@@ -1905,32 +1905,32 @@ public static final int
 * range of angles.
 */
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal Mat src,
-                                    @ByVal Mat dst,
-                                    int dstMatDepth,
-                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                    int op/*=cv::ximgproc::FHT_ADD*/,
-                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
+                                      @ByVal Mat dst,
+                                      int dstMatDepth,
+                                      int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                      int op/*=cv::ximgproc::FHT_ADD*/,
+                                      int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal Mat src,
-                                    @ByVal Mat dst,
-                                    int dstMatDepth );
+                                      @ByVal Mat dst,
+                                      int dstMatDepth );
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal UMat src,
-                                    @ByVal UMat dst,
-                                    int dstMatDepth,
-                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                    int op/*=cv::ximgproc::FHT_ADD*/,
-                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
+                                      @ByVal UMat dst,
+                                      int dstMatDepth,
+                                      int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                      int op/*=cv::ximgproc::FHT_ADD*/,
+                                      int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal UMat src,
-                                    @ByVal UMat dst,
-                                    int dstMatDepth );
+                                      @ByVal UMat dst,
+                                      int dstMatDepth );
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal GpuMat src,
-                                    @ByVal GpuMat dst,
-                                    int dstMatDepth,
-                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                    int op/*=cv::ximgproc::FHT_ADD*/,
-                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
+                                      @ByVal GpuMat dst,
+                                      int dstMatDepth,
+                                      int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                      int op/*=cv::ximgproc::FHT_ADD*/,
+                                      int makeSkew/*=cv::ximgproc::HDO_DESKEW*/ );
 @Namespace("cv::ximgproc") public static native void FastHoughTransform( @ByVal GpuMat src,
-                                    @ByVal GpuMat dst,
-                                    int dstMatDepth );
+                                      @ByVal GpuMat dst,
+                                      int dstMatDepth );
 
 /**
 * \brief   Calculates coordinates of line segment corresponded by point in Hough space.
@@ -1948,26 +1948,26 @@ public static final int
 * The function calculates coordinates of line segment corresponded by point in Hough space.
 */
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal Mat srcImgInfo,
-                                 int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                 int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
-                                 int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
+                                   @ByVal Mat srcImgInfo,
+                                   int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                   int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
+                                   int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal Mat srcImgInfo );
+                                   @ByVal Mat srcImgInfo );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal UMat srcImgInfo,
-                                 int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                 int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
-                                 int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
+                                   @ByVal UMat srcImgInfo,
+                                   int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                   int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
+                                   int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal UMat srcImgInfo );
+                                   @ByVal UMat srcImgInfo );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal GpuMat srcImgInfo,
-                                 int angleRange/*=cv::ximgproc::ARO_315_135*/,
-                                 int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
-                                 int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
+                                   @ByVal GpuMat srcImgInfo,
+                                   int angleRange/*=cv::ximgproc::ARO_315_135*/,
+                                   int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
+                                   int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
 @Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
-                                 @ByVal GpuMat srcImgInfo );
+                                   @ByVal GpuMat srcImgInfo );
 
  // namespace cv::ximgproc
 

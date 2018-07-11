@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_tracking.class, opencv_objdetect.class, opencv_photo.class, opencv_plot.class}, value = {
     @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>",
-                         "<opencv2/face/facemark.hpp>", "<opencv2/face/facemarkLBF.hpp>", "<opencv2/face/facemarkAAM.hpp>",
-                         "<opencv2/face/face_alignment.hpp>"},
+                         "<opencv2/face/facemark.hpp>", "<opencv2/face/facemark_train.hpp>", "<opencv2/face/facemarkLBF.hpp>",
+                         "<opencv2/face/facemarkAAM.hpp>", "<opencv2/face/face_alignment.hpp>"},
               link = "opencv_face@.3.4"),
     @Platform(value = "ios", preload = "libopencv_face"),
     @Platform(value = "windows", link = "opencv_face341")},
@@ -64,13 +64,13 @@ public class opencv_face implements InfoMapper {
                .put(new Info("cv::face::drawFacemarks(cv::InputOutputArray, cv::InputArray, cv::Scalar)").javaText(
                        "@Namespace(\"cv::face\") public static native void drawFacemarks( @ByVal Mat image, @ByRef Point2fVector points,\n"
                      + "                                 @ByVal(nullValue = \"cv::Scalar(255,0,0)\") Scalar color);"))
-               .put(new Info("cv::face::Facemark::addTrainingSample").javaText("public native @Cast(\"bool\") boolean addTrainingSample(@ByVal Mat image, @ByRef Point2fVector landmarks);"))
+               .put(new Info("cv::face::FacemarkTrain::addTrainingSample").javaText("public native @Cast(\"bool\") boolean addTrainingSample(@ByVal Mat image, @ByRef Point2fVector landmarks);"))
                .put(new Info("cv::face::Facemark::fit").javaText(
                        "public native @Cast(\"bool\") boolean fit( @ByVal Mat image,\n"
                      + "                      @ByRef RectVector faces,\n"
-                     + "                      @ByRef Point2fVectorVector landmarks,\n"
-                     + "                      Pointer config/*=0*/);"))
-               .put(new Info("cv::face::Facemark::getFaces").javaText("public native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);"))
+                     + "                      @ByRef Point2fVectorVector landmarks);"))
+               .put(new Info("cv::face::FacemarkTrain::getFaces").javaText("public native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);"))
+               .put(new Info("cv::face::FacemarkAAM::fitConfig").javaText("public native @Cast(\"bool\") boolean fitConfig( @ByVal Mat image, @ByRef RectVector roi, @ByRef Point2fVectorVector _landmarks, @StdVector Config runtime_params );"))
                .put(new Info("cv::face::FacemarkKazemi::fit").javaText("public native @Cast(\"bool\") boolean fit( @ByVal Mat image, @ByRef RectVector faces, @ByRef Point2fVectorVector landmarks );"))
                .put(new Info("cv::face::FacemarkKazemi::getFaces").javaText("public native @Cast(\"bool\") boolean getFaces(@ByVal Mat image, @ByRef RectVector faces);"))
         ;

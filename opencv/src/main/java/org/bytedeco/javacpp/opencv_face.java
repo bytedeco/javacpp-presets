@@ -575,9 +575,11 @@ String name = model->name();
 
 // #include "opencv2/face/facerec.hpp"
 // #include "opencv2/face/facemark.hpp"
+// #include "opencv2/face/facemark_train.hpp"
 // #include "opencv2/face/facemarkLBF.hpp"
 // #include "opencv2/face/facemarkAAM.hpp"
 // #include "opencv2/face/face_alignment.hpp"
+// #include "opencv2/face/mace.hpp"
 
 // #endif // __OPENCV_FACE_HPP__
 
@@ -796,7 +798,105 @@ Mentor: Delia Passalacqua
 - The Facemark API
 */
 
-// #include "opencv2/face.hpp"
+// #include "opencv2/core.hpp"
+// #include <vector>
+
+
+/** \brief Abstract base class for all facemark models
+<p>
+To utilize this API in your program, please take a look at the \ref tutorial_table_of_content_facemark
+### Description
+<p>
+Facemark is a base class which provides universal access to any specific facemark algorithm.
+Therefore, the users should declare a desired algorithm before they can use it in their application.
+<p>
+Here is an example on how to declare a facemark algorithm:
+<pre>{@code
+// Using Facemark in your code:
+Ptr<Facemark> facemark = createFacemarkLBF();
+}</pre>
+<p>
+The typical pipeline for facemark detection is as follows:
+- Load the trained model using Facemark::loadModel.
+- Perform the fitting on an image via Facemark::fit.
+*/
+@Namespace("cv::face") public static class Facemark extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Facemark(Pointer p) { super(p); }
+
+
+    /** \brief A function to load the trained model before the fitting process.
+    @param model A string represent the filename of a trained model.
+    <p>
+    <B>Example of usage</B>
+    <pre>{@code
+    facemark->loadModel("../data/lbf.model");
+    }</pre>
+    */
+    public native void loadModel( @Str BytePointer model );
+    public native void loadModel( @Str String model );
+    // virtual void saveModel(String fs)=0;
+
+    /** \brief Detect facial landmarks from an image.
+    @param image Input image.
+    @param faces Output of the function which represent region of interest of the detected faces.
+    Each face is stored in cv::Rect container.
+    @param landmarks The detected landmark points for each faces.
+    <p>
+    <B>Example of usage</B>
+    <pre>{@code
+    Mat image = imread("image.jpg");
+    std::vector<Rect> faces;
+    std::vector<std::vector<Point2f> > landmarks;
+    facemark->fit(image, faces, landmarks);
+    }</pre>
+    */
+    public native @Cast("bool") boolean fit( @ByVal Mat image,
+                          @ByRef RectVector faces,
+                          @ByRef Point2fVectorVector landmarks);
+} /* Facemark*/
+
+
+/** construct an AAM facemark detector */
+@Namespace("cv::face") public static native @Ptr Facemark createFacemarkAAM();
+
+/** construct an LBF facemark detector */
+@Namespace("cv::face") public static native @Ptr Facemark createFacemarkLBF();
+
+/** construct a Kazemi facemark detector */
+@Namespace("cv::face") public static native @Ptr Facemark createFacemarkKazemi();
+
+
+ // face
+ // cv
+
+// #endif //__OPENCV_FACELANDMARK_HPP__
+
+
+// Parsed from <opencv2/face/facemark_train.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+/*
+This file was part of GSoC Project: Facemark API for OpenCV
+Final report: https://gist.github.com/kurnianggoro/74de9121e122ad0bd825176751d47ecc
+Student: Laksono Kurnianggoro
+Mentor: Delia Passalacqua
+*/
+
+// #ifndef __OPENCV_FACELANDMARKTRAIN_HPP__
+// #define __OPENCV_FACELANDMARKTRAIN_HPP__
+
+/**
+\defgroup face Face Analysis
+- \ref tutorial_table_of_content_facemark
+- The Facemark API
+*/
+
+// #include "opencv2/face/facemark.hpp"
 // #include "opencv2/objdetect.hpp"
 // #include <vector>
 // #include <string>
@@ -1049,16 +1149,13 @@ for(int j=0;j<rects.size();j++){
 @Namespace("cv::face") public static native void drawFacemarks( @ByVal Mat image, @ByRef Point2fVector points,
                                  @ByVal(nullValue = "cv::Scalar(255,0,0)") Scalar color);
 
-/** \brief Abstract base class for all facemark models
-<p>
-All facemark models in OpenCV are derived from the abstract base class Facemark, which
-provides a unified access to all facemark algorithms in OpenCV.
+/** \brief Abstract base class for trainable facemark models
 <p>
 To utilize this API in your program, please take a look at the \ref tutorial_table_of_content_facemark
 ### Description
 <p>
-Facemark is a base class which provides universal access to any specific facemark algorithm.
-Therefore, the users should declare a desired algorithm before they can use it in their application.
+The AAM and LBF facemark models in OpenCV are derived from the abstract base class FacemarkTrain, which
+provides a unified access to those facemark algorithms in OpenCV.
 <p>
 Here is an example on how to declare facemark algorithm:
 <pre>{@code
@@ -1066,26 +1163,23 @@ Here is an example on how to declare facemark algorithm:
 Ptr<Facemark> facemark = FacemarkLBF::create();
 }</pre>
 <p>
+<p>
 The typical pipeline for facemark detection is listed as follows:
-- (Non-mandatory) Set a user defined face detection using Facemark::setFaceDetector.
+- (Non-mandatory) Set a user defined face detection using FacemarkTrain::setFaceDetector.
   The facemark algorithms are desgined to fit the facial points into a face.
   Therefore, the face information should be provided to the facemark algorithm.
   Some algorithms might provides a default face recognition function.
   However, the users might prefer to use their own face detector to obtains the best possible detection result.
-- (Non-mandatory) Training the model for a specific algorithm using Facemark::training.
+- (Non-mandatory) Training the model for a specific algorithm using FacemarkTrain::training.
   In this case, the model should be automatically saved by the algorithm.
   If the user already have a trained model, then this part can be omitted.
 - Load the trained model using Facemark::loadModel.
 - Perform the fitting via the Facemark::fit.
 */
-@Namespace("cv::face") public static class Facemark extends Algorithm {
+@Namespace("cv::face") public static class FacemarkTrain extends Facemark {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Facemark(Pointer p) { super(p); }
-
-
-    public native void read( @Const @ByRef FileNode fn );
-    public native void write( @ByRef FileStorage fs );
+    public FacemarkTrain(Pointer p) { super(p); }
 
     /** \brief Add one training sample to the trainer.
     <p>
@@ -1153,42 +1247,6 @@ The typical pipeline for facemark detection is listed as follows:
     public native void training(Pointer parameters/*=0*/);
     public native void training();
 
-    /** \brief A function to load the trained model before the fitting process.
-    <p>
-    @param model A string represent the filename of a trained model.
-    <p>
-    <B>Example of usage</B>
-    <pre>{@code
-    facemark->loadModel("../data/lbf.model");
-    }</pre>
-    */
-    public native void loadModel(@Str BytePointer model);
-    public native void loadModel(@Str String model);
-    // virtual void saveModel(String fs)=0;
-
-    /** \brief Trains a Facemark algorithm using the given dataset.
-    <p>
-    @param image Input image.
-    @param faces Output of the function which represent region of interest of the detected faces.
-    Each face is stored in cv::Rect container.
-    @param landmarks The detected landmark points for each faces.
-    @param config Algorithm specific for running time parameters.
-    <p>
-    <B>Example of usage</B>
-    <pre>{@code
-    Mat image = imread("image.jpg");
-    std::vector<Rect> faces;
-    std::vector<std::vector<Point2f> > landmarks;
-    facemark->fit(image, faces, landmarks);
-    }</pre>
-    <p>
-    TODO remove "config" from here
-    */
-    public native @Cast("bool") boolean fit( @ByVal Mat image,
-                          @ByRef RectVector faces,
-                          @ByRef Point2fVectorVector landmarks,
-                          Pointer config/*=0*/);
-
     /** \brief Set a user defined face detector for the Facemark algorithm.
     @param detector The user defined face detector function
     @param userData Detector parameters
@@ -1253,7 +1311,7 @@ The typical pipeline for facemark detection is listed as follows:
 /** \} */
  /* namespace face */
  /* namespace cv */
-// #endif //__OPENCV_FACELANDMARK_HPP__
+// #endif //__OPENCV_FACELANDMARKTRAIN_HPP__
 
 
 // Parsed from <opencv2/face/facemarkLBF.hpp>
@@ -1297,12 +1355,12 @@ Mentor: Delia Passalacqua
 // #ifndef __OPENCV_FACEMARK_LBF_HPP__
 // #define __OPENCV_FACEMARK_LBF_HPP__
 
-// #include "opencv2/face/facemark.hpp"
+// #include "opencv2/face/facemark_train.hpp"
 
 /** \addtogroup face
  *  \{ */
 
-@Namespace("cv::face") public static class FacemarkLBF extends Facemark {
+@Namespace("cv::face") public static class FacemarkLBF extends FacemarkTrain {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkLBF(Pointer p) { super(p); }
@@ -1458,12 +1516,12 @@ Mentor: Delia Passalacqua
 // #ifndef __OPENCV_FACEMARK_AAM_HPP__
 // #define __OPENCV_FACEMARK_AAM_HPP__
 
-// #include "opencv2/face/facemark.hpp"
+// #include "opencv2/face/facemark_train.hpp"
 
 /** \addtogroup face
  *  \{ */
 
-@Namespace("cv::face") public static class FacemarkAAM extends Facemark {
+@Namespace("cv::face") public static class FacemarkAAM extends FacemarkTrain {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkAAM(Pointer p) { super(p); }
@@ -1580,10 +1638,6 @@ Mentor: Delia Passalacqua
             return (Model)super.position(position);
         }
     
-        /**  unused delete */
-        public native int npts(); public native Model npts(int npts);
-        /**  unused delete */
-        public native int max_n(); public native Model max_n(int max_n);
         
         /**  defines the scales considered to build the model */
         public native @StdVector FloatPointer scales(); public native Model scales(FloatPointer scales);
@@ -1652,6 +1706,12 @@ Mentor: Delia Passalacqua
         public native @ByRef Mat Q(); public native Model Q(Mat Q);
 
     }
+
+    /** overload with additional Config structures */
+    public native @Cast("bool") boolean fitConfig( @ByVal Mat image, @ByRef RectVector roi, @ByRef Point2fVectorVector _landmarks, @StdVector Config runtime_params );
+
+
+    /**  initializer */
     public static native @Ptr FacemarkAAM create(@Const @ByRef(nullValue = "cv::face::FacemarkAAM::Params()") Params parameters );
     public static native @Ptr FacemarkAAM create( );
 
@@ -1672,8 +1732,8 @@ Mentor: Delia Passalacqua
 // #ifndef __OPENCV_FACE_ALIGNMENT_HPP__
 // #define __OPENCV_FACE_ALIGNMENT_HPP__
 
-// #include "facemark.hpp"
-@Namespace("cv::face") public static class FacemarkKazemi extends Algorithm {
+// #include "opencv2/face/facemark_train.hpp"
+@Namespace("cv::face") public static class FacemarkKazemi extends Facemark {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FacemarkKazemi(Pointer p) { super(p); }
@@ -1716,9 +1776,6 @@ Mentor: Delia Passalacqua
     public static native @Ptr FacemarkKazemi create(@Const @ByRef(nullValue = "cv::face::FacemarkKazemi::Params()") Params parameters);
     public static native @Ptr FacemarkKazemi create();
 
-    /** \brief training the facemark model, input are the file names of image list and landmark annotation */
-    public native void training(@Str BytePointer imageList, @Str BytePointer groundTruth);
-    public native void training(@Str String imageList, @Str String groundTruth);
     /** \brief This function is used to train the model using gradient boosting to get a cascade of regressors
     *which can then be used to predict shape.
     *@param images A vector of type cv::Mat which stores the images which are used in training samples.
@@ -1732,18 +1789,7 @@ Mentor: Delia Passalacqua
     public native @Cast("bool") boolean training(@ByRef MatVector images, @ByRef Point2fVectorVector landmarks,@StdString BytePointer configfile,@ByVal Size scale);
     public native @Cast("bool") boolean training(@ByRef MatVector images, @ByRef Point2fVectorVector landmarks,@StdString String configfile,@ByVal Size scale,@StdString String modelFilename/*="face_landmarks.dat"*/);
     public native @Cast("bool") boolean training(@ByRef MatVector images, @ByRef Point2fVectorVector landmarks,@StdString String configfile,@ByVal Size scale);
-    /** \brief This function is used to load the trained model..
-    *@param filename A variable of type cv::String which stores the name of the file in which trained model is stored.
-    */
-    public native void loadModel(@Str BytePointer filename);
-    public native void loadModel(@Str String filename);
-    /** \brief This functions retrieves a centered and scaled face shape, according to the bounding rectangle.
-    *@param image A variable of type cv::InputArray which stores the image whose landmarks have to be found
-    *@param faces A variable of type cv::InputArray which stores the bounding boxes of faces found in a given image.
-    *@param landmarks A variable of type cv::InputOutputArray which stores the landmarks of all the faces found in the image
-    */
-    /** from many ROIs */
-    public native @Cast("bool") boolean fit( @ByVal Mat image, @ByRef RectVector faces, @ByRef Point2fVectorVector landmarks );
+
     /** set the custom face detector */
     public native @Cast("bool") boolean setFaceDetector(@Cast("bool (*)(cv::InputArray, cv::OutputArray, void*)") Pointer f, Pointer userData);
     /** get faces using the custom detector */

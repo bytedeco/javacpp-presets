@@ -220,9 +220,11 @@ public static native void cvSetWindowProperty(String name, int prop_id, double p
 public static native double cvGetWindowProperty(@Cast("const char*") BytePointer name, int prop_id);
 public static native double cvGetWindowProperty(String name, int prop_id);
 
+// #ifdef __cplusplus  // FIXIT remove in OpenCV 4.0
 /* Get window image rectangle coordinates, width and height */
 public static native @ByVal Rect cvGetWindowImageRect(@Cast("const char*") BytePointer name);
 public static native @ByVal Rect cvGetWindowImageRect(String name);
+// #endif
 
 /* display image within window (highgui windows remember their content) */
 public static native void cvShowImage( @Cast("const char*") BytePointer name, @Const CvArr image );
@@ -997,7 +999,7 @@ The function getWindowImageRect returns the client screen coordinates, width and
 <p>
 @param winname Name of the window.
 @param onMouse Mouse callback. See OpenCV samples, such as
-<https://github.com/opencv/opencv/tree/master/samples/cpp/ffilldemo.cpp>, on how to specify and
+<https://github.com/opencv/opencv/tree/3.4/samples/cpp/ffilldemo.cpp>, on how to specify and
 use the callback.
 @param userdata The optional parameter passed to the callback.
  */

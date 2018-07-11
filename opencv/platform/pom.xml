@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>opencv-platform</artifactId>
-  <version>3.4.1-${project.parent.version}</version>
+  <version>3.4.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for OpenCV</name>
 
   <properties>

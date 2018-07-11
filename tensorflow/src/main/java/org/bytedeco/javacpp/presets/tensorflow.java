@@ -613,7 +613,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
                .put(new Info("std::pair<tensorflow::TensorSlice,tensorflow::string>").pointerTypes("TensorSlideStringPair").define())
                .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
-               .put(new Info("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>").pointerTypes("SafeTensorIdTensorIdMap").define())
+//               .put(new Info("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>").pointerTypes("SafeTensorIdTensorIdMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::TensorShape>").pointerTypes("VarToShapeMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::DataType>").pointerTypes("VarToDataTypeMap").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>").pointerTypes("StringTensorSliceSetMap").define())

@@ -292,7 +292,7 @@ public static final int
         @Override public RetinaParameters position(long position) {
             return (RetinaParameters)super.position(position);
         }
-     
+    
         /** Outer Plexiform Layer (OPL) and Inner Plexiform Layer Parvocellular (IplParvo) parameters */
         @NoOffset public static class OPLandIplParvoParameters extends Pointer {
             static { Loader.load(); }
@@ -375,7 +375,7 @@ more informations in the above cited Jeanny Heraults's book.
     public Retina(Pointer p) { super(p); }
 
 
-    
+
     /** \brief Retreive retina input buffer size
     @return the retina input buffer size
      */
@@ -874,7 +874,7 @@ Vision: Images, Signals and Neural Networks: Models of Neural Processing in Visu
         return (SegmentationParameters)super.position(position);
     }
  // CV_EXPORTS_W_MAP to export to python native dictionnaries
-	// default structure instance construction with default values	
+	// default structure instance construction with default values
 	public SegmentationParameters() { super((Pointer)null); allocate(); }
 	private native void allocate();
 	// all properties list

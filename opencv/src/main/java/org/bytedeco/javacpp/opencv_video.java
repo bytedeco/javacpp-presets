@@ -682,9 +682,15 @@ when fullAffine=false.
 \sa
 estimateAffine2D, estimateAffinePartial2D, getAffineTransform, getPerspectiveTransform, findHomography
  */
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine );
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine );
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine);
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine);
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine);
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
+                                         int ransacSize0);
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
+                                         int ransacSize0);
+@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
+                                         int ransacSize0);
 
 
 /** enum cv:: */

@@ -2273,6 +2273,7 @@ intensities, see \cite UES01 for details.
 // #endif
 
 // #include "opencv2/core.hpp"
+// #include "opencv2/core/cuda.hpp"
 
 /** \addtogroup stitching_blend
  *  \{

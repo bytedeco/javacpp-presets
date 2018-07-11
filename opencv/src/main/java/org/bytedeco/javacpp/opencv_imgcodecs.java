@@ -321,7 +321,13 @@ public static final int
        /** For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used. */
        IMWRITE_WEBP_QUALITY        = 64,
        /** For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format */
-       IMWRITE_PAM_TUPLETYPE       = 128;
+       IMWRITE_PAM_TUPLETYPE       = 128,
+       /** For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values */
+       IMWRITE_TIFF_RESUNIT = 256,
+       /** For TIFF, use to specify the X direction DPI */
+       IMWRITE_TIFF_XDPI = 257,
+       /** For TIFF, use to specify the Y direction DPI */
+       IMWRITE_TIFF_YDPI = 258;
 
 /** enum cv::ImwriteEXRTypeFlags */
 public static final int

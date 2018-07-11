@@ -3700,6 +3700,124 @@ must be in front of the camera). The decomposition method is described in detail
                                         @ByVal GpuMatVector translations,
                                         @ByVal GpuMatVector normals);
 
+/** \brief Filters homography decompositions based on additional information.
+<p>
+@param rotations Vector of rotation matrices.
+@param normals Vector of plane normal matrices.
+@param beforePoints Vector of (rectified) visible reference points before the homography is applied
+@param afterPoints Vector of (rectified) visible reference points after the homography is applied
+@param possibleSolutions Vector of int indices representing the viable solution set after filtering
+@param pointsMask optional Mat/Vector of 8u type representing the mask for the inliers as given by the findHomography function
+<p>
+This function is intended to filter the output of the decomposeHomographyMat based on additional
+information as described in \cite Malis . The summary of the method: the decomposeHomographyMat function
+returns 2 unique solutions and their "opposites" for a total of 4 solutions. If we have access to the
+sets of points visible in the camera frame before and after the homography transformation is applied,
+we can determine which are the true potential solutions and which are the opposites by verifying which
+homographies are consistent with all visible reference points being in front of the camera. The inputs
+are left unchanged; the filtered solution set is returned as indices into the existing one.
+<p>
+*/
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal Mat beforePoints,
+                                                           @ByVal Mat afterPoints,
+                                                           @ByVal Mat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal UMat beforePoints,
+                                                           @ByVal UMat afterPoints,
+                                                           @ByVal UMat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
+                                                           @ByVal MatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
+                                                           @ByVal UMatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions,
+                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
+                                                           @ByVal GpuMatVector normals,
+                                                           @ByVal GpuMat beforePoints,
+                                                           @ByVal GpuMat afterPoints,
+                                                           @ByVal GpuMat possibleSolutions);
+
 /** \brief The base class for stereo correspondence algorithms.
  */
 @Namespace("cv") public static class StereoMatcher extends Algorithm {

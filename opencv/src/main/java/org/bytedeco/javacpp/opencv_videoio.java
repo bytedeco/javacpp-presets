@@ -769,7 +769,9 @@ public static final int
        /** Built-in OpenCV MotionJPEG codec */
        CAP_OPENCV_MJPEG = 2200,
        /** Intel MediaSDK */
-       CAP_INTEL_MFX    = 2300;
+       CAP_INTEL_MFX    = 2300,
+       /** XINE engine (Linux) */
+       CAP_XINE         = 2400;
 
 /** \brief %VideoCapture generic properties identifier.
  <p>

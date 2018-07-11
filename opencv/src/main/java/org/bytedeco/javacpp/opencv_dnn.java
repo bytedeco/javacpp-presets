@@ -305,7 +305,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #ifndef OPENCV_DNN_HPP
 // #define OPENCV_DNN_HPP
 
-// This is an umbrealla header to include into you project.
+// This is an umbrella header to include into you project.
 // We are free to change headers layout in dnn subfolder, so please include
 // this header for future compatibility
 
@@ -315,10 +315,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     This module contains:
         - API for new layers creation, layers are building bricks of neural networks;
         - set of built-in most-useful Layers;
-        - API to constuct and modify comprehensive neural networks from layers;
+        - API to construct and modify comprehensive neural networks from layers;
         - functionality for loading serialized networks models from different frameworks.
     <p>
-    Functionality of this module is designed only for forward pass computations (i. e. network testing).
+    Functionality of this module is designed only for forward pass computations (i.e. network testing).
     A network training is in principle not supported.
   \}
 */
@@ -553,15 +553,15 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         \f$W_{x?} \in R^{N_h \times N_x}\f$, \f$W_{h?} \in R^{N_h \times N_h}\f$, \f$b_? \in R^{N_h}\f$.
         <p>
         For simplicity and performance purposes we use \f$ W_x = [W_{xi}; W_{xf}; W_{xo}, W_{xg}] \f$
-        (i.e. \f$W_x\f$ is vertical contacentaion of \f$ W_{x?} \f$), \f$ W_x \in R^{4N_h \times N_x} \f$.
+        (i.e. \f$W_x\f$ is vertical concatenation of \f$ W_{x?} \f$), \f$ W_x \in R^{4N_h \times N_x} \f$.
         The same for \f$ W_h = [W_{hi}; W_{hf}; W_{ho}, W_{hg}], W_h \in R^{4N_h \times N_h} \f$
         and for \f$ b = [b_i; b_f, b_o, b_g]\f$, \f$b \in R^{4N_h} \f$.
         <p>
-        @param Wh is matrix defining how previous output is transformed to internal gates (i.e. according to abovemtioned notation is \f$ W_h \f$)
-        @param Wx is matrix defining how current input is transformed to internal gates (i.e. according to abovemtioned notation is \f$ W_x \f$)
-        @param b  is bias vector (i.e. according to abovemtioned notation is \f$ b \f$)
+        @param Wh is matrix defining how previous output is transformed to internal gates (i.e. according to above mentioned notation is \f$ W_h \f$)
+        @param Wx is matrix defining how current input is transformed to internal gates (i.e. according to above mentioned notation is \f$ W_x \f$)
+        @param b  is bias vector (i.e. according to above mentioned notation is \f$ b \f$)
         */
-        public native void setWeights(@Const @ByRef Mat Wh, @Const @ByRef Mat Wx, @Const @ByRef Mat b);
+        public native @Deprecated void setWeights(@Const @ByRef Mat Wh, @Const @ByRef Mat Wx, @Const @ByRef Mat b);
 
         /** \brief Specifies shape of output blob which will be [[{@code T}], {@code N}] + \p outTailShape.
           * \details If this parameter is empty or unset then \p outTailShape = [{@code Wh}.size(0)] will be used,
@@ -579,15 +579,15 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
           * If flag is set to false then shape of input blob will be interpreted as [{@code N}, {@code [data dims]}].
           * In this case each forward() call will make one iteration and produce one timestamp with shape [{@code N}, {@code [out dims]}].
           */
-        public native void setUseTimstampsDim(@Cast("bool") boolean use/*=true*/);
-        public native void setUseTimstampsDim();
+        public native @Deprecated void setUseTimstampsDim(@Cast("bool") boolean use/*=true*/);
+        public native @Deprecated void setUseTimstampsDim();
 
         /** @deprecated Use flag {@code use_timestamp_dim} in LayerParams.
          * \brief If this flag is set to true then layer will produce \f$ c_t \f$ as second output.
          * \details Shape of the second output is the same as first output.
          */
-        public native void setProduceCellOutput(@Cast("bool") boolean produce/*=false*/);
-        public native void setProduceCellOutput();
+        public native @Deprecated void setProduceCellOutput(@Cast("bool") boolean produce/*=false*/);
+        public native @Deprecated void setProduceCellOutput();
 
         /* In common case it use single input with @f$x_t@f$ values to compute output(s) @f$h_t@f$ (and @f$c_t@f$).
          * @param input should contain packed values @f$x_t@f$
@@ -596,7 +596,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * If setUseTimstampsDim() is set to true then @p input[0] should has at least two dimensions with the following shape: [`T`, `N`, `[data dims]`],
          * where `T` specifies number of timestamps, `N` is number of independent streams (i.e. @f$ x_{t_0 + t}^{stream} @f$ is stored inside @p input[0][t, stream, ...]).
          *
-         * If setUseTimstampsDim() is set to fase then @p input[0] should contain single timestamp, its shape should has form [`N`, `[data dims]`] with at least one dimension.
+         * If setUseTimstampsDim() is set to false then @p input[0] should contain single timestamp, its shape should has form [`N`, `[data dims]`] with at least one dimension.
          * (i.e. @f$ x_{t}^{stream} @f$ is stored inside @p input[0][stream, ...]).
         */
 
@@ -853,6 +853,25 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     }
 
     /**
+     * Permute channels of 4-dimensional input blob.
+     * @param group Number of groups to split input channels and pick in turns
+     *              into output blob.
+     *
+     * \f[ groupSize = \frac{number\ of\ channels}{group} \f]
+     * \f[ output(n, c, h, w) = input(n, groupSize \times (c \% group) + \lfloor \frac{c}{group} \rfloor, h, w) \f]
+     * Read more at https://arxiv.org/pdf/1707.01083.pdf
+     */
+    @Namespace("cv::dnn") @NoOffset public static class ShuffleChannelLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ShuffleChannelLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
+
+        public native int group(); public native ShuffleChannelLayer group(int group);
+    }
+
+    /**
      * \brief Adds extra values for specific axes.
      * @param paddings Vector of paddings in format
      *                 <pre>{@code
@@ -1036,7 +1055,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ShiftLayer(Pointer p) { super(p); }
     
-        public static native @Ptr ShiftLayer create(@Const @ByRef LayerParams params);
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
     @Namespace("cv::dnn") public static class PriorBoxLayer extends Layer {
@@ -1091,7 +1110,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      * dst(x, y, c) = \frac{ src(x, y, c) }{norm(c)}
      * \f]
      *
-     * Where {@code x, y} - spatial cooridnates, {@code c} - channel.
+     * Where {@code x, y} - spatial coordinates, {@code c} - channel.
      *
      * An every sample in the batch is normalized separately. Optionally,
      * output is scaled by the trained parameters.
@@ -1103,22 +1122,35 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     
         public native float pnorm(); public native NormalizeBBoxLayer pnorm(float pnorm);
         public native float epsilon(); public native NormalizeBBoxLayer epsilon(float epsilon);
-        public native @Cast("bool") boolean acrossSpatial(); public native NormalizeBBoxLayer acrossSpatial(boolean acrossSpatial);
+        public native @Cast("bool") @Deprecated boolean acrossSpatial(); public native NormalizeBBoxLayer acrossSpatial(boolean acrossSpatial);
 
         public static native @Ptr NormalizeBBoxLayer create(@Const @ByRef LayerParams params);
     }
 
     /**
-     * \brief Resize input 4-dimensional blob by nearest neghbor strategy.
+     * \brief Resize input 4-dimensional blob by nearest neighbor or bilinear strategy.
      *
-     * Layer is used to support TensorFlow's resize_nearest_neighbor op.
+     * Layer is used to support TensorFlow's resize_nearest_neighbor and resize_bilinear ops.
      */
-    @Namespace("cv::dnn") public static class ResizeNearestNeighborLayer extends Layer {
+    @Namespace("cv::dnn") public static class ResizeLayer extends Layer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public ResizeNearestNeighborLayer(Pointer p) { super(p); }
+        public ResizeLayer(Pointer p) { super(p); }
     
-        public static native @Ptr ResizeNearestNeighborLayer create(@Const @ByRef LayerParams params);
+        public static native @Ptr ResizeLayer create(@Const @ByRef LayerParams params);
+    }
+
+    /**
+     * \brief Bilinear resize layer from https://github.com/cdmh/deeplab-public
+     *
+     * It differs from \ref ResizeLayer in output shape and resize scales computations.
+     */
+    @Namespace("cv::dnn") public static class InterpLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public InterpLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
     @Namespace("cv::dnn") public static class ProposalLayer extends Layer {
@@ -1127,6 +1159,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public ProposalLayer(Pointer p) { super(p); }
     
         public static native @Ptr ProposalLayer create(@Const @ByRef LayerParams params);
+    }
+
+    @Namespace("cv::dnn") public static class CropAndResizeLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public CropAndResizeLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
 /** \}
@@ -1186,7 +1226,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/core.hpp>
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_EXPERIMENTAL_NS
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v4 {
+// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_v5 {
 // #define CV__DNN_EXPERIMENTAL_NS_END }
  
 // #else
@@ -1200,24 +1240,32 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
     /**
      * \brief Enum of computation backends supported by layers.
+     * @see Net::setPreferableBackend
      */
     /** enum cv::dnn::Backend */
     public static final int
+        /** DNN_BACKEND_DEFAULT equals to DNN_BACKEND_INFERENCE_ENGINE if
+         *  OpenCV is built with Intel's Inference Engine library or
+         *  DNN_BACKEND_OPENCV otherwise. */
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE = 1,
-        DNN_BACKEND_INFERENCE_ENGINE = 2;
+        DNN_BACKEND_INFERENCE_ENGINE = 2,
+        DNN_BACKEND_OPENCV = 3;
 
     /**
      * \brief Enum of target devices for computations.
+     * @see Net::setPreferableTarget
      */
     /** enum cv::dnn::Target */
     public static final int
         DNN_TARGET_CPU = 0,
-        DNN_TARGET_OPENCL = 1;
+        DNN_TARGET_OPENCL = 1,
+        DNN_TARGET_OPENCL_FP16 = 2,
+        DNN_TARGET_MYRIAD = 3;
 
     /** \brief This class provides all data needed to initialize layer.
      *
-     * It includes dictionary with scalar params (which can be readed by using Dict interface),
+     * It includes dictionary with scalar params (which can be read by using Dict interface),
      * blob params #blobs and optional meta information: #name and #type of layer instance.
     */
     @Namespace("cv::dnn") @NoOffset public static class LayerParams extends Dict {
@@ -1284,7 +1332,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * Initialize wrapper from another one. It'll wrap the same host CPU
          * memory and mustn't allocate memory on device(i.e. GPU). It might
          * has different shape. Use in case of CPU memory reusing for reuse
-         * associented memory on device too.
+         * associated memory on device too.
          */
 
         /**
@@ -1498,6 +1546,15 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public Net() { super((Pointer)null); allocate(); }
         private native void allocate();
 
+        /** \brief Create a network from Intel's Model Optimizer intermediate representation.
+         *  @param [in] xml XML configuration file with network's topology.
+         *  @param [in] bin Binary file with trained weights.
+         *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
+         *  backend.
+         */
+        public static native @ByVal Net readFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
+        public static native @ByVal Net readFromModelOptimizer(@Str String xml, @Str String bin);
+
         /** Returns true if there are no layers in the network. */
         public native @Cast("bool") boolean empty();
 
@@ -1551,8 +1608,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
         /** \brief Connects #\p outNum output of the first layer to #\p inNum input of the second layer.
          *  @param outLayerId identifier of the first layer
-         *  @param inpLayerId identifier of the second layer
          *  @param outNum number of the first layer output
+         *  @param inpLayerId identifier of the second layer
          *  @param inpNum number of the second layer input
          */
         public native void connect(int outLayerId, int outNum, int inpLayerId, int inpNum);
@@ -1624,6 +1681,9 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * \brief Ask network to use specific computation backend where it supported.
          * @param [in] backendId backend identifier.
          * @see Backend
+         *
+         * If OpenCV is compiled with Intel's Inference Engine library, DNN_BACKEND_DEFAULT
+         * means DNN_BACKEND_INFERENCE_ENGINE. Otherwise it equals to DNN_BACKEND_OPENCV.
          */
         public native void setPreferableBackend(int backendId);
 
@@ -1631,6 +1691,14 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
          * \brief Ask network to make computations on specific target device.
          * @param [in] targetId target identifier.
          * @see Target
+         *
+         * List of supported combinations backend / target:
+         * |                        | DNN_BACKEND_OPENCV | DNN_BACKEND_INFERENCE_ENGINE | DNN_BACKEND_HALIDE |
+         * |------------------------|--------------------|------------------------------|--------------------|
+         * | DNN_TARGET_CPU         |                  + |                            + |                  + |
+         * | DNN_TARGET_OPENCL      |                  + |                            + |                  + |
+         * | DNN_TARGET_OPENCL_FP16 |                  + |                            + |                    |
+         * | DNN_TARGET_MYRIAD      |                    |                            + |                    |
          */
         public native void setPreferableTarget(int targetId);
 
@@ -1754,7 +1822,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         public native int getLayersCount(@Str BytePointer layerType);
         public native int getLayersCount(@Str String layerType);
 
-        /** \brief Computes bytes number which are requered to store
+        /** \brief Computes bytes number which are required to store
          * all weights and intermediate blobs for model.
          * @param netInputShapes vector of shapes for all net inputs.
          * @param weights output parameter to store resulting bytes for weights.
@@ -1774,7 +1842,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
                                                   @Const @StdVector @ByRef IntPointer netInputShape,
                                                   @Cast("size_t*") @ByRef SizeTPointer weights, @Cast("size_t*") @ByRef SizeTPointer blobs);
 
-        /** \brief Computes bytes number which are requered to store
+        /** \brief Computes bytes number which are required to store
          * all weights and intermediate blobs for each layer.
          * @param netInputShapes vector of shapes for all net inputs.
          * @param layerIds output vector to save layer IDs.
@@ -1917,6 +1985,34 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
 
+     /**
+      * \brief Read deep learning network represented in one of the supported formats.
+      * @param [in] model Binary file contains trained weights. The following file
+      *                  extensions are expected for models from different frameworks:
+      *                  * {@code *.caffemodel} (Caffe, http://caffe.berkeleyvision.org/)
+      *                  * {@code *.pb} (TensorFlow, https://www.tensorflow.org/)
+      *                  * {@code *.t7} | {@code *.net} (Torch, http://torch.ch/)
+      *                  * {@code *.weights} (Darknet, https://pjreddie.com/darknet/)
+      *                  * {@code *.bin} (DLDT, https://software.intel.com/openvino-toolkit)
+      * @param [in] config Text file contains network configuration. It could be a
+      *                   file with the following extensions:
+      *                  * {@code *.prototxt} (Caffe, http://caffe.berkeleyvision.org/)
+      *                  * {@code *.pbtxt} (TensorFlow, https://www.tensorflow.org/)
+      *                  * {@code *.cfg} (Darknet, https://pjreddie.com/darknet/)
+      *                  * {@code *.xml} (DLDT, https://software.intel.com/openvino-toolkit)
+      * @param [in] framework Explicit framework name tag to determine a format.
+      * @return Net object.
+      *
+      * This function automatically detects an origin framework of trained model
+      * and calls an appropriate function such \ref readNetFromCaffe, \ref readNetFromTensorflow,
+      * \ref readNetFromTorch or \ref readNetFromDarknet. An order of \p model and \p config
+      * arguments does not matter.
+      */
+     @Namespace("cv::dnn") public static native @ByVal Net readNet(@Str BytePointer model, @Str BytePointer config/*=""*/, @Str BytePointer framework/*=""*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNet(@Str BytePointer model);
+     @Namespace("cv::dnn") public static native @ByVal Net readNet(@Str String model, @Str String config/*=""*/, @Str String framework/*=""*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNet(@Str String model);
+
     /** \brief Loads blob which was serialized as torch.Tensor object of Torch7 framework.
      *  \warning This function has the same limitations as readNetFromTorch().
      */
@@ -1924,6 +2020,17 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str BytePointer filename);
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str String filename, @Cast("bool") boolean isBinary/*=true*/);
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str String filename);
+
+    /** \brief Load a network from Intel's Model Optimizer intermediate representation.
+     *  @param [in] xml XML configuration file with network's topology.
+     *  @param [in] bin Binary file with trained weights.
+     *  @return Net object.
+     *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
+     *  backend.
+     */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml, @Str String bin);
+
     /** \brief Creates 4-dimensional blob from image. Optionally resizes and crops \p image from center,
      *  subtract \p mean values, scales values by \p scalefactor, swap Blue and Red channels.
      *  @param image input image (with 1-, 3- or 4-channels).
@@ -1937,7 +2044,7 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
      *  \details if \p crop is true, input image is resized so one side after resize is equal to corresponding
      *  dimension in \p size and another one is equal or larger. Then, crop from the center is performed.
      *  If \p crop is false, direct resize without cropping and preserving aspect ratio is performed.
-     *  @return 4-dimansional Mat with NCHW dimensions order.
+     *  @return 4-dimensional Mat with NCHW dimensions order.
      */
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal Mat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
                                        @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/);
@@ -2098,6 +2205,27 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
                                    float score_threshold, float nms_threshold,
                                    @StdVector int[] indices);
 
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector FloatPointer scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector IntPointer indices,
+                                 float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector FloatPointer scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector IntPointer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector FloatBuffer scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector IntBuffer indices,
+                                 float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector FloatBuffer scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector IntBuffer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector float[] scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector int[] indices,
+                                 float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@StdVector RotatedRect bboxes, @StdVector float[] scores,
+                                 float score_threshold, float nms_threshold,
+                                 @StdVector int[] indices);
 
 /** \} */
 
@@ -2169,18 +2297,18 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
 
     /** Each Layer class must provide this function to the factory */
-    @Convention(value="", extern="C++") public static class Constuctor extends FunctionPointer {
+    @Convention(value="", extern="C++") public static class Constructor extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Constuctor(Pointer p) { super(p); }
-        protected Constuctor() { allocate(); }
+        public    Constructor(Pointer p) { super(p); }
+        protected Constructor() { allocate(); }
         private native void allocate();
         public native @Ptr Layer call(@ByRef LayerParams params);
     }
 
     /** Registers the layer class with typename \p type and specified \p constructor. Thread-safe. */
-    public static native void registerLayer(@Str BytePointer type, Constuctor constructor);
-    public static native void registerLayer(@Str String type, Constuctor constructor);
+    public static native void registerLayer(@Str BytePointer type, Constructor constructor);
+    public static native void registerLayer(@Str String type, Constructor constructor);
 
     /** Unregisters registered layer with specified type name. Thread-safe. */
     public static native void unregisterLayer(@Str BytePointer type);
@@ -2279,14 +2407,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 
 @Namespace("cv::dnn") public static native @ByVal Mat getPlane(@Const @ByRef Mat m, int n, int cn);
 
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntPointer dims, int n/*=4*/);
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntPointer dims);
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntBuffer dims, int n/*=4*/);
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntBuffer dims);
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const int[] dims, int n/*=4*/);
-@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const int[] dims);
+@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntPointer dims, int n);
+@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const IntBuffer dims, int n);
+@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const int[] dims, int n);
 
 @Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const @ByRef Mat mat);
+
+@Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const @ByRef MatSize sz);
 
 @Namespace("cv::dnn") public static native @StdVector @ByVal IntPointer shape(@Const @ByRef UMat mat);
 

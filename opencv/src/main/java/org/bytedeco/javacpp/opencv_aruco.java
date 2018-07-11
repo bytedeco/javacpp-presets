@@ -116,12 +116,15 @@ the use of this software, even if advised of the possibility of such damage.
     /**
      * @see generateCustomDictionary
      */
+    public static native @Ptr Dictionary create(int nMarkers, int markerSize, int randomSeed/*=0*/);
     public static native @Ptr Dictionary create(int nMarkers, int markerSize);
 
 
     /**
      * @see generateCustomDictionary
      */
+    public static native @Ptr @Name("create") Dictionary create_from(int nMarkers, int markerSize,
+                @Ptr Dictionary baseDictionary, int randomSeed/*=0*/);
     public static native @Ptr @Name("create") Dictionary create_from(int nMarkers, int markerSize,
                 @Ptr Dictionary baseDictionary);
 
@@ -200,7 +203,15 @@ public static final int
     DICT_7X7_100 = 13,
     DICT_7X7_250 = 14,
     DICT_7X7_1000 = 15,
-    DICT_ARUCO_ORIGINAL = 16;
+    DICT_ARUCO_ORIGINAL = 16,
+    /** 4x4 bits, minimum hamming distance between any two codes = 5, 30 codes */
+    DICT_APRILTAG_16h5 = 17,
+    /** 5x5 bits, minimum hamming distance between any two codes = 9, 35 codes */
+    DICT_APRILTAG_25h9 = 18,
+    /** 6x6 bits, minimum hamming distance between any two codes = 10, 2320 codes */
+    DICT_APRILTAG_36h10 = 19,
+    /** 6x6 bits, minimum hamming distance between any two codes = 11, 587 codes */
+    DICT_APRILTAG_36h11 = 20;
 
 
 /**
@@ -219,6 +230,10 @@ public static final int
   */
 @Namespace("cv::aruco") public static native @Ptr @Name("generateCustomDictionary") Dictionary custom_dictionary(
         int nMarkers,
+        int markerSize,
+        int randomSeed/*=0*/);
+@Namespace("cv::aruco") public static native @Ptr @Name("generateCustomDictionary") Dictionary custom_dictionary(
+        int nMarkers,
         int markerSize);
 
 
@@ -228,12 +243,18 @@ public static final int
   * @param nMarkers number of markers in the dictionary
   * @param markerSize number of bits per dimension of each markers
   * @param baseDictionary Include the markers in this dictionary at the beginning (optional)
+  * @param randomSeed a user supplied seed for theRNG()
   *
   * This function creates a new dictionary composed by nMarkers markers and each markers composed
   * by markerSize x markerSize bits. If baseDictionary is provided, its markers are directly
   * included and the rest are generated based on them. If the size of baseDictionary is higher
   * than nMarkers, only the first nMarkers in baseDictionary are taken and no new marker is added.
   */
+@Namespace("cv::aruco") public static native @Ptr @Name("generateCustomDictionary") Dictionary custom_dictionary_from(
+        int nMarkers,
+        int markerSize,
+        @Ptr Dictionary baseDictionary,
+        int randomSeed/*=0*/);
 @Namespace("cv::aruco") public static native @Ptr @Name("generateCustomDictionary") Dictionary custom_dictionary_from(
         int nMarkers,
         int markerSize,
@@ -301,14 +322,16 @@ the use of this software, even if advised of the possibility of such damage.
  * These markers are useful for easy, fast and robust camera pose estimation.ç
  *
  * The main functionalities are:
- * - Detection of markers in a image
+ * - Detection of markers in an image
  * - Pose estimation from a single marker or from a board/set of markers
  * - Detection of ChArUco board for high subpixel accuracy
  * - Camera calibration from both, ArUco boards and ChArUco boards.
  * - Detection of ChArUco diamond markers
  * The samples directory includes easy examples of how to use the module.
  *
- * The implementation is based on the ArUco Library by R. Muñoz-Salinas and S. Garrido-Jurado.
+ * The implementation is based on the ArUco Library by R. Muñoz-Salinas and S. Garrido-Jurado \cite Aruco2014.
+ *
+ * Markers can also be detected based on the AprilTag 2 \cite wang2016iros fiducial detection method.
  *
  * \sa S. Garrido-Jurado, R. Muñoz-Salinas, F. J. Madrid-Cuevas, and M. J. Marín-Jiménez. 2014.
  * "Automatic generation and detection of highly reliable fiducial markers under occlusion".
@@ -327,9 +350,14 @@ the use of this software, even if advised of the possibility of such damage.
 
 /** enum cv::aruco::CornerRefineMethod */
 public static final int
-	CORNER_REFINE_NONE = 0,     // default corners
-	CORNER_REFINE_SUBPIX = 1,   // refine the corners using subpix
-	CORNER_REFINE_CONTOUR = 2;   // refine the corners using the contour-points
+    /** Tag and corners detection based on the ArUco approach */
+    CORNER_REFINE_NONE = 0,
+    /** ArUco approach and refine the corners locations using corner subpixel accuracy */
+    CORNER_REFINE_SUBPIX = 1,
+    /** ArUco approach and refine the corners locations using the contour-points line fitting */
+    CORNER_REFINE_CONTOUR = 2,
+    /** Tag and corners detection based on the AprilTag 2 approach \cite wang2016iros */
+    CORNER_REFINE_APRILTAG = 3;
 
 /**
  * \brief Parameters for the detectMarker process:
@@ -354,7 +382,8 @@ public static final int
  *   similar, so that the smaller one is removed. The rate is relative to the smaller perimeter
  *   of the two markers (default 0.05).
  * - cornerRefinementMethod: corner refinement method. (CORNER_REFINE_NONE, no refinement.
- *   CORNER_REFINE_SUBPIX, do subpixel refinement. CORNER_REFINE_CONTOUR use contour-Points)
+ *   CORNER_REFINE_SUBPIX, do subpixel refinement. CORNER_REFINE_CONTOUR use contour-Points,
+ *   CORNER_REFINE_APRILTAG  use the AprilTag2 approach)
  * - cornerRefinementWinSize: window size for the corner refinement process (in pixels) (default 5).
  * - cornerRefinementMaxIterations: maximum number of iterations for stop criteria of the corner
  *   refinement process (default 30).
@@ -374,6 +403,21 @@ public static final int
  *   than 128 or not) (default 5.0)
  * - errorCorrectionRate error correction rate respect to the maximun error correction capability
  *   for each dictionary. (default 0.6).
+ * - aprilTagMinClusterPixels: reject quads containing too few pixels.
+ * - aprilTagMaxNmaxima: how many corner candidates to consider when segmenting a group of pixels into a quad.
+ * - aprilTagCriticalRad: Reject quads where pairs of edges have angles that are close to straight or close to
+ *   180 degrees. Zero means that no quads are rejected. (In radians).
+ * - aprilTagMaxLineFitMse:  When fitting lines to the contours, what is the maximum mean squared error
+ *   allowed?  This is useful in rejecting contours that are far from being quad shaped; rejecting
+ *   these quads "early" saves expensive decoding processing.
+ * - aprilTagMinWhiteBlackDiff: When we build our model of black & white pixels, we add an extra check that
+ *   the white model must be (overall) brighter than the black model.  How much brighter? (in pixel values, [0,255]).
+ * - aprilTagDeglitch:  should the thresholded image be deglitched? Only useful for very noisy images
+ * - aprilTagQuadDecimate: Detection of quads can be done on a lower-resolution image, improving speed at a
+ *   cost of pose accuracy and a slight decrease in detection rate. Decoding the binary payload is still
+ *   done at full resolution.
+ * - aprilTagQuadSigma: What Gaussian blur should be applied to the segmented image (used for quad detection?)
+ *   Parameter is the standard deviation in pixels.  Very noisy images benefit from non-zero values (e.g. 0.8).
  */
 @Namespace("cv::aruco") @NoOffset public static class DetectorParameters extends Pointer {
     static { Loader.load(); }
@@ -412,6 +456,18 @@ public static final int
     public native double maxErroneousBitsInBorderRate(); public native DetectorParameters maxErroneousBitsInBorderRate(double maxErroneousBitsInBorderRate);
     public native double minOtsuStdDev(); public native DetectorParameters minOtsuStdDev(double minOtsuStdDev);
     public native double errorCorrectionRate(); public native DetectorParameters errorCorrectionRate(double errorCorrectionRate);
+
+    // April :: User-configurable parameters.
+    public native float aprilTagQuadDecimate(); public native DetectorParameters aprilTagQuadDecimate(float aprilTagQuadDecimate);
+    public native float aprilTagQuadSigma(); public native DetectorParameters aprilTagQuadSigma(float aprilTagQuadSigma);
+
+    // April :: Internal variables
+    public native int aprilTagMinClusterPixels(); public native DetectorParameters aprilTagMinClusterPixels(int aprilTagMinClusterPixels);
+    public native int aprilTagMaxNmaxima(); public native DetectorParameters aprilTagMaxNmaxima(int aprilTagMaxNmaxima);
+    public native float aprilTagCriticalRad(); public native DetectorParameters aprilTagCriticalRad(float aprilTagCriticalRad);
+    public native float aprilTagMaxLineFitMse(); public native DetectorParameters aprilTagMaxLineFitMse(float aprilTagMaxLineFitMse);
+    public native int aprilTagMinWhiteBlackDiff(); public native DetectorParameters aprilTagMinWhiteBlackDiff(int aprilTagMinWhiteBlackDiff);
+    public native int aprilTagDeglitch(); public native DetectorParameters aprilTagDeglitch(int aprilTagDeglitch);
 }
 
 

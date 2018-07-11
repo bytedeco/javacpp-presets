@@ -1,6 +1,6 @@
-diff -ruN opencv_contrib-3.4.1/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-3.4.1-patch/modules/bgsegm/src/bgfg_gsoc.cpp
---- opencv_contrib-3.4.1/modules/bgsegm/src/bgfg_gsoc.cpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/bgsegm/src/bgfg_gsoc.cpp	2018-03-10 14:18:02.591239465 +0900
+diff -ruN opencv_contrib-3.4.2/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-3.4.2-patch/modules/bgsegm/src/bgfg_gsoc.cpp
+--- opencv_contrib-3.4.2/modules/bgsegm/src/bgfg_gsoc.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/bgsegm/src/bgfg_gsoc.cpp	2018-07-11 19:00:20.709017987 +0900
 @@ -264,7 +264,7 @@
  
  class BackgroundModelGSOC : public BackgroundModel<BackgroundSampleGSOC> {
@@ -19,39 +19,9 @@ diff -ruN opencv_contrib-3.4.1/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-3
  
      int countMatches(int i, int j, const Point3f& color, int desc, float threshold, int descThreshold, float& minDist) const {
          const int end = i * stride + (j + 1) * nSamples;
-diff -ruN opencv_contrib-3.4.1/modules/dnn_modern/CMakeLists.txt opencv_contrib-3.4.1-patch/modules/dnn_modern/CMakeLists.txt
---- opencv_contrib-3.4.1/modules/dnn_modern/CMakeLists.txt	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/dnn_modern/CMakeLists.txt	2018-03-10 14:19:49.845808226 +0900
-@@ -15,16 +15,16 @@
- 
- set(TINY_DNN_CPP_PATH "${OpenCV_BINARY_DIR}/3rdparty/tinydnn")
- set(TINY_DNN_CPP_ROOT "${TINY_DNN_CPP_PATH}/tiny-dnn-1.0.0a3")
--ocv_download(FILENAME "v1.0.0a3.tar.gz"
--               HASH "adb1c512e09ca2c7a6faef36f9c53e59"
--               URL
--                 "${OPENCV_TINY_DNN_URL}"
--                 "$ENV{OPENCV_TINY_DNN_URL}"
--                 "https://github.com/tiny-dnn/tiny-dnn/archive/"
--               DESTINATION_DIR "${TINY_DNN_CPP_PATH}"
--               STATUS TINY_DNN_DOWNLOAD_SUCCESS
--               ID "tiny-dnn"
--               UNPACK RELATIVE_URL)
-+#ocv_download(FILENAME "v1.0.0a3.tar.gz"
-+#               HASH "adb1c512e09ca2c7a6faef36f9c53e59"
-+#               URL
-+#                 "${OPENCV_TINY_DNN_URL}"
-+#                 "$ENV{OPENCV_TINY_DNN_URL}"
-+#                 "https://github.com/tiny-dnn/tiny-dnn/archive/"
-+#               DESTINATION_DIR "${TINY_DNN_CPP_PATH}"
-+#               STATUS TINY_DNN_DOWNLOAD_SUCCESS
-+#               ID "tiny-dnn"
-+#               UNPACK RELATIVE_URL)
- 
- if(NOT TINY_DNN_DOWNLOAD_SUCCESS)
-   message(STATUS "Failed to download tiny-dnn sources")
-diff -ruN opencv_contrib-3.4.1/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-3.4.1-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
---- opencv_contrib-3.4.1/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-03-10 14:19:49.846808222 +0900
+diff -ruN opencv_contrib-3.4.2/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-3.4.2-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
+--- opencv_contrib-3.4.2/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-07-11 19:00:20.710017987 +0900
 @@ -93,7 +93,7 @@
  
      };
@@ -61,9 +31,9 @@ diff -ruN opencv_contrib-3.4.1/modules/face/include/opencv2/face/facemarkLBF.hpp
      public:
          BBox();
          ~BBox();
-diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/feature.hpp opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/feature.hpp
---- opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/feature.hpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/feature.hpp	2018-03-10 14:19:49.846808222 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/feature.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/feature.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/feature.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/feature.hpp	2018-07-11 19:00:20.710017987 +0900
 @@ -100,8 +100,6 @@
      (p3) = (rect).x + (rect).width - (rect).height                        \
             + (step) * ((rect).y + (rect).width + (rect).height);
@@ -153,10 +123,10 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/feature
 +class CV_EXPORTS CvLBPEvaluator : public CvFeatureEvaluator
  {
   public:
-   virtual ~CvLBPEvaluator()
-diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp
---- opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-03-10 14:19:49.846808222 +0900
+   virtual ~CvLBPEvaluator() CV_OVERRIDE
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-07-11 19:00:20.710017987 +0900
 @@ -59,7 +59,7 @@
  class ClassifierThreshold;
  class Detector;
@@ -211,9 +181,9 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineB
  {
   public:
  
-diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineMIL.hpp opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp
---- opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-03-10 14:19:49.846808222 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineMIL.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-07-11 19:00:20.710017987 +0900
 @@ -87,7 +87,7 @@
  
  };
@@ -223,9 +193,9 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/onlineM
  {
   public:
    float _mu0, _mu1, _sig0, _sig1;
-diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/tracker.hpp opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/tracker.hpp
---- opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-03-10 14:19:49.846808222 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/tracker.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/tracker.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-07-11 19:00:20.711017987 +0900
 @@ -176,7 +176,7 @@
    /** @overload
      @param feature The TrackerFeature class
@@ -262,9 +232,9 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/include/opencv2/tracking/tracker
    {
  
     public:
-diff -ruN opencv_contrib-3.4.1/modules/tracking/src/onlineMIL.cpp opencv_contrib-3.4.1-patch/modules/tracking/src/onlineMIL.cpp
---- opencv_contrib-3.4.1/modules/tracking/src/onlineMIL.cpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/src/onlineMIL.cpp	2018-03-10 14:19:49.847808218 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/onlineMIL.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/onlineMIL.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/onlineMIL.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/onlineMIL.cpp	2018-07-11 19:00:20.711017987 +0900
 @@ -364,7 +364,7 @@
    return float( log_p1 - log_p0 );
  }
@@ -274,9 +244,9 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/src/onlineMIL.cpp opencv_contrib
  {
    std::vector<float> res( x.rows );
  
-diff -ruN opencv_contrib-3.4.1/modules/tracking/src/trackerFeatureSet.cpp opencv_contrib-3.4.1-patch/modules/tracking/src/trackerFeatureSet.cpp
---- opencv_contrib-3.4.1/modules/tracking/src/trackerFeatureSet.cpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/src/trackerFeatureSet.cpp	2018-03-10 14:19:49.847808218 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/trackerFeatureSet.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/trackerFeatureSet.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/trackerFeatureSet.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/trackerFeatureSet.cpp	2018-07-11 19:00:20.711017987 +0900
 @@ -111,7 +111,7 @@
    return true;
  }
@@ -286,9 +256,9 @@ diff -ruN opencv_contrib-3.4.1/modules/tracking/src/trackerFeatureSet.cpp opencv
  {
    if( blockAddTrackerFeature )
    {
-diff -ruN opencv_contrib-3.4.1/modules/tracking/src/trackerSampler.cpp opencv_contrib-3.4.1-patch/modules/tracking/src/trackerSampler.cpp
---- opencv_contrib-3.4.1/modules/tracking/src/trackerSampler.cpp	2018-02-22 22:38:31.000000000 +0900
-+++ opencv_contrib-3.4.1-patch/modules/tracking/src/trackerSampler.cpp	2018-03-10 14:19:49.847808218 +0900
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/trackerSampler.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/trackerSampler.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/trackerSampler.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/trackerSampler.cpp	2018-07-11 19:00:20.711017987 +0900
 @@ -106,7 +106,7 @@
    return true;
  }

@@ -374,7 +374,7 @@ compensate for the differences in the size of areas. The sums of pixel values ov
 regions are calculated rapidly using integral images (see below and the integral description).
 <p>
 To see the object detector at work, have a look at the facedetect demo:
-<https://github.com/opencv/opencv/tree/master/samples/cpp/dbt_face_detection.cpp>
+<https://github.com/opencv/opencv/tree/3.4/samples/cpp/dbt_face_detection.cpp>
 <p>
 The following reference is for the detection part only. There is a separate application called
 opencv_traincascade that can train a cascade of boosted classifiers from a set of samples.
@@ -1505,6 +1505,19 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector DoubleBuffer weights, int groupThreshold, double eps);
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector double[] weights, int groupThreshold, double eps);
 }
+
+/** \brief Detect QR code in image and return minimum area of quadrangle that describes QR code.
+    @param in  Matrix of the type CV_8UC1 containing an image where QR code are detected.
+    @param points Output vector of vertices of a quadrangle of minimal area that describes QR code.
+    @param eps_x Epsilon neighborhood, which allows you to determine the horizontal pattern of the scheme 1:1:3:1:1 according to QR code standard.
+    @param eps_y Epsilon neighborhood, which allows you to determine the vertical pattern of the scheme 1:1:3:1:1 according to QR code standard.
+    */
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points);
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points);
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
+@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points);
 
 /** \} objdetect */
 

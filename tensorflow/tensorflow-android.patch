@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-android/tensorflow/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/BUILD	2018-07-05 10:09:42.083681693 +0900
-@@ -529,29 +529,25 @@
+diff -ruN tensorflow-1.9.0/tensorflow/BUILD tensorflow-1.9.0-android/tensorflow/BUILD
+--- tensorflow-1.9.0/tensorflow/BUILD	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/BUILD	2018-07-11 22:37:05.882331241 +0900
+@@ -505,29 +505,25 @@
  
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
@@ -49,9 +49,9 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-android/ten
      ],
  )
  
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/c/BUILD tensorflow-1.9.0-rc2-android/tensorflow/c/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/c/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/c/BUILD	2018-07-05 10:09:42.084681693 +0900
+diff -ruN tensorflow-1.9.0/tensorflow/c/BUILD tensorflow-1.9.0-android/tensorflow/c/BUILD
+--- tensorflow-1.9.0/tensorflow/c/BUILD	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/c/BUILD	2018-07-11 22:37:05.883331242 +0900
 @@ -135,6 +135,22 @@
      visibility = ["//visibility:public"],
  )
@@ -75,10 +75,10 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/c/BUILD tensorflow-1.9.0-rc2-android/t
  tf_cuda_library(
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/BUILD tensorflow-1.9.0-rc2-android/tensorflow/core/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/core/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/core/BUILD	2018-07-05 10:09:42.085681693 +0900
-@@ -1617,7 +1617,11 @@
+diff -ruN tensorflow-1.9.0/tensorflow/core/BUILD tensorflow-1.9.0-android/tensorflow/core/BUILD
+--- tensorflow-1.9.0/tensorflow/core/BUILD	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/core/BUILD	2018-07-11 22:37:05.884331242 +0900
+@@ -1596,7 +1596,11 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -91,9 +91,9 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/BUILD tensorflow-1.9.0-rc2-androi
      copts = tf_copts(),
      tags = [
          "manual",
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/framework/tensor.h tensorflow-1.9.0-rc2-android/tensorflow/core/framework/tensor.h
---- tensorflow-1.9.0-rc2/tensorflow/core/framework/tensor.h	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/core/framework/tensor.h	2018-07-05 10:09:47.240682933 +0900
+diff -ruN tensorflow-1.9.0/tensorflow/core/framework/tensor.h tensorflow-1.9.0-android/tensorflow/core/framework/tensor.h
+--- tensorflow-1.9.0/tensorflow/core/framework/tensor.h	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/core/framework/tensor.h	2018-07-11 22:37:05.885331242 +0900
 @@ -117,6 +117,11 @@
    /// are not valid.
    Tensor(Tensor&& other);
@@ -118,10 +118,10 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/framework/tensor.h tensorflow-1.9
    bool CanUseDMA() const;
  
    // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/kernels/BUILD tensorflow-1.9.0-rc2-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/core/kernels/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/core/kernels/BUILD	2018-07-05 10:09:42.087681694 +0900
-@@ -4990,6 +4990,7 @@
+diff -ruN tensorflow-1.9.0/tensorflow/core/kernels/BUILD tensorflow-1.9.0-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.9.0/tensorflow/core/kernels/BUILD	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/core/kernels/BUILD	2018-07-11 22:37:05.885331242 +0900
+@@ -4912,6 +4912,7 @@
          "warn_about_ints.h",
          "where_op.h",
          "xent_op.h",
@@ -129,9 +129,9 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/kernels/BUILD tensorflow-1.9.0-rc
      ],
  )
  
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/java/src/main/native/BUILD tensorflow-1.9.0-rc2-android/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/java/src/main/native/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/java/src/main/native/BUILD	2018-07-05 10:09:42.088681694 +0900
+diff -ruN tensorflow-1.9.0/tensorflow/java/src/main/native/BUILD tensorflow-1.9.0-android/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.9.0/tensorflow/java/src/main/native/BUILD	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/java/src/main/native/BUILD	2018-07-11 22:37:05.886331243 +0900
 @@ -86,3 +86,15 @@
      ),
      visibility = ["//tensorflow:__subpackages__"],
@@ -148,10 +148,10 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/java/src/main/native/BUILD tensorflow-
 +    ),
 +    visibility = ["//visibility:public"],
 +)
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/tensorflow.bzl tensorflow-1.9.0-rc2-android/tensorflow/tensorflow.bzl
---- tensorflow-1.9.0-rc2/tensorflow/tensorflow.bzl	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/tensorflow/tensorflow.bzl	2018-07-05 10:09:42.089681694 +0900
-@@ -198,7 +198,6 @@
+diff -ruN tensorflow-1.9.0/tensorflow/tensorflow.bzl tensorflow-1.9.0-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.9.0/tensorflow/tensorflow.bzl	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/tensorflow/tensorflow.bzl	2018-07-11 22:37:05.886331243 +0900
+@@ -192,7 +192,6 @@
    # to be used, pass android_optimization_level_override=None
    android_copts = [
        "-std=c++11",
@@ -159,13 +159,22 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/tensorflow.bzl tensorflow-1.9.0-rc2-an
        "-Wno-narrowing",
        "-fomit-frame-pointer",
    ]
-diff -ruN tensorflow-1.9.0-rc2/WORKSPACE tensorflow-1.9.0-rc2-android/WORKSPACE
---- tensorflow-1.9.0-rc2/WORKSPACE	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-android/WORKSPACE	2018-07-05 10:09:42.089681694 +0900
-@@ -27,6 +27,16 @@
- load("@local_config_android//:android.bzl", "android_workspace")
- android_workspace()
- 
+diff -ruN tensorflow-1.9.0/WORKSPACE tensorflow-1.9.0-android/WORKSPACE
+--- tensorflow-1.9.0/WORKSPACE	2018-07-10 05:38:25.000000000 +0900
++++ tensorflow-1.9.0-android/WORKSPACE	2018-07-11 22:42:11.267422117 +0900
+@@ -33,15 +33,15 @@
+ #    path = "<PATH_TO_SDK>",
+ #)
+ #
+-#android_ndk_repository(
+-#    name="androidndk",
+-#    path="<PATH_TO_NDK>",
+-#    # This needs to be 14 or higher to compile TensorFlow.
+-#    # Please specify API level to >= 21 to build for 64-bit
+-#    # archtectures or the Android NDK will automatically select biggest
+-#    # API level that it supports without notice.
+-#    # Note that the NDK version is not the API level.
+-#    api_level=14)
 +android_ndk_repository(
 +    name="androidndk",
 +    path="<PATH_TO_NDK>",
@@ -175,7 +184,6 @@ diff -ruN tensorflow-1.9.0-rc2/WORKSPACE tensorflow-1.9.0-rc2-android/WORKSPACE
 +    # API level that it supports without notice.
 +    # Note that the NDK version is not the API level.
 +    api_level=14)
-+
+ 
  # Please add all new TensorFlow dependencies in workspace.bzl.
  tf_workspace()
- 
