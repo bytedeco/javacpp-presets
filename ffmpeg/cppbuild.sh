@@ -150,7 +150,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
         sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -220,7 +220,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=aarch64 --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/arm64-v8a/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/arm64-v8a/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -293,7 +293,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
         sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -363,7 +363,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-android.patch
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86_64/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86_64/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
