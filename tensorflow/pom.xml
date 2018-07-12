@@ -103,7 +103,7 @@
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
              <linkPath>${tensorflow.path}/../build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/double-conversion/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>
@@ -174,7 +174,7 @@
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/session_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensorflow_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/tensor_jni.cc</compilerOption>
-                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/utils_jni.cc</compilerOption>
+<!--                <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/utils_jni.cc</compilerOption> -->
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
               </compilerOptions>
