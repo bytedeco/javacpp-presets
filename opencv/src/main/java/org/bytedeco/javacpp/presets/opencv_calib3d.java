@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = {opencv_highgui.class, opencv_features2d.class}, value = {
     @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.3.4"),
     @Platform(value = "ios", preload = "libopencv_calib3d"),
-    @Platform(value = "windows", link = "opencv_calib3d341")},
+    @Platform(value = "windows", link = "opencv_calib3d342")},
         target = "org.bytedeco.javacpp.opencv_calib3d", helper = "org.bytedeco.javacpp.helper.opencv_calib3d")
 public class opencv_calib3d implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_tracking@.3.4"
         ),
         @Platform(value = "ios", preload = "libopencv_tracking"),
-        @Platform(value = "windows", link = "opencv_tracking341")
+        @Platform(value = "windows", link = "opencv_tracking342")
     },
     target = "org.bytedeco.javacpp.opencv_tracking"
 )

@@ -41,8 +41,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               link = "opencv_stitching@.3.4", preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
               "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4", "opencv_cudawarping@.3.4"}),
     @Platform(value = "ios", preload = "libopencv_stitching"),
-    @Platform(value = "windows", link = "opencv_stitching341", preload = {"opencv_cuda341", "opencv_cudaarithm341", "opencv_cudafilters341",
-              "opencv_cudaimgproc341", "opencv_cudafeatures2d341", "opencv_cudalegacy341", "opencv_cudawarping341"})},
+    @Platform(value = "windows", link = "opencv_stitching342", preload = {"opencv_cuda342", "opencv_cudaarithm342", "opencv_cudafilters342",
+              "opencv_cudaimgproc342", "opencv_cudafeatures2d342", "opencv_cudalegacy342", "opencv_cudawarping342"})},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {

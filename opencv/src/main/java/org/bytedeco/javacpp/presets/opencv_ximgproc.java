@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
         "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.4"),
     @Platform(value = "ios", preload = "libopencv_ximgproc"),
-    @Platform(value = "windows", link = "opencv_ximgproc341")},
+    @Platform(value = "windows", link = "opencv_ximgproc342")},
         target = "org.bytedeco.javacpp.opencv_ximgproc")
 public class opencv_ximgproc implements InfoMapper {
     public void map(InfoMap infoMap) {

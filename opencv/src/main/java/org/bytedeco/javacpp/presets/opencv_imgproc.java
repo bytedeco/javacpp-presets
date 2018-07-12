@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc.hpp>",
                          "<opencv2/imgproc/detail/distortion_model.hpp>"}, link = "opencv_imgproc@.3.4"),
     @Platform(value = "ios", preload = "libopencv_imgproc"),
-    @Platform(value = "windows", link = "opencv_imgproc341")},
+    @Platform(value = "windows", link = "opencv_imgproc342")},
         target = "org.bytedeco.javacpp.opencv_imgproc", helper = "org.bytedeco.javacpp.helper.opencv_imgproc")
 public class opencv_imgproc implements InfoMapper {
     public void map(InfoMap infoMap) {
