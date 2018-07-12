@@ -143,8 +143,6 @@ case $PLATFORM in
         export FC="$OLDFC -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export NO_AVX2=1
-        export NO_AVX512=1
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -177,7 +175,6 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
-        export NO_AVX2=1
         export NO_AVX512=1
         ;;
     windows-x86)
@@ -193,7 +190,6 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
-        export NO_AVX2=1
         export NO_AVX512=1
         ;;
     *)

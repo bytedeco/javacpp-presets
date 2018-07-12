@@ -1,4 +1,5 @@
 
+ * Build all presets on CentOS 6 with Developer Toolset 6
  * Fix functions from `facemark.hpp` and `face_alignment.hpp` that crash when called with `cv::Mat` objects
  * Virtualize `TensorBuffer` and make constructor with helper method in `Tensor` public to allow zero-copy
  * Add factory methods for `TF_Status`, `TF_Buffer`, `TF_Tensor`, `TF_SessionOptions`, `TF_Graph`, `TF_ImportGraphDefOptions`, and `TF_Session` that register deallocators
