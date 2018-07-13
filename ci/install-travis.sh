@@ -28,7 +28,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 rh-maven33 python27"
-  if [[ "librealsense chilitags mkl-dnn llvm tesseract caffe mxnet tensorflow tensorrt ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense tensorflow skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
@@ -43,7 +43,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6.1/repo/epel-$CENTOS_VERSION/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo -o /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/\$basearch/i386/g' /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y install"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -ivh --force"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
   fi
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
