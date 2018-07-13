@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.14
+MKLDNN_VERSION=0.15
 MKLML_VERSION=2018.0.3.20180406
 download https://github.com/intel/mkl-dnn/archive/v$MKLDNN_VERSION.tar.gz mkl-dnn-$MKLDNN_VERSION.tar.bz2
 
@@ -26,7 +26,7 @@ case $PLATFORM in
         download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_lnx_$MKLML_VERSION.tgz mklml_lnx_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_lnx_$MKLML_VERSION.tgz -C external
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -Wno-error=unused-result
         make -j $MAKEJ
         make install/strip
         cp external/mklml_lnx_$MKLML_VERSION/include/* ../include/

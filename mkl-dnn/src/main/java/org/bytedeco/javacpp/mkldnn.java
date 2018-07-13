@@ -361,168 +361,179 @@ public static final int
     /** 4D weights tensor in the format (height, width, input channels,
      * output channels). */
     mkldnn_hwio = 17,
+    /** 5D weights tensor in the format (depth, height, width, input channels,
+     * output channels). */
+    mkldnn_dhwio = 18,
     /** 5D weight tensor in the \c oidhw format. */
-    mkldnn_oidhw = 18,
+    mkldnn_oidhw = 19,
    /** 6D weights tensor in the \c oidhw format with output channels data
     * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_OIdhw16i16o = 19,
+    mkldnn_OIdhw16i16o = 20,
     /** 6D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIdhw16o16i = 20,
+    mkldnn_OIdhw16o16i = 21,
     /** 5D weights tensor in the blocked version of \c oidhw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_Oidhw16o = 21,
+    mkldnn_Oidhw16o = 22,
     /** 5D weights tensor in the blocked version of \c oidhw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_Odhwi16o = 22,
+    mkldnn_Odhwi16o = 23,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 8-element blocks. */
-    mkldnn_OIhw8i8o = 23,
+    mkldnn_OIhw8i8o = 24,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIhw16i16o = 24,
+    mkldnn_OIhw16i16o = 25,
     /** 4D weights tensor in the \c oihw format with output channels data
      * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_OIhw4i16o4i = 25,
+    mkldnn_OIhw4i16o4i = 26,
     /** 4D weights tensor in the \c oihw format with output channels data
      * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_OIhw8i16o2i = 26,
+    mkldnn_OIhw8i16o2i = 27,
+    /** 5D weights tensor in the \c oidhw format with output channels data
+     * laid out in memory in 16-element blocks and input channels data
+     * laid out in memory in 8-element blocks blocked by pairs. */
+    mkldnn_OIdhw8i16o2i = 28,
     /** 4D weights tensor in the \c oihw format with input channels data
      * laid out in memory in 16-element blocks and output channels data
      * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_OIhw8o16i2o = 27,
+    mkldnn_OIhw8o16i2o = 29,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 8-element blocks. */
-    mkldnn_OIhw8o8i = 28,
+    mkldnn_OIhw8o8i = 30,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIhw16o16i = 29,
+    mkldnn_OIhw16o16i = 31,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_IOhw16o16i = 30,
+    mkldnn_IOhw16o16i = 32,
     /** 4D weights tensor in the format (output channels, input channels,
      * height, width) with output channels data laid out in memory in 8-element
      * blocks. */
-    mkldnn_Oihw8o = 31,
+    mkldnn_Oihw8o = 33,
     /** 4D weights tensor in the format (output channels, input channels,
      * height, width) with output channels data laid out in memory in
      * 16-element blocks. */
-    mkldnn_Oihw16o = 32,
+    mkldnn_Oihw16o = 34,
     /** 4D weights tensor in the format (output channels, width, height, input
      * channels) with output channels data laid out in memory in 8-element
      * blocks. */
-    mkldnn_Ohwi8o = 33,
+    mkldnn_Ohwi8o = 35,
     /** 4D weights tensor in the format (output channels, width, height, input
      * channels) with output channels data laid out in memory in 16-element
      * blocks. */
-    mkldnn_Ohwi16o = 34,
+    mkldnn_Ohwi16o = 36,
     /** 4D weights tensor in the \c oihw format with both input and output
      * channels data laid out in memory in 16-element and 4-element blocks. */
-    mkldnn_OhIw16o4i = 35,
+    mkldnn_OhIw16o4i = 37,
     /** 5D weights tensor in the \c oihw format with extra outer dimension for
      * groups. */
-    mkldnn_goihw = 36,
+    mkldnn_goihw = 38,
     /** 5D weights tensor in the \c hwio format with extra dimension for
      * groups that comes after the output channels. */
-    mkldnn_hwigo = 37,
+    mkldnn_hwigo = 39,
     /** 5D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 8-element blocks.
      */
-    mkldnn_gOIhw8i8o = 38,
+    mkldnn_gOIhw8i8o = 40,
     /** 5D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 16-element blocks.
      */
-    mkldnn_gOIhw16i16o = 39,
+    mkldnn_gOIhw16i16o = 41,
     /** 5D weights tensor in the \c oihw format with output channels data
      * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_gOIhw4i16o4i = 40,
+    mkldnn_gOIhw4i16o4i = 42,
     /** 5D weights tensor in the \c oihw format with output channels data
      * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_gOIhw8i16o2i = 41,
+    mkldnn_gOIhw8i16o2i = 43,
+    /** 6D weights tensor in the \c oidhw format with output channels data
+     * laid out in memory in 16-element blocks and input channels data
+     * laid out in memory in 8-element blocks blocked by pairs. */
+    mkldnn_gOIdhw8i16o2i = 44,
     /** 5D weights tensor in the \c oihw format with input channels data
      * laid out in memory in 16-element blocks and output channels data
      * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_gOIhw8o16i2o = 42,
+    mkldnn_gOIhw8o16i2o = 45,
     /** 5D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 8-element blocks.
      */
-    mkldnn_gOIhw8o8i = 43,
+    mkldnn_gOIhw8o8i = 46,
     /** 5D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 16-element blocks.
      */
-    mkldnn_gOIhw16o16i = 44,
+    mkldnn_gOIhw16o16i = 47,
     /** 5D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 16-element blocks.
      */
-    mkldnn_gIOhw16o16i = 45,
+    mkldnn_gIOhw16o16i = 48,
     /** 5D weights tensor in the blocked version of \c goihw format with output
      * channels data laid out in memory in 8-element blocks. */
-    mkldnn_gOihw8o = 46,
+    mkldnn_gOihw8o = 49,
     /** 5D weights tensor in the blocked version of \c goihw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOihw16o = 47,
+    mkldnn_gOihw16o = 50,
     /** 5D weights tensor in the blocked version of \c goihw format with output
      * channels data laid out in memory in 8-element blocks. */
-    mkldnn_gOhwi8o = 48,
+    mkldnn_gOhwi8o = 51,
     /** 5D weights tensor in the blocked version of \c goihw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOhwi16o = 49,
+    mkldnn_gOhwi16o = 52,
     /** 5D weights tensor in the blocked version of \c goihw format with group
      * data laid out in memory in 8-element blocks. */
-    mkldnn_Goihw8g = 50,
+    mkldnn_Goihw8g = 53,
     /** 5D weights tensor in the blocked version of \c goihw format with group
      * data laid out in memory in 16-element blocks. */
-    mkldnn_Goihw16g = 51,
+    mkldnn_Goihw16g = 54,
     /** 5D weights tensor in the \c goihw format with both input and output
      * channels data laid out in memory in 16-element and 4-element blocks. */
-    mkldnn_gOhIw16o4i = 52,
+    mkldnn_gOhIw16o4i = 55,
     /** 6D weight tensor in the \c goidhw format with extra dimension for
      * groups */
-    mkldnn_goidhw = 53,
+    mkldnn_goidhw = 56,
    /** 6D weights tensor in the \c oidhw format with output channels data
     * laid out in memory in 16-element blocks and input channels data
      * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_gOIdhw16i16o = 54,
+    mkldnn_gOIdhw16i16o = 57,
     /** 6D weights tensor in the blocked version of \c goihw format with both
      * input and output channels data laid out in memory in 16-element blocks.
      */
-    mkldnn_gOIdhw16o16i = 55,
+    mkldnn_gOIdhw16o16i = 58,
     /** 6D weights tensor in the blocked version of \c goidhw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOidhw16o = 56,
+    mkldnn_gOidhw16o = 59,
     /** 6D weights tensor in the blocked version of \c goidhw format with output
      * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOdhwi16o = 57,
+    mkldnn_gOdhwi16o = 60,
     /** 3D data tensor in the format (batch, seq_length, input channels). */
-    mkldnn_ntc = 58,
+    mkldnn_ntc = 61,
     /** 3D data tensor in the format (seq_length, batch, input channels). */
-    mkldnn_tnc = 59,
+    mkldnn_tnc = 62,
     /** 5D states tensor in the format (num_layers, num_directions, num_states,
      * batch, state channels). */
-    mkldnn_ldsnc = 60,
+    mkldnn_ldsnc = 63,
     /** 5D weights tensor in the format (num_layers, num_directions,
      *  input_chanels, num_gates, output_channels). */
-    mkldnn_ldigo = 61,
+    mkldnn_ldigo = 64,
     /** 5D weights tensor in the blocked format. */
-    mkldnn_ldigo_p = 62,
+    mkldnn_ldigo_p = 65,
     /** 5D weights tensor in the format (num_layers, num_directions, num_gates,
      *  output_channels, input_chanels). */
-    mkldnn_ldgoi = 63,
+    mkldnn_ldgoi = 66,
     /** 5D weights tensor in the blocked format. */
-    mkldnn_ldgoi_p = 64,
+    mkldnn_ldgoi_p = 67,
     /** 4D bias tensor in the format (num_layers, num_directions, num_gates,
      * output_channels). */
-    mkldnn_ldgo = 65,
+    mkldnn_ldgo = 68,
     /** General tensor format for integer 8bit winograd convolution. */
-    mkldnn_wino_fmt = 66,
+    mkldnn_wino_fmt = 69,
     /** Just a sentinel, not real memory format. Must be changed after new
      * format is added. */
-    mkldnn_format_last = 67,
+    mkldnn_format_last = 70,
     /** 4D weights tensor in the oihw format with input channels data laid out
      * in memory in 8-element blocks. */
     mkldnn_oIhw8i = mkldnn_nChw8c,
@@ -586,7 +597,7 @@ public static final int
     mkldnn_deconvolution = 8,
     /** An element-wise primitive. */
     mkldnn_eltwise = 9,
-    /** A ReLU primitive, @deprecated . */
+    /** A ReLU primitive. @deprecated */
     mkldnn_relu = mkldnn_eltwise,
     /** A Softmax primitive. */
     mkldnn_softmax = mkldnn_eltwise + 1,
@@ -598,7 +609,7 @@ public static final int
     mkldnn_batch_normalization = mkldnn_eltwise + 4,
     /** An inner product primitive. */
     mkldnn_inner_product = mkldnn_eltwise + 5,
-    /** A convolution primitive merged with relu */
+    /** A convolution primitive merged with ReLU. @deprecated */
     mkldnn_convolution_relu = mkldnn_eltwise + 6,
     /** A rnn primitive. */
     mkldnn_rnn = mkldnn_eltwise + 7;
@@ -651,7 +662,16 @@ public static final int
     /** LSTM cell */
     mkldnn_vanilla_lstm = 81,
     /** GRU cell */
-    mkldnn_vanilla_gru = 82;
+    mkldnn_vanilla_gru = 82,
+    /** GRU cell with linear before reset
+     *
+     * Modification of original GRU cell. Differs from #mkldnn_vanilla_gru
+     * in how the new memory gate is calculated:
+     * \f[ c_t = tanh(W_c*x_t + b_{c_h} + r_t*(U_c*h_{t-1}+b_{c_h})) \f]
+     * Primitive expects 4 biases on input:
+     * \f$[b_{u}, b_{r}, b_{c_x}, b_{c_h}]\f$
+     * */
+    mkldnn_gru_linear_before_reset = 83;
 
 /** Flags for batch-normalization primititve. */
 /** enum mkldnn_batch_normalization_flag_t */
@@ -684,7 +704,7 @@ public static final int
     mkldnn_use_scaleshift = 0x2,
     /** Omit statistics
      *
-     * \warning: deprecated, use #mkldnn_use_global_stats instead
+     * @deprecated use #mkldnn_use_global_stats instead
      *
      * For time being had an affect on backward propagation only which allowed
      * skipping some computations (the same semantics as
@@ -972,6 +992,8 @@ public static class mkldnn_softmax_desc_t extends Pointer {
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_softmax_desc_t prop_kind(int prop_kind);
     /** Source and destination memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t data_desc(); public native mkldnn_softmax_desc_t data_desc(mkldnn_memory_desc_t data_desc);
+    /** Source and Destination of gradient memory descriptor. */
+    public native @ByRef mkldnn_memory_desc_t diff_desc(); public native mkldnn_softmax_desc_t diff_desc(mkldnn_memory_desc_t diff_desc);
     /** The axis along which to perform the softmax. */
     public native int softmax_axis(); public native mkldnn_softmax_desc_t softmax_axis(int softmax_axis);
 }
@@ -1196,7 +1218,8 @@ public static class mkldnn_rnn_cell_desc_t extends Pointer {
     }
 
     /** RNN cell kind. Must be one of #mkldnn_vanilla_rnn,
-     * #mkldnn_vanilla_lstm, or #mkldnn_vanilla_gru. */
+     * #mkldnn_vanilla_lstm, #mkldnn_vanilla_gru
+     * or #mkldnn_gru_linear_before_reset. */
     public native @Cast("mkldnn_alg_kind_t") int cell_kind(); public native mkldnn_rnn_cell_desc_t cell_kind(int cell_kind);
     /** Activation function used. Must be one of #mkldnn_eltwise_relu,
      * #mkldnn_eltwise_tanh. */
@@ -1512,7 +1535,7 @@ public static final int
     mkldnn_query_batch_normalization_d = mkldnn_query_eltwise_d + 4,
     /** inner product descriptor */
     mkldnn_query_inner_product_d = mkldnn_query_eltwise_d + 5,
-    /** convolution-relu descriptor */
+    /** @deprecated */
     mkldnn_query_convolution_relu_d = mkldnn_query_eltwise_d + 6,
     /** rnn descriptor */
     mkldnn_query_rnn_d = mkldnn_query_eltwise_d + 7,
@@ -2330,8 +2353,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
 
 /** \addtogroup c_api_deconvolution Deconvolution
  * A primitive to compute deconvolution using different algorithms.
- * something goes here.
- *  * \{ */
+ *
+ * \{ */
 
 
 /** Initializes a deconvolution descriptor \p deconv_desc for forward propagation
@@ -2433,6 +2456,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
 /** \addtogroup c_api_eltwise Eltwise
  * A primitive to compute element wise operations like parametric rectifier
  * linear unit (ReLU).
+ *
+ * Both forward and backward passes support in-place operation, i.e. src
+ * and dst point to the same memory for forward, and diff_dst and diff_src
+ * point to the same memory for backward pass.
+ *
+ * \warning Since for backward pass original src is required, in-place forward
+ * pass in general cannot be applied during training. However for some kinds of
+ * element wise operations (namely ReLU with alpha parameter equals 0) dst and
+ * src can be interchangeable for the backward pass, which allows performing
+ * in-place forward even for training.
+ *
  * \{ */
 
 /** Initializes a \p eltwise_desc for forward propagation using \p prop_kind
@@ -2504,10 +2538,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_forward_desc_in
         mkldnn_softmax_desc_t softmax_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, int softmax_axis);
 
+/** Initializes a \p softmax_desc for backward propagation using memory
+ * descriptors \p diff_desc and \p data_desc. */
+public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_init(
+        mkldnn_softmax_desc_t softmax_desc,
+        @Const mkldnn_memory_desc_t diff_desc,
+        @Const mkldnn_memory_desc_t data_desc, int softmax_axis);
+
 /** \} */
 
 /** \addtogroup c_api_pooling Pooling
- * A primitive to perform max, min, or average pooling.
+ * A primitive to perform max or average pooling.
  * 
  * Max pooling:
  * \f[dst[n][oc][oh][ow] =
@@ -2619,17 +2660,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
 /** \} */
 
 /** \addtogroup c_api_batch_normalization Batch Normalization
- * A primitive to perform batch normalization
+ * A primitive to perform batch normalization.
+ *
  * \f[dst[n][c][h][w] = \gamma[c] \frac{src[n][c][h][w] - \mu[c]}
  *                      {\sqrt{\sigma[c] + eps}} + \beta[c],\f]
  *
  * where \f$\gamma[c], \beta[c]\f$ are weights and bias for a channel and,
  *
  * \f$\mu[c] = \frac{1}{NHW} \sum\limits_{whn} src[n][c][h][w]\f$,
- * \f$\sigma[c] = \frac{1}{NHW} \sum\limits_{whn} 
+ * \f$\sigma[c] = \frac{1}{NHW} \sum\limits_{whn}
  *                              (src[n][c][h][w] - \mu[c])^2\f$,
  *
  * and eps is a constant to improve numerical stability.
+ *
+ * Both forward and backward passes support in-place operation, i.e. src
+ * and dst point to the same memory for forward, and diff_dst and diff_src
+ * point to the same memory for backward pass.
+ *
  * \{ */
 
 /** Initializes a batch normalization descriptor \p bnrm_desc for forward
@@ -2662,11 +2709,12 @@ public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_bac
 
 /** \addtogroup c_api_inner_product Inner product
  * A primitive to compute an inner product.
+ *
  * Inner product layer is also known as fully connected layer.
  * with spatial dimension:
- * 
+ *
  * \f[dst[n][oc] = \sum\limits_{ic, kh, kw}
- *                 src[n][ic][kh][kw] \cdot weights[oc][ic][kh][kw] 
+ *                 src[n][ic][kh][kw] \cdot weights[oc][ic][kh][kw]
  *                 + bias[oc]\f]
  * \{ */
 
@@ -2713,13 +2761,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_
 
 /** \} */
 
-/** \addtogroup c_api_convolution_relu Convolution followed by ReLU
+/** \addtogroup c_api_convolution_relu Convolution followed by ReLU (deprecated)
  * A merged primitive to compute a convolution followed by relu.
  * \{ */
 
 /** Initializes a merged convolution-relu descriptor \p conv_relu_desc for
  * forward propagation (supported inference mode only) using convolution
- * descriptor \p conv_desc and ReLU parameter \p negative slope. */
+ * descriptor \p conv_desc and ReLU parameter \p negative slope.
+ *
+ * @deprecated use mkldnn_convolution_desc_init with
+ * mkldnn_post_ops_append_eltwise to append ReLU */
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_relu_desc_init(
         mkldnn_convolution_relu_desc_t conv_relu_desc,
         @Const mkldnn_convolution_desc_t conv_desc, float negative_slope);
@@ -2734,7 +2785,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_relu_desc_i
 /**
  * Initializes a recurrent cell descriptor \p rnn_cell_desc
  * using \p rnn_cell_desc, \p kind (possible values are
- *  #mkldnn_vanilla_rnn, #mkldnn_vanilla_lstm, #mkldnn_vanilla_gru),
+ *  #mkldnn_vanilla_rnn, #mkldnn_vanilla_lstm, #mkldnn_vanilla_gru,
+ *  #mkldnn_gru_linear_before_reset),
  *  \p f (possible values are #mkldnn_eltwise_relu,
  *   #mkldnn_eltwise_tanh), \p flags, \p alpha, and \p clipping.
  */
@@ -2862,6 +2914,53 @@ public static native @Cast("mkldnn_status_t") int mkldnn_stream_destroy(mkldnn_s
  * \note
  *     Dumping information might affect performance */
 public static native @Cast("mkldnn_status_t") int mkldnn_verbose_set(int level);
+
+/** \} */
+
+/** \addtogroup c_api_blas BLAS functions
+ * \{ */
+
+/** SGEMM performs matrix-matrix multiplication operation
+ * C := alpha*op( A )*op( B ) + beta*C,
+ * where  op( X ) is one of
+ * op( X ) = X or op( X ) = X**T,
+ * alpha and beta are scalars, and A, B and C are matrices, with op( A )
+ * an m by k matrix, op( B ) a k by n matrix and C an m by n matrix.
+ * \note
+ *      API is different compared to standard BLAS routine
+ *      as it returns mkldnn_status_t for error handling.
+ *      XERBLA is not supported: no error message will be printed
+ *      in case of incorrect parameters */
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
+        @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
+        @Const FloatPointer alpha, @Const FloatPointer A, @Const IntPointer lda,
+        @Const FloatPointer B, @Const IntPointer ldb,
+        @Const FloatPointer beta, FloatPointer C, @Const IntPointer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
+        @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
+        @Const FloatBuffer alpha, @Const FloatBuffer A, @Const IntBuffer lda,
+        @Const FloatBuffer B, @Const IntBuffer ldb,
+        @Const FloatBuffer beta, FloatBuffer C, @Const IntBuffer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
+        @Const int[] M, @Const int[] N, @Const int[] K,
+        @Const float[] alpha, @Const float[] A, @Const int[] lda,
+        @Const float[] B, @Const int[] ldb,
+        @Const float[] beta, float[] C, @Const int[] ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
+        @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
+        @Const FloatPointer alpha, @Const FloatPointer A, @Const IntPointer lda,
+        @Const FloatPointer B, @Const IntPointer ldb,
+        @Const FloatPointer beta, FloatPointer C, @Const IntPointer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
+        @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
+        @Const FloatBuffer alpha, @Const FloatBuffer A, @Const IntBuffer lda,
+        @Const FloatBuffer B, @Const IntBuffer ldb,
+        @Const FloatBuffer beta, FloatBuffer C, @Const IntBuffer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
+        @Const int[] M, @Const int[] N, @Const int[] K,
+        @Const float[] alpha, @Const float[] A, @Const int[] lda,
+        @Const float[] B, @Const int[] ldb,
+        @Const float[] beta, float[] C, @Const int[] ldc);
 
 /** \} */
 
@@ -3115,7 +3214,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_verbose_set(int level);
 
 ///
 @Namespace("mkldnn") public static native @Cast("mkldnn_primitive_kind_t") int convert_to_c(@Cast("mkldnn::primitive::kind") int akind);
-
 /** Intel(R) MKL-DNN exception class.
  * 
  *  This class captures the status returned by the failed C API function, error
@@ -3179,6 +3277,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_verbose_set(int level);
 /** \}
  <p>
  *  \addtogroup cpp_api_enums Common data types and enumerations
+ *  A proxy to \ref c_api_types in \ref c_api.
+ * 
  *  \{ */
 
 /** enum mkldnn::round_mode */
@@ -3226,7 +3326,8 @@ public static final int
     pooling_avg_exclude_padding = mkldnn_pooling_avg_exclude_padding,
     vanilla_rnn = mkldnn_vanilla_rnn,
     vanilla_lstm = mkldnn_vanilla_lstm,
-    vanilla_gru = mkldnn_vanilla_gru;
+    vanilla_gru = mkldnn_vanilla_gru,
+    gru_linear_before_reset = mkldnn_gru_linear_before_reset;
 
 /** enum mkldnn::batch_normalization_flag */
 public static final int
@@ -3284,6 +3385,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_attr Attributes
+ *  An extension for controlling primitive behavior.
+ * 
+ *  \sa \ref c_api_attributes in \ref c_api
  *  \{ */
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -3362,6 +3466,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_engine Engine
+ *  Engine operations
+ * 
+ *  \sa \ref c_api_engine in \ref c_api
  *  \{ */
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -3413,6 +3520,9 @@ public static final int
  *  \{
  <p>
  *  \addtogroup cpp_api_memory Memory
+ *  A primitive to describe data.
+ * 
+ *  \sa \ref c_api_memory in \ref c_api
  *  \{
  <p>
  *  Memory primitive that describes the data. */
@@ -3455,6 +3565,7 @@ public static final int
         oihw = mkldnn_oihw,
         ihwo = mkldnn_ihwo,
         hwio = mkldnn_hwio,
+        dhwio = mkldnn_dhwio,
         oidhw = mkldnn_oidhw,
         OIdhw16i16o = mkldnn_OIdhw16i16o,
         OIdhw16o16i = mkldnn_OIdhw16o16i,
@@ -3468,6 +3579,7 @@ public static final int
         OIhw16o16i = mkldnn_OIhw16o16i,
         IOhw16o16i = mkldnn_IOhw16o16i,
         OIhw8i16o2i = mkldnn_OIhw8i16o2i,
+        OIdhw8i16o2i = mkldnn_OIdhw8i16o2i,
         OIhw8o16i2o = mkldnn_OIhw8o16i2o,
         OIhw4i16o4i = mkldnn_OIhw4i16o4i,
         Oihw8o = mkldnn_Oihw8o,
@@ -3480,6 +3592,7 @@ public static final int
         gOIhw8i8o = mkldnn_gOIhw8i8o,
         gOIhw16i16o = mkldnn_gOIhw16i16o,
         gOIhw8i16o2i = mkldnn_gOIhw8i16o2i,
+        gOIdhw8i16o2i = mkldnn_gOIdhw8i16o2i,
         gOIhw8o16i2o = mkldnn_gOIhw8o16i2o,
         gOIhw4i16o4i = mkldnn_gOIhw4i16o4i,
         gOihw8o = mkldnn_gOihw8o,
@@ -3614,6 +3727,12 @@ public static final int
 
 @Namespace("mkldnn") public static native @ByVal memory null_memory(@ByVal engine eng);
 
+@Namespace("mkldnn") public static native void check_num_parameters(@Const mkldnn_primitive_desc aprimitive_desc, int n_inputs, int n_outputs,
+    @StdString BytePointer prim_name);
+@Namespace("mkldnn") public static native void check_num_parameters(@Const mkldnn_primitive_desc aprimitive_desc, int n_inputs, int n_outputs,
+    @StdString String prim_name);
+
+
 @Namespace("mkldnn") public static native @Cast("bool") boolean is_null_memory(@Const mkldnn_primitive aprimitive);
 
 @Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_data_type_t") int a, @Cast("mkldnn::memory::data_type") int b);
@@ -3622,6 +3741,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_reorder Reorder
+ *  A primitive to copy data between memory formats.
+ * 
+ *  \sa \ref c_api_reorder in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class reorder extends primitive {
@@ -3661,6 +3783,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_view View
+ *  A primitive to view on a memory.
+ * 
+ *  \sa mkldnn_view_primitive_desc_create in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class view extends primitive {
@@ -3705,6 +3830,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_concat Concat
+ *  A primitive to concatenate data by arbitrary dimension
+ * 
+ *  \sa \ref c_api_concat in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class concat extends primitive {
@@ -3744,6 +3872,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_sum Sum
+ *  A primitive to sum data
+ * 
+ *  \sa \ref c_api_sum in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class sum extends primitive {
@@ -3833,6 +3964,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_convolution Convolution
+ *  A primitive to compute convolution using different algorithms.
+ * 
+ *  \sa \ref c_api_convolution in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class convolution_forward extends primitive {
@@ -4506,6 +4640,10 @@ public static final int
                 @Const @ByRef memory diff_weights);
 }
 
+/** A merged convolution-relu primitive for inference mode only
+ * 
+ *  @deprecated consider using convolution_forward with post_ops
+ *  (e.g. post_ops::append_eltwise(1.f, #eltwise_relu, negative_slope, 0.f) */
 @Namespace("mkldnn") public static class convolution_relu_forward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4517,6 +4655,7 @@ public static final int
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_convolution_relu_desc_t data(); public native desc data(mkldnn_convolution_relu_desc_t data);
+
         public desc(@Const @ByVal convolution_forward.desc conv_desc,
                         float negative_slope) { super((Pointer)null); allocate(conv_desc, negative_slope); }
         private native void allocate(@Const @ByVal convolution_forward.desc conv_desc,
@@ -4534,17 +4673,19 @@ public static final int
         public native @ByVal engine get_engine();
     }
 
+    /** @deprecated consider using convolution_forward + post_ops */
     public convolution_relu_forward(@Const @ByRef primitive_desc aprimitive_desc,
                 @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
                 @Const @ByRef primitive.at bias, @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, weights, bias, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
+    private native @Deprecated void allocate(@Const @ByRef primitive_desc aprimitive_desc,
                 @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
                 @Const @ByRef primitive.at bias, @Const @ByRef memory dst);
 
+    /** @deprecated consider using convolution_forward + post_ops */
     public convolution_relu_forward(@Const @ByRef primitive_desc aprimitive_desc,
                 @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
                 @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, weights, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
+    private native @Deprecated void allocate(@Const @ByRef primitive_desc aprimitive_desc,
                 @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
                 @Const @ByRef memory dst);
 }
@@ -4552,6 +4693,9 @@ public static final int
 /** \} */
 //
 /** \addtogroup cpp_api_deconvolution Deconvolution
+/** A primitive to compute deconvolution using different algorithms.
+/**
+/** \sa \ref c_api_deconvolution in \ref c_api
 /** \{ */
 
 @Namespace("mkldnn") public static class deconvolution_forward extends primitive {
@@ -4946,6 +5090,10 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_lrn LRN
+ *  A primitive to perform local response normalization (LRN) across or within
+ *  channels.
+ * 
+ *  \sa \ref c_api_lrn in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class lrn_forward extends primitive {
@@ -5069,6 +5217,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_pooling Pooling
+ *  A primitive to perform max or average pooling.
+ * 
+ *  \sa \ref c_api_pooling in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class pooling_forward extends primitive {
@@ -5143,6 +5294,8 @@ public static final int
         public native @ByVal memory.primitive_desc workspace_primitive_desc();
 
         public native @ByVal memory.primitive_desc dst_primitive_desc();
+
+        public native @ByVal memory.primitive_desc src_primitive_desc();
 
         public native @ByVal engine get_engine();
     }
@@ -5231,6 +5384,8 @@ public static final int
 
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
 
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
+
         public native @ByVal engine get_engine();
     }
 
@@ -5248,6 +5403,10 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_eltwise Eltwise
+ *  A primitive to compute element wise operations like parametric rectifier
+ *  linear unit (ReLU).
+ * 
+ *  \sa \ref c_api_eltwise in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class eltwise_forward extends primitive {
@@ -5339,9 +5498,15 @@ public static final int
                 @Const @ByRef memory diff_src);
 }
 
+
+///
+
 /** \}
  <p>
  *  \addtogroup cpp_api_softmax Softmax
+ *  A primitive to perform softmax.
+ * 
+ *  \sa \ref c_api_softmax in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class softmax_forward extends primitive {
@@ -5378,9 +5543,52 @@ public static final int
                 @Const @ByRef primitive.at src, @Const @ByRef memory dst);
 }
 
+@Namespace("mkldnn") public static class softmax_backward extends primitive {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public softmax_backward(Pointer p) { super(p); }
+
+    @NoOffset public static class desc extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public desc(Pointer p) { super(p); }
+    
+        public native @ByRef mkldnn_softmax_desc_t data(); public native desc data(mkldnn_softmax_desc_t data);
+        public desc(@Const @ByRef memory.desc diff_desc, @Const @ByRef memory.desc data_desc,
+                        int softmax_axis) { super((Pointer)null); allocate(diff_desc, data_desc, softmax_axis); }
+        private native void allocate(@Const @ByRef memory.desc diff_desc, @Const @ByRef memory.desc data_desc,
+                        int softmax_axis);
+    }
+
+    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public primitive_desc(Pointer p) { super(p); }
+    
+        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
+        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_primitive_desc);
+
+        public native @ByVal memory.primitive_desc diff_src_primitive_desc();
+
+        public native @ByVal engine get_engine();
+    }
+
+    public softmax_backward(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at dst, @Const @ByRef primitive.at diff_dst,
+                @Const @ByRef memory diff_src) { super((Pointer)null); allocate(aprimitive_desc, dst, diff_dst, diff_src); }
+    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at dst, @Const @ByRef primitive.at diff_dst,
+                @Const @ByRef memory diff_src);
+}
+
 /** \}
  <p>
  *  \addtogroup cpp_api_batch_norm Batch normalization
+ *  A primitive to perform batch normalization.
+ * 
+ *  \sa \ref c_api_batch_normalization in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class batch_normalization_forward extends primitive {
@@ -5596,6 +5804,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_inner_product Inner Product
+ *  A primitive to compute an inner product.
+ * 
+ *  \sa \ref c_api_inner_product in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class inner_product_forward extends primitive {
@@ -5777,6 +5988,9 @@ public static final int
 /** \}
  <p>
  *  \addtogroup cpp_api_rnn RNN
+ *  A primitive to compute common recurrent layer.
+ * 
+ *  \sa \ref c_api_rnn in \ref c_api
  *  \{ */
 
 @Namespace("mkldnn") public static class rnn_cell extends Pointer {
@@ -6019,6 +6233,9 @@ public static final int
  *  \} Primitives
  <p>
  *  \addtogroup cpp_api_stream Stream
+ *  Execution stream operations
+ * 
+ *  \sa \ref c_api_stream in \ref c_api
  *  \{ */
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
