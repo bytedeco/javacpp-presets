@@ -124,7 +124,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.2  https://support.hdfgroup.org/HDF5/
  * MKL 2018.3  https://software.intel.com/intel-mkl
  * MKL-DNN 0.15  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.2.dev  http://www.openblas.net/
+ * OpenBLAS 0.3.0  http://www.openblas.net/
  * ARPACK-NG 3.6.1  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html

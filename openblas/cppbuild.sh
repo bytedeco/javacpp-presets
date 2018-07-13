@@ -7,9 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=develop
+OPENBLAS_VERSION=0.3.0
 
-download https://github.com/xianyi/OpenBLAS/archive/$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
+download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -21,6 +21,8 @@ tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
 tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C OpenBLAS-$OPENBLAS_VERSION-nolapack/
 
 cd OpenBLAS-$OPENBLAS_VERSION
+# Work around clash with winnt.h https://github.com/xianyi/OpenBLAS/issues/1503
+sedinplace 's/-DCR/-DCR=CR/g' driver/level3/Makefile ../OpenBLAS-$OPENBLAS_VERSION-nolapack/driver/level3/Makefile
 sedinplace 's/gotblas_SANDYBRIDGE/gotoblas_SANDYBRIDGE/g' driver/others/dynamic.c ../OpenBLAS-$OPENBLAS_VERSION-nolapack/driver/others/dynamic.c
 cp lapack-netlib/LAPACKE/include/*.h ../include
 
