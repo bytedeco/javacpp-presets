@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet 1.2.0  http://mxnet.incubator.apache.org/
+ * MXNet 1.2.1.rc1  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.2.0-1.4.2-SNAPSHOT</version>
+            <version>1.2.1.rc1-1.4.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
