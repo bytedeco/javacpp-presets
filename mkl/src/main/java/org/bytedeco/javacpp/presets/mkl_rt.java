@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",*/
         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
-              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
+              compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
               preload = {"iomp5", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread"}),
     @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
     @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
