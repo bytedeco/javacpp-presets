@@ -3,6 +3,11 @@ set -vx
 
 while true; do echo .; sleep 60; done &
 
+sudo fallocate -l 4GB /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 ls -ltr $HOME/downloads
