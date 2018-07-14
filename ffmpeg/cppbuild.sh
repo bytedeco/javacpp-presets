@@ -564,6 +564,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
+        patch -Np1 < ../../../libvpx-linux-arm.patch
         if [ $CROSSCOMPILE -eq 1 ]
         then
           CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv7-linux-gcc
@@ -638,7 +639,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        patch -Np1 < ../../../disable_vp8_loop_filter_simple_neon.patch
+        patch -Np1 < ../../../libvpx-linux-arm.patch
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
         make -j $MAKEJ
         make install

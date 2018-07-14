@@ -1,36 +1,34 @@
-diff --git a/vp8/common/rtcd_defs.pl b/vp8/common/rtcd_defs.pl
-index bc5e05799..961b002e9 100644
---- a/vp8/common/rtcd_defs.pl
-+++ b/vp8/common/rtcd_defs.pl
-@@ -50,10 +50,9 @@ specialize qw/vp8_loop_filter_bh sse2 neon dspr2 msa/;
+diff -ruN libvpx-1.7.0/vp8/common/rtcd_defs.pl libvpx-1.7.0-linux-arm/vp8/common/rtcd_defs.pl
+--- libvpx-1.7.0/vp8/common/rtcd_defs.pl	2018-01-25 07:25:44.000000000 +0900
++++ libvpx-1.7.0-linux-arm/vp8/common/rtcd_defs.pl	2018-07-14 17:33:51.630592973 +0900
+@@ -60,10 +60,9 @@
  
  
  add_proto qw/void vp8_loop_filter_simple_mbv/, "unsigned char *y, int ystride, const unsigned char *blimit";
--specialize qw/vp8_loop_filter_simple_mbv sse2 neon msa/;
-+specialize qw/vp8_loop_filter_simple_mbv sse2 msa/;
+-specialize qw/vp8_loop_filter_simple_mbv sse2 neon msa mmi/;
++specialize qw/vp8_loop_filter_simple_mbv sse2 msa mmi/;
  $vp8_loop_filter_simple_mbv_c=vp8_loop_filter_simple_vertical_edge_c;
  $vp8_loop_filter_simple_mbv_sse2=vp8_loop_filter_simple_vertical_edge_sse2;
 -$vp8_loop_filter_simple_mbv_neon=vp8_loop_filter_mbvs_neon;
  $vp8_loop_filter_simple_mbv_msa=vp8_loop_filter_simple_vertical_edge_msa;
+ $vp8_loop_filter_simple_mbv_mmi=vp8_loop_filter_simple_vertical_edge_mmi;
  
- add_proto qw/void vp8_loop_filter_simple_mbh/, "unsigned char *y, int ystride, const unsigned char *blimit";
-@@ -64,10 +63,9 @@ $vp8_loop_filter_simple_mbh_neon=vp8_loop_filter_mbhs_neon;
- $vp8_loop_filter_simple_mbh_msa=vp8_loop_filter_simple_horizontal_edge_msa;
+@@ -76,10 +75,9 @@
+ $vp8_loop_filter_simple_mbh_mmi=vp8_loop_filter_simple_horizontal_edge_mmi;
  
  add_proto qw/void vp8_loop_filter_simple_bv/, "unsigned char *y, int ystride, const unsigned char *blimit";
--specialize qw/vp8_loop_filter_simple_bv sse2 neon msa/;
-+specialize qw/vp8_loop_filter_simple_bv sse2 msa/;
+-specialize qw/vp8_loop_filter_simple_bv sse2 neon msa mmi/;
++specialize qw/vp8_loop_filter_simple_bv sse2 msa mmi/;
  $vp8_loop_filter_simple_bv_c=vp8_loop_filter_bvs_c;
  $vp8_loop_filter_simple_bv_sse2=vp8_loop_filter_bvs_sse2;
 -$vp8_loop_filter_simple_bv_neon=vp8_loop_filter_bvs_neon;
  $vp8_loop_filter_simple_bv_msa=vp8_loop_filter_bvs_msa;
+ $vp8_loop_filter_simple_bv_mmi=vp8_loop_filter_bvs_mmi;
  
- add_proto qw/void vp8_loop_filter_simple_bh/, "unsigned char *y, int ystride, const unsigned char *blimit";
-diff --git a/vp8/vp8_common.mk b/vp8/vp8_common.mk
-index 137f5bb62..b22bcdb3a 100644
---- a/vp8/vp8_common.mk
-+++ b/vp8/vp8_common.mk
-@@ -133,7 +133,7 @@ VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/idct_dequant_full_2x_neon.c
+diff -ruN libvpx-1.7.0/vp8/vp8_common.mk libvpx-1.7.0-linux-arm/vp8/vp8_common.mk
+--- libvpx-1.7.0/vp8/vp8_common.mk	2018-01-25 07:25:44.000000000 +0900
++++ libvpx-1.7.0-linux-arm/vp8/vp8_common.mk	2018-07-14 17:31:10.564587864 +0900
+@@ -141,7 +141,7 @@
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/iwalsh_neon.c
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/vp8_loopfilter_neon.c
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/loopfiltersimplehorizontaledge_neon.c
