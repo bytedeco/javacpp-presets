@@ -49,12 +49,20 @@ export LD_LIBRARY_PATH=$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        LIBS=
+        if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
+            LIBS="-lgfortran_nonshared"
+        fi
+        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        LIBS=
+        if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
+            LIBS="-lgfortran_nonshared"
+        fi
+        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
