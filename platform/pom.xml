@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.2</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -218,6 +218,7 @@
     </dependency>
   </dependencies>
 
+<!--
   <build>
     <plugins>
       <plugin>
@@ -262,5 +263,6 @@
       </plugin>
     </plugins>
   </build>
+-->
 
 </project>

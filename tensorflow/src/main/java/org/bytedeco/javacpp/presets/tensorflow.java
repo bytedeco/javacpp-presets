@@ -349,7 +349,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         List<String> preloads = properties.get("platform.preload");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || !extension.equals("-gpu")) {
+        if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
             return;
         }
         int i = 0;

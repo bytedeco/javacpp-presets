@@ -12,7 +12,7 @@ mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
-sudo easy_install pip
+curl https://bootstrap.pypa.io/get-pip.py | sudo python
 sudo pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
@@ -33,7 +33,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 rh-maven33 python27"
-  if [[ "librealsense tensorflow skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense mxnet tensorflow skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi

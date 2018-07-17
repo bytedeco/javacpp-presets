@@ -1,4 +1,5 @@
 
+### July 17, 2018 version 1.4.2
  * Fix FFmpeg build of libvpx with Linux on ARM ([issue #586](https://github.com/bytedeco/javacpp-presets/issues/586))
  * Enable MediaCodec acceleration for FFmpeg on Android ([pull #589](https://github.com/bytedeco/javacpp-presets/pull/589))
  * Include `c_api_internal.h` for TensorFlow ([issue #585](https://github.com/bytedeco/javacpp-presets/issues/585))
