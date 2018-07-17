@@ -1,6 +1,7 @@
 org.bytedeco.javacpp
 org.bytedeco.javacpp.helper
 org.bytedeco.javacpp.presets
+org.opencv.android
 org.opencv.aruco
 org.opencv.bgsegm
 org.opencv.bioinspired
