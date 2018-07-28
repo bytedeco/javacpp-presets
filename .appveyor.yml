@@ -96,8 +96,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64
-#    - PROJ: "tensorflow"
-#      OS: windows-x86_64
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
     - PROJ: "ale"
       OS: windows-x86_64
     - PROJ: "systems"
@@ -106,13 +106,13 @@ environment:
     - PROJ: "opencv"
       OS: windows-x86_64
       EXT: -gpu
-#    - PROJ: "tensorflow"
-#      OS: windows-x86_64
-#      EXT: -gpu
-#      PARTIAL_CPPBUILD: "1"
-#    - PROJ: "tensorflow"
-#      OS: windows-x86_64
-#      EXT: -gpu
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
+      PARTIAL_CPPBUILD: "1"
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
 
 for:
 -
