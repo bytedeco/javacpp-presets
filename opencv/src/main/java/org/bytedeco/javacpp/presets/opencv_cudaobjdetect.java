@@ -47,6 +47,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = "windows",
             link = "opencv_cudaobjdetect342",
+            preload = "opencv_cudalegacy342",
             extension = "-gpu"
         )
     },
