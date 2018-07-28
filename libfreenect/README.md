@@ -47,13 +47,13 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
           <groupId>org.jogamp.gluegen</groupId>
           <artifactId>gluegen-rt-main</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
           <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.jogamp.jogl</groupId>
           <artifactId>jogl-all-main</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
           <optional>true</optional>
         </dependency>
     </dependencies>
