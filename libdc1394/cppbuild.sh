@@ -9,12 +9,21 @@ fi
 
 LIBDC1394_VERSION=2.2.5
 download http://downloads.sourceforge.net/project/libdc1394/libdc1394-2/$LIBDC1394_VERSION/libdc1394-$LIBDC1394_VERSION.tar.gz libdc1394-$LIBDC1394_VERSION.tar.gz
+if [[ "$PLATFORM" == windows* ]]; then
+    download http://www.cs.cmu.edu/~iwan/1394/downloads/1394camera646.exe 1394camera646.exe
+fi
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xzf ../libdc1394-$LIBDC1394_VERSION.tar.gz
+if [[ "$PLATFORM" == windows* ]]; then
+    mkdir -p 1394camera bin
+    7z x -y ../1394camera646.exe -o1394camera
+    export C_INCLUDE_PATH="$INSTALL_PATH/1394camera/include/"
+    export LIBRARY_PATH="$INSTALL_PATH/bin/"
+fi
 cd libdc1394-$LIBDC1394_VERSION
 
 case $PLATFORM in
@@ -51,19 +60,15 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        export C_INCLUDE_PATH="/c/Program Files (x86)/CMU/1394Camera/include/"
-        mkdir -p "$INSTALL_PATH/bin"
-        cp "/c/Program Files (x86)/CMU/1394Camera/lib/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
-        export LIBRARY_PATH="$INSTALL_PATH/bin/"
+        cp ../1394camera/lib/1394camera.dll ../bin/
+        cp ../1394camera/lib/1394camera.dll ../bin/lib1394camera.dll
         CC="gcc -m32 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static --disable-sdltest
         make -j4
         make install-strip
         ;;
     windows-x86_64)
-        export C_INCLUDE_PATH="/c/Program Files (x86)/CMU/1394Camera/include/"
-        mkdir -p "$INSTALL_PATH/bin"
-        cp "/c/Program Files (x86)/CMU/1394Camera/lib64/x64/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
-        export LIBRARY_PATH="$INSTALL_PATH/bin/"
+        cp ../1394camera/lib64/x64/1394camera.dll ../bin/
+        cp ../1394camera/lib64/x64/1394camera.dll ../bin/lib1394camera.dll
         CC="gcc -m64 -Duint=int -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static --disable-sdltest
         make -j4
         make install-strip

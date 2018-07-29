@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.9.1")},
+    @Platform(include = "<cusparse.h>", link = "cusparse@.9.2"),
+    @Platform(value = "windows-x86_64", preload = "cusparse64_92")},
         target = "org.bytedeco.javacpp.cusparse")
 @NoException
 public class cusparse implements InfoMapper {
@@ -44,6 +45,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseMatDescr_t").valueTypes("cusparseMatDescr").pointerTypes("@ByPtrPtr cusparseMatDescr"))
                .put(new Info("cusparseSolveAnalysisInfo_t").valueTypes("cusparseSolveAnalysisInfo").pointerTypes("@ByPtrPtr cusparseSolveAnalysisInfo"))
                .put(new Info("csrsv2Info_t").valueTypes("csrsv2Info").pointerTypes("@ByPtrPtr csrsv2Info"))
+               .put(new Info("csrsm2Info_t").valueTypes("csrsm2Info").pointerTypes("@ByPtrPtr csrsm2Info"))
                .put(new Info("bsrsv2Info_t").valueTypes("bsrsv2Info").pointerTypes("@ByPtrPtr bsrsv2Info"))
                .put(new Info("bsrsm2Info_t").valueTypes("bsrsm2Info").pointerTypes("@ByPtrPtr bsrsm2Info"))
                .put(new Info("csric02Info_t").valueTypes("csric02Info").pointerTypes("@ByPtrPtr csric02Info"))

@@ -33,6 +33,9 @@ case $ARCH in
     arm*)
         ARCH=arm
         ;;
+    aarch64*)
+        ARCH=arm64
+        ;;
     i386|i486|i586|i686)
         ARCH=x86
         ;;
@@ -152,7 +155,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl openblas arpack-ng cminpack fftw gsl llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow ale liquidfun skia systems)
+    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl mkl-dnn openblas arpack-ng cminpack fftw gsl llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow tensorrt ale liquidfun skia systems)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

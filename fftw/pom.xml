@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>fftw</artifactId>
-  <version>3.3.7-${project.parent.version}</version>
+  <version>3.3.8-${project.parent.version}</version>
   <name>JavaCPP Presets for FFTW</name>
 
   <properties>

@@ -44,8 +44,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         "<SpinnakerGenApiC.h>",
                         "<SpinnakerC.h>",
                 },
-                link = {"spinnaker-c@.2"}, includepath = "/usr/include/spinnaker/spinc/"),
-        @Platform(value = "linux-arm", link = "spinnaker-c@.2"),
+                link = {"Spinnaker_C@.2"}, includepath = "/usr/include/spinnaker/spinc/"),
+        @Platform(value = "linux-arm", link = "Spinnaker_C@.2"),
         @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140"},
                 includepath = "C:/Program Files/Point Grey Research/Spinnaker/include/spinc/"),
         @Platform(value = "windows-x86",
@@ -65,6 +65,8 @@ public class Spinnaker_C implements InfoMapper {
                 // Skip to avoid linker errors,
                 // somehow JavaCPP did not generate wrapper for 'SPINNAKERC_API spinRegisterSetEx(...)'
                 .put(new Info("spinRegisterSetEx").skip())
+                // Skip deprecation macro, as it is causing parsing error in javacpp
+                .put(new Info("SPINNAKERC_API_DEPRECATED").skip())
         ;
     }
 }

@@ -12,8 +12,8 @@ GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.3
 LIBPNG=libpng-1.6.34
 LIBTIFF=tiff-4.0.9
-LIBWEBP=libwebp-0.6.1
-LEPTONICA_VERSION=1.75.3
+LIBWEBP=libwebp-1.0.0
+LEPTONICA_VERSION=1.76.0
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
@@ -518,5 +518,7 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+sedinplace '/dependency_libs/d' ../lib/liblept.la || true
 
 cd ../..

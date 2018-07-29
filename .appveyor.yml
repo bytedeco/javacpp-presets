@@ -41,7 +41,9 @@ environment:
       OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
-    - PROJ: "leptonica,tesseract"
+    - PROJ: "leptonica"
+      OS: windows-x86
+    - PROJ: "tesseract"
       OS: windows-x86
     - PROJ: "ale"
       OS: windows-x86
@@ -72,6 +74,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "mkl"
       OS: windows-x86_64
+    - PROJ: "mkl-dnn"
+      OS: windows-x86_64
     - PROJ: "openblas"
       OS: windows-x86_64
     - PROJ: "arpack-ng"
@@ -86,7 +90,9 @@ environment:
       OS: windows-x86_64
     - PROJ: "libpostal"
       OS: windows-x86_64
-    - PROJ: "leptonica,tesseract"
+    - PROJ: "leptonica"
+      OS: windows-x86_64
+    - PROJ: "tesseract"
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64
@@ -100,6 +106,21 @@ environment:
     - PROJ: "opencv"
       OS: windows-x86_64
       EXT: -gpu
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
+      PARTIAL_CPPBUILD: "1"
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
+
+for:
+-
+  matrix:
+    only:
+      - PARTIAL_CPPBUILD: "1"
+  after_build:
+    - appveyor PushArtifact "%APPVEYOR_BUILD_FOLDER%\%PROJ%-cppbuild.zip"
 
 init:
 # uncomment this if you need to enable RDP for this build run

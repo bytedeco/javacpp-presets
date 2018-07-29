@@ -35,10 +35,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(
     inherit = openblas.class,
-    value = @Platform(include = "arpack.hpp", link = "arpack@.2", preload = "libarpack-2"),
+    value = @Platform(
+        include = {"arpack.h", "arpack.hpp", "debug_c.hpp", "stat_c.hpp"},
+        link = "arpack@.2",
+        preload = "libarpack-2"),
     target = "org.bytedeco.javacpp.arpack")
 @NoException
 public class arpack implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("const char").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"));
     }
 }

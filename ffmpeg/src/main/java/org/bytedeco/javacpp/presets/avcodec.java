@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,12 +33,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=swresample.class, target="org.bytedeco.javacpp.avcodec", value={
-    @Platform(cinclude={"<libavcodec/avcodec.h>", /* "<libavcodec/avfft.h>" */}, link="avcodec@.57"),
-    @Platform(value="windows", preload="avcodec-57") })
+    @Platform(cinclude={"<libavcodec/avcodec.h>", "<libavcodec/jni.h>", /* "<libavcodec/avfft.h>" */}, link="avcodec@.58"),
+    @Platform(value="windows", preload="avcodec-58") })
 public class avcodec implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!FF_API_LOWRES", "!FF_API_DEBUG_MV").define(false))
                .put(new Info("CODEC_FLAG_CLOSED_GOP").translate().cppTypes("long"))
+               .put(new Info("AVCodecHWConfigInternal").cast().pointerTypes("Pointer"))
                .putFirst(new Info("AVPanScan").pointerTypes("AVPanScan"))
                .putFirst(new Info("AVCodecContext").pointerTypes("AVCodecContext"));
     }

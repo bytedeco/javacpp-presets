@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
               link = "opencv_dnn@.3.4"),
     @Platform(value = "ios", preload = "libopencv_dnn"),
-    @Platform(value = "windows", link = "opencv_dnn341")},
+    @Platform(value = "windows", link = "opencv_dnn342")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -57,11 +57,14 @@ public class opencv_dnn implements InfoMapper {
                              "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::EltwiseLayer",
                              "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
                              "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer", "cv::dnn::ProposalLayer",
-                             "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer").purify())
+                             "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer",
+                             "cv::dnn::CropAndResizeLayer", "cv::dnn::InterpLayer", "cv::dnn::ResizeLayer",
+                             "cv::dnn::ShuffleChannelLayer", "cv::dnn::experimental_dnn_v5::ShuffleChannelLayer").purify())
                .put(new Info("cv::dnn::Net::forward(cv::dnn::Net::LayerId, cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forward(cv::dnn::Net::LayerId*, cv::dnn::Net::LayerId*)",
                              "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId)",
-                             "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId*)").skip())
+                             "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId*)",
+                             "std::map<cv::String,cv::dnn::DictValue>::const_iterator").skip())
                .put(new Info("std::vector<cv::Mat*>").pointerTypes("MatPointerVector").define())
                .put(new Info("cv::dnn::Layer* (*)(cv::dnn::LayerParams&)").annotations("@Convention(value=\"\", extern=\"C++\")"));
     }

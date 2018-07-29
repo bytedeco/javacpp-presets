@@ -7,7 +7,8 @@ mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 mkdir %APPVEYOR_BUILD_FOLDER%\buildlogs
 
-set MAKEJ=2
+echo %NUMBER_OF_PROCESSORS%
+set MAKEJ=%NUMBER_OF_PROCESSORS%
 
 IF "%OS%"=="windows-x86_64" (
    set MSYSTEM=MINGW64
@@ -29,22 +30,36 @@ if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "releas
 
 rem C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
 rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
-C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip autoconf autoconf-archive automake libtool make patch gnupg"
+C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL"
 
 C:\msys64\usr\bin\bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
-SET CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1
-SET CUDA_PATH_V9_1=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1
-SET PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1\libnvvp;C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
+if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
+    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2"
+    SET "CUDA_PATH_V9_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2"
+    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2\libnvvp;%PATH%"
+)
+SET "PATH=C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
+
+IF "%PARTIAL_CPPBUILD%"=="1" (
+   C:\msys64\usr\bin\bash -c "bash cppbuild.sh install %PROJ% -platform=%OS% -extension=%EXT%"
+   C:\msys64\usr\bin\bash -c "zip -r %PROJ%-cppbuild.zip %PROJ%/cppbuild"
+   IF ERRORLEVEL 1 (
+     echo Quitting with error  
+     exit 1
+   )
+   exit 0
+)
+
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
    call mvn clean deploy -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
    IF ERRORLEVEL 1 (
      echo Quitting with error  
-     exit /b 1
+     exit 1
    )
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
@@ -52,7 +67,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
     call mvn clean deploy -B -U --settings ..\ci\settings.xml -f platform -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
     IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1
+      exit 1
     )
 
     cd ..
@@ -62,8 +77,9 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    call mvn clean install -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
    IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1 
+      exit 1
    )
 
 )
+exit 0
 

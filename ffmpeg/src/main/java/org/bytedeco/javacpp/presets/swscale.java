@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.swscale", value={
-    @Platform(cinclude="<libswscale/swscale.h>", link="swscale@.4"),
-    @Platform(value="windows", preload="swscale-4") })
+    @Platform(cinclude="<libswscale/swscale.h>", link="swscale@.5"),
+    @Platform(value="windows", preload="swscale-5") })
 public class swscale implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

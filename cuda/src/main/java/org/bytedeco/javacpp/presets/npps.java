@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,7 +36,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = nppc.class, value = {
     @Platform(include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
-            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.9.1")},
+            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.9.2"),
+    @Platform(value = "windows-x86_64", preload = "npps64_92")},
         target = "org.bytedeco.javacpp.npps")
 @NoException
 public class npps implements InfoMapper {

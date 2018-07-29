@@ -22,6 +22,10 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -43,10 +47,29 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         link = "nvinfer@.4",
         linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}),
     target = "org.bytedeco.javacpp.nvinfer")
-public class nvinfer implements InfoMapper {
+public class nvinfer implements LoadEnabled, InfoMapper {
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloads = properties.get("platform.preload");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || !platform.equals("linux-x86_64")) {
+            return;
+        }
+        int i = 0;
+        String[] libs = {"cudart", "cublas", "cudnn"};
+        for (String lib : libs) {
+            lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-               .put(new Info("NV_TENSORRT_FINAL").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "TENSORRTAPI").cppTypes().annotations())
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::EnumMax").skip())

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2017 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,7 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.7")},
+    @Platform(include = "<cudnn.h>", link = "cudnn@.7"),
+    @Platform(value = "windows-x86_64", preload = "cudnn64_7")},
         target = "org.bytedeco.javacpp.cudnn")
 @NoException
 public class cudnn implements InfoMapper {

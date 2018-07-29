@@ -39,7 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "mkl_df.h", "mkl_df_defines.h", "mkl_df_types.h", "mkl_df_functions.h",
         "mkl_dfti.h", "mkl_trig_transforms.h", "mkl_poisson.h", "mkl_solvers_ee.h", /*"mkl_direct_types.h", "mkl_direct_blas.h", "mkl_direct_lapack.h", "mkl_direct_call.h",*/
         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_blacs.h", "mkl_pblas.h", "mkl_scalapack.h", "mkl_cdft_types.h", "mkl_cdft.h", "i_malloc.h" */},
-              compiler = "fastfpu", includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
+              compiler = {"fastfpu", "nodeprecated"}, includepath = "/opt/intel/mkl/include/", linkpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}, link = "mkl_rt",
               preload = {"iomp5", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic", "mkl_def", "mkl_mc", "mkl_mc3", "mkl_gnu_thread", "mkl_intel_lp64", "mkl_intel_thread"}),
     @Platform(value = "linux-x86",    linkpath = {"/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
     @Platform(value = "linux-x86_64", linkpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
@@ -70,8 +70,8 @@ public class mkl_rt implements InfoMapper {
                              "mkl_mic_get_device_count", "mkl_mic_get_cpuinfo", "mkl_mic_get_meminfo", "mkl_mic_set_resource_limit", "mkl_mic_get_resource_limit",
                              "mkl_mic_set_workdivision", "mkl_mic_get_workdivision", "mkl_mic_set_max_memory", "mkl_mic_free_memory", "mkl_mic_set_offload_report",
                              "mkl_mic_set_device_num_threads", "mkl_mic_set_flags", "mkl_mic_get_flags", "mkl_mic_get_status", "mkl_mic_clear_status", "mkl_cbwr_get",
-                             "mkl_cbwr_set", "mkl_cbwr_get_auto_branch", "mkl_set_env_mode", "mkl_verbose", "mkl_set_exit_handler", "mkl_mic_register_memory",
-                             "mkl_set_mpi", "mkl_set_memory_limit", "mkl_finalize",
+                             "mkl_cbwr_set", "mkl_cbwr_get_auto_branch", "mkl_set_env_mode", "mkl_verbose", "mkl_verbose_output_file", "mkl_set_exit_handler",
+                             "mkl_mic_register_memory", "mkl_set_mpi", "mkl_set_memory_limit", "mkl_finalize",
 
                              "DFTI_DFT_Desc_struct", "DFTI_Descriptor_struct", "DFTI_Descriptor",
 
@@ -84,6 +84,9 @@ public class mkl_rt implements InfoMapper {
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",
                              "mkl_dc_getrf", "mkl_dc_lapacke_getrf_convert", "mkl_dc_getri", "mkl_dc_lapacke_getri_convert", "mkl_dc_getrs", "mkl_dc_lapacke_getrs_convert",
                              "__inline", "MKL_DIRECT_CALL_INIT_FLAG").cppTypes().annotations())
+
+               .put(new Info("DEPRECATED").cppText("#define DEPRECATED deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
                .put(new Info("sparse_vector_t").valueTypes("sparse_vector").pointerTypes("@ByPtrPtr sparse_vector"))

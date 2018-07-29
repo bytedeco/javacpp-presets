@@ -1,26 +1,26 @@
-diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-java/tensorflow/BUILD
---- tensorflow-1.7.0-rc0/tensorflow/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-java/tensorflow/BUILD	2018-03-19 03:07:38.430628042 +0900
-@@ -799,17 +799,12 @@
+diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-java/tensorflow/BUILD
+--- tensorflow-1.9.0-rc2/tensorflow/BUILD	2018-07-03 07:07:51.000000000 +0900
++++ tensorflow-1.9.0-rc2-java/tensorflow/BUILD	2018-07-05 10:07:19.120647307 +0900
+@@ -530,16 +530,12 @@
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
      linkopts = select({
 -        "//tensorflow:darwin": [
 -            "-Wl,-exported_symbols_list",  # This line must be directly followed by the exported_symbols.lds file
--            "//tensorflow:tf_exported_symbols.lds",
+-            "$(location //tensorflow:tf_exported_symbols.lds)",
 -        ],
 +        "//tensorflow:darwin": [],
          "//tensorflow:windows": [],
          "//tensorflow:windows_msvc": [],
          "//conditions:default": [
              "-z defs",
-             "-s",
 -            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
--            "//tensorflow:tf_version_script.lds",
+-            "$(location //tensorflow:tf_version_script.lds)",
++            "-s",
          ],
      }),
      deps = [
-@@ -822,6 +817,7 @@
+@@ -552,6 +548,7 @@
          "//tensorflow/cc:scope",
          "//tensorflow/cc/profiler",
          "//tensorflow/core:tensorflow",
@@ -28,9 +28,36 @@ diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-java/tensor
      ],
  )
  
-diff -ruN tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-03-19 03:16:32.287475508 +0900
+diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/framework/tensor.h tensorflow-1.9.0-rc2-java/tensorflow/core/framework/tensor.h
+--- tensorflow-1.9.0-rc2/tensorflow/core/framework/tensor.h	2018-07-03 07:07:51.000000000 +0900
++++ tensorflow-1.9.0-rc2-java/tensorflow/core/framework/tensor.h	2018-07-05 10:08:00.520657265 +0900
+@@ -117,6 +117,11 @@
+   /// are not valid.
+   Tensor(Tensor&& other);
+ 
++  // Creates a tensor with the input datatype, shape and buf.
++  //
++  // Acquires a ref on buf that belongs to this Tensor.
++  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
++
+   ~Tensor();
+ 
+   /// Returns the data type.
+@@ -502,11 +507,6 @@
+   friend class NumpyTensorBuffer;  // For access to the private constructor
+                                    // taking the buffer.
+ 
+-  // Creates a tensor with the input datatype, shape and buf.
+-  //
+-  // Acquires a ref on buf that belongs to this Tensor.
+-  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
+-
+   bool CanUseDMA() const;
+ 
+   // Only needed by variable op to set the shape of an uninitialized
+diff -ruN tensorflow-1.9.0-rc2/tensorflow/java/src/main/native/BUILD tensorflow-1.9.0-rc2-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.9.0-rc2/tensorflow/java/src/main/native/BUILD	2018-07-03 07:07:51.000000000 +0900
++++ tensorflow-1.9.0-rc2-java/tensorflow/java/src/main/native/BUILD	2018-07-05 10:07:19.121647307 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),

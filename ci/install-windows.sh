@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo Reducing PATH size by removing duplicates to satisfy MKL, etc
+echo Reducing PATH size by removing duplicates and truncating to satisfy MKL, etc
 PREVIFS="$IFS"
 NEWPATH="${PATH%%:*}"
 IFS=":"
@@ -11,7 +11,7 @@ for P in $PATH; do
             FOUND=1
         fi
     done
-    if [[ "$FOUND" == "0" ]]; then
+    if [[ "$FOUND" == "0" ]] && [[ ${#NEWPATH} -lt 3000 ]]; then
         NEWPATH=$NEWPATH:$P
     fi
 done
@@ -77,7 +77,7 @@ fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/12394/w_mkl_2018.1.156.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13037/w_mkl_2018.3.210.exe"
        ./mkl.exe --s --x --f .
        ./setup.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -87,24 +87,19 @@ fi
 
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
-       curl -L -o cuda_9.1.85_windows.exe "https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_9.1.85_windows"
-       curl -L -o cudnn-9.1-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.1/cudnn-9.1-windows7-x64-v7.1.zip"
-       ./cuda_9.1.85_windows.exe -s
+       curl -L -o cuda_9.2.88_windows.exe "https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.88_windows"
+       curl -L -o cuda_9.2.88.1_windows.exe "https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.88.1_windows"
+       curl -L -o cudnn-9.2-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-windows7-x64-v7.1.zip"
+       ./cuda_9.2.88_windows.exe -s
        sleep 60
-       unzip ./cudnn-9.1-windows7-x64-v7.1.zip
-       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/bin
-       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/include
-       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.1/lib/x64
+       ./cuda_9.2.88.1_windows.exe -s
+       sleep 10
+       unzip ./cudnn-9.2-windows7-x64-v7.1.zip
+       mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/bin
+       mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/include
+       mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/lib/x64
        echo Finished cuda install
 fi 
-
-if [ "$PROJ" == "libdc1394" ]; then
-       echo Installing libdc1394 
-       /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShVnNJM3JCclpuTE0 CMU.zip
-       unzip CMU.zip
-       mv CMU /c/Program\ Files\ \(x86\)
-       echo Finished libdc1394 install
-fi
 
 echo Finished setting up env in setup.sh
 
