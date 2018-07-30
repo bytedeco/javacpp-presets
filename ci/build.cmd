@@ -51,6 +51,7 @@ IF "%PARTIAL_CPPBUILD%"=="1" (
      echo Quitting with error  
      exit 1
    )
+   echo Exiting with success
    exit 0
 )
 
@@ -81,5 +82,6 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    )
 
 )
+echo Exiting with success
 exit 0
 
