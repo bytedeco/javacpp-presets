@@ -75,7 +75,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi
-    if [ "$PROJ" == "spinnaker" ]; then
+  if [ "$PROJ" == "spinnaker" ]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found spinnaker in cache and size seems ok"
