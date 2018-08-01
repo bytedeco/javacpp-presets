@@ -62,6 +62,7 @@
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.la</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dylib</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/zlib*</exclude>
               </excludes>
             </configuration>
           </execution>
