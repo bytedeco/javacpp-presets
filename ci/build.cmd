@@ -49,36 +49,39 @@ IF "%PARTIAL_CPPBUILD%"=="1" (
    C:\msys64\usr\bin\bash -c "zip -r %PROJ%-cppbuild.zip %PROJ%/cppbuild"
    IF ERRORLEVEL 1 (
      echo Quitting with error  
-     exit /b 1
+     exit 1
    )
-   exit /b 0
+   echo Exiting with success
+   exit 0
 )
 
 IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    echo Deploy snaphot for %PROJ%
-   call mvn clean deploy -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
+   call mvn deploy -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
    IF ERRORLEVEL 1 (
      echo Quitting with error  
-     exit /b 1
+     exit 1
    )
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn clean deploy -B -U --settings ..\ci\settings.xml -f platform -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
+    call mvn deploy -B -U --settings ..\ci\settings.xml -f platform -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
     IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1
+      exit 1
     )
 
     cd ..
    )
 ) ELSE (
    echo Install %PROJ%
-   call mvn clean install -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
+   call mvn install -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
    IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1 
+      exit 1
    )
 
 )
+echo Exiting with success
+exit 0
 

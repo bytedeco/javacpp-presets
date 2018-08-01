@@ -3,11 +3,16 @@ set -vx
 
 while true; do echo .; sleep 60; done &
 
+sudo fallocate -l 4GB /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 ls -ltr $HOME/downloads
 ls -ltr $HOME/.m2
-sudo easy_install pip
+curl https://bootstrap.pypa.io/get-pip.py | sudo python
 sudo pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
@@ -27,8 +32,8 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="rh-maven33 python27"
-  if [[ "librealsense chilitags mkl-dnn llvm tesseract caffe mxnet tensorflow tensorrt onnx ale skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  SCL_ENABLE="devtoolset-6 rh-maven33 python27"
+  if [[ "librealsense mxnet tensorflow skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="rh-maven33 rh-python35"
   fi
@@ -36,13 +41,17 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y install devtoolset-4-toolchain rh-java-common-ant $SCL_ENABLE clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y install"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6.1/repo/epel-$CENTOS_VERSION/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo -o /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/\$basearch/i386/g' /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
+    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
   fi
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gcc --version"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
 
   if [ "$PROJ" == "flycapture" ]; then
@@ -75,7 +84,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.11.1/bazel-0.11.1-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -170,7 +179,7 @@ if [[ "$OS" =~ android ]]; then
    fi
    if [ "$PROJ" == "tensorflow" ]; then
       echo "adding bazel for tensorflow"
-      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.11.1/bazel-0.11.1-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
       if [ "$CURL_STATUS" != "0" ]; then
         echo "Download failed here, so can't proceed with the build.. Failing.."
         exit 1
@@ -206,7 +215,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.64_mac -o $HOME/cuda_9.2.64_mac.dmg
         curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.64.1_mac -o $HOME/cuda_9.2.64.1_mac.dmg
-        curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-osx-x64-v7.1.tgz -o $HOME/cudnn-9.2-osx-x64-v7.1.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-osx-x64-v7.1.tgz -o $HOME/cudnn-9.2-osx-x64-v7.1.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_9.2.64_mac.dmg
@@ -237,7 +246,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.11.1/bazel-0.11.1-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1

@@ -38,7 +38,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.9.0-rc2
+TENSORFLOW_VERSION=1.10.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -117,6 +117,7 @@ case $PLATFORM in
         export CC="/usr/bin/gcc"
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
+        patch -Np1 < ../../../tensorflow-unsecure.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
@@ -125,7 +126,8 @@ case $PLATFORM in
         export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
         export GCC_HOST_COMPILER_PATH=$CC
-        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64 --linkopt=-s"
+        export TF_NEED_MKL=1
+        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
         ;;
@@ -133,22 +135,23 @@ case $PLATFORM in
         # https://github.com/tensorflow/tensorflow/issues/14174
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
         # https://github.com/tensorflow/tensorflow/issues/19676
-        patch -R -Np1 < ../../../tensorflow-macosx-nogpu.patch || true
         patch -Np1 < ../../../tensorflow-java.patch
-        export BUILDFLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
+        patch -Np1 < ../../../tensorflow-macosx.patch
+        export TF_NEED_MKL=1
+        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
         export PATH=$DYLD_LIBRARY_PATH:$PATH
-        patch -Np1 < ../../../tensorflow-macosx.patch
         ;;
     windows-x86_64)
         # help cmake's findCuda-method to find the right cuda version
         export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         patch -Np1 < ../../../tensorflow-java.patch
+        patch -Np1 < ../../../tensorflow-windows.patch
         mkdir -p ../build
         cd ../build
-        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=OFF -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
         if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
             MSBuild.exe //p:Configuration=Release /maxcpucount:$MAKEJ tensorflow_static.vcxproj
         fi

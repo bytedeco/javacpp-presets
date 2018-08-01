@@ -23,6 +23,7 @@ tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C O
 cd OpenBLAS-$OPENBLAS_VERSION
 # Work around clash with winnt.h https://github.com/xianyi/OpenBLAS/issues/1503
 sedinplace 's/-DCR/-DCR=CR/g' driver/level3/Makefile ../OpenBLAS-$OPENBLAS_VERSION-nolapack/driver/level3/Makefile
+sedinplace 's/gotblas_SANDYBRIDGE/gotoblas_SANDYBRIDGE/g' driver/others/dynamic.c ../OpenBLAS-$OPENBLAS_VERSION-nolapack/driver/others/dynamic.c
 cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
@@ -144,7 +145,6 @@ case $PLATFORM in
         export FC="$OLDFC -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export NO_AVX2=1
         ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
@@ -177,7 +177,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
-        export NO_AVX2=1
+        export NO_AVX512=1
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
@@ -192,7 +192,7 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
-        export NO_AVX2=1
+        export NO_AVX512=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

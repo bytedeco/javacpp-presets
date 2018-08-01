@@ -89,7 +89,7 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_9.2.88_windows.exe "https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_9.2.88_windows"
        curl -L -o cuda_9.2.88.1_windows.exe "https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda_9.2.88.1_windows"
-       curl -L -o cudnn-9.2-windows7-x64-v7.1.zip "http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-windows7-x64-v7.1.zip"
+       curl -L -o cudnn-9.2-windows7-x64-v7.1.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-windows7-x64-v7.1.zip"
        ./cuda_9.2.88_windows.exe -s
        sleep 60
        ./cuda_9.2.88.1_windows.exe -s
@@ -100,6 +100,12 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v9.2/lib/x64
        echo Finished cuda install
 fi 
+
+DOWNLOAD_FILE="$PROJ-cppbuild.zip"
+DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
+if curl -fsSL -G -v -o "$DOWNLOAD_FILE" "$DOWNLOAD_ADDRESS" --data-urlencode "all=true" --data-urlencode "job=Environment: PROJ=$PROJ, OS=$OS, EXT=$EXT, PARTIAL_CPPBUILD=1"; then
+    unzip -o $DOWNLOAD_FILE -d $APPVEYOR_BUILD_FOLDER
+fi
 
 echo Finished setting up env in setup.sh
 

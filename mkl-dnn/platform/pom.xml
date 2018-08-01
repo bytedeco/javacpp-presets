@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mkl-dnn-platform</artifactId>
-  <version>0.14-${project.parent.version}</version>
+  <version>0.15-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MKL-DNN</name>
 
   <properties>

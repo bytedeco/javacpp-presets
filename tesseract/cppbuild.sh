@@ -19,10 +19,15 @@ cd tesseract-$TESSERACT_VERSION
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
-sedinplace '/tiff/d' src/api/Makefile.am
-sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
-
-bash autogen.sh
+# sedinplace '/tiff/d' src/api/Makefile.am
+# sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
+# bash autogen.sh
+patch -Np1 < ../../../tesseract-configure.patch
+chmod 755 configure config/install-sh
+export AUTOCONF=:
+export AUTOHEADER=:
+export AUTOMAKE=:
+export ACLOCAL=:
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
@@ -124,7 +129,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
-        patch -Np1 < ../../../tesseract-macosx.patch
+        sedinplace 's/\\$rpath/@rpath/g' configure
         ./configure --prefix=$INSTALL_PATH LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip

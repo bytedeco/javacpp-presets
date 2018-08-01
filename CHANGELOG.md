@@ -1,4 +1,14 @@
 
+ * Enable MKL-DNN for TensorFlow
+ * Upgrade presets for TensorFlow 1.10.0-rc0
+ * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
+
+### July 17, 2018 version 1.4.2
+ * Fix FFmpeg build of libvpx with Linux on ARM ([issue #586](https://github.com/bytedeco/javacpp-presets/issues/586))
+ * Enable MediaCodec acceleration for FFmpeg on Android ([pull #589](https://github.com/bytedeco/javacpp-presets/pull/589))
+ * Include `c_api_internal.h` for TensorFlow ([issue #585](https://github.com/bytedeco/javacpp-presets/issues/585))
+ * Build all presets on CentOS 6 with Developer Toolset 6 and move almost all Linux builds to CentOS 6
+ * Fix functions from `facemark.hpp` and `face_alignment.hpp` that crash when called with `cv::Mat` objects
  * Virtualize `TensorBuffer` and make constructor with helper method in `Tensor` public to allow zero-copy
  * Add factory methods for `TF_Status`, `TF_Buffer`, `TF_Tensor`, `TF_SessionOptions`, `TF_Graph`, `TF_ImportGraphDefOptions`, and `TF_Session` that register deallocators
  * Bundle the libraries of CUDA and cuDNN, allowing OpenCV, Caffe, and TensorFlow to use GPUs with no CUDA installation
@@ -24,9 +34,9 @@
  * Add support for Windows to presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
  * Add Android utility classes from the official Java API of OpenCV and TensorFlow ([issue #549](https://github.com/bytedeco/javacpp-presets/issues/549))
  * Update build for FFmpeg on Raspbian Stretch ([pull #548](https://github.com/bytedeco/javacpp-presets/pull/548))
- * Add presets for MKL-DNN 0.14 and TensorRT 4.0
+ * Add presets for MKL-DNN 0.15 and TensorRT 4.0
  * Fix build for FFmpeg on `android-x86` and `android-x86_64` platforms ([issue bytedeco/javacv#945](https://github.com/bytedeco/javacv/issues/945))
- * Upgrade presets for FFmpeg 4.0.1, HDF5 1.10.2, MKL 2018.3, OpenBLAS 0.3.0, ARPACK-NG 3.6.1, FFTW 3.3.8, GSL 2.5, LLVM 6.0.0, Leptonica 1.76.0, Tesseract 4.0.0-beta.3 ([issue #385](https://github.com/bytedeco/javacpp-presets/issues/385)), Caffe 1.0, CUDA 9.2, MXNet 1.2.0, TensorFlow 1.9.0-rc2, and their dependencies
+ * Upgrade presets for OpenCV 3.4.2, FFmpeg 4.0.1, HDF5 1.10.2, MKL 2018.3, OpenBLAS 0.3.0, ARPACK-NG 3.6.1, FFTW 3.3.8, GSL 2.5, LLVM 6.0.1, Leptonica 1.76.0, Tesseract 4.0.0-beta.3 ([issue #385](https://github.com/bytedeco/javacpp-presets/issues/385)), Caffe 1.0, CUDA 9.2, MXNet 1.2.1.rc1, TensorFlow 1.9.0, and their dependencies
 
 ### March 29, 2018 version 1.4.1
  * Disable unneeded error messages from LibTIFF in presets for Leptonica ([issue deeplearning4j/DataVec#518](https://github.com/deeplearning4j/DataVec/pull/518))
