@@ -6,14 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>onnx</artifactId>
-  <version>1.2.2-1.4.2-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>JavaCPP Presets for onnx</name>
+  <version>1.2.2-1.4.3-SNAPSHOT</version>
+  <name>JavaCPP Presets for ONNX</name>
 
   <dependencies>
     <dependency>

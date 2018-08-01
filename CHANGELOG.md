@@ -1,4 +1,5 @@
 
+ * Add presets for ONNX 1.2.2
  * Enable MKL-DNN for TensorFlow
  * Upgrade presets for TensorFlow 1.10.0-rc0
  * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
