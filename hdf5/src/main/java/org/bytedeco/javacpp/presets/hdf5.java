@@ -47,7 +47,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "H5ArrayType.h", "H5VarLenType.h", "H5DataSet.h", "H5Group.h", "H5File.h", "H5Library.h"},
             link = {"hdf5@.101", "hdf5_cpp@.102", "hdf5_hl@.100", "hdf5_hl_cpp@.100"}, resource = {"include", "lib"}),
     @Platform(value = "linux-ppc64le", link = {"hdf5@.101", "hdf5_cpp@.101", "hdf5_hl@.101", "hdf5_hl_cpp@.101"}),
-    @Platform(value = "windows", link = {"libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp"}, preload = {"concrt140", "msvcp140", "vcruntime140",
+    @Platform(value = "windows", link = {"zlibstatic", "libhdf5", "libhdf5_cpp", "libhdf5_hl", "libhdf5_hl_cpp"}, preload = {"concrt140", "msvcp140", "vcruntime140",
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
         "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
