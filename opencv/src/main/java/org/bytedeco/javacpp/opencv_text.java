@@ -39,6 +39,8 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index(function = "at") public native int get(@Cast("size_t") long i);
     public native IntDeque put(@Cast("size_t") long i, int value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, int value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -105,6 +107,8 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index(function = "at") public native @ByRef ERStat get(@Cast("size_t") long i);
     public native ERStatVector put(@Cast("size_t") long i, ERStat value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef ERStat value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -171,6 +175,8 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index(function = "at") public native @ByRef ERStatVector get(@Cast("size_t") long i);
     public native ERStatVectorVector put(@Cast("size_t") long i, ERStatVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef ERStatVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -237,6 +243,8 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     @Index(function = "at") public native double get(@Cast("size_t") long i);
     public native DoubleVector put(@Cast("size_t") long i, double value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, double value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -306,6 +314,8 @@ public class opencv_text extends org.bytedeco.javacpp.presets.opencv_text {
     public native StdStringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StdStringVector put(@Cast("size_t") long i, @StdString String value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

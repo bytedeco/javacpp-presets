@@ -32,6 +32,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Index(function = "at") public native @StdVector IntPointer get(@Cast("size_t") long i);
     public native MatShapeVector put(@Cast("size_t") long i, IntPointer value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdVector IntPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -98,6 +100,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Index(function = "at") public native @ByRef MatShapeVector get(@Cast("size_t") long i);
     public native MatShapeVectorVector put(@Cast("size_t") long i, MatShapeVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef MatShapeVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -213,6 +217,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     @Index(function = "at") public native Mat get(@Cast("size_t") long i);
     public native MatPointerVector put(@Cast("size_t") long i, Mat value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, Mat value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {

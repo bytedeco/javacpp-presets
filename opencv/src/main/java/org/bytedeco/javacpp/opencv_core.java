@@ -20,7 +20,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native double get(int i);
+    @Index public native double get(int i);
     public native IntDoubleMap put(int i, double value);
 
     public native @ByVal Iterator begin();
@@ -157,6 +157,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @Str String value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Str BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -240,6 +242,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point get(@Cast("size_t") long i);
     public native PointVector put(@Cast("size_t") long i, Point value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -306,6 +310,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point2f get(@Cast("size_t") long i);
     public native Point2fVector put(@Cast("size_t") long i, Point2f value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point2f value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -372,6 +378,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point2d get(@Cast("size_t") long i);
     public native Point2dVector put(@Cast("size_t") long i, Point2d value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point2d value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -438,6 +446,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point3i get(@Cast("size_t") long i);
     public native Point3iVector put(@Cast("size_t") long i, Point3i value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point3i value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -504,6 +514,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point3f get(@Cast("size_t") long i);
     public native Point3fVector put(@Cast("size_t") long i, Point3f value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point3f value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -570,6 +582,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Size get(@Cast("size_t") long i);
     public native SizeVector put(@Cast("size_t") long i, Size value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Size value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -636,6 +650,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Rect get(@Cast("size_t") long i);
     public native RectVector put(@Cast("size_t") long i, Rect value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Rect value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -702,6 +718,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Rect2d get(@Cast("size_t") long i);
     public native Rect2dVector put(@Cast("size_t") long i, Rect2d value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Rect2d value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -768,6 +786,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Scalar get(@Cast("size_t") long i);
     public native ScalarVector put(@Cast("size_t") long i, Scalar value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Scalar value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -834,6 +854,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef KeyPoint get(@Cast("size_t") long i);
     public native KeyPointVector put(@Cast("size_t") long i, KeyPoint value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef KeyPoint value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -900,6 +922,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef DMatch get(@Cast("size_t") long i);
     public native DMatchVector put(@Cast("size_t") long i, DMatch value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef DMatch value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -966,6 +990,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef PointVector get(@Cast("size_t") long i);
     public native PointVectorVector put(@Cast("size_t") long i, PointVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef PointVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1032,6 +1058,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point2fVector get(@Cast("size_t") long i);
     public native Point2fVectorVector put(@Cast("size_t") long i, Point2fVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point2fVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1098,6 +1126,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Point2dVector get(@Cast("size_t") long i);
     public native Point2dVectorVector put(@Cast("size_t") long i, Point2dVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Point2dVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1164,6 +1194,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @Cast("std::vector<cv::Point3f>*") @ByRef Point3fVector get(@Cast("size_t") long i);
     public native Point3fVectorVector put(@Cast("size_t") long i, Point3fVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("std::vector<cv::Point3f>*") @ByRef Point3fVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1230,6 +1262,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef RectVector get(@Cast("size_t") long i);
     public native RectVectorVector put(@Cast("size_t") long i, RectVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef RectVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1296,6 +1330,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef KeyPointVector get(@Cast("size_t") long i);
     public native KeyPointVectorVector put(@Cast("size_t") long i, KeyPointVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef KeyPointVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1362,6 +1398,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef DMatchVector get(@Cast("size_t") long i);
     public native DMatchVectorVector put(@Cast("size_t") long i, DMatchVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef DMatchVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1428,6 +1466,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef Mat get(@Cast("size_t") long i);
     public native MatVector put(@Cast("size_t") long i, Mat value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Mat value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1494,6 +1534,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef UMat get(@Cast("size_t") long i);
     public native UMatVector put(@Cast("size_t") long i, UMat value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef UMat value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1560,6 +1602,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef GpuMat get(@Cast("size_t") long i);
     public native GpuMatVector put(@Cast("size_t") long i, GpuMat value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef GpuMat value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1626,6 +1670,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native @ByRef MatVector get(@Cast("size_t") long i);
     public native MatVectorVector put(@Cast("size_t") long i, MatVector value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef MatVector value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1804,6 +1850,8 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     @Index(function = "at") public native NodeDataTls get(@Cast("size_t") long i);
     public native NodeDataTlsVector put(@Cast("size_t") long i, NodeDataTls value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, NodeDataTls value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
