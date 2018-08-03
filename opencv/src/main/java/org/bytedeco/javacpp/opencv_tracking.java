@@ -35,6 +35,8 @@ public class opencv_tracking extends org.bytedeco.javacpp.presets.opencv_trackin
     @Index(function = "at") public native @Ptr Tracker get(@Cast("size_t") long i);
     public native TrackerVector put(@Cast("size_t") long i, Tracker value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Ptr Tracker value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -101,6 +103,8 @@ public class opencv_tracking extends org.bytedeco.javacpp.presets.opencv_trackin
     @Index(function = "at") public native @ByRef ConfidenceMap get(@Cast("size_t") long i);
     public native ConfidenceMapVector put(@Cast("size_t") long i, ConfidenceMap value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef ConfidenceMap value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -271,6 +275,8 @@ public class opencv_tracking extends org.bytedeco.javacpp.presets.opencv_trackin
     @Index(function = "at") public native @Ptr TrackerTargetState get(@Cast("size_t") long i);
     public native Trajectory put(@Cast("size_t") long i, TrackerTargetState value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Ptr TrackerTargetState value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
