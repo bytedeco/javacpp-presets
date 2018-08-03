@@ -57,6 +57,8 @@ import static org.bytedeco.javacpp.onnx.*;
 
 public class LoadModel {
     public static void main(String[] args) throws Exception {
+        OpSchemaRegistry.get_all_schemas();
+
         byte[] bytes = Files.readAllBytes(Paths.get("examples/resources/single_relu.onnx"));
 
         ModelProto model = new ModelProto();

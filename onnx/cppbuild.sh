@@ -46,18 +46,15 @@ ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 
 #to build with "Traditional ML" support. Untested.
 #export ONNX_ML=1
-export DEFSBASEDIR=.setuptools-cmake-build/CMakeFiles/onnx.dir/onnx
-export PROTOBASEDIR=.setuptools-cmake-build/CMakeFiles/onnx_proto.dir/onnx/
-export INCLUDEBASEDIR=.setuptools-cmake-build/onnx/
-
+export CMAKE_BUILD_DIR=.setuptools-cmake-build/
+export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
 python3 setup.py build
-g++ -v -std=c++11 -shared -Wl,-soname,libonnx.so -fPIC -DONNX_NAMESPACE=onnx -o libonnx.so $PROTOBASEDIR/onnx-operators.pb.cc.o $PROTOBASEDIR/onnx.pb.cc.o $DEFSBASEDIR/checker.cc.o $DEFSBASEDIR/defs/schema.cc.o $DEFSBASEDIR/defs/tensor/old.cc.o $DEFSBASEDIR/defs/tensor/defs.cc.o $DEFSBASEDIR/defs/generator/defs.cc.o $DEFSBASEDIR/defs/math/defs.cc.o $DEFSBASEDIR/defs/data_type_utils.cc.o $DEFSBASEDIR/defs/traditionalml/defs.cc.o $DEFSBASEDIR/defs/experiments/defs.cc.o $DEFSBASEDIR/defs/nn/defs.cc.o $DEFSBASEDIR/defs/nn/old.cc.o $DEFSBASEDIR/defs/reduction/defs.cc.o $DEFSBASEDIR/defs/logical/defs.cc.o $DEFSBASEDIR/defs/rnn/defs.cc.o -lprotobuf -pthread
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs
 cp onnx/*.h ../include/onnx/
-cp $INCLUDEBASEDIR/*.h ../include/onnx/
 cp onnx/common/*.h ../include/onnx/common/
 cp onnx/defs/*.h ../include/onnx/defs/
-cp libonnx.so ../lib
+cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
+cp $CMAKE_BUILD_DIR/*.so ../lib
 
 cd ../..

@@ -50,7 +50,7 @@ import java.lang.annotation.Target;
 //        "onnx/string_utils.h",
         "onnx/checker.h",
     },
-    link = "onnx"))
+    link = {"onnx_proto", "onnx"}))
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
@@ -85,7 +85,7 @@ public class onnx implements InfoMapper {
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
                              "onnx::_AttributeProto_default_instance_", "google::protobuf::UnknownField::LengthDelimited", "google::protobuf::internal::empty_string_once_init_").skip())
 
-               .put(new Info("onnx::DataType").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))

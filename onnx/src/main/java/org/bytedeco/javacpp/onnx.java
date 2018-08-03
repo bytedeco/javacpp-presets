@@ -46,6 +46,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native void insert(int value);
+    public native void erase(int value);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -103,6 +105,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     @Index(function = "at") public native float get(@Cast("size_t") long i);
     public native FloatVector put(@Cast("size_t") long i, float value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, float value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -168,6 +172,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     @Index(function = "at") public native @Cast("int64_t") long get(@Cast("size_t") long i);
     public native LongVector put(@Cast("size_t") long i, long value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("int64_t") long value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -237,6 +243,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @StdString String value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -320,6 +328,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     @Index(function = "at") public native @ByRef OpSchema get(@Cast("size_t") long i);
     public native OpSchemaVector put(@Cast("size_t") long i, OpSchema value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef OpSchema value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -386,6 +396,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     @Index(function = "at") public native @ByRef OpSchema.FormalParameter get(@Cast("size_t") long i);
     public native FormalParameterVector put(@Cast("size_t") long i, OpSchema.FormalParameter value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef OpSchema.FormalParameter value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -463,7 +475,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native int get(@StdString BytePointer i);
+    @Index public native int get(@StdString BytePointer i);
     public native StringIntMap put(@StdString BytePointer i, int value);
 
     public native @ByVal Iterator begin();
@@ -505,7 +517,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native int get(int i);
+    @Index public native int get(int i);
     public native IntIntMap put(int i, int value);
 
     public native @ByVal Iterator begin();
@@ -532,6 +544,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native void insert(@StdString BytePointer value);
+    public native void erase(@StdString BytePointer value);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -555,6 +569,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native void insert(@StdString @Cast({"char*", "std::string*"}) BytePointer value);
+    public native void erase(@StdString @Cast({"char*", "std::string*"}) BytePointer value);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -563,7 +579,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @ByRef @Const @Cast({"char*", "std::string*"}) BytePointer get();
+        public native @Name("operator*") @StdString @Const @Cast({"char*", "std::string*"}) BytePointer get();
     }
 }
 
@@ -1192,7 +1208,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   // Get output formal parameters.
   public native @Const @ByRef FormalParameterVector outputs();
 
-  public native @StdVector TypeConstraintParam typeConstraintParams();
+  public native @Const @ByRef TypeConstraintParamVector typeConstraintParams();
 
   public native @StdString BytePointer Name();
 
@@ -1482,12 +1498,12 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         return (DataTypeUtils)super.position(position);
     }
 
-  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString BytePointer type_str);
-  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString String type_str);
+  public static native @StdString @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString BytePointer type_str);
+  public static native @StdString @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@StdString String type_str);
 
-  public static native @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@Const @ByRef TypeProto type_proto);
+  public static native @StdString @ByVal @Cast({"char*", "std::string*"}) BytePointer ToType(@Const @ByRef TypeProto type_proto);
 
-  public static native @Const @ByRef TypeProto ToTypeProto(@ByRef @Cast({"char*", "std::string*"}) BytePointer data_type);
+  public static native @Const @ByRef TypeProto ToTypeProto(@StdString @ByRef @Cast({"char*", "std::string*"}) BytePointer data_type);
 }
  // namespace Utils
  // namespace ONNX_NAMESPACE
