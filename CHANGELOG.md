@@ -1,4 +1,5 @@
 
+ * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
  * Enable MKL-DNN for TensorFlow
  * Upgrade presets for TensorFlow 1.10.0-rc1

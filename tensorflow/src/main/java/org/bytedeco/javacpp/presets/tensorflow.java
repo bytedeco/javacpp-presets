@@ -693,6 +693,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));
 
+        infoMap.put(new Info("std::vector<tensorflow::OpDef>").pointerTypes("OpDefVector").define());
         if (!android) {
             infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
         }

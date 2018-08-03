@@ -20,7 +20,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef AllocatorAttributes get(@Cast("size_t") long i);
+    @Index public native @ByRef AllocatorAttributes get(@Cast("size_t") long i);
     public native AllocatorAttributesVector put(@Cast("size_t") long i, AllocatorAttributes value);
 }
 
@@ -35,7 +35,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef AllocRecord get(@Cast("size_t") long i);
+    @Index public native @ByRef AllocRecord get(@Cast("size_t") long i);
     public native AllocRecordVector put(@Cast("size_t") long i, AllocRecord value);
 }
 
@@ -50,7 +50,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native DeviceContext get(@Cast("size_t") long i);
+    @Index public native DeviceContext get(@Cast("size_t") long i);
     public native DeviceContextInlinedVector put(@Cast("size_t") long i, DeviceContext value);
 }
 
@@ -65,7 +65,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef DeviceType get(@Cast("size_t") long i);
+    @Index public native @ByRef DeviceType get(@Cast("size_t") long i);
     public native DeviceTypeVector put(@Cast("size_t") long i, DeviceType value);
 }
 
@@ -80,7 +80,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef TensorValue get(@Cast("size_t") long i);
+    @Index public native @ByRef TensorValue get(@Cast("size_t") long i);
     public native TensorValueVector put(@Cast("size_t") long i, TensorValue value);
 }
 
@@ -95,7 +95,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef WrappedAllocator get(@Cast("size_t") long i);
+    @Index public native @ByRef WrappedAllocator get(@Cast("size_t") long i);
     public native WrappedAllocatorVector put(@Cast("size_t") long i, WrappedAllocator value);
 }
 
@@ -110,7 +110,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @Cast("tensorflow::int64") long get(@Cast("size_t") long i);
+    @Index public native @Cast("tensorflow::int64") long get(@Cast("size_t") long i);
     public native LongVector put(@Cast("size_t") long i, long value);
 }
 
@@ -125,7 +125,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @Cast("tensorflow::DataType") int get(@Cast("size_t") long i);
+    @Index public native @Cast("tensorflow::DataType") int get(@Cast("size_t") long i);
     public native DataTypeVector put(@Cast("size_t") long i, int value);
 }
 
@@ -140,9 +140,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @StdString BytePointer get(@StdString BytePointer i);
+    @Index public native @StdString BytePointer get(@StdString BytePointer i);
     public native StringStringMap put(@StdString BytePointer i, BytePointer value);
-    @ValueSetter @Index(function = "at") public native StringStringMap put(@StdString BytePointer i, @StdString String value);
+    @ValueSetter @Index public native StringStringMap put(@StdString BytePointer i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -168,7 +168,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @Cast("google::protobuf::int32") int get(@StdString BytePointer i);
+    @Index public native @Cast("google::protobuf::int32") int get(@StdString BytePointer i);
     public native StringIntMap put(@StdString BytePointer i, int value);
 
     public native @ByVal Iterator begin();
@@ -195,9 +195,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @StdString BytePointer get(int i);
+    @Index public native @StdString BytePointer get(int i);
     public native IntStringMap put(int i, BytePointer value);
-    @ValueSetter @Index(function = "at") public native IntStringMap put(int i, @StdString String value);
+    @ValueSetter @Index public native IntStringMap put(int i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -223,7 +223,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef Feature get(@StdString BytePointer i);
+    @Index public native @ByRef Feature get(@StdString BytePointer i);
     public native StringFeatureMap put(@StdString BytePointer i, Feature value);
 
     public native @ByVal Iterator begin();
@@ -250,7 +250,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef FeatureList get(@StdString BytePointer i);
+    @Index public native @ByRef FeatureList get(@StdString BytePointer i);
     public native StringFeatureListMap put(@StdString BytePointer i, FeatureList value);
 
     public native @ByVal Iterator begin();
@@ -277,7 +277,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef CollectionDef get(@StdString BytePointer i);
+    @Index public native @ByRef CollectionDef get(@StdString BytePointer i);
     public native StringCollectionDefMap put(@StdString BytePointer i, CollectionDef value);
 
     public native @ByVal Iterator begin();
@@ -304,7 +304,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef SignatureDef get(@StdString BytePointer i);
+    @Index public native @ByRef SignatureDef get(@StdString BytePointer i);
     public native StringSignatureDefMap put(@StdString BytePointer i, SignatureDef value);
 
     public native @ByVal Iterator begin();
@@ -331,7 +331,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef TensorInfo get(@StdString BytePointer i);
+    @Index public native @ByRef TensorInfo get(@StdString BytePointer i);
     public native StringTensorInfoMap put(@StdString BytePointer i, TensorInfo value);
 
     public native @ByVal Iterator begin();
@@ -358,7 +358,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef AttrValue get(@StdString BytePointer i);
+    @Index public native @ByRef AttrValue get(@StdString BytePointer i);
     public native StringAttrValueMap put(@StdString BytePointer i, AttrValue value);
 
     public native @ByVal Iterator begin();
@@ -400,9 +400,9 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @StdString BytePointer get(TF_Session i);
+    @Index public native @StdString BytePointer get(TF_Session i);
     public native TF_SessionStringMap put(TF_Session i, BytePointer value);
-    @ValueSetter @Index(function = "at") public native TF_SessionStringMap put(TF_Session i, @StdString String value);
+    @ValueSetter @Index public native TF_SessionStringMap put(TF_Session i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -428,6 +428,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -451,7 +453,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef TensorId get(@ByRef TensorId i);
+    @Index public native @ByRef TensorId get(@ByRef TensorId i);
     public native TensorIdTensorIdMap put(@ByRef TensorId i, TensorId value);
 
     public native @ByVal Iterator begin();
@@ -478,7 +480,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef SafeTensorId get(@ByRef SafeTensorId i);
+    @Index public native @ByRef SafeTensorId get(@ByRef SafeTensorId i);
     public native SafeTensorIdTensorIdMap put(@ByRef SafeTensorId i, SafeTensorId value);
 
     public native @ByVal Iterator begin();
@@ -505,6 +507,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native void insert(@StdString BytePointer value);
+    public native void erase(@StdString BytePointer value);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -540,6 +544,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native StringPieceVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StringPieceVector put(@Cast("size_t") long i, @StringPiece String value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StringPiece BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -626,6 +632,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
     @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @StdString String value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -748,6 +756,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native Device get(@Cast("size_t") long i);
     public native DeviceVector put(@Cast("size_t") long i, Device value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, Device value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -814,6 +824,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native DeviceContext get(@Cast("size_t") long i);
     public native DeviceContextVector put(@Cast("size_t") long i, DeviceContext value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, DeviceContext value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -880,6 +892,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @ByRef Tensor get(@Cast("size_t") long i);
     public native TensorVector put(@Cast("size_t") long i, Tensor value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Tensor value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -946,6 +960,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @ByRef TensorProto get(@Cast("size_t") long i);
     public native TensorProtoVector put(@Cast("size_t") long i, TensorProto value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef TensorProto value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1012,6 +1028,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @ByRef TensorShape get(@Cast("size_t") long i);
     public native TensorShapeVector put(@Cast("size_t") long i, TensorShape value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef TensorShape value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1078,6 +1096,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @ByRef NodeBuilder.NodeOut get(@Cast("size_t") long i);
     public native NodeOutVector put(@Cast("size_t") long i, NodeBuilder.NodeOut value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef NodeBuilder.NodeOut value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1144,6 +1164,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native Node get(@Cast("size_t") long i);
     public native NodeVector put(@Cast("size_t") long i, Node value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, Node value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1276,6 +1298,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @Const Tensor get(@Cast("size_t") long i);
     public native ConstTensorPtrVector put(@Cast("size_t") long i, Tensor value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Const Tensor value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1342,6 +1366,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @Const Dimension get(@Cast("size_t") long i);
     public native ConstDimensionPtrVector put(@Cast("size_t") long i, Dimension value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Const Dimension value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1446,6 +1472,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native Edge get(@Cast("size_t") long i);
     public native EdgeVector put(@Cast("size_t") long i, Edge value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, Edge value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1492,6 +1520,74 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::vector<tensorflow::OpDef>") public static class OpDefVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpDefVector(Pointer p) { super(p); }
+    public OpDefVector(OpDef value) { this(1); put(0, value); }
+    public OpDefVector(OpDef ... array) { this(array.length); put(array); }
+    public OpDefVector()       { allocate();  }
+    public OpDefVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef OpDefVector put(@ByRef OpDefVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @ByRef OpDef get(@Cast("size_t") long i);
+    public native OpDefVector put(@Cast("size_t") long i, OpDef value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef OpDef value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @ByRef @Const OpDef get();
+    }
+
+    public OpDef[] get() {
+        OpDef[] array = new OpDef[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public OpDef pop_back() {
+        long size = size();
+        OpDef value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public OpDefVector push_back(OpDef value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public OpDefVector put(OpDef value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public OpDefVector put(OpDef ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<tensorflow::Output>") public static class OutputVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1512,6 +1608,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     @Index(function = "at") public native @ByRef Output get(@Cast("size_t") long i);
     public native OutputVector put(@Cast("size_t") long i, Output value);
 
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @ByRef Output value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -1671,7 +1769,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     @MemberGetter public native @StdString BytePointer first(); public native StringIntPair first(BytePointer first);
     @MemberGetter public native int second();  public native StringIntPair second(int second);
-    @MemberSetter @Index(function = "at") public native StringIntPair first(@StdString String first);
+    @MemberSetter @Index public native StringIntPair first(@StdString String first);
 
     public StringIntPair put(BytePointer firstValue, int secondValue) {
         first(firstValue);
@@ -1699,7 +1797,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     @MemberGetter public native @StringPiece BytePointer first(); public native StringPieceIntPair first(BytePointer first);
     @MemberGetter public native int second();  public native StringPieceIntPair second(int second);
-    @MemberSetter @Index(function = "at") public native StringPieceIntPair first(@StringPiece String first);
+    @MemberSetter @Index public native StringPieceIntPair first(@StringPiece String first);
 
     public StringPieceIntPair put(BytePointer firstValue, int secondValue) {
         first(firstValue);
@@ -1727,7 +1825,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     @MemberGetter public native @ByRef TensorSlice first(); public native TensorSlideStringPair first(TensorSlice first);
     @MemberGetter public native @StdString BytePointer second();  public native TensorSlideStringPair second(BytePointer second);
-    @MemberSetter @Index(function = "at") public native TensorSlideStringPair second(@StdString String second);
+    @MemberSetter @Index public native TensorSlideStringPair second(@StdString String second);
 
     public TensorSlideStringPair put(TensorSlice firstValue, BytePointer secondValue) {
         first(firstValue);
@@ -1799,7 +1897,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @ByRef TensorShape get(@StdString BytePointer i);
+    @Index public native @ByRef TensorShape get(@StdString BytePointer i);
     public native VarToShapeMap put(@StdString BytePointer i, TensorShape value);
 
     public native @ByVal Iterator begin();
@@ -1826,7 +1924,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native @Cast("tensorflow::DataType") int get(@StdString BytePointer i);
+    @Index public native @Cast("tensorflow::DataType") int get(@StdString BytePointer i);
     public native VarToDataTypeMap put(@StdString BytePointer i, int value);
 
     public native @ByVal Iterator begin();
@@ -1853,7 +1951,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native TensorSliceSet get(@StdString BytePointer i);
+    @Index public native TensorSliceSet get(@StdString BytePointer i);
     public native StringTensorSliceSetMap put(@StdString BytePointer i, TensorSliceSet value);
 
     public native @ByVal Iterator begin();
@@ -1880,7 +1978,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index(function = "at") public native Node get(@StdString BytePointer i);
+    @Index public native Node get(@StdString BytePointer i);
     public native StringNodeMap put(@StdString BytePointer i, Node value);
 
     public native @ByVal Iterator begin();
@@ -1907,6 +2005,8 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public boolean empty() { return size() == 0; }
     public native long size();
 
+    public native void insert(@StdString BytePointer value);
+    public native void erase(@StdString BytePointer value);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
     @NoOffset @Name("iterator") public static class Iterator extends Pointer {
@@ -27635,7 +27735,7 @@ limitations under the License.
   public static native OpRegistry Global();
 
   // Get all registered ops.
-  public native void GetRegisteredOps(@StdVector OpDef op_defs);
+  public native void GetRegisteredOps(OpDefVector op_defs);
 
   // Get all `OpRegistrationData`s.
   public native void GetOpRegistrationData(@StdVector OpRegistrationData op_data);
