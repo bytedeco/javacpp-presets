@@ -32,10 +32,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-6 rh-maven33 python27"
+  SCL_ENABLE="devtoolset-6 python27"
   if [[ "librealsense mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="rh-maven33 rh-python35"
+    SCL_ENABLE="rh-python35"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
@@ -53,6 +53,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
+
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
   if [ "$PROJ" == "flycapture" ]; then
     if [ "$OS" == "linux-x86_64" ]; then
