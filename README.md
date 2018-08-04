@@ -136,6 +136,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.10.0-rc1  https://github.com/tensorflow/tensorflow
  * TensorRT 4.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * ONNX 1.2.2  https://github.com/onnx/onnx
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
  * System APIs of the build environments:

@@ -532,6 +532,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
@@ -1166,6 +1167,7 @@
         <module>tensorflow</module>
         <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>

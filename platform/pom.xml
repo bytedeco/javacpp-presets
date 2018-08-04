@@ -44,6 +44,7 @@
     <module>../tensorflow/platform</module>
     <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
+    <module>../onnx/platform</module>
     <module>../liquidfun/platform</module>
     <module>../skia/platform</module>
     <module>../systems/platform</module>
@@ -200,6 +201,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ale-platform</artifactId>
       <version>0.6.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>onnx-platform</artifactId>
+      <version>1.2.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
