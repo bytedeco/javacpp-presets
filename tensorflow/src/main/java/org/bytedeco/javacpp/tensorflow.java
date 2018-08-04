@@ -27339,6 +27339,80 @@ public static class TF_Function extends Pointer {
 // #endif  // TENSORFLOW_C_C_API_INTERNAL_H_
 
 
+// Parsed from tensorflow/c/python_api.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_C_PYTHON_API_H_
+// #define TENSORFLOW_C_PYTHON_API_H_
+
+// #include <string>
+
+// #include "tensorflow/c/c_api.h"
+
+// These functions can be removed without notice. They exist to facilitate some
+// refactoring of graph construction code in the Python API.
+
+@Namespace("tensorflow") public static native void AddControlInput(TF_Graph graph, TF_Operation op, TF_Operation input);
+
+// Changes an attr value in the node_def Protocol Buffer and sets a status upon
+// completion.
+@Namespace("tensorflow") public static native void SetAttr(TF_Graph graph, TF_Operation op, @Cast("const char*") BytePointer attr_name,
+             TF_Buffer attr_value_proto, TF_Status status);
+@Namespace("tensorflow") public static native void SetAttr(TF_Graph graph, TF_Operation op, String attr_name,
+             TF_Buffer attr_value_proto, TF_Status status);
+
+@Namespace("tensorflow") public static native void SetRequestedDevice(TF_Graph graph, TF_Operation op, @Cast("const char*") BytePointer device);
+@Namespace("tensorflow") public static native void SetRequestedDevice(TF_Graph graph, TF_Operation op, String device);
+
+@Namespace("tensorflow") public static native void UpdateEdge(TF_Graph graph, @ByVal TF_Output new_src, @ByVal TF_Input dst,
+                TF_Status status);
+
+@Namespace("tensorflow") public static native void RemoveAllControlInputs(TF_Graph graph, TF_Operation op);
+
+// Sets whether ops missing a shape inference function should trigger an
+// error. The default is true.
+@Namespace("tensorflow") public static native void SetRequireShapeInferenceFns(TF_Graph graph, @Cast("bool") boolean require);
+
+// Extends `session` with any new operations added to its associated graph.
+// Usually this happens automatically in TF_SessionRun. After this is called,
+// TF_SessionRun will no longer extend the session on every call.
+//
+// We expose this here to allow fine-grained synchronization in multi-threaded
+// workloads, which is required since the Python implementation depends on the
+// above mutation methods. This allows us to prevent modifications to nodes in
+// the graph after the session has been made aware of them.
+@Namespace("tensorflow") public static native void ExtendSession(TF_Session session, TF_Status status);
+
+// Returns the serialized CppShapeInferenceResult::HandleData proto for
+// `output` if its a resource tensor, or otherwise returns the empty string.
+@Namespace("tensorflow") public static native @StdString BytePointer GetResourceHandleShapeAndType(TF_Graph graph, @ByVal TF_Output output);
+
+// Sets `output` based on `proto`, which should be a serialized
+// CppShapeInferenceResult::HandleData proto.
+// NOTE(skyewm): `proto` is passed a void*/size_t pair instead of a std::string
+// because I couldn't get SWIG to work otherwise.
+@Namespace("tensorflow") public static native void SetResourceHandleShapeAndType(TF_Graph graph, @ByVal TF_Output output,
+                                   @Const Pointer proto, @Cast("size_t") long proto_len,
+                                   TF_Status status);
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_C_PYTHON_API_H_
+
+
 // Parsed from tensorflow/core/framework/op_def_builder.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
