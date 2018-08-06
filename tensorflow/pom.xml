@@ -123,6 +123,7 @@
              <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
           </linkPaths>
           <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
         </configuration>
