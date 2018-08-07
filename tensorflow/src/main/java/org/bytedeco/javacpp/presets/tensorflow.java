@@ -131,6 +131,7 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/python_api.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
@@ -186,7 +187,7 @@ import java.util.List;
                         "tensorflow/cc/ops/string_ops.h",
                         "tensorflow/cc/ops/training_ops.h",
                         "tensorflow/cc/ops/user_ops.h"},
-                link = "tensorflow_cc", preload = "tensorflow_framework"),
+                link = "tensorflow_cc", preload = {"iomp5", "mklml", "mklml_intel", "tensorflow_framework"}),
         @Platform(
                 value = {"linux-x86_64", "macosx-x86_64"},
                 extension = "-gpu"),
@@ -195,7 +196,7 @@ import java.util.List;
                 link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
                         "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
                         "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main"},
-                preload = {"concrt140", "msvcp140", "vcruntime140",
+                preload = {"msvcr120", "libiomp5md", "mklml", "concrt140", "msvcp140", "vcruntime140",
                            "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                            "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
                            "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"}),
@@ -620,7 +621,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::pair<tensorflow::StringPiece,int>").pointerTypes("StringPieceIntPair").define())
                .put(new Info("std::pair<tensorflow::TensorSlice,tensorflow::string>").pointerTypes("TensorSlideStringPair").define())
                .put(new Info("std::map<tensorflow::TensorId,tensorflow::TensorId>").pointerTypes("TensorIdTensorIdMap").define())
-//               .put(new Info("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>").pointerTypes("SafeTensorIdTensorIdMap").define())
+               .put(new Info("std::map<tensorflow::SafeTensorId,tensorflow::SafeTensorId>").pointerTypes("SafeTensorIdTensorIdMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::TensorShape>").pointerTypes("VarToShapeMap").define())
                .put(new Info("std::unordered_map<std::string,tensorflow::DataType>").pointerTypes("VarToDataTypeMap").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet*>").pointerTypes("StringTensorSliceSetMap").define())
@@ -693,6 +694,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));
 
+        infoMap.put(new Info("std::vector<tensorflow::OpDef>").pointerTypes("OpDefVector").define());
         if (!android) {
             infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
         }

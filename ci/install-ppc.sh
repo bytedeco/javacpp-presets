@@ -45,7 +45,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    cd $HOME/
    curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
    curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el.deb
-   curl -L http://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-linux-ppc64le-v7.1.tgz -o $HOME/cudnn-9.2-linux-ppc64le-v7.1.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-linux-ppc64le-v7.1.tgz -o $HOME/cudnn-9.2-linux-ppc64le-v7.1.tgz
    ar vx $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS

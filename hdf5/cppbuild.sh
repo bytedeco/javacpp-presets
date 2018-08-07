@@ -7,7 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+ZLIB=zlib-1.2.11
 HDF5_VERSION=1.10.2
+download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
 download "https://www.hdfgroup.org/package/source-bzip2-2/?wpdmdl=11811" hdf5-$HDF5_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
@@ -75,15 +77,19 @@ case $PLATFORM in
     windows-x86)
 	mkdir -p build
 	cd build
-        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false ..
+        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON ..
+	sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+	cp bin/Release/zlib* ../../lib/
 	cd ..
         ;;
     windows-x86_64)
 	mkdir -p build
 	cd build
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false ..
+        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON ..
+	sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+	cp bin/Release/zlib* ../../lib/
 	cd ..
         ;;
     *)
