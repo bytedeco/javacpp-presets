@@ -151,14 +151,16 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-windows.patch
         mkdir -p ../build
         cd ../build
-        "$CMAKE" -G "Visual Studio 15 2017" -T v140 -A x64 -DCMAKE_BUILD_TYPE=Release -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -DPYTHON_EXECUTABLE="C:/Users/WuMo-Zion/Miniconda3/python.exe" -DPYTHON_LIBRARIES="C:/Users/WuMo-Zion/Miniconda3/libs/python36.lib" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" -DCUDA_HOST_COMPILER="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/bin/amd64/cl.exe" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
-        MSBuild.exe //p:Configuration=Release //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger ALL_BUILD.vcxproj 
-        # if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
-        #     MSBuild.exe //p:Configuration=Release //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger "tensorflow_static.vcxproj"
-        # fi
-        # if [[ "$EXTENSION" == *gpu ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then
-        #     MSBuild.exe //p:Configuration=Release /p:Platform=x64 /maxcpucount:$MAKEJ /p:PreferredToolArchitecture=x64 tf_core_gpu_kernels.vcxproj /filelogger
-        # fi
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
+        if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
+            MSBuild.exe //p:Configuration=Release //maxcpucount:$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tensorflow_static.vcxproj
+        fi
+        if [[ ! -f ../build/Release/tf_c_python_api.lib ]]; then
+            MSBuild.exe //p:Configuration=Release //maxcpucount:$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tf_c_python_api.vcxproj
+        fi
+        if [[ "$EXTENSION" == *gpu ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then
+            MSBuild.exe //p:Configuration=Release //maxcpucount:$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tf_core_gpu_kernels.vcxproj
+        fi
         cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
     *)

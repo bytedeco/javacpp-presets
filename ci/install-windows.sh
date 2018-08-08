@@ -101,6 +101,14 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Finished cuda install
 fi 
 
+if [ "$PROJ" == "tensorflow" ]; then
+       curl -L https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+       curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
+       /c/Python27/python get-pip.py
+       /c/Python27/python -m pip install numpy
+       unzip -o swigwin-3.0.12.zip -d /c/
+fi
+
 DOWNLOAD_FILE="$PROJ-cppbuild.zip"
 DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
 if curl -fsSL -G -v -o "$DOWNLOAD_FILE" "$DOWNLOAD_ADDRESS" --data-urlencode "all=true" --data-urlencode "job=Environment: PROJ=$PROJ, OS=$OS, EXT=$EXT, PARTIAL_CPPBUILD=1"; then
