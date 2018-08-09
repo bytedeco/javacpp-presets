@@ -155,7 +155,7 @@ case $PLATFORM in
         if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
             MSBuild.exe //p:Configuration=Release //maxcpucount:$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tensorflow_static.vcxproj
         fi
-        if [[ ! -f ../build/Release/tf_c_python_api.lib ]]; then
+        if [[ ! -f ../build/tf_c_python_api.dir/Release/tf_c_python_api.lib ]]; then
             MSBuild.exe //p:Configuration=Release //maxcpucount:$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tf_c_python_api.vcxproj
         fi
         if [[ "$EXTENSION" == *gpu ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then

@@ -102,10 +102,8 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
 fi 
 
 if [ "$PROJ" == "tensorflow" ]; then
-       curl -L https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-       curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
-       /c/Python27/python get-pip.py
        /c/Python27/python -m pip install numpy
+       curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
 fi
 
