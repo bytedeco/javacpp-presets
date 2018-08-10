@@ -22,14 +22,14 @@ OPUS=opus-1.2.1
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.0h
-OPENH264_VERSION=1.7.0
+OPENH264_VERSION=1.8.0
 X265=2.8
 VPX_VERSION=1.7.0
 ALSA_VERSION=1.1.6
 FREETYPE_VERSION=2.9.1
 MFX_VERSION=1.23
 NVCODEC_VERSION=8.1.24.2
-FFMPEG_VERSION=4.0.1
+FFMPEG_VERSION=4.0.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -134,6 +134,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
+        patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ V=0
         make install
@@ -275,6 +276,7 @@ case $PLATFORM in
         cd ../openh264-$OPENH264_VERSION
         LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
+        patch -Np1 < ../../../x264-android.patch || true
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ V=0
         make install
