@@ -51,6 +51,7 @@ IF "%PARTIAL_CPPBUILD%"=="1" (
      echo Quitting with error  
      exit 1
    )
+   TASKKILL /F /IM MSBuild.exe /T
    echo Exiting with success
    exit 0
 )
@@ -82,6 +83,7 @@ IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
    )
 
 )
+TASKKILL /F /IM MSBuild.exe /T
 echo Exiting with success
 exit 0
 
