@@ -86,9 +86,9 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           echo "Found spinnaker in cache and size seems ok"
         else
           echo "Downloading flycap64 as not found in cache or too small"
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 10h7GJ53ZnZr1wKo9mOlEa9Ve_Zb1ltyF $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
         fi
-        tar xzvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C $TRAVIS_BUILD_DIR/../
+        tar xzvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib"
     fi
   fi
