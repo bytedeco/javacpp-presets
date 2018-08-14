@@ -88,8 +88,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           echo "Downloading flycap64 as not found in cache or too small"
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
         fi
-        tar xzvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib"
+        tar xzvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C $HOME/build
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/usr/include/* /usr/include; cp -R $HOME/build/usr/lib/* /usr/lib"
     fi
   fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
