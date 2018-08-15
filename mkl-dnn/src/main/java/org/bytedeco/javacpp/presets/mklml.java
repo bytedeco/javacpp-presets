@@ -66,7 +66,7 @@ public class mklml implements InfoMapper {
                              "mkl_somatcopy2", "mkl_domatcopy2", "mkl_comatcopy2", "mkl_zomatcopy2",
                              "mkl_somatadd", "mkl_domatadd", "mkl_comatadd", "mkl_zomatadd",
 
-                             "CBLAS_INDEX").cppTypes().annotations())
+                             "CBLAS_INDEX", "mkl_jit_create_dgemm", "mkl_jit_create_sgemm").cppTypes().annotations())
 
                .put(new Info("MKL_Simatcopy", "MKL_Dimatcopy", "MKL_Cimatcopy", "MKL_Zimatcopy",
                              "MKL_Somatcopy2", "MKL_Domatcopy2", "MKL_Comatcopy2", "MKL_Zomatcopy2",

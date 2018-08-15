@@ -1,6 +1,6 @@
-diff -ruN tesseract-4.0.0-beta.3/src/api/baseapi.cpp tesseract-4.0.0-beta.3-android/src/api/baseapi.cpp
---- tesseract-4.0.0-beta.3/src/api/baseapi.cpp	2018-06-20 19:21:25.000000000 +0900
-+++ tesseract-4.0.0-beta.3-android/src/api/baseapi.cpp	2018-06-25 12:24:31.630344792 +0900
+diff -ruN tesseract-4.0.0-beta.4/src/api/baseapi.cpp tesseract-4.0.0-beta.4-android/src/api/baseapi.cpp
+--- tesseract-4.0.0-beta.4/src/api/baseapi.cpp	2018-07-27 15:10:37.000000000 +0900
++++ tesseract-4.0.0-beta.4-android/src/api/baseapi.cpp	2018-08-15 19:49:01.967641279 +0900
 @@ -42,6 +42,10 @@
  #include <unistd.h>
  #endif  // _WIN32
@@ -9,13 +9,13 @@ diff -ruN tesseract-4.0.0-beta.3/src/api/baseapi.cpp tesseract-4.0.0-beta.3-andr
 +int fgetpos(FILE* __fp, fpos_t* __pos);
 +int fsetpos(FILE* __fp, const fpos_t* __pos);
 +
- #include <algorithm>
- #include <clocale>
- #include <fstream>
-diff -ruN tesseract-4.0.0-beta.3/src/api/Makefile.am tesseract-4.0.0-beta.3-android/src/api/Makefile.am
---- tesseract-4.0.0-beta.3/src/api/Makefile.am	2018-06-20 19:21:25.000000000 +0900
-+++ tesseract-4.0.0-beta.3-android/src/api/Makefile.am	2018-06-25 12:23:35.824330876 +0900
-@@ -54,7 +54,7 @@
+ #include <clocale>             // for LC_ALL, LC_CTYPE, LC_NUMERIC
+ #include <cmath>               // for round, M_PI
+ #include <cstdint>             // for int32_t
+diff -ruN tesseract-4.0.0-beta.4/src/api/Makefile.am tesseract-4.0.0-beta.4-android/src/api/Makefile.am
+--- tesseract-4.0.0-beta.4/src/api/Makefile.am	2018-07-27 15:10:37.000000000 +0900
++++ tesseract-4.0.0-beta.4-android/src/api/Makefile.am	2018-08-15 19:48:24.839616888 +0900
+@@ -58,7 +58,7 @@
      ../ccutil/libtesseract_ccutil.la \
      ../opencl/libtesseract_opencl.la 
  
@@ -24,9 +24,9 @@ diff -ruN tesseract-4.0.0-beta.3/src/api/Makefile.am tesseract-4.0.0-beta.3-andr
  
  bin_PROGRAMS = tesseract
  tesseract_SOURCES = tesseractmain.cpp
-diff -ruN tesseract-4.0.0-beta.3/src/lstm/lstm.cpp tesseract-4.0.0-beta.3-android/src/lstm/lstm.cpp
---- tesseract-4.0.0-beta.3/src/lstm/lstm.cpp	2018-06-20 19:21:25.000000000 +0900
-+++ tesseract-4.0.0-beta.3-android/src/lstm/lstm.cpp	2018-06-25 12:23:35.825330876 +0900
+diff -ruN tesseract-4.0.0-beta.4/src/lstm/lstm.cpp tesseract-4.0.0-beta.4-android/src/lstm/lstm.cpp
+--- tesseract-4.0.0-beta.4/src/lstm/lstm.cpp	2018-07-27 15:10:37.000000000 +0900
++++ tesseract-4.0.0-beta.4-android/src/lstm/lstm.cpp	2018-08-15 19:48:24.840616888 +0900
 @@ -33,6 +33,10 @@
  #include "networkscratch.h"
  #include "tprintf.h"
@@ -38,9 +38,9 @@ diff -ruN tesseract-4.0.0-beta.3/src/lstm/lstm.cpp tesseract-4.0.0-beta.3-androi
  // Macros for openmp code if it is available, otherwise empty macros.
  #ifdef _OPENMP
  #define PARALLEL_IF_OPENMP(__num_threads)                                  \
-diff -ruN tesseract-4.0.0-beta.3/src/lstm/weightmatrix.cpp tesseract-4.0.0-beta.3-android/src/lstm/weightmatrix.cpp
---- tesseract-4.0.0-beta.3/src/lstm/weightmatrix.cpp	2018-06-20 19:21:25.000000000 +0900
-+++ tesseract-4.0.0-beta.3-android/src/lstm/weightmatrix.cpp	2018-06-25 12:23:35.826330877 +0900
+diff -ruN tesseract-4.0.0-beta.4/src/lstm/weightmatrix.cpp tesseract-4.0.0-beta.4-android/src/lstm/weightmatrix.cpp
+--- tesseract-4.0.0-beta.4/src/lstm/weightmatrix.cpp	2018-07-27 15:10:37.000000000 +0900
++++ tesseract-4.0.0-beta.4-android/src/lstm/weightmatrix.cpp	2018-08-15 19:48:24.840616888 +0900
 @@ -25,6 +25,10 @@
  #include "statistc.h"
  #include "tprintf.h"

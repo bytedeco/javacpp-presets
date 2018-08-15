@@ -54,6 +54,8 @@ public class tesseract implements InfoMapper {
                .put(new Info("Pixa").pointerTypes("PIXA").skip())
                .put(new Info("Boxa").pointerTypes("BOXA").skip())
 
+               .put(new Info("std::vector<std::vector<std::pair<const char*,float> > >").pointerTypes("StringFloatPairVectorVector").define())
+
                .put(new Info("TessResultCallback1<bool,int>").pointerTypes("DeleteCallback").define().virtualize())
 
                .put(new Info("TessCallback1<char>").pointerTypes("CharClearCallback").define().virtualize())
