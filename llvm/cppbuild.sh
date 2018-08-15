@@ -53,13 +53,13 @@ case $PLATFORM in
         ;;
     windows-x86)
         $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd Release/lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
         cd ../..
         $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd ../../lib
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
@@ -68,13 +68,13 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         $CMAKE -G "Visual Studio 14 2015 Win64" -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd Release/lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib
         cd ../..
         $CMAKE -G "Visual Studio 14 2015 Win64" -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd ../../lib
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
         [ -f clang.lib ] || lib.exe /OUT:clang.lib clang*.lib

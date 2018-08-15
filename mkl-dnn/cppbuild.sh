@@ -45,7 +45,7 @@ case $PLATFORM in
         mkdir -p external
         unzip -o mklml_win_$MKLML_VERSION.zip -d external
         "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cp external/mklml_win_$MKLML_VERSION/include/* ../include/
         cp external/mklml_win_$MKLML_VERSION/lib/*.lib ../lib/
         ;;
