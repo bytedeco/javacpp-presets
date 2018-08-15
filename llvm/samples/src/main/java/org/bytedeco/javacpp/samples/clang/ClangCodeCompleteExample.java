@@ -1,4 +1,4 @@
-package org.bytedeco.javacpp.preset.clang;
+package org.bytedeco.javacpp.samples.clang;
 
 import java.net.URL;
 import java.nio.file.Path;

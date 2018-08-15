@@ -1,4 +1,4 @@
-package org.bytedeco.javacpp.preset.clang;
+package org.bytedeco.javacpp.samples.clang;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
