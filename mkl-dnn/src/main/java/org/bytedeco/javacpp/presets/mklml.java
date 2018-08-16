@@ -71,8 +71,9 @@ public class mklml implements InfoMapper {
                .put(new Info("MKL_Simatcopy", "MKL_Dimatcopy", "MKL_Cimatcopy", "MKL_Zimatcopy",
                              "MKL_Somatcopy2", "MKL_Domatcopy2", "MKL_Comatcopy2", "MKL_Zomatcopy2",
                              "MKL_Somatadd", "MKL_Domatadd", "MKL_Comatadd", "MKL_Zomatadd",
-
-                             "cblas_ctrsm_batch", "cblas_dtrsm_batch", "cblas_strsm_batch", "cblas_ztrsm_batch").skip())
+                             "cblas_ctrsm_batch", "cblas_dtrsm_batch", "cblas_strsm_batch", "cblas_ztrsm_batch",
+                             "mkl_cblas_jit_create_dgemm", "mkl_cblas_jit_create_sgemm",
+                             "mkl_jit_get_dgemm_ptr", "mkl_jit_get_sgemm_ptr", "mkl_jit_destroy").skip())
 
                .put(new Info("dnnPrimitive_t").valueTypes("_uniPrimitive_s").pointerTypes("@ByPtrPtr _uniPrimitive_s"))
                .put(new Info("dnnLayout_t").valueTypes("_dnnLayout_s").pointerTypes("@ByPtrPtr _dnnLayout_s"));

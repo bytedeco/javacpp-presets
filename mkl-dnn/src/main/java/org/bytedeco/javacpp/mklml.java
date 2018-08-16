@@ -2055,30 +2055,16 @@ public static native void cblas_gemm_s8u8s32(@Cast("const CBLAS_LAYOUT") int Lay
 // #ifndef mkl_jit_create_dgemm
 // #define mkl_jit_create_dgemm mkl_cblas_jit_create_dgemm
 // #endif
-public static native @Cast("mkl_jit_status_t") int mkl_cblas_jit_create_dgemm(@Cast("void**") PointerPointer jitter, @Cast("const MKL_LAYOUT") int layout, @Cast("const MKL_TRANSPOSE") int transa, @Cast("const MKL_TRANSPOSE") int transb,
-                                            int m, int n, int k, 
-                                            double alpha, int lda, int ldb, 
-                                            double beta, int ldc);
-public static native @Cast("mkl_jit_status_t") int mkl_cblas_jit_create_dgemm(@Cast("void**") @ByPtrPtr Pointer jitter, @Cast("const MKL_LAYOUT") int layout, @Cast("const MKL_TRANSPOSE") int transa, @Cast("const MKL_TRANSPOSE") int transb,
-                                            int m, int n, int k, 
-                                            double alpha, int lda, int ldb, 
-                                            double beta, int ldc);
+
 // #ifndef mkl_jit_create_sgemm
 // #define mkl_jit_create_sgemm mkl_cblas_jit_create_sgemm
 // #endif
-public static native @Cast("mkl_jit_status_t") int mkl_cblas_jit_create_sgemm(@Cast("void**") PointerPointer jitter, @Cast("const MKL_LAYOUT") int layout, @Cast("const MKL_TRANSPOSE") int transa, @Cast("const MKL_TRANSPOSE") int transb,
-                                            int m, int n, int k, 
-                                            float alpha, int lda, int ldb, 
-                                            float beta, int ldc);
-public static native @Cast("mkl_jit_status_t") int mkl_cblas_jit_create_sgemm(@Cast("void**") @ByPtrPtr Pointer jitter, @Cast("const MKL_LAYOUT") int layout, @Cast("const MKL_TRANSPOSE") int transa, @Cast("const MKL_TRANSPOSE") int transb,
-                                            int m, int n, int k, 
-                                            float alpha, int lda, int ldb, 
-                                            float beta, int ldc);
 
-public static native dgemm_jit_kernel_t mkl_jit_get_dgemm_ptr(@Const Pointer jitter);
-public static native sgemm_jit_kernel_t mkl_jit_get_sgemm_ptr(@Const Pointer jitter);
 
-public static native @Cast("mkl_jit_status_t") int mkl_jit_destroy(Pointer jitter);
+
+
+
+
 
 
 // #ifdef __cplusplus
