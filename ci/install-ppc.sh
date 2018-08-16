@@ -45,7 +45,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    cd $HOME/
    curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
    curl -L https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el -o $HOME/cuda-repo-ubuntu1604-9-2-local-cublas-update-1_1.0-1_ppc64el.deb
-   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.1.4/cudnn-9.2-linux-ppc64le-v7.1.tgz -o $HOME/cudnn-9.2-linux-ppc64le-v7.1.tgz
+   curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.2.1/cudnn-9.2-linux-ppc64le-v7.2.1.38.tgz -o $HOME/cudnn-9.2-linux-ppc64le-v7.2.1.38.tgz
    ar vx $HOME/cuda-repo-ubuntu1604-9-2-local_9.2.88-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS
@@ -59,7 +59,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda-9.2 /usr/local/cuda"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xf $HOME/cudnn-9.2-linux-ppc64le-v7.1.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar --totals -xf $HOME/cudnn-9.2-linux-ppc64le-v7.2.1.38.tgz -C /usr/local/"
 fi
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "powerpc64le-linux-gnu-gcc --version"

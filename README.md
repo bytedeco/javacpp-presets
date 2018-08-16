@@ -131,7 +131,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Tesseract 4.0.0-beta.4  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 9.2  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 7.1  https://developer.nvidia.com/cudnn
+   * cuDNN 7.2  https://developer.nvidia.com/cudnn
  * MXNet 1.2.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.10.0  https://github.com/tensorflow/tensorflow
  * TensorRT 4.0  https://developer.nvidia.com/tensorrt

@@ -6,7 +6,7 @@
  * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
  * Enable MKL-DNN for TensorFlow
- * Upgrade presets for FFmpeg 4.0.2, MKL-DNN 0.16, ARPACK-NG 3.6.2, Tesseract 4.0.0-beta.4, MXNet 1.2.1, TensorFlow 1.10.0, and their dependencies
+ * Upgrade presets for FFmpeg 4.0.2, MKL-DNN 0.16, ARPACK-NG 3.6.2, Tesseract 4.0.0-beta.4, cuDNN 7.2, MXNet 1.2.1, TensorFlow 1.10.0, and their dependencies
  * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
 
 ### July 17, 2018 version 1.4.2

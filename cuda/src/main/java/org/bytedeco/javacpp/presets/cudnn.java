@@ -55,6 +55,7 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnAlgorithmDescriptor_t").valueTypes("cudnnAlgorithmStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmStruct"))
                .put(new Info("cudnnAlgorithmPerformance_t").valueTypes("cudnnAlgorithmPerformanceStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmPerformanceStruct"))
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
+               .put(new Info("cudnnRNNDataDescriptor_t").valueTypes("cudnnRNNDataStruct").pointerTypes("@ByPtrPtr cudnnRNNDataStruct"))
                .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
                .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))
                .put(new Info("cudnnCTCLossDescriptor_t").valueTypes("cudnnCTCLossStruct").pointerTypes("@ByPtrPtr cudnnCTCLossStruct"))
