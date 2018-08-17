@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_lapack.h", "mkl_lapacke.h", "mkl_service.h",
                         "mkl_vml.h", "mkl_vml_defines.h", "mkl_vml_types.h", "mkl_vml_functions.h",
                         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "i_malloc.h"*/},
-            link = "mklml_intel", preload = "iomp5"),
+            link = "mklml_intel", preload = "iomp5", resource = {"include", "lib"}),
         @Platform(
             value = "macosx-x86_64",
             link = "mklml"),

@@ -1,4 +1,5 @@
 
+ * Bundle native resources (header files and import libraries) of MKL-DNN
  * Make MSBuild compile more efficiently on multiple processors ([pull #599](https://github.com/bytedeco/javacpp-presets/pull/599))
  * Add samples for Clang ([pull #598](https://github.com/bytedeco/javacpp-presets/pull/598))
  * Include `python_api.h` for TensorFlow ([issue #585](https://github.com/bytedeco/javacpp-presets/issues/585))
