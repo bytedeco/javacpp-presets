@@ -151,45 +151,47 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-windows.patch
         mkdir -p ../build
         cd ../build
-		
+
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
-        
-		# partial build if the variable is not set or set to 1
-		if [[ "${PARTIAL_CPPBUILD:-1}" == "1" ]]; then
-		
-			# two xeon core need around 30min
-			MSBuild.exe tf_c.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			MSBuild.exe tf_core_cpu.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			MSBuild.exe tf_cc.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger	
-			MSBuild.exe tf_core_ops.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger		
-			MSBuild.exe tf_core_kernels_cpu_only.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 		
-			MSBuild.exe tf_stream_executor.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			MSBuild.exe tf_core_distributed_runtime.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			MSBuild.exe tf_core_direct_session.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			
-			# two xeon core need around 1h 40min
-			if [[ "$EXTENSION" == *gpu ]]; then
-				MSBuild.exe tf_core_gpu_kernels.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 
-			fi
-			
-			# two xeon core need around 2min
-			if [[ ! -f ../build/tf_c_python_api.dir/Release/tf_c_python_api.lib ]]; then
-				MSBuild.exe tf_python_protos_cc.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 
-				MSBuild.exe tf_c_python_api.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 
-			fi
-		fi
-			
-		# the remaining parts, if the variable is not set or set to 0
-		if [[ "${PARTIAL_CPPBUILD:-0}" == "0" ]]; then
-	
-			# two xeon core need around 3h 15min
-			if [[ ! -f ../build/Release/tensorflow_static.lib ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then
-				MSBuild.exe tf_core_kernels.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 
-				MSBuild.exe tf_tools_transform_graph_lib.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger 
-				MSBuild.exe tensorflow_static.vcxproj //p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
-			fi
-		fi
-		
+
+        MSBUILD_OPTIONS="//p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger"
+
+        # partial build if the variable is not set or set to 1
+        if [[ "${PARTIAL_CPPBUILD:-1}" == "1" ]]; then
+
+            # two xeon core need around 30min
+            MSBuild.exe tf_c.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_core_cpu.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_cc.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_core_ops.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_core_distributed_runtime.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_core_direct_session.vcxproj $MSBUILD_OPTIONS
+
+            # two xeon core need around 1h 40min
+            if [[ "$EXTENSION" == *gpu ]]; then
+                MSBuild.exe tf_core_kernels_cpu_only.vcxproj $MSBUILD_OPTIONS
+                MSBuild.exe tf_stream_executor.vcxproj $MSBUILD_OPTIONS
+                MSBuild.exe tf_core_gpu_kernels.vcxproj $MSBUILD_OPTIONS
+            fi
+
+            # two xeon core need around 2min
+            if [[ ! -f ../build/tf_c_python_api.dir/Release/tf_c_python_api.lib ]]; then
+                MSBuild.exe $MSBUILD_OPTIONS
+                MSBuild.exe tf_c_python_api.vcxproj $MSBUILD_OPTIONS
+            fi
+        fi
+
+        # the remaining parts, if the variable is not set or set to 0
+        if [[ "${PARTIAL_CPPBUILD:-0}" == "0" ]]; then
+
+            # two xeon core need around 3h 15min
+            if [[ ! -f ../build/Release/tensorflow_static.lib ]] && [[ "${PARTIAL_CPPBUILD:-}" != "1" ]]; then
+                MSBuild.exe tf_core_kernels.vcxproj $MSBUILD_OPTIONS
+                MSBuild.exe tf_tools_transform_graph_lib.vcxproj $MSBUILD_OPTIONS
+                MSBuild.exe tensorflow_static.vcxproj $MSBUILD_OPTIONS
+            fi
+        fi
+
         cd ../tensorflow-$TENSORFLOW_VERSION
         ;;
     *)
