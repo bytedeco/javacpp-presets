@@ -154,13 +154,13 @@ case $PLATFORM in
 
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
 
-        MSBUILD_OPTIONS="//p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger"
+        MSBUILD_OPTIONS="//p:BuildProjectReferences=false //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger"
 
         # partial build if the variable is not set or set to 1
         if [[ "${PARTIAL_CPPBUILD:-1}" == "1" ]]; then
 
             # two xeon core need around 30min
-            MSBuild.exe tf_c.vcxproj $MSBUILD_OPTIONS
+            MSBuild.exe tf_c.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger
             MSBuild.exe tf_core_cpu.vcxproj $MSBUILD_OPTIONS
             MSBuild.exe tf_cc.vcxproj $MSBUILD_OPTIONS
             MSBuild.exe tf_core_ops.vcxproj $MSBUILD_OPTIONS
@@ -176,7 +176,7 @@ case $PLATFORM in
 
             # two xeon core need around 2min
             if [[ ! -f ../build/tf_c_python_api.dir/Release/tf_c_python_api.lib ]]; then
-                MSBuild.exe $MSBUILD_OPTIONS
+                MSBuild.exe tf_python_protos_cc.vcxproj $MSBUILD_OPTIONS
                 MSBuild.exe tf_c_python_api.vcxproj $MSBUILD_OPTIONS
             fi
         fi
