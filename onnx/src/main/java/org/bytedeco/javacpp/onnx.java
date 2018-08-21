@@ -1453,6 +1453,150 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
  // namespace ONNX_NAMESPACE
 
 
+// Parsed from onnx/defs/operator_sets-ml.h
+
+// Copyright (c) Facebook Inc. and Microsoft Corporation.
+// Licensed under the MIT license.
+
+// #pragma once
+
+// #ifdef ONNX_ML
+
+// #include "onnx/defs/schema.h"
+
+// Forward declarations for ai.onnx.ml version 1
+@Namespace("onnx") @Opaque public static class ArrayFeatureExtractor_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ArrayFeatureExtractor_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ArrayFeatureExtractor_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Binarizer_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Binarizer_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Binarizer_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class CastMap_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CastMap_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CastMap_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class CategoryMapper_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CategoryMapper_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CategoryMapper_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class DictVectorizer_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DictVectorizer_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DictVectorizer_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class FeatureVectorizer_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FeatureVectorizer_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FeatureVectorizer_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Imputer_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Imputer_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Imputer_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class LabelEncoder_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LabelEncoder_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LabelEncoder_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class LinearClassifier_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LinearClassifier_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LinearClassifier_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class LinearRegressor_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public LinearRegressor_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LinearRegressor_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Normalizer_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Normalizer_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Normalizer_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class OneHotEncoder_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public OneHotEncoder_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OneHotEncoder_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class SVMClassifier_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SVMClassifier_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SVMClassifier_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class SVMRegressor_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SVMRegressor_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SVMRegressor_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Scaler_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Scaler_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Scaler_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class TreeEnsembleClassifier_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TreeEnsembleClassifier_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TreeEnsembleClassifier_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class TreeEnsembleRegressor_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TreeEnsembleRegressor_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TreeEnsembleRegressor_OnnxML_ver1(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class ZipMap_OnnxML_ver1 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZipMap_OnnxML_ver1() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZipMap_OnnxML_ver1(Pointer p) { super(p); }
+}
+
+// Iterate over schema from ai.onnx.ml version 1
+@Namespace("onnx") public static class OpSet_OnnxML_ver1 extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public OpSet_OnnxML_ver1() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpSet_OnnxML_ver1(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpSet_OnnxML_ver1(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public OpSet_OnnxML_ver1 position(long position) {
+        return (OpSet_OnnxML_ver1)super.position(position);
+    }
+
+}
+
+@Namespace("onnx") public static native void RegisterOnnxMLOperatorSetSchema();
+ // namespace ONNX_NAMESPACE
+
+// #endif
+
+
 // Parsed from onnx/defs/data_type_utils.h
 
 // Copyright (c) Facebook Inc. and Microsoft Corporation.
@@ -1666,13 +1810,13 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
  // namespace ONNX_NAMESPACE
 
 
-// Parsed from onnx/onnx-operators.pb.h
+// Parsed from onnx/onnx-operators-ml.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: onnx-operators.proto
+// source: onnx-operators-ml.proto
 
-// #ifndef PROTOBUF_onnx_2doperators_2eproto__INCLUDED
-// #define PROTOBUF_onnx_2doperators_2eproto__INCLUDED
+// #ifndef PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
+// #define PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
 
 // #include <string>
 
@@ -1700,10 +1844,10 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
-// #include "onnx.pb.h"
+// #include "onnx-ml.pb.h"
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_onnx_2doperators_2eproto") public static class TableStruct extends Pointer {
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static class TableStruct extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TableStruct() { super((Pointer)null); allocate(); }
@@ -1720,15 +1864,15 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   @MemberGetter public static native @Cast("const google::protobuf::uint32") int offsets(int i);
   @MemberGetter public static native @Cast("const google::protobuf::uint32*") IntPointer offsets();
 }
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void AddDescriptors();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsFunctionProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsFunctionProto();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsOperatorProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsOperatorProto();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsOperatorSetProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaultsOperatorSetProto();
-@Namespace("protobuf_onnx_2doperators_2eproto") public static native void InitDefaults();
-  // namespace protobuf_onnx_2doperators_2eproto
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void AddDescriptors();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProtoImpl();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProto();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProtoImpl();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProto();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProtoImpl();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProto();
+@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaults();
+  // namespace protobuf_onnx_2doperators_2dml_2eproto
 @Namespace("onnx") @Opaque public static class FunctionProtoDefaultTypeInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public FunctionProtoDefaultTypeInternal() { super((Pointer)null); }
@@ -2576,16 +2720,16 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_onnx_2doperators_2eproto__INCLUDED
+// #endif  // PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
 
 
-// Parsed from onnx/onnx.pb.h
+// Parsed from onnx/onnx-ml.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: onnx.proto
+// source: onnx-ml.proto
 
-// #ifndef PROTOBUF_onnx_2eproto__INCLUDED
-// #define PROTOBUF_onnx_2eproto__INCLUDED
+// #ifndef PROTOBUF_onnx_2dml_2eproto__INCLUDED
+// #define PROTOBUF_onnx_2dml_2eproto__INCLUDED
 
 // #include <string>
 
@@ -2615,29 +2759,29 @@ public static final int
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsAttributeProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsAttributeProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsValueInfoProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsValueInfoProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsModelProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsModelProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsStringStringEntryProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsStringStringEntryProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorProto_SegmentImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorProto_Segment();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorShapeProto_DimensionImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorShapeProto_Dimension();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorShapeProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTensorShapeProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTypeProto_TensorImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTypeProto_Tensor();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTypeProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsTypeProto();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsOperatorSetIdProtoImpl();
-@Namespace("protobuf_onnx_2eproto") public static native void InitDefaultsOperatorSetIdProto();
-  // namespace protobuf_onnx_2eproto
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsAttributeProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsAttributeProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsValueInfoProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsValueInfoProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsModelProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsModelProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto_SegmentImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto_Segment();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_DimensionImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_Dimension();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto_TensorImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto_Tensor();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProtoImpl();
+@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProto();
+  // namespace protobuf_onnx_2dml_2eproto
 @Namespace("onnx") @Opaque public static class AttributeProtoDefaultTypeInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public AttributeProtoDefaultTypeInternal() { super((Pointer)null); }
@@ -2713,6 +2857,20 @@ public static final int
     public TypeProtoDefaultTypeInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TypeProtoDefaultTypeInternal(Pointer p) { super(p); }
+}
+
+@Namespace("onnx") @Opaque public static class TypeProto_MapDefaultTypeInternal extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TypeProto_MapDefaultTypeInternal() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TypeProto_MapDefaultTypeInternal(Pointer p) { super(p); }
+}
+
+@Namespace("onnx") @Opaque public static class TypeProto_SequenceDefaultTypeInternal extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TypeProto_SequenceDefaultTypeInternal() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TypeProto_SequenceDefaultTypeInternal(Pointer p) { super(p); }
 }
 
 @Namespace("onnx") @Opaque public static class TypeProto_TensorDefaultTypeInternal extends Pointer {
@@ -4425,6 +4583,168 @@ public static final int
 }
 // -------------------------------------------------------------------
 
+@Namespace("onnx") @NoOffset public static class TypeProto_Sequence extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TypeProto_Sequence(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TypeProto_Sequence(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TypeProto_Sequence position(long position) {
+        return (TypeProto_Sequence)super.position(position);
+    }
+
+  public TypeProto_Sequence() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public TypeProto_Sequence(@Const @ByRef TypeProto_Sequence from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef TypeProto_Sequence from);
+
+  public native @ByRef @Name("operator =") TypeProto_Sequence put(@Const @ByRef TypeProto_Sequence from);
+//   #if LANG_CXX11
+//   #endif
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TypeProto_Sequence default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const TypeProto_Sequence internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void Swap(TypeProto_Sequence other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native TypeProto_Sequence New();
+
+  public native TypeProto_Sequence New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef TypeProto_Sequence from);
+  public native void MergeFrom(@Const @ByRef TypeProto_Sequence from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .onnx.TypeProto elem_type = 1;
+  public native @Cast("bool") boolean has_elem_type();
+  public native void clear_elem_type();
+  @MemberGetter public static native int kElemTypeFieldNumber();
+  public static final int kElemTypeFieldNumber = kElemTypeFieldNumber();
+  public native @Const @ByRef TypeProto elem_type();
+  public native TypeProto release_elem_type();
+  public native TypeProto mutable_elem_type();
+  public native void set_allocated_elem_type(TypeProto elem_type);
+}
+// -------------------------------------------------------------------
+
+@Namespace("onnx") @NoOffset public static class TypeProto_Map extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TypeProto_Map(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TypeProto_Map(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TypeProto_Map position(long position) {
+        return (TypeProto_Map)super.position(position);
+    }
+
+  public TypeProto_Map() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public TypeProto_Map(@Const @ByRef TypeProto_Map from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef TypeProto_Map from);
+
+  public native @ByRef @Name("operator =") TypeProto_Map put(@Const @ByRef TypeProto_Map from);
+//   #if LANG_CXX11
+//   #endif
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TypeProto_Map default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const TypeProto_Map internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void Swap(TypeProto_Map other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native TypeProto_Map New();
+
+  public native TypeProto_Map New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef TypeProto_Map from);
+  public native void MergeFrom(@Const @ByRef TypeProto_Map from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .onnx.TypeProto value_type = 2;
+  public native @Cast("bool") boolean has_value_type();
+  public native void clear_value_type();
+  @MemberGetter public static native int kValueTypeFieldNumber();
+  public static final int kValueTypeFieldNumber = kValueTypeFieldNumber();
+  public native @Const @ByRef TypeProto value_type();
+  public native TypeProto release_value_type();
+  public native TypeProto mutable_value_type();
+  public native void set_allocated_value_type(TypeProto value_type);
+
+  // optional .onnx.TensorProto.DataType key_type = 1;
+  public native @Cast("bool") boolean has_key_type();
+  public native void clear_key_type();
+  @MemberGetter public static native int kKeyTypeFieldNumber();
+  public static final int kKeyTypeFieldNumber = kKeyTypeFieldNumber();
+  public native @Cast("onnx::TensorProto_DataType") int key_type();
+  public native void set_key_type(@Cast("onnx::TensorProto_DataType") int value);
+}
+// -------------------------------------------------------------------
+
 @Namespace("onnx") @NoOffset public static class TypeProto extends MessageLite {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4454,6 +4774,8 @@ public static final int
   /** enum onnx::TypeProto::ValueCase */
   public static final int
     kTensorType = 1,
+    kSequenceType = 4,
+    kMapType = 5,
     VALUE_NOT_SET = 0;
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -4520,6 +4842,26 @@ public static final int
   public native TypeProto_Tensor release_tensor_type();
   public native TypeProto_Tensor mutable_tensor_type();
   public native void set_allocated_tensor_type(TypeProto_Tensor tensor_type);
+
+  // optional .onnx.TypeProto.Sequence sequence_type = 4;
+  public native @Cast("bool") boolean has_sequence_type();
+  public native void clear_sequence_type();
+  @MemberGetter public static native int kSequenceTypeFieldNumber();
+  public static final int kSequenceTypeFieldNumber = kSequenceTypeFieldNumber();
+  public native @Const @ByRef TypeProto_Sequence sequence_type();
+  public native TypeProto_Sequence release_sequence_type();
+  public native TypeProto_Sequence mutable_sequence_type();
+  public native void set_allocated_sequence_type(TypeProto_Sequence sequence_type);
+
+  // optional .onnx.TypeProto.Map map_type = 5;
+  public native @Cast("bool") boolean has_map_type();
+  public native void clear_map_type();
+  @MemberGetter public static native int kMapTypeFieldNumber();
+  public static final int kMapTypeFieldNumber = kMapTypeFieldNumber();
+  public native @Const @ByRef TypeProto_Map map_type();
+  public native TypeProto_Map release_map_type();
+  public native TypeProto_Map mutable_map_type();
+  public native void set_allocated_map_type(TypeProto_Map map_type);
 
   public native @Cast("onnx::TypeProto::ValueCase") int value_case();
 }
@@ -5431,9 +5773,61 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// TypeProto_Sequence
+
+// optional .onnx.TypeProto elem_type = 1;
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TypeProto_Map
+
+// optional .onnx.TensorProto.DataType key_type = 1;
+
+
+
+
+
+
+
+// optional .onnx.TypeProto value_type = 2;
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // TypeProto
 
 // optional .onnx.TypeProto.Tensor tensor_type = 1;
+
+
+
+
+
+
+
+// optional .onnx.TypeProto.Sequence sequence_type = 4;
+
+
+
+
+
+
+
+// optional .onnx.TypeProto.Map map_type = 5;
 
 
 
@@ -5515,6 +5909,10 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -5528,7 +5926,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_onnx_2eproto__INCLUDED
+// #endif  // PROTOBUF_onnx_2dml_2eproto__INCLUDED
 
 
 // Parsed from google/protobuf/message_lite.h

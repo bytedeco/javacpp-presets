@@ -45,7 +45,7 @@ rm -df third_party/pybind11
 ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 
 #to build with "Traditional ML" support. Untested.
-#export ONNX_ML=1
+export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
 python3 setup.py build
