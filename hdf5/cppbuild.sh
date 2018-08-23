@@ -8,9 +8,9 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 ZLIB=zlib-1.2.11
-HDF5_VERSION=1.10.2
+HDF5_VERSION=1.10.3
 download "http://zlib.net/$ZLIB.tar.gz" $ZLIB.tar.gz
-download "https://www.hdfgroup.org/package/source-bzip2-2/?wpdmdl=11811" hdf5-$HDF5_VERSION.tar.bz2
+download "https://www.hdfgroup.org/package/source-bzip/?wpdmdl=12594" hdf5-$HDF5_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
 cd $PLATFORM
