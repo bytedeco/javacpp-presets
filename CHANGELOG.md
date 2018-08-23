@@ -1,4 +1,5 @@
 
+ * Add methods overloaded with `PointerPointer` for MKL-DNN ([issue bytedeco/javacpp#251](https://github.com/bytedeco/javacpp/issues/251))
  * Bundle native resources (header files and import libraries) of MKL-DNN
  * Make MSBuild compile more efficiently on multiple processors ([pull #599](https://github.com/bytedeco/javacpp-presets/pull/599))
  * Add samples for Clang ([pull #598](https://github.com/bytedeco/javacpp-presets/pull/598))
