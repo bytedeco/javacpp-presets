@@ -57,7 +57,6 @@ import static org.bytedeco.javacpp.onnx.*;
 
 public class LoadModel {
     public static void main(String[] args) throws Exception {
-        RegisterOnnxMLOperatorSetSchema();
         OpSchemaVector allSchemas = OpSchemaRegistry.get_all_schemas();
         System.out.println(allSchemas.size());
 

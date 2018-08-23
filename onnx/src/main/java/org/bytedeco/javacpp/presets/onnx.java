@@ -40,6 +40,7 @@ import java.lang.annotation.Target;
     compiler = "cpp11",
     include = {
         "onnx/defs/schema.h",
+        "onnx/defs/operator_sets.h",
         "onnx/defs/operator_sets-ml.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
