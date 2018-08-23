@@ -40,8 +40,7 @@ import java.lang.annotation.Target;
     compiler = "cpp11",
     include = {
         "onnx/defs/schema.h",
-//	"onnx/defs/operator_sets.h",
-	"onnx/defs/operator_sets-ml.h",
+        "onnx/defs/operator_sets-ml.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",
@@ -64,11 +63,11 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
                .put(new Info("std::vector<int64_t>").pointerTypes("LongVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
-               .put(new Info("std::initializer_list").skip())
-               .put(new Info("std::function<void(OpSchema&&)>").skip())
+               .put(new Info("std::initializer_list", "std::function<void(OpSchema&&)>").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
+
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
@@ -92,6 +91,7 @@ public class onnx implements InfoMapper {
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
                .put(new Info("onnx::OpSchema::FormalParameter").pointerTypes("OpSchema.FormalParameter"))
                .put(new Info("onnx::OpSchema::TypeConstraintParam").pointerTypes("OpSchema.TypeConstraintParam"))
+
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
                .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
                .put(new Info("std::unordered_map<std::string,int>").pointerTypes("StringIntMap").define())
