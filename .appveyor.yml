@@ -13,6 +13,8 @@ environment:
       OS: windows-x86
     - PROJ: "flycapture"
       OS: windows-x86
+    - PROJ: "spinnaker"
+      OS: windows-x86
     - PROJ: "libdc1394"
       OS: windows-x86
     - PROJ: "libfreenect"
@@ -55,6 +57,8 @@ environment:
     - PROJ: "ffmpeg"
       OS: windows-x86_64
     - PROJ: "flycapture"
+      OS: windows-x86_64
+    - PROJ: "spinnaker"
       OS: windows-x86_64
     - PROJ: "libdc1394"
       OS: windows-x86_64
