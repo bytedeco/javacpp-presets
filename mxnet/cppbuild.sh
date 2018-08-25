@@ -17,8 +17,17 @@ case $PLATFORM in
         export BLAS="openblas"
         ;;
     linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
+        if [ $(which gcc-6) ]; then
+          export CC="gcc-6 -m64"
+        else
+          export CC="gcc -m64"
+        fi 
+
+        if [ $(which g++-6) ]; then
+          export CXX="g++-6 -m64"
+        else 
+          export CXX="g++ -m64"
+        fi
         export BLAS="openblas"
         ;;
     macosx-*)
@@ -68,6 +77,24 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
+if [ ! -z ${CUDA_HOME+x} ] && [ -d "$CUDA_HOME" ]; then
+    USE_CUDA="USE_CUDA=1 USE_CUDA_PATH=$CUDA_HOME"
+    HAS_CUDA=1
+    echo "using CUDA"
+else
+  USE_CUDA="USE_CUDA=0"
+  HAS_CUDA=0
+  echo "not using CUDA"
+fi
+
+if [ ! -z ${USE_CUDNN+x} ] && [ $HAS_CUDA -eq 1 ] ; then
+  export USE_CUDNN="USE_CUDNN=1"
+  echo "using CUDNN"
+else
+  export USE_CUDNN=""
+  echo "not using CUDNN"
+fi
+
 echo "Decompressing archives..."
 tar --totals -xzf ../dlpack-$DLPACK_VERSION.tar.gz
 tar --totals -xzf ../dmlc-core-$DMLC_VERSION.tar.gz
@@ -98,7 +125,7 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" USE_F16C=0 ADD_CFLAGS="-DMXNET_USE_LAPACK=1 $ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" $USE_CUDA $USE_CUDNN USE_F16C=0 ADD_CFLAGS="-DMXNET_USE_LAPACK=1 $ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
 cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
 unset CC
