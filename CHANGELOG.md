@@ -1,4 +1,5 @@
 
+ * Fix loading order of runtime libraries for Visual Studio 2015 on Windows ([issue #606](https://github.com/bytedeco/javacpp-presets/issues/606))
  * Add methods overloaded with `PointerPointer` for MKL-DNN ([issue bytedeco/javacpp#251](https://github.com/bytedeco/javacpp/issues/251))
  * Bundle native resources (header files and import libraries) of MKL-DNN
  * Make MSBuild compile more efficiently on multiple processors ([pull #599](https://github.com/bytedeco/javacpp-presets/pull/599))

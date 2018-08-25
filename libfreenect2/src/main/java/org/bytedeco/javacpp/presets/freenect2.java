@@ -37,10 +37,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<libfreenect2/packet_pipeline.h>", "<libfreenect2/registration.h>", "<libfreenect2/config.h>"},
             link = "freenect2@.0.2"),
     @Platform(value = "macosx-x86_64", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
-    @Platform(value = "windows-x86_64", preload = {"freenect2-openni2", "glfw3", "libusb-1.0", "turbojpeg", "concrt140", "msvcp140", "vcruntime140",
+    @Platform(value = "windows-x86_64", preload = {
                 "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                 "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-                "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0"},
+                "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
+                "vcruntime140", "msvcp140", "concrt140", "libusb-1.0", "glfw3", "turbojpeg", "freenect2-openni2"},
             preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                            "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
 public class freenect2 implements InfoMapper {

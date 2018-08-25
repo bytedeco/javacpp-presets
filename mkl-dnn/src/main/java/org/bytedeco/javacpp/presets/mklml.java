@@ -48,9 +48,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = "windows-x86_64",
             link = "mklml",
-            preload = {"msvcp140", "vcruntime140", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
-                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0",
-                       "msvcr120", "libiomp5md"},
+            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
+                       "msvcr120", "libiomp5md", "vcruntime140", "msvcp140", "concrt140"},
             preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                            "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"})},
     target = "org.bytedeco.javacpp.mklml")
