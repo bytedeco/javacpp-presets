@@ -7,6 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export GPU_BUILD=0
+export USE_CUDNN=0
+export CUDA_HOME=/opt/cuda 
+if [[ "$EXTENSION" == *gpu ]]; then
+    export GPU_BUILD=1
+    export USE_CUDNN=1
+fi
+
 export ADD_CFLAGS=
 export ADD_LDFLAGS=
 export USE_OPENMP=1
@@ -77,7 +85,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-if [ ! -z ${CUDA_HOME+x} ] && [ -d "$CUDA_HOME" ]; then
+if [ ! -z ${CUDA_HOME+x} ] && [ -d "$CUDA_HOME" ] && [ $GPU_BUILD -eq 1 ]; then
     USE_CUDA="USE_CUDA=1 USE_CUDA_PATH=$CUDA_HOME"
     HAS_CUDA=1
     echo "using CUDA"
