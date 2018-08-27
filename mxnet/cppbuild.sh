@@ -9,7 +9,7 @@ fi
 
 export GPU_BUILD=0
 export USE_CUDNN=0
-export CUDA_HOME=/opt/cuda 
+
 if [[ "$EXTENSION" == *gpu ]]; then
     export GPU_BUILD=1
     export USE_CUDNN=1
@@ -71,6 +71,8 @@ INSTALL_PATH=`pwd`
 
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+CUDA_HOME="/usr/local/cuda"
+
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
@@ -85,7 +87,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-if [ ! -z ${CUDA_HOME+x} ] && [ -d "$CUDA_HOME" ] && [ $GPU_BUILD -eq 1 ]; then
+if [ -d "$CUDA_HOME" ] && [ $GPU_BUILD -eq 1 ]; then
     USE_CUDA="USE_CUDA=1 USE_CUDA_PATH=$CUDA_HOME"
     HAS_CUDA=1
     echo "using CUDA"
