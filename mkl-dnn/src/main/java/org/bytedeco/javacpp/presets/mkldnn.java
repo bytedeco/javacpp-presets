@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             define = {"GENERIC_EXCEPTION_CLASS mkldnn::error",
                       "GENERIC_EXCEPTION_TOSTRING message.append(\": status = \").append(std::to_string(e.status)).c_str()"},
             include = {"mkldnn_types.h", /*"mkldnn_debug.h",*/ "mkldnn.h", "mkldnn.hpp"},
-            link = "mkldnn@.0")},
+            link = "mkldnn@.0", preload = "libmkldnn")},
     target = "org.bytedeco.javacpp.mkldnn")
 public class mkldnn implements InfoMapper {
     public void map(InfoMap infoMap) {

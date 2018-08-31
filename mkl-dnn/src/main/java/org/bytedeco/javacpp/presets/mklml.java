@@ -44,16 +44,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "mklml_intel", preload = "iomp5", resource = {"include", "lib"}),
         @Platform(
             value = "macosx-x86_64",
-            link = "mklml"),
+            link = "mklml",
+            preload = {"gcc_s@.1", "gomp@.1", "stdc++@.6", "iomp5"},
+            preloadpath = {"/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
         @Platform(
             value = "windows-x86_64",
             link = "mklml",
-            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
-                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
-                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-                       "msvcr120", "libiomp5md", "vcruntime140", "msvcp140", "concrt140"},
-            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
-                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"})},
+            preload = {"libwinpthread-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "msvcr120", "libiomp5md"})},
     target = "org.bytedeco.javacpp.mklml")
 @NoException
 public class mklml implements InfoMapper {

@@ -35,17 +35,23 @@ case $PLATFORM in
         download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_mac_$MKLML_VERSION.tgz mklml_mac_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_mac_$MKLML_VERSION.tgz -C external
+        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
+        export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
+        sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
         make -j $MAKEJ
         make install/strip
         cp external/mklml_mac_$MKLML_VERSION/include/* ../include/
+        unset CC
+        unset CXX
         ;;
     windows-x86_64)
         download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_win_$MKLML_VERSION.zip mklml_win_$MKLML_VERSION.zip
         mkdir -p external
         unzip -o mklml_win_$MKLML_VERSION.zip -d external
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
-        MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
+        "$CMAKE" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH
+        make -j $MAKEJ
+        make install/strip
         cp external/mklml_win_$MKLML_VERSION/include/* ../include/
         cp external/mklml_win_$MKLML_VERSION/lib/*.lib ../lib/
         ;;
