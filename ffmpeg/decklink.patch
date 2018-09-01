@@ -1,0 +1,61 @@
+unchanged:
+--- ffmpeg-4.0/configure	2018-05-06 22:22:05.446265900 -0400
++++ ffmpeg-4.0/configure2	2018-05-06 22:22:27.712484600 -0400
+@@ -3185,9 +3185,9 @@
+ caca_outdev_deps="libcaca"
+ decklink_deps_any="libdl LoadLibrary"
+ decklink_indev_deps="decklink threads"
+-decklink_indev_extralibs="-lstdc++"
++decklink_indev_extralibs="-static-libstdc++"
+ decklink_outdev_deps="decklink threads"
+-decklink_outdev_extralibs="-lstdc++"
++decklink_outdev_extralibs="-static-libstdc++"
+ libndi_newtek_indev_deps="libndi_newtek"
+ libndi_newtek_indev_extralibs="-lndi"
+ libndi_newtek_outdev_deps="libndi_newtek"
+@@ -5953,8 +5953,7 @@
+ # these are off by default, so fail if requested and not available
+ enabled cuda_sdk          && require cuda_sdk cuda.h cuCtxCreate -lcuda
+ enabled chromaprint       && require chromaprint chromaprint.h chromaprint_get_version -lchromaprint
+-enabled decklink          && { require_header DeckLinkAPI.h &&
+-                               { test_cpp_condition DeckLinkAPIVersion.h "BLACKMAGIC_DECKLINK_API_VERSION >= 0x0a060100" || die "ERROR: Decklink API version must be >= 10.6.1."; } }
++enabled decklink          && require_header DeckLinkAPI.h
+ enabled libndi_newtek     && require_header Processing.NDI.Lib.h
+ enabled frei0r            && require_header frei0r.h
+ enabled gmp               && require gmp gmp.h mpz_export -lgmp
+unchanged:
+--- ffmpeg-4.0/libavdevice/decklink_common.h	2018-04-20 06:02:57.000000000 -0400
++++ ffmpeg-4.0/libavdevice/decklink_common2.h	2018-05-06 11:19:43.873596700 -0400
+@@ -23,8 +23,6 @@
+ #ifndef AVDEVICE_DECKLINK_COMMON_H
+ #define AVDEVICE_DECKLINK_COMMON_H
+ 
+-#include <DeckLinkAPIVersion.h>
+-
+ #include "libavutil/thread.h"
+ #include "decklink_common_c.h"
+ 
+@@ -110,11 +108,7 @@
+ typedef enum { DIRECTION_IN, DIRECTION_OUT} decklink_direction_t;
+ 
+ #ifdef _WIN32
+-#if BLACKMAGIC_DECKLINK_API_VERSION < 0x0a040000
+-typedef unsigned long buffercount_type;
+-#else
+ typedef unsigned int buffercount_type;
+-#endif
+ IDeckLinkIterator *CreateDeckLinkIteratorInstance(void);
+ #else
+ typedef uint32_t buffercount_type;
+only in patch2:
+unchanged:
+--- ffmpeg-4.0/libavdevice/decklink_dec.cpp	2018-04-20 06:02:57.000000000 -0400
++++ ffmpeg-4.0/libavdevice/decklink_dec2.cpp	2018-05-06 11:23:41.688285100 -0400
+@@ -707,6 +707,7 @@
+                         "- Frames dropped %u\n", ctx->frameCount, ++ctx->dropped);
+             }
+             no_video = 1;
++            pkt.flags |= AV_PKT_FLAG_DISCARD;
+         } else {
+             if (no_video) {
+                 av_log(avctx, AV_LOG_WARNING, "Frame received (#%lu) - Input returned "
