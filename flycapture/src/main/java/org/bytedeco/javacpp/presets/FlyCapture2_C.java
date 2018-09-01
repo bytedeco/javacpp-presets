@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         "MultiSyncLibraryDefs_C.h", "MultiSyncLibrary_C.h"},
                 link = {"flycapture-c@.2", "multisync-c@.2"}, includepath = "/usr/include/flycapture/C/"),
         @Platform(value = "linux-arm", include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}, link = "flycapture-c@.2"),
-        @Platform(value = "windows", link = {"FlyCapture2_C", "MultiSyncLibrary_C"},
+        @Platform(value = "windows", link = {"FlyCapture2_C_v100", "MultiSyncLibrary_C_v100"},
                 preload = {"libiomp5md", "FlyCapture2"},
                 includepath =  "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),
         @Platform(value = "windows-x86",

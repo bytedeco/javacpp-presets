@@ -70,7 +70,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>flycapture-platform</artifactId>
-      <version>2.11.3.121-${project.version}</version>
+      <version>2.12.3.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

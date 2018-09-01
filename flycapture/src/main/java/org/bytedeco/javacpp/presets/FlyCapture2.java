@@ -49,7 +49,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "linux-arm", include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
                 "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
                 "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"}, link = "flycapture@.2"),
-        @Platform(value = "windows", link = {"FlyCapture2", "MultiSyncLibrary"},
+        @Platform(value = "windows", link = {"FlyCapture2_v100", "MultiSyncLibrary_v100"},
                 includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
         @Platform(value = "windows-x86",
                 linkpath    = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/",
