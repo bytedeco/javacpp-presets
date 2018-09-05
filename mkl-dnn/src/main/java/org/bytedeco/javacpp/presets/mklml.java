@@ -41,12 +41,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         "mkl_dnn_types.h", "mkl_dnn.h", /*"mkl_lapack.h", "mkl_lapacke.h", "mkl_service.h",
                         "mkl_vml.h", "mkl_vml_defines.h", "mkl_vml_types.h", "mkl_vml_functions.h",
                         "mkl_vsl.h", "mkl_vsl_defines.h", "mkl_vsl_types.h", "mkl_vsl_functions.h", "i_malloc.h"*/},
-            link = "mklml_intel", preload = "iomp5", resource = {"include", "lib"}),
+            link = "mklml_intel", preload = {"gomp@.1", "iomp5"}, resource = {"include", "lib"}),
         @Platform(
             value = "macosx-x86_64",
             link = "mklml",
             preload = {"gcc_s@.1", "gomp@.1", "stdc++@.6", "iomp5"},
-            preloadpath = {"/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
+            preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
         @Platform(
             value = "windows-x86_64",
             link = "mklml",
