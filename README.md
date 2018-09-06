@@ -125,6 +125,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
+ * CPython 3.6.x  https://www.python.org/downloads/
  * LLVM 6.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.76.0  http://www.leptonica.org/download.html

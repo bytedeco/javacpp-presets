@@ -86,6 +86,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "gsl"
       OS: windows-x86_64
+    - PROJ: "cpython"
+      OS: windows-x86_64
     - PROJ: "llvm"
       OS: windows-x86_64
     - PROJ: "libpostal"
