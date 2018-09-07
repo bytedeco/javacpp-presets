@@ -44,15 +44,18 @@ import java.lang.annotation.Target;
         "onnx/defs/operator_sets-ml.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
-        "onnx/onnx-operators-ml.pb.h",
+//        "onnx/version_converter/convert.h",
+//        "onnx/optimizer/optimize.h",
+ 	"onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
+	"onnx/checker.h",
+	"onnx/proto_utils.h",
+//	"onnx/onnxifi.h",
+	"onnx/common/tensor.h",
         "google/protobuf/message_lite.h",
-        "google/protobuf/unknown_field_set.h",
-        "onnx/proto_utils.h",
-//        "onnx/string_utils.h",
-        "onnx/checker.h",
+        "google/protobuf/unknown_field_set.h"
     },
-    link = {"onnx_proto", "onnx"}))
+    link = {"onnx_proto", "onnx", "onnxifi"}))
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))

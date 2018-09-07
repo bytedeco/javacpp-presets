@@ -7267,6 +7267,338 @@ public static final int
 // #endif  // PROTOBUF_onnx_2fonnx_2dml_2eproto__INCLUDED
 
 
+// Parsed from onnx/checker.h
+
+// #pragma once
+
+// #include <stdexcept>
+// #include <unordered_map>
+// #include <unordered_set>
+// #include "onnx/defs/schema.h"
+// #include "onnx/onnx-operators_pb.h"
+// #include "onnx/onnx_pb.h"
+// #include "onnx/string_utils.h"
+@Namespace("onnx::checker") @NoOffset public static class ValidationError extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ValidationError(Pointer p) { super(p); }
+
+  public native @Cast("const char*") BytePointer what();
+  public native void AppendContext(@StdString BytePointer context);
+  public native void AppendContext(@StdString String context);
+}
+
+// #define fail_check(...)
+//   throw ONNX_NAMESPACE::checker::ValidationError(
+//       ONNX_NAMESPACE::MakeString(__VA_ARGS__));
+
+@Namespace("onnx::checker") @NoOffset public static class CheckerContext extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CheckerContext(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CheckerContext(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CheckerContext position(long position) {
+        return (CheckerContext)super.position(position);
+    }
+
+  public native int get_ir_version();
+  public native void set_ir_version(int v);
+  public native @Const @ByRef StringIntMap get_opset_imports();
+  public native void set_opset_imports(@ByVal StringIntMap imps);
+  public native @Cast("bool") boolean is_main_graph();
+  public native void set_is_main_graph(@Cast("bool") boolean is_main_graph);
+
+  public native void set_schema_registry(@Const ISchemaRegistry schema_registry);
+
+  public native @Const ISchemaRegistry get_schema_registry();
+
+  public CheckerContext() { super((Pointer)null); allocate(); }
+  private native void allocate();
+}
+
+@Namespace("onnx::checker") public static class LexicalScopeContext extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public LexicalScopeContext() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LexicalScopeContext(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LexicalScopeContext(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public LexicalScopeContext position(long position) {
+        return (LexicalScopeContext)super.position(position);
+    }
+
+  public native @ByRef StringSet output_names(); public native LexicalScopeContext output_names(StringSet output_names);
+}
+@Namespace("onnx::checker") public static native void check_value_info(@Const @ByRef ValueInfoProto value_info, @Const @ByRef CheckerContext arg1);
+@Namespace("onnx::checker") public static native void check_tensor(@Const @ByRef TensorProto tensor, @Const @ByRef CheckerContext arg1);
+@Namespace("onnx::checker") public static native void check_attribute(
+    @Const @ByRef AttributeProto attr,
+    @Const @ByRef CheckerContext arg1,
+    @Const @ByRef LexicalScopeContext arg2);
+@Namespace("onnx::checker") public static native void check_node(
+    @Const @ByRef NodeProto node,
+    @Const @ByRef CheckerContext arg1,
+    @Const @ByRef LexicalScopeContext arg2);
+@Namespace("onnx::checker") public static native void check_graph(
+    @Const @ByRef GraphProto graph,
+    @Const @ByRef CheckerContext arg1,
+    @Const @ByRef LexicalScopeContext arg2);
+@Namespace("onnx::checker") public static native void check_function(
+    @Const @ByRef FunctionProto function,
+    @Const @ByRef CheckerContext arg1,
+    @Const @ByRef LexicalScopeContext arg2);
+
+@Namespace("onnx::checker") public static native void check_model(@Const @ByRef ModelProto model);
+ // namespace checker
+ // namespace ONNX_NAMESPACE
+
+
+// Parsed from onnx/proto_utils.h
+
+// #pragma once
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+
+// #ifdef ONNX_USE_LITE_PROTO
+// #include <google/protobuf/message_lite.h>
+// #else // ONNX_USE_LITE_PROTO
+// #include <google/protobuf/message.h>
+// #endif  // !ONNX_USE_LITE_PROTO
+
+// #ifdef ONNX_USE_LITE_PROTO
+@Namespace("onnx") public static native @StdString BytePointer ProtoDebugString(@Const @ByRef MessageLite proto);
+// #else
+// #endif
+
+@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, @Cast("const char*") BytePointer buffer, @Cast("size_t") long length);
+@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, String buffer, @Cast("size_t") long length);
+
+@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<int64_t>") LongVector RetrieveValuesLong(@Const @ByRef AttributeProto attr);
+
+@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<std::string>") StringVector RetrieveValuesString(@Const @ByRef AttributeProto attr);
+
+ // namespace ONNX_NAMESPACE
+
+
+// Parsed from onnx/common/tensor.h
+
+// ATTENTION: The code in this file is highly EXPERIMENTAL.
+// Adventurous users should note that the APIs will probably change.
+
+// #pragma once
+
+// #include <cmath>
+// #include <functional>
+// #include <numeric>
+// #include "onnx/common/assertions.h"
+// #include "onnx/onnx_pb.h"
+
+@Namespace("onnx") @NoOffset public static class Tensor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Tensor(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Tensor(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Tensor position(long position) {
+        return (Tensor)super.position(position);
+    }
+
+  public Tensor() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public native @ByRef LongVector sizes();
+
+  public native @Cast("int64_t") long size_from_dim(int dim);
+
+  public native @Cast("onnx::TensorProto_DataType*") @ByRef IntPointer elem_type();
+
+  public native @ByRef StringVector strings();
+
+  public native @ByRef FloatVector floats();
+
+  public native @StdVector DoublePointer doubles();
+
+  public native @StdVector IntPointer int32s();
+
+  public native @ByRef LongVector int64s();
+
+  public native @Cast("uint64_t*") @StdVector LongPointer uint64s();
+
+  public native @StdString BytePointer raw();
+
+  public native void set_raw_data(@StdString BytePointer raw_data);
+  public native void set_raw_data(@StdString String raw_data);
+
+  public native @Cast("bool") boolean is_segment();
+
+  public native @Cast("int64_t") long segment_begin();
+
+  public native @Cast("int64_t") long segment_end();
+
+  public native void set_segment_begin_and_end(@Cast("int64_t") long begin, @Cast("int64_t") long end);
+
+  public native @Cast("bool") boolean hasName();
+
+  public native @StdString BytePointer name();
+
+  public native void setName(@StdString BytePointer name);
+  public native void setName(@StdString String name);
+
+  public native @Cast("bool") boolean is_raw_data();
+
+  //this += a
+  //Supported for
+  //FLOAT, BOOL, INT8, INT16, INT32, UINT8, UINT16, INT64,
+  //UINT32, UINT64, DOUBLE,
+  //TODO: Support for FLOAT16, COMPLEX64, COMPLEX128
+  public native void add(@Const @ByRef Tensor a);
+
+  //this -= a
+  //Supported for
+  //FLOAT, BOOL, INT8, INT16, INT32, UINT8, UINT16, INT64,
+  //UINT32, UINT64, DOUBLE
+  //TODO: Support for FLOAT16, COMPLEX64, COMPLEX128
+  public native void subtract(@Const @ByRef Tensor a);
+
+  //this *= a
+  //Supported for
+  //FLOAT, BOOL, INT8, INT16, INT32, UINT8, UINT16, INT64,
+  //UINT32, UINT64, DOUBLE
+  //TODO: Support for FLOAT16, COMPLEX64, COMPLEX128
+  public native void multiply(@Const @ByRef Tensor a);
+
+  //this /= a
+  //Supported for
+  //FLOAT, INT8, INT16, INT32, UINT8, UINT16, INT64,
+  //UINT32, UINT64, DOUBLE
+  //TODO: Support for FLOAT16, COMPLEX64, COMPLEX128
+  public native void divide(@Const @ByRef Tensor a);
+
+  //Element-wise square root of This
+  //Supported for
+  //FLOAT, DOUBLE,
+  //TODO: Support for FLOAT16
+  public native void sqrt();
+
+  //Element wise scaling of tensor s
+  //s is one dimensional, has size M, where M is size of first dimension of tensor
+  //s must have has data type corresponding to this
+  //Supported for
+  //FLOAT16, FLOAT, DOUBLE
+  public native void scale_by_first_dim(@Const @ByRef Tensor s);
+}
+
+// #define define_data(type, field)
+//   template <>
+//   inline type* Tensor::data<type>() {
+//     if (is_raw_data_) {
+//       return (type*)&raw_data_.data()[0];
+//     } else {
+//       return field.data();
+//     }
+//   }
+// 
+//   template <>
+//   inline const type* Tensor::data<type>() const {
+//     if (is_raw_data_) {
+//       return (type*)(raw_data_.data());
+//     } else {
+//       return field.data();
+//     }
+//   }
+
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+// #undef define_data
+
+
+
+
+
+
+
+// #define APPLY_BINARY_FUNCTION(op_name, f)
+//   inline void Tensor::op_name(const Tensor& other) {
+//     TENSOR_ASSERTM(
+//         other.eem_type() == elem_type_,
+//         "Tensor types do not match: %s != %s",
+//         to_string(elem_type_).c_str(),
+//         " vs. ",
+//         to_string(other.eem_type()).c_str());
+//     TENSOR_ASSERTM(other.sizes() == sizes_, "Tensor sizes do not match.");
+//     switch (elem_type_) {
+//       case ONNX_NAMESPACE::TensorProto_DataType_FLOAT: {
+//         bin_func(f<float>(), data<float>(), other.data<float>());
+//         break;
+//       }
+//       case ONNX_NAMESPACE::TensorProto_DataType_BOOL:
+//       case ONNX_NAMESPACE::TensorProto_DataType_INT8:
+//       case ONNX_NAMESPACE::TensorProto_DataType_INT16:
+//       case ONNX_NAMESPACE::TensorProto_DataType_INT32:
+//       case ONNX_NAMESPACE::TensorProto_DataType_UINT8:
+//       case ONNX_NAMESPACE::TensorProto_DataType_UINT16: {
+//         bin_func(f<int32_t>(), data<int32_t>(), other.data<int32_t>());
+//         break;
+//       }
+//       case ONNX_NAMESPACE::TensorProto_DataType_INT64: {
+//         bin_func(f<int64_t>(), data<int64_t>(), other.data<int64_t>());
+//         break;
+//       }
+//       case ONNX_NAMESPACE::TensorProto_DataType_UINT32:
+//       case ONNX_NAMESPACE::TensorProto_DataType_UINT64: {
+//         bin_func(f<uint64_t>(), data<uint64_t>(), other.data<uint64_t>());
+//         break;
+//       }
+//       case ONNX_NAMESPACE::TensorProto_DataType_DOUBLE: {
+//         bin_func(f<double>(), data<double>(), other.data<double>());
+//         break;
+//       }
+//       default:
+//         TENSOR_ASSERTM(
+//             false,
+//             "Operation %s not supported for data type %s",
+//             #op_name,
+//             " not supported for data type ",
+//             to_string(elem_type_).c_str());
+//     }
+//   }
+
+
+
+
+
+
+// #undef APPLY_BINARY_FUNCTION
+
+
+
+
+
+ // namespace ONNX_NAMESPACE
+
+
 // Parsed from google/protobuf/message_lite.h
 
 // Protocol Buffers - Google's data interchange format
@@ -7969,125 +8301,6 @@ public static final int
 
   // namespace google
 // #endif  // GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
-
-
-// Parsed from onnx/proto_utils.h
-
-// #pragma once
-
-// #include <google/protobuf/io/coded_stream.h>
-// #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
-
-// #ifdef ONNX_USE_LITE_PROTO
-// #include <google/protobuf/message_lite.h>
-// #else // ONNX_USE_LITE_PROTO
-// #include <google/protobuf/message.h>
-// #endif  // !ONNX_USE_LITE_PROTO
-
-// #ifdef ONNX_USE_LITE_PROTO
-@Namespace("onnx") public static native @StdString BytePointer ProtoDebugString(@Const @ByRef MessageLite proto);
-// #else
-// #endif
-
-@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, @Cast("const char*") BytePointer buffer, @Cast("size_t") long length);
-@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, String buffer, @Cast("size_t") long length);
-
-@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<int64_t>") LongVector RetrieveValuesLong(@Const @ByRef AttributeProto attr);
-
-@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<std::string>") StringVector RetrieveValuesString(@Const @ByRef AttributeProto attr);
-
- // namespace ONNX_NAMESPACE
-
-
-// Parsed from onnx/checker.h
-
-// #pragma once
-
-// #include <stdexcept>
-// #include <unordered_map>
-// #include <unordered_set>
-// #include "onnx/defs/schema.h"
-// #include "onnx/onnx-operators_pb.h"
-// #include "onnx/onnx_pb.h"
-// #include "onnx/string_utils.h"
-@Namespace("onnx::checker") @NoOffset public static class ValidationError extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ValidationError(Pointer p) { super(p); }
-
-  public native @Cast("const char*") BytePointer what();
-  public native void AppendContext(@StdString BytePointer context);
-  public native void AppendContext(@StdString String context);
-}
-
-// #define fail_check(...)
-//   throw ONNX_NAMESPACE::checker::ValidationError(
-//       ONNX_NAMESPACE::MakeString(__VA_ARGS__));
-
-@Namespace("onnx::checker") @NoOffset public static class CheckerContext extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CheckerContext(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CheckerContext(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CheckerContext position(long position) {
-        return (CheckerContext)super.position(position);
-    }
-
-  public native int get_ir_version();
-  public native void set_ir_version(int v);
-  public native @Const @ByRef StringIntMap get_opset_imports();
-  public native void set_opset_imports(@ByVal StringIntMap imps);
-  public native @Cast("bool") boolean is_main_graph();
-  public native void set_is_main_graph(@Cast("bool") boolean is_main_graph);
-
-  public native void set_schema_registry(@Const ISchemaRegistry schema_registry);
-
-  public native @Const ISchemaRegistry get_schema_registry();
-
-  public CheckerContext() { super((Pointer)null); allocate(); }
-  private native void allocate();
-}
-
-@Namespace("onnx::checker") public static class LexicalScopeContext extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public LexicalScopeContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LexicalScopeContext(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LexicalScopeContext(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public LexicalScopeContext position(long position) {
-        return (LexicalScopeContext)super.position(position);
-    }
-
-  public native @ByRef StringSet output_names(); public native LexicalScopeContext output_names(StringSet output_names);
-}
-@Namespace("onnx::checker") public static native void check_value_info(@Const @ByRef ValueInfoProto value_info, @Const @ByRef CheckerContext arg1);
-@Namespace("onnx::checker") public static native void check_tensor(@Const @ByRef TensorProto tensor, @Const @ByRef CheckerContext arg1);
-@Namespace("onnx::checker") public static native void check_attribute(
-    @Const @ByRef AttributeProto attr,
-    @Const @ByRef CheckerContext arg1,
-    @Const @ByRef LexicalScopeContext arg2);
-@Namespace("onnx::checker") public static native void check_node(
-    @Const @ByRef NodeProto node,
-    @Const @ByRef CheckerContext arg1,
-    @Const @ByRef LexicalScopeContext arg2);
-@Namespace("onnx::checker") public static native void check_graph(
-    @Const @ByRef GraphProto graph,
-    @Const @ByRef CheckerContext arg1,
-    @Const @ByRef LexicalScopeContext arg2);
-@Namespace("onnx::checker") public static native void check_function(
-    @Const @ByRef FunctionProto function,
-    @Const @ByRef CheckerContext arg1,
-    @Const @ByRef LexicalScopeContext arg2);
-
-@Namespace("onnx::checker") public static native void check_model(@Const @ByRef ModelProto model);
- // namespace checker
- // namespace ONNX_NAMESPACE
 
 
 }
