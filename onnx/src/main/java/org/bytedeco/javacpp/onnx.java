@@ -444,6 +444,74 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::vector<const onnx::TensorShapeProto*>") public static class TensorShapeProtoVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorShapeProtoVector(Pointer p) { super(p); }
+    public TensorShapeProtoVector(TensorShapeProto value) { this(1); put(0, value); }
+    public TensorShapeProtoVector(TensorShapeProto ... array) { this(array.length); put(array); }
+    public TensorShapeProtoVector()       { allocate();  }
+    public TensorShapeProtoVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef TensorShapeProtoVector put(@ByRef TensorShapeProtoVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Const TensorShapeProto get(@Cast("size_t") long i);
+    public native TensorShapeProtoVector put(@Cast("size_t") long i, TensorShapeProto value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Const TensorShapeProto value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Const TensorShapeProto get();
+    }
+
+    public TensorShapeProto[] get() {
+        TensorShapeProto[] array = new TensorShapeProto[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public TensorShapeProto pop_back() {
+        long size = size();
+        TensorShapeProto value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public TensorShapeProtoVector push_back(TensorShapeProto value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public TensorShapeProtoVector put(TensorShapeProto value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public TensorShapeProtoVector put(TensorShapeProto ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @NoOffset @Name("std::pair<int,int>") public static class UseTypeIntPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -844,7 +912,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
    * SinceVersion(3), and another, updated op schema entry for Foo
    * with SinceVersion(6).
    */
-  public native @ByRef OpSchema SinceVersion(@Cast("onnx::OperatorSetVersion") int n); // aka int
+  public native @ByRef @Function OpSchema SinceVersion(@Cast("onnx::OperatorSetVersion") int n); // aka int
 
   /**
    * \brief Input could be one of the values specified in allowed_input_nums.
@@ -1211,6 +1279,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   public native @StdString BytePointer Name();
 
+  public native @Cast("onnx::OperatorSetVersion") @Function int SinceVersion();
+
   public native int since_version();
 
   public native int min_input();
@@ -1425,6 +1495,21 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // Helper function
 
 
+// #ifdef __GNUC__
+// #define ONNX_UNUSED __attribute__((__unused__))
+// #else
+// #define ONNX_UNUSED
+// #endif
+
+// Legacy macros to register schema at static initialization
+// #define ONNX_OPERATOR_SCHEMA(name)
+//   ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
+// #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name)
+//   ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
+// #define ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
+//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce(
+//       op_schema_register_once##name##Counter) ONNX_UNUSED =
+//       OpSchema(#name, __FILE__, __LINE__)
 
 // Helper function
 
@@ -2883,6 +2968,184 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
  // namespace ONNX_NAMESPACE
 
 // #endif // ! ONNX_DATA_TYPE_UTILS_H
+
+
+// Parsed from onnx/defs/shape_inference.h
+
+// #pragma once
+
+// #include "onnx/defs/data_type_utils.h"
+// #include "onnx/proto_utils.h"
+// #include "onnx/string_utils.h"
+
+// Exception class used for handling errors in type and shape inference
+
+@Namespace("onnx") @NoOffset public static class InferenceError extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InferenceError(Pointer p) { super(p); }
+
+
+  public InferenceError(@StdString BytePointer message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString BytePointer message);
+  public InferenceError(@StdString String message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString String message);
+
+  public native @Cast("const char*") BytePointer what();
+
+  public native void AppendContext(@StdString BytePointer context);
+  public native void AppendContext(@StdString String context);
+}
+
+// #define fail_type_inference(...)
+//   throw ONNX_NAMESPACE::InferenceError(
+//       ONNX_NAMESPACE::MakeString("[TypeInferenceError] ", __VA_ARGS__));
+
+// #define fail_shape_inference(...)
+//   throw ONNX_NAMESPACE::InferenceError(
+//       ONNX_NAMESPACE::MakeString("[ShapeInferenceError] ", __VA_ARGS__));
+
+@Namespace("onnx") public static class InferenceContext extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InferenceContext(Pointer p) { super(p); }
+
+  public native @Const AttributeProto getAttribute(@StdString BytePointer name);
+  public native @Const AttributeProto getAttribute(@StdString String name);
+  public native @Cast("size_t") long getNumInputs();
+  public native @Const TypeProto getInputType(@Cast("size_t") long index);
+  public native @Const TensorProto getInputData(@Cast("size_t") long index);
+  public native @Cast("size_t") long getNumOutputs();
+  public native TypeProto getOutputType(@Cast("size_t") long index);
+}
+
+// This no-op inference function is used for operators without an
+// inference implementation.
+@Namespace("onnx") public static native void dummyInferenceFunction(@ByRef InferenceContext arg0);
+
+@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("int64_t") long defaultValue);
+@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("int64_t") long defaultValue);
+
+@Namespace("onnx") public static native @StdString BytePointer getAttribute(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @StdString BytePointer defaultValue);
+@Namespace("onnx") public static native @StdString String getAttribute(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @StdString String defaultValue);
+
+@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(
+    @ByVal Dimension dim1,
+    @ByVal Dimension dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(
+    @ByVal Dimension dim1,
+    @Cast("int64_t") long dim2);
+
+@Namespace("onnx") public static native @ByVal @Name("operator /") Dimension divide(
+    @ByVal Dimension dim1,
+    @Cast("int64_t") long dim2);
+
+// if from >= upto_exclusive, return 1.
+// Caller must make sure upto_exclusive is less than or equal to shape.size()
+// Caller must make sure from>=0
+@Namespace("onnx") public static native @ByVal Dimension multiplyDims(@Const @ByRef TensorShapeProto shape, int from, int upto_exclusive);
+
+// Note: for all methods below for propagating type or shape, callers are
+// responsible to handle optional inputs/outputs and ensure that the specified
+// index value is less than NumInputs/NumOutputs.
+
+@Namespace("onnx") public static native void propagateElemTypeFromInputToOutput(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native @Cast("bool") boolean hasInputShape(@ByRef InferenceContext ctx, int n);
+
+@Namespace("onnx") public static native @Cast("bool") boolean hasNInputShapes(@ByRef InferenceContext ctx, int n);
+
+@Namespace("onnx") public static native @Const @ByRef TensorShapeProto getInputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
+
+// Caller must make sure fromDimIndex is strictly less than shape.dim_size()
+@Namespace("onnx") public static native void appendSingleDimCopiedFromInputTypeToOutputType(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex,
+    @Cast("size_t") long fromDimIndex);
+
+@Namespace("onnx") public static native void propagateShapeFromInputToOutput(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long inputIndex,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native void propagateShapeAndTypeFromFirstInput(@ByRef InferenceContext ctx);
+
+@Namespace("onnx") public static native void updateOutputElemType(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    @Cast("onnx::TensorProto_DataType") int elemType);
+
+// Infer type of an output from the value of a specified attribute, which is
+// expected to have a valid value representing a TensorProto_DataType.
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex,
+    @Cast("onnx::TensorProto_DataType") int default_value/*=TensorProto::UNDEFINED*/);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex,
+    @Cast("onnx::TensorProto_DataType") int default_value/*=TensorProto::UNDEFINED*/);
+@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native TensorShapeProto getOutputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
+
+@Namespace("onnx") public static native void updateOutputShape(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    @Const @ByRef TensorShapeProto shape);
+
+@Namespace("onnx") public static native void updateOutputShape(
+    @ByRef InferenceContext ctx,
+    @Cast("size_t") long outputIndex,
+    @Const @ByRef TensorProto tensorProto);
+
+// Infer shape of an output from the value of a specified attribute, which is
+// expected to be a list of integers specifying a valid shape.
+@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString BytePointer attributeName,
+    @Cast("size_t") long outputIndex);
+@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
+    @ByRef InferenceContext ctx,
+    @StdString String attributeName,
+    @Cast("size_t") long outputIndex);
+
+@Namespace("onnx") public static native void multidirectionalBroadcastShapeInference(
+    @Const @ByRef TensorShapeProtoVector shapes,
+    @ByRef TensorShapeProto resultShape);
+
+@Namespace("onnx") public static native void bidirectionalBroadcastShapeInference(
+	@Const @ByRef TensorShapeProto shapeL,
+	@Const @ByRef TensorShapeProto shapeR,
+	@ByRef TensorShapeProto resultShape);
+
+ // namespace ONNX_NAMESPACE
 
 
 // Parsed from onnx/onnx-operators-ml.pb.h

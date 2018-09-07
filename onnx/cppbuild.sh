@@ -56,6 +56,5 @@ cp onnx/common/*.h ../include/onnx/common/
 cp onnx/defs/*.h ../include/onnx/defs/
 cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
 cp $CMAKE_BUILD_DIR/*.so ../lib
-patch ../include/onnx/defs/schema.h ../../../schema.h.patch
 
 cd ../..
