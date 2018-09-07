@@ -1,4 +1,5 @@
 
+ * Fix logic in `tensorflow.Tensor.createIndexer()` to support scalar tensors
  * Enable OpenMP for MKL-DNN also on Mac and Windows by building with GCC
  * Fix loading order of runtime libraries for Visual Studio 2015 on Windows ([issue #606](https://github.com/bytedeco/javacpp-presets/issues/606))
  * Add methods overloaded with `PointerPointer` for MKL-DNN ([issue bytedeco/javacpp#251](https://github.com/bytedeco/javacpp/issues/251))
