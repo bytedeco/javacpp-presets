@@ -1199,7 +1199,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   public native @StdString BytePointer domain();
 
-  public native int since_version();
   public native @Const @ByRef StringAttributeMap attributes();
 
   // Get input formal parameters.
@@ -1212,7 +1211,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   public native @StdString BytePointer Name();
 
-  public native @Cast("const onnx::OperatorSetVersion") int SinceVersion();
+  public native int since_version();
 
   public native int min_input();
   public native int max_input();
@@ -1426,15 +1425,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // Helper function
 
 
-// Legacy macros to register schema at static initialization
-// #define ONNX_OPERATOR_SCHEMA(name)
-//   ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(__COUNTER__, name)
-// #define ONNX_OPERATOR_SCHEMA_UNIQ_HELPER(Counter, name)
-//   ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
-// #define ONNX_OPERATOR_SCHEMA_UNIQ(Counter, name)
-//   static ONNX_NAMESPACE::OpSchemaRegistry::OpSchemaRegisterOnce(
-//       op_schema_register_once##name##Counter) =
-//       OpSchema(#name, __FILE__, __LINE__)
 
 // Helper function
 
@@ -1750,12 +1740,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public Loop_Onnx_ver1() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Loop_Onnx_ver1(Pointer p) { super(p); }
-}
-@Namespace("onnx") @Opaque public static class LoopIndexTensor_Onnx_ver1 extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public LoopIndexTensor_Onnx_ver1() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LoopIndexTensor_Onnx_ver1(Pointer p) { super(p); }
 }
 @Namespace("onnx") @Opaque public static class LpNormalization_Onnx_ver1 extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -2633,6 +2617,67 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
 }
 
+// Forward declarations for ai.onnx version 8
+@Namespace("onnx") @Opaque public static class Expand_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Expand_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Expand_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Max_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Max_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Max_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Min_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Min_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Min_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Sum_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Sum_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Sum_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Mean_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Mean_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Mean_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class MaxPool_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MaxPool_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MaxPool_Onnx_ver8(Pointer p) { super(p); }
+}
+@Namespace("onnx") @Opaque public static class Scan_Onnx_ver8 extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Scan_Onnx_ver8() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Scan_Onnx_ver8(Pointer p) { super(p); }
+}
+
+// Iterate over schema from ai.onnx version 7
+@Namespace("onnx") public static class OpSet_Onnx_ver8 extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public OpSet_Onnx_ver8() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpSet_Onnx_ver8(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpSet_Onnx_ver8(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public OpSet_Onnx_ver8 position(long position) {
+        return (OpSet_Onnx_ver8)super.position(position);
+    }
+
+}
+
 @Namespace("onnx") public static native void RegisterOnnxOperatorSetSchema();
 
  // namespace ONNX_NAMESPACE
@@ -2840,168 +2885,13 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // #endif // ! ONNX_DATA_TYPE_UTILS_H
 
 
-// Parsed from onnx/defs/shape_inference.h
-
-// #pragma once
-
-// #include "onnx/defs/data_type_utils.h"
-// #include "onnx/proto_utils.h"
-// #include "onnx/string_utils.h"
-
-// Exception class used for handling errors in type and shape inference
-
-@Namespace("onnx") @NoOffset public static class InferenceError extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InferenceError(Pointer p) { super(p); }
-
-
-	public InferenceError(@StdString BytePointer message) { super((Pointer)null); allocate(message); }
-	private native void allocate(@StdString BytePointer message);
-	public InferenceError(@StdString String message) { super((Pointer)null); allocate(message); }
-	private native void allocate(@StdString String message);
-
-	public native @Cast("const char*") BytePointer what();
-
-	public native void AppendContext(@StdString BytePointer context);
-	public native void AppendContext(@StdString String context);
-}
-
-// #define fail_type_inference(...)
-//   throw ONNX_NAMESPACE::InferenceError(
-//       ONNX_NAMESPACE::MakeString("[TypeInferenceError] ", __VA_ARGS__));
-
-// #define fail_shape_inference(...)
-//   throw ONNX_NAMESPACE::InferenceError(
-//       ONNX_NAMESPACE::MakeString("[ShapeInferenceError] ", __VA_ARGS__));
-
-@Namespace("onnx") public static class InferenceContext extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InferenceContext(Pointer p) { super(p); }
-
-  public native @Const AttributeProto getAttribute(@StdString BytePointer name);
-  public native @Const AttributeProto getAttribute(@StdString String name);
-  public native @Cast("size_t") long getNumInputs();
-  public native @Const TypeProto getInputType(@Cast("size_t") long index);
-  public native @Cast("size_t") long getNumOutputs();
-  public native TypeProto getOutputType(@Cast("size_t") long index);
-}
-
-// This no-op inference function is used for operators without an
-// inference implementation.
-@Namespace("onnx") public static native void dummyInferenceFunction(@ByRef InferenceContext arg0);
-
-@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@ByRef InferenceContext ctx, @StdString BytePointer attributeName, @Cast("int64_t") long defaultValue);
-@Namespace("onnx") public static native @Cast("int64_t") long getAttribute(@ByRef InferenceContext ctx, @StdString String attributeName, @Cast("int64_t") long defaultValue);
-
-@Namespace("onnx") public static native @StdString BytePointer getAttribute(@ByRef InferenceContext ctx, @StdString BytePointer attributeName, @StdString BytePointer defaultValue);
-@Namespace("onnx") public static native @StdString String getAttribute(@ByRef InferenceContext ctx, @StdString String attributeName, @StdString String defaultValue);
-
-@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(@ByVal Dimension dim1, @ByVal Dimension dim2);
-
-@Namespace("onnx") public static native @ByVal @Name("operator *") Dimension multiply(@ByVal Dimension dim1, @Cast("int64_t") long dim2);
-
-@Namespace("onnx") public static native @ByVal @Name("operator /") Dimension divide(@ByVal Dimension dim1, @Cast("int64_t") long dim2);
-
-//if from >= upto_exclusive, return 1.
-//Caller must make sure upto_exclusive is less than or equal to shape.size()
-//Caller must make sure from>=0
-@Namespace("onnx") public static native @ByVal Dimension multiplyDims(@Const @ByRef TensorShapeProto shape, int from, int upto_exclusive);
-
-// Note: for all methods below for propagating type or shape, callers are responsible
-// to handle optional inputs/outputs and ensure that the specified index value
-// is less than NumInputs/NumOutputs.
-
-@Namespace("onnx") public static native void propagateElemTypeFromInputToOutput(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long inputIndex,
-    @Cast("size_t") long outputIndex);
-
-@Namespace("onnx") public static native @Cast("bool") boolean hasInputShape(@ByRef InferenceContext ctx, int n);
-
-@Namespace("onnx") public static native @Cast("bool") boolean hasNInputShapes(@ByRef InferenceContext ctx, int n);
-
-@Namespace("onnx") public static native @Const @ByRef TensorShapeProto getInputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
-
-//Caller must make sure fromDimIndex is strictly less than shape.dim_size()
-@Namespace("onnx") public static native void appendSingleDimCopiedFromInputTypeToOutputType(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long inputIndex,
-    @Cast("size_t") long outputIndex,
-    @Cast("size_t") long fromDimIndex);
-
-@Namespace("onnx") public static native void propagateShapeFromInputToOutput(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long inputIndex,
-    @Cast("size_t") long outputIndex);
-
-@Namespace("onnx") public static native void propagateShapeAndTypeFromFirstInput(@ByRef InferenceContext ctx);
-
-@Namespace("onnx") public static native void updateOutputElemType(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long outputIndex,
-    @Cast("onnx::TensorProto_DataType") int elemType);
-
-// Infer type of an output from the value of a specified attribute, which is expected
-// to have a valid value representing a TensorProto_DataType.
-@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString BytePointer attributeName,
-    @Cast("size_t") long outputIndex,
-    @Cast("onnx::TensorProto_DataType") int default_value/*=TensorProto::UNDEFINED*/);
-@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString BytePointer attributeName,
-    @Cast("size_t") long outputIndex);
-@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString String attributeName,
-    @Cast("size_t") long outputIndex,
-    @Cast("onnx::TensorProto_DataType") int default_value/*=TensorProto::UNDEFINED*/);
-@Namespace("onnx") public static native void propagateElemTypeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString String attributeName,
-    @Cast("size_t") long outputIndex);
-
-@Namespace("onnx") public static native TensorShapeProto getOutputShape(@ByRef InferenceContext ctx, @Cast("size_t") long n);
-
-@Namespace("onnx") public static native void updateOutputShape(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long outputIndex,
-    @Const @ByRef TensorShapeProto shape);
-
-@Namespace("onnx") public static native void updateOutputShape(
-    @ByRef InferenceContext ctx,
-    @Cast("size_t") long outputIndex,
-    @Const @ByRef TensorProto tensorProto);
-
-// Infer shape of an output from the value of a specified attribute, which is expected
-// to be a list of integers specifying a valid shape.
-@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString BytePointer attributeName,
-    @Cast("size_t") long outputIndex);
-@Namespace("onnx") public static native void propagateShapeFromAttributeToOutput(
-    @ByRef InferenceContext ctx,
-    @StdString String attributeName,
-    @Cast("size_t") long outputIndex);
-
-@Namespace("onnx") public static native void bidirectionalBroadcastShapeInference(
-    @Const @ByRef TensorShapeProto shapeL,
-    @Const @ByRef TensorShapeProto shapeR,
-    @ByRef TensorShapeProto resultShape);
-
- // namespace ONNX_NAMESPACE
-
-
 // Parsed from onnx/onnx-operators-ml.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: onnx-operators-ml.proto
+// source: onnx/onnx-operators-ml.proto
 
-// #ifndef PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
-// #define PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
+// #ifndef PROTOBUF_onnx_2fonnx_2doperators_2dml_2eproto__INCLUDED
+// #define PROTOBUF_onnx_2fonnx_2doperators_2dml_2eproto__INCLUDED
 
 // #include <string>
 
@@ -3029,10 +2919,10 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
-// #include "onnx-ml.pb.h"
+// #include "onnx/onnx-ml.pb.h"
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static class TableStruct extends Pointer {
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static class TableStruct extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TableStruct() { super((Pointer)null); allocate(); }
@@ -3049,15 +2939,15 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   @MemberGetter public static native @Cast("const google::protobuf::uint32") int offsets(int i);
   @MemberGetter public static native @Cast("const google::protobuf::uint32*") IntPointer offsets();
 }
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void AddDescriptors();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProto();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProto();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProtoImpl();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProto();
-@Namespace("protobuf_onnx_2doperators_2dml_2eproto") public static native void InitDefaults();
-  // namespace protobuf_onnx_2doperators_2dml_2eproto
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void AddDescriptors();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsFunctionProto();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorProto();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaultsOperatorSetProto();
+@Namespace("protobuf_onnx_2fonnx_2doperators_2dml_2eproto") public static native void InitDefaults();
+  // namespace protobuf_onnx_2fonnx_2doperators_2dml_2eproto
 @Namespace("onnx") @Opaque public static class FunctionProtoDefaultTypeInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public FunctionProtoDefaultTypeInternal() { super((Pointer)null); }
@@ -3905,16 +3795,16 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_onnx_2doperators_2dml_2eproto__INCLUDED
+// #endif  // PROTOBUF_onnx_2fonnx_2doperators_2dml_2eproto__INCLUDED
 
 
 // Parsed from onnx/onnx-ml.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: onnx-ml.proto
+// source: onnx/onnx-ml.proto
 
-// #ifndef PROTOBUF_onnx_2dml_2eproto__INCLUDED
-// #define PROTOBUF_onnx_2dml_2eproto__INCLUDED
+// #ifndef PROTOBUF_onnx_2fonnx_2dml_2eproto__INCLUDED
+// #define PROTOBUF_onnx_2fonnx_2dml_2eproto__INCLUDED
 
 // #include <string>
 
@@ -3944,29 +3834,29 @@ public static final int
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsAttributeProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsAttributeProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsValueInfoProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsValueInfoProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsModelProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsModelProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto_SegmentImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto_Segment();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_DimensionImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_Dimension();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto_TensorImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto_Tensor();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsTypeProto();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProtoImpl();
-@Namespace("protobuf_onnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProto();
-  // namespace protobuf_onnx_2dml_2eproto
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsAttributeProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsAttributeProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsValueInfoProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsValueInfoProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsModelProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsModelProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsStringStringEntryProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorProto_SegmentImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorProto_Segment();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_DimensionImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto_Dimension();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTensorShapeProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTypeProto_TensorImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTypeProto_Tensor();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTypeProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsTypeProto();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProtoImpl();
+@Namespace("protobuf_onnx_2fonnx_2dml_2eproto") public static native void InitDefaultsOperatorSetIdProto();
+  // namespace protobuf_onnx_2fonnx_2dml_2eproto
 @Namespace("onnx") @Opaque public static class AttributeProtoDefaultTypeInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public AttributeProtoDefaultTypeInternal() { super((Pointer)null); }
@@ -7111,7 +7001,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
-// #endif  // PROTOBUF_onnx_2dml_2eproto__INCLUDED
+// #endif  // PROTOBUF_onnx_2fonnx_2dml_2eproto__INCLUDED
 
 
 // Parsed from google/protobuf/message_lite.h

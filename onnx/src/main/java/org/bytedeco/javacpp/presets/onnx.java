@@ -43,7 +43,7 @@ import java.lang.annotation.Target;
         "onnx/defs/operator_sets.h",
         "onnx/defs/operator_sets-ml.h",
         "onnx/defs/data_type_utils.h",
-        "onnx/defs/shape_inference.h",
+//        "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
         "google/protobuf/message_lite.h",
