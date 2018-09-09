@@ -44,10 +44,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4",
                          "opencv_cudaoptflow@.3.4", "opencv_cudawarping@.3.4"}),
     @Platform(value = "ios", preload = "libopencv_videostab"),
-    @Platform(value = "windows", link = "opencv_videostab342",
-              preload = {"opencv_cuda342", "opencv_cudaarithm342", "opencv_cudafilters342",
-                         "opencv_cudaimgproc342", "opencv_cudafeatures2d342", "opencv_cudalegacy342",
-                         "opencv_cudaoptflow342", "opencv_cudawarping342"})},
+    @Platform(value = "windows", link = "opencv_videostab343",
+              preload = {"opencv_cuda343", "opencv_cudaarithm343", "opencv_cudafilters343",
+                         "opencv_cudaimgproc343", "opencv_cudafeatures2d343", "opencv_cudalegacy343",
+                         "opencv_cudaoptflow343", "opencv_cudawarping343"})},
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {

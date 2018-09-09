@@ -995,12 +995,13 @@ The function getWindowImageRect returns the client screen coordinates, width and
 @Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str BytePointer winname);
 @Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str String winname);
 
+/** \example samples/cpp/create_mask.cpp
+This program demonstrates using mouse events and how to make and use a mask image (black and white) .
+*/
 /** \brief Sets mouse handler for the specified window
 <p>
 @param winname Name of the window.
-@param onMouse Mouse callback. See OpenCV samples, such as
-<https://github.com/opencv/opencv/tree/3.4/samples/cpp/ffilldemo.cpp>, on how to specify and
-use the callback.
+@param onMouse Callback function for mouse events. See OpenCV samples on how to specify and use the callback.
 @param userdata The optional parameter passed to the callback.
  */
 @Namespace("cv") public static native void setMouseCallback(@Str BytePointer winname, MouseCallback onMouse, Pointer userdata/*=0*/);

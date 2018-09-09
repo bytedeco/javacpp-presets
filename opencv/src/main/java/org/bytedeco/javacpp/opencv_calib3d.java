@@ -725,7 +725,7 @@ v = f_y*y'' + c_y
 tangential distortion coefficients. \f$s_1\f$, \f$s_2\f$, \f$s_3\f$, and \f$s_4\f$, are the thin prism distortion
 coefficients. Higher-order coefficients are not considered in OpenCV.
 <p>
-The next figure shows two common types of radial distortion: barrel distortion (typically \f$ k_1 > 0 \f$ and pincushion distortion (typically \f$ k_1 < 0 \f$).
+The next figure shows two common types of radial distortion: barrel distortion (typically \f$ k_1 > 0 \f$) and pincushion distortion (typically \f$ k_1 < 0 \f$).
 <p>
 ![](pics/distortion_examples.png)
 <p>
@@ -932,11 +932,11 @@ optimization procedures like calibrateCamera, stereoCalibrate, or solvePnP .
 @Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat jacobian );
 @Namespace("cv") public static native void Rodrigues( @ByVal GpuMat src, @ByVal GpuMat dst );
 
-/** \example pose_from_homography.cpp
-  An example program about pose estimation from coplanar points
-  <p>
-  Check \ref tutorial_homography "the corresponding tutorial" for more details
- */
+/** \example samples/cpp/tutorial_code/features2D/Homography/pose_from_homography.cpp
+An example program about pose estimation from coplanar points
+<p>
+Check \ref tutorial_homography "the corresponding tutorial" for more details
+*/
 
 /** \brief Finds a perspective transformation between two planes.
 <p>
@@ -1250,11 +1250,11 @@ perspective transformation (and also compute the derivatives) in the ideal zero-
                                  @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                  @ByVal GpuMat imagePoints );
 
-/** \example homography_from_camera_displacement.cpp
-  An example program about homography from the camera displacement
-  <p>
-  Check \ref tutorial_homography "the corresponding tutorial" for more details
- */
+/** \example samples/cpp/tutorial_code/features2D/Homography/homography_from_camera_displacement.cpp
+An example program about homography from the camera displacement
+<p>
+Check \ref tutorial_homography "the corresponding tutorial" for more details
+*/
 
 /** \brief Finds an object pose from 3D-2D point correspondences.
 <p>
@@ -3634,11 +3634,11 @@ correctly only when there are more than 50% of inliers.
                                   @Cast("size_t") long refineIters/*=10*/);
 @Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal GpuMat from, @ByVal GpuMat to);
 
-/** \example decompose_homography.cpp
-  An example program with homography decomposition.
-  <p>
-  Check \ref tutorial_homography "the corresponding tutorial" for more details.
- */
+/** \example samples/cpp/tutorial_code/features2D/Homography/decompose_homography.cpp
+An example program with homography decomposition.
+<p>
+Check \ref tutorial_homography "the corresponding tutorial" for more details.
+*/
 
 /** \brief Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
 <p>
