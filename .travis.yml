@@ -601,6 +601,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=spinnaker OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=libdc1394 OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
