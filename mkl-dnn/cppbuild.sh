@@ -26,7 +26,8 @@ case $PLATFORM in
         download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_lnx_$MKLML_VERSION.tgz mklml_lnx_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_lnx_$MKLML_VERSION.tgz -C external
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -Wno-error=unused-result
+        # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -Wno-error=unused-result
         make -j $MAKEJ
         make install/strip
         cp external/mklml_lnx_$MKLML_VERSION/include/* ../include/

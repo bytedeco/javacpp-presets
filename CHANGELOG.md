@@ -1,5 +1,7 @@
 
+ * Add an RPATH to `libmkldnn.so.0` to avoid loading issues on Linux ([issue deeplearning4j/deeplearning4j#6366](https://github.com/deeplearning4j/deeplearning4j/issues/6366))
  * Fix logic in `tensorflow.Tensor.createIndexer()` to support scalar tensors
+ * Bundle `libgomp.so.1` in JAR file of MKL-DNN for Linux
  * Enable OpenMP for MKL-DNN also on Mac and Windows by building with GCC
  * Fix loading order of runtime libraries for Visual Studio 2015 on Windows ([issue #606](https://github.com/bytedeco/javacpp-presets/issues/606))
  * Add methods overloaded with `PointerPointer` for MKL-DNN ([issue bytedeco/javacpp#251](https://github.com/bytedeco/javacpp/issues/251))
@@ -7,7 +9,7 @@
  * Make MSBuild compile more efficiently on multiple processors ([pull #599](https://github.com/bytedeco/javacpp-presets/pull/599))
  * Add samples for Clang ([pull #598](https://github.com/bytedeco/javacpp-presets/pull/598))
  * Include `python_api.h` and enable Python API for TensorFlow ([issue #602](https://github.com/bytedeco/javacpp-presets/issues/602))
- * Add presets for CPython 3.6.x, ONNX 1.2.2 ([pull #547](https://github.com/bytedeco/javacpp-presets/pull/547))
+ * Add presets for Spinnaker 1.15.x ([pull #553](https://github.com/bytedeco/javacpp-presets/pull/553)), CPython 3.6.x, ONNX 1.2.2 ([pull #547](https://github.com/bytedeco/javacpp-presets/pull/547))
  * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
  * Enable MKL-DNN for TensorFlow
