@@ -149,6 +149,8 @@ import java.util.List;
                         "tensorflow/core/common_runtime/process_function_library_runtime.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
+                        "tensorflow/core/common_runtime/graph_runner.h",
+                        "tensorflow/core/common_runtime/shape_refiner.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/framework/selective_registration.h",
@@ -315,6 +317,8 @@ import java.util.List;
                         "tensorflow/core/common_runtime/process_function_library_runtime.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
+                        "tensorflow/core/common_runtime/graph_runner.h",
+                        "tensorflow/core/common_runtime/shape_refiner.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/framework/selective_registration.h",
@@ -600,7 +604,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::gtl::FlatMap<TF_Session*,tensorflow::string>").pointerTypes("TF_SessionStringMap").define())
 
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
-               .put(new Info("tensorflow::CompositeOpScopes").skip())
+               .put(new Info("tensorflow::CompositeOpScopes", "tensorflow::ExtendedInferenceContext").skip())
 
                 // Fixed shape inference
                .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())

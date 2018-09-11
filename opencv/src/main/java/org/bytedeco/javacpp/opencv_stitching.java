@@ -1074,6 +1074,26 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     private native void allocate();
 }
 
+
+/** \brief SIFT features finder.
+<p>
+\sa detail::FeaturesFinder, SIFT
+*/
+@Namespace("cv::detail") @NoOffset public static class SiftFeaturesFinder extends FeaturesFinder {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SiftFeaturesFinder(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SiftFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SiftFeaturesFinder position(long position) {
+        return (SiftFeaturesFinder)super.position(position);
+    }
+
+    public SiftFeaturesFinder() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
+
 /** \brief ORB features finder. :
 <p>
 \sa detail::FeaturesFinder, ORB
@@ -3020,6 +3040,14 @@ Homography model, as they work with different transformations.
 /** \addtogroup stitching
  *  \{
 <p>
+/** \example samples/cpp/stitching.cpp
+A basic example on image stitching
+*/
+
+/** \example samples/cpp/stitching_detailed.cpp
+A detailed example on image stitching
+*/
+
 /** \brief High level image stitcher.
 <p>
 It's possible to use this class without being aware of the entire stitching pipeline. However, to

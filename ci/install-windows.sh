@@ -75,6 +75,30 @@ if [ "$PROJ" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
+if [ "$PROJ" == "spinnaker" ]; then
+       echo Flycapture install
+       if [ "$OS" == "windows-x86_64" ]; then
+           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker in cache and size seems ok"
+           else
+             echo "Downloading spinnaker.zip to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+           fi
+           unzip /c/Downloads/spinnaker.zip
+           mv Point\ Grey\ Research /c/Program\ Files
+       elif [ "$OS" == "windows-x86" ]; then
+           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker in cache and size seems ok"
+           else
+             echo "Downloading spinnaker.zip to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+           fi
+           unzip /c/Downloads/spinnaker.zip
+           mv Point\ Grey\ Research /c/Program\ Files
+       fi
+       echo "Finished spinnaker install"
+fi
+
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
        curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13037/w_mkl_2018.3.210.exe"

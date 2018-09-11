@@ -651,7 +651,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native @Ptr MaskGenerator getMaskGenerator();
 }
 
-/** \example facedetect.cpp
+/** \example samples/cpp/facedetect.cpp
 This program demonstrates usage of the Cascade classifier class
 \image html Cascade_Classifier_Tutorial_Result_Haar.jpg "Sample screenshot" width=321 height=254
 */
@@ -1121,7 +1121,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     */
     public native double getWinSigma();
 
-    /**\example peopledetect.cpp
+    /**\example samples/cpp/peopledetect.cpp
     */
     /**\brief Sets coefficients for the linear SVM classifier.
     @param _svmdetector coefficients for the linear SVM classifier.
@@ -1165,7 +1165,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     */
     public native void copyTo(@ByRef HOGDescriptor c);
 
-    /**\example train_HOG.cpp
+    /**\example samples/cpp/train_HOG.cpp
     */
     /** \brief Computes HOG descriptors of given image.
     @param img Matrix of the type CV_8U containing an image where HOG features will be calculated.
@@ -1391,7 +1391,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     */
     public static native @StdVector FloatPointer getDefaultPeopleDetector();
 
-    /**\example hog.cpp
+    /**\example samples/tapi/hog.cpp
     */
     /** \brief Returns coefficients of the classifier trained for people detection (for 48x96 windows).
     */
@@ -1504,6 +1504,28 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector DoublePointer weights, int groupThreshold, double eps);
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector DoubleBuffer weights, int groupThreshold, double eps);
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector double[] weights, int groupThreshold, double eps);
+}
+
+@Namespace("cv") @NoOffset public static class QRCodeDetector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QRCodeDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QRCodeDetector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QRCodeDetector position(long position) {
+        return (QRCodeDetector)super.position(position);
+    }
+
+    public QRCodeDetector() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native void setEpsX(double epsX);
+    public native void setEpsY(double epsY);
+
+    public native @Cast("bool") boolean detect(@ByVal Mat in, @ByVal Mat points);
+    public native @Cast("bool") boolean detect(@ByVal UMat in, @ByVal UMat points);
+    public native @Cast("bool") boolean detect(@ByVal GpuMat in, @ByVal GpuMat points);
 }
 
 /** \brief Detect QR code in image and return minimum area of quadrangle that describes QR code.

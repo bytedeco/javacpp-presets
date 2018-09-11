@@ -1219,7 +1219,7 @@ This function is to be applied on color images.
 /** \addtogroup photo_clone
  *  \{
 <p>
-/** \example cloning_demo.cpp
+/** \example samples/cpp/tutorial_code/photo/seamless_cloning/cloning_demo.cpp
 An example using seamlessClone function
 */
 /** \brief Image editing tasks concern either global changes (color/intensity corrections, filters,
@@ -1366,7 +1366,7 @@ filters are used in many different applications \cite EM11 .
         float sigma_r/*=0.15f*/);
 @Namespace("cv") public static native void detailEnhance(@ByVal GpuMat src, @ByVal GpuMat dst);
 
-/** \example npr_demo.cpp
+/** \example samples/cpp/tutorial_code/photo/non_photorealistic_rendering/npr_demo.cpp
 An example using non-photorealistic line drawing functions
 */
 /** \brief Pencil-like non-photorealistic line drawing

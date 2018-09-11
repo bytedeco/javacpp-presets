@@ -81,6 +81,17 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi 
+  if [ "$PROJ" == "spinnaker" ]; then
+    if [ "$OS" == "linux-x86_64" ]; then
+        if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found spinnaker in cache and size seems ok"
+        else
+          echo "Downloading flycap64 as not found in cache or too small"
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
+        fi
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /"
+    fi
+  fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13005/l_mkl_2018.3.222.tgz -o $HOME/mkl.tgz
