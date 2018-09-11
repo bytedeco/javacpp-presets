@@ -50,9 +50,13 @@ import java.lang.annotation.Target;
         "onnx/onnx-ml.pb.h",
 	"onnx/checker.h",
 	"onnx/proto_utils.h",
-//	"onnx/onnxifi.h",
+	"onnx/onnxifi.h",
 	"onnx/common/tensor.h",
-        "google/protobuf/message_lite.h",
+        "onnx/common/array_ref.h",
+//        "onnx/common/graph_node_list.h",
+//        "onnx/common/interned_strings.h",
+//	"onnx/common/ir.h",
+	"google/protobuf/message_lite.h",
         "google/protobuf/unknown_field_set.h"
     },
     link = {"onnx_proto", "onnx", "onnxifi"}))
@@ -72,7 +76,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("StringSet").define())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
-
+               .put(new Info("ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
