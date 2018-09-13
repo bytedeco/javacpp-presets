@@ -7267,6 +7267,738 @@ public static final int
 // #endif  // PROTOBUF_onnx_2fonnx_2dml_2eproto__INCLUDED
 
 
+// Parsed from google/protobuf/message_lite.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Authors: wink@google.com (Wink Saville),
+//          kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Defines MessageLite, the abstract interface implemented by all (lite
+// and non-lite) protocol message objects.
+
+// #ifndef GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+// #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
+// #include <climits>
+// #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/stubs/logging.h>
+// #include <google/protobuf/stubs/once.h>
+// #include <google/protobuf/stubs/port.h>
+@Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Arena() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Arena(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CodedOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CodedOutputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyInputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyInputStream(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ZeroCopyOutputStream() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ZeroCopyOutputStream(Pointer p) { super(p); }
+}
+
+
+@Namespace("google::protobuf::internal") @Opaque public static class WireFormatLite extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WireFormatLite() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WireFormatLite(Pointer p) { super(p); }
+}
+
+// #ifndef SWIG
+// We compute sizes as size_t but cache them as int.  This function converts a
+// computed size to a cached size.  Since we don't proceed with serialization
+// if the total size was > INT_MAX, it is not important what this function
+// returns for inputs > INT_MAX.  However this case should not error or
+// GOOGLE_CHECK-fail, because the full size_t resolution is still returned from
+// ByteSizeLong() and checked against INT_MAX; we can catch the overflow
+// there.
+@Namespace("google::protobuf::internal") public static native int ToCachedSize(@Cast("size_t") long size);
+
+// We mainly calculate sizes in terms of size_t, but some functions that
+// compute sizes return "int".  These int sizes are expected to always be
+// positive. This function is more efficient than casting an int to size_t
+// directly on 64-bit platforms because it avoids making the compiler emit a
+// sign extending instruction, which we don't want and don't want to pay for.
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long FromIntSize(int size);
+
+// For cases where a legacy function returns an integer size.  We GOOGLE_DCHECK()
+// that the conversion will fit within an integer; if this is false then we
+// are losing information.
+@Namespace("google::protobuf::internal") public static native int ToIntSize(@Cast("size_t") long size);
+
+// This type wraps a variable whose constructor and destructor are explicitly
+// called. It is particularly useful for a global variable, without its
+// constructor and destructor run on start and end of the program lifetime.
+// This circumvents the initial construction order fiasco, while keeping
+// the address of the empty string a compile time constant.
+//
+// Pay special attention to the initialization state of the object.
+// 1. The object is "uninitialized" to begin with.
+// 2. Call DefaultConstruct() only if the object is uninitialized.
+//    After the call, the object becomes "initialized".
+// 3. Call get() and get_mutable() only if the object is initialized.
+// 4. Call Destruct() only if the object is initialized.
+//    After the call, the object becomes uninitialized.
+
+// Default empty string object. Don't use this directly. Instead, call
+// GetEmptyString() to get the reference.
+
+@Namespace("google::protobuf::internal") public static native void InitEmptyString();
+
+
+@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyStringAlreadyInited();
+
+@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyString();
+
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString BytePointer str);
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString String str);
+// #endif  // SWIG
+  // namespace internal
+
+// Interface to light weight protocol messages.
+//
+// This interface is implemented by all protocol message objects.  Non-lite
+// messages additionally implement the Message interface, which is a
+// subclass of MessageLite.  Use MessageLite instead when you only need
+// the subset of features which it supports -- namely, nothing that uses
+// descriptors or reflection.  You can instruct the protocol compiler
+// to generate classes which implement only MessageLite, not the full
+// Message interface, by adding the following line to the .proto file:
+//
+//   option optimize_for = LITE_RUNTIME;
+//
+// This is particularly useful on resource-constrained systems where
+// the full protocol buffers runtime library is too big.
+//
+// Note that on non-constrained systems (e.g. servers) when you need
+// to link in lots of protocol definitions, a better way to reduce
+// total code footprint is to use optimize_for = CODE_SIZE.  This
+// will make the generated code smaller while still supporting all the
+// same features (at the expense of speed).  optimize_for = LITE_RUNTIME
+// is best when you only have a small number of message types linked
+// into your binary, in which case the size of the protocol buffers
+// runtime itself is the biggest problem.
+@Namespace("google::protobuf") public static class MessageLite extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MessageLite(Pointer p) { super(p); }
+
+
+  // Basic Operations ------------------------------------------------
+
+  // Get the name of this message type, e.g. "foo.bar.BazProto".
+  public native @StdString BytePointer GetTypeName();
+
+  // Construct a new instance of the same type.  Ownership is passed to the
+  // caller.
+  public native MessageLite New();
+
+  // Construct a new instance on the arena. Ownership is passed to the caller
+  // if arena is a NULL. Default implementation for backwards compatibility.
+  public native MessageLite New(Arena arena);
+
+  // Get the arena, if any, associated with this message. Virtual method
+  // required for generic operations but most arena-related operations should
+  // use the GetArenaNoVirtual() generated-code method. Default implementation
+  // to reduce code size by avoiding the need for per-type implementations
+  // when types do not implement arena support.
+  public native Arena GetArena();
+
+  // Get a pointer that may be equal to this message's arena, or may not be.
+  // If the value returned by this method is equal to some arena pointer, then
+  // this message is on that arena; however, if this message is on some arena,
+  // this method may or may not return that arena's pointer. As a tradeoff,
+  // this method may be more efficient than GetArena(). The intent is to allow
+  // underlying representations that use e.g. tagged pointers to sometimes
+  // store the arena pointer directly, and sometimes in a more indirect way,
+  // and allow a fastpath comparison against the arena pointer when it's easy
+  // to obtain.
+  public native Pointer GetMaybeArenaPointer();
+
+  // Clear all fields of the message and set them to their default values.
+  // Clear() avoids freeing memory, assuming that any memory allocated
+  // to hold parts of the message will be needed again to hold the next
+  // message.  If you actually want to free the memory used by a Message,
+  // you must delete it.
+  public native void Clear();
+
+  // Quickly check if all required fields have values set.
+  public native @Cast("bool") boolean IsInitialized();
+
+  // This is not implemented for Lite messages -- it just returns "(cannot
+  // determine missing fields for lite message)".  However, it is implemented
+  // for full messages.  See message.h.
+  public native @StdString BytePointer InitializationErrorString();
+
+  // If |other| is the exact same class as this, calls MergeFrom(). Otherwise,
+  // results are undefined (probably crash).
+  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
+
+  // Parsing ---------------------------------------------------------
+  // Methods for parsing in protocol buffer format.  Most of these are
+  // just simple wrappers around MergeFromCodedStream().  Clear() will be
+  // called before merging the input.
+
+  // Fill the message with a protocol buffer parsed from the given input
+  // stream. Returns false on a read error or if the input is in the wrong
+  // format.  A successful return does not indicate the entire input is
+  // consumed, ensure you call ConsumedEntireMessage() to check that if
+  // applicable.
+  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
+  // Like ParseFromCodedStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromCodedStream(CodedInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream.  If
+  // successful, the entire input will be consumed.
+  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
+  // Like ParseFromZeroCopyStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromZeroCopyStream(ZeroCopyInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream, expecting
+  // the message to be exactly "size" bytes long.  If successful, exactly
+  // this many bytes will have been consumed from the input.
+  public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
+  // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
+  // missing required fields.
+  public native @Cast("bool") boolean ParsePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input,
+                                               int size);
+  // Parses a protocol buffer contained in a string. Returns true on success.
+  // This function takes a string in the (non-human-readable) binary wire
+  // format, matching the encoding output by MessageLite::SerializeToString().
+  // If you'd like to convert a human-readable string into a protocol buffer
+  // object, see google::protobuf::TextFormat::ParseFromString().
+  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParseFromString(@StdString String data);
+  // Like ParseFromString(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString String data);
+  // Parse a protocol buffer contained in an array of bytes.
+  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
+  // Like ParseFromArray(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromArray(@Const Pointer data, int size);
+
+
+  // Reads a protocol buffer from the stream and merges it into this
+  // Message.  Singular fields read from the input overwrite what is
+  // already in the Message and repeated fields are appended to those
+  // already present.
+  //
+  // It is the responsibility of the caller to call input->LastTagWas()
+  // (for groups) or input->ConsumedEntireMessage() (for non-groups) after
+  // this returns to verify that the message's end was delimited correctly.
+  //
+  // ParsefromCodedStream() is implemented as Clear() followed by
+  // MergeFromCodedStream().
+  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
+
+  // Like MergeFromCodedStream(), but succeeds even if required fields are
+  // missing in the input.
+  //
+  // MergeFromCodedStream() is just implemented as MergePartialFromCodedStream()
+  // followed by IsInitialized().
+  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
+
+
+  // Serialization ---------------------------------------------------
+  // Methods for serializing in protocol buffer format.  Most of these
+  // are just simple wrappers around ByteSize() and SerializeWithCachedSizes().
+
+  // Write a protocol buffer of this message to the given output.  Returns
+  // false on a write error.  If the message is missing required fields,
+  // this may GOOGLE_CHECK-fail.
+  public native @Cast("bool") boolean SerializeToCodedStream(CodedOutputStream output);
+  // Like SerializeToCodedStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToCodedStream(CodedOutputStream output);
+  // Write the message to the given zero-copy output stream.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToZeroCopyStream(ZeroCopyOutputStream output);
+  // Like SerializeToZeroCopyStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToZeroCopyStream(ZeroCopyOutputStream output);
+  // Serialize the message and store it in the given string.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like SerializeToString(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Serialize the message and store it in the given byte array.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToArray(Pointer data, int size);
+  // Like SerializeToArray(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToArray(Pointer data, int size);
+
+  // Make a string encoding the message. Is equivalent to calling
+  // SerializeToString() on a string and using that.  Returns the empty
+  // string if SerializeToString() would have returned an error.
+  // Note: If you intend to generate many such strings, you may
+  // reduce heap fragmentation by instead re-using the same string
+  // object with calls to SerializeToString().
+  public native @StdString BytePointer SerializeAsString();
+  // Like SerializeAsString(), but allows missing required fields.
+  public native @StdString BytePointer SerializePartialAsString();
+
+  // Like SerializeToString(), but appends to the data to the string's existing
+  // contents.  All required fields must be set.
+  public native @Cast("bool") boolean AppendToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like AppendToString(), but allows missing required fields.
+  public native @Cast("bool") boolean AppendPartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+
+  // Computes the serialized size of the message.  This recursively calls
+  // ByteSizeLong() on all embedded messages.
+  //
+  // ByteSizeLong() is generally linear in the number of fields defined for the
+  // proto.
+  public native @Cast("size_t") long ByteSizeLong();
+
+  // Legacy ByteSize() API.
+  public native int ByteSize();
+
+  // Serializes the message without recomputing the size.  The message must not
+  // have changed since the last call to ByteSize(), and the value returned by
+  // ByteSize must be non-negative.  Otherwise the results are undefined.
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+
+  // Functions below here are not part of the public interface.  It isn't
+  // enforced, but they should be treated as private, and will be private
+  // at some future time.  Unfortunately the implementation of the "friend"
+  // keyword in GCC is broken at the moment, but we expect it will be fixed.
+
+  // Like SerializeWithCachedSizes, but writes directly to *target, returning
+  // a pointer to the byte immediately after the last byte written.  "target"
+  // must point at a byte array of at least ByteSize() bytes.  Whether to use
+  // deterministic serialization, e.g., maps in sorted order, is determined by
+  // CodedOutputStream::IsDefaultSerializationDeterministic().
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] target);
+
+  // Returns the result of the last call to ByteSize().  An embedded message's
+  // size is needed both to serialize it (because embedded messages are
+  // length-delimited) and to compute the outer message's size.  Caching
+  // the size avoids computing it multiple times.
+  //
+  // ByteSize() does not automatically use the cached size when available
+  // because this would require invalidating it every time the message was
+  // modified, which would be too hard and expensive.  (E.g. if a deeply-nested
+  // sub-message is changed, all of its parents' cached sizes would need to be
+  // invalidated, which is too much work for an otherwise inlined setter
+  // method.)
+  public native int GetCachedSize();
+
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
+                                                           @Cast("google::protobuf::uint8*") byte[] target);
+}
+
+
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
+
+// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
+// preserve unknowns.
+@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
+  // namespace internal
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
+
+// Parsed from google/protobuf/unknown_field_set.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Contains classes used to keep track of unrecognized fields seen while
+// parsing a protocol message.
+
+// #ifndef GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+// #define GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+
+// #include <assert.h>
+// #include <string>
+// #include <vector>
+// #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/stubs/logging.h>
+// #include <google/protobuf/message_lite.h>         // coded_stream.h        // coded_stream.h      // zero_copy_stream.h
+  
+    @Namespace("google::protobuf::internal") @Opaque public static class InternalMetadataWithArena extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public InternalMetadataWithArena() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public InternalMetadataWithArena(Pointer p) { super(p); }
+    }  // metadata.h
+    @Namespace("google::protobuf::internal") @Opaque public static class WireFormat extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public WireFormat() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public WireFormat(Pointer p) { super(p); }
+    }               // wire_format.h
+    @Namespace("google::protobuf::internal") @Opaque public static class MessageSetFieldSkipperUsingCord extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public MessageSetFieldSkipperUsingCord() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public MessageSetFieldSkipperUsingCord(Pointer p) { super(p); }
+    }
+                                    // extension_set_heavy.cc
+                        // message.h                 // below
+
+// An UnknownFieldSet contains fields that were encountered while parsing a
+// message but were not defined by its type.  Keeping track of these can be
+// useful, especially in that they may be written if the message is serialized
+// again without being cleared in between.  This means that software which
+// simply receives messages and forwards them to other servers does not need
+// to be updated every time a new field is added to the message definition.
+//
+// To get the UnknownFieldSet attached to any message, call
+// Reflection::GetUnknownFields().
+//
+// This class is necessarily tied to the protocol buffer wire format, unlike
+// the Reflection interface which is independent of any serialization scheme.
+@Namespace("google::protobuf") @NoOffset public static class UnknownFieldSet extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownFieldSet(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UnknownFieldSet(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public UnknownFieldSet position(long position) {
+        return (UnknownFieldSet)super.position(position);
+    }
+
+  public UnknownFieldSet() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  // Remove all fields.
+  public native void Clear();
+
+  // Remove all fields and deallocate internal data objects
+  public native void ClearAndFreeMemory();
+
+  // Is this set empty?
+  public native @Cast("bool") boolean empty();
+
+  // Merge the contents of some other UnknownFieldSet with this one.
+  public native void MergeFrom(@Const @ByRef UnknownFieldSet other);
+
+  // Similar to above, but this function will destroy the contents of other.
+  public native void MergeFromAndDestroy(UnknownFieldSet other);
+
+  // Merge the contents an UnknownFieldSet with the UnknownFieldSet in
+  // *metadata, if there is one.  If *metadata doesn't have an UnknownFieldSet
+  // then add one to it and make it be a copy of the first arg.
+  public static native void MergeToInternalMetdata(
+        @Const @ByRef UnknownFieldSet other,
+        InternalMetadataWithArena metadata);
+
+  // Swaps the contents of some other UnknownFieldSet with this one.
+  public native void Swap(UnknownFieldSet x);
+
+  // Computes (an estimate of) the total number of bytes currently used for
+  // storing the unknown fields in memory. Does NOT include
+  // sizeof(*this) in the calculation.
+  public native @Cast("size_t") long SpaceUsedExcludingSelfLong();
+
+  public native int SpaceUsedExcludingSelf();
+
+  // Version of SpaceUsed() including sizeof(*this).
+  public native @Cast("size_t") long SpaceUsedLong();
+
+  public native int SpaceUsed();
+
+  // Returns the number of fields present in the UnknownFieldSet.
+  public native int field_count();
+  // Get a field in the set, where 0 <= index < field_count().  The fields
+  // appear in the order in which they were added.
+  public native @Const @ByRef UnknownField field(int index);
+  // Get a mutable pointer to a field in the set, where
+  // 0 <= index < field_count().  The fields appear in the order in which
+  // they were added.
+  public native UnknownField mutable_field(int index);
+
+  // Adding fields ---------------------------------------------------
+
+  public native void AddVarint(int number, @Cast("google::protobuf::uint64") long value);
+  public native void AddFixed32(int number, @Cast("google::protobuf::uint32") int value);
+  public native void AddFixed64(int number, @Cast("google::protobuf::uint64") long value);
+  public native void AddLengthDelimited(int number, @StdString BytePointer value);
+  public native void AddLengthDelimited(int number, @StdString String value);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer AddLengthDelimited(int number);
+  public native UnknownFieldSet AddGroup(int number);
+
+  // Adds an unknown field from another set.
+  public native void AddField(@Const @ByRef UnknownField field);
+
+  // Delete fields with indices in the range [start .. start+num-1].
+  // Caution: implementation moves all fields with indices [start+num .. ].
+  public native void DeleteSubrange(int start, int num);
+
+  // Delete all fields with a specific field number. The order of left fields
+  // is preserved.
+  // Caution: implementation moves all fields after the first deleted field.
+  public native void DeleteByNumber(int number);
+
+  // Parsing helpers -------------------------------------------------
+  // These work exactly like the similarly-named methods of Message.
+
+  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
+  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
+  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
+  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
+  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParseFromString(@StdString String data);
+
+  public static native @Const UnknownFieldSet default_instance();
+}
+
+// Represents one field in an UnknownFieldSet.
+@Namespace("google::protobuf") public static class UnknownField extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public UnknownField() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UnknownField(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownField(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public UnknownField position(long position) {
+        return (UnknownField)super.position(position);
+    }
+
+  /** enum google::protobuf::UnknownField::Type */
+  public static final int
+    TYPE_VARINT = 0,
+    TYPE_FIXED32 = 1,
+    TYPE_FIXED64 = 2,
+    TYPE_LENGTH_DELIMITED = 3,
+    TYPE_GROUP = 4;
+
+  // The field's field number, as seen on the wire.
+  public native int number();
+
+  // The field type.
+  public native @Cast("google::protobuf::UnknownField::Type") int type();
+
+  // Accessors -------------------------------------------------------
+  // Each method works only for UnknownFields of the corresponding type.
+
+  public native @Cast("google::protobuf::uint64") long varint();
+  public native @Cast("google::protobuf::uint32") int fixed32();
+  public native @Cast("google::protobuf::uint64") long fixed64();
+  public native @StdString BytePointer length_delimited();
+  public native @Const @ByRef UnknownFieldSet group();
+
+  public native void set_varint(@Cast("google::protobuf::uint64") long value);
+  public native void set_fixed32(@Cast("google::protobuf::uint32") int value);
+  public native void set_fixed64(@Cast("google::protobuf::uint64") long value);
+  public native void set_length_delimited(@StdString BytePointer value);
+  public native void set_length_delimited(@StdString String value);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_length_delimited();
+  public native UnknownFieldSet mutable_group();
+
+  // Serialization API.
+  // These methods can take advantage of the underlying implementation and may
+  // archieve a better performance than using getters to retrieve the data and
+  // do the serialization yourself.
+  public native void SerializeLengthDelimitedNoTag(CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") byte[] target);
+
+  public native @Cast("size_t") long GetLengthDelimitedSize();
+
+
+  // If this UnknownField contains a pointer, delete it.
+  public native void Delete();
+
+  // Reset all the underlying pointers to NULL. A special function to be only
+  // used while merging from a temporary UFS.
+  public native void Reset();
+
+  // Make a deep copy of any pointers in this UnknownField.
+  public native void DeepCopy(@Const @ByRef UnknownField other);
+
+  // Set the wire type of this UnknownField. Should only be used when this
+  // UnknownField is being created.
+  public native void SetType(@Cast("google::protobuf::UnknownField::Type") int type);
+
+  public native @Cast("google::protobuf::uint32") int number_(); public native UnknownField number_(int number_);
+  public native @Cast("google::protobuf::uint32") int type_(); public native UnknownField type_(int type_);
+    @Name("data_.varint_") public native @Cast("google::protobuf::uint64") long data__varint_(); public native UnknownField data__varint_(long data__varint_);
+    @Name("data_.fixed32_") public native @Cast("google::protobuf::uint32") int data__fixed32_(); public native UnknownField data__fixed32_(int data__fixed32_);
+    @Name("data_.fixed64_") public native @Cast("google::protobuf::uint64") long data__fixed64_(); public native UnknownField data__fixed64_(long data__fixed64_);
+    @Name("data_.group_") public native UnknownFieldSet data__group_(); public native UnknownField data__group_(UnknownFieldSet data__group_);
+}
+
+// ===================================================================
+// inline implementations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+
+
+// Parsed from onnx/proto_utils.h
+
+// #pragma once
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
+
+// #ifdef ONNX_USE_LITE_PROTO
+// #include <google/protobuf/message_lite.h>
+// #else // ONNX_USE_LITE_PROTO
+// #include <google/protobuf/message.h>
+// #endif  // !ONNX_USE_LITE_PROTO
+
+// #ifdef ONNX_USE_LITE_PROTO
+@Namespace("onnx") public static native @StdString BytePointer ProtoDebugString(@Const @ByRef MessageLite proto);
+// #else
+// #endif
+
+@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, @Cast("const char*") BytePointer buffer, @Cast("size_t") long length);
+@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, String buffer, @Cast("size_t") long length);
+
+@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<int64_t>") LongVector RetrieveValuesLong(@Const @ByRef AttributeProto attr);
+
+@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<std::string>") StringVector RetrieveValuesString(@Const @ByRef AttributeProto attr);
+
+ // namespace ONNX_NAMESPACE
+
+
 // Parsed from onnx/checker.h
 
 // #pragma once
@@ -7355,34 +8087,6 @@ public static final int
 
 @Namespace("onnx::checker") public static native void check_model(@Const @ByRef ModelProto model);
  // namespace checker
- // namespace ONNX_NAMESPACE
-
-
-// Parsed from onnx/proto_utils.h
-
-// #pragma once
-
-// #include <google/protobuf/io/coded_stream.h>
-// #include <google/protobuf/io/zero_copy_stream_impl_lite.h>
-
-// #ifdef ONNX_USE_LITE_PROTO
-// #include <google/protobuf/message_lite.h>
-// #else // ONNX_USE_LITE_PROTO
-// #include <google/protobuf/message.h>
-// #endif  // !ONNX_USE_LITE_PROTO
-
-// #ifdef ONNX_USE_LITE_PROTO
-@Namespace("onnx") public static native @StdString BytePointer ProtoDebugString(@Const @ByRef MessageLite proto);
-// #else
-// #endif
-
-@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, @Cast("const char*") BytePointer buffer, @Cast("size_t") long length);
-@Namespace("onnx") public static native @Cast("bool") boolean ParseProtoFromBytes(MessageLite proto, String buffer, @Cast("size_t") long length);
-
-@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<int64_t>") LongVector RetrieveValuesLong(@Const @ByRef AttributeProto attr);
-
-@Namespace("onnx") public static native @ByVal @Name("RetrieveValues<std::string>") StringVector RetrieveValuesString(@Const @ByRef AttributeProto attr);
-
  // namespace ONNX_NAMESPACE
 
 
@@ -9775,710 +10479,6 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
    *  value. */
 
  // namespace ONNX_NAMESPACE
-
-
-// Parsed from google/protobuf/message_lite.h
-
-// Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-// Authors: wink@google.com (Wink Saville),
-//          kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Defines MessageLite, the abstract interface implemented by all (lite
-// and non-lite) protocol message objects.
-
-// #ifndef GOOGLE_PROTOBUF_MESSAGE_LITE_H__
-// #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
-
-// #include <climits>
-// #include <google/protobuf/stubs/common.h>
-// #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/stubs/once.h>
-// #include <google/protobuf/stubs/port.h>
-@Namespace("google::protobuf") @Opaque public static class Arena extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public Arena() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Arena(Pointer p) { super(p); }
-}
-@Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CodedInputStream() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CodedInputStream(Pointer p) { super(p); }
-}
-@Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CodedOutputStream() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CodedOutputStream(Pointer p) { super(p); }
-}
-@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ZeroCopyInputStream() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ZeroCopyInputStream(Pointer p) { super(p); }
-}
-@Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ZeroCopyOutputStream() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ZeroCopyOutputStream(Pointer p) { super(p); }
-}
-
-
-@Namespace("google::protobuf::internal") @Opaque public static class WireFormatLite extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public WireFormatLite() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public WireFormatLite(Pointer p) { super(p); }
-}
-
-// #ifndef SWIG
-// We compute sizes as size_t but cache them as int.  This function converts a
-// computed size to a cached size.  Since we don't proceed with serialization
-// if the total size was > INT_MAX, it is not important what this function
-// returns for inputs > INT_MAX.  However this case should not error or
-// GOOGLE_CHECK-fail, because the full size_t resolution is still returned from
-// ByteSizeLong() and checked against INT_MAX; we can catch the overflow
-// there.
-@Namespace("google::protobuf::internal") public static native int ToCachedSize(@Cast("size_t") long size);
-
-// We mainly calculate sizes in terms of size_t, but some functions that
-// compute sizes return "int".  These int sizes are expected to always be
-// positive. This function is more efficient than casting an int to size_t
-// directly on 64-bit platforms because it avoids making the compiler emit a
-// sign extending instruction, which we don't want and don't want to pay for.
-@Namespace("google::protobuf::internal") public static native @Cast("size_t") long FromIntSize(int size);
-
-// For cases where a legacy function returns an integer size.  We GOOGLE_DCHECK()
-// that the conversion will fit within an integer; if this is false then we
-// are losing information.
-@Namespace("google::protobuf::internal") public static native int ToIntSize(@Cast("size_t") long size);
-
-// This type wraps a variable whose constructor and destructor are explicitly
-// called. It is particularly useful for a global variable, without its
-// constructor and destructor run on start and end of the program lifetime.
-// This circumvents the initial construction order fiasco, while keeping
-// the address of the empty string a compile time constant.
-//
-// Pay special attention to the initialization state of the object.
-// 1. The object is "uninitialized" to begin with.
-// 2. Call DefaultConstruct() only if the object is uninitialized.
-//    After the call, the object becomes "initialized".
-// 3. Call get() and get_mutable() only if the object is initialized.
-// 4. Call Destruct() only if the object is initialized.
-//    After the call, the object becomes uninitialized.
-
-// Default empty string object. Don't use this directly. Instead, call
-// GetEmptyString() to get the reference.
-
-@Namespace("google::protobuf::internal") public static native void InitEmptyString();
-
-
-@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyStringAlreadyInited();
-
-@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyString();
-
-@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString BytePointer str);
-@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString String str);
-// #endif  // SWIG
-  // namespace internal
-
-// Interface to light weight protocol messages.
-//
-// This interface is implemented by all protocol message objects.  Non-lite
-// messages additionally implement the Message interface, which is a
-// subclass of MessageLite.  Use MessageLite instead when you only need
-// the subset of features which it supports -- namely, nothing that uses
-// descriptors or reflection.  You can instruct the protocol compiler
-// to generate classes which implement only MessageLite, not the full
-// Message interface, by adding the following line to the .proto file:
-//
-//   option optimize_for = LITE_RUNTIME;
-//
-// This is particularly useful on resource-constrained systems where
-// the full protocol buffers runtime library is too big.
-//
-// Note that on non-constrained systems (e.g. servers) when you need
-// to link in lots of protocol definitions, a better way to reduce
-// total code footprint is to use optimize_for = CODE_SIZE.  This
-// will make the generated code smaller while still supporting all the
-// same features (at the expense of speed).  optimize_for = LITE_RUNTIME
-// is best when you only have a small number of message types linked
-// into your binary, in which case the size of the protocol buffers
-// runtime itself is the biggest problem.
-@Namespace("google::protobuf") public static class MessageLite extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public MessageLite(Pointer p) { super(p); }
-
-
-  // Basic Operations ------------------------------------------------
-
-  // Get the name of this message type, e.g. "foo.bar.BazProto".
-  public native @StdString BytePointer GetTypeName();
-
-  // Construct a new instance of the same type.  Ownership is passed to the
-  // caller.
-  public native MessageLite New();
-
-  // Construct a new instance on the arena. Ownership is passed to the caller
-  // if arena is a NULL. Default implementation for backwards compatibility.
-  public native MessageLite New(Arena arena);
-
-  // Get the arena, if any, associated with this message. Virtual method
-  // required for generic operations but most arena-related operations should
-  // use the GetArenaNoVirtual() generated-code method. Default implementation
-  // to reduce code size by avoiding the need for per-type implementations
-  // when types do not implement arena support.
-  public native Arena GetArena();
-
-  // Get a pointer that may be equal to this message's arena, or may not be.
-  // If the value returned by this method is equal to some arena pointer, then
-  // this message is on that arena; however, if this message is on some arena,
-  // this method may or may not return that arena's pointer. As a tradeoff,
-  // this method may be more efficient than GetArena(). The intent is to allow
-  // underlying representations that use e.g. tagged pointers to sometimes
-  // store the arena pointer directly, and sometimes in a more indirect way,
-  // and allow a fastpath comparison against the arena pointer when it's easy
-  // to obtain.
-  public native Pointer GetMaybeArenaPointer();
-
-  // Clear all fields of the message and set them to their default values.
-  // Clear() avoids freeing memory, assuming that any memory allocated
-  // to hold parts of the message will be needed again to hold the next
-  // message.  If you actually want to free the memory used by a Message,
-  // you must delete it.
-  public native void Clear();
-
-  // Quickly check if all required fields have values set.
-  public native @Cast("bool") boolean IsInitialized();
-
-  // This is not implemented for Lite messages -- it just returns "(cannot
-  // determine missing fields for lite message)".  However, it is implemented
-  // for full messages.  See message.h.
-  public native @StdString BytePointer InitializationErrorString();
-
-  // If |other| is the exact same class as this, calls MergeFrom(). Otherwise,
-  // results are undefined (probably crash).
-  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
-
-  // Parsing ---------------------------------------------------------
-  // Methods for parsing in protocol buffer format.  Most of these are
-  // just simple wrappers around MergeFromCodedStream().  Clear() will be
-  // called before merging the input.
-
-  // Fill the message with a protocol buffer parsed from the given input
-  // stream. Returns false on a read error or if the input is in the wrong
-  // format.  A successful return does not indicate the entire input is
-  // consumed, ensure you call ConsumedEntireMessage() to check that if
-  // applicable.
-  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
-  // Like ParseFromCodedStream(), but accepts messages that are missing
-  // required fields.
-  public native @Cast("bool") boolean ParsePartialFromCodedStream(CodedInputStream input);
-  // Read a protocol buffer from the given zero-copy input stream.  If
-  // successful, the entire input will be consumed.
-  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
-  // Like ParseFromZeroCopyStream(), but accepts messages that are missing
-  // required fields.
-  public native @Cast("bool") boolean ParsePartialFromZeroCopyStream(ZeroCopyInputStream input);
-  // Read a protocol buffer from the given zero-copy input stream, expecting
-  // the message to be exactly "size" bytes long.  If successful, exactly
-  // this many bytes will have been consumed from the input.
-  public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
-  // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
-  // missing required fields.
-  public native @Cast("bool") boolean ParsePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input,
-                                               int size);
-  // Parses a protocol buffer contained in a string. Returns true on success.
-  // This function takes a string in the (non-human-readable) binary wire
-  // format, matching the encoding output by MessageLite::SerializeToString().
-  // If you'd like to convert a human-readable string into a protocol buffer
-  // object, see google::protobuf::TextFormat::ParseFromString().
-  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
-  public native @Cast("bool") boolean ParseFromString(@StdString String data);
-  // Like ParseFromString(), but accepts messages that are missing
-  // required fields.
-  public native @Cast("bool") boolean ParsePartialFromString(@StdString BytePointer data);
-  public native @Cast("bool") boolean ParsePartialFromString(@StdString String data);
-  // Parse a protocol buffer contained in an array of bytes.
-  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
-  // Like ParseFromArray(), but accepts messages that are missing
-  // required fields.
-  public native @Cast("bool") boolean ParsePartialFromArray(@Const Pointer data, int size);
-
-
-  // Reads a protocol buffer from the stream and merges it into this
-  // Message.  Singular fields read from the input overwrite what is
-  // already in the Message and repeated fields are appended to those
-  // already present.
-  //
-  // It is the responsibility of the caller to call input->LastTagWas()
-  // (for groups) or input->ConsumedEntireMessage() (for non-groups) after
-  // this returns to verify that the message's end was delimited correctly.
-  //
-  // ParsefromCodedStream() is implemented as Clear() followed by
-  // MergeFromCodedStream().
-  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
-
-  // Like MergeFromCodedStream(), but succeeds even if required fields are
-  // missing in the input.
-  //
-  // MergeFromCodedStream() is just implemented as MergePartialFromCodedStream()
-  // followed by IsInitialized().
-  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
-
-
-  // Serialization ---------------------------------------------------
-  // Methods for serializing in protocol buffer format.  Most of these
-  // are just simple wrappers around ByteSize() and SerializeWithCachedSizes().
-
-  // Write a protocol buffer of this message to the given output.  Returns
-  // false on a write error.  If the message is missing required fields,
-  // this may GOOGLE_CHECK-fail.
-  public native @Cast("bool") boolean SerializeToCodedStream(CodedOutputStream output);
-  // Like SerializeToCodedStream(), but allows missing required fields.
-  public native @Cast("bool") boolean SerializePartialToCodedStream(CodedOutputStream output);
-  // Write the message to the given zero-copy output stream.  All required
-  // fields must be set.
-  public native @Cast("bool") boolean SerializeToZeroCopyStream(ZeroCopyOutputStream output);
-  // Like SerializeToZeroCopyStream(), but allows missing required fields.
-  public native @Cast("bool") boolean SerializePartialToZeroCopyStream(ZeroCopyOutputStream output);
-  // Serialize the message and store it in the given string.  All required
-  // fields must be set.
-  public native @Cast("bool") boolean SerializeToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
-  // Like SerializeToString(), but allows missing required fields.
-  public native @Cast("bool") boolean SerializePartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
-  // Serialize the message and store it in the given byte array.  All required
-  // fields must be set.
-  public native @Cast("bool") boolean SerializeToArray(Pointer data, int size);
-  // Like SerializeToArray(), but allows missing required fields.
-  public native @Cast("bool") boolean SerializePartialToArray(Pointer data, int size);
-
-  // Make a string encoding the message. Is equivalent to calling
-  // SerializeToString() on a string and using that.  Returns the empty
-  // string if SerializeToString() would have returned an error.
-  // Note: If you intend to generate many such strings, you may
-  // reduce heap fragmentation by instead re-using the same string
-  // object with calls to SerializeToString().
-  public native @StdString BytePointer SerializeAsString();
-  // Like SerializeAsString(), but allows missing required fields.
-  public native @StdString BytePointer SerializePartialAsString();
-
-  // Like SerializeToString(), but appends to the data to the string's existing
-  // contents.  All required fields must be set.
-  public native @Cast("bool") boolean AppendToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
-  // Like AppendToString(), but allows missing required fields.
-  public native @Cast("bool") boolean AppendPartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
-
-  // Computes the serialized size of the message.  This recursively calls
-  // ByteSizeLong() on all embedded messages.
-  //
-  // ByteSizeLong() is generally linear in the number of fields defined for the
-  // proto.
-  public native @Cast("size_t") long ByteSizeLong();
-
-  // Legacy ByteSize() API.
-  public native int ByteSize();
-
-  // Serializes the message without recomputing the size.  The message must not
-  // have changed since the last call to ByteSize(), and the value returned by
-  // ByteSize must be non-negative.  Otherwise the results are undefined.
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-
-  // Functions below here are not part of the public interface.  It isn't
-  // enforced, but they should be treated as private, and will be private
-  // at some future time.  Unfortunately the implementation of the "friend"
-  // keyword in GCC is broken at the moment, but we expect it will be fixed.
-
-  // Like SerializeWithCachedSizes, but writes directly to *target, returning
-  // a pointer to the byte immediately after the last byte written.  "target"
-  // must point at a byte array of at least ByteSize() bytes.  Whether to use
-  // deterministic serialization, e.g., maps in sorted order, is determined by
-  // CodedOutputStream::IsDefaultSerializationDeterministic().
-  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] target);
-
-  // Returns the result of the last call to ByteSize().  An embedded message's
-  // size is needed both to serialize it (because embedded messages are
-  // length-delimited) and to compute the outer message's size.  Caching
-  // the size avoids computing it multiple times.
-  //
-  // ByteSize() does not automatically use the cached size when available
-  // because this would require invalidating it every time the message was
-  // modified, which would be too hard and expensive.  (E.g. if a deeply-nested
-  // sub-message is changed, all of its parents' cached sizes would need to be
-  // invalidated, which is too much work for an otherwise inlined setter
-  // method.)
-  public native int GetCachedSize();
-
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") byte[] target);
-}
-
-
-
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
-
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
-  // namespace internal
-
-
-  // namespace protobuf
-
-  // namespace google
-// #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
-
-
-// Parsed from google/protobuf/unknown_field_set.h
-
-// Protocol Buffers - Google's data interchange format
-// Copyright 2008 Google Inc.  All rights reserved.
-// https://developers.google.com/protocol-buffers/
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are
-// met:
-//
-//     * Redistributions of source code must retain the above copyright
-// notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above
-// copyright notice, this list of conditions and the following disclaimer
-// in the documentation and/or other materials provided with the
-// distribution.
-//     * Neither the name of Google Inc. nor the names of its
-// contributors may be used to endorse or promote products derived from
-// this software without specific prior written permission.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-// Author: kenton@google.com (Kenton Varda)
-//  Based on original Protocol Buffers design by
-//  Sanjay Ghemawat, Jeff Dean, and others.
-//
-// Contains classes used to keep track of unrecognized fields seen while
-// parsing a protocol message.
-
-// #ifndef GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
-// #define GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
-
-// #include <assert.h>
-// #include <string>
-// #include <vector>
-// #include <google/protobuf/stubs/common.h>
-// #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/message_lite.h>         // coded_stream.h        // coded_stream.h      // zero_copy_stream.h
-  
-    @Namespace("google::protobuf::internal") @Opaque public static class InternalMetadataWithArena extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public InternalMetadataWithArena() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public InternalMetadataWithArena(Pointer p) { super(p); }
-    }  // metadata.h
-    @Namespace("google::protobuf::internal") @Opaque public static class WireFormat extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public WireFormat() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public WireFormat(Pointer p) { super(p); }
-    }               // wire_format.h
-    @Namespace("google::protobuf::internal") @Opaque public static class MessageSetFieldSkipperUsingCord extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public MessageSetFieldSkipperUsingCord() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public MessageSetFieldSkipperUsingCord(Pointer p) { super(p); }
-    }
-                                    // extension_set_heavy.cc
-                        // message.h                 // below
-
-// An UnknownFieldSet contains fields that were encountered while parsing a
-// message but were not defined by its type.  Keeping track of these can be
-// useful, especially in that they may be written if the message is serialized
-// again without being cleared in between.  This means that software which
-// simply receives messages and forwards them to other servers does not need
-// to be updated every time a new field is added to the message definition.
-//
-// To get the UnknownFieldSet attached to any message, call
-// Reflection::GetUnknownFields().
-//
-// This class is necessarily tied to the protocol buffer wire format, unlike
-// the Reflection interface which is independent of any serialization scheme.
-@Namespace("google::protobuf") @NoOffset public static class UnknownFieldSet extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnknownFieldSet(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UnknownFieldSet(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public UnknownFieldSet position(long position) {
-        return (UnknownFieldSet)super.position(position);
-    }
-
-  public UnknownFieldSet() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  // Remove all fields.
-  public native void Clear();
-
-  // Remove all fields and deallocate internal data objects
-  public native void ClearAndFreeMemory();
-
-  // Is this set empty?
-  public native @Cast("bool") boolean empty();
-
-  // Merge the contents of some other UnknownFieldSet with this one.
-  public native void MergeFrom(@Const @ByRef UnknownFieldSet other);
-
-  // Similar to above, but this function will destroy the contents of other.
-  public native void MergeFromAndDestroy(UnknownFieldSet other);
-
-  // Merge the contents an UnknownFieldSet with the UnknownFieldSet in
-  // *metadata, if there is one.  If *metadata doesn't have an UnknownFieldSet
-  // then add one to it and make it be a copy of the first arg.
-  public static native void MergeToInternalMetdata(
-        @Const @ByRef UnknownFieldSet other,
-        InternalMetadataWithArena metadata);
-
-  // Swaps the contents of some other UnknownFieldSet with this one.
-  public native void Swap(UnknownFieldSet x);
-
-  // Computes (an estimate of) the total number of bytes currently used for
-  // storing the unknown fields in memory. Does NOT include
-  // sizeof(*this) in the calculation.
-  public native @Cast("size_t") long SpaceUsedExcludingSelfLong();
-
-  public native int SpaceUsedExcludingSelf();
-
-  // Version of SpaceUsed() including sizeof(*this).
-  public native @Cast("size_t") long SpaceUsedLong();
-
-  public native int SpaceUsed();
-
-  // Returns the number of fields present in the UnknownFieldSet.
-  public native int field_count();
-  // Get a field in the set, where 0 <= index < field_count().  The fields
-  // appear in the order in which they were added.
-  public native @Const @ByRef UnknownField field(int index);
-  // Get a mutable pointer to a field in the set, where
-  // 0 <= index < field_count().  The fields appear in the order in which
-  // they were added.
-  public native UnknownField mutable_field(int index);
-
-  // Adding fields ---------------------------------------------------
-
-  public native void AddVarint(int number, @Cast("google::protobuf::uint64") long value);
-  public native void AddFixed32(int number, @Cast("google::protobuf::uint32") int value);
-  public native void AddFixed64(int number, @Cast("google::protobuf::uint64") long value);
-  public native void AddLengthDelimited(int number, @StdString BytePointer value);
-  public native void AddLengthDelimited(int number, @StdString String value);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer AddLengthDelimited(int number);
-  public native UnknownFieldSet AddGroup(int number);
-
-  // Adds an unknown field from another set.
-  public native void AddField(@Const @ByRef UnknownField field);
-
-  // Delete fields with indices in the range [start .. start+num-1].
-  // Caution: implementation moves all fields with indices [start+num .. ].
-  public native void DeleteSubrange(int start, int num);
-
-  // Delete all fields with a specific field number. The order of left fields
-  // is preserved.
-  // Caution: implementation moves all fields after the first deleted field.
-  public native void DeleteByNumber(int number);
-
-  // Parsing helpers -------------------------------------------------
-  // These work exactly like the similarly-named methods of Message.
-
-  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
-  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
-  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
-  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
-  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
-  public native @Cast("bool") boolean ParseFromString(@StdString String data);
-
-  public static native @Const UnknownFieldSet default_instance();
-}
-
-// Represents one field in an UnknownFieldSet.
-@Namespace("google::protobuf") public static class UnknownField extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public UnknownField() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UnknownField(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public UnknownField(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public UnknownField position(long position) {
-        return (UnknownField)super.position(position);
-    }
-
-  /** enum google::protobuf::UnknownField::Type */
-  public static final int
-    TYPE_VARINT = 0,
-    TYPE_FIXED32 = 1,
-    TYPE_FIXED64 = 2,
-    TYPE_LENGTH_DELIMITED = 3,
-    TYPE_GROUP = 4;
-
-  // The field's field number, as seen on the wire.
-  public native int number();
-
-  // The field type.
-  public native @Cast("google::protobuf::UnknownField::Type") int type();
-
-  // Accessors -------------------------------------------------------
-  // Each method works only for UnknownFields of the corresponding type.
-
-  public native @Cast("google::protobuf::uint64") long varint();
-  public native @Cast("google::protobuf::uint32") int fixed32();
-  public native @Cast("google::protobuf::uint64") long fixed64();
-  public native @StdString BytePointer length_delimited();
-  public native @Const @ByRef UnknownFieldSet group();
-
-  public native void set_varint(@Cast("google::protobuf::uint64") long value);
-  public native void set_fixed32(@Cast("google::protobuf::uint32") int value);
-  public native void set_fixed64(@Cast("google::protobuf::uint64") long value);
-  public native void set_length_delimited(@StdString BytePointer value);
-  public native void set_length_delimited(@StdString String value);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_length_delimited();
-  public native UnknownFieldSet mutable_group();
-
-  // Serialization API.
-  // These methods can take advantage of the underlying implementation and may
-  // archieve a better performance than using getters to retrieve the data and
-  // do the serialization yourself.
-  public native void SerializeLengthDelimitedNoTag(CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") byte[] target);
-
-  public native @Cast("size_t") long GetLengthDelimitedSize();
-
-
-  // If this UnknownField contains a pointer, delete it.
-  public native void Delete();
-
-  // Reset all the underlying pointers to NULL. A special function to be only
-  // used while merging from a temporary UFS.
-  public native void Reset();
-
-  // Make a deep copy of any pointers in this UnknownField.
-  public native void DeepCopy(@Const @ByRef UnknownField other);
-
-  // Set the wire type of this UnknownField. Should only be used when this
-  // UnknownField is being created.
-  public native void SetType(@Cast("google::protobuf::UnknownField::Type") int type);
-
-  public native @Cast("google::protobuf::uint32") int number_(); public native UnknownField number_(int number_);
-  public native @Cast("google::protobuf::uint32") int type_(); public native UnknownField type_(int type_);
-    @Name("data_.varint_") public native @Cast("google::protobuf::uint64") long data__varint_(); public native UnknownField data__varint_(long data__varint_);
-    @Name("data_.fixed32_") public native @Cast("google::protobuf::uint32") int data__fixed32_(); public native UnknownField data__fixed32_(int data__fixed32_);
-    @Name("data_.fixed64_") public native @Cast("google::protobuf::uint64") long data__fixed64_(); public native UnknownField data__fixed64_(long data__fixed64_);
-    @Name("data_.group_") public native UnknownFieldSet data__group_(); public native UnknownField data__group_(UnknownFieldSet data__group_);
-}
-
-// ===================================================================
-// inline implementations
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // namespace protobuf
-
-  // namespace google
-// #endif  // GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
 
 
 }

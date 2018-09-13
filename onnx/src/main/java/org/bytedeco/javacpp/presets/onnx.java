@@ -44,26 +44,29 @@ import java.lang.annotation.Target;
         "onnx/defs/operator_sets-ml.h",
         "onnx/defs/data_type_utils.h",
         "onnx/defs/shape_inference.h",
-//        "onnx/version_converter/convert.h",
-//        "onnx/optimizer/optimize.h",
- 	"onnx/onnx-operators-ml.pb.h",
+        "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
-	"onnx/checker.h",
-	"onnx/proto_utils.h",
-	"onnx/onnxifi.h",
-	"onnx/common/tensor.h",
+        "google/protobuf/message_lite.h",
+        "google/protobuf/unknown_field_set.h",
+        "onnx/proto_utils.h",
+//        "onnx/string_utils.h",
+        "onnx/checker.h",
+        "onnx/onnxifi.h",
+        "onnx/common/tensor.h",
         "onnx/common/array_ref.h",
 //        "onnx/common/graph_node_list.h",
 //        "onnx/common/interned_strings.h",
-//	"onnx/common/ir.h",
-	"google/protobuf/message_lite.h",
-        "google/protobuf/unknown_field_set.h"
+//        "onnx/common/ir.h",
+//        "onnx/version_converter/BaseConverter.h",
+//        "onnx/version_converter/convert.h",
+//        "onnx/optimizer/optimize.h",
     },
     link = {"onnx_proto", "onnx", "onnxifi"}))
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
-               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "ONNX_UNUSED", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
+               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "ONNX_UNUSED",
+                             "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
                .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
                              "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
