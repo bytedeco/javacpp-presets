@@ -168,6 +168,8 @@ import java.util.List;
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow/cc/saved_model/loader.h",
+                        "tensorflow/cc/saved_model/tag_constants.h",
+                        "tensorflow/cc/saved_model/signature_constants.h",
                         "tensorflow_adapters.h",
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",

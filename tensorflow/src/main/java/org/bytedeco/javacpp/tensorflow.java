@@ -36307,6 +36307,129 @@ limitations under the License.
 // #endif  // TENSORFLOW_CC_SAVED_MODEL_LOADER_H_
 
 
+// Parsed from tensorflow/cc/saved_model/tag_constants.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+// #define TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+
+/** Tag for the {@code gpu} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagGpu(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagGpu();
+
+/** Tag for the {@code tpu} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagTpu(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagTpu();
+
+/** Tag for the {@code serving} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagServe(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagServe();
+
+/** Tag for the {@code training} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagTrain(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagTrain();
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+
+
+// Parsed from tensorflow/cc/saved_model/signature_constants.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+// #define TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+
+/** Key in the signature def map for {@code default} serving signatures. The default
+ *  signature is used in inference requests where a specific signature was not
+ *  specified. */
+@Namespace("tensorflow") @MemberGetter public static native byte kDefaultServingSignatureDefKey(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kDefaultServingSignatureDefKey();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Classification API constants.
+ <p>
+ *  Classification inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyInputs();
+
+/** Classification method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyMethodName();
+
+/** Classification classes output. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyOutputClasses(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyOutputClasses();
+
+/** Classification scores output. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyOutputScores(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyOutputScores();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Predict API constants.
+ <p>
+ *  Predict inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictInputs();
+
+/** Predict method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictMethodName();
+
+/** Predict outputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictOutputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictOutputs();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Regression API constants.
+ <p>
+ *  Regression inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressInputs();
+
+/** Regression method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressMethodName();
+
+/** Regression outputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressOutputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressOutputs();
+
+////////////////////////////////////////////////////////////////////////////////
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+
+
 // Parsed from tensorflow/cc/ops/standard_ops.h
 
 /* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
