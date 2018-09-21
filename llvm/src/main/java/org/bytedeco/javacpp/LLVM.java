@@ -3513,7 +3513,29 @@ public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMType
 public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMTypeRef Ty,
                                  LLVMValueRef PersFn, @Cast("unsigned") int NumClauses,
                                  String Name);
+public static native LLVMValueRef LLVMBuildCatchPad(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                               @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
+                               @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildCatchPad(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                               @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
+                               String Name);
+public static native LLVMValueRef LLVMBuildCleanupPad(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                                 @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
+                                 @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildCleanupPad(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                                 @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
+                                 String Name);
 public static native LLVMValueRef LLVMBuildResume(LLVMBuilderRef B, LLVMValueRef Exn);
+public static native LLVMValueRef LLVMBuildCatchSwitch(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                                  LLVMBasicBlockRef UnwindBB,
+                                  @Cast("unsigned") int NumHandlers, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildCatchSwitch(LLVMBuilderRef B, LLVMValueRef ParentPad,
+                                  LLVMBasicBlockRef UnwindBB,
+                                  @Cast("unsigned") int NumHandlers, String Name);
+public static native LLVMValueRef LLVMBuildCatchRet(LLVMBuilderRef B, LLVMValueRef CatchPad,
+                               LLVMBasicBlockRef BB);
+public static native LLVMValueRef LLVMBuildCleanupRet(LLVMBuilderRef B, LLVMValueRef CatchPad,
+                                 LLVMBasicBlockRef BB);
 public static native LLVMValueRef LLVMBuildUnreachable(LLVMBuilderRef arg0);
 
 /* Add a case to the switch instruction */
