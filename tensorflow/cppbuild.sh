@@ -24,6 +24,7 @@ export TF_NEED_OPENCL_SYCL=0
 export TF_NEED_MPI=0
 export TF_NEED_GDR=0
 export TF_NEED_TENSORRT=0
+export TF_NEED_NGRAPH=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=9.2
@@ -38,7 +39,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.10.1
+TENSORFLOW_VERSION=1.11.0-rc2
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -136,7 +137,7 @@ case $PLATFORM in
         sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
         # https://github.com/tensorflow/tensorflow/issues/19676
         patch -Np1 < ../../../tensorflow-java.patch
-        patch -Np1 < ../../../tensorflow-macosx.patch
+        patch -Np1 < ../../../tensorflow-macosx.patch || true
         export TF_NEED_MKL=1
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
@@ -148,7 +149,8 @@ case $PLATFORM in
         # help cmake's findCuda-method to find the right cuda version
         export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         patch -Np1 < ../../../tensorflow-java.patch
-        patch -Np1 < ../../../tensorflow-windows.patch
+        patch -Np1 < ../../../tensorflow-windows.patch || true
+        sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
         mkdir -p ../build
         cd ../build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
@@ -182,5 +184,6 @@ cp -r tensorflow/contrib/android/java/* ../java
 cp -r tensorflow/contrib/lite/java/src/main/java/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java
+patch -Np1 -d ../java < ../../../tensorflow-java-ops.patch || true # bazel build //tensorflow/java:tensorflow
 
 cd ../..

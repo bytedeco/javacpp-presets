@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.10.1</tensorflow.version>
+    <tensorflow.version>1.11.0-rc2</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
@@ -94,11 +94,13 @@
             <includePath>${tensorflow.path}/</includePath>
             <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_absl/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/nsync/public/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d02e6a705c30/</includePath>
             <includePath>${tensorflow.path}/../build/</includePath>
+            <includePath>${tensorflow.path}/../build/abseil/src/abseil/</includePath>
             <includePath>${tensorflow.path}/../build/zlib/src/zlib/</includePath>
             <includePath>${tensorflow.path}/../build/nsync/src/nsync/public/</includePath>
             <includePath>${tensorflow.path}/../build/protobuf/src/protobuf/src/</includePath>
@@ -108,6 +110,10 @@
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
              <linkPath>${tensorflow.path}/../build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/base/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/types/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/numeric/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/strings/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>

@@ -1,6 +1,6 @@
-diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_clang.tpl tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL_clang.tpl
---- tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_clang.tpl	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL_clang.tpl	2018-07-30 11:46:38.276221232 +0900
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL_clang.tpl tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL_clang.tpl
+--- tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL_clang.tpl	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL_clang.tpl	2018-09-22 11:01:52.833872251 +0900
 @@ -0,0 +1,1410 @@
 +major_version: "local"
 +minor_version: ""
@@ -1412,9 +1412,9 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_clang.tpl t
 +
 +  linking_mode_flags { mode: DYNAMIC }
 +}
-diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl
---- tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl	2018-07-30 11:46:38.277221233 +0900
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl
+--- tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl	2018-09-22 11:01:52.834872253 +0900
 @@ -0,0 +1,249 @@
 +major_version: "local"
 +minor_version: ""
@@ -1665,9 +1665,9 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL_nvcc.tpl te
 +    compiler_flag: "-fdata-sections"
 +  }
 +}
-diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL.tpl tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL.tpl
---- tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL.tpl	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-macosx/third_party/gpus/crosstool/CROSSTOOL.tpl	1970-01-01 09:00:00.000000000 +0900
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL.tpl tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL.tpl
+--- tensorflow-1.11.0-rc1/third_party/gpus/crosstool/CROSSTOOL.tpl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/crosstool/CROSSTOOL.tpl	1970-01-01 09:00:00.000000000 +0900
 @@ -1,1408 +0,0 @@
 -major_version: "local"
 -minor_version: ""
@@ -3077,9 +3077,9 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/crosstool/CROSSTOOL.tpl tensorf
 -
 -  linking_mode_flags { mode: DYNAMIC }
 -}
-diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda/BUILD.tpl tensorflow-1.10.0-rc0-macosx/third_party/gpus/cuda/BUILD.tpl
---- tensorflow-1.10.0-rc0/third_party/gpus/cuda/BUILD.tpl	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-macosx/third_party/gpus/cuda/BUILD.tpl	2018-07-30 11:47:19.398250208 +0900
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/cuda/BUILD.tpl tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda/BUILD.tpl
+--- tensorflow-1.11.0-rc1/third_party/gpus/cuda/BUILD.tpl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda/BUILD.tpl	2018-09-22 11:01:52.835872255 +0900
 @@ -62,7 +62,6 @@
          ":freebsd": [],
          "//conditions:default": ["-ldl"],
@@ -3096,9 +3096,20 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda/BUILD.tpl tensorflow-1.10.
      linkstatic = 1,
      visibility = ["//visibility:public"],
  )
-diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl tensorflow-1.10.0-rc0-macosx/third_party/gpus/cuda_configure.bzl
---- tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-macosx/third_party/gpus/cuda_configure.bzl	2018-07-30 11:46:53.763232145 +0900
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/cuda/BUILD.windows.tpl tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda/BUILD.windows.tpl
+--- tensorflow-1.11.0-rc1/third_party/gpus/cuda/BUILD.windows.tpl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda/BUILD.windows.tpl	2018-08-24 04:58:44.000000000 +0900
+@@ -142,7 +142,6 @@
+     ],
+     includes = [
+         ".",
+-        "cuda/",
+         "cuda/extras/CUPTI/include/",
+     ],
+     visibility = ["//visibility:public"],
+diff -ruN tensorflow-1.11.0-rc1/third_party/gpus/cuda_configure.bzl tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda_configure.bzl
+--- tensorflow-1.11.0-rc1/third_party/gpus/cuda_configure.bzl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-macosx/third_party/gpus/cuda_configure.bzl	2018-09-22 11:01:52.836872256 +0900
 @@ -20,7 +20,6 @@
      `/usr/local/cuda`.
    * `TF_CUDA_COMPUTE_CAPABILITIES`: The CUDA compute capabilities. Default is
@@ -3134,23 +3145,24 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl tensorflow-1
  ]
  
  # Lookup paths for cupti.h, relative to the CUDA toolkit directory.
-@@ -59,8 +57,8 @@
+@@ -59,9 +57,8 @@
  # On most systems, the cupti library is not installed in the same directory as
  # the other CUDA libraries but rather in a special extras/CUPTI directory.
  CUPTI_HEADER_PATHS = [
 -    "extras/CUPTI/include/",
 -    "include/cuda/CUPTI/",
+-    "include/",
 +  "extras/CUPTI/include/",
 +  "include/cuda/CUPTI/",
  ]
  
  # Lookup paths for the cupti library, relative to the
-@@ -68,25 +66,25 @@
+@@ -69,25 +66,25 @@
  # On most systems, the cupti library is not installed in the same directory as
  # the other CUDA libraries but rather in a special extras/CUPTI directory.
  CUPTI_LIB_PATHS = [
 -    "extras/CUPTI/lib64/",
--    "lib/x86_64-linux-gnu",
+-    "lib/x86_64-linux-gnu/",
 -    "lib64/",
 -    "extras/CUPTI/libx64/",
 -    "extras/CUPTI/lib/",
@@ -3182,12 +3194,13 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl tensorflow-1
  ]
  
  # Lookup paths for NVVM libdevice relative to the CUDA directory toolkit.
-@@ -94,841 +92,686 @@
+@@ -95,842 +92,686 @@
  # libdevice implements mathematical functions for GPU kernels, and is provided
  # in NVVM bitcode (a subset of LLVM bitcode).
  NVVM_LIBDEVICE_PATHS = [
 -    "nvvm/libdevice/",
 -    "share/cuda/",
+-    "lib/nvidia-cuda-toolkit/libdevice/",
 -]
 -
 -# Files used to detect the NVVM libdevice path.
@@ -4602,7 +4615,7 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl tensorflow-1
  
  _DUMMY_CROSSTOOL_BZL_FILE = """
  def error_gpu_disabled():
-@@ -949,498 +792,355 @@
+@@ -951,498 +792,355 @@
    )
  """
  
@@ -5417,7 +5430,7 @@ diff -ruN tensorflow-1.10.0-rc0/third_party/gpus/cuda_configure.bzl tensorflow-1
  
  cuda_configure = repository_rule(
      implementation = _cuda_autoconf_impl,
-@@ -1457,7 +1157,6 @@
+@@ -1459,7 +1157,6 @@
          _TF_CUDA_COMPUTE_CAPABILITIES,
          _TF_CUDA_CONFIG_REPO,
          "NVVMIR_LIBRARY_DIR",
