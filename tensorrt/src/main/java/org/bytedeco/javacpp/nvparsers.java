@@ -367,7 +367,7 @@ public class nvparsers extends org.bytedeco.javacpp.presets.nvparsers {
 
 //Current supported Universal Framework Format (UFF) version for the parser.
 public static final int UFF_REQUIRED_VERSION_MAJOR = 0;
-public static final int UFF_REQUIRED_VERSION_MINOR = 3;
+public static final int UFF_REQUIRED_VERSION_MINOR = 4;
 public static final int UFF_REQUIRED_VERSION_PATCH = 0;
 
 /**

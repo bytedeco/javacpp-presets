@@ -90,10 +90,10 @@ public class opencv_core implements LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += "@.9.2";
+                    lib += "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += "64_92";
+                    lib += "64_100";
                     break;
                 default:
                     continue; // no CUDA

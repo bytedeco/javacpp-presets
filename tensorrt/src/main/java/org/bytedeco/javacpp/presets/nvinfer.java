@@ -44,7 +44,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         compiler = "cpp11",
         include = {"NvInfer.h", "NvUtils.h"},
         includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-        link = "nvinfer@.4",
+        link = "nvinfer@.5",
         linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}),
     target = "org.bytedeco.javacpp.nvinfer")
 public class nvinfer implements LoadEnabled, InfoMapper {
@@ -60,7 +60,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         int i = 0;
         String[] libs = {"cudart", "cublas", "cudnn"};
         for (String lib : libs) {
-            lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+            lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }
@@ -73,10 +73,12 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::EnumMax").skip())
-               .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::ISoftMaxLayer",
+               .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
                              "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger").purify().virtualize())
+               .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(
+                             "public native @Cast(\"nvinfer1::IPluginCreator*const*\") PointerPointer getPluginCreatorList(IntPointer numCreators);"))
                .put(new Info("nvinfer1::IProfiler::~IProfiler").javaText("\n"
                      + "/** Default native constructor. */\n"
                      + "public IProfiler() { super((Pointer)null); allocate(); }\n"

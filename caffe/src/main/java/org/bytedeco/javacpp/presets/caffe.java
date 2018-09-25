@@ -79,10 +79,10 @@ public class caffe implements LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    lib += lib.equals("cudnn") ? "64_7" : "64_100";
                     break;
                 default:
                     continue; // no CUDA

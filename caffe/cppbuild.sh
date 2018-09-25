@@ -31,7 +31,7 @@ case $PLATFORM in
         export TOOLSET="gcc"
         export BINARY=64
         export BLAS=open
-        export CUDAFLAGS="-Xcompiler -std=c++98"
+        export CUDAFLAGS=
         ;;
     macosx-*)
         export CC="clang"

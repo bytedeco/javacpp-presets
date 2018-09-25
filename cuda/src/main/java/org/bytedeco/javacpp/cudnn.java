@@ -70,8 +70,8 @@ public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
 // #define CUDNN_H_
 
 public static final int CUDNN_MAJOR = 7;
-public static final int CUDNN_MINOR = 2;
-public static final int CUDNN_PATCHLEVEL = 1;
+public static final int CUDNN_MINOR = 3;
+public static final int CUDNN_PATCHLEVEL = 0;
 
 public static final int CUDNN_VERSION = (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
 
