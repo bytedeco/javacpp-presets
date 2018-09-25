@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 3.4.2  http://opencv.org/
+ * OpenCV 3.4.3  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>3.4.2-1.4.3-SNAPSHOT</version>
+            <version>3.4.3-1.4.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.2-1.4.3-SNAPSHOT</version>
+            <version>3.4.3-1.4.3-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.2-1.4.3-SNAPSHOT</version>
+            <version>3.4.3-1.4.3-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.2-1.4.3-SNAPSHOT</version>
+            <version>3.4.3-1.4.3-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 

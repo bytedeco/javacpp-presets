@@ -405,9 +405,9 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
             return (B)createBuffer(0);
         }
         /** Returns {@link #tensor_data()} wrapped in a {@link Buffer} of appropriate type starting at given index. */
-        public <B extends Buffer> B createBuffer(int index) {
+        public <B extends Buffer> B createBuffer(long index) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            long size = TotalBytes();
             switch (dtype()) {
                 case DT_COMPLEX64:
                 case DT_FLOAT:    return (B)new FloatPointer(ptr).position(index).capacity(size/4).asBuffer();
@@ -434,15 +434,17 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
         }
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            int dims = dims();
+            long size = TotalBytes();
             boolean complex = dtype() == DT_COMPLEX64;
-            int dims = complex ? dims() + 1 : dims();
+            boolean scalar = dims == 0;
+            dims = (complex ? 1 : 0) + (scalar ? 1 : dims);
             long[] sizes = new long[dims];
             long[] strides = new long[dims];
-            sizes[dims - 1] = complex ? 2 : (int)dim_size(dims - 1);
+            sizes[dims - 1] = complex ? 2 : (scalar ? 1 : dim_size(dims - 1));
             strides[dims - 1] = 1;
             for (int i = dims - 2; i >= 0; i--) {
-                sizes[i] = (int)dim_size(i);
+                sizes[i] = scalar ? 1 : dim_size(i);
                 strides[i] = sizes[i + 1] * strides[i + 1];
             }
             switch (dtype()) {

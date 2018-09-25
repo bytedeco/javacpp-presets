@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-unsecure/tensorflow/BUILD
---- tensorflow-1.9.0-rc2/tensorflow/BUILD	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-unsecure/tensorflow/BUILD	2018-07-06 06:37:22.177130762 +0900
-@@ -592,7 +592,7 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/BUILD tensorflow-1.11.0-rc1-unsecure/tensorflow/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-unsecure/tensorflow/BUILD	2018-09-22 10:56:06.547016142 +0900
+@@ -456,7 +456,7 @@
      name = "grpc",
      deps = select({
          ":linux_s390x": ["@grpc//:grpc_unsecure"],
@@ -10,7 +10,7 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-unsecure/te
      }),
  )
  
-@@ -600,6 +600,6 @@
+@@ -464,7 +464,7 @@
      name = "grpc++",
      deps = select({
          ":linux_s390x": ["@grpc//:grpc++_unsecure"],
@@ -18,15 +18,16 @@ diff -ruN tensorflow-1.9.0-rc2/tensorflow/BUILD tensorflow-1.9.0-rc2-unsecure/te
 +        "//conditions:default": ["@grpc//:grpc++_unsecure"],
      }),
  )
-diff -ruN tensorflow-1.9.0-rc2/tensorflow/core/platform/default/build_config.bzl tensorflow-1.9.0-rc2-unsecure/tensorflow/core/platform/default/build_config.bzl
---- tensorflow-1.9.0-rc2/tensorflow/core/platform/default/build_config.bzl	2018-07-03 07:07:51.000000000 +0900
-+++ tensorflow-1.9.0-rc2-unsecure/tensorflow/core/platform/default/build_config.bzl	2018-07-06 06:42:09.356183272 +0900
-@@ -204,7 +204,7 @@
-   if use_grpc_plugin:
-     cc_libs += select({
-         "//tensorflow:linux_s390x": ["//external:grpc_lib_unsecure"],
--        "//conditions:default": ["//external:grpc_lib"],
-+        "//conditions:default": ["//external:grpc_lib_unsecure"],
-     })
  
-   if default_header:
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/platform/default/build_config.bzl tensorflow-1.11.0-rc1-unsecure/tensorflow/core/platform/default/build_config.bzl
+--- tensorflow-1.11.0-rc1/tensorflow/core/platform/default/build_config.bzl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-unsecure/tensorflow/core/platform/default/build_config.bzl	2018-09-22 10:57:02.770352480 +0900
+@@ -207,7 +207,7 @@
+     if use_grpc_plugin:
+         cc_libs += select({
+             "//tensorflow:linux_s390x": ["//external:grpc_lib_unsecure"],
+-            "//conditions:default": ["//external:grpc_lib"],
++            "//conditions:default": ["//external:grpc_lib_unsecure"],
+         })
+ 
+     if default_header:

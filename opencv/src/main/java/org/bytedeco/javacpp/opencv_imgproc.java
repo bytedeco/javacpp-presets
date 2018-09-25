@@ -3731,7 +3731,7 @@ public static final int
  *  \addtogroup imgproc_feature
  *  \{
 <p>
-/** \example lsd_lines.cpp
+/** \example samples/cpp/lsd_lines.cpp
 An example using the LineSegmentDetector
 \image html building_lsd.png "Sample output image" width=434 height=300
 */
@@ -3922,11 +3922,12 @@ operation is shifted.
 @Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor);
 @Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize);
 
-/** \example Smoothing.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/Smoothing/Smoothing.cpp
 Sample code for simple filters
 ![Sample screenshot](Smoothing_Tutorial_Result_Median_Filter.jpg)
 Check \ref tutorial_gausian_median_blur_bilateral_filter "the corresponding tutorial" for more details
  */
+
 /** \brief Blurs an image using the median filter.
 <p>
 The function smoothes an image using the median filter with the \f$\texttt{ksize} \times
@@ -4221,11 +4222,12 @@ is at the kernel center.
 @Namespace("cv") public static native void sepFilter2D( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
                                @ByVal GpuMat kernelX, @ByVal GpuMat kernelY );
 
-/** \example Sobel_Demo.cpp
+/** \example samples/cpp/tutorial_code/ImgTrans/Sobel_Demo.cpp
 Sample code using Sobel and/or Scharr OpenCV functions to make a simple Edge Detector
 ![Sample screenshot](Sobel_Derivatives_Tutorial_Result.jpg)
 Check \ref tutorial_sobel_derivatives "the corresponding tutorial" for more details
- */
+*/
+
 /** \brief Calculates the first, second, third, or mixed image derivatives using an extended Sobel operator.
 <p>
 In all cases except one, the \f$\texttt{ksize} \times \texttt{ksize}\f$ separable kernel is used to
@@ -4359,8 +4361,8 @@ applied (see #getDerivKernels for details).
 @Namespace("cv") public static native void Scharr( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
                           int dx, int dy );
 
-/** \example laplace.cpp
-  An example using Laplace transformations for edge detection
+/** \example samples/cpp/laplace.cpp
+An example using Laplace transformations for edge detection
 */
 
 /** \brief Calculates the Laplacian of an image.
@@ -4404,10 +4406,10 @@ applied. See #getDerivKernels for details.
  *  \addtogroup imgproc_feature
  *  \{
 <p>
-/** \example edge.cpp
-  This program demonstrates usage of the Canny edge detector
-  <p>
-  Check \ref tutorial_canny_detector "the corresponding tutorial" for more details
+/** \example samples/cpp/edge.cpp
+This program demonstrates usage of the Canny edge detector
+<p>
+Check \ref tutorial_canny_detector "the corresponding tutorial" for more details
 */
 
 /** \brief Finds edges in an image using the Canny algorithm \cite Canny86 .
@@ -4524,7 +4526,7 @@ Corners in the image can be found as the local maxima of this response map.
 size as src .
 @param blockSize Neighborhood size (see the details on #cornerEigenValsAndVecs ).
 @param ksize Aperture parameter for the Sobel operator.
-@param k Harris detector free parameter. See the formula below.
+@param k Harris detector free parameter. See the formula above.
 @param borderType Pixel extrapolation method. See #BorderTypes.
  */
 @Namespace("cv") public static native void cornerHarris( @ByVal Mat src, @ByVal Mat dst, int blockSize,
@@ -4635,7 +4637,7 @@ where \f${DI_{p_i}}\f$ is an image gradient at one of the points \f$p_i\f$ in a 
 value of \f$q\f$ is to be found so that \f$\epsilon_i\f$ is minimized. A system of equations may be set up
 with \f$\epsilon_i\f$ set to zero:
 <p>
-\f[\sum _i(DI_{p_i}  \cdot {DI_{p_i}}^T) -  \sum _i(DI_{p_i}  \cdot {DI_{p_i}}^T  \cdot p_i)\f]
+\f[\sum _i(DI_{p_i}  \cdot {DI_{p_i}}^T) \cdot q -  \sum _i(DI_{p_i}  \cdot {DI_{p_i}}^T  \cdot p_i)\f]
 <p>
 where the gradients are summed within a neighborhood ("search window") of \f$q\f$ . Calling the first
 gradient term \f$G\f$ and the second gradient term \f$b\f$ gives:
@@ -4645,11 +4647,11 @@ gradient term \f$G\f$ and the second gradient term \f$b\f$ gives:
 The algorithm sets the center of the neighborhood window at this new center \f$q\f$ and then iterates
 until the center stays within a set threshold.
 <p>
-@param image Input image.
+@param image Input single-channel, 8-bit or float image.
 @param corners Initial coordinates of the input corners and refined coordinates provided for
 output.
 @param winSize Half of the side length of the search window. For example, if winSize=Size(5,5) ,
-then a \f$5*2+1 \times 5*2+1 = 11 \times 11\f$ search window is used.
+then a \f$(5*2+1) \times (5*2+1) = 11 \times 11\f$ search window is used.
 @param zeroZone Half of the size of the dead region in the middle of the search zone over which
 the summation in the formula below is not done. It is used sometimes to avoid possible
 singularities of the autocorrelation matrix. The value of (-1,-1) indicates that there is no such
@@ -4758,7 +4760,7 @@ or #cornerMinEigenVal.
                                      int maxCorners, double qualityLevel, double minDistance,
                                      @ByVal GpuMat mask, int blockSize,
                                      int gradientSize );
-/** \example houghlines.cpp
+/** \example samples/cpp/tutorial_code/ImgTrans/houghlines.cpp
 An example using the Hough line detector
 ![Sample input image](Hough_Lines_Tutorial_Original_Image.jpg) ![Output image](Hough_Lines_Tutorial_Result.jpg)
 */
@@ -4879,7 +4881,7 @@ votes ( \f$>\texttt{threshold}\f$ )
                                       double min_rho, double max_rho, double rho_step,
                                       double min_theta, double max_theta, double theta_step );
 
-/** \example houghcircles.cpp
+/** \example samples/cpp/tutorial_code/ImgTrans/houghcircles.cpp
 An example using the Hough circle detector
 */
 
@@ -4941,7 +4943,7 @@ centers without finding the radius.
  *  \addtogroup imgproc_filter
  *  \{
 <p>
-/** \example morphology2.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/Morphology_2.cpp
 Advanced morphology Transformations sample code
 ![Sample screenshot](Morphology_2_Tutorial_Result.jpg)
 Check \ref tutorial_opening_closing_hats "the corresponding tutorial" for more details
@@ -4985,11 +4987,12 @@ anchor is at the element center.
                          @Const @ByRef(nullValue = "cv::Scalar(cv::morphologyDefaultBorderValue())") Scalar borderValue );
 @Namespace("cv") public static native void erode( @ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat kernel );
 
-/** \example Morphology_1.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/Morphology_1.cpp
 Erosion and Dilation sample code
 ![Sample Screenshot-Erosion](Morphology_1_Tutorial_Erosion_Result.jpg)![Sample Screenshot-Dilation](Morphology_1_Tutorial_Dilation_Result.jpg)
 Check \ref tutorial_erosion_dilatation "the corresponding tutorial" for more details
- */
+*/
+
 /** \brief Dilates an image by using a specific structuring element.
 <p>
 The function dilates the source image using the specified structuring element that determines the
@@ -5174,9 +5177,10 @@ the "outliers" in the source image are not modified by the function.
 @Namespace("cv") public static native void warpAffine( @ByVal GpuMat src, @ByVal GpuMat dst,
                               @ByVal GpuMat M, @ByVal Size dsize);
 
-/** \example warpPerspective_demo.cpp
+/** \example samples/cpp/warpPerspective_demo.cpp
 An example program shows using cv::findHomography and cv::warpPerspective for image warping
- */
+*/
+
 /** \brief Applies a perspective transformation to an image.
 <p>
 The function warpPerspective transforms the source image using the specified matrix:
@@ -5436,7 +5440,7 @@ source image. The center must be inside the image.
 @Namespace("cv") public static native void getRectSubPix( @ByVal GpuMat image, @ByVal Size patchSize,
                                  @ByVal Point2f center, @ByVal GpuMat patch );
 
-/** \example polar_transforms.cpp
+/** \example samples/cpp/polar_transforms.cpp
 An example using the cv::linearPolar and cv::logPolar operations
 */
 
@@ -5975,9 +5979,10 @@ is positive but may be zero or negative as well.
  *  \addtogroup imgproc_filter
  *  \{
 <p>
-/** \example Pyramids.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/Pyramids/Pyramids.cpp
 An example using pyrDown and pyrUp functions
- */
+*/
+
 /** \brief Blurs an image and downsamples it.
 <p>
 By default, size of the output image is computed as {@code Size((src.cols+1)/2, (src.rows+1)/2)}, but in
@@ -6339,7 +6344,7 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
  *  \addtogroup imgproc_hist
  *  \{
 <p>
-/** \example demhist.cpp
+/** \example samples/cpp/demhist.cpp
 An example for creating histograms of an image
 */
 
@@ -6970,9 +6975,9 @@ a flow from \f$i\f$ -th point of signature1 to \f$j\f$ -th point of signature2 .
 
 /** \} imgproc_hist
 <p>
-/** \example watershed.cpp
+/** \example samples/cpp/watershed.cpp
 An example using the watershed algorithm
- */
+*/
 
 /** \brief Performs a marker-based image segmentation using the watershed algorithm.
 <p>
@@ -7064,10 +7069,10 @@ whole original image (i.e. when maxLevel==0).
  *  \addtogroup imgproc_misc
  *  \{
 <p>
-/** \example grabcut.cpp
+/** \example samples/cpp/grabcut.cpp
 An example using the GrabCut algorithm
 ![Sample Screenshot](grabcut_output1.jpg)
- */
+*/
 
 /** \brief Runs the GrabCut algorithm.
 <p>
@@ -7106,10 +7111,9 @@ mode==GC_EVAL .
                            @ByVal GpuMat bgdModel, @ByVal GpuMat fgdModel,
                            int iterCount );
 
-/** \example distrans.cpp
-An example on using the distance transform\
+/** \example samples/cpp/distrans.cpp
+An example on using the distance transform
 */
-
 
 /** \brief Calculates the distance to the closest zero pixel for each pixel of the source image.
 <p>
@@ -7204,8 +7208,8 @@ the first variant of the function and distanceType == #DIST_L1.
 @Namespace("cv") public static native void distanceTransform( @ByVal GpuMat src, @ByVal GpuMat dst,
                                      int distanceType, int maskSize);
 
-/** \example ffilldemo.cpp
-  An example using the FloodFill technique
+/** \example samples/cpp/ffilldemo.cpp
+An example using the FloodFill technique
 */
 
 /** \overload
@@ -7460,9 +7464,10 @@ public static final int
     /** \f[R(x,y)= \frac{ \sum_{x',y'} (T'(x',y') \cdot I'(x+x',y+y')) }{ \sqrt{\sum_{x',y'}T'(x',y')^2 \cdot \sum_{x',y'} I'(x+x',y+y')^2} }\f] */
     TM_CCOEFF_NORMED = 5;
 
-/** \example MatchTemplate_Demo.cpp
+/** \example samples/cpp/tutorial_code/Histograms_Matching/MatchTemplate_Demo.cpp
 An example using Template Matching algorithm
- */
+*/
+
 /** \brief Compares a template against overlapped image regions.
 <p>
 The function slides through image , compares the overlapped patches of size \f$w \times h\f$ against
@@ -7504,6 +7509,10 @@ not set by default. Currently, only the #TM_SQDIFF and #TM_CCORR_NORMED methods 
  *  \addtogroup imgproc_shape
  *  \{
 <p>
+/** \example samples/cpp/connected_components.cpp
+This program demonstrates connected components and use of the trackbar
+*/
+
 /** \brief computes the connected components labeled image of boolean image
 <p>
 image with 4 or 8 way connectivity - returns N, the total number of labels [0, N-1] where 0
@@ -7725,6 +7734,16 @@ context.
 @Namespace("cv") public static native void findContours( @ByVal GpuMat image, @ByVal GpuMatVector contours,
                               int mode, int method);
 
+/** \example samples/cpp/squares.cpp
+A program using pyramid scaling, Canny, contours and contour simplification to find
+squares in a list of images (pic1-6.png). Returns sequence of squares detected on the image.
+*/
+
+/** \example samples/tapi/squares.cpp
+A program using pyramid scaling, Canny, contours and contour simplification to find
+squares in the input image.
+*/
+
 /** \brief Approximates a polygonal curve(s) with the specified precision.
 <p>
 The function cv::approxPolyDP approximates a curve or a polygon with another curve/polygon with less
@@ -7858,8 +7877,8 @@ The function finds the minimal enclosing circle of a 2D point set using an itera
 @Namespace("cv") public static native void minEnclosingCircle( @ByVal GpuMat points,
                                       @ByRef Point2f center, @ByRef float[] radius );
 
-/** \example minarea.cpp
-  */
+/** \example samples/cpp/minarea.cpp
+*/
 
 /** \brief Finds a triangle of minimum area enclosing a 2D point set and returns its area.
 <p>
@@ -7900,7 +7919,7 @@ The function compares two shapes. All three implemented methods use the Hu invar
 @Namespace("cv") public static native double matchShapes( @ByVal GpuMat contour1, @ByVal GpuMat contour2,
                                  int method, double parameter );
 
-/** \example convexhull.cpp
+/** \example samples/cpp/convexhull.cpp
 An example using the convexHull functionality
 */
 
@@ -7981,8 +8000,8 @@ without self-intersections. Otherwise, the function output is undefined.
 @Namespace("cv") public static native float intersectConvexConvex( @ByVal GpuMat _p1, @ByVal GpuMat _p2,
                                           @ByVal GpuMat _p12 );
 
-/** \example fitellipse.cpp
-  An example using the fitEllipse technique
+/** \example samples/cpp/fitellipse.cpp
+An example using the fitEllipse technique
 */
 
 /** \brief Fits an ellipse around a set of 2D points.
@@ -8227,9 +8246,10 @@ public static final int
     /** ![parula](pics/colormaps/colorscale_parula.jpg) */
     COLORMAP_PARULA = 12;
 
-/** \example falsecolor.cpp
+/** \example samples/cpp/falsecolor.cpp
 An example using applyColorMap function
 */
+
 /** \brief Applies a GNU Octave/MATLAB equivalent colormap on a given image.
 <p>
 @param src The source image, grayscale or colored of type CV_8UC1 or CV_8UC3.
@@ -8348,9 +8368,10 @@ r.br()-Point(1,1)} are opposite corners
 @Namespace("cv") public static native void rectangle(@ByRef Mat img, @ByVal Rect rec,
                           @Const @ByRef Scalar color);
 
-/** \example Drawing_2.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/basic_drawing/Drawing_2.cpp
 An example using drawing functions
- */
+*/
+
 /** \brief Draws a circle.
 <p>
 The function cv::circle draws a simple or filled circle with a given center and radius.
@@ -8552,9 +8573,11 @@ twice at the most (though, its top-most and/or the bottom edge could be horizont
                          @Const int[] npts, int ncontours,
                          @Const @ByRef Scalar color );
 
-/** \example Drawing_1.cpp
+/** \example samples/cpp/tutorial_code/ImgProc/basic_drawing/Drawing_1.cpp
 An example using drawing functions
- */
+Check \ref tutorial_random_generator_and_text "the corresponding tutorial" for more details
+*/
+
 /** \brief Fills the area bounded by one or more polygons.
 <p>
 The function cv::fillPoly fills an area bounded by several polygonal contours. The function can fill
@@ -8693,14 +8716,14 @@ The function cv::polylines draws one or more polygonal curves.
 @Namespace("cv") public static native void polylines(@ByVal GpuMat img, @ByVal GpuMatVector pts,
                             @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
 
-/** \example contours2.cpp
-  An example program illustrates the use of cv::findContours and cv::drawContours
-  \image html WindowsQtContoursOutput.png "Screenshot of the program"
+/** \example samples/cpp/contours2.cpp
+An example program illustrates the use of cv::findContours and cv::drawContours
+\image html WindowsQtContoursOutput.png "Screenshot of the program"
 */
 
-/** \example segment_objects.cpp
+/** \example samples/cpp/segment_objects.cpp
 An example using drawContours to clean up a background segmentation result
- */
+*/
 
 /** \brief Draws contours outlines or filled contours.
 <p>

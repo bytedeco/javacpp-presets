@@ -2734,15 +2734,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
-// #define TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
+// #define TENSORFLOW_CORE_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
 
 // IWYU pragma: private, include "third_party/tensorflow/core/platform/types.h"
 // IWYU pragma: friend third_party/tensorflow/core/platform/types.h
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
 
 
 // Parsed from tensorflow/core/lib/bfloat16/bfloat16.h
@@ -2797,6 +2797,8 @@ limitations under the License.
 
   public bfloat16() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  public static native @ByVal bfloat16 truncate_to_bfloat16(float v);
 
   public bfloat16(float v) { super((Pointer)null); allocate(v); }
   private native void allocate(float v);
@@ -2866,8 +2868,6 @@ limitations under the License.
 
   // Converts a float point to bfloat16, with round-nearest-to-even as rounding
   // method.
-  // TODO(b/69266521): Add a truncate_to_bfloat16 function and make this
-  // function as default behavior.
   // TODO: There is a slightly faster implementation (8% faster on CPU)
   // than this (documented in cl/175987786), that is exponentially harder to
   // understand and document. Switch to the faster version when converting to
@@ -2965,8 +2965,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
-// #define TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_NUMERIC_TYPES_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_NUMERIC_TYPES_H_
 
 // #include <complex>
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
@@ -3027,7 +3027,7 @@ public static native @ByVal bfloat16 FloatToBFloat16(float float_val);
   // namespace std
 // #endif  // _MSC_VER
 
-// #endif  // TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_NUMERIC_TYPES_H_
 
 
 // Parsed from tensorflow/core/platform/init_main.h
@@ -3047,8 +3047,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_INIT_MAIN_H_
-// #define TENSORFLOW_PLATFORM_INIT_MAIN_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_INIT_MAIN_H_
+// #define TENSORFLOW_CORE_PLATFORM_INIT_MAIN_H_
 
 // Platform-specific initialization routine that may be invoked by a
 // main() program that uses TensorFlow.
@@ -3064,7 +3064,7 @@ limitations under the License.
   // namespace port
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_INIT_MAIN_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_INIT_MAIN_H_
 
 
 // Parsed from tensorflow/core/platform/types.h
@@ -3084,8 +3084,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_TYPES_H_
-// #define TENSORFLOW_PLATFORM_TYPES_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_TYPES_H_
+// #define TENSORFLOW_CORE_PLATFORM_TYPES_H_
 
 // #include <string>
 // #include "tensorflow/core/platform/platform.h"
@@ -3142,7 +3142,7 @@ public static final long kint64max = kint64max();
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_TYPES_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_TYPES_H_
 
 
 // Parsed from tensorflow/core/platform/mutex.h
@@ -3162,8 +3162,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_MUTEX_H_
-// #define TENSORFLOW_PLATFORM_MUTEX_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_MUTEX_H_
+// #define TENSORFLOW_CORE_PLATFORM_MUTEX_H_
 
 // #include "tensorflow/core/platform/platform.h"
 // #include "tensorflow/core/platform/types.h"
@@ -3196,7 +3196,7 @@ public static final int kCond_Timeout = 0, kCond_MaybeNotified = 1;
                                     @Cast("tensorflow::int64") long ms);
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_MUTEX_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_MUTEX_H_
 
 
 // Parsed from tensorflow/core/platform/macros.h
@@ -3216,8 +3216,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_MACROS_H_
-// #define TENSORFLOW_PLATFORM_MACROS_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_MACROS_H_
+// #define TENSORFLOW_CORE_PLATFORM_MACROS_H_
 
 // Compiler attributes
 // #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(SWIG)
@@ -3328,7 +3328,7 @@ public static final int LANG_CXX11 = 1;
 //   } while (0)
 // #endif
 
-// #endif  // TENSORFLOW_PLATFORM_MACROS_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_MACROS_H_
 
 
 // Parsed from tensorflow/core/util/port.h
@@ -3348,8 +3348,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_UTIL_PORT_H_
-// #define TENSORFLOW_UTIL_PORT_H_
+// #ifndef TENSORFLOW_CORE_UTIL_PORT_H_
+// #define TENSORFLOW_CORE_UTIL_PORT_H_
 
 // Returns true if GOOGLE_CUDA is defined.
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsGoogleCudaEnabled();
@@ -3363,7 +3363,7 @@ limitations under the License.
 
   // end namespace tensorflow
 
-// #endif  // TENSORFLOW_UTIL_PORT_H_
+// #endif  // TENSORFLOW_CORE_UTIL_PORT_H_
 
 
 // Parsed from tensorflow/core/lib/core/error_codes.pb.h
@@ -3512,8 +3512,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_LOGGING_H_
-// #define TENSORFLOW_PLATFORM_LOGGING_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_LOGGING_H_
+// #define TENSORFLOW_CORE_PLATFORM_LOGGING_H_
 
 // #include "tensorflow/core/platform/platform.h"  // To pick up PLATFORM_define
 
@@ -3533,7 +3533,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_LOGGING_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_LOGGING_H_
 
 
 // Parsed from tensorflow/core/lib/core/status.h
@@ -3695,28 +3695,27 @@ limitations under the License.
 // #ifndef TENSORFLOW_LIB_IO_ZLIB_COMPRESSION_OPTIONS_H_
 // #define TENSORFLOW_LIB_IO_ZLIB_COMPRESSION_OPTIONS_H_
 
-// #include <zlib.h>
-
 // #include "tensorflow/core/platform/types.h"
 
-@Namespace("tensorflow::io") public static class ZlibCompressionOptions extends Pointer {
+@Namespace("tensorflow::io") @NoOffset public static class ZlibCompressionOptions extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public ZlibCompressionOptions() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ZlibCompressionOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ZlibCompressionOptions(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ZlibCompressionOptions(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public ZlibCompressionOptions position(long position) {
         return (ZlibCompressionOptions)super.position(position);
     }
 
+  public ZlibCompressionOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
   public static native @ByVal ZlibCompressionOptions DEFAULT();
   public static native @ByVal ZlibCompressionOptions RAW();
   public static native @ByVal ZlibCompressionOptions GZIP();
 
+  // Defaults to Z_NO_FLUSH
   public native @Cast("tensorflow::int8") byte flush_mode(); public native ZlibCompressionOptions flush_mode(byte flush_mode);
 
   // Size of the buffer used for caching the data read from source file.
@@ -3759,6 +3758,8 @@ limitations under the License.
   // window_bits value provided used while compressing. If a compressed stream
   // with a larger window size is given as input, inflate() will return with the
   // error code Z_DATA_ERROR instead of trying to allocate a larger window.
+  //
+  // Defaults to MAX_WBITS
   public native @Cast("tensorflow::int8") byte window_bits(); public native ZlibCompressionOptions window_bits(byte window_bits);
 
   // From the zlib manual (http://www.zlib.net/manual.html):
@@ -3769,7 +3770,7 @@ limitations under the License.
   // equivalent to level 6).
   public native @Cast("tensorflow::int8") byte compression_level(); public native ZlibCompressionOptions compression_level(byte compression_level);
 
-  // The only one supported at this time.
+  // Only Z_DEFLATED is supported at this time.
   public native @Cast("tensorflow::int8") byte compression_method(); public native ZlibCompressionOptions compression_method(byte compression_method);
 
   // From the zlib manual (http://www.zlib.net/manual.html):
@@ -3921,8 +3922,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_LIB_IO_INPUTSTREAM_INTERFACE_H_
-// #define TENSORFLOW_LIB_IO_INPUTSTREAM_INTERFACE_H_
+// #ifndef TENSORFLOW_CORE_LIB_IO_INPUTSTREAM_INTERFACE_H_
+// #define TENSORFLOW_CORE_LIB_IO_INPUTSTREAM_INTERFACE_H_
 
 // #include <string>
 // #include "tensorflow/core/lib/core/status.h"
@@ -3980,8 +3981,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_LIB_IO_RECORD_READER_H_
-// #define TENSORFLOW_LIB_IO_RECORD_READER_H_
+// #ifndef TENSORFLOW_CORE_LIB_IO_RECORD_READER_H_
+// #define TENSORFLOW_CORE_LIB_IO_RECORD_READER_H_
 
 // #include "tensorflow/core/lib/core/errors.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
@@ -4094,7 +4095,7 @@ limitations under the License.
   // namespace io
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_LIB_IO_RECORD_READER_H_
+// #endif  // TENSORFLOW_CORE_LIB_IO_RECORD_READER_H_
 
 
 // Parsed from tensorflow/core/lib/io/record_writer.h
@@ -4114,8 +4115,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_LIB_IO_RECORD_WRITER_H_
-// #define TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+// #ifndef TENSORFLOW_CORE_LIB_IO_RECORD_WRITER_H_
+// #define TENSORFLOW_CORE_LIB_IO_RECORD_WRITER_H_
 
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
@@ -4193,7 +4194,7 @@ limitations under the License.
   // namespace io
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_LIB_IO_RECORD_WRITER_H_
+// #endif  // TENSORFLOW_CORE_LIB_IO_RECORD_WRITER_H_
 
 
 // Parsed from tensorflow/core/platform/protobuf.h
@@ -4213,8 +4214,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_PROTOBUF_H_
-// #define TENSORFLOW_PLATFORM_PROTOBUF_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_PROTOBUF_H_
+// #define TENSORFLOW_CORE_PLATFORM_PROTOBUF_H_
 
 // #include "tensorflow/core/platform/platform.h"
 // #include "tensorflow/core/platform/types.h"
@@ -4251,7 +4252,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PLATFORM_PROTOBUF_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_PROTOBUF_H_
 
 
 // Parsed from tensorflow/core/platform/file_system.h
@@ -4994,6 +4995,9 @@ limitations under the License.
   // TODO(jeff,sanjay): Add back thread/thread-pool support if needed.
   // TODO(jeff,sanjay): if needed, tighten spec so relative to epoch, or
   // provide a routine to get the absolute time.
+
+  /** \brief Returns the number of nano-seconds since the Unix epoch. */
+  public native @Cast("tensorflow::uint64") long NowNanos();
 
   /** \brief Returns the number of micro-seconds since the Unix epoch. */
   public native @Cast("tensorflow::uint64") long NowMicros();
@@ -6592,6 +6596,13 @@ limitations under the License.
   public native @Const @ByRef DebugTensorWatch debug_tensor_watch_opts(int index);
   public native DebugTensorWatch add_debug_tensor_watch_opts();
 
+  // bool reset_disk_byte_usage = 11;
+  public native void clear_reset_disk_byte_usage();
+  @MemberGetter public static native int kResetDiskByteUsageFieldNumber();
+  public static final int kResetDiskByteUsageFieldNumber = kResetDiskByteUsageFieldNumber();
+  public native @Cast("bool") boolean reset_disk_byte_usage();
+  public native void set_reset_disk_byte_usage(@Cast("bool") boolean value);
+
   // int64 global_step = 10;
   public native void clear_global_step();
   @MemberGetter public static native int kGlobalStepFieldNumber();
@@ -6905,6 +6916,11 @@ limitations under the License.
 
 
 // int64 global_step = 10;
+
+
+
+
+// bool reset_disk_byte_usage = 11;
 
 
 
@@ -9317,6 +9333,31 @@ public static final int
   public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_group_leader();
   public native @Deprecated void unsafe_arena_set_allocated_collective_group_leader(
         @StdString @Cast({"char*", "std::string*"}) BytePointer collective_group_leader);
+
+  // string executor_type = 3;
+  public native void clear_executor_type();
+  @MemberGetter public static native int kExecutorTypeFieldNumber();
+  public static final int kExecutorTypeFieldNumber = kExecutorTypeFieldNumber();
+  public native @StdString BytePointer executor_type();
+  public native void set_executor_type(@StdString BytePointer value);
+  public native void set_executor_type(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_executor_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_executor_type(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_executor_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_executor_type();
+  public native void set_allocated_executor_type(@StdString @Cast({"char*", "std::string*"}) BytePointer executor_type);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_executor_type();
+  public native @Deprecated void unsafe_arena_set_allocated_executor_type(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer executor_type);
+
+  // bool client_handles_error_formatting = 2;
+  public native void clear_client_handles_error_formatting();
+  @MemberGetter public static native int kClientHandlesErrorFormattingFieldNumber();
+  public static final int kClientHandlesErrorFormattingFieldNumber = kClientHandlesErrorFormattingFieldNumber();
+  public native @Cast("bool") boolean client_handles_error_formatting();
+  public native void set_client_handles_error_formatting(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -10409,6 +10450,26 @@ public static final int
 // ConfigProto_Experimental
 
 // string collective_group_leader = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool client_handles_error_formatting = 2;
+
+
+
+
+// string executor_type = 3;
 
 
 
@@ -12173,6 +12234,41 @@ public static final int
   public native @Cast("google::protobuf::int64") long scheduled_micros();
   public native void set_scheduled_micros(@Cast("google::protobuf::int64") long value);
 
+  // int64 all_start_nanos = 13;
+  public native void clear_all_start_nanos();
+  @MemberGetter public static native int kAllStartNanosFieldNumber();
+  public static final int kAllStartNanosFieldNumber = kAllStartNanosFieldNumber();
+  public native @Cast("google::protobuf::int64") long all_start_nanos();
+  public native void set_all_start_nanos(@Cast("google::protobuf::int64") long value);
+
+  // int64 op_start_rel_nanos = 14;
+  public native void clear_op_start_rel_nanos();
+  @MemberGetter public static native int kOpStartRelNanosFieldNumber();
+  public static final int kOpStartRelNanosFieldNumber = kOpStartRelNanosFieldNumber();
+  public native @Cast("google::protobuf::int64") long op_start_rel_nanos();
+  public native void set_op_start_rel_nanos(@Cast("google::protobuf::int64") long value);
+
+  // int64 op_end_rel_nanos = 15;
+  public native void clear_op_end_rel_nanos();
+  @MemberGetter public static native int kOpEndRelNanosFieldNumber();
+  public static final int kOpEndRelNanosFieldNumber = kOpEndRelNanosFieldNumber();
+  public native @Cast("google::protobuf::int64") long op_end_rel_nanos();
+  public native void set_op_end_rel_nanos(@Cast("google::protobuf::int64") long value);
+
+  // int64 all_end_rel_nanos = 16;
+  public native void clear_all_end_rel_nanos();
+  @MemberGetter public static native int kAllEndRelNanosFieldNumber();
+  public static final int kAllEndRelNanosFieldNumber = kAllEndRelNanosFieldNumber();
+  public native @Cast("google::protobuf::int64") long all_end_rel_nanos();
+  public native void set_all_end_rel_nanos(@Cast("google::protobuf::int64") long value);
+
+  // int64 scheduled_nanos = 17;
+  public native void clear_scheduled_nanos();
+  @MemberGetter public static native int kScheduledNanosFieldNumber();
+  public static final int kScheduledNanosFieldNumber = kScheduledNanosFieldNumber();
+  public native @Cast("google::protobuf::int64") long scheduled_nanos();
+  public native void set_scheduled_nanos(@Cast("google::protobuf::int64") long value);
+
   // uint32 thread_id = 10;
   public native void clear_thread_id();
   @MemberGetter public static native int kThreadIdFieldNumber();
@@ -12579,6 +12675,31 @@ public static final int
 
 
 
+// int64 all_start_nanos = 13;
+
+
+
+
+// int64 op_start_rel_nanos = 14;
+
+
+
+
+// int64 op_end_rel_nanos = 15;
+
+
+
+
+// int64 all_end_rel_nanos = 16;
+
+
+
+
+// int64 scheduled_nanos = 17;
+
+
+
+
 // -------------------------------------------------------------------
 
 // DeviceStepStats
@@ -12920,8 +13041,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_LIB_CORE_THREADPOOL_H_
-// #define TENSORFLOW_LIB_CORE_THREADPOOL_H_
+// #ifndef TENSORFLOW_CORE_LIB_CORE_THREADPOOL_H_
+// #define TENSORFLOW_CORE_LIB_CORE_THREADPOOL_H_
 
 // #include <functional>
 // #include <memory>
@@ -13030,7 +13151,7 @@ limitations under the License.
   // namespace thread
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_LIB_CORE_THREADPOOL_H_
+// #endif  // TENSORFLOW_CORE_LIB_CORE_THREADPOOL_H_
 
 
 // Parsed from tensorflow/core/framework/allocation_description.pb.h
@@ -13550,16 +13671,18 @@ limitations under the License.
   public native int scope_id(); public native AllocatorAttributes scope_id(int scope_id);
 }
 
-// Returns a trivial implementation of Allocator which uses the system
-// default malloc. The returned allocator is a process singleton.
+// Returns a trivial implementation of Allocator, which is a process singleton.
+// Access through this function is only intended for use in tests and auxiliary
+// processing.  Performance sensitive uses should always obtain allocators from
+// ProcessState.
 @Namespace("tensorflow") public static native Allocator cpu_allocator();
 
-// If 'enable' is true, the process-wide cpu allocator collects
+// If 'enable' is true, the default CPU allocator implementation will collect
 // AllocatorStats. By default, it's disabled.
 @Namespace("tensorflow") public static native void EnableCPUAllocatorStats(@Cast("bool") boolean enable);
 
-// If 'enable' is true, the process-wide cpu allocator collects full
-// statistics. By default, it's disabled.
+// If 'enable' is true, the default CPU allocator implementation will collect
+// full statistics. By default, it's disabled.
 @Namespace("tensorflow") public static native void EnableCPUAllocatorFullStats(@Cast("bool") boolean enable);
 
 // Abstract interface of an object that does the underlying suballoc/free of
@@ -15106,15 +15229,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_TYPES_H_
-// #define TENSORFLOW_FRAMEWORK_TENSOR_TYPES_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_TYPES_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_TYPES_H_
 
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 
 // Helper to define Tensor types given that the scalar is of type T.
 
   // namespace tensorflow
-// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_TYPES_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_TYPES_H_
 
 
 // Parsed from tensorflow/core/framework/tensor_shape.h
@@ -15572,8 +15695,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
-// #define TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_UTIL_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_UTIL_H_
 
 // #include "tensorflow/core/framework/tensor.h"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
@@ -15631,7 +15754,7 @@ limitations under the License.
   // namespace tensor
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_UTIL_H_
 
 
 // Parsed from tensorflow/core/framework/tensor_reference.h
@@ -17240,6 +17363,1104 @@ limitations under the License.
 // @@protoc_insertion_point(global_scope)
 
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
+
+
+// Parsed from tensorflow/core/framework/api_def.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/framework/api_def.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+
+// #include <string>
+
+// #include <google/protobuf/stubs/common.h>
+
+// #if GOOGLE_PROTOBUF_VERSION < 3006000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please update
+// #error your headers.
+// #endif
+// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers.  Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/generated_enum_reflection.h>
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/attr_value.pb.h"
+// @@protoc_insertion_point(includes)
+// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+// Internal implementation detail -- do not use these members.
+  // namespace protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+  // namespace tensorflow
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+
+/** enum tensorflow::ApiDef_Visibility */
+public static final int
+  ApiDef_Visibility_DEFAULT_VISIBILITY = 0,
+  ApiDef_Visibility_VISIBLE = 1,
+  ApiDef_Visibility_SKIP = 2,
+  ApiDef_Visibility_HIDDEN = 3,
+  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
+  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_IsValid(int value);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MIN();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MAX();
+@Namespace("tensorflow") @MemberGetter public static native int ApiDef_Visibility_Visibility_ARRAYSIZE();
+
+@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ApiDef_Visibility_descriptor();
+@Namespace("tensorflow") public static native @StdString BytePointer ApiDef_Visibility_Name(@Cast("tensorflow::ApiDef_Visibility") int value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") int... value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
+    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") int... value);
+// ===================================================================
+
+@Namespace("tensorflow") @NoOffset public static class ApiDef_Endpoint extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ApiDef_Endpoint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ApiDef_Endpoint(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ApiDef_Endpoint position(long position) {
+        return (ApiDef_Endpoint)super.position(position);
+    }
+
+  public ApiDef_Endpoint() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ApiDef_Endpoint(@Const @ByRef ApiDef_Endpoint from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ApiDef_Endpoint from);
+
+  public native @ByRef @Name("operator =") ApiDef_Endpoint put(@Const @ByRef ApiDef_Endpoint from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ApiDef_Endpoint default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const ApiDef_Endpoint internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(ApiDef_Endpoint other);
+  public native void Swap(ApiDef_Endpoint other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native ApiDef_Endpoint New();
+
+  public native ApiDef_Endpoint New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef ApiDef_Endpoint from);
+  public native void MergeFrom(@Const @ByRef ApiDef_Endpoint from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  public native void clear_name();
+  @MemberGetter public static native int kNameFieldNumber();
+  public static final int kNameFieldNumber = kNameFieldNumber();
+  public native @StdString BytePointer name();
+  public native void set_name(@StdString BytePointer value);
+  public native void set_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
+
+  // bool deprecated = 3;
+  public native void clear_deprecated();
+  @MemberGetter public static native int kDeprecatedFieldNumber();
+  public static final int kDeprecatedFieldNumber = kDeprecatedFieldNumber();
+  public native void set_deprecated(@Cast("bool") boolean value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class ApiDef_Arg extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ApiDef_Arg(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ApiDef_Arg(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ApiDef_Arg position(long position) {
+        return (ApiDef_Arg)super.position(position);
+    }
+
+  public ApiDef_Arg() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ApiDef_Arg(@Const @ByRef ApiDef_Arg from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ApiDef_Arg from);
+
+  public native @ByRef @Name("operator =") ApiDef_Arg put(@Const @ByRef ApiDef_Arg from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ApiDef_Arg default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const ApiDef_Arg internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(ApiDef_Arg other);
+  public native void Swap(ApiDef_Arg other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native ApiDef_Arg New();
+
+  public native ApiDef_Arg New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef ApiDef_Arg from);
+  public native void MergeFrom(@Const @ByRef ApiDef_Arg from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  public native void clear_name();
+  @MemberGetter public static native int kNameFieldNumber();
+  public static final int kNameFieldNumber = kNameFieldNumber();
+  public native @StdString BytePointer name();
+  public native void set_name(@StdString BytePointer value);
+  public native void set_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
+
+  // string rename_to = 2;
+  public native void clear_rename_to();
+  @MemberGetter public static native int kRenameToFieldNumber();
+  public static final int kRenameToFieldNumber = kRenameToFieldNumber();
+  public native @StdString BytePointer rename_to();
+  public native void set_rename_to(@StdString BytePointer value);
+  public native void set_rename_to(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_rename_to(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_rename_to(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
+  public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
+  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
+
+  // string description = 3;
+  public native void clear_description();
+  @MemberGetter public static native int kDescriptionFieldNumber();
+  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
+  public native @StdString BytePointer description();
+  public native void set_description(@StdString BytePointer value);
+  public native void set_description(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_description(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
+  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class ApiDef_Attr extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ApiDef_Attr(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ApiDef_Attr(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ApiDef_Attr position(long position) {
+        return (ApiDef_Attr)super.position(position);
+    }
+
+  public ApiDef_Attr() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ApiDef_Attr(@Const @ByRef ApiDef_Attr from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ApiDef_Attr from);
+
+  public native @ByRef @Name("operator =") ApiDef_Attr put(@Const @ByRef ApiDef_Attr from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ApiDef_Attr default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const ApiDef_Attr internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(ApiDef_Attr other);
+  public native void Swap(ApiDef_Attr other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native ApiDef_Attr New();
+
+  public native ApiDef_Attr New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef ApiDef_Attr from);
+  public native void MergeFrom(@Const @ByRef ApiDef_Attr from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string name = 1;
+  public native void clear_name();
+  @MemberGetter public static native int kNameFieldNumber();
+  public static final int kNameFieldNumber = kNameFieldNumber();
+  public native @StdString BytePointer name();
+  public native void set_name(@StdString BytePointer value);
+  public native void set_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
+  public native @Deprecated void unsafe_arena_set_allocated_name(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
+
+  // string rename_to = 2;
+  public native void clear_rename_to();
+  @MemberGetter public static native int kRenameToFieldNumber();
+  public static final int kRenameToFieldNumber = kRenameToFieldNumber();
+  public native @StdString BytePointer rename_to();
+  public native void set_rename_to(@StdString BytePointer value);
+  public native void set_rename_to(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_rename_to(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_rename_to(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
+  public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
+  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
+
+  // string description = 4;
+  public native void clear_description();
+  @MemberGetter public static native int kDescriptionFieldNumber();
+  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
+  public native @StdString BytePointer description();
+  public native void set_description(@StdString BytePointer value);
+  public native void set_description(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_description(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
+  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
+
+  // .tensorflow.AttrValue default_value = 3;
+  public native @Cast("bool") boolean has_default_value();
+  public native void clear_default_value();
+  @MemberGetter public static native int kDefaultValueFieldNumber();
+  public static final int kDefaultValueFieldNumber = kDefaultValueFieldNumber();
+  public native @Const @ByRef AttrValue default_value();
+  public native AttrValue release_default_value();
+  public native AttrValue mutable_default_value();
+  public native void set_allocated_default_value(AttrValue default_value);
+  public native void unsafe_arena_set_allocated_default_value(
+        AttrValue default_value);
+  public native AttrValue unsafe_arena_release_default_value();
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class ApiDef extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ApiDef(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ApiDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ApiDef position(long position) {
+        return (ApiDef)super.position(position);
+    }
+
+  public ApiDef() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ApiDef(@Const @ByRef ApiDef from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ApiDef from);
+
+  public native @ByRef @Name("operator =") ApiDef put(@Const @ByRef ApiDef from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ApiDef default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const ApiDef internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(ApiDef other);
+  public native void Swap(ApiDef other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native ApiDef New();
+
+  public native ApiDef New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef ApiDef from);
+  public native void MergeFrom(@Const @ByRef ApiDef from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int DEFAULT_VISIBILITY();
+  public static final int DEFAULT_VISIBILITY = DEFAULT_VISIBILITY();
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int VISIBLE();
+  public static final int VISIBLE = VISIBLE();
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int SKIP();
+  public static final int SKIP = SKIP();
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int HIDDEN();
+  public static final int HIDDEN = HIDDEN();
+  public static native @Cast("bool") boolean Visibility_IsValid(int value);
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int Visibility_MIN();
+  public static final int Visibility_MIN = Visibility_MIN();
+  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int Visibility_MAX();
+  public static final int Visibility_MAX = Visibility_MAX();
+  @MemberGetter public static native int Visibility_ARRAYSIZE();
+  public static final int Visibility_ARRAYSIZE = Visibility_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Visibility_descriptor();
+  public static native @StdString BytePointer Visibility_Name(@Cast("tensorflow::ApiDef::Visibility") int value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::ApiDef::Visibility*") IntPointer value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
+        @Cast("tensorflow::ApiDef::Visibility*") IntBuffer value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::ApiDef::Visibility*") int... value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
+        @Cast("tensorflow::ApiDef::Visibility*") IntPointer value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
+        @Cast("tensorflow::ApiDef::Visibility*") IntBuffer value);
+  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
+        @Cast("tensorflow::ApiDef::Visibility*") int... value);
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.ApiDef.Endpoint endpoint = 3;
+  public native int endpoint_size();
+  public native void clear_endpoint();
+  @MemberGetter public static native int kEndpointFieldNumber();
+  public static final int kEndpointFieldNumber = kEndpointFieldNumber();
+  public native ApiDef_Endpoint mutable_endpoint(int index);
+  public native @Const @ByRef ApiDef_Endpoint endpoint(int index);
+  public native ApiDef_Endpoint add_endpoint();
+
+  // repeated .tensorflow.ApiDef.Arg in_arg = 4;
+  public native int in_arg_size();
+  public native void clear_in_arg();
+  @MemberGetter public static native int kInArgFieldNumber();
+  public static final int kInArgFieldNumber = kInArgFieldNumber();
+  public native ApiDef_Arg mutable_in_arg(int index);
+  public native @Const @ByRef ApiDef_Arg in_arg(int index);
+  public native ApiDef_Arg add_in_arg();
+
+  // repeated .tensorflow.ApiDef.Arg out_arg = 5;
+  public native int out_arg_size();
+  public native void clear_out_arg();
+  @MemberGetter public static native int kOutArgFieldNumber();
+  public static final int kOutArgFieldNumber = kOutArgFieldNumber();
+  public native ApiDef_Arg mutable_out_arg(int index);
+  public native @Const @ByRef ApiDef_Arg out_arg(int index);
+  public native ApiDef_Arg add_out_arg();
+
+  // repeated .tensorflow.ApiDef.Attr attr = 6;
+  public native int attr_size();
+  public native void clear_attr();
+  @MemberGetter public static native int kAttrFieldNumber();
+  public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native ApiDef_Attr mutable_attr(int index);
+  public native @Const @ByRef ApiDef_Attr attr(int index);
+  public native ApiDef_Attr add_attr();
+
+  // repeated string arg_order = 11;
+  public native int arg_order_size();
+  public native void clear_arg_order();
+  @MemberGetter public static native int kArgOrderFieldNumber();
+  public static final int kArgOrderFieldNumber = kArgOrderFieldNumber();
+  public native @StdString BytePointer arg_order(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_arg_order(int index);
+  public native void set_arg_order(int index, @StdString BytePointer value);
+  public native void set_arg_order(int index, @StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_arg_order(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_arg_order(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_arg_order();
+  public native void add_arg_order(@StdString BytePointer value);
+  public native void add_arg_order(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void add_arg_order(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_arg_order(String value, @Cast("size_t") long size);
+
+  // string graph_op_name = 1;
+  public native void clear_graph_op_name();
+  @MemberGetter public static native int kGraphOpNameFieldNumber();
+  public static final int kGraphOpNameFieldNumber = kGraphOpNameFieldNumber();
+  public native @StdString BytePointer graph_op_name();
+  public native void set_graph_op_name(@StdString BytePointer value);
+  public native void set_graph_op_name(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_graph_op_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_graph_op_name(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_graph_op_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_graph_op_name();
+  public native void set_allocated_graph_op_name(@StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_graph_op_name();
+  public native @Deprecated void unsafe_arena_set_allocated_graph_op_name(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
+
+  // string summary = 7;
+  public native void clear_summary();
+  @MemberGetter public static native int kSummaryFieldNumber();
+  public static final int kSummaryFieldNumber = kSummaryFieldNumber();
+  public native @StdString BytePointer summary();
+  public native void set_summary(@StdString BytePointer value);
+  public native void set_summary(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_summary(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_summary(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_summary();
+  public native void set_allocated_summary(@StdString @Cast({"char*", "std::string*"}) BytePointer summary);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
+  public native @Deprecated void unsafe_arena_set_allocated_summary(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer summary);
+
+  // string description = 8;
+  public native void clear_description();
+  @MemberGetter public static native int kDescriptionFieldNumber();
+  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
+  public native @StdString BytePointer description();
+  public native void set_description(@StdString BytePointer value);
+  public native void set_description(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_description(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
+  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
+  public native @Deprecated void unsafe_arena_set_allocated_description(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
+
+  // string description_prefix = 9;
+  public native void clear_description_prefix();
+  @MemberGetter public static native int kDescriptionPrefixFieldNumber();
+  public static final int kDescriptionPrefixFieldNumber = kDescriptionPrefixFieldNumber();
+  public native @StdString BytePointer description_prefix();
+  public native void set_description_prefix(@StdString BytePointer value);
+  public native void set_description_prefix(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_description_prefix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_description_prefix(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_prefix();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_prefix();
+  public native void set_allocated_description_prefix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_prefix();
+  public native @Deprecated void unsafe_arena_set_allocated_description_prefix(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
+
+  // string description_suffix = 10;
+  public native void clear_description_suffix();
+  @MemberGetter public static native int kDescriptionSuffixFieldNumber();
+  public static final int kDescriptionSuffixFieldNumber = kDescriptionSuffixFieldNumber();
+  public native @StdString BytePointer description_suffix();
+  public native void set_description_suffix(@StdString BytePointer value);
+  public native void set_description_suffix(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_description_suffix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_description_suffix(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_suffix();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_suffix();
+  public native void set_allocated_description_suffix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_suffix();
+  public native @Deprecated void unsafe_arena_set_allocated_description_suffix(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
+
+  // string deprecation_message = 12;
+  public native void clear_deprecation_message();
+  @MemberGetter public static native int kDeprecationMessageFieldNumber();
+  public static final int kDeprecationMessageFieldNumber = kDeprecationMessageFieldNumber();
+  public native @StdString BytePointer deprecation_message();
+  public native void set_deprecation_message(@StdString BytePointer value);
+  public native void set_deprecation_message(@StdString String value);
+//   #if LANG_CXX11
+//   #endif
+  public native void set_deprecation_message(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_deprecation_message(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_deprecation_message();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_deprecation_message();
+  public native void set_allocated_deprecation_message(@StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
+  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_deprecation_message();
+  public native @Deprecated void unsafe_arena_set_allocated_deprecation_message(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
+
+  // .tensorflow.ApiDef.Visibility visibility = 2;
+  public native void clear_visibility();
+  @MemberGetter public static native int kVisibilityFieldNumber();
+  public static final int kVisibilityFieldNumber = kVisibilityFieldNumber();
+  public native @Cast("tensorflow::ApiDef_Visibility") int visibility();
+  public native void set_visibility(@Cast("tensorflow::ApiDef_Visibility") int value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class ApiDefs extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ApiDefs(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ApiDefs(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ApiDefs position(long position) {
+        return (ApiDefs)super.position(position);
+    }
+
+  public ApiDefs() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ApiDefs(@Const @ByRef ApiDefs from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ApiDefs from);
+
+  public native @ByRef @Name("operator =") ApiDefs put(@Const @ByRef ApiDefs from);
+//   #if LANG_CXX11
+//   #endif
+  public native Arena GetArena();
+  public native Pointer GetMaybeArenaPointer();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ApiDefs default_instance();
+
+  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  public static native @Const ApiDefs internal_default_instance();
+  @MemberGetter public static native int kIndexInFileMessages();
+  public static final int kIndexInFileMessages = kIndexInFileMessages();
+
+  public native void UnsafeArenaSwap(ApiDefs other);
+  public native void Swap(ApiDefs other);
+  
+
+  // implements Message ----------------------------------------------
+
+  public native ApiDefs New();
+
+  public native ApiDefs New(Arena arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
+  public native void CopyFrom(@Const @ByRef ApiDefs from);
+  public native void MergeFrom(@Const @ByRef ApiDefs from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native @Cast("size_t") long ByteSizeLong();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        CodedInputStream input);
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
+        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .tensorflow.ApiDef op = 1;
+  public native int op_size();
+  public native void clear_op();
+  @MemberGetter public static native int kOpFieldNumber();
+  public static final int kOpFieldNumber = kOpFieldNumber();
+  public native ApiDef mutable_op(int index);
+  public native @Const @ByRef ApiDef op(int index);
+  public native ApiDef add_op();
+}
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// ApiDef_Endpoint
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool deprecated = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// ApiDef_Arg
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string rename_to = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string description = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ApiDef_Attr
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string rename_to = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.AttrValue default_value = 3;
+
+
+
+
+
+
+
+
+// string description = 4;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ApiDef
+
+// string graph_op_name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string deprecation_message = 12;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.ApiDef.Visibility visibility = 2;
+
+
+
+
+// repeated .tensorflow.ApiDef.Endpoint endpoint = 3;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.ApiDef.Arg in_arg = 4;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.ApiDef.Arg out_arg = 5;
+
+
+
+
+
+
+
+
+// repeated string arg_order = 11;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated .tensorflow.ApiDef.Attr attr = 6;
+
+
+
+
+
+
+
+
+// string summary = 7;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string description = 8;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string description_prefix = 9;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string description_suffix = 10;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ApiDefs
+
+// repeated .tensorflow.ApiDef op = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+
+  // namespace protobuf
+  // namespace google
+
+// @@protoc_insertion_point(global_scope)
+
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 
 
 // Parsed from tensorflow/core/framework/op_def.pb.h
@@ -19027,8 +20248,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
-// #define TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_SESSION_STATE_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_SESSION_STATE_H_
 
 // #include <string>
 // #include <unordered_map>
@@ -19123,7 +20344,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_SESSION_STATE_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_SESSION_STATE_H_
 
 
 // Parsed from tensorflow/core/framework/types.h
@@ -19143,8 +20364,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_TYPES_H_
-// #define TENSORFLOW_FRAMEWORK_TYPES_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TYPES_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TYPES_H_
 
 // #include <map>
 // #include <set>
@@ -19452,7 +20673,7 @@ public static final int kDataTypeRefOffset = 100;
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_TYPES_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TYPES_H_
 
 
 // Parsed from tensorflow/core/framework/control_flow.h
@@ -19472,8 +20693,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
-// #define TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_CONTROL_FLOW_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_CONTROL_FLOW_H_
 
 // #include "tensorflow/core/lib/hash/hash.h"
 // #include "tensorflow/core/platform/logging.h"
@@ -19528,7 +20749,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_CONTROL_FLOW_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_CONTROL_FLOW_H_
 
 
 // Parsed from tensorflow/core/framework/kernel_def.pb.h
@@ -20063,8 +21284,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
-// #define TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_KERNEL_DEF_BUILDER_H_
 
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
@@ -20132,7 +21353,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_KERNEL_DEF_BUILDER_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_KERNEL_DEF_BUILDER_H_
 
 
 // Parsed from tensorflow/core/framework/tracking_allocator.h
@@ -20152,8 +21373,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
-// #define TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TRACKING_ALLOCATOR_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TRACKING_ALLOCATOR_H_
 
 // #include <unordered_map>
 // #include "tensorflow/core/framework/allocator.h"
@@ -20239,7 +21460,7 @@ limitations under the License.
 
   // end namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_TRACKING_ALLOCATOR_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TRACKING_ALLOCATOR_H_
 
 
 // Parsed from tensorflow/core/framework/op_kernel.h
@@ -20338,11 +21559,11 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CollectiveExecutor(Pointer p) { super(p); }
 }
-@Namespace("tensorflow") @Opaque public static class StepStatsCollector extends Pointer {
+@Namespace("tensorflow") @Opaque public static class StepStatsCollectorInterface extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public StepStatsCollector() { super((Pointer)null); }
+    public StepStatsCollectorInterface() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StepStatsCollector(Pointer p) { super(p); }
+    public StepStatsCollectorInterface(Pointer p) { super(p); }
 }
 
 @Namespace("tensorflow") @NoOffset public static class OpKernel extends Pointer {
@@ -20849,7 +22070,7 @@ limitations under the License.
     public native CallFrameInterface call_frame(); public native Params call_frame(CallFrameInterface call_frame);
     public native FunctionLibraryRuntime function_library(); public native Params function_library(FunctionLibraryRuntime function_library);
     public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner(); public native Params runner(Pointer runner);
-    public native StepStatsCollector stats_collector(); public native Params stats_collector(StepStatsCollector stats_collector);
+    public native StepStatsCollectorInterface stats_collector(); public native Params stats_collector(StepStatsCollectorInterface stats_collector);
 
     // TensorSliceReaderCache support.
     public native TensorSliceReaderCacheWrapper slice_reader_cache(); public native Params slice_reader_cache(TensorSliceReaderCacheWrapper slice_reader_cache);
@@ -21251,13 +22472,6 @@ limitations under the License.
   public native @ByVal Status mutable_output(@StringPiece BytePointer name, @ByPtrPtr Tensor tensor);
   public native @ByVal Status mutable_output(@StringPiece String name, @ByPtrPtr Tensor tensor);
 
-  // Transfers ownership of an output tensor to the caller.
-  // NOTE: For non-reference outputs, the caller takes responsibility
-  // for deletion. For reference outputs, the caller does NOT take
-  // responsibility for deletion.
-  public native @ByVal Status release_output(@StringPiece BytePointer name, TensorValue value);
-  public native @ByVal Status release_output(@StringPiece String name, TensorValue value);
-
   // Records device specific state about how the input tensors were
   // computed.
   //
@@ -21307,7 +22521,7 @@ limitations under the License.
   public native FunctionLibraryRuntime function_library();
 
   public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner();
-  public native StepStatsCollector stats_collector();
+  public native StepStatsCollectorInterface stats_collector();
 
   // Shared resources accessible to this kernel.
   public native ResourceMgr resource_manager();
@@ -21570,6 +22784,14 @@ limitations under the License.
 // Gets a list of all registered kernels.
 @Namespace("tensorflow") public static native @ByVal KernelList GetAllRegisteredKernels();
 
+// Gets a list of all registered kernels for which predicate returns true
+@Namespace("tensorflow") public static native @ByVal KernelList GetFilteredRegisteredKernels(
+    @Const @ByRef KernelDefPredicateFn predicate);
+
+// Gets a list of all registered kernels for a given op
+@Namespace("tensorflow") public static native @ByVal KernelList GetRegisteredKernelsForOp(@StringPiece BytePointer op_name);
+@Namespace("tensorflow") public static native @ByVal KernelList GetRegisteredKernelsForOp(@StringPiece String op_name);
+
 @Namespace("tensorflow::kernel_factory") public static class OpKernelRegistrar extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -21667,9 +22889,32 @@ limitations under the License.
 //   ...
 // }
 
+// Generate a fatal error if OP_REQUIRES or OP_REQUIRES_OK are used in
+// AsyncOpKernel implementations. If these macros are used and the condition
+// does not hold, the `done` callback will never be called and the system will
+// deadlock, so a crash failure is preferable. Since the OP_REQUIRES[_OK] macros
+// are legal to use in AsyncOpKernel constructors, we use overload resolution
+// to distinguish between OpKernelConstruction* and OpKernelContext* context
+// types.
+@Namespace("tensorflow") @Opaque public static class XlaOpKernelContext extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public XlaOpKernelContext() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public XlaOpKernelContext(Pointer p) { super(p); }
+}
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(XlaOpKernelContext arg0, @Cast("const char*") BytePointer arg1);
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(XlaOpKernelContext arg0, String arg1);
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(OpKernelConstruction arg0, @Cast("const char*") BytePointer arg1);
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(OpKernelConstruction arg0, String arg1);
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(OpKernelContext ctx,
+                            @Cast("const char*") BytePointer correct_macro_name);
+@Namespace("tensorflow") public static native void CheckNotInComputeAsync(OpKernelContext ctx,
+                            String correct_macro_name);
+
 // #define OP_REQUIRES(CTX, EXP, STATUS)
 //   do {
 //     if (!TF_PREDICT_TRUE(EXP)) {
+//       CheckNotInComputeAsync((CTX), "OP_REQUIRES_ASYNC");
 //       (CTX)->CtxFailure(__FILE__, __LINE__, (STATUS));
 //       return;
 //     }
@@ -21679,6 +22924,7 @@ limitations under the License.
 //   do {
 //     ::tensorflow::Status _s(__VA_ARGS__);
 //     if (!TF_PREDICT_TRUE(_s.ok())) {
+//       CheckNotInComputeAsync((CTX), "OP_REQUIRES_OK_ASYNC");
 //       (CTX)->CtxFailureWithWarning(__FILE__, __LINE__, _s);
 //       return;
 //     }
@@ -21817,13 +23063,6 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/platform/macros.h"
-
-@Namespace("tensorflow") @Opaque public static class ShapeRefiner extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ShapeRefiner() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ShapeRefiner(Pointer p) { super(p); }
-}
 @Namespace("tensorflow") @Opaque public static class ShapeRefinerTest extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public ShapeRefinerTest() { super((Pointer)null); }
@@ -23041,8 +24280,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PUBLIC_SESSION_H_
-// #define TENSORFLOW_PUBLIC_SESSION_H_
+// #ifndef TENSORFLOW_CORE_PUBLIC_SESSION_H_
+// #define TENSORFLOW_CORE_PUBLIC_SESSION_H_
 
 // #include <string>
 // #include <vector>
@@ -23265,7 +24504,7 @@ limitations under the License.
  *  If session creation succeeds, the new {@code Session} will be stored in
  *  {@code *out_session}, the caller will take ownership of the returned
  *  {@code *out_session}, and this function will return {@code OK()}. Otherwise, this
- *  function will return an error status. */
+ *  function will return an error status and set *out_session to nullptr. */
 
 ///
 ///
@@ -23316,7 +24555,7 @@ limitations under the License.
 
   // end namespace tensorflow
 
-// #endif  // TENSORFLOW_PUBLIC_SESSION_H_
+// #endif  // TENSORFLOW_CORE_PUBLIC_SESSION_H_
 
 
 // Parsed from tensorflow/core/framework/tensor_slice.pb.h
@@ -23597,8 +24836,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
-// #define TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_SLICE_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_SLICE_H_
 
 // #include <string>
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
@@ -23747,7 +24986,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_SLICE_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_SLICE_H_
 
 
 // Parsed from tensorflow/core/util/tensor_slice_set.h
@@ -23973,8 +25212,8 @@ limitations under the License.
 // The utility to read checkpoints for google brain tensor ops and v3
 // checkpoints for dist_belief.
 
-// #ifndef TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
-// #define TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
+// #ifndef TENSORFLOW_CORE_UTIL_TENSOR_SLICE_READER_H_
+// #define TENSORFLOW_CORE_UTIL_TENSOR_SLICE_READER_H_
 
 // #include <unordered_map>
 
@@ -24092,7 +25331,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_UTIL_TENSOR_SLICE_READER_H_
+// #endif  // TENSORFLOW_CORE_UTIL_TENSOR_SLICE_READER_H_
 
 
 // Parsed from tensorflow/core/util/tensor_bundle/tensor_bundle.h
@@ -24157,8 +25396,8 @@ limitations under the License.
 //       "/fs/model/train/ckpt-step/ckpt" /* merged prefix */);
 //
 
-// #ifndef TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
-// #define TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+// #ifndef TENSORFLOW_CORE_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+// #define TENSORFLOW_CORE_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
 
 // #include "tensorflow/core/protobuf/tensor_bundle.pb.h"
 
@@ -24415,7 +25654,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
+// #endif  // TENSORFLOW_CORE_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
 
 
 // Parsed from tensorflow/c/tf_status_helper.h
@@ -24435,8 +25674,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_C_TF_STATUS_HELPER_H
-// #define TENSORFLOW_C_TF_STATUS_HELPER_H
+// #ifndef TENSORFLOW_C_TF_STATUS_HELPER_H_
+// #define TENSORFLOW_C_TF_STATUS_HELPER_H_
 
 // #include "tensorflow/c/c_api.h"
 // #include "tensorflow/core/lib/core/status.h"
@@ -24449,7 +25688,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_C_TF_STATUS_HELPER_H
+// #endif  // TENSORFLOW_C_TF_STATUS_HELPER_H_
 
 
 // Parsed from tensorflow/c/checkpoint_reader.h
@@ -24469,8 +25708,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_C_CHECKPOINT_READER_H
-// #define TENSORFLOW_C_CHECKPOINT_READER_H
+// #ifndef TENSORFLOW_C_CHECKPOINT_READER_H_
+// #define TENSORFLOW_C_CHECKPOINT_READER_H_
 
 // #include <memory>
 // #include <string>
@@ -24523,7 +25762,7 @@ limitations under the License.
   // namespace checkpoint
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_C_CHECKPOINT_READER_H
+// #endif  // TENSORFLOW_C_CHECKPOINT_READER_H_
 
 
 // Parsed from tensorflow/c/c_api.h
@@ -24574,6 +25813,7 @@ limitations under the License.
 // * size_t is used to represent byte sizes of objects that are
 //   materialized in the address space of the calling process.
 // * int is used as an index into arrays.
+// * Deletion functions are safe to call on nullptr.
 //
 // Questions left to address:
 // * Might at some point need a way for callers to provide their own Env.
@@ -26285,6 +27525,7 @@ public static native void TF_AbortWhile(@Const TF_WhileParams params);
 
 // Adds operations to compute the partial derivatives of sum of `y`s w.r.t `x`s,
 // i.e., d(y_1 + y_2 + ...)/dx_1, d(y_1 + y_2 + ...)/dx_2...
+//
 // `dx` are used as initial gradients (which represent the symbolic partial
 // derivatives of some loss function `L` w.r.t. `y`).
 // `dx` must be nullptr or have size `ny`.
@@ -26293,6 +27534,12 @@ public static native void TF_AbortWhile(@Const TF_WhileParams params);
 // The partial derivatives are returned in `dy`. `dy` should be allocated to
 // size `nx`.
 //
+// Gradient nodes are automatically named under the "gradients/" prefix. To
+// guarantee name uniqueness, subsequent calls to the same graph will
+// append an incremental tag to the prefix: "gradients_1/", "gradients_2/", ...
+// See TF_AddGradientsWithPrefix, which provides a means to specify a custom
+// name prefix for operations added to a graph to compute the gradients.
+//
 // WARNING: This function does not yet support all the gradients that python
 // supports. See
 // https://www.tensorflow.org/code/tensorflow/cc/gradients/README.md
@@ -26300,6 +27547,38 @@ public static native void TF_AbortWhile(@Const TF_WhileParams params);
 public static native void TF_AddGradients(TF_Graph g, TF_Output y, int ny,
                                     TF_Output x, int nx, TF_Output dx,
                                     TF_Status status, TF_Output dy);
+
+// Adds operations to compute the partial derivatives of sum of `y`s w.r.t `x`s,
+// i.e., d(y_1 + y_2 + ...)/dx_1, d(y_1 + y_2 + ...)/dx_2...
+// This is a variant of TF_AddGradients that allows to caller to pass a custom
+// name prefix to the operations added to a graph to compute the gradients.
+//
+// `dx` are used as initial gradients (which represent the symbolic partial
+// derivatives of some loss function `L` w.r.t. `y`).
+// `dx` must be nullptr or have size `ny`.
+// If `dx` is nullptr, the implementation will use dx of `OnesLike` for all
+// shapes in `y`.
+// The partial derivatives are returned in `dy`. `dy` should be allocated to
+// size `nx`.
+// `prefix` names the scope into which all gradients operations are being added.
+// `prefix` must be unique within the provided graph otherwise this operation
+// will fail. If `prefix` is nullptr, the default prefixing behaviour takes
+// place, see TF_AddGradients for more details.
+//
+// WARNING: This function does not yet support all the gradients that python
+// supports. See
+// https://www.tensorflow.org/code/tensorflow/cc/gradients/README.md
+// for instructions on how to add C++ more gradients.
+public static native void TF_AddGradientsWithPrefix(TF_Graph g, @Cast("const char*") BytePointer prefix,
+                                              TF_Output y, int ny,
+                                              TF_Output x, int nx,
+                                              TF_Output dx, TF_Status status,
+                                              TF_Output dy);
+public static native void TF_AddGradientsWithPrefix(TF_Graph g, String prefix,
+                                              TF_Output y, int ny,
+                                              TF_Output x, int nx,
+                                              TF_Output dx, TF_Status status,
+                                              TF_Output dy);
 
 // Create a TF_Function from a TF_Graph
 //
@@ -26425,6 +27704,11 @@ public static native TF_Function TF_GraphToFunction(
     @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
     int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr byte[] output_names,
     @Const TF_FunctionOptions opts, String description, TF_Status status);
+
+// Returns the name of the graph function.
+// The return value points to memory that is only usable until the next
+// mutation to *func.
+public static native @Cast("const char*") BytePointer TF_FunctionName(TF_Function func);
 
 // Write out a serialized representation of `func` (as a FunctionDef protocol
 // message) to `output_func_def` (allocated by TF_NewBuffer()).
@@ -26853,6 +28137,13 @@ public static native @Cast("const char*") BytePointer TF_DeviceListType(@Const T
 public static native @Cast("int64_t") long TF_DeviceListMemoryBytes(
     @Const TF_DeviceList list, int index, TF_Status status);
 
+// Retrieve the incarnation number of a given device.
+//
+// If index is out of bounds, an error code will be set in the status object,
+// and 0 will be returned.
+public static native @Cast("uint64_t") long TF_DeviceListIncarnation(
+    @Const TF_DeviceList list, int index, TF_Status status);
+
 // --------------------------------------------------------------------------
 // Load plugins containing custom ops and kernels
 
@@ -26941,6 +28232,20 @@ public static native TF_Buffer TF_ApiDefMapGet(TF_ApiDefMap api_def_map,
                                                  String name,
                                                  @Cast("size_t") long name_len,
                                                  TF_Status status);
+
+// --------------------------------------------------------------------------
+// Kernel definition information.
+
+// Returns a serialized KernelList protocol buffer containing KernelDefs for all
+// registered kernels.
+public static native TF_Buffer TF_GetAllRegisteredKernels(TF_Status status);
+
+// Returns a serialized KernelList protocol buffer containing KernelDefs for all
+// kernels registered for the operation named `name`.
+public static native TF_Buffer TF_GetRegisteredKernelsForOp(
+    @Cast("const char*") BytePointer name, TF_Status status);
+public static native TF_Buffer TF_GetRegisteredKernelsForOp(
+    String name, TF_Status status);
 
 // #ifdef __cplusplus /* end extern "C" */
 // #endif
@@ -27433,8 +28738,8 @@ limitations under the License.
 // Class and associated machinery for specifying an Op's OpDef and shape
 // inference function for Op registration.
 
-// #ifndef TENSORFLOW_FRAMEWORK_OP_DEF_BUILDER_H_
-// #define TENSORFLOW_FRAMEWORK_OP_DEF_BUILDER_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_DEF_BUILDER_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_OP_DEF_BUILDER_H_
 
 // #include <string>
 // #include <vector>
@@ -27594,7 +28899,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_OP_DEF_BUILDER_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_OP_DEF_BUILDER_H_
 
 
 // Parsed from tensorflow/core/framework/op_def_util.h
@@ -27617,10 +28922,11 @@ limitations under the License.
 // TODO(josh11b): Probably not needed for OpKernel authors, so doesn't
 // need to be as publicly accessible as other files in framework/.
 
-// #ifndef TENSORFLOW_FRAMEWORK_OP_DEF_UTIL_H_
-// #define TENSORFLOW_FRAMEWORK_OP_DEF_UTIL_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_DEF_UTIL_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_OP_DEF_UTIL_H_
 
 // #include <string>
+// #include "tensorflow/core/framework/api_def.pb.h"
 // #include "tensorflow/core/framework/op_def.pb.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/platform/protobuf.h"
@@ -27648,6 +28954,11 @@ limitations under the License.
 // Returns nullptr if no such attr is found.
 @Namespace("tensorflow") public static native @Cast("const tensorflow::OpDef::ArgDef*") OpDef_ArgDef FindInputArg(@StringPiece BytePointer name, @Const @ByRef OpDef op_def);
 @Namespace("tensorflow") public static native @Cast("const tensorflow::OpDef::ArgDef*") OpDef_ArgDef FindInputArg(@StringPiece String name, @Const @ByRef OpDef op_def);
+
+// Searches api_def for input argument with the indicated name.
+// Returns nullptr if no such attr is found.
+@Namespace("tensorflow") public static native @Cast("const tensorflow::ApiDef::Arg*") ApiDef_Arg FindInputArg(@StringPiece BytePointer name, @Const @ByRef ApiDef api_def);
+@Namespace("tensorflow") public static native @Cast("const tensorflow::ApiDef::Arg*") ApiDef_Arg FindInputArg(@StringPiece String name, @Const @ByRef ApiDef api_def);
 
 // Produce a human-readable version of an op_def that is more concise
 // than a text-format proto.  Excludes descriptions.
@@ -27697,7 +29008,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_OP_DEF_UTIL_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_OP_DEF_UTIL_H_
 
 
 // Parsed from tensorflow/core/framework/op.h
@@ -27717,8 +29028,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_OP_H_
-// #define TENSORFLOW_FRAMEWORK_OP_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_OP_H_
 
 // #include <functional>
 // #include <unordered_map>
@@ -28008,7 +29319,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_OP_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_OP_H_
 
 
 // Parsed from tensorflow/core/graph/edgeset.h
@@ -28218,8 +29529,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_FUNCTION_H_
-// #define TENSORFLOW_FRAMEWORK_FUNCTION_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_FUNCTION_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_FUNCTION_H_
 
 // #include <vector>
 // #include "tensorflow/core/framework/attr_value.pb.h"
@@ -28233,6 +29544,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/hash/hash.h"
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/protobuf.h"
 
 @Namespace("tensorflow") @Opaque public static class CancellationManager extends Pointer {
@@ -28489,7 +29801,10 @@ limitations under the License.
   // Caller methods.
   public native @ByVal Status SetArgs(@ByVal TensorVector args);
   public native @ByVal Status GetRetvals(TensorVector rets);
-  public native @ByVal Status ConsumeRetvals(TensorVector rets);
+
+  // Moves the return values from the frame to rets. If allow_dead_tensors is
+  // false it will fail if any of the retvals do not have a value.
+  public native @ByVal Status ConsumeRetvals(TensorVector rets, @Cast("bool") boolean allow_dead_tensors);
 
   public native @Cast("size_t") long num_args();
   public native @Cast("size_t") long num_retvals();
@@ -28501,11 +29816,14 @@ limitations under the License.
 
 // Helper to maintain a map between function names in a given
 // FunctionDefLibrary and function definitions.
+//
+// This class is thread-safe.
 @Namespace("tensorflow") @NoOffset public static class FunctionLibraryDefinition extends OpRegistryInterface {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionLibraryDefinition(Pointer p) { super(p); }
 
+  // Note: This constructor grabs `lib_def`'s lock in shared mode.
   public FunctionLibraryDefinition(@Const @ByRef FunctionLibraryDefinition lib_def) { super((Pointer)null); allocate(lib_def); }
   private native void allocate(@Const @ByRef FunctionLibraryDefinition lib_def);
   public FunctionLibraryDefinition(@Const OpRegistryInterface default_registry,
@@ -28515,8 +29833,15 @@ limitations under the License.
 
   
 
+  // Returns True if the library contains `func`, False otherwise.
+  public native @Cast("bool") boolean Contains(@StdString BytePointer func);
+  public native @Cast("bool") boolean Contains(@StdString String func);
+
   // Returns nullptr if "func" is not defined in "lib_def". Otherwise,
   // returns its definition proto.
+  //
+  // NB: This function returns a borrowed pointer, which can be invalidated by a
+  // subsequent call to `ReplaceFunction()` with the given name.
   public native @Const FunctionDef Find(@StdString BytePointer func);
   public native @Const FunctionDef Find(@StdString String func);
 
@@ -28535,15 +29860,10 @@ limitations under the License.
   // This operation is atomic.
   public native @ByVal Status AddGradientDef(@Const @ByRef GradientDef grad);
 
-  // Remove function `func` from the library. Returns non-OK Status unless
-  // `func` is in the library.
-  public native @ByVal Status RemoveFunction(@StdString BytePointer func);
-  public native @ByVal Status RemoveFunction(@StdString String func);
-
-  // Remove gradient of function `func` from the library. Returns non-OK Status
-  // unless `func` has a gradient.
-  public native @ByVal Status RemoveGradient(@StdString BytePointer func);
-  public native @ByVal Status RemoveGradient(@StdString String func);
+  // Replaces the function corresponding to `func` with `fdef`. Returns
+  // a non-OK status if "func" was not found in the library, OK otherwise.
+  public native @ByVal Status ReplaceFunction(@StdString BytePointer func, @Const @ByRef FunctionDef fdef);
+  public native @ByVal Status ReplaceFunction(@StdString String func, @Const @ByRef FunctionDef fdef);
 
   // Adds the functions and gradients in 'other' to this function library.
   // Duplicate functions and gradients are ignored.
@@ -28566,6 +29886,9 @@ limitations under the License.
   // If "op" is defined in the library, returns its signature.
   // Otherwise, assume "op" is a primitive op and returns its op
   // signature and shape inference function.
+  //
+  // NB: This function outputs a borrowed pointer, which can be invalidated by a
+  // subsequent call to `ReplaceFunction()` with the given name.
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
                   @Cast("const tensorflow::OpRegistrationData**") PointerPointer op_reg_data);
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
@@ -28664,9 +29987,14 @@ limitations under the License.
 
     // This interface is EXPERIMENTAL and subject to change.
     //
-    // Instatiates the function using an executor of the given type. If empty,
+    // Instantiates the function using an executor of the given type. If empty,
     // the default TensorFlow executor will be used.
     public native @StdString BytePointer executor_type(); public native InstantiateOptions executor_type(BytePointer executor_type);
+
+    // If true, the runtime will attempt to create kernels for the function at
+    // instantiation time, rather than on the first run. This can be used to
+    // surface errors earlier.
+    public native @Cast("bool") boolean create_kernels_eagerly(); public native InstantiateOptions create_kernels_eagerly(boolean create_kernels_eagerly);
   }
   public native @ByVal Status Instantiate(@StdString BytePointer function_name, @ByVal AttrSlice attrs,
                                @Const @ByRef InstantiateOptions options,
@@ -28739,7 +30067,7 @@ limitations under the License.
     public native CancellationManager cancellation_manager(); public native Options cancellation_manager(CancellationManager cancellation_manager);
     public native CollectiveExecutor collective_executor(); public native Options collective_executor(CollectiveExecutor collective_executor);
     public native ScopedStepContainer step_container(); public native Options step_container(ScopedStepContainer step_container);
-    public native StepStatsCollector stats_collector(); public native Options stats_collector(StepStatsCollector stats_collector);
+    public native StepStatsCollectorInterface stats_collector(); public native Options stats_collector(StepStatsCollectorInterface stats_collector);
 
     public native @Cast("std::function<void(std::function<void()>)>*") Pointer runner(); public native Options runner(Pointer runner);
 
@@ -28756,6 +30084,9 @@ limitations under the License.
     // If true, we create a new IntraProcessRendezvous, else use the existing
     // one.
     public native @Cast("bool") boolean create_rendezvous(); public native Options create_rendezvous(boolean create_rendezvous);
+
+    // If True, allow returning dead tensors.
+    public native @Cast("bool") boolean allow_dead_tensors(); public native Options allow_dead_tensors(boolean allow_dead_tensors);
   }
   public native void Run(@Const @ByRef Options opts, @Cast("tensorflow::FunctionLibraryRuntime::Handle") long handle,
                      @ByVal TensorVector args, TensorVector rets,
@@ -28943,8 +30274,9 @@ limitations under the License.
 //   REGISTER_OP_GRADIENT_UNIQ(ctr, name, fn)
 
 // #define REGISTER_OP_GRADIENT_UNIQ(ctr, name, fn)
-//   static bool unused_grad_##ctr = SHOULD_REGISTER_OP_GRADIENT &&
-//                                   ::tensorflow::gradient::RegisterOp(name, fn)
+//   static bool unused_grad_##ctr TF_ATTRIBUTE_UNUSED =
+//       SHOULD_REGISTER_OP_GRADIENT &&
+//       ::tensorflow::gradient::RegisterOp(name, fn)
 // Register a gradient creator for the "op".
 @Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString BytePointer op, @ByVal @Cast("tensorflow::gradient::Creator*") Pointer func);
 @Namespace("tensorflow::gradient") public static native @Cast("bool") boolean RegisterOp(@StdString String op, @ByVal @Cast("tensorflow::gradient::Creator*") Pointer func);
@@ -28969,7 +30301,7 @@ limitations under the License.
 
   // end namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_FUNCTION_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_FUNCTION_H_
 
 
 // Parsed from tensorflow/core/util/device_name_utils.h
@@ -28989,8 +30321,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
-// #define TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
+// #ifndef TENSORFLOW_CORE_UTIL_DEVICE_NAME_UTILS_H_
+// #define TENSORFLOW_CORE_UTIL_DEVICE_NAME_UTILS_H_
 
 // #include <string>
 
@@ -29156,7 +30488,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_UTIL_DEVICE_NAME_UTILS_H_
+// #endif  // TENSORFLOW_CORE_UTIL_DEVICE_NAME_UTILS_H_
 
 
 // Parsed from tensorflow/core/framework/device_base.h
@@ -29260,6 +30592,13 @@ limitations under the License.
   public native void CopyDeviceTensorToCPU(@Const Tensor device_tensor,
                                        @StringPiece String tensor_name, Device device,
                                        Tensor cpu_tensor, @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+
+  // If possible, wait for all events on *stream to complete then execute func.
+  // A non-OK Status is returned otherwise.  The stream argument should be the
+  // one provided by GpuDeviceInfo.  This function is not applicable to devices
+  // that don't provide such a value.
+  public native @ByVal Status ThenExecute(Device device, Stream stream,
+                               @ByVal Fn func);
 }
 
 // map[i] is the DeviceContext* for the node with id i, if i < map.size().
@@ -29363,7 +30702,7 @@ limitations under the License.
 
   public native ScopedAllocatorMgr GetScopedAllocatorMgr();
 
-  public native @Cast("const bool") boolean has_eigen_cpu_device();
+  public native @Cast("bool") boolean has_eigen_cpu_device();
 
   public native @Const ThreadPoolDevice eigen_cpu_device();
 
@@ -29435,8 +30774,8 @@ limitations under the License.
 // * Task numbers are within the specified replica, so there are as
 //   many "task zeros" as replicas.
 
-// #ifndef TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
-// #define TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
+// #ifndef TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_H_
+// #define TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_H_
 
 // #include <memory>
 // #include <string>
@@ -29553,7 +30892,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_COMMON_RUNTIME_DEVICE_H_
+// #endif  // TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_H_
 
 
 // Parsed from tensorflow/core/common_runtime/device_mgr.h
@@ -29573,8 +30912,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
-// #define TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
+// #ifndef TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_MGR_H_
+// #define TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_MGR_H_
 
 // #include <string>
 // #include <unordered_map>
@@ -29626,7 +30965,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_COMMON_RUNTIME_DEVICE_MGR_H_
+// #endif  // TENSORFLOW_CORE_COMMON_RUNTIME_DEVICE_MGR_H_
 
 
 // Parsed from tensorflow/core/common_runtime/process_function_library_runtime.h
@@ -29652,6 +30991,7 @@ limitations under the License.
 
 // #include "tensorflow/core/common_runtime/device_mgr.h"
 // #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/protobuf/config.pb.h"
 
 // A class that stores all the FunctionLibraryRuntime objects, one per device.
@@ -29733,14 +31073,14 @@ limitations under the License.
         DeviceContext device_context,
         @StdVector AllocatorAttributes alloc_attrs,
         Rendezvous rendezvous, TensorVector received_tensors,
-        @Cast("const tensorflow::StatusCallback*") @ByRef Pointer done);
+        @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
   public static native void ReceiveTensorsAsync(
         @StdString String source_device, @StdString String target_device,
         @StdString String key_prefix, @Cast("tensorflow::int64") long src_incarnation, @Cast("tensorflow::int64") long num_tensors,
         DeviceContext device_context,
         @StdVector AllocatorAttributes alloc_attrs,
         Rendezvous rendezvous, TensorVector received_tensors,
-        @Cast("const tensorflow::StatusCallback*") @ByRef Pointer done);
+        @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
 
   @MemberGetter public static native byte kDefaultFLRDevice(int i);
   @MemberGetter public static native @Cast("const char*") BytePointer kDefaultFLRDevice();
@@ -30606,6 +31946,198 @@ limitations under the License.
 // #endif  // TENSORFLOW_GRAPH_TENSOR_ID_H_
 
 
+// Parsed from tensorflow/core/common_runtime/graph_runner.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_COMMON_RUNTIME_GRAPH_RUNNER_H_
+// #define TENSORFLOW_CORE_COMMON_RUNTIME_GRAPH_RUNNER_H_
+
+// #include <memory>
+// #include <string>
+// #include <vector>
+
+// #include "tensorflow/core/common_runtime/device.h"
+// #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/graph/graph.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/env.h"
+
+// GraphRunner takes a Graph, some inputs to feed, and some outputs
+// to fetch and executes the graph required to feed and fetch the
+// inputs and outputs.
+//
+// This class is only meant for internal use where one needs to
+// partially evaluate inexpensive nodes in a graph, such as for shape
+// inference or for constant folding.  Because of its limited, simple
+// use-cases, it executes all computation on the given device (CPU by default)
+// and is not meant to be particularly lightweight, fast, or efficient.
+@Namespace("tensorflow") @NoOffset public static class GraphRunner extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GraphRunner(Pointer p) { super(p); }
+
+  // REQUIRES: `env` is not nullptr.
+  public GraphRunner(Env env) { super((Pointer)null); allocate(env); }
+  private native void allocate(Env env);
+  // REQUIRES: 'device' is not nullptr. Not owned.
+  public GraphRunner(Device device) { super((Pointer)null); allocate(device); }
+  private native void allocate(Device device);
+
+  // Function semantics for `inputs`, `output_names` and `outputs`
+  // matches those from Session::Run().
+  //
+  // NOTE: The output tensors share lifetime with the GraphRunner, and could
+  // be destroyed once the GraphRunner is destroyed.
+  //
+  // REQUIRES: `graph`, `env`, and `outputs` are not nullptr.
+  // `function_library` may be nullptr.
+  public native @ByVal Status Run(Graph graph, FunctionLibraryRuntime function_library,
+               @Cast("const tensorflow::GraphRunner::NamedTensorList*") @ByRef StringTensorPairVector inputs,
+               @Const @ByRef StringVector output_names,
+               TensorVector outputs);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_COMMON_RUNTIME_GRAPH_RUNNER_H_
+
+
+// Parsed from tensorflow/core/common_runtime/shape_refiner.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_CORE_COMMON_RUNTIME_SHAPE_REFINER_H_
+// #define TENSORFLOW_CORE_COMMON_RUNTIME_SHAPE_REFINER_H_
+
+// #include <vector>
+
+// #include "tensorflow/core/common_runtime/graph_runner.h"
+// #include "tensorflow/core/framework/function.pb.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+// #include "tensorflow/core/graph/graph.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/macros.h"
+
+
+// This class stores extra inference information in addition to
+// InferenceContext, such as inference tree for user-defined functions and node
+// input and output types.
+
+// ShapeRefiner performs shape inference for TensorFlow Graphs.  It is
+// responsible for instantiating InferenceContext objects for each
+// Node in the Graph, and providing/storing the 'input_tensor' Tensors
+// used by Shape Inference functions, when available at graph
+// construction time.
+@Namespace("tensorflow") @NoOffset public static class ShapeRefiner extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ShapeRefiner(Pointer p) { super(p); }
+
+  public ShapeRefiner(int graph_def_version, @Const OpRegistryInterface ops) { super((Pointer)null); allocate(graph_def_version, ops); }
+  private native void allocate(int graph_def_version, @Const OpRegistryInterface ops);
+
+  // Same as ShapeRefiner(versions.producer(), ops)
+  public ShapeRefiner(@Const @ByRef VersionDef versions, @Const OpRegistryInterface ops) { super((Pointer)null); allocate(versions, ops); }
+  private native void allocate(@Const @ByRef VersionDef versions, @Const OpRegistryInterface ops);
+
+  // Performs validation of 'node' and runs 'node's shape function,
+  // storing its shape outputs.
+  //
+  // All inputs of 'node' must be added to ShapeRefiner prior to
+  // adding 'node'.
+  //
+  // Returns an error if:
+  //  - the shape function for 'node' was not registered.
+  //  - 'node' was added before its inputs.
+  //  - The shape inference function returns an error.
+  public native @ByVal Status AddNode(@Const Node node);
+
+  // Sets 'node's 'output_port' output to have shape 'shape'.
+  //
+  // Returns an error if 'node' was not previously added to this
+  // object, if 'output_port' is invalid, or if 'shape' is
+  // not compatible with the existing shape of the output.
+  public native @ByVal Status SetShape(@Const Node node, int output_port,
+                    @ByVal ShapeHandle shape);
+
+  // Update the input shapes of node in case the shapes of the fan-ins of 'node'
+  // have themselves been modified (For example, in case of incremental shape
+  // refinement). If 'relax' is true, a new shape with the broadest set of
+  // information will be set as the new input (see InferenceContext::RelaxInput
+  // for full details and examples). Sets refined to true if any shapes have
+  // changed (in their string representations). Note that shapes may have been
+  // updated to newer versions (but with identical string representations) even
+  // if <*refined> is set to false.
+  public native @ByVal Status UpdateNode(@Const Node node, @Cast("bool") boolean relax, @Cast("bool*") BoolPointer refined);
+  public native @ByVal Status UpdateNode(@Const Node node, @Cast("bool") boolean relax, @Cast("bool*") boolean... refined);
+
+  // Returns the InferenceContext for 'node', if present.
+  public native InferenceContext GetContext(@Const Node node);
+
+  // Returns the ExtendedInferenceContext for 'node', if present.
+
+  // Getters and setters for graph_def_version_.
+  public native int graph_def_version();
+  public native void set_graph_def_version(int version);
+
+  public native void set_require_shape_inference_fns(@Cast("bool") boolean require_shape_inference_fns);
+  public native void set_disable_constant_propagation(@Cast("bool") boolean disable);
+
+  // Set function library to enable function shape inference.
+  // Without function library, function inference always yields unknown shapes.
+  // With this enabled, shape inference can take more time since it descends
+  // into all function calls. It doesn't do inference once for each function
+  // definition, but once for each function call.
+  // The function library must outlive the shape refiner.
+  public native void set_function_library_for_shape_inference(
+        @Const FunctionLibraryDefinition lib);
+
+  public native @Cast("bool") boolean function_shape_inference_supported();
+
+  // Call this to keep nested shapes information for user-defined functions:
+  // nested inferences will be available on the ExtendedInferenceContext for
+  // each function node, forming a tree of shape inferences corresponding to the
+  // tree of nested function calls. By default this setting is disabled, and
+  // only the shapes for the top-level function node will be reported on the
+  // InferenceContext for each function node, to reduce memory usage.
+  //
+  // This flag has no effect when the function inference is not enabled via
+  // set_function_library_for_shape_inference.
+  public native void set_keep_nested_shape_inferences();
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_COMMON_RUNTIME_SHAPE_REFINER_H_
+
+
 // Parsed from tensorflow/core/framework/node_def_builder.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -30623,8 +32155,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_NODE_DEF_BUILDER_H_
-// #define TENSORFLOW_FRAMEWORK_NODE_DEF_BUILDER_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_BUILDER_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_BUILDER_H_
 
 // #include <functional>
 // #include <vector>
@@ -30798,7 +32330,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_NODE_DEF_BUILDER_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_BUILDER_H_
 
 
 // Parsed from tensorflow/core/framework/node_def_util.h
@@ -30818,8 +32350,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
-// #define TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_UTIL_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_UTIL_H_
 
 // #include <string>
 // #include <unordered_map>
@@ -30848,6 +32380,12 @@ limitations under the License.
 // than a text-format proto.
 @Namespace("tensorflow") public static native @StdString BytePointer SummarizeNode(@Const @ByRef Node node);
 @Namespace("tensorflow") public static native @StdString BytePointer SummarizeNodeDef(@Const @ByRef NodeDef node_def);
+
+// Produces a formatted string pattern from the node which can uniquely identify
+// this node upstream to produce an informative error message. The pattern
+// followed is: {{node <node_name>}}
+@Namespace("tensorflow") public static native @StdString BytePointer FormatNodeForError(@Const @ByRef Node node);
+@Namespace("tensorflow") public static native @StdString BytePointer FormatNodeDefForError(@Const @ByRef NodeDef node_def);
 
 // Adds an attr with name <name> and value <value> to *node_def.
 // The type of the attr is based on the type of value.
@@ -31218,7 +32756,7 @@ limitations under the License.
                                 NodeDef node_def);
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_NODE_DEF_UTIL_H_
 
 
 // Parsed from tensorflow/core/framework/selective_registration.h
@@ -31238,8 +32776,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_SELECTIVE_REGISTRATION_H_
-// #define TENSORFLOW_FRAMEWORK_SELECTIVE_REGISTRATION_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_SELECTIVE_REGISTRATION_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_SELECTIVE_REGISTRATION_H_
 
 // #include <string.h>
 
@@ -31280,7 +32818,7 @@ limitations under the License.
 // #define SHOULD_REGISTER_OP_KERNEL(clz) true
 // #endif
 
-// #endif  // TENSORFLOW_FRAMEWORK_SELECTIVE_REGISTRATION_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_SELECTIVE_REGISTRATION_H_
 
 
 // Parsed from tensorflow/core/graph/node_builder.h
@@ -31300,8 +32838,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_GRAPH_NODE_BUILDER_H_
-// #define TENSORFLOW_GRAPH_NODE_BUILDER_H_
+// #ifndef TENSORFLOW_CORE_GRAPH_NODE_BUILDER_H_
+// #define TENSORFLOW_CORE_GRAPH_NODE_BUILDER_H_
 
 // #include <vector>
 // #include "tensorflow/core/framework/node_def_builder.h"
@@ -31445,7 +32983,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_GRAPH_NODE_BUILDER_H_
+// #endif  // TENSORFLOW_CORE_GRAPH_NODE_BUILDER_H_
 
 
 // Parsed from tensorflow/core/graph/graph_def_builder.h
@@ -31465,8 +33003,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_GRAPH_GRAPH_DEF_BUILDER_H_
-// #define TENSORFLOW_GRAPH_GRAPH_DEF_BUILDER_H_
+// #ifndef TENSORFLOW_CORE_GRAPH_GRAPH_DEF_BUILDER_H_
+// #define TENSORFLOW_CORE_GRAPH_GRAPH_DEF_BUILDER_H_
 
 // #include <vector>
 // #include "tensorflow/core/framework/graph.pb.h"
@@ -31696,7 +33234,7 @@ limitations under the License.
   // namespace ops
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_GRAPH_GRAPH_DEF_BUILDER_H_
+// #endif  // TENSORFLOW_CORE_GRAPH_GRAPH_DEF_BUILDER_H_
 
 
 // Parsed from tensorflow/core/graph/default_device.h
@@ -31716,8 +33254,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
-// #define TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+// #ifndef TENSORFLOW_CORE_GRAPH_DEFAULT_DEVICE_H_
+// #define TENSORFLOW_CORE_GRAPH_DEFAULT_DEVICE_H_
 
 // #include <string>
 
@@ -31732,7 +33270,7 @@ limitations under the License.
   // namespace graph
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+// #endif  // TENSORFLOW_CORE_GRAPH_DEFAULT_DEVICE_H_
 
 
 // Parsed from tensorflow/core/graph/graph_constructor.h
@@ -31752,8 +33290,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
-// #define TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+// #ifndef TENSORFLOW_CORE_GRAPH_GRAPH_CONSTRUCTOR_H_
+// #define TENSORFLOW_CORE_GRAPH_GRAPH_CONSTRUCTOR_H_
 
 // #include "tensorflow/core/framework/graph.pb.h"
 // #include "tensorflow/core/graph/graph.h"
@@ -31955,7 +33493,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+// #endif  // TENSORFLOW_CORE_GRAPH_GRAPH_CONSTRUCTOR_H_
 
 
 // Parsed from tensorflow/core/graph/gradients.h
@@ -32502,1104 +34040,6 @@ limitations under the License.
 // #endif  // TENSORFLOW_CC_FRAMEWORK_OPS_H_
 
 
-// Parsed from tensorflow/core/framework/api_def.pb.h
-
-// Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: tensorflow/core/framework/api_def.proto
-
-// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
-// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
-
-// #include <string>
-
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006000
-// #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
-// #error your headers.
-// #endif
-// #if 3006000 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
-// #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
-// #error regenerate this file with a newer version of protoc.
-// #endif
-
-// #include <google/protobuf/io/coded_stream.h>
-// #include <google/protobuf/arena.h>
-// #include <google/protobuf/arenastring.h>
-// #include <google/protobuf/generated_message_table_driven.h>
-// #include <google/protobuf/generated_message_util.h>
-// #include <google/protobuf/inlined_string_field.h>
-// #include <google/protobuf/metadata.h>
-// #include <google/protobuf/message.h>
-// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
-// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-// #include <google/protobuf/generated_enum_reflection.h>
-// #include <google/protobuf/unknown_field_set.h>
-// #include "tensorflow/core/framework/attr_value.pb.h"
-// @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
-// Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
-  // namespace tensorflow
-
-
-
-
-
-  // namespace protobuf
-  // namespace google
-
-/** enum tensorflow::ApiDef_Visibility */
-public static final int
-  ApiDef_Visibility_DEFAULT_VISIBILITY = 0,
-  ApiDef_Visibility_VISIBLE = 1,
-  ApiDef_Visibility_SKIP = 2,
-  ApiDef_Visibility_HIDDEN = 3,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_IsValid(int value);
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MIN();
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MAX();
-@Namespace("tensorflow") @MemberGetter public static native int ApiDef_Visibility_Visibility_ARRAYSIZE();
-
-@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ApiDef_Visibility_descriptor();
-@Namespace("tensorflow") public static native @StdString BytePointer ApiDef_Visibility_Name(@Cast("tensorflow::ApiDef_Visibility") int value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") IntPointer value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") IntBuffer value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") int... value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") IntPointer value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString BytePointer name, @Cast("tensorflow::ApiDef_Visibility*") IntBuffer value);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_Parse(
-    @StdString String name, @Cast("tensorflow::ApiDef_Visibility*") int... value);
-// ===================================================================
-
-@Namespace("tensorflow") @NoOffset public static class ApiDef_Endpoint extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ApiDef_Endpoint(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ApiDef_Endpoint(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ApiDef_Endpoint position(long position) {
-        return (ApiDef_Endpoint)super.position(position);
-    }
-
-  public ApiDef_Endpoint() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public ApiDef_Endpoint(@Const @ByRef ApiDef_Endpoint from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef ApiDef_Endpoint from);
-
-  public native @ByRef @Name("operator =") ApiDef_Endpoint put(@Const @ByRef ApiDef_Endpoint from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef ApiDef_Endpoint default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const ApiDef_Endpoint internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(ApiDef_Endpoint other);
-  public native void Swap(ApiDef_Endpoint other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native ApiDef_Endpoint New();
-
-  public native ApiDef_Endpoint New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef ApiDef_Endpoint from);
-  public native void MergeFrom(@Const @ByRef ApiDef_Endpoint from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string name = 1;
-  public native void clear_name();
-  @MemberGetter public static native int kNameFieldNumber();
-  public static final int kNameFieldNumber = kNameFieldNumber();
-  public native @StdString BytePointer name();
-  public native void set_name(@StdString BytePointer value);
-  public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_name(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
-  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native @Deprecated void unsafe_arena_set_allocated_name(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
-
-  // bool deprecated = 3;
-  public native void clear_deprecated();
-  @MemberGetter public static native int kDeprecatedFieldNumber();
-  public static final int kDeprecatedFieldNumber = kDeprecatedFieldNumber();
-  public native void set_deprecated(@Cast("bool") boolean value);
-}
-// -------------------------------------------------------------------
-
-@Namespace("tensorflow") @NoOffset public static class ApiDef_Arg extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ApiDef_Arg(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ApiDef_Arg(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ApiDef_Arg position(long position) {
-        return (ApiDef_Arg)super.position(position);
-    }
-
-  public ApiDef_Arg() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public ApiDef_Arg(@Const @ByRef ApiDef_Arg from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef ApiDef_Arg from);
-
-  public native @ByRef @Name("operator =") ApiDef_Arg put(@Const @ByRef ApiDef_Arg from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef ApiDef_Arg default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const ApiDef_Arg internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(ApiDef_Arg other);
-  public native void Swap(ApiDef_Arg other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native ApiDef_Arg New();
-
-  public native ApiDef_Arg New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef ApiDef_Arg from);
-  public native void MergeFrom(@Const @ByRef ApiDef_Arg from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string name = 1;
-  public native void clear_name();
-  @MemberGetter public static native int kNameFieldNumber();
-  public static final int kNameFieldNumber = kNameFieldNumber();
-  public native @StdString BytePointer name();
-  public native void set_name(@StdString BytePointer value);
-  public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_name(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
-  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native @Deprecated void unsafe_arena_set_allocated_name(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
-
-  // string rename_to = 2;
-  public native void clear_rename_to();
-  @MemberGetter public static native int kRenameToFieldNumber();
-  public static final int kRenameToFieldNumber = kRenameToFieldNumber();
-  public native @StdString BytePointer rename_to();
-  public native void set_rename_to(@StdString BytePointer value);
-  public native void set_rename_to(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_rename_to(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_rename_to(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
-  public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
-  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-
-  // string description = 3;
-  public native void clear_description();
-  @MemberGetter public static native int kDescriptionFieldNumber();
-  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
-  public native @StdString BytePointer description();
-  public native void set_description(@StdString BytePointer value);
-  public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_description(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
-  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native @Deprecated void unsafe_arena_set_allocated_description(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
-}
-// -------------------------------------------------------------------
-
-@Namespace("tensorflow") @NoOffset public static class ApiDef_Attr extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ApiDef_Attr(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ApiDef_Attr(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ApiDef_Attr position(long position) {
-        return (ApiDef_Attr)super.position(position);
-    }
-
-  public ApiDef_Attr() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public ApiDef_Attr(@Const @ByRef ApiDef_Attr from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef ApiDef_Attr from);
-
-  public native @ByRef @Name("operator =") ApiDef_Attr put(@Const @ByRef ApiDef_Attr from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef ApiDef_Attr default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const ApiDef_Attr internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(ApiDef_Attr other);
-  public native void Swap(ApiDef_Attr other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native ApiDef_Attr New();
-
-  public native ApiDef_Attr New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef ApiDef_Attr from);
-  public native void MergeFrom(@Const @ByRef ApiDef_Attr from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string name = 1;
-  public native void clear_name();
-  @MemberGetter public static native int kNameFieldNumber();
-  public static final int kNameFieldNumber = kNameFieldNumber();
-  public native @StdString BytePointer name();
-  public native void set_name(@StdString BytePointer value);
-  public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_name(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
-  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_name();
-  public native @Deprecated void unsafe_arena_set_allocated_name(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer name);
-
-  // string rename_to = 2;
-  public native void clear_rename_to();
-  @MemberGetter public static native int kRenameToFieldNumber();
-  public static final int kRenameToFieldNumber = kRenameToFieldNumber();
-  public native @StdString BytePointer rename_to();
-  public native void set_rename_to(@StdString BytePointer value);
-  public native void set_rename_to(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_rename_to(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_rename_to(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_rename_to();
-  public native void set_allocated_rename_to(@StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_rename_to();
-  public native @Deprecated void unsafe_arena_set_allocated_rename_to(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer rename_to);
-
-  // string description = 4;
-  public native void clear_description();
-  @MemberGetter public static native int kDescriptionFieldNumber();
-  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
-  public native @StdString BytePointer description();
-  public native void set_description(@StdString BytePointer value);
-  public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_description(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
-  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native @Deprecated void unsafe_arena_set_allocated_description(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
-
-  // .tensorflow.AttrValue default_value = 3;
-  public native @Cast("bool") boolean has_default_value();
-  public native void clear_default_value();
-  @MemberGetter public static native int kDefaultValueFieldNumber();
-  public static final int kDefaultValueFieldNumber = kDefaultValueFieldNumber();
-  public native @Const @ByRef AttrValue default_value();
-  public native AttrValue release_default_value();
-  public native AttrValue mutable_default_value();
-  public native void set_allocated_default_value(AttrValue default_value);
-  public native void unsafe_arena_set_allocated_default_value(
-        AttrValue default_value);
-  public native AttrValue unsafe_arena_release_default_value();
-}
-// -------------------------------------------------------------------
-
-@Namespace("tensorflow") @NoOffset public static class ApiDef extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ApiDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ApiDef(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ApiDef position(long position) {
-        return (ApiDef)super.position(position);
-    }
-
-  public ApiDef() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public ApiDef(@Const @ByRef ApiDef from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef ApiDef from);
-
-  public native @ByRef @Name("operator =") ApiDef put(@Const @ByRef ApiDef from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef ApiDef default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const ApiDef internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(ApiDef other);
-  public native void Swap(ApiDef other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native ApiDef New();
-
-  public native ApiDef New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef ApiDef from);
-  public native void MergeFrom(@Const @ByRef ApiDef from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int DEFAULT_VISIBILITY();
-  public static final int DEFAULT_VISIBILITY = DEFAULT_VISIBILITY();
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int VISIBLE();
-  public static final int VISIBLE = VISIBLE();
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int SKIP();
-  public static final int SKIP = SKIP();
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int HIDDEN();
-  public static final int HIDDEN = HIDDEN();
-  public static native @Cast("bool") boolean Visibility_IsValid(int value);
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int Visibility_MIN();
-  public static final int Visibility_MIN = Visibility_MIN();
-  @MemberGetter public static native @Cast("const tensorflow::ApiDef::Visibility") int Visibility_MAX();
-  public static final int Visibility_MAX = Visibility_MAX();
-  @MemberGetter public static native int Visibility_ARRAYSIZE();
-  public static final int Visibility_ARRAYSIZE = Visibility_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Visibility_descriptor();
-  public static native @StdString BytePointer Visibility_Name(@Cast("tensorflow::ApiDef::Visibility") int value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
-        @Cast("tensorflow::ApiDef::Visibility*") IntPointer value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
-        @Cast("tensorflow::ApiDef::Visibility*") IntBuffer value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
-        @Cast("tensorflow::ApiDef::Visibility*") int... value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
-        @Cast("tensorflow::ApiDef::Visibility*") IntPointer value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
-        @Cast("tensorflow::ApiDef::Visibility*") IntBuffer value);
-  public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
-        @Cast("tensorflow::ApiDef::Visibility*") int... value);
-
-  // accessors -------------------------------------------------------
-
-  // repeated .tensorflow.ApiDef.Endpoint endpoint = 3;
-  public native int endpoint_size();
-  public native void clear_endpoint();
-  @MemberGetter public static native int kEndpointFieldNumber();
-  public static final int kEndpointFieldNumber = kEndpointFieldNumber();
-  public native ApiDef_Endpoint mutable_endpoint(int index);
-  public native @Const @ByRef ApiDef_Endpoint endpoint(int index);
-  public native ApiDef_Endpoint add_endpoint();
-
-  // repeated .tensorflow.ApiDef.Arg in_arg = 4;
-  public native int in_arg_size();
-  public native void clear_in_arg();
-  @MemberGetter public static native int kInArgFieldNumber();
-  public static final int kInArgFieldNumber = kInArgFieldNumber();
-  public native ApiDef_Arg mutable_in_arg(int index);
-  public native @Const @ByRef ApiDef_Arg in_arg(int index);
-  public native ApiDef_Arg add_in_arg();
-
-  // repeated .tensorflow.ApiDef.Arg out_arg = 5;
-  public native int out_arg_size();
-  public native void clear_out_arg();
-  @MemberGetter public static native int kOutArgFieldNumber();
-  public static final int kOutArgFieldNumber = kOutArgFieldNumber();
-  public native ApiDef_Arg mutable_out_arg(int index);
-  public native @Const @ByRef ApiDef_Arg out_arg(int index);
-  public native ApiDef_Arg add_out_arg();
-
-  // repeated .tensorflow.ApiDef.Attr attr = 6;
-  public native int attr_size();
-  public native void clear_attr();
-  @MemberGetter public static native int kAttrFieldNumber();
-  public static final int kAttrFieldNumber = kAttrFieldNumber();
-  public native ApiDef_Attr mutable_attr(int index);
-  public native @Const @ByRef ApiDef_Attr attr(int index);
-  public native ApiDef_Attr add_attr();
-
-  // repeated string arg_order = 11;
-  public native int arg_order_size();
-  public native void clear_arg_order();
-  @MemberGetter public static native int kArgOrderFieldNumber();
-  public static final int kArgOrderFieldNumber = kArgOrderFieldNumber();
-  public native @StdString BytePointer arg_order(int index);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_arg_order(int index);
-  public native void set_arg_order(int index, @StdString BytePointer value);
-  public native void set_arg_order(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_arg_order(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_arg_order(int index, String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_arg_order();
-  public native void add_arg_order(@StdString BytePointer value);
-  public native void add_arg_order(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void add_arg_order(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void add_arg_order(String value, @Cast("size_t") long size);
-
-  // string graph_op_name = 1;
-  public native void clear_graph_op_name();
-  @MemberGetter public static native int kGraphOpNameFieldNumber();
-  public static final int kGraphOpNameFieldNumber = kGraphOpNameFieldNumber();
-  public native @StdString BytePointer graph_op_name();
-  public native void set_graph_op_name(@StdString BytePointer value);
-  public native void set_graph_op_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_graph_op_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_graph_op_name(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_graph_op_name();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_graph_op_name();
-  public native void set_allocated_graph_op_name(@StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_graph_op_name();
-  public native @Deprecated void unsafe_arena_set_allocated_graph_op_name(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer graph_op_name);
-
-  // string summary = 7;
-  public native void clear_summary();
-  @MemberGetter public static native int kSummaryFieldNumber();
-  public static final int kSummaryFieldNumber = kSummaryFieldNumber();
-  public native @StdString BytePointer summary();
-  public native void set_summary(@StdString BytePointer value);
-  public native void set_summary(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_summary(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_summary(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_summary();
-  public native void set_allocated_summary(@StdString @Cast({"char*", "std::string*"}) BytePointer summary);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_summary();
-  public native @Deprecated void unsafe_arena_set_allocated_summary(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer summary);
-
-  // string description = 8;
-  public native void clear_description();
-  @MemberGetter public static native int kDescriptionFieldNumber();
-  public static final int kDescriptionFieldNumber = kDescriptionFieldNumber();
-  public native @StdString BytePointer description();
-  public native void set_description(@StdString BytePointer value);
-  public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_description(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description();
-  public native void set_allocated_description(@StdString @Cast({"char*", "std::string*"}) BytePointer description);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description();
-  public native @Deprecated void unsafe_arena_set_allocated_description(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer description);
-
-  // string description_prefix = 9;
-  public native void clear_description_prefix();
-  @MemberGetter public static native int kDescriptionPrefixFieldNumber();
-  public static final int kDescriptionPrefixFieldNumber = kDescriptionPrefixFieldNumber();
-  public native @StdString BytePointer description_prefix();
-  public native void set_description_prefix(@StdString BytePointer value);
-  public native void set_description_prefix(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_description_prefix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_description_prefix(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_prefix();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_prefix();
-  public native void set_allocated_description_prefix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_prefix();
-  public native @Deprecated void unsafe_arena_set_allocated_description_prefix(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer description_prefix);
-
-  // string description_suffix = 10;
-  public native void clear_description_suffix();
-  @MemberGetter public static native int kDescriptionSuffixFieldNumber();
-  public static final int kDescriptionSuffixFieldNumber = kDescriptionSuffixFieldNumber();
-  public native @StdString BytePointer description_suffix();
-  public native void set_description_suffix(@StdString BytePointer value);
-  public native void set_description_suffix(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_description_suffix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_description_suffix(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_suffix();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_description_suffix();
-  public native void set_allocated_description_suffix(@StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_description_suffix();
-  public native @Deprecated void unsafe_arena_set_allocated_description_suffix(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer description_suffix);
-
-  // string deprecation_message = 12;
-  public native void clear_deprecation_message();
-  @MemberGetter public static native int kDeprecationMessageFieldNumber();
-  public static final int kDeprecationMessageFieldNumber = kDeprecationMessageFieldNumber();
-  public native @StdString BytePointer deprecation_message();
-  public native void set_deprecation_message(@StdString BytePointer value);
-  public native void set_deprecation_message(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
-  public native void set_deprecation_message(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
-  public native void set_deprecation_message(String value, @Cast("size_t") long size);
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_deprecation_message();
-  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_deprecation_message();
-  public native void set_allocated_deprecation_message(@StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_deprecation_message();
-  public native @Deprecated void unsafe_arena_set_allocated_deprecation_message(
-        @StdString @Cast({"char*", "std::string*"}) BytePointer deprecation_message);
-
-  // .tensorflow.ApiDef.Visibility visibility = 2;
-  public native void clear_visibility();
-  @MemberGetter public static native int kVisibilityFieldNumber();
-  public static final int kVisibilityFieldNumber = kVisibilityFieldNumber();
-  public native @Cast("tensorflow::ApiDef_Visibility") int visibility();
-  public native void set_visibility(@Cast("tensorflow::ApiDef_Visibility") int value);
-}
-// -------------------------------------------------------------------
-
-@Namespace("tensorflow") @NoOffset public static class ApiDefs extends MessageLite {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ApiDefs(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ApiDefs(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ApiDefs position(long position) {
-        return (ApiDefs)super.position(position);
-    }
-
-  public ApiDefs() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public ApiDefs(@Const @ByRef ApiDefs from) { super((Pointer)null); allocate(from); }
-  private native void allocate(@Const @ByRef ApiDefs from);
-
-  public native @ByRef @Name("operator =") ApiDefs put(@Const @ByRef ApiDefs from);
-//   #if LANG_CXX11
-//   #endif
-  public native Arena GetArena();
-  public native Pointer GetMaybeArenaPointer();
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
-  public static native @Const @ByRef ApiDefs default_instance();
-
-  public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  public static native @Const ApiDefs internal_default_instance();
-  @MemberGetter public static native int kIndexInFileMessages();
-  public static final int kIndexInFileMessages = kIndexInFileMessages();
-
-  public native void UnsafeArenaSwap(ApiDefs other);
-  public native void Swap(ApiDefs other);
-  
-
-  // implements Message ----------------------------------------------
-
-  public native ApiDefs New();
-
-  public native ApiDefs New(Arena arena);
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef MessageLite from);
-  public native void CopyFrom(@Const @ByRef ApiDefs from);
-  public native void MergeFrom(@Const @ByRef ApiDefs from);
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-
-  public native @Cast("size_t") long ByteSizeLong();
-  public native @Cast("bool") boolean MergePartialFromCodedStream(
-        CodedInputStream input);
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
-  public native int GetCachedSize();
-
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // repeated .tensorflow.ApiDef op = 1;
-  public native int op_size();
-  public native void clear_op();
-  @MemberGetter public static native int kOpFieldNumber();
-  public static final int kOpFieldNumber = kOpFieldNumber();
-  public native ApiDef mutable_op(int index);
-  public native @Const @ByRef ApiDef op(int index);
-  public native ApiDef add_op();
-}
-// ===================================================================
-
-
-// ===================================================================
-
-// #ifdef __GNUC__
-//   #pragma GCC diagnostic push
-//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
-// #endif  // __GNUC__
-// ApiDef_Endpoint
-
-// string name = 1;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// bool deprecated = 3;
-
-
-
-
-// -------------------------------------------------------------------
-
-// ApiDef_Arg
-
-// string name = 1;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string rename_to = 2;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string description = 3;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// -------------------------------------------------------------------
-
-// ApiDef_Attr
-
-// string name = 1;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string rename_to = 2;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// .tensorflow.AttrValue default_value = 3;
-
-
-
-
-
-
-
-
-// string description = 4;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// -------------------------------------------------------------------
-
-// ApiDef
-
-// string graph_op_name = 1;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string deprecation_message = 12;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// .tensorflow.ApiDef.Visibility visibility = 2;
-
-
-
-
-// repeated .tensorflow.ApiDef.Endpoint endpoint = 3;
-
-
-
-
-
-
-
-
-// repeated .tensorflow.ApiDef.Arg in_arg = 4;
-
-
-
-
-
-
-
-
-// repeated .tensorflow.ApiDef.Arg out_arg = 5;
-
-
-
-
-
-
-
-
-// repeated string arg_order = 11;
-
-
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-// repeated .tensorflow.ApiDef.Attr attr = 6;
-
-
-
-
-
-
-
-
-// string summary = 7;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string description = 8;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string description_prefix = 9;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// string description_suffix = 10;
-
-
-
-// #if LANG_CXX11
-
-// #endif
-
-
-
-
-
-
-
-
-// -------------------------------------------------------------------
-
-// ApiDefs
-
-// repeated .tensorflow.ApiDef op = 1;
-
-
-
-
-
-
-
-
-// #ifdef __GNUC__
-//   #pragma GCC diagnostic pop
-// #endif  // __GNUC__
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-// -------------------------------------------------------------------
-
-
-// @@protoc_insertion_point(namespace_scope)
-
-  // namespace tensorflow
-
-
-  // namespace protobuf
-  // namespace google
-
-// @@protoc_insertion_point(global_scope)
-
-// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
-
-
 // Parsed from tensorflow/core/framework/op_gen_lib.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -33617,8 +34057,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_FRAMEWORK_OP_GEN_LIB_H_
-// #define TENSORFLOW_FRAMEWORK_OP_GEN_LIB_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_GEN_LIB_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_OP_GEN_LIB_H_
 
 // #include <string>
 // #include <unordered_map>
@@ -33705,7 +34145,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_FRAMEWORK_OP_GEN_LIB_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_OP_GEN_LIB_H_
 
 
 // Parsed from tensorflow/cc/framework/cc_op_gen.h
@@ -36122,6 +36562,129 @@ limitations under the License.
 // #endif  // TENSORFLOW_CC_SAVED_MODEL_LOADER_H_
 
 
+// Parsed from tensorflow/cc/saved_model/tag_constants.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+// #define TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+
+/** Tag for the {@code gpu} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagGpu(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagGpu();
+
+/** Tag for the {@code tpu} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagTpu(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagTpu();
+
+/** Tag for the {@code serving} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagServe(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagServe();
+
+/** Tag for the {@code training} graph. */
+@Namespace("tensorflow") @MemberGetter public static native byte kSavedModelTagTrain(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kSavedModelTagTrain();
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_SAVED_MODEL_TAG_CONSTANTS_H_
+
+
+// Parsed from tensorflow/cc/saved_model/signature_constants.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+// #define TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+
+/** Key in the signature def map for {@code default} serving signatures. The default
+ *  signature is used in inference requests where a specific signature was not
+ *  specified. */
+@Namespace("tensorflow") @MemberGetter public static native byte kDefaultServingSignatureDefKey(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kDefaultServingSignatureDefKey();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Classification API constants.
+ <p>
+ *  Classification inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyInputs();
+
+/** Classification method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyMethodName();
+
+/** Classification classes output. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyOutputClasses(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyOutputClasses();
+
+/** Classification scores output. */
+@Namespace("tensorflow") @MemberGetter public static native byte kClassifyOutputScores(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kClassifyOutputScores();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Predict API constants.
+ <p>
+ *  Predict inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictInputs();
+
+/** Predict method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictMethodName();
+
+/** Predict outputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kPredictOutputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kPredictOutputs();
+
+////////////////////////////////////////////////////////////////////////////////
+/** Regression API constants.
+ <p>
+ *  Regression inputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressInputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressInputs();
+
+/** Regression method name used in a SignatureDef. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressMethodName(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressMethodName();
+
+/** Regression outputs. */
+@Namespace("tensorflow") @MemberGetter public static native byte kRegressOutputs(int i);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const char*") BytePointer kRegressOutputs();
+
+////////////////////////////////////////////////////////////////////////////////
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_SAVED_MODEL_SIGNATURE_CONSTANTS_H_
+
+
 // Parsed from tensorflow/cc/ops/standard_ops.h
 
 /* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
@@ -37275,6 +37838,34 @@ limitations under the License.
   public native @ByRef Output output(); public native Empty output(Output output);
 }
 
+/** Ensures that the tensor's shape matches the expected shape.
+ * 
+ *  Raises an error if the input tensor's shape does not match the specified shape.
+ *  Returns the input tensor otherwise.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * input: A tensor, whose shape is to be validated.
+ *  * shape: The expected (possibly partially specified) shape of the input tensor.
+ * 
+ *  Returns:
+ *  * {@code Output}: A tensor with the same shape and contents as the input tensor or value. */
+@Namespace("tensorflow::ops") @NoOffset public static class EnsureShape extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnsureShape(Pointer p) { super(p); }
+
+  public EnsureShape(@Const @ByRef Scope scope, @ByVal Input input,
+              @ByVal PartialTensorShape shape) { super((Pointer)null); allocate(scope, input, shape); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input,
+              @ByVal PartialTensorShape shape);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native EnsureShape output(Output output);
+}
+
 /** Inserts a dimension of 1 into a tensor's shape.
  * 
  *  Given a tensor {@code input}, this operation inserts a dimension of 1 at the
@@ -37829,6 +38420,16 @@ limitations under the License.
  *                       [9, 9, 9]]
  *  }</pre>
  * 
+ *  {@code tf.fill} differs from {@code tf.constant} in a few ways:
+ * 
+ *  *   {@code tf.fill} only supports scalar contents, whereas {@code tf.constant} supports
+ *      Tensor values.
+ *  *   {@code tf.fill} creates an Op in the computation graph that constructs the actual
+ *      Tensor value at runtime. This is in contrast to {@code tf.constant} which embeds
+ *      the entire Tensor into the graph with a {@code Const} node.
+ *  *   Because {@code tf.fill} evaluates at graph runtime, it supports dynamic shapes
+ *      based on other runtime Tensors, unlike {@code tf.constant}.
+ * 
  *  Arguments:
  *  * scope: A Scope object
  *  * dims: 1-D. Represents the shape of the output tensor.
@@ -37939,7 +38540,7 @@ limitations under the License.
  * 
  *      output[\\(i_0, ..., i_{K-2}\\)] = params[indices[\\(i_0, ..., i_{K-2}\\)]]
  * 
- *  Whereas in \{tf.gather} {@code indices} defines slices into the first
+ *  Whereas in {@code tf.gather} {@code indices} defines slices into the first
  *  dimension of {@code params}, in {@code tf.gather_nd}, {@code indices} defines slices into the
  *  first {@code N} dimensions of {@code params}, where {@code N = indices.shape[-1]}.
  * 
@@ -38036,6 +38637,8 @@ limitations under the License.
  *      output = [['b0', 'b1'], ['d0', 'c1']]
  *  }</pre>
  * 
+ *  See also {@code tf.gather} and {@code tf.batch_gather}.
+ * 
  *  Arguments:
  *  * scope: A Scope object
  *  * params: The tensor from which to gather values.
@@ -38087,6 +38690,8 @@ limitations under the License.
  *  Note that on CPU, if an out of bound index is found, an error is returned.
  *  On GPU, if an out of bound index is found, a 0 is stored in the
  *  corresponding output value.
+ * 
+ *  See also {@code tf.batch_gather} and {@code tf.gather_nd}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -40130,10 +40735,14 @@ limitations under the License.
  *  Creates a new tensor by applying sparse {@code updates} to individual values or
  *  slices within a tensor (initially zero for numeric, empty for string) of
  *  the given {@code shape} according to indices.  This operator is the inverse of the
- *  \{tf.gather_nd} operator which extracts values or slices from a given tensor.
+ *  {@code tf.gather_nd} operator which extracts values or slices from a given tensor.
+ * 
+ *  If {@code indices} contains duplicates, then their updates are accumulated (summed).
  * 
  *  **WARNING**: The order in which updates are applied is nondeterministic, so the
- *  output will be nondeterministic if {@code indices} contains duplicates.
+ *  output will be nondeterministic if {@code indices} contains duplicates -- because
+ *  of some numerical approximation issues, numbers summed in different order
+ *  may yield different results.
  * 
  *  {@code indices} is an integer tensor containing indices into a new tensor of shape
  *  {@code shape}.  The last dimension of {@code indices} can be at most the rank of {@code shape}:
@@ -40261,7 +40870,7 @@ limitations under the License.
  * 
  *      [1, 13, 3, 14, 14, 6, 7, 20]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to slices.
+ *  See {@code tf.scatter_nd} for more details about how to make updates to slices.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -41144,27 +41753,27 @@ limitations under the License.
  *  Optional attributes (see {@code Attrs}):
  *  * begin_mask: a bitmask where a bit i being 1 means to ignore the begin
  *  value and instead use the largest interval possible. At runtime
- *  begin[i] will be replaced with {@code [0, n-1) if }stride[i] > 0{@code  or
- *  }[-1, n-1]{@code  if }stride[i] < 0{@code 
- *  * end_mask: analogous to }begin_mask{@code 
- *  * ellipsis_mask: a bitmask where bit }i{@code  being 1 means the }i{@code th
+ *  begin[i] will be replaced with {@code [0, n-1)} if {@code stride[i] > 0} or
+ *  {@code [-1, n-1]} if {@code stride[i] < 0}
+ *  * end_mask: analogous to {@code begin_mask}
+ *  * ellipsis_mask: a bitmask where bit {@code i} being 1 means the {@code i}th
  *  position is actually an ellipsis. One bit at most can be 1.
- *  If }ellipsis_mask == 0{@code , then an implicit ellipsis mask of }1 << (m+1){@code 
- *  is provided. This means that }foo[3:5] == foo[3:5, ...]{@code . An ellipsis
+ *  If {@code ellipsis_mask == 0}, then an implicit ellipsis mask of {@code 1 << (m+1)}
+ *  is provided. This means that {@code foo[3:5] == foo[3:5, ...]}. An ellipsis
  *  implicitly creates as many range specifications as necessary to fully
  *  specify the sliced range for every dimension. For example for a 4-dimensional
- *  tensor }foo{@code  the slice }foo[2, ..., 5:8]{@code  implies }foo[2, :, :, 5:8]{@code .
- *  * new_axis_mask: a bitmask where bit }i{@code  being 1 means the }i{@code th
+ *  tensor {@code foo} the slice {@code foo[2, ..., 5:8]} implies {@code foo[2, :, :, 5:8]}.
+ *  * new_axis_mask: a bitmask where bit {@code i} being 1 means the {@code i}th
  *  specification creates a new shape 1 dimension. For example
- *  }foo[:4, tf.newaxis, :2]{@code  would produce a shape }(4, 1, 2){@code  tensor.
- *  * shrink_axis_mask: a bitmask where bit }i{@code  implies that the }i{@code th
+ *  {@code foo[:4, tf.newaxis, :2]} would produce a shape {@code (4, 1, 2)} tensor.
+ *  * shrink_axis_mask: a bitmask where bit {@code i} implies that the {@code i}th
  *  specification should shrink the dimensionality. begin and end
  *  must imply a slice of size 1 in the dimension. For example in
- *  python one might do }foo[:, 3, :]{@code  which would result in
- *  }shrink_axis_mask{@code  being 2.
+ *  python one might do {@code foo[:, 3, :]} which would result in
+ *  {@code shrink_axis_mask} being 2.
  * 
  *  Returns:
- *  * }Output{@code : The output tensor. */
+ *  * {@code Output}: The output tensor. */
 @Namespace("tensorflow::ops") @NoOffset public static class StridedSlice extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -41187,8 +41796,8 @@ limitations under the License.
   
     /** a bitmask where a bit i being 1 means to ignore the begin
      *  value and instead use the largest interval possible. At runtime
-     *  begin[i] will be replaced with {@code [0, n-1) if }stride[i] > 0{@code  or
-     *  }[-1, n-1]{@code  if }stride[i] < 0{@code 
+     *  begin[i] will be replaced with {@code [0, n-1)} if {@code stride[i] > 0} or
+     *  {@code [-1, n-1]} if {@code stride[i] < 0}
      * 
      *  Defaults to 0 */
     
@@ -47740,7 +48349,7 @@ limitations under the License.
  * 
  *  For example, if an image is 100 x 200 pixels (height x width) and the bounding
  *  box is {@code [0.1, 0.2, 0.5, 0.9]}, the upper-left and bottom-right coordinates of
- *  the bounding box will be {@code (40, 10)} to {@code (100, 50)} (in (x,y) coordinates).
+ *  the bounding box will be {@code (40, 10)} to {@code (180, 50)} (in (x,y) coordinates).
  * 
  *  Parts of the bounding box may fall outside the image.
  * 
@@ -48358,6 +48967,90 @@ limitations under the License.
   public native Node node();
 
   public native @ByRef Output selected_indices(); public native NonMaxSuppressionV3 selected_indices(Output selected_indices);
+}
+
+/** Greedily selects a subset of bounding boxes in descending order of score,
+ * 
+ *  pruning away boxes that have high intersection-over-union (IOU) overlap
+ *  with previously selected boxes.  Bounding boxes with score less than
+ *  {@code score_threshold} are removed.  Bounding boxes are supplied as
+ *  [y1, x1, y2, x2], where (y1, x1) and (y2, x2) are the coordinates of any
+ *  diagonal pair of box corners and the coordinates can be provided as normalized
+ *  (i.e., lying in the interval [0, 1]) or absolute.  Note that this algorithm
+ *  is agnostic to where the origin is in the coordinate system and more
+ *  generally is invariant to orthogonal transformations and translations
+ *  of the coordinate system; thus translating or reflections of the coordinate
+ *  system result in the same boxes being selected by the algorithm.
+ *  The output of this operation is a set of integers indexing into the input
+ *  collection of bounding boxes representing the selected boxes.  The bounding
+ *  box coordinates corresponding to the selected indices can then be obtained
+ *  using the {@code tf.gather operation}.  For example:
+ *    selected_indices = tf.image.non_max_suppression_v2(
+ *        boxes, scores, max_output_size, iou_threshold, score_threshold)
+ *    selected_boxes = tf.gather(boxes, selected_indices)
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * boxes: A 2-D float tensor of shape {@code [num_boxes, 4]}.
+ *  * scores: A 1-D float tensor of shape {@code [num_boxes]} representing a single
+ *  score corresponding to each box (each row of boxes).
+ *  * max_output_size: A scalar integer tensor representing the maximum number of
+ *  boxes to be selected by non max suppression.
+ *  * iou_threshold: A 0-D float tensor representing the threshold for deciding whether
+ *  boxes overlap too much with respect to IOU.
+ *  * score_threshold: A 0-D float tensor representing the threshold for deciding when to remove
+ *  boxes based on score.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * pad_to_max_output_size: If true, the output {@code selected_indices} is padded to be of length
+ *  {@code max_output_size}. Defaults to false.
+ * 
+ *  Returns:
+ *  * {@code Output} selected_indices: A 1-D integer tensor of shape {@code [M]} representing the selected
+ *  indices from the boxes tensor, where {@code M <= max_output_size}.
+ *  * {@code Output} valid_outputs: A 0-D integer tensor representing the number of valid elements in
+ *  {@code selected_indices}, with the valid elements appearing first. */
+@Namespace("tensorflow::ops") @NoOffset public static class NonMaxSuppressionV4 extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NonMaxSuppressionV4(Pointer p) { super(p); }
+
+  /** Optional attribute setters for NonMaxSuppressionV4 */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** If true, the output {@code selected_indices} is padded to be of length
+     *  {@code max_output_size}. Defaults to false.
+     * 
+     *  Defaults to false */
+    public native @ByVal Attrs PadToMaxOutputSize(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean pad_to_max_output_size_(); public native Attrs pad_to_max_output_size_(boolean pad_to_max_output_size_);
+  }
+  public NonMaxSuppressionV4(@Const @ByRef Scope scope, @ByVal Input boxes, @ByVal Input scores, @ByVal Input max_output_size, @ByVal Input iou_threshold,
+                      @ByVal Input score_threshold) { super((Pointer)null); allocate(scope, boxes, scores, max_output_size, iou_threshold, score_threshold); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input boxes, @ByVal Input scores, @ByVal Input max_output_size, @ByVal Input iou_threshold,
+                      @ByVal Input score_threshold);
+  public NonMaxSuppressionV4(@Const @ByRef Scope scope, @ByVal Input boxes, @ByVal Input scores, @ByVal Input max_output_size, @ByVal Input iou_threshold,
+                      @ByVal Input score_threshold, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, boxes, scores, max_output_size, iou_threshold, score_threshold, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input boxes, @ByVal Input scores, @ByVal Input max_output_size, @ByVal Input iou_threshold,
+                      @ByVal Input score_threshold, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs PadToMaxOutputSize(@Cast("bool") boolean x);
+
+  public native @ByRef Output selected_indices(); public native NonMaxSuppressionV4 selected_indices(Output selected_indices);
+  public native @ByRef Output valid_outputs(); public native NonMaxSuppressionV4 valid_outputs(Output valid_outputs);
 }
 
 /** Greedily selects a subset of bounding boxes in descending order of score,
@@ -50448,43 +51141,6 @@ limitations under the License.
   public native @ByRef Output output(); public native MatrixDeterminant output(Output output);
 }
 
-/** Computes the matrix exponential of one or more square matrices:
- * 
- *  \\(exp(A) = \sum_{n=0}^\infty A^n/n!\\)
- * 
- *  The exponential is computed using a combination of the scaling and squaring
- *  method and the Pade approximation. Details can be founds in:
- *  Nicholas J. Higham, "The scaling and squaring method for the matrix exponential
- *  revisited," SIAM J. Matrix Anal. Applic., 26:1179-1193, 2005.
- * 
- *  The input is a tensor of shape {@code [..., M, M]} whose inner-most 2 dimensions
- *  form square matrices. The output is a tensor of the same shape as the input
- *  containing the exponential for all input submatrices {@code [..., :, :]}.
- * 
- *  Arguments:
- *  * scope: A Scope object
- *  * input: Shape is {@code [..., M, M]}.
- * 
- *  Returns:
- *  * {@code Output}: Shape is {@code [..., M, M]}.
- * 
- *  \compatibility(scipy)
- *  Equivalent to scipy.linalg.expm
- *  \end_compatibility */
-@Namespace("tensorflow::ops") @NoOffset public static class MatrixExponential extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public MatrixExponential(Pointer p) { super(p); }
-
-  public MatrixExponential(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
-  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
-  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
-  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
-  public native Node node();
-
-  public native @ByRef Output output(); public native MatrixExponential output(Output output);
-}
-
 /** Computes the inverse of one or more square invertible matrices or their
  * 
  *  adjoints (conjugate transposes).
@@ -52512,21 +53168,47 @@ limitations under the License.
  * 
  *  Returns:
  *  * {@code Output}: The y tensor. */
-@Name("class tensorflow::ops::Cast") @NoOffset public static class CastOp extends Pointer {
+@Name("tensorflow::ops::Cast") @NoOffset public static class CastOp extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CastOp(Pointer p) { super(p); }
 
+  /** Optional attribute setters for Cast */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to false */
+    public native @ByVal Attrs Truncate(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean Truncate_(); public native Attrs Truncate_(boolean Truncate_);
+  }
   public CastOp(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT) { super((Pointer)null); allocate(scope, x, DstT); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT);
+  public CastOp(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT,
+       @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, DstT, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x, @Cast("tensorflow::DataType") int DstT,
+       @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
 
+  public static native @ByVal Attrs Truncate(@Cast("bool") boolean x);
+
   public native @ByRef Output y(); public native CastOp y(Output y);
 }
 
-/** Returns element-wise smallest integer in not less than x.
+/** Returns element-wise smallest integer not less than x.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -53094,6 +53776,33 @@ limitations under the License.
   public native @ByRef Output z(); public native Div z(Output z);
 }
 
+/** Returns 0 if the denominator is zero.
+ * 
+ * 
+ *  *NOTE*: {@code DivNoNan} supports broadcasting. More about broadcasting
+ *  [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ * 
+ *  Returns:
+ *  * {@code Output}: The z tensor. */
+@Namespace("tensorflow::ops") @NoOffset public static class DivNoNan extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DivNoNan(Pointer p) { super(p); }
+
+  public DivNoNan(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output z(); public native DivNoNan z(Output z);
+}
+
 /** Returns the truth value of (x == y) element-wise.
  * 
  *  *NOTE*: {@code Equal} supports broadcasting. More about broadcasting
@@ -53404,7 +54113,7 @@ limitations under the License.
   public native @ByRef Output out(); public native HistogramFixedWidth out(Output out);
 }
 
-/** Compute the lower regularized incomplete Gamma function {@code Q(a, x)}.
+/** Compute the lower regularized incomplete Gamma function {@code P(a, x)}.
  * 
  *  The lower regularized incomplete Gamma function is defined as:
  * 
@@ -55019,8 +55728,9 @@ limitations under the License.
 
 /** Computes the maximum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output_i = \max_j(data_j)\\) where {@code max} is over {@code j} such
@@ -55058,8 +55768,9 @@ limitations under the License.
 
 /** Computes the mean along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output_i = \frac{\sum_j data_j}{N}\\) where {@code mean} is
@@ -55098,8 +55809,9 @@ limitations under the License.
 
 /** Computes the minimum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output_i = \min_j(data_j)\\) where {@code min} is over {@code j} such
@@ -55137,8 +55849,9 @@ limitations under the License.
 
 /** Computes the product along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output_i = \prod_j data_j\\) where the product is over {@code j} such
@@ -55176,8 +55889,9 @@ limitations under the License.
 
 /** Computes the sum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output_i = \sum_j data_j\\) where sum is over {@code j} such
@@ -55445,8 +56159,9 @@ limitations under the License.
 
 /** Computes the mean along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Like {@code SegmentMean}, but {@code segment_ids} can have rank less than {@code data}'s first
  *  dimension, selecting a subset of dimension 0, specified by {@code indices}.
@@ -55508,8 +56223,9 @@ limitations under the License.
  *  Like {@code SparseSegmentMean}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -55542,8 +56258,9 @@ limitations under the License.
  * 
  *  N is the size of the segment being reduced.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -55604,8 +56321,9 @@ limitations under the License.
  *  Like {@code SparseSegmentSqrtN}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -55636,8 +56354,9 @@ limitations under the License.
 
 /** Computes the sum along sparse segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Like {@code SegmentSum}, but {@code segment_ids} can have rank less than {@code data}'s first
  *  dimension, selecting a subset of dimension 0, specified by {@code indices}.
@@ -55694,8 +56413,9 @@ limitations under the License.
  *  Like {@code SparseSegmentSum}, but allows missing ids in {@code segment_ids}. If an id is
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  For example:
  * 
@@ -56024,8 +56744,9 @@ limitations under the License.
 
 /** Computes the maximum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  This operator is similar to the unsorted segment sum operator found
  *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
@@ -56068,8 +56789,9 @@ limitations under the License.
 
 /** Computes the minimum along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#segmentation)
+ *  for an explanation of segments.
  * 
  *  This operator is similar to the unsorted segment sum operator found
  *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
@@ -56108,8 +56830,9 @@ limitations under the License.
 
 /** Computes the product along segments of a tensor.
  * 
- *  Read \{$math_ops#segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#segmentation)
+ *  for an explanation of segments.
  * 
  *  This operator is similar to the unsorted segment sum operator found
  *  [(here)](../../../api_docs/python/math_ops.md#UnsortedSegmentSum).
@@ -56147,8 +56870,9 @@ limitations under the License.
 
 /** Computes the sum along segments of a tensor.
  * 
- *  Read \{$math_ops#Segmentation$the section on segmentation} for an explanation of
- *  segments.
+ *  Read
+ *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  for an explanation of segments.
  * 
  *  Computes a tensor such that
  *  \\(output[i] = sum_{j...} data[j...]\\) where the sum is over tuples {@code j...} such
@@ -62012,6 +62736,188 @@ limitations under the License.
   public native @ByRef @Cast("tensorflow::OutputList*") OutputVector dense_values(); public native ParseExample dense_values(OutputVector dense_values);
 }
 
+/** Transforms a vector of brain.SequenceExample protos (as strings) into typed tensors.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * serialized: A vector containing binary serialized SequenceExample protos.
+ *  * debug_name: A vector containing the names of the serialized protos.
+ *  May contain, for example, table key (descriptive) name for the
+ *  corresponding serialized proto.  This is purely useful for debugging
+ *  purposes, and the presence of values here has no effect on the output.
+ *  May also be an empty vector if no name is available.
+ *  * context_dense_defaults: A list of Ncontext_dense Tensors (some may be empty).
+ *  context_dense_defaults[j] provides default values
+ *  when the SequenceExample's context map lacks context_dense_key[j].
+ *  If an empty Tensor is provided for context_dense_defaults[j],
+ *  then the Feature context_dense_keys[j] is required.
+ *  The input type is inferred from context_dense_defaults[j], even when it's
+ *  empty.  If context_dense_defaults[j] is not empty, its shape must match
+ *  context_dense_shapes[j].
+ *  * feature_list_dense_missing_assumed_empty: A vector listing the
+ *  FeatureList keys which may be missing from the SequenceExamples.  If the
+ *  associated FeatureList is missing, it is treated as empty.  By default,
+ *  any FeatureList not listed in this vector must exist in the SequenceExamples.
+ *  * context_sparse_keys: A list of Ncontext_sparse string Tensors (scalars).
+ *  The keys expected in the Examples' features associated with context_sparse
+ *  values.
+ *  * context_dense_keys: A list of Ncontext_dense string Tensors (scalars).
+ *  The keys expected in the SequenceExamples' context features associated with
+ *  dense values.
+ *  * feature_list_sparse_keys: A list of Nfeature_list_sparse string Tensors
+ *  (scalars).  The keys expected in the FeatureLists associated with sparse
+ *  values.
+ *  * feature_list_dense_keys: A list of Nfeature_list_dense string Tensors (scalars).
+ *  The keys expected in the SequenceExamples' feature_lists associated
+ *  with lists of dense values.
+ * 
+ *  Optional attributes (see {@code Attrs}):
+ *  * context_sparse_types: A list of Ncontext_sparse types; the data types of data in
+ *  each context Feature given in context_sparse_keys.
+ *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+ *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+ *  * context_dense_shapes: A list of Ncontext_dense shapes; the shapes of data in
+ *  each context Feature given in context_dense_keys.
+ *  The number of elements in the Feature corresponding to context_dense_key[j]
+ *  must always equal context_dense_shapes[j].NumEntries().
+ *  The shape of context_dense_values[j] will match context_dense_shapes[j].
+ *  * feature_list_sparse_types: A list of Nfeature_list_sparse types; the data types
+ *  of data in each FeatureList given in feature_list_sparse_keys.
+ *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+ *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+ *  * feature_list_dense_shapes: A list of Nfeature_list_dense shapes; the shapes of
+ *  data in each FeatureList given in feature_list_dense_keys.
+ *  The shape of each Feature in the FeatureList corresponding to
+ *  feature_list_dense_key[j] must always equal
+ *  feature_list_dense_shapes[j].NumEntries().
+ * 
+ *  Returns:
+ *  * {@code OutputList} context_sparse_indices
+ *  * {@code OutputList} context_sparse_values
+ *  * {@code OutputList} context_sparse_shapes
+ *  * {@code OutputList} context_dense_values
+ *  * {@code OutputList} feature_list_sparse_indices
+ *  * {@code OutputList} feature_list_sparse_values
+ *  * {@code OutputList} feature_list_sparse_shapes
+ *  * {@code OutputList} feature_list_dense_values
+ *  * {@code OutputList} feature_list_dense_lengths */
+@Namespace("tensorflow::ops") @NoOffset public static class ParseSequenceExample extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ParseSequenceExample(Pointer p) { super(p); }
+
+  /** Optional attribute setters for ParseSequenceExample */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to 0 */
+    public native @ByVal Attrs NcontextSparse(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs NcontextDense(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    public native @ByVal Attrs NfeatureListSparse(@Cast("tensorflow::int64") long x);
+
+    /** Defaults to 0 */
+    
+    ///
+    public native @ByVal Attrs NfeatureListDense(@Cast("tensorflow::int64") long x);
+
+    /** A list of Ncontext_sparse types; the data types of data in
+     *  each context Feature given in context_sparse_keys.
+     *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+     *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+     * 
+     *  Defaults to [] */
+    public native @ByVal Attrs ContextSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+
+    /** Defaults to [] */
+    
+    ///
+    public native @ByVal Attrs FeatureListDenseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+
+    /** A list of Ncontext_dense shapes; the shapes of data in
+     *  each context Feature given in context_dense_keys.
+     *  The number of elements in the Feature corresponding to context_dense_key[j]
+     *  must always equal context_dense_shapes[j].NumEntries().
+     *  The shape of context_dense_values[j] will match context_dense_shapes[j].
+     * 
+     *  Defaults to [] */
+    
+    ///
+    public native @ByVal Attrs ContextDenseShapes(@ArraySlice PartialTensorShape x);
+
+    /** A list of Nfeature_list_sparse types; the data types
+     *  of data in each FeatureList given in feature_list_sparse_keys.
+     *  Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+     *  DT_INT64 (Int64List), and DT_STRING (BytesList).
+     * 
+     *  Defaults to [] */
+    
+    ///
+    public native @ByVal Attrs FeatureListSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+
+    /** A list of Nfeature_list_dense shapes; the shapes of
+     *  data in each FeatureList given in feature_list_dense_keys.
+     *  The shape of each Feature in the FeatureList corresponding to
+     *  feature_list_dense_key[j] must always equal
+     *  feature_list_dense_shapes[j].NumEntries().
+     * 
+     *  Defaults to [] */
+    public native @ByVal Attrs FeatureListDenseShapes(@ArraySlice PartialTensorShape x);
+
+    public native @Cast("tensorflow::int64") long Ncontext_sparse_(); public native Attrs Ncontext_sparse_(long Ncontext_sparse_);
+    public native @Cast("tensorflow::int64") long Ncontext_dense_(); public native Attrs Ncontext_dense_(long Ncontext_dense_);
+    public native @Cast("tensorflow::int64") long Nfeature_list_sparse_(); public native Attrs Nfeature_list_sparse_(long Nfeature_list_sparse_);
+    public native @Cast("tensorflow::int64") long Nfeature_list_dense_(); public native Attrs Nfeature_list_dense_(long Nfeature_list_dense_);
+    public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector context_sparse_types_(); public native Attrs context_sparse_types_(DataTypeVector context_sparse_types_);
+    public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector feature_list_dense_types_(); public native Attrs feature_list_dense_types_(DataTypeVector feature_list_dense_types_);
+    public native @ArraySlice PartialTensorShape context_dense_shapes_(); public native Attrs context_dense_shapes_(PartialTensorShape context_dense_shapes_);
+    public native @ByRef @Cast("tensorflow::DataTypeSlice*") DataTypeVector feature_list_sparse_types_(); public native Attrs feature_list_sparse_types_(DataTypeVector feature_list_sparse_types_);
+    public native @ArraySlice PartialTensorShape feature_list_dense_shapes_(); public native Attrs feature_list_dense_shapes_(PartialTensorShape feature_list_dense_shapes_);
+  }
+  public ParseSequenceExample(@Const @ByRef Scope scope, @ByVal Input serialized, @ByVal Input debug_name,
+                       @ByVal InputList context_dense_defaults, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_missing_assumed_empty, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_dense_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_keys) { super((Pointer)null); allocate(scope, serialized, debug_name, context_dense_defaults, feature_list_dense_missing_assumed_empty, context_sparse_keys, context_dense_keys, feature_list_sparse_keys, feature_list_dense_keys); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input serialized, @ByVal Input debug_name,
+                       @ByVal InputList context_dense_defaults, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_missing_assumed_empty, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_dense_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_keys);
+  public ParseSequenceExample(@Const @ByRef Scope scope, @ByVal Input serialized, @ByVal Input debug_name,
+                       @ByVal InputList context_dense_defaults, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_missing_assumed_empty, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_dense_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_keys, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, serialized, debug_name, context_dense_defaults, feature_list_dense_missing_assumed_empty, context_sparse_keys, context_dense_keys, feature_list_sparse_keys, feature_list_dense_keys, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input serialized, @ByVal Input debug_name,
+                       @ByVal InputList context_dense_defaults, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_missing_assumed_empty, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector context_dense_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_sparse_keys, @Cast("const tensorflow::gtl::ArraySlice<tensorflow::string>*") @ByRef StringVector feature_list_dense_keys, @Const @ByRef Attrs attrs);
+
+  public static native @ByVal Attrs NcontextSparse(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NcontextDense(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NfeatureListSparse(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs NfeatureListDense(@Cast("tensorflow::int64") long x);
+  public static native @ByVal Attrs ContextSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+  public static native @ByVal Attrs FeatureListDenseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+  public static native @ByVal Attrs ContextDenseShapes(@ArraySlice PartialTensorShape x);
+  public static native @ByVal Attrs FeatureListSparseTypes(@Cast("const tensorflow::DataTypeSlice*") @ByRef DataTypeVector x);
+  public static native @ByVal Attrs FeatureListDenseShapes(@ArraySlice PartialTensorShape x);
+
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_indices(); public native ParseSequenceExample context_sparse_indices(OutputVector context_sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_values(); public native ParseSequenceExample context_sparse_values(OutputVector context_sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_sparse_shapes(); public native ParseSequenceExample context_sparse_shapes(OutputVector context_sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector context_dense_values(); public native ParseSequenceExample context_dense_values(OutputVector context_dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_indices(); public native ParseSequenceExample feature_list_sparse_indices(OutputVector feature_list_sparse_indices);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_values(); public native ParseSequenceExample feature_list_sparse_values(OutputVector feature_list_sparse_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_sparse_shapes(); public native ParseSequenceExample feature_list_sparse_shapes(OutputVector feature_list_sparse_shapes);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_dense_values(); public native ParseSequenceExample feature_list_dense_values(OutputVector feature_list_dense_values);
+  public native @ByRef @Cast("tensorflow::OutputList*") OutputVector feature_list_dense_lengths(); public native ParseSequenceExample feature_list_dense_lengths(OutputVector feature_list_dense_lengths);
+}
+
 /** Transforms a tf.Example proto (as a string) into typed tensors.
  * 
  *  Arguments:
@@ -65285,7 +66191,7 @@ limitations under the License.
  *  8 elements. In Python, that update would look like this:
  * 
  *  <pre>{@code python
- *      ref = tfe.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+ *      ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8], use_resource=True)
  *      indices = tf.constant([[4], [3], [1] ,[7]])
  *      updates = tf.constant([9, 10, 11, 12])
  *      update = tf.scatter_nd_add(ref, indices, updates)
@@ -65297,7 +66203,7 @@ limitations under the License.
  * 
  *      [1, 12, 3, 14, 14, 6, 7, 20]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.
  * 
  *  Arguments:
@@ -65384,7 +66290,7 @@ limitations under the License.
  *  8 elements. In Python, that update would look like this:
  * 
  *  <pre>{@code python
- *      ref = tfe.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+ *      ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
  *      indices = tf.constant([[4], [3], [1] ,[7]])
  *      updates = tf.constant([9, 10, 11, 12])
  *      update = tf.scatter_nd_update(ref, indices, updates)
@@ -65396,7 +66302,7 @@ limitations under the License.
  * 
  *      [1, 11, 3, 10, 9, 6, 7, 12]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.
  * 
  *  Arguments:
@@ -65896,7 +66802,7 @@ limitations under the License.
  * 
  *      [1, 13, 3, 14, 14, 6, 7, 20]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.
  * 
  *  Arguments:
@@ -65992,7 +66898,7 @@ limitations under the License.
  * 
  *      [1, -9, 3, -6, -4, 6, 7, -4]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.
  * 
  *  Arguments:
@@ -66090,8 +66996,10 @@ limitations under the License.
  * 
  *      [1, 11, 3, 10, 9, 6, 7, 12]
  * 
- *  See \{tf.scatter_nd} for more details about how to make updates to
+ *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.
+ * 
+ *  See also {@code tf.scatter_update} and {@code tf.batch_scatter_update}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -66265,6 +67173,8 @@ limitations under the License.
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/ScatterUpdate.png" alt>
  *  </div>
+ * 
+ *  See also {@code tf.batch_scatter_update} and {@code tf.scatter_nd_update}.
  * 
  *  Arguments:
  *  * scope: A Scope object
@@ -66934,6 +67844,31 @@ limitations under the License.
   public native @ByRef Output output(); public native StringJoin output(Output output);
 }
 
+/** String lengths of {@code input}.
+ * 
+ *  Computes the length of each string given in the input tensor.
+ * 
+ *  Arguments:
+ *  * scope: A Scope object
+ *  * input: The string for which to compute the length.
+ * 
+ *  Returns:
+ *  * {@code Output}: Integer tensor that has the same shape as {@code input}. The output contains the
+ *  element-wise string lengths of {@code input}. */
+@Namespace("tensorflow::ops") @NoOffset public static class StringLength extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringLength(Pointer p) { super(p); }
+
+  public StringLength(@Const @ByRef Scope scope, @ByVal Input input) { super((Pointer)null); allocate(scope, input); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input input);
+  public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
+  public native @ByVal @Name("operator tensorflow::Input") Input asInput();
+  public native Node node();
+
+  public native @ByRef Output output(); public native StringLength output(Output output);
+}
+
 /** Split elements of {@code input} based on {@code delimiter} into a {@code SparseTensor}.
  * 
  *  Let N be the size of source (typically N will be the batch size). Split each
@@ -67568,7 +68503,7 @@ limitations under the License.
 
 /** Update '*var' according to the Adam algorithm.
  * 
- *  $$lr_t := \text{learning_rate} * \sqrt{(1 - beta_2^t) / (1 - beta_1^t)}$$
+ *  $$lr_t := \text{learning\_rate} * \sqrt{1 - beta_2^t} / (1 - beta_1^t)$$
  *  $$m_t := beta_1 * m_{t-1} + (1 - beta_1) * g$$
  *  $$v_t := beta_2 * v_{t-1} + (1 - beta_2) * g * g$$
  *  $$variable := variable - lr_t * m_t / (\sqrt{v_t} + \epsilon)$$
@@ -68647,7 +69582,7 @@ limitations under the License.
 
 /** Update '*var' according to the Adam algorithm.
  * 
- *  $$lr_t := \text{learning_rate} * \sqrt{(1 - beta_2^t) / (1 - beta_1^t)}$$
+ *  $$lr_t := \text{learning\_rate} * \sqrt{1 - beta_2^t} / (1 - beta_1^t)$$
  *  $$m_t := beta_1 * m_{t-1} + (1 - beta_1) * g$$
  *  $$v_t := beta_2 * v_{t-1} + (1 - beta_2) * g * g$$
  *  $$variable := variable - lr_t * m_t / (\sqrt{v_t} + \epsilon)$$

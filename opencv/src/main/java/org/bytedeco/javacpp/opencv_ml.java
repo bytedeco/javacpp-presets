@@ -291,7 +291,18 @@ of this class into StatModel::train.
     /** \brief Returns vector of symbolic names captured in loadFromCSV() */
     public native void getNames(@ByRef StringVector names);
 
+    /** \brief Extract from 1D vector elements specified by passed indexes.
+    @param vec input vector (supported types: CV_32S, CV_32F, CV_64F)
+    @param idx 1D index vector
+     */
     public static native @ByVal Mat getSubVector(@Const @ByRef Mat vec, @Const @ByRef Mat idx);
+
+    /** \brief Extract from matrix rows/cols specified by passed indexes.
+    @param matrix input matrix (supported types: CV_32S, CV_32F, CV_64F)
+    @param idx 1D index vector
+    @param layout specifies to extract rows (cv::ml::ROW_SAMPLES) or to extract columns (cv::ml::COL_SAMPLES)
+     */
+    public static native @ByVal Mat getSubMatrix(@Const @ByRef Mat matrix, @Const @ByRef Mat idx, int layout);
 
     /** \brief Reads the dataset from a .csv file and returns the ready-to-use training data.
     <p>

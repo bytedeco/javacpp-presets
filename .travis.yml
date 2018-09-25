@@ -419,6 +419,11 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode7.3
+        env: PROJ=cpython OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
         env: PROJ=llvm OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -596,6 +601,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=spinnaker OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=libdc1394 OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -649,6 +658,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=gsl OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpython OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

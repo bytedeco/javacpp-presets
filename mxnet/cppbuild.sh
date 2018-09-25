@@ -50,20 +50,8 @@ case $PLATFORM in
         ;;
 esac
 
-DLPACK_VERSION=10892ac964f1af7c81aae145cd3fab78bbccd297
-DMLC_VERSION=e9446f5a53cf5e61273deff7ce814093d2791766
-MSHADOW_VERSION=a8c650ce8a708608a282c4d1e251c57873a8db25
-PS_VERSION=a6dda54604a07d1fb21b016ed1e3f4246b08222a
-NNVM_VERSION=2bc5144cd3733fd239287e3560c7db8285d21f02
-TVM_VERSION=fdba6cc9bd3bec9ccd0592fa3900b7fe25d6cb97
-MXNET_VERSION=1.2.1
-download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
-download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
-download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
-download https://github.com/dmlc/ps-lite/archive/$PS_VERSION.tar.gz ps-lite-$PS_VERSION.tar.gz
-download https://github.com/dmlc/nnvm/archive/$NNVM_VERSION.tar.gz nnvm-$NNVM_VERSION.tar.gz
-download https://github.com/dmlc/tvm/archive/$TVM_VERSION.tar.gz tvm-$TVM_VERSION.tar.gz
-download https://github.com/apache/incubator-mxnet/archive/$MXNET_VERSION.tar.gz incubator-mxnet-$MXNET_VERSION.tar.gz
+MXNET_VERSION=1.3.0
+download http://apache.org/dist/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -106,25 +94,9 @@ else
 fi
 
 echo "Decompressing archives..."
-tar --totals -xzf ../dlpack-$DLPACK_VERSION.tar.gz
-tar --totals -xzf ../dmlc-core-$DMLC_VERSION.tar.gz
-tar --totals -xzf ../mshadow-$MSHADOW_VERSION.tar.gz
-tar --totals -xzf ../ps-lite-$PS_VERSION.tar.gz
-tar --totals -xzf ../nnvm-$NNVM_VERSION.tar.gz
-tar --totals -xzf ../tvm-$TVM_VERSION.tar.gz
-tar --totals -xzf ../incubator-mxnet-$MXNET_VERSION.tar.gz
-cd nnvm-$NNVM_VERSION
-rmdir dmlc-core tvm || true
-ln -snf ../dmlc-core-$DMLC_VERSION dmlc-core
-ln -snf ../tvm-$TVM_VERSION tvm
-cd ../incubator-mxnet-$MXNET_VERSION/3rdparty
-rmdir dlpack dmlc-core mshadow ps-lite nnvm || true
-ln -snf ../../dlpack-$DLPACK_VERSION dlpack
-ln -snf ../../dmlc-core-$DMLC_VERSION dmlc-core
-ln -snf ../../mshadow-$MSHADOW_VERSION mshadow
-ln -snf ../../ps-lite-$PS_VERSION ps-lite
-ln -snf ../../nnvm-$NNVM_VERSION nnvm
-cd ..
+tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+
+cd apache-mxnet-src-$MXNET_VERSION-incubating
 
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
@@ -136,8 +108,8 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
 make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" $USE_CUDA $USE_CUDNN USE_F16C=0 ADD_CFLAGS="-DMXNET_USE_LAPACK=1 $ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
-cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
-cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
+cp -a include lib 3rdparty/dmlc-core/include ..
+cp -a 3rdparty/mshadow/mshadow ../include
 unset CC
 unset CXX
 

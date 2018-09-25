@@ -33,9 +33,9 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
-  if [[ "librealsense mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "librealsense cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="rh-python35"
+    SCL_ENABLE="python36-devel python36-setuptools"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:9.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
@@ -56,6 +56,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/bin/python3.6 /usr/bin/python3"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
@@ -80,6 +81,17 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi 
+  if [ "$PROJ" == "spinnaker" ]; then
+    if [ "$OS" == "linux-x86_64" ]; then
+        if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found spinnaker in cache and size seems ok"
+        else
+          echo "Downloading flycap64 as not found in cache or too small"
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
+        fi
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /"
+    fi
+  fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13005/l_mkl_2018.3.222.tgz -o $HOME/mkl.tgz
@@ -196,9 +208,13 @@ fi
 
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      if [[ "$PROJ" =~ mxnet ]]; then 
-        export PKG_CONFIG_PATH=$TRAVIS_BUILD_DIR/opencv/cppbuild/macosx-x86_64/lib/pkgconfig
-      fi 
+
+      if [ "$PROJ" == "cpython" ]; then
+        curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
+        echo "Install python pkg"
+        sudo installer -store -pkg $HOME/python.pkg -target /
+      fi
+
       if [ "$PROJ" == "mkl" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13012/m_mkl_2018.3.185.dmg -o $HOME/mkl.dmg

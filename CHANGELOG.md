@@ -1,14 +1,20 @@
 
+ * Prevent MKL-DNN from compiling code with `-march=native` ([pull #618](https://github.com/bytedeco/javacpp-presets/pull/618))
+ * Add an RPATH to `libmkldnn.so.0` to avoid loading issues on Linux ([issue deeplearning4j/deeplearning4j#6366](https://github.com/deeplearning4j/deeplearning4j/issues/6366))
+ * Fix logic in `tensorflow.Tensor.createIndexer()` to support scalar tensors
+ * Bundle `libgomp.so.1` in JAR file of MKL-DNN for Linux
+ * Enable OpenMP for MKL-DNN also on Mac and Windows by building with GCC
+ * Fix loading order of runtime libraries for Visual Studio 2015 on Windows ([issue #606](https://github.com/bytedeco/javacpp-presets/issues/606))
  * Add methods overloaded with `PointerPointer` for MKL-DNN ([issue bytedeco/javacpp#251](https://github.com/bytedeco/javacpp/issues/251))
  * Bundle native resources (header files and import libraries) of MKL-DNN
  * Make MSBuild compile more efficiently on multiple processors ([pull #599](https://github.com/bytedeco/javacpp-presets/pull/599))
  * Add samples for Clang ([pull #598](https://github.com/bytedeco/javacpp-presets/pull/598))
- * Include `python_api.h` and enable Python API for TensorFlow ([issue #602](https://github.com/bytedeco/javacpp-presets/issues/602))
- * Add presets for ONNX 1.2.2 ([pull #547](https://github.com/bytedeco/javacpp-presets/pull/547))
+ * Include `tag_constants.h`, `signature_constants.h`, `graph_runner.h`, `shape_refiner.h`, `python_api.h`, and enable Python API for TensorFlow ([issue #602](https://github.com/bytedeco/javacpp-presets/issues/602))
+ * Add presets for Spinnaker 1.15.x ([pull #553](https://github.com/bytedeco/javacpp-presets/pull/553)), CPython 3.6.x, ONNX 1.3.0 ([pull #547](https://github.com/bytedeco/javacpp-presets/pull/547))
  * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
  * Enable MKL-DNN for TensorFlow
- * Upgrade presets for FFmpeg 4.0.2, HDF5 1.10.3, MKL-DNN 0.16, ARPACK-NG 3.6.2, Tesseract 4.0.0-beta.4, cuDNN 7.2, MXNet 1.2.1, TensorFlow 1.10.0, and their dependencies
+ * Upgrade presets for OpenCV 3.4.3, FFmpeg 4.0.2, HDF5 1.10.3, MKL-DNN 0.16, OpenBLAS 0.3.3, ARPACK-NG 3.6.3, LLVM 7.0.0, Tesseract 4.0.0-beta.4, cuDNN 7.2, MXNet 1.3.0, TensorFlow 1.11.0-rc2, and their dependencies
  * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
 
 ### July 17, 2018 version 1.4.2

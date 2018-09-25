@@ -51,14 +51,25 @@ import java.lang.annotation.Target;
         "onnx/proto_utils.h",
 //        "onnx/string_utils.h",
         "onnx/checker.h",
+        "onnx/onnxifi.h",
+        "onnx/common/tensor.h",
+        "onnx/common/array_ref.h",
+//        "onnx/common/graph_node_list.h",
+//        "onnx/common/interned_strings.h",
+//        "onnx/common/ir.h",
+//        "onnx/version_converter/BaseConverter.h",
+//        "onnx/version_converter/convert.h",
+//        "onnx/optimizer/optimize.h",
     },
-    link = {"onnx_proto", "onnx"}))
+    link = {"onnx_proto", "onnx", "onnxifi"}))
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
-               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL").cppTypes().annotations())
+               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "ONNX_UNUSED",
+                             "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
                .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
                              "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
                .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::TensorShapeProto_Dimension", "onnx::TensorShapeProto::Dimension", "TensorShapeProto_Dimension").pointerTypes("Dimension"))
                .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
@@ -102,6 +113,8 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
                .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define())
+               .put(new Info("onnx::TensorShapeProto").pointerTypes("TensorShapeProto"))
+               .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
 
                .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::RegisterSchema", "onnx::ReplaceAll").skip())
 

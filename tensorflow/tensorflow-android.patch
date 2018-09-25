@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/BUILD tensorflow-1.10.0-rc0-android/tensorflow/BUILD
---- tensorflow-1.10.0-rc0/tensorflow/BUILD	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/BUILD	2018-07-30 11:35:51.178591430 +0900
-@@ -545,29 +545,25 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/BUILD tensorflow-1.11.0-rc1-android/tensorflow/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/BUILD	2018-09-21 19:59:09.448149266 +0900
+@@ -557,28 +557,25 @@
  
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
@@ -11,7 +11,6 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/BUILD tensorflow-1.10.0-rc0-android/t
 -            "$(location //tensorflow:tf_exported_symbols.lds)",
 -        ],
 -        "//tensorflow:windows": [],
--        "//tensorflow:windows_msvc": [],
 -        "//conditions:default": [
 -            "-z defs",
 -            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
@@ -46,13 +45,13 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/BUILD tensorflow-1.10.0-rc0-android/t
 -        "//tensorflow/cc/profiler",
 -        "//tensorflow/core:tensorflow",
 +        "//tensorflow/core:android_tensorflow_lib",
-     ],
+     ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/c/BUILD tensorflow-1.10.0-rc0-android/tensorflow/c/BUILD
---- tensorflow-1.10.0-rc0/tensorflow/c/BUILD	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/c/BUILD	2018-07-30 11:35:51.178591430 +0900
-@@ -135,6 +135,22 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/c/BUILD tensorflow-1.11.0-rc1-android/tensorflow/c/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/c/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/c/BUILD	2018-09-21 19:57:34.591098814 +0900
+@@ -144,6 +144,22 @@
      visibility = ["//visibility:public"],
  )
  
@@ -75,10 +74,10 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/c/BUILD tensorflow-1.10.0-rc0-android
  tf_cuda_library(
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/BUILD tensorflow-1.10.0-rc0-android/tensorflow/core/BUILD
---- tensorflow-1.10.0-rc0/tensorflow/core/BUILD	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/core/BUILD	2018-07-30 11:35:51.179591430 +0900
-@@ -1617,7 +1617,11 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/BUILD tensorflow-1.11.0-rc1-android/tensorflow/core/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/core/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/core/BUILD	2018-09-21 19:57:34.593098815 +0900
+@@ -1653,7 +1653,11 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -91,9 +90,9 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/BUILD tensorflow-1.10.0-rc0-andr
      copts = tf_copts(),
      tags = [
          "manual",
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.10.0-rc0-android/tensorflow/core/framework/tensor.h
---- tensorflow-1.10.0-rc0/tensorflow/core/framework/tensor.h	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/core/framework/tensor.h	2018-07-30 11:35:51.179591430 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h tensorflow-1.11.0-rc1-android/tensorflow/core/framework/tensor.h
+--- tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/core/framework/tensor.h	2018-09-21 19:57:34.593098815 +0900
 @@ -117,6 +117,11 @@
    /// are not valid.
    Tensor(Tensor&& other);
@@ -106,7 +105,7 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    ~Tensor();
  
    /// Returns the data type.
-@@ -502,11 +507,6 @@
+@@ -503,11 +508,6 @@
    friend class NumpyTensorBuffer;  // For access to the private constructor
                                     // taking the buffer.
  
@@ -118,20 +117,20 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    bool CanUseDMA() const;
  
    // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.10.0-rc0-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.10.0-rc0/tensorflow/core/kernels/BUILD	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/core/kernels/BUILD	2018-07-30 11:35:51.180591429 +0900
-@@ -4989,6 +4989,7 @@
-         "warn_about_ints.h",
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/kernels/BUILD tensorflow-1.11.0-rc1-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/core/kernels/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/core/kernels/BUILD	2018-09-21 19:57:34.594098815 +0900
+@@ -5123,6 +5123,7 @@
+         "transpose_op.h",
          "where_op.h",
          "xent_op.h",
 +        "cwise_op_floor.cc",
      ],
  )
  
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.10.0-rc0-android/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.10.0-rc0/tensorflow/java/src/main/native/BUILD	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/java/src/main/native/BUILD	2018-07-30 11:35:51.180591429 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD tensorflow-1.11.0-rc1-android/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/java/src/main/native/BUILD	2018-09-21 19:57:34.594098815 +0900
 @@ -86,3 +86,15 @@
      ),
      visibility = ["//tensorflow:__subpackages__"],
@@ -148,20 +147,21 @@ diff -ruN tensorflow-1.10.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow
 +    ),
 +    visibility = ["//visibility:public"],
 +)
-diff -ruN tensorflow-1.10.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.10.0-rc0-android/tensorflow/tensorflow.bzl
---- tensorflow-1.10.0-rc0/tensorflow/tensorflow.bzl	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/tensorflow/tensorflow.bzl	2018-07-30 11:35:51.181591429 +0900
-@@ -201,7 +201,6 @@
-   # to be used, pass android_optimization_level_override=None
-   android_copts = [
-       "-std=c++11",
--      "-DTF_LEAN_BINARY",
-       "-Wno-narrowing",
-       "-fomit-frame-pointer",
-   ]
-diff -ruN tensorflow-1.10.0-rc0/WORKSPACE tensorflow-1.10.0-rc0-android/WORKSPACE
---- tensorflow-1.10.0-rc0/WORKSPACE	2018-07-21 09:59:01.000000000 +0900
-+++ tensorflow-1.10.0-rc0-android/WORKSPACE	2018-07-30 11:36:57.177563143 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/tensorflow.bzl tensorflow-1.11.0-rc1-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.11.0-rc1/tensorflow/tensorflow.bzl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/tensorflow/tensorflow.bzl	2018-09-21 19:59:47.767169648 +0900
+@@ -219,7 +219,7 @@
+     # to be used, pass android_optimization_level_override=None
+     android_copts = [
+         "-std=c++11",
+-        "-DTF_LEAN_BINARY",
++#        "-DTF_LEAN_BINARY",
+         "-Wno-narrowing",
+         "-fomit-frame-pointer",
+     ]
+diff -ruN tensorflow-1.11.0-rc1/WORKSPACE tensorflow-1.11.0-rc1-android/WORKSPACE
+--- tensorflow-1.11.0-rc1/WORKSPACE	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-android/WORKSPACE	2018-09-21 19:57:34.595098816 +0900
 @@ -27,6 +27,16 @@
  load("@local_config_android//:android.bzl", "android_workspace")
  android_workspace()

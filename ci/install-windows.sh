@@ -75,6 +75,30 @@ if [ "$PROJ" == "flycapture" ]; then
        echo "Finished flycapture install"
 fi
 
+if [ "$PROJ" == "spinnaker" ]; then
+       echo Flycapture install
+       if [ "$OS" == "windows-x86_64" ]; then
+           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker in cache and size seems ok"
+           else
+             echo "Downloading spinnaker.zip to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+           fi
+           unzip /c/Downloads/spinnaker.zip
+           mv Point\ Grey\ Research /c/Program\ Files
+       elif [ "$OS" == "windows-x86" ]; then
+           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker in cache and size seems ok"
+           else
+             echo "Downloading spinnaker.zip to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+           fi
+           unzip /c/Downloads/spinnaker.zip
+           mv Point\ Grey\ Research /c/Program\ Files
+       fi
+       echo "Finished spinnaker install"
+fi
+
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
        curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13037/w_mkl_2018.3.210.exe"
@@ -106,6 +130,32 @@ if [ "$PROJ" == "tensorflow" ]; then
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
 fi
+
+# copy Python 3.6 back to default installation directory
+cp -a "/c/Python36-x64" "/C/Program Files/Python36"
+
+# install an older less buggy version of GCC
+curl -L -o mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-gcc-ada-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-ada-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-gcc-objc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-objc-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+pacman -U --noconfirm *.pkg.tar.xz
 
 DOWNLOAD_FILE="$PROJ-cppbuild.zip"
 DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"

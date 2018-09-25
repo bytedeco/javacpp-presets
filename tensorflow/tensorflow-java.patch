@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.10.0/tensorflow/BUILD tensorflow-1.10.0-java/tensorflow/BUILD
---- tensorflow-1.10.0/tensorflow/BUILD	2018-08-08 08:52:04.000000000 +0900
-+++ tensorflow-1.10.0-java/tensorflow/BUILD	2018-08-18 07:19:00.002529204 +0900
-@@ -546,28 +546,26 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/BUILD tensorflow-1.11.0-rc1-java/tensorflow/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/BUILD	2018-09-22 13:48:21.935583132 +0900
+@@ -558,27 +558,25 @@
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
      linkopts = select({
@@ -11,7 +11,6 @@ diff -ruN tensorflow-1.10.0/tensorflow/BUILD tensorflow-1.10.0-java/tensorflow/B
 -        ],
 +        "//tensorflow:darwin": [],
          "//tensorflow:windows": [],
-         "//tensorflow:windows_msvc": [],
          "//conditions:default": [
              "-z defs",
 -            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
@@ -31,13 +30,13 @@ diff -ruN tensorflow-1.10.0/tensorflow/BUILD tensorflow-1.10.0-java/tensorflow/B
          "//tensorflow/cc/profiler",
          "//tensorflow/core:tensorflow",
 +        "//tensorflow/java/src/main/native:native",
-     ],
+     ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.10.0/tensorflow/c/BUILD tensorflow-1.10.0-java/tensorflow/c/BUILD
---- tensorflow-1.10.0/tensorflow/c/BUILD	2018-08-08 08:52:04.000000000 +0900
-+++ tensorflow-1.10.0-java/tensorflow/c/BUILD	2018-08-18 07:22:56.651480681 +0900
-@@ -280,7 +280,7 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/c/BUILD tensorflow-1.11.0-rc1-java/tensorflow/c/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/c/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/c/BUILD	2018-09-21 19:50:38.770877557 +0900
+@@ -289,7 +289,7 @@
      name = "python_api",
      srcs = ["python_api.cc"],
      hdrs = ["python_api.h"],
@@ -46,9 +45,9 @@ diff -ruN tensorflow-1.10.0/tensorflow/c/BUILD tensorflow-1.10.0-java/tensorflow
      deps = [
          ":c_api",
          ":c_api_internal",
-diff -ruN tensorflow-1.10.0/tensorflow/core/framework/tensor.h tensorflow-1.10.0-java/tensorflow/core/framework/tensor.h
---- tensorflow-1.10.0/tensorflow/core/framework/tensor.h	2018-08-08 08:52:04.000000000 +0900
-+++ tensorflow-1.10.0-java/tensorflow/core/framework/tensor.h	2018-08-18 07:18:37.783538856 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h tensorflow-1.11.0-rc1-java/tensorflow/core/framework/tensor.h
+--- tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/core/framework/tensor.h	2018-09-21 19:50:38.771877558 +0900
 @@ -117,6 +117,11 @@
    /// are not valid.
    Tensor(Tensor&& other);
@@ -61,7 +60,7 @@ diff -ruN tensorflow-1.10.0/tensorflow/core/framework/tensor.h tensorflow-1.10.0
    ~Tensor();
  
    /// Returns the data type.
-@@ -502,11 +507,6 @@
+@@ -503,11 +508,6 @@
    friend class NumpyTensorBuffer;  // For access to the private constructor
                                     // taking the buffer.
  
@@ -73,9 +72,21 @@ diff -ruN tensorflow-1.10.0/tensorflow/core/framework/tensor.h tensorflow-1.10.0
    bool CanUseDMA() const;
  
    // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.10.0/tensorflow/java/src/main/native/BUILD tensorflow-1.10.0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.10.0/tensorflow/java/src/main/native/BUILD	2018-08-08 08:52:04.000000000 +0900
-+++ tensorflow-1.10.0-java/tensorflow/java/src/main/native/BUILD	2018-08-18 07:18:37.784538856 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/java/BUILD tensorflow-1.11.0-rc1-java/tensorflow/java/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/java/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/java/BUILD	2018-09-22 13:48:29.074580425 +0900
+@@ -1,7 +1,7 @@
+ # Description:
+ # TensorFlow Java API.
+ 
+-package(default_visibility = ["//visibility:private"])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD tensorflow-1.11.0-rc1-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/java/src/main/native/BUILD	2018-09-21 19:50:38.771877558 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),
