@@ -730,6 +730,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=mxnet OS=linux-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=tensorflow OS=linux-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
@@ -742,6 +746,11 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
       - os: osx

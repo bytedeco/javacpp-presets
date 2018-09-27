@@ -7,9 +7,20 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export ADD_CFLAGS=
+export ADD_CFLAGS="-DMXNET_USE_LAPACK=1"
 export ADD_LDFLAGS=
 export USE_OPENMP=1
+export CUDA_ARCH=-arch=sm_30
+export USE_CUDA=0
+export USE_CUDNN=0
+export USE_CUDA_PATH=
+if [[ "$EXTENSION" == *gpu ]]; then
+    export ADD_CFLAGS="$ADD_CFLAGS -DMXNET_USE_CUDA=1"
+    export USE_CUDA=1
+    export USE_CUDNN=1
+    export USE_CUDA_PATH="/usr/local/cuda"
+fi
+
 case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
@@ -19,13 +30,16 @@ case $PLATFORM in
     linux-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
+        if which g++-6 &> /dev/null; then
+            export CC="gcc-6 -m64"
+            export CXX="g++-6 -m64"
+        fi
         export BLAS="openblas"
         ;;
     macosx-*)
         export CC="clang"
         export CXX="clang++"
         export BLAS="openblas"
-        export ADD_CFLAGS="-Dthread_local="
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -36,8 +50,8 @@ esac
 MXNET_VERSION=1.3.0
 download http://apache.org/dist/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
-mkdir -p $PLATFORM
-cd $PLATFORM
+mkdir -p "$PLATFORM$EXTENSION"
+cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
@@ -70,7 +84,7 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" USE_F16C=0 ADD_CFLAGS="-DMXNET_USE_LAPACK=1 $ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
 cp -a include lib 3rdparty/dmlc-core/include ..
 cp -a 3rdparty/mshadow/mshadow ../include
 unset CC
