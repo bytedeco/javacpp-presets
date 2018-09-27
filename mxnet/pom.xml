@@ -14,10 +14,6 @@
   <version>1.3.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
 
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -71,16 +67,6 @@
           </dependency>
         </dependencies>
         <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
           <classPaths>
             <classPath>${basedir}/../opencv/target/classes/</classPath>
             <classPath>${basedir}/../openblas/target/classes/</classPath>
@@ -94,17 +80,17 @@
             <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/include/</includePath>
             <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/javacpp/include/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
-            <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           </preloadPaths>
         </configuration>
         <executions>
