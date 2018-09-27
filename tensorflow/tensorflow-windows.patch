@@ -1,6 +1,6 @@
-diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/CMakeLists.txt tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/CMakeLists.txt
---- tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-15 04:38:07.000000000 +0900
-+++ tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-23 18:52:10.278844605 +0900
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/CMakeLists.txt tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/CMakeLists.txt
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-21 03:15:35.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-27 14:15:13.537678928 +0900
 @@ -223,6 +223,7 @@
  endif()
  
@@ -49,6 +49,24 @@ diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/CMakeLists.txt tensorfl
    endif (WIN32)
  
    if (WIN32)
+@@ -417,7 +416,7 @@
+     endif(NOT CUDNN_HOME)
+     set(CUDNN_INCLUDE "${CUDNN_HOME}/include")
+ 
+-    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUFFT_LIBRARIES}
++    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_cublas_LIBRARY} ${CUDA_cufft_LIBRARY}
+       ${CUDA_curand_LIBRARY} ${CUDA_cupti_LIBRARY} ${CUDA_cusolver_LIBRARY} ${CUDNN_HOME}/lib/x64/cudnn.lib)
+   else (WIN32)
+     set(CUDNN_INCLUDE "${tensorflow_CUDNN_INCLUDE}")
+@@ -444,7 +443,7 @@
+       message("culibos-static: ${culibos_STATIC_LIBRARY}")
+     endif (NOT culibos_STATIC_LIBRARY)
+ 
+-    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUFFT_LIBRARIES}
++    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_cublas_LIBRARY} ${CUDA_cufft_LIBRARY}
+       ${CUDA_curand_LIBRARY} ${CUDA_cupti_LIBRARY} ${CUDA_cusolver_LIBRARY} ${cudnn_STATIC_LIBRARY} ${culibos_STATIC_LIBRARY} ${nccl_STATIC_LIBRARY})
+   endif (WIN32)
+   include_directories(${CUDNN_INCLUDE})
 @@ -456,7 +455,7 @@
    FILE(WRITE ${tensorflow_source_dir}/third_party/gpus/cuda/cuda_config.h
      "#ifndef CUDA_CUDA_CONFIG_H_\n"
@@ -58,9 +76,9 @@ diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/CMakeLists.txt tensorfl
      "#define TF_CUDA_VERSION \"64_${short_CUDA_VER}\"\n"
      "#define TF_CUDNN_VERSION \"64_${tensorflow_CUDNN_VERSION}\"\n"
      "#define TF_CUDA_TOOLKIT_PATH \"${CUDA_TOOLKIT_ROOT_DIR}\"\n"
-diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/external/FindAbseil.cmake tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake
---- tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/external/FindAbseil.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake	2018-09-23 19:44:46.448730297 +0900
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/external/FindAbseil.cmake tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/external/FindAbseil.cmake	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake	2018-09-27 14:14:44.901652376 +0900
 @@ -0,0 +1,86 @@
 +# Copyright 2018 The Cartographer Authors
 +#
@@ -148,9 +166,9 @@ diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/external/FindAbseil.cma
 +  unset(prefix)
 +  unset(suffix)
 +endif()
-diff -ruN tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/tf_tools.cmake tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/tf_tools.cmake
---- tensorflow-1.11.0-rc1/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-15 04:38:07.000000000 +0900
-+++ tensorflow-1.11.0-rc1-windows/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-23 21:36:25.480422059 +0900
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/tf_tools.cmake tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/tf_tools.cmake
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-21 03:15:35.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-27 14:14:44.901652376 +0900
 @@ -32,7 +32,7 @@
    tf_protos_cc
  )
