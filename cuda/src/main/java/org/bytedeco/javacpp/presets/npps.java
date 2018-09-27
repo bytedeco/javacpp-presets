@@ -36,8 +36,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = nppc.class, value = {
     @Platform(include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
-            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.9.2"),
-    @Platform(value = "windows-x86_64", preload = "npps64_92")},
+            "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.10.0"),
+    @Platform(value = "windows-x86_64", preload = "npps64_100")},
         target = "org.bytedeco.javacpp.npps")
 @NoException
 public class npps implements InfoMapper {

@@ -35,9 +35,9 @@ C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-tool
 
 C:\msys64\usr\bin\bash -lc "$APPVEYOR_BUILD_FOLDER/ci/install-windows.sh %PROJ%"
 if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2"
-    SET "CUDA_PATH_V9_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2"
-    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.2\libnvvp;%PATH%"
+    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0"
+    SET "CUDA_PATH_V9_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0"
+    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0\libnvvp;%PATH%"
 )
 SET "PATH=C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 

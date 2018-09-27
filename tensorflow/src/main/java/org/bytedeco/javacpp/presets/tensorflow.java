@@ -222,9 +222,9 @@ import java.util.List;
                         "cudart", "cudart_static", "cuda", "cublas", "cublas_device", "cudnn",
                         "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
                         "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/extras/CUPTI/libx64/"}),
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/extras/CUPTI/libx64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -367,10 +367,10 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    lib += lib.equals("cudnn") ? "64_7" : "64_100";
                     break;
                 default:
                     continue; // no CUDA
