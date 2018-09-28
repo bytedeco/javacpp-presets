@@ -119,7 +119,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.3  https://support.hdfgroup.org/HDF5/
- * MKL 2018.3  https://software.intel.com/intel-mkl
+ * MKL 2019.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.16  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.3  http://www.openblas.net/
  * ARPACK-NG 3.6.3  https://github.com/opencollab/arpack-ng

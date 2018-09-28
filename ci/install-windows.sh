@@ -101,7 +101,7 @@ fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13037/w_mkl_2018.3.210.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13558/w_mkl_2019.0.117.exe"
        ./mkl.exe --s --x --f .
        ./setup.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -141,6 +141,7 @@ curl -L -o mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msy
 curl -L -o mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz
@@ -151,6 +152,7 @@ curl -L -o mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.m
 curl -L -o mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 

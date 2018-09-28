@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL 2018.3  https://software.intel.com/intel-mkl
+ * MKL 2019.0  https://software.intel.com/intel-mkl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2018.3-1.4.2</version>
+            <version>2019.0-1.4.2</version>
         </dependency>
     </dependencies>
 </project>
