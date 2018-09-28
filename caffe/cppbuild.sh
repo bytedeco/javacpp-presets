@@ -50,11 +50,11 @@ esac
 
 GLOG=0.3.5
 GFLAGS=2.2.1
-PROTO=3.5.1
+PROTO=3.6.1
 LEVELDB=1.20
 SNAPPY=1.1.7
 LMDB=0.9.22
-BOOST=1_67_0
+BOOST=1_68_0
 CAFFE_VERSION=1.0
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz

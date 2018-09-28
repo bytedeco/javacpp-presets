@@ -14,8 +14,8 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 export ONNX=1.3.0
-export PROTO=3.5.1
-export PYBIND=2.2.3
+export PROTO=3.6.1
+export PYBIND=2.2.4
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz

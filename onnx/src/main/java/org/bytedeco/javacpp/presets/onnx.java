@@ -46,6 +46,7 @@ import java.lang.annotation.Target;
         "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
+        "google/protobuf/arena.h",
         "google/protobuf/message_lite.h",
         "google/protobuf/unknown_field_set.h",
         "onnx/proto_utils.h",
@@ -65,8 +66,8 @@ import java.lang.annotation.Target;
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
-               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "ONNX_UNUSED",
-                             "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
+               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE",
+                             "ONNX_UNUSED", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
                .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
                              "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
@@ -84,6 +85,7 @@ public class onnx implements InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("LongLongPair").define())
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
 
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
