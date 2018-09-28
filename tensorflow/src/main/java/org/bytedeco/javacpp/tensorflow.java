@@ -20630,8 +20630,6 @@ public static final int kDataTypeRefOffset = 100;
 
 // Extra validity checking; not part of public API.
 
-
-
 // TODO(jeff): Maybe unify this with Tensor::CanUseDMA, or the underlying
 // is_simple<T> in tensor.cc (and possible choose a more general name?)
 @Namespace("tensorflow") @MemberGetter public static native @Const @ByRef DataTypeSet kDataTypesCanUseMemcpy();
@@ -32810,7 +32808,6 @@ limitations under the License.
 
 // #if (!defined(SHOULD_REGISTER_OP) || !defined(SHOULD_REGISTER_OP_GRADIENT) ||
 //      !defined(SHOULD_REGISTER_OP_KERNEL))
-
 // #endif
 // #else
 // #define SHOULD_REGISTER_OP(op) true
