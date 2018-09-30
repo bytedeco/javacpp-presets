@@ -163,7 +163,7 @@ cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch
 cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
-export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include"
+export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include -std=c++11"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include $CUDAFLAGS"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH -L$OPENCV_PATH/lib -L$HDF5_PATH -L$HDF5_PATH/lib"
 make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. CPU_ONLY=$CPU_ONLY CUDA_ARCH=-arch=sm_30 USE_CUDNN=$USE_CUDNN proto
