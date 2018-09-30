@@ -103,7 +103,7 @@ if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
        curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13558/w_mkl_2019.0.117.exe"
        ./mkl.exe --s --x --f .
-       ./setup.exe install --output=mkllog.txt -eula=accept
+       ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
        cat mkllog.txt
        echo Finished mkl 
