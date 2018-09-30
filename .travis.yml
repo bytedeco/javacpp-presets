@@ -383,7 +383,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode8.3
+        osx_image: xcode9.4
         env: PROJ=mkl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
