@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 
 @Properties(target = "org.bytedeco.javacpp.liquidfun", value = {
-    @Platform(value = {"linux-x86", "macosx"},
+    @Platform(value = {"linux-x86", "macosx", "windows-x86"},
               define = "LIQUIDFUN_EXTERNAL_LANGUAGE_API 1",
               include = {"<Box2D/Common/b2Settings.h>",
                          "<Box2D/Common/b2Math.h>",

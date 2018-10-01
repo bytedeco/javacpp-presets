@@ -49,6 +49,8 @@ environment:
       OS: windows-x86
     - PROJ: "ale"
       OS: windows-x86
+    - PROJ: "liquidfun"
+      OS: windows-x86
     - PROJ: "systems"
       OS: windows-x86
 
@@ -105,6 +107,8 @@ environment:
     - PROJ: "tensorflow"
       OS: windows-x86_64
     - PROJ: "ale"
+      OS: windows-x86_64
+    - PROJ: "liquidfun"
       OS: windows-x86_64
     - PROJ: "systems"
       OS: windows-x86_64

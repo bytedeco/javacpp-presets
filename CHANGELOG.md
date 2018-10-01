@@ -1,4 +1,5 @@
 
+ * Add support for Windows to presets for LiquidFun ([pull #536](https://github.com/bytedeco/javacpp-presets/pull/536))
  * Add CUDA-enabled build for MXNet via `-gpu` extension ([pull #609](https://github.com/bytedeco/javacpp-presets/pull/609))
  * Prevent MKL-DNN from compiling code with `-march=native` ([pull #618](https://github.com/bytedeco/javacpp-presets/pull/618))
  * Add an RPATH to `libmkldnn.so.0` to avoid loading issues on Linux ([issue deeplearning4j/deeplearning4j#6366](https://github.com/deeplearning4j/deeplearning4j/issues/6366))
