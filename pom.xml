@@ -1287,6 +1287,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>ale</module>
+        <module>liquidfun</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1346,8 +1347,8 @@
         <module>cuda</module>
         <module>tensorflow</module>
         <module>ale</module>
-        <module>systems</module>
         <module>liquidfun</module>
+        <module>systems</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
