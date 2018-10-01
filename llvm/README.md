@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 5.0.1  http://llvm.org/
+ * LLVM 7.0.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -17,6 +17,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/llvm/apidocs/
 
 &lowast; Bindings are currently available only for the C API of LLVM.
+
 
 Sample Usage
 ------------
@@ -37,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>1.4</version>
+    <version>1.4.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Fac</exec.mainClass>
     </properties>
@@ -45,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>5.0.1-1.4</version>
+            <version>7.0.0-1.4.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

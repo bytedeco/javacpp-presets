@@ -1,0 +1,33 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/BUILD tensorflow-1.11.0-rc1-unsecure/tensorflow/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-unsecure/tensorflow/BUILD	2018-09-22 10:56:06.547016142 +0900
+@@ -456,7 +456,7 @@
+     name = "grpc",
+     deps = select({
+         ":linux_s390x": ["@grpc//:grpc_unsecure"],
+-        "//conditions:default": ["@grpc"],
++        "//conditions:default": ["@grpc//:grpc_unsecure"],
+     }),
+ )
+ 
+@@ -464,7 +464,7 @@
+     name = "grpc++",
+     deps = select({
+         ":linux_s390x": ["@grpc//:grpc++_unsecure"],
+-        "//conditions:default": ["@grpc//:grpc++"],
++        "//conditions:default": ["@grpc//:grpc++_unsecure"],
+     }),
+ )
+ 
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/platform/default/build_config.bzl tensorflow-1.11.0-rc1-unsecure/tensorflow/core/platform/default/build_config.bzl
+--- tensorflow-1.11.0-rc1/tensorflow/core/platform/default/build_config.bzl	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-unsecure/tensorflow/core/platform/default/build_config.bzl	2018-09-22 10:57:02.770352480 +0900
+@@ -207,7 +207,7 @@
+     if use_grpc_plugin:
+         cc_libs += select({
+             "//tensorflow:linux_s390x": ["//external:grpc_lib_unsecure"],
+-            "//conditions:default": ["//external:grpc_lib"],
++            "//conditions:default": ["//external:grpc_lib_unsecure"],
+         })
+ 
+     if default_header:

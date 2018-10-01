@@ -36,8 +36,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               link = "opencv_photo@.3.4",
               preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4", "opencv_cudaimgproc@.3.4"}),
     @Platform(value = "ios", preload = "libopencv_photo"),
-    @Platform(value = "windows", link = "opencv_photo341",
-              preload = {"opencv_cuda341", "opencv_cudaarithm341", "opencv_cudafilters341", "opencv_cudaimgproc341"})},
+    @Platform(value = "windows", link = "opencv_photo343",
+              preload = {"opencv_cuda343", "opencv_cudaarithm343", "opencv_cudafilters343", "opencv_cudaimgproc343"})},
         target = "org.bytedeco.javacpp.opencv_photo")
 public class opencv_photo implements InfoMapper {
     public void map(InfoMap infoMap) {

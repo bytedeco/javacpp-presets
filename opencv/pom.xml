@@ -6,18 +6,30 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>opencv</artifactId>
-  <version>3.4.1-${project.parent.version}</version>
+  <version>3.4.3-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.android</groupId>
+      <artifactId>android</artifactId>
+      <version>4.1.1.4</version>
+      <exclusions>
+        <exclusion>
+            <groupId>*</groupId>
+            <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -62,6 +74,38 @@
                 <include>org/bytedeco/javacpp/helper/*</include>
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>${javacpp.platform}${javacpp.platform.extension}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>${javacpp.platform.library.path}/lib/*.so*</exclude>
+                <exclude>${javacpp.platform.library.path}/sdk/**/*.so*</exclude>
+                <exclude>${javacpp.platform.library.path}/sdk/native/jni/include/**</exclude>
+                <exclude>${javacpp.platform.library.path}/**/*cascade*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/bin/*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.a</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.dylib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.so*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.dll</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.exe</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/**/*cascade*</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>

@@ -7,13 +7,13 @@ mkdir %APPVEYOR_BUILD_FOLDER%\tmp
 set TMPDIR=%APPVEYOR_BUILD_FOLDER%\tmp
 mkdir %APPVEYOR_BUILD_FOLDER%\buildlogs
 
-set MAKEJ=2
+echo %NUMBER_OF_PROCESSORS%
+set MAKEJ=%NUMBER_OF_PROCESSORS%
 
 IF "%OS%"=="windows-x86_64" (
    set MSYSTEM=MINGW64
    echo Callings vcvarsall for amd64
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-
 )
 IF "%OS%"=="windows-x86" (
    set MSYSTEM=MINGW32
@@ -22,43 +22,68 @@ IF "%OS%"=="windows-x86" (
 )
 echo on
 
+if "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" if "%APPVEYOR_REPO_BRANCH%" == "release" (
+    set "MAVEN_RELEASE=-DperformRelease -DstagingRepositoryId=%STAGING_REPOSITORY%"
+) else (
+    set "MAVEN_RELEASE=-Dmaven.javadoc.skip=true"
+)
+
 rem C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm"
 rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
-C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip autoconf automake libtool make patch"
+C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL"
 
-C:\msys64\usr\bin\bash -lc "/c/projects/javacpp-presets/ci/install-windows.sh %PROJ%"
-SET CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1
-SET CUDA_PATH_V9_1=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1
-SET PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v9.1\libnvvp;C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%
+C:\msys64\usr\bin\bash -lc "$APPVEYOR_BUILD_FOLDER/ci/install-windows.sh %PROJ%"
+if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
+    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0"
+    SET "CUDA_PATH_V9_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0"
+    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.0\libnvvp;%PATH%"
+)
+SET "PATH=C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"
 echo PR Number "%APPVEYOR_PULL_REQUEST_NUMBER%"
-IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
-   echo Deploy snaphot for %PROJ%
-   call mvn clean deploy -B -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -Djavacpp.copyResources --settings .\ci\settings.xml -pl .,%PROJ%
+
+IF "%PARTIAL_CPPBUILD%"=="1" (
+   C:\msys64\usr\bin\bash -c "bash cppbuild.sh install %PROJ% -platform=%OS% -extension=%EXT%"
+   C:\msys64\usr\bin\bash -c "zip -r %PROJ%-cppbuild.zip %PROJ%/cppbuild"
    IF ERRORLEVEL 1 (
      echo Quitting with error  
-     exit /b 1
+     exit 1
+   )
+   TASKKILL /F /IM MSBuild.exe /T
+   echo Exiting with success
+   exit 0
+)
+
+IF "%APPVEYOR_PULL_REQUEST_NUMBER%"=="" (
+   echo Deploy snaphot for %PROJ%
+   call mvn deploy -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
+   IF ERRORLEVEL 1 (
+     echo Quitting with error  
+     exit 1
    )
    FOR %%a in ("%PROJ:,=" "%") do (
     echo Deploy platform %%a 
     cd %%a
-    call mvn clean -B -U -f platform -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% --settings ..\ci\settings.xml deploy
+    call mvn deploy -B -U --settings ..\ci\settings.xml -f platform -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT%
     IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1
+      exit 1
     )
 
     cd ..
    )
 ) ELSE (
    echo Install %PROJ%
-   call mvn clean install -B -U -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -Djavacpp.copyResources -pl .,%PROJ%
+   call mvn install -B -U --settings .\ci\settings.xml -Dmaven.test.skip=true %MAVEN_RELEASE% -Djavacpp.platform=%OS% -Djavacpp.platform.extension=%EXT% -pl .,%PROJ%
    IF ERRORLEVEL 1 (
       echo Quitting with error  
-      exit /b 1 
+      exit 1
    )
 
 )
+TASKKILL /F /IM MSBuild.exe /T
+echo Exiting with success
+exit 0
 

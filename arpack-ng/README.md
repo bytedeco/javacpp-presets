@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARPACK-NG  https://scilab.io/arpack-ng/
+ * ARPACK-NG 3.6.3  https://scilab.io/arpack-ng/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of ARPACK-NG ported to Java from this C source file:
 
- * https://github.com/opencollab/arpack-ng/blob/master/TESTS/icb_arpack_c.c
+ * https://github.com/opencollab/arpack-ng/blob/3.6.3/TESTS/icb_arpack_c.c
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/IcbArpackC.java` source files below, simply execute on the command line:
 ```bash
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.arpack</groupId>
     <artifactId>icbarpackc</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>IcbArpackC</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>20171109-1d912ad-1.4.1-SNAPSHOT</version>
+            <version>3.6.3-1.4.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -167,7 +167,7 @@ public class IcbArpackC {
       for (k=0; k < 2 * (3*(ncv*ncv) + 6*ncv); ++k )
         workl[k] = 0;
       int lworkl = 3*(ncv*ncv) + 6*ncv;
-      double[] rwork = new double[2 * ncv];
+      double[] rwork = new double[ncv];
       double[] workev = new double[2 * 2*ncv];
       int[] info = {0};
 
@@ -193,7 +193,7 @@ public class IcbArpackC {
       int i;
       for (i = 0; i < nev; ++i) {
         System.out.printf("%f %f\n", d[2 * i], d[2 * i + 1]);
-        if(Math.abs(d[2 * i] - (double)(1000-i))>1e-6){
+        if(Math.abs(d[2 * i] - (double)(1000-i))>1e-6 || Math.abs(d[2 * i + 1] - (double)(1000-i))>1e-6){
           return 1;
         }
       }
@@ -201,9 +201,31 @@ public class IcbArpackC {
     }
 
     public static void main(String[] args) {
-      if (ds() != 0) System.exit(1);
+      sstats_c();
+      int rc = ds(); // arpack without debug.
+      if (rc != 0) System.exit(rc);
+      int[] nopx_c = {0}, nbx_c = {0}, nrorth_c = {0}, nitref_c = {0}, nrstrt_c = {0};
+      float[] tsaupd_c = {0}, tsaup2_c = {0}, tsaitr_c = {0}, tseigt_c = {0}, tsgets_c = {0}, tsapps_c = {0}, tsconv_c = {0};
+      float[] tnaupd_c = {0}, tnaup2_c = {0}, tnaitr_c = {0}, tneigt_c = {0}, tngets_c = {0}, tnapps_c = {0}, tnconv_c = {0};
+      float[] tcaupd_c = {0}, tcaup2_c = {0}, tcaitr_c = {0}, tceigt_c = {0}, tcgets_c = {0}, tcapps_c = {0}, tcconv_c = {0};
+      float[] tmvopx_c = {0}, tmvbx_c = {0}, tgetv0_c = {0}, titref_c = {0}, trvec_c = {0};
+      stat_c(  nopx_c,    nbx_c, nrorth_c, nitref_c, nrstrt_c,
+             tsaupd_c, tsaup2_c, tsaitr_c, tseigt_c, tsgets_c, tsapps_c, tsconv_c,
+             tnaupd_c, tnaup2_c, tnaitr_c, tneigt_c, tngets_c, tnapps_c, tnconv_c,
+             tcaupd_c, tcaup2_c, tcaitr_c, tceigt_c, tcgets_c, tcapps_c, tcconv_c,
+             tmvopx_c,  tmvbx_c, tgetv0_c, titref_c,  trvec_c);
+      System.out.printf("Timers : nopx %d, tmvopx %f - nbx %d, tmvbx %f\n", nopx_c[0], tmvopx_c[0], nbx_c[0], tmvbx_c[0]);
+
       System.out.printf("------\n");
-      System.exit(zn());
+
+      debug_c(6, -6, 1,
+              1, 1, 1, 1, 1, 1, 1,
+              1, 1, 1, 1, 1, 1, 1,
+              1, 1, 1, 1, 1, 1, 1); // set debug flags.
+      rc = zn(); // arpack with debug.
+
+      System.out.printf("------\n");
+      System.exit(rc);
     }
 }
 ```

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.4.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -129,7 +129,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.7</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>javacpp.parser</id>
@@ -142,7 +142,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.7.0</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -197,7 +197,6 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkPath>
           </linkPaths>
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
@@ -220,10 +219,8 @@
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib64/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib/</linkResource>
-            <linkResource>/org/bytedeco/javacpp/${javacpp.platform}/lib64/</linkResource>
           </linkResources>
         </configuration>
         <executions>
@@ -287,14 +284,14 @@
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
-<!--              <copyResources>true</copyResources>-->
+              <copyResources>true</copyResources>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>default-jar</id>
@@ -344,6 +341,7 @@
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
+                <include>${javacpp.platform}${javacpp.platform.extension}/</include>
                 <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <excludes>
@@ -367,6 +365,10 @@
         <version>3.0.1</version>
         <executions>
           <execution>
+            <id>attach-sources</id>
+            <phase>leave-disabled-to-not-generate-sources-twice-on-release</phase>
+          </execution>
+          <execution>
             <id>attach-source</id>
             <goals>
               <goal>jar-no-fork</goal>
@@ -376,7 +378,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -398,25 +400,9 @@
 
     <plugins>
       <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version>
-        <configuration>
-          <skip>true</skip>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.6</version>
-        <executions>
-          <execution>
-            <id>default-deploy</id>
-            <phase>deploy</phase>
-            <goals>
-              <goal>deploy</goal>
-            </goals>
-          </execution>
-        </executions>
+        <version>1.6.8</version>
         <extensions>true</extensions>
         <configuration>
           <serverId>sonatype-nexus-staging</serverId>
@@ -438,7 +424,7 @@
           <plugin>
             <artifactId>maven-javadoc-plugin</artifactId>
             <configuration>
-              <additionalparam>-Xdoclint:none</additionalparam>
+              <doclint>none</doclint>
             </configuration>
           </plugin>
         </plugins>
@@ -460,6 +446,32 @@
           <value>true</value>
         </property>
       </activation>
+      <repositories>
+        <repository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${stagingRepositoryId}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>sonatype-nexus-staging</id>
+          <name>Sonatype Nexus Staging</name>
+          <url>https://oss.sonatype.org/service/local/staging/deployByRepositoryId/${stagingRepositoryId}/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
       <build>
         <plugins>
           <plugin>
@@ -475,6 +487,7 @@
               </execution>
             </executions>
             <configuration>
+              <passphrase>${env.GPG_PASSPHRASE}</passphrase>
               <useAgent>false</useAgent>
             </configuration>
           </plugin>
@@ -493,6 +506,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -503,11 +517,13 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
+        <module>mkl-dnn</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -516,7 +532,9 @@
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
@@ -1126,6 +1144,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -1135,12 +1154,14 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
+        <module>mkl-dnn</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>cpython</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1148,7 +1169,9 @@
         <module>cuda</module>
         <module>mxnet</module>
         <module>tensorflow</module>
+        <module>tensorrt</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
@@ -1193,12 +1216,14 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
+        <module>mkl-dnn</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>llvm</module>
+        <module>cpython</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1243,6 +1268,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>librealsense</module>
@@ -1295,6 +1321,7 @@
         <module>opencv</module>
         <module>ffmpeg</module>
         <module>flycapture</module>
+        <module>spinnaker</module>
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>libfreenect2</module>
@@ -1305,16 +1332,19 @@
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
+        <module>mkl-dnn</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>tensorflow</module>
         <module>ale</module>
         <module>systems</module>
         <module>liquidfun</module>

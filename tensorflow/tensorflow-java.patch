@@ -1,36 +1,92 @@
-diff -ruN tensorflow-1.7.0-rc0/tensorflow/BUILD tensorflow-1.7.0-rc0-java/tensorflow/BUILD
---- tensorflow-1.7.0-rc0/tensorflow/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-java/tensorflow/BUILD	2018-03-19 03:07:38.430628042 +0900
-@@ -799,17 +799,12 @@
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/BUILD tensorflow-1.11.0-rc1-java/tensorflow/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/BUILD	2018-09-22 13:48:21.935583132 +0900
+@@ -558,27 +558,25 @@
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
      linkopts = select({
 -        "//tensorflow:darwin": [
 -            "-Wl,-exported_symbols_list",  # This line must be directly followed by the exported_symbols.lds file
--            "//tensorflow:tf_exported_symbols.lds",
+-            "$(location //tensorflow:tf_exported_symbols.lds)",
 -        ],
 +        "//tensorflow:darwin": [],
          "//tensorflow:windows": [],
-         "//tensorflow:windows_msvc": [],
          "//conditions:default": [
              "-z defs",
-             "-s",
 -            "-Wl,--version-script",  #  This line must be directly followed by the version_script.lds file
--            "//tensorflow:tf_version_script.lds",
+-            "$(location //tensorflow:tf_version_script.lds)",
++            "-s",
          ],
      }),
      deps = [
-@@ -822,6 +817,7 @@
+         "//tensorflow:tf_exported_symbols.lds",
+         "//tensorflow:tf_version_script.lds",
+         "//tensorflow/c:c_api",
++        "//tensorflow/c:python_api",
+         "//tensorflow/c/eager:c_api",
+         "//tensorflow/cc:cc_ops",
+         "//tensorflow/cc:client_session",
          "//tensorflow/cc:scope",
          "//tensorflow/cc/profiler",
          "//tensorflow/core:tensorflow",
 +        "//tensorflow/java/src/main/native:native",
-     ],
+     ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.7.0-rc0/tensorflow/java/src/main/native/BUILD	2018-03-13 13:02:38.000000000 +0900
-+++ tensorflow-1.7.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-03-19 03:16:32.287475508 +0900
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/c/BUILD tensorflow-1.11.0-rc1-java/tensorflow/c/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/c/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/c/BUILD	2018-09-21 19:50:38.770877557 +0900
+@@ -289,7 +289,7 @@
+     name = "python_api",
+     srcs = ["python_api.cc"],
+     hdrs = ["python_api.h"],
+-    visibility = ["//tensorflow/python:__pkg__"],
++    visibility = ["//visibility:public"],
+     deps = [
+         ":c_api",
+         ":c_api_internal",
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h tensorflow-1.11.0-rc1-java/tensorflow/core/framework/tensor.h
+--- tensorflow-1.11.0-rc1/tensorflow/core/framework/tensor.h	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/core/framework/tensor.h	2018-09-21 19:50:38.771877558 +0900
+@@ -117,6 +117,11 @@
+   /// are not valid.
+   Tensor(Tensor&& other);
+ 
++  // Creates a tensor with the input datatype, shape and buf.
++  //
++  // Acquires a ref on buf that belongs to this Tensor.
++  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
++
+   ~Tensor();
+ 
+   /// Returns the data type.
+@@ -503,11 +508,6 @@
+   friend class NumpyTensorBuffer;  // For access to the private constructor
+                                    // taking the buffer.
+ 
+-  // Creates a tensor with the input datatype, shape and buf.
+-  //
+-  // Acquires a ref on buf that belongs to this Tensor.
+-  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
+-
+   bool CanUseDMA() const;
+ 
+   // Only needed by variable op to set the shape of an uninitialized
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/java/BUILD tensorflow-1.11.0-rc1-java/tensorflow/java/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/java/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/java/BUILD	2018-09-22 13:48:29.074580425 +0900
+@@ -1,7 +1,7 @@
+ # Description:
+ # TensorFlow Java API.
+ 
+-package(default_visibility = ["//visibility:private"])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
+diff -ruN tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD tensorflow-1.11.0-rc1-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.11.0-rc1/tensorflow/java/src/main/native/BUILD	2018-09-15 04:38:07.000000000 +0900
++++ tensorflow-1.11.0-rc1-java/tensorflow/java/src/main/native/BUILD	2018-09-21 19:50:38.771877558 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),

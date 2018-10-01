@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avcodec.class, target="org.bytedeco.javacpp.avformat", value={
-    @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.57"),
-    @Platform(value="windows", preload="avformat-57") })
+    @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.58"),
+    @Platform(value="windows", preload="avformat-58") })
 public class avformat implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("URLContext", "FFFrac").cast().pointerTypes("Pointer"))

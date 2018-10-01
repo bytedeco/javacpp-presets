@@ -1,15 +1,6 @@
 diff -ruN libvpx-1.6.1/build/make/configure.sh libvpx-1.6.1-android/build/make/configure.sh
 --- libvpx-1.6.1/build/make/configure.sh	2017-01-13 05:27:27.000000000 +0900
-+++ libvpx-1.6.1-android/build/make/configure.sh	2018-02-25 03:20:33.561735386 +0900
-@@ -866,7 +866,7 @@
- 
-   # Process ARM architecture variants
-   case ${toolchain} in
--    arm*)
-+    *)
-       # on arm, isa versions are supersets
-       case ${tgt_isa} in
-         arm64|armv8)
++++ libvpx-1.6.1-android/build/make/configure.sh	2018-04-02 10:15:16.326675003 +0900
 @@ -979,11 +979,8 @@
            ;;
  
@@ -59,3 +50,36 @@ diff -ruN libvpx-1.6.1/build/make/configure.sh libvpx-1.6.1-android/build/make/c
            else
              echo "Assuming standalone build with NDK toolchain."
              echo "See build/make/Android.mk for details."
+@@ -1150,6 +1129,32 @@
+       ;;
+     x86*)
+       case  ${tgt_os} in
++        android*)
++          if [ -n "${ANDROID_NDK}" ]; then
++            TOOLCHAIN_PATH=${ANDROID_BIN}-
++            CC=${TOOLCHAIN_PATH}gcc
++            CXX=${TOOLCHAIN_PATH}g++
++            AR=${TOOLCHAIN_PATH}ar
++            LD=${TOOLCHAIN_PATH}gcc
++            AS=${TOOLCHAIN_PATH}as
++            STRIP=${TOOLCHAIN_PATH}strip
++            NM=${TOOLCHAIN_PATH}nm
++            alt_libc=$ANDROID_ROOT
++
++            if [ -d "${alt_libc}" ]; then
++              add_cflags "--sysroot=${alt_libc}"
++              add_ldflags "--sysroot=${alt_libc}"
++            fi
++
++            enable_feature pic
++            soft_enable realtime_only
++          else
++            echo "Assuming standalone build with NDK toolchain."
++            echo "See build/make/Android.mk for details."
++            check_add_ldflags -static
++            soft_enable unit_tests
++          fi
++          ;;
+         win*)
+           enabled gcc && add_cflags -fno-common
+           ;;

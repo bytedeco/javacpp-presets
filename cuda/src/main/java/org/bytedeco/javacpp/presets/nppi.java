@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -40,8 +40,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
             "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"},
-            link = {"nppial@.9.1", "nppicc@.9.1", "nppicom@.9.1", "nppidei@.9.1", "nppif@.9.1",
-                    "nppig@.9.1", "nppim@.9.1", "nppist@.9.1", "nppisu@.9.1", "nppitc@.9.1"} )},
+            link = {"nppial@.10.0", "nppicc@.10.0", "nppicom@.10.0", "nppidei@.10.0", "nppif@.10.0",
+                    "nppig@.10.0", "nppim@.10.0", "nppist@.10.0", "nppisu@.10.0", "nppitc@.10.0"}),
+    @Platform(value = "windows-x86_64",
+            preload = {"nppial64_100", "nppicc64_100", "nppicom64_100", "nppidei64_100", "nppif64_100",
+                       "nppig64_100", "nppim64_100", "nppist64_100", "nppisu64_100", "nppitc64_100"})},
         target = "org.bytedeco.javacpp.nppi")
 @NoException
 public class nppi implements InfoMapper {

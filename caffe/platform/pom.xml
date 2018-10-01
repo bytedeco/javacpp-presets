@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
@@ -23,17 +23,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.4.1-${project.parent.version}</version>
+      <version>3.4.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.1-${project.parent.version}</version>
+      <version>1.10.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.2.20-${project.parent.version}</version>
+      <version>0.3.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

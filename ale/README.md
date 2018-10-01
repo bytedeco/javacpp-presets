@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.ale</groupId>
     <artifactId>sharedlibraryinterfaceexample</artifactId>
-    <version>1.4</version>
+    <version>1.4.2</version>
     <properties>
         <exec.mainClass>SharedLibraryInterfaceExample</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ale-platform</artifactId>
-            <version>0.6.0-1.4</version>
+            <version>0.6.0-1.4.2</version>
         </dependency>
     </dependencies>
 </project>
@@ -66,6 +66,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  *  Sample code for running an agent with the shared library interface. 
  **************************************************************************** */
 
+import java.lang.System;
 import java.util.Random;
 import org.bytedeco.javacpp.*;
 import static org.bytedeco.javacpp.ale.*;

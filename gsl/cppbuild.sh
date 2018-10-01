@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.4
+GSL_VERSION=2.5
 download http://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -45,7 +45,7 @@ case $PLATFORM in
         export CFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
+        patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
@@ -60,7 +60,7 @@ case $PLATFORM in
         export CFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
+        patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
@@ -75,7 +75,7 @@ case $PLATFORM in
         export CFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
+        patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
@@ -90,7 +90,7 @@ case $PLATFORM in
         export CFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
-        patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
+        patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
@@ -123,19 +123,19 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
-        patch -Np1 < ../../../gsl-$GSL_VERSION-macosx.patch
+        patch -Np1 < ../../../gsl-macosx.patch
         ./configure --prefix=$INSTALL_PATH
         make -j $MAKEJ V=0
         make install-strip
         ;;
     windows-x86)
-        patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
+        patch -Np1 < ../../../gsl-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32 -static-libgcc"
         make -j $MAKEJ V=0
         make install-strip
         ;;
     windows-x86_64)
-        patch -Np1 < ../../../gsl-$GSL_VERSION-windows.patch
+        patch -Np1 < ../../../gsl-windows.patch
         ./configure --prefix=$INSTALL_PATH CC="gcc -m64 -static-libgcc"
         make -j $MAKEJ V=0
         make install-strip

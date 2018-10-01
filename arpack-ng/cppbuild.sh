@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-ARPACK_NG_VERSION=1d912add4fabc6ceeeb8968bb3f67e94e8a5040f
+ARPACK_NG_VERSION=3.6.3
 download https://github.com/opencollab/arpack-ng/archive/$ARPACK_NG_VERSION.tar.gz arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -17,12 +17,17 @@ echo "Decompressing archives..."
 tar --totals -xzf ../arpack-ng-$ARPACK_NG_VERSION.tar.gz
 
 cd arpack-ng-$ARPACK_NG_VERSION
-patch -Np1 < ../../../arpack-ng.patch # https://github.com/opencollab/arpack-ng/pull/84
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
 fi
 patch -Np1 < ../../../arpack-ng-configure.patch || true # bash bootstrap
-chmod 755 configure
+chmod 755 configure build-aux/install-sh
+sedinplace 's/std::real(sigma) + std::imag(sigma) \* I/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
+sedinplace 's/std::real(sigma) + _Complex_I \* std::imag(sigma)/*reinterpret_cast<_Complex double*>(\&sigma)/g' arpack.hpp
+sedinplace 's/internal::s/s/g' arpack.hpp
+sedinplace 's/internal::d/d/g' arpack.hpp
+sedinplace 's/internal::cn/cn/g' arpack.hpp
+sedinplace 's/internal::z/z/g' arpack.hpp
 
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 
@@ -44,12 +49,20 @@ export LD_LIBRARY_PATH=$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        LIBS=
+        if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
+            LIBS="-lgfortran_nonshared"
+        fi
+        CC="gcc -m32" CXX="g++ -m32" FC="gfortran -m32 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        LIBS=
+        if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
+            LIBS="-lgfortran_nonshared"
+        fi
+        CC="gcc -m64" CXX="g++ -m64" FC="gfortran -m64 $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
         make -j $MAKEJ
         make install-strip
         ;;

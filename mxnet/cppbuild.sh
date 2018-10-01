@@ -7,8 +7,20 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export ADD_CFLAGS="-DMXNET_USE_LAPACK=1"
 export ADD_LDFLAGS=
 export USE_OPENMP=1
+export CUDA_ARCH=-arch=sm_30
+export USE_CUDA=0
+export USE_CUDNN=0
+export USE_CUDA_PATH=
+if [[ "$EXTENSION" == *gpu ]]; then
+    export ADD_CFLAGS="$ADD_CFLAGS -DMXNET_USE_CUDA=1"
+    export USE_CUDA=1
+    export USE_CUDNN=1
+    export USE_CUDA_PATH="/usr/local/cuda"
+fi
+
 case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
@@ -18,13 +30,16 @@ case $PLATFORM in
     linux-x86_64)
         export CC="gcc -m64"
         export CXX="g++ -m64"
+        if which g++-6 &> /dev/null; then
+            export CC="gcc-6 -m64"
+            export CXX="g++-6 -m64"
+        fi
         export BLAS="openblas"
         ;;
     macosx-*)
-        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
-        export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
+        export CC="clang"
+        export CXX="clang++"
         export BLAS="openblas"
-        export ADD_LDFLAGS="-static-libgcc -static-libstdc++"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -32,21 +47,11 @@ case $PLATFORM in
         ;;
 esac
 
-DLPACK_VERSION=a6e09b58dc00ee0065f5b7879800e646fbb01d1e
-DMLC_VERSION=87b7ffa59eb78f753073ac56f5f60e46d930b93c
-MSHADOW_VERSION=2d7780c3f2eefe4453fa419862d1b2089bedb8d5
-PS_VERSION=2ce8b9a256207947acfa2cb9b09ab74b8de74547
-NNVM_VERSION=e4a138ab947d682c83625840bbcd66f70feb4b14
-MXNET_VERSION=1.0.0
-download https://github.com/dmlc/dlpack/archive/$DLPACK_VERSION.tar.gz dlpack-$DLPACK_VERSION.tar.gz
-download https://github.com/dmlc/dmlc-core/archive/$DMLC_VERSION.tar.gz dmlc-core-$DMLC_VERSION.tar.gz
-download https://github.com/dmlc/mshadow/archive/$MSHADOW_VERSION.tar.gz mshadow-$MSHADOW_VERSION.tar.gz
-download https://github.com/dmlc/ps-lite/archive/$PS_VERSION.tar.gz ps-lite-$PS_VERSION.tar.gz
-download https://github.com/dmlc/nnvm/archive/$NNVM_VERSION.tar.gz nnvm-$NNVM_VERSION.tar.gz
-download https://github.com/apache/incubator-mxnet/archive/$MXNET_VERSION.tar.gz incubator-mxnet-$MXNET_VERSION.tar.gz
+MXNET_VERSION=1.3.0
+download http://apache.org/dist/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
-mkdir -p $PLATFORM
-cd $PLATFORM
+mkdir -p "$PLATFORM$EXTENSION"
+cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
@@ -66,29 +71,22 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 echo "Decompressing archives..."
-tar --totals -xzf ../dlpack-$DLPACK_VERSION.tar.gz
-tar --totals -xzf ../dmlc-core-$DMLC_VERSION.tar.gz
-tar --totals -xzf ../mshadow-$MSHADOW_VERSION.tar.gz
-tar --totals -xzf ../ps-lite-$PS_VERSION.tar.gz
-tar --totals -xzf ../nnvm-$NNVM_VERSION.tar.gz
-tar --totals -xzf ../incubator-mxnet-$MXNET_VERSION.tar.gz
-cd incubator-mxnet-$MXNET_VERSION
-rmdir dlpack dmlc-core mshadow ps-lite nnvm || true
-ln -snf ../dlpack-$DLPACK_VERSION dlpack
-ln -snf ../dmlc-core-$DMLC_VERSION dmlc-core
-ln -snf ../mshadow-$MSHADOW_VERSION mshadow
-ln -snf ../ps-lite-$PS_VERSION ps-lite
-ln -snf ../nnvm-$NNVM_VERSION nnvm
+tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+
+cd apache-mxnet-src-$MXNET_VERSION-incubating
+
+sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
+sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 
 export C_INCLUDE_PATH="$OPENBLAS_PATH/include/:$OPENCV_PATH/include/"
 export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/:$OPENCV_PATH/lib64/"
+export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/"
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" ADD_CFLAGS="-DMXNET_USE_LAPACK" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
-cp -a include lib ../dmlc-core-$DMLC_VERSION/include ..
-cp -a ../mshadow-$MSHADOW_VERSION/mshadow ../include
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+cp -a include lib 3rdparty/dmlc-core/include ..
+cp -a 3rdparty/mshadow/mshadow ../include
 unset CC
 unset CXX
 
