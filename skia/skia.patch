@@ -1,0 +1,264 @@
+diff -ruN skia-53d672981d2f4535d61da05befa793a73103c4fd/DEPS skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/DEPS
+--- skia-53d672981d2f4535d61da05befa793a73103c4fd/DEPS	2017-05-11 13:47:58.000000000 +0900
++++ skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/DEPS	2018-01-07 22:41:59.186863784 +0900
+@@ -11,7 +11,7 @@
+   "third_party/externals/icu"           : "https://chromium.googlesource.com/chromium/deps/icu.git@ec9c1133693148470ffe2e5e53576998e3650c1d",
+   "third_party/externals/imgui"         : "https://github.com/ocornut/imgui.git@6384eee34f08cb7eab8d835043e1738e4adcdf75",
+   "third_party/externals/jsoncpp"       : "https://chromium.googlesource.com/external/github.com/open-source-parsers/jsoncpp.git@1.0.0",
+-  "third_party/externals/libjpeg-turbo" : "https://skia.googlesource.com/third_party/libjpeg-turbo.git@6de58e0d28014caf2fc1370145f22fd6d65f63e3",
++  "third_party/externals/libjpeg-turbo" : "https://github.com/libjpeg-turbo/libjpeg-turbo.git@c308d434160fbc33e3ed1cd59641d095c186501e",
+   "third_party/externals/libwebp"       : "https://chromium.googlesource.com/webm/libwebp.git@v0.6.0",
+   "third_party/externals/microhttpd"    : "https://android.googlesource.com/platform/external/libmicrohttpd@748945ec6f1c67b7efc934ab0808e1d32f2fb98d",
+   "third_party/externals/piex"          : "https://android.googlesource.com/platform/external/piex.git@8f540f64b6c170a16fb7e6e52d61819705c1522a",
+diff -ruN skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/BUILD.gn skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/BUILD.gn
+--- skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/BUILD.gn	2017-05-11 13:47:58.000000000 +0900
++++ skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/BUILD.gn	2018-01-07 22:40:59.391079901 +0900
+@@ -15,7 +15,10 @@
+   }
+ } else {
+   third_party("libjpeg") {
+-    public_include_dirs = [ "../externals/libjpeg-turbo" ]
++    public_include_dirs = [
++      ".",
++      "../externals/libjpeg-turbo",
++    ]
+ 
+     defines = [ "TURBO_FOR_WINDOWS" ]
+ 
+@@ -67,12 +70,12 @@
+       "../externals/libjpeg-turbo/jutils.c",
+     ]
+ 
+-    if (current_cpu == "arm" && !is_ios && !is_win) {
++    if (current_cpu == "arm" && !is_ios) {
+       sources += [
+         "../externals/libjpeg-turbo/simd/jsimd_arm.c",
+         "../externals/libjpeg-turbo/simd/jsimd_arm_neon.S",
+       ]
+-    } else if (current_cpu == "arm64" && !is_ios && !is_win) {
++    } else if (current_cpu == "arm64" && !is_ios) {
+       sources += [
+         "../externals/libjpeg-turbo/simd/jsimd_arm64.c",
+         "../externals/libjpeg-turbo/simd/jsimd_arm64_neon.S",
+diff -ruN skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jconfig.h skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jconfig.h
+--- skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jconfig.h	1970-01-01 09:00:00.000000000 +0900
++++ skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jconfig.h	2018-01-07 22:41:09.259044235 +0900
+@@ -0,0 +1,76 @@
++/* jconfig.h.  Generated from jconfig.h.in by configure.  */
++/* Version ID for the JPEG library.
++ * Might be useful for tests like "#if JPEG_LIB_VERSION >= 60".
++ */
++#define JPEG_LIB_VERSION 62
++
++/* libjpeg-turbo version */
++#define LIBJPEG_TURBO_VERSION 1.5.3
++
++/*
++ * Add support for arithmetic encoding (C_) and decoding (D_).
++ * This matches Android. Note that such JPEGs are likely rare, given lack of
++ * support by major browsers.
++ */
++/* Support arithmetic encoding */
++#define C_ARITH_CODING_SUPPORTED 1
++
++/* Support arithmetic decoding */
++#define D_ARITH_CODING_SUPPORTED 1
++
++/*
++ * Define BITS_IN_JSAMPLE as either
++ *   8   for 8-bit sample values (the usual setting)
++ *   12  for 12-bit sample values
++ * Only 8 and 12 are legal data precisions for lossy JPEG according to the
++ * JPEG standard, and the IJG code does not support anything else!
++ * We do not support run-time selection of data precision, sorry.
++ */
++
++#define BITS_IN_JSAMPLE  8      /* use 8 or 12 */
++
++/* Define to 1 if you have the <locale.h> header file. */
++#define HAVE_LOCALE_H 1
++
++/* Define to 1 if you have the <stddef.h> header file. */
++#define HAVE_STDDEF_H 1
++
++/* Define to 1 if you have the <stdlib.h> header file. */
++#define HAVE_STDLIB_H 1
++
++/* Define to 1 if the system has the type `unsigned char'. */
++#define HAVE_UNSIGNED_CHAR 1
++
++/* Define to 1 if the system has the type `unsigned short'. */
++#define HAVE_UNSIGNED_SHORT 1
++
++/* Compiler does not support pointers to undefined structures. */
++/* #undef INCOMPLETE_TYPES_BROKEN */
++
++/* Support in-memory source/destination managers */
++#define MEM_SRCDST_SUPPORTED 1
++
++/* Define if you have BSD-like bzero and bcopy in <strings.h> rather than
++   memset/memcpy in <string.h>. */
++/* #undef NEED_BSD_STRINGS */
++
++/* Define if you need to include <sys/types.h> to get size_t. */
++/* #undef NEED_SYS_TYPES_H 1 */
++
++/* Define if your (broken) compiler shifts signed values as if they were
++   unsigned. */
++/* #undef RIGHT_SHIFT_IS_UNSIGNED */
++
++/* Use accelerated SIMD routines. */
++#define WITH_SIMD 1
++
++/* Define to 1 if type `char' is unsigned and you are not using gcc.  */
++#ifndef __CHAR_UNSIGNED__
++/* # undef __CHAR_UNSIGNED__ */
++#endif
++
++/* Define to empty if `const' does not conform to ANSI C. */
++/* #undef const */
++
++/* Define to `unsigned int' if <sys/types.h> does not define. */
++/* #undef size_t */
+diff -ruN skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jconfigint.h skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jconfigint.h
+--- skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jconfigint.h	1970-01-01 09:00:00.000000000 +0900
++++ skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jconfigint.h	2018-01-07 22:41:16.120019438 +0900
+@@ -0,0 +1,42 @@
++/* jconfigint.h.  Customized for android on the basis of jconfigint.h.in. */
++
++#ifndef __JCONFIGINT_H__
++#define __JCONFIGINT_H__
++
++
++#define BUILD ""
++
++/* How to obtain function inlining. */
++#ifndef INLINE
++  #ifndef TURBO_FOR_WINDOWS
++    #define INLINE inline __attribute__((always_inline))
++  #else
++    #if defined(__GNUC__)
++      #define INLINE inline __attribute__((always_inline))
++    #elif defined(_MSC_VER)
++      #define INLINE __forceinline
++    #else
++      #define INLINE
++    #endif
++  #endif
++#endif
++
++/* Define to the full name of this package. */
++#define PACKAGE_NAME "libjpeg-turbo"
++
++/* Version number of package */
++#define VERSION "1.5.1"
++
++/* The size of `size_t', as reported by the compiler through the
++ * builtin macro __SIZEOF_SIZE_T__. If the compiler does not
++ * report __SIZEOF_SIZE_T__ add a custom rule for the compiler
++ * here. */
++#ifdef __SIZEOF_SIZE_T__
++#define SIZEOF_SIZE_T __SIZEOF_SIZE_T__
++#elif __WORDSIZE==64 || defined(_WIN64)
++#define SIZEOF_SIZE_T 8
++#else
++#define SIZEOF_SIZE_T 4
++#endif
++
++#endif // __JCONFIGINT_H__
+diff -ruN skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jsimdcfg.inc skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jsimdcfg.inc
+--- skia-53d672981d2f4535d61da05befa793a73103c4fd/third_party/libjpeg-turbo/jsimdcfg.inc	1970-01-01 09:00:00.000000000 +0900
++++ skia-53d672981d2f4535d61da05befa793a73103c4fd-patch/third_party/libjpeg-turbo/jsimdcfg.inc	2018-01-07 22:41:23.409993090 +0900
+@@ -0,0 +1,92 @@
++;
++; Automatically generated include file from jsimdcfg.inc.h
++;
++;
++; -- jpeglib.h
++;
++%define DCTSIZE 8
++%define DCTSIZE2 64
++;
++; -- jmorecfg.h
++;
++%define RGB_RED 0
++%define RGB_GREEN 1
++%define RGB_BLUE 2
++%define RGB_PIXELSIZE 3
++%define EXT_RGB_RED 0
++%define EXT_RGB_GREEN 1
++%define EXT_RGB_BLUE 2
++%define EXT_RGB_PIXELSIZE 3
++%define EXT_RGBX_RED 0
++%define EXT_RGBX_GREEN 1
++%define EXT_RGBX_BLUE 2
++%define EXT_RGBX_PIXELSIZE 4
++%define EXT_BGR_RED 2
++%define EXT_BGR_GREEN 1
++%define EXT_BGR_BLUE 0
++%define EXT_BGR_PIXELSIZE 3
++%define EXT_BGRX_RED 2
++%define EXT_BGRX_GREEN 1
++%define EXT_BGRX_BLUE 0
++%define EXT_BGRX_PIXELSIZE 4
++%define EXT_XBGR_RED 3
++%define EXT_XBGR_GREEN 2
++%define EXT_XBGR_BLUE 1
++%define EXT_XBGR_PIXELSIZE 4
++%define EXT_XRGB_RED 1
++%define EXT_XRGB_GREEN 2
++%define EXT_XRGB_BLUE 3
++%define EXT_XRGB_PIXELSIZE 4
++%define RGBX_FILLER_0XFF 1
++; Representation of a single sample (pixel element value).
++; On this SIMD implementation, this must be 'unsigned char'.
++;
++%define JSAMPLE byte ; unsigned char
++%define SIZEOF_JSAMPLE SIZEOF_BYTE ; sizeof(JSAMPLE)
++%define CENTERJSAMPLE 128
++; Representation of a DCT frequency coefficient.
++; On this SIMD implementation, this must be 'short'.
++;
++%define JCOEF word ; short
++%define SIZEOF_JCOEF SIZEOF_WORD ; sizeof(JCOEF)
++; Datatype used for image dimensions.
++; On this SIMD implementation, this must be 'unsigned int'.
++;
++%define JDIMENSION dword ; unsigned int
++%define SIZEOF_JDIMENSION SIZEOF_DWORD ; sizeof(JDIMENSION)
++%define JSAMPROW POINTER ; JSAMPLE * (jpeglib.h)
++%define JSAMPARRAY POINTER ; JSAMPROW * (jpeglib.h)
++%define JSAMPIMAGE POINTER ; JSAMPARRAY * (jpeglib.h)
++%define JCOEFPTR POINTER ; JCOEF * (jpeglib.h)
++%define SIZEOF_JSAMPROW SIZEOF_POINTER ; sizeof(JSAMPROW)
++%define SIZEOF_JSAMPARRAY SIZEOF_POINTER ; sizeof(JSAMPARRAY)
++%define SIZEOF_JSAMPIMAGE SIZEOF_POINTER ; sizeof(JSAMPIMAGE)
++%define SIZEOF_JCOEFPTR SIZEOF_POINTER ; sizeof(JCOEFPTR)
++;
++; -- jdct.h
++;
++; A forward DCT routine is given a pointer to a work area of type DCTELEM[];
++; the DCT is to be performed in-place in that buffer.
++; To maximize parallelism, Type DCTELEM is changed to short (originally, int).
++;
++%define DCTELEM word ; short
++%define SIZEOF_DCTELEM SIZEOF_WORD ; sizeof(DCTELEM)
++%define float FP32 ; float
++%define SIZEOF_FAST_FLOAT SIZEOF_FP32 ; sizeof(float)
++; To maximize parallelism, Type short is changed to short.
++;
++%define ISLOW_MULT_TYPE word ; must be short
++%define SIZEOF_ISLOW_MULT_TYPE SIZEOF_WORD ; sizeof(ISLOW_MULT_TYPE)
++%define IFAST_MULT_TYPE word ; must be short
++%define SIZEOF_IFAST_MULT_TYPE SIZEOF_WORD ; sizeof(IFAST_MULT_TYPE)
++%define IFAST_SCALE_BITS 2 ; fractional bits in scale factors
++%define FLOAT_MULT_TYPE FP32 ; must be float
++%define SIZEOF_FLOAT_MULT_TYPE SIZEOF_FP32 ; sizeof(FLOAT_MULT_TYPE)
++;
++; -- jsimd.h
++;
++%define JSIMD_NONE 0x00
++%define JSIMD_MMX 0x01
++%define JSIMD_3DNOW 0x02
++%define JSIMD_SSE 0x04
++%define JSIMD_SSE2 0x08

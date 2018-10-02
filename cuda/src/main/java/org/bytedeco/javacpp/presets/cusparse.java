@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -33,8 +34,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.8.0")},
+    @Platform(include = "<cusparse.h>", link = "cusparse@.10.0"),
+    @Platform(value = "windows-x86_64", preload = "cusparse64_100")},
         target = "org.bytedeco.javacpp.cusparse")
+@NoException
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUSPARSEAPI").cppTypes().annotations().cppText(""))
@@ -42,6 +45,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseMatDescr_t").valueTypes("cusparseMatDescr").pointerTypes("@ByPtrPtr cusparseMatDescr"))
                .put(new Info("cusparseSolveAnalysisInfo_t").valueTypes("cusparseSolveAnalysisInfo").pointerTypes("@ByPtrPtr cusparseSolveAnalysisInfo"))
                .put(new Info("csrsv2Info_t").valueTypes("csrsv2Info").pointerTypes("@ByPtrPtr csrsv2Info"))
+               .put(new Info("csrsm2Info_t").valueTypes("csrsm2Info").pointerTypes("@ByPtrPtr csrsm2Info"))
                .put(new Info("bsrsv2Info_t").valueTypes("bsrsv2Info").pointerTypes("@ByPtrPtr bsrsv2Info"))
                .put(new Info("bsrsm2Info_t").valueTypes("bsrsm2Info").pointerTypes("@ByPtrPtr bsrsm2Info"))
                .put(new Info("csric02Info_t").valueTypes("csric02Info").pointerTypes("@ByPtrPtr csric02Info"))
@@ -51,6 +55,7 @@ public class cusparse implements InfoMapper {
                .put(new Info("cusparseHybMat_t").valueTypes("cusparseHybMat").pointerTypes("@ByPtrPtr cusparseHybMat"))
                .put(new Info("csrgemm2Info_t").valueTypes("csrgemm2Info").pointerTypes("@ByPtrPtr csrgemm2Info"))
                .put(new Info("csru2csrInfo_t").valueTypes("csru2csrInfo").pointerTypes("@ByPtrPtr csru2csrInfo"))
-               .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"));
+               .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"))
+               .put(new Info("pruneInfo_t").valueTypes("pruneInfo").pointerTypes("@ByPtrPtr pruneInfo"));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -33,8 +34,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cufft.h>", link = "cufft@.8.0")},
+    @Platform(include = "<cufft.h>", link = "cufft@.10.0"),
+    @Platform(value = "windows-x86_64", preload = "cufft64_100")},
         target = "org.bytedeco.javacpp.cufft")
+@NoException
 public class cufft implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUFFTAPI").cppTypes().annotations().cppText(""))

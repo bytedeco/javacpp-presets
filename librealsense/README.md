@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * librealsense 1.9.6  https://github.com/IntelRealSense/librealsense
+ * librealsense 1.12.1  https://github.com/IntelRealSense/librealsense
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -17,9 +17,8 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/librealsense/apidocs/
 
 
-Example
--------
-
+Sample Usage
+------------
 Here is a very simple example that check if you can load the library,
 and connect to a camera.
 
@@ -31,15 +30,15 @@ and connect to a camera.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.librealsense</groupId>
     <artifactId>TestConnection</artifactId>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.4.2</version>
     <properties>
         <exec.mainClass>TestConnection</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>librealsense</artifactId>
-            <version>1.9.6-1.2.5-SNAPSHOT</version>
+            <artifactId>librealsense-platform</artifactId>
+            <version>1.12.1-1.4.2</version>
         </dependency>
     </dependencies>
 </project>

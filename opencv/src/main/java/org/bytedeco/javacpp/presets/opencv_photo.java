@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2015 Samuel Audet
+ * Copyright (C) 2013-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,10 +33,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/photo/photo_c.h>", "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
-              link = "opencv_photo@.3.1", preload = "opencv_cuda@.3.1"),
-    @Platform(value = "windows", link = "opencv_photo310", preload = "opencv_cuda310")},
+              link = "opencv_photo@.3.4",
+              preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4", "opencv_cudaimgproc@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_photo"),
+    @Platform(value = "windows", link = "opencv_photo343",
+              preload = {"opencv_cuda343", "opencv_cudaarithm343", "opencv_cudafilters343", "opencv_cudaimgproc343"})},
         target = "org.bytedeco.javacpp.opencv_photo")
 public class opencv_photo implements InfoMapper {
     public void map(InfoMap infoMap) {
     }
 }
+

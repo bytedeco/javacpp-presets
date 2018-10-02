@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -32,11 +33,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Jarek Sacha
  */
-@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_shape.class}, value = {
-    @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.3.1"),
-    @Platform(value = "windows", link = "opencv_xfeatures2d310")},
+@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_ml.class, opencv_shape.class}, value = {
+    @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.3.4",
+              preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_xfeatures2d"),
+    @Platform(value = "windows", link = "opencv_xfeatures2d343",
+              preload = {"opencv_cuda343", "opencv_cudaarithm343"})},
         target = "org.bytedeco.javacpp.opencv_xfeatures2d")
 public class opencv_xfeatures2d implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("cv::Matx23f").cast().pointerTypes("FloatPointer"));
     }
 }

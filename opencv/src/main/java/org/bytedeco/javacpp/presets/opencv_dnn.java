@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Audet
+ * Copyright (C) 2016-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,21 +33,39 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_imgproc.class, value = {
-    @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/blob.hpp>",
-                         "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>"}, link = "opencv_dnn@.3.1"),
-    @Platform(value = "windows", link = "opencv_dnn310")},
+    @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
+                         "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
+              link = "opencv_dnn@.3.4"),
+    @Platform(value = "ios", preload = "libopencv_dnn"),
+    @Platform(value = "windows", link = "opencv_dnn343")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("std::vector<cv::dnn::Blob>").pointerTypes("BlobVector").define())
-               .put(new Info("std::vector<cv::dnn::Blob*>").pointerTypes("BlobPointerVector").define())
+        infoMap.put(new Info("CV__DNN_EXPERIMENTAL_NS_BEGIN", "CV__DNN_EXPERIMENTAL_NS_END").cppTypes().annotations())
+               .put(new Info("cv::dnn::MatShape").annotations("@StdVector").pointerTypes("IntPointer"))
+               .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
+               .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())
+               .put(new Info("std::vector<std::vector<cv::Range> >").pointerTypes("RangeVectorVector").define())
+               .put(new Info("cv::dnn::LRNLayer::type").javaNames("lrnType"))
+               .put(new Info("cv::dnn::PoolingLayer::type").javaNames("poolingType"))
+               .put(new Info("cv::dnn::BlankLayer", "cv::dnn::LSTMLayer", "cv::dnn::RNNLayer", "cv::dnn::BaseConvolutionLayer",
+                             "cv::dnn::ConvolutionLayer", "cv::dnn::DeconvolutionLayer", "cv::dnn::LRNLayer", "cv::dnn::PoolingLayer",
+                             "cv::dnn::SoftmaxLayer", "cv::dnn::InnerProductLayer", "cv::dnn::MVNLayer", "cv::dnn::ReshapeLayer",
+                             "cv::dnn::FlattenLayer", "cv::dnn::ConcatLayer", "cv::dnn::SplitLayer", "cv::dnn::SliceLayer",
+                             "cv::dnn::PermuteLayer", "cv::dnn::PaddingLayer", "cv::dnn::ActivationLayer", "cv::dnn::ReLULayer",
+                             "cv::dnn::ChannelsPReLULayer", "cv::dnn::ELULayer", "cv::dnn::TanHLayer", "cv::dnn::SigmoidLayer",
+                             "cv::dnn::BNLLLayer", "cv::dnn::AbsLayer", "cv::dnn::PowerLayer", "cv::dnn::CropLayer", "cv::dnn::EltwiseLayer",
+                             "cv::dnn::BatchNormLayer", "cv::dnn::MaxUnpoolLayer", "cv::dnn::ScaleLayer", "cv::dnn::ShiftLayer",
+                             "cv::dnn::PriorBoxLayer", "cv::dnn::DetectionOutputLayer", "cv::dnn::NormalizeBBoxLayer", "cv::dnn::ProposalLayer",
+                             "cv::dnn::ReLU6Layer", "cv::dnn::ReorgLayer", "cv::dnn::RegionLayer", "cv::dnn::ResizeNearestNeighborLayer",
+                             "cv::dnn::CropAndResizeLayer", "cv::dnn::InterpLayer", "cv::dnn::ResizeLayer",
+                             "cv::dnn::ShuffleChannelLayer", "cv::dnn::experimental_dnn_v5::ShuffleChannelLayer").purify())
                .put(new Info("cv::dnn::Net::forward(cv::dnn::Net::LayerId, cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forward(cv::dnn::Net::LayerId*, cv::dnn::Net::LayerId*)",
                              "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId)",
                              "cv::dnn::Net::forwardOpt(cv::dnn::Net::LayerId*)",
-                             "cv::dnn::Net::setParam(cv::dnn::Net::LayerId, int, cv::dnn::Blob&)",
-                             "cv::dnn::readTorchBlob(cv::String&, bool)",
-                             "cv::dnn::Blob::fill(cv::InputArray)").skip())
+                             "std::map<cv::String,cv::dnn::DictValue>::const_iterator").skip())
+               .put(new Info("std::vector<cv::Mat*>").pointerTypes("MatPointerVector").define())
                .put(new Info("cv::dnn::Layer* (*)(cv::dnn::LayerParams&)").annotations("@Convention(value=\"\", extern=\"C++\")"));
     }
 }

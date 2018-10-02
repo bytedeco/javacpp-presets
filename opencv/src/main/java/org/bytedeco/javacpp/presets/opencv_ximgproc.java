@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -32,15 +32,20 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_calib3d.class, value = {
+@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class}, value = {
     @Platform(include = {"<opencv2/ximgproc.hpp>", "opencv2/ximgproc/edge_filter.hpp", "opencv2/ximgproc/disparity_filter.hpp",
         "opencv2/ximgproc/sparse_match_interpolator.hpp", "opencv2/ximgproc/structured_edge_detection.hpp", "opencv2/ximgproc/seeds.hpp",
         "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
-        "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.1"),
-    @Platform(value = "windows", link = "opencv_ximgproc310")},
+        "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.4"),
+    @Platform(value = "ios", preload = "libopencv_ximgproc"),
+    @Platform(value = "windows", link = "opencv_ximgproc343")},
         target = "org.bytedeco.javacpp.opencv_ximgproc")
 public class opencv_ximgproc implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::ximgproc::segmentation::PointSet").skip());
+        infoMap.put(new Info("cv::ximgproc::segmentation::PointSet").skip())
+               .put(new Info("cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategyColor",
+                             "cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategySize",
+                             "cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategyTexture",
+                             "cv::ximgproc::segmentation::SelectiveSearchSegmentationStrategyFill").purify());
     }
 }

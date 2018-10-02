@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.gsl", value={
-    @Platform(include={"gsl/gsl_types.h", "gsl/gsl_errno.h", "gsl/gsl_ieee_utils.h", "gsl/gsl_inline.h", "gsl/gsl_message.h", "gsl/gsl_complex.h",
+@Properties(inherit = openblas.class, target = "org.bytedeco.javacpp.gsl", value = {
+    @Platform(include = {"gsl/gsl_types.h", "gsl/gsl_errno.h", "gsl/gsl_ieee_utils.h", "gsl/gsl_inline.h", "gsl/gsl_message.h", "gsl/gsl_complex.h",
         "gsl/gsl_complex_math.h", "gsl/gsl_check_range.h", "gsl/gsl_sys.h", "gsl/gsl_machine.h", "gsl/gsl_precision.h", "gsl/gsl_nan.h", "gsl/gsl_pow_int.h",
         "gsl/gsl_math.h", "gsl/gsl_min.h", "gsl/gsl_minmax.h", "gsl/gsl_mode.h", "gsl/gsl_test.h", "gsl/gsl_version.h",
 
@@ -50,7 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         /*"gsl/gsl_matrix_long_double.h",*/ "gsl/gsl_matrix_double.h", "gsl/gsl_matrix_float.h", "gsl/gsl_matrix_ulong.h", "gsl/gsl_matrix_long.h",
         "gsl/gsl_matrix_uint.h", "gsl/gsl_matrix_int.h", "gsl/gsl_matrix_ushort.h", "gsl/gsl_matrix_short.h", "gsl/gsl_matrix_uchar.h", "gsl/gsl_matrix_char.h",
 
-        "gsl/gsl_cblas.h", "gsl/gsl_blas_types.h", "gsl/gsl_blas.h", "gsl/gsl_bspline.h", "gsl/gsl_cdf.h", "gsl/gsl_chebyshev.h", "gsl/gsl_combination.h",
+        /* "gsl/gsl_cblas.h", */ "gsl/gsl_blas_types.h", "gsl/gsl_blas.h", "gsl/gsl_bspline.h", "gsl/gsl_cdf.h", "gsl/gsl_chebyshev.h", "gsl/gsl_combination.h",
         "gsl/gsl_deriv.h", "gsl/gsl_dht.h", "gsl/gsl_diff.h", "gsl/gsl_eigen.h", "gsl/gsl_fit.h", "gsl/gsl_permutation.h", "gsl/gsl_heapsort.h",
         "gsl/gsl_histogram2d.h", "gsl/gsl_histogram.h", "gsl/gsl_integration.h", "gsl/gsl_interp.h", "gsl/gsl_linalg.h", "gsl/gsl_poly.h", "gsl/gsl_rng.h",
         "gsl/gsl_qrng.h", "gsl/gsl_randist.h", "gsl/gsl_roots.h",  "gsl/gsl_siman.h", "gsl/gsl_spline.h", "gsl/gsl_sum.h", "gsl/gsl_wavelet.h",
@@ -95,10 +96,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
-        "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"}, 
-                               link={"gslcblas@.0", "gsl@.0"}),
-    @Platform(value="android", link={"gslcblas",    "gsl"}),
-    @Platform(value="windows", preload={"libgslcblas-0", "libgsl-0"}) })
+        "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"},
+     define = "__GSL_CBLAS_H__", link = "gsl@.23"),
+    @Platform(value = "android", link = "gsl"),
+    @Platform(value = "windows", preload = "libgsl-23") })
+@NoException
 public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
@@ -144,6 +146,7 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_sf_result_struct").pointerTypes("gsl_sf_result"))
                .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
                .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
-                             "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf").skip());
+                             "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
+                             "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e").skip());
     }
 }

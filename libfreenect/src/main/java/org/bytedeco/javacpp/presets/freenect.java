@@ -24,6 +24,7 @@ package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -34,13 +35,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.freenect", value={
-    @Platform(not="android", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_audio.h>", "<libfreenect/libfreenect_sync.h>"},
-        link={"freenect@0.5", "freenect_sync@0.5"}, preload="libusb-1.0"),
-    @Platform(value="windows", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_sync.h>"},
-        link={"freenect", "freenect_sync", "pthreadVC2"}),
-    @Platform(value="windows-x86",    preload="libusb0_x86"),
-    @Platform(value="windows-x86_64", preload="libusb0") })
+@Properties(target = "org.bytedeco.javacpp.freenect", value = {
+    @Platform(not = "android", include = {"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_audio.h>", "<libfreenect/libfreenect_sync.h>"},
+        link = {"freenect@0.5", "freenect_sync@0.5"}),
+    @Platform(value = "macosx-x86_64", preload = "usb-1.0@.0", preloadpath = "/usr/local/lib/"),
+    @Platform(value = "windows", include = {"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_sync.h>"},
+        link = {"freenect", "freenect_sync", "pthreadVC2"}),
+    @Platform(value = "windows-x86",    preload = "libusb0_x86"),
+    @Platform(value = "windows-x86_64", preload = "libusb0") })
+@NoException
 public class freenect implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FREENECTAPI", "FREENECTAPI_SYNC").cppTypes().annotations());

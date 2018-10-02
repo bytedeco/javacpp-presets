@@ -1,0 +1,39 @@
+diff -ruN libdc1394-2.2.5/configure libdc1394-2.2.5-macosx/configure
+--- libdc1394-2.2.5/configure	2016-12-22 17:26:26.000000000 +0900
++++ libdc1394-2.2.5-macosx/configure	2017-01-03 21:36:57.000000000 +0900
+@@ -12502,9 +12502,9 @@
+   esac
+   if test "$_lt_dar_can_shared" = "yes"; then
+     output_verbose_link_cmd=func_echo_all
+-    archive_cmds="\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name \$rpath/\$soname \$verstring $_lt_dar_single_mod${_lt_dsymutil}"
++    archive_cmds="\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name @rpath/\$soname \$verstring $_lt_dar_single_mod${_lt_dsymutil}"
+     module_cmds="\$CC \$allow_undefined_flag -o \$lib -bundle \$libobjs \$deplibs \$compiler_flags${_lt_dsymutil}"
+-    archive_expsym_cmds="sed 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name \$rpath/\$soname \$verstring ${_lt_dar_single_mod}${_lt_dar_export_syms}${_lt_dsymutil}"
++    archive_expsym_cmds="sed 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC -dynamiclib \$allow_undefined_flag -o \$lib \$libobjs \$deplibs \$compiler_flags -install_name @rpath/\$soname \$verstring ${_lt_dar_single_mod}${_lt_dar_export_syms}${_lt_dsymutil}"
+     module_expsym_cmds="sed -e 's,^,_,' < \$export_symbols > \$output_objdir/\${libname}-symbols.expsym~\$CC \$allow_undefined_flag -o \$lib -bundle \$libobjs \$deplibs \$compiler_flags${_lt_dar_export_syms}${_lt_dsymutil}"
+ 
+   else
+diff -ruN libdc1394-2.2.5/dc1394/bayer.c libdc1394-2.2.5-macosx/dc1394/bayer.c
+--- libdc1394-2.2.5/dc1394/bayer.c	2016-10-11 15:19:10.000000000 +0900
++++ libdc1394-2.2.5-macosx/dc1394/bayer.c	2017-01-03 21:44:31.000000000 +0900
+@@ -775,7 +775,7 @@
+ {
+ 	uint8_t *outR, *outG, *outB;
+ 	register int i, j;
+-	uint tmp;
++	int tmp;
+ 	int st=sx*sy;
+ 	int p;
+ 	int sx2=sx<<1;
+diff -ruN libdc1394-2.2.5/dc1394/macosx/capture.c libdc1394-2.2.5-macosx/dc1394/macosx/capture.c
+--- libdc1394-2.2.5/dc1394/macosx/capture.c	2016-12-20 22:10:34.000000000 +0900
++++ libdc1394-2.2.5-macosx/dc1394/macosx/capture.c	2017-01-03 21:42:02.000000000 +0900
+@@ -614,7 +614,7 @@
+     dc1394video_frame_t * frame_tmp = capture->frames + next;
+     char ch;
+ 
+-	if(craw->frames==NULL || craw->capture_is_set==0) {
++	if(craw->capture_is_set==0) {
+ 		*frame=NULL;
+ 		return DC1394_CAPTURE_IS_NOT_SET;
+ 	}

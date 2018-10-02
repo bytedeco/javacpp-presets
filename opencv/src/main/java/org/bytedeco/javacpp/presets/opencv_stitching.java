@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,8 +38,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
         "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
         "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-              link = "opencv_stitching@.3.1", preload = "opencv_cuda@.3.1"),
-    @Platform(value = "windows", link = "opencv_stitching310", preload = "opencv_cuda310")},
+              link = "opencv_stitching@.3.4", preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
+              "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4", "opencv_cudawarping@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_stitching"),
+    @Platform(value = "windows", link = "opencv_stitching343", preload = {"opencv_cuda343", "opencv_cudaarithm343", "opencv_cudafilters343",
+              "opencv_cudaimgproc343", "opencv_cudafeatures2d343", "opencv_cudalegacy343", "opencv_cudawarping343"})},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -65,3 +68,4 @@ public class opencv_stitching implements InfoMapper {
                .put(new Info("cv::detail::GraphCutSeamFinderGpu").pointerTypes("GraphCutSeamFinderGpu"));
     }
 }
+

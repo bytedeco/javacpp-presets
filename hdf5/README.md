@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * HDF5 1.10.0-patch1  https://support.hdfgroup.org/HDF5/
+ * HDF5 1.10.3  https://support.hdfgroup.org/HDF5/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,15 +34,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.2.5-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>hdf5</artifactId>
-            <version>1.10.0-patch1-1.2.5-SNAPSHOT</version>
+            <artifactId>hdf5-platform</artifactId>
+            <version>1.10.3-1.4.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -111,8 +111,8 @@ public class H5tutrCmprss {
             // plist->setSzip(szip_options_mask, szip_pixels_per_block);
 
             // Create the dataset.
-            DataSet dataset = new DataSet(file.asCommonFG().createDataSet(DATASET_NAME,
-                                    new DataType(PredType.STD_I32BE()), dataspace, plist));
+            DataSet dataset = new DataSet(file.createDataSet(DATASET_NAME,
+                                    new DataType(PredType.STD_I32BE()), dataspace, plist, null, null));
 
             for (int i = 0; i <  DIM0; i++)
                 for (int j = 0; j < DIM1; j++)
@@ -142,7 +142,7 @@ public class H5tutrCmprss {
             // Open the file and the dataset in the file.
             file = new H5File();
             file.openFile(FILE_NAME, H5F_ACC_RDONLY);
-            dataset = new DataSet(file.asCommonFG().openDataSet(DATASET_NAME));
+            dataset = new DataSet(file.openDataSet(DATASET_NAME));
 
             // Get the create property list of the dataset.
             plist = new DSetCreatPropList(dataset.getCreatePlist());

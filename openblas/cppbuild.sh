@@ -7,28 +7,33 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.2.19
+OPENBLAS_VERSION=0.3.3
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
+mkdir -p include lib bin OpenBLAS-$OPENBLAS_VERSION-nolapack
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz
+tar --totals -xzf ../OpenBLAS-$OPENBLAS_VERSION.tar.gz --strip-components=1 -C OpenBLAS-$OPENBLAS_VERSION-nolapack/
 
 cd OpenBLAS-$OPENBLAS_VERSION
+cp lapack-netlib/LAPACKE/include/*.h ../include
 
 # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
 export CROSS_SUFFIX=
 export HOSTCC=gcc
 export NO_LAPACK=0
-export TARGET=GENERIC
+export NUM_THREADS=64
+export NO_AFFINITY=1
 case $PLATFORM in
     android-arm)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
         export CROSS_SUFFIX="$ANDROID_BIN-"
@@ -38,11 +43,29 @@ case $PLATFORM in
             export NOFORTRAN=1
         fi
         export BINARY=32
-        export TARGET=ARMV5
+        export TARGET=ARMV5 # to disable hard-float functions unsupported by Android
+        export ARM_SOFTFP_ABI=1
+        sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
+        ;;
+    android-arm64)
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
+        export CC="$ANDROID_BIN-gcc $CFLAGS"
+        export FC="$ANDROID_BIN-gfortran $CFLAGS"
+        export CROSS_SUFFIX="$ANDROID_BIN-"
+        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
+        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+            export NO_LAPACK=1
+            export NOFORTRAN=1
+        fi
+        export BINARY=64
+        export TARGET=ARMV8
         ;;
     android-x86)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
         export CROSS_SUFFIX="$ANDROID_BIN-"
@@ -54,43 +77,119 @@ case $PLATFORM in
         export BINARY=32
         export TARGET=ATOM
         ;;
+    android-x86_64)
+        patch -Np1 < ../../../OpenBLAS-android.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
+        export CFLAGS="$ANDROID_FLAGS"
+        export CC="$ANDROID_BIN-gcc $CFLAGS"
+        export FC="$ANDROID_BIN-gfortran $CFLAGS"
+        export CROSS_SUFFIX="$ANDROID_BIN-"
+        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
+        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+            export NO_LAPACK=1
+            export NOFORTRAN=1
+        fi
+        export BINARY=64
+        export TARGET=ATOM
+        ;;
+    ios-arm)
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7 -miphoneos-version-min=5.0"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=ARMV5 # to disable unsupported assembler from iOS SDK: use Accelerate to optimize
+        export NO_SHARED=1
+        ;;
+    ios-arm64)
+        # use generic kernels as Xcode assembler does not accept optimized ones: use Accelerate to optimize
+        cp kernel/arm/KERNEL.ARMV5 kernel/arm64/KERNEL.ARMV8
+        cp kernel/arm/KERNEL.ARMV5 ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/arm64/KERNEL.ARMV8
+        export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch arm64 -miphoneos-version-min=5.0"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=ARMV8
+        export NO_SHARED=1
+        ;;
+    ios-x86)
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686 -mios-simulator-version-min=5.0"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=32
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
+        export NO_SHARED=1
+        ;;
+    ios-x86_64)
+        export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64 -mios-simulator-version-min=5.0"
+        export FC=
+        export NO_LAPACK=1
+        export NOFORTRAN=1
+        export BINARY=64
+        export TARGET=GENERIC # optimized kernels do not return correct results on iOS: use Accelerate to optimize
+        export NO_SHARED=1
+        ;;
     linux-x86)
         export CC="$OLDCC -m32"
         export FC="$OLDFC -m32"
         export BINARY=32
+        export DYNAMIC_ARCH=1
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
+        export DYNAMIC_ARCH=1
         ;;
     linux-ppc64le)
-        export CC="$OLDCC -m64"
-        export FC="$OLDFC -m64"
+        # patch to use less buggy generic kernels
+        patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-linux-ppc64le.patch
+        MACHINE_TYPE=$( uname -m )
+        if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
+          export CC="$OLDCC -m64"
+          export FC="$OLDFC -m64"
+        else
+          export CC="powerpc64le-linux-gnu-gcc"
+          export FC="powerpc64le-linux-gnu-gfortran"
+          export CROSS_SUFFIX="powerpc64le-linux-gnu-"
+        fi
         export BINARY=64
-        export TARGET=POWER8
+        export TARGET=POWER5
         ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc"
         export FC="arm-linux-gnueabihf-gfortran"
+        export LDFLAGS="-Wl,-z,noexecstack"
         export BINARY=32
         export TARGET=ARMV6
         ;;
     macosx-*)
-        patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-macosx.patch
-        export CC="gcc"
-        export FC="gfortran"
+        patch -Np1 < ../../../OpenBLAS-macosx.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
+        export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
+        export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
         export BINARY=64
+        export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
+        export NO_AVX512=1
         ;;
     windows-x86)
         export CC="$OLDCC -m32"
         export FC="$OLDFC -m32"
         export BINARY=32
+        export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
         ;;
     windows-x86_64)
         export CC="$OLDCC -m64"
         export FC="$OLDFC -m64"
         export BINARY=64
+        export DYNAMIC_ARCH=1
+        export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
+        export NO_AVX512=1
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -98,14 +197,19 @@ case $PLATFORM in
         ;;
 esac
 
-make -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY TARGET=$TARGET COMMON_PROF=
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0 NUM_THREADS=$NUM_THREADS
 make install "PREFIX=$INSTALL_PATH"
 
-# create .lib files which can be used in other builds
-case $PLATFORM in
-	windows-*)
-		cp ../lib/libopenblas.dll.a ../lib/libopenblas.lib
-		;;
-esac
+unset DYNAMIC_ARCH
+if [[ -z ${TARGET:-} ]]; then
+    export TARGET=GENERIC
+fi
+cd ../OpenBLAS-$OPENBLAS_VERSION-nolapack/
+make -s -j $MAKEJ libs netlib shared "CROSS_SUFFIX=$CROSS_SUFFIX" "CC=$CC" "FC=$FC" "HOSTCC=$HOSTCC" BINARY=$BINARY COMMON_PROF= F_COMPILER=GFORTRAN USE_OPENMP=0 NUM_THREADS=$NUM_THREADS NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+make install "PREFIX=$INSTALL_PATH" NO_LAPACK=1 LIBNAMESUFFIX=nolapack
+
+unset CC
+unset FC
+unset LDFLAGS
 
 cd ../..

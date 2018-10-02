@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.videoInputLib", value={
-    @Platform(include={"<videoInput.h>", "<videoInput.cpp>"}, link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })
+    @Platform(value="windows", include={"<videoInput.h>", "<videoInput.cpp>"}, link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })
 public class videoInputLib implements InfoMapper {
     public void map(InfoMap infoMap) {
           infoMap.put(new Info("videoInput.cpp").skip())

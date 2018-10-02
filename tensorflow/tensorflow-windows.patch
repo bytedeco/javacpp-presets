@@ -1,0 +1,180 @@
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/CMakeLists.txt tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/CMakeLists.txt
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-21 03:15:35.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/CMakeLists.txt	2018-09-27 14:15:13.537678928 +0900
+@@ -223,6 +223,7 @@
+ endif()
+ 
+ # External dependencies
++include(FindAbseil)
+ include(zlib)
+ include(gif)
+ include(png)
+@@ -248,6 +249,7 @@
+ link_directories(${ADD_LINK_DIRECTORY})
+ 
+ set(tensorflow_EXTERNAL_LIBRARIES
++    ${ABSEIL_DEPENDENT_LIBRARIES}
+     ${gif_STATIC_LIBRARIES}
+     ${png_STATIC_LIBRARIES}
+     ${jpeg_STATIC_LIBRARIES}
+@@ -296,6 +298,7 @@
+     ${tensorflow_source_dir}
+     ${CMAKE_CURRENT_BINARY_DIR}
+     # External dependencies.
++    ${ABSEIL_INCLUDE_DIRS}
+     ${zlib_INCLUDE_DIR}
+     ${gif_INCLUDE_DIR}
+     ${png_INCLUDE_DIR}
+@@ -394,20 +397,16 @@
+ 
+   # by default we assume compute cabability 3.5 and 5.2. If you change this change it in
+   # CUDA_NVCC_FLAGS and cuda_config.h below
+-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_37,code=\"sm_37,compute_37\")
+-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_52,code=\"sm_52,compute_52\")
+-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_60,code=\"sm_60,compute_60\")
+-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_61,code=\"sm_61,compute_61\")
+-  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_70,code=\"sm_70,compute_70\")
++  set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-gencode arch=compute_30,code=\"sm_30,compute_30\")
+   set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};--include-path ${PROJECT_BINARY_DIR}/$\{build_configuration\};--expt-relaxed-constexpr)
+   set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS};-ftz=true)  # Flush denormals to zero
+   set(CUDA_INCLUDE ${CUDA_TOOLKIT_TARGET_DIR} ${CUDA_TOOLKIT_TARGET_DIR}/extras/CUPTI/include)
+   include_directories(${CUDA_INCLUDE})
+   if (WIN32)
+-    add_definitions(-DGOOGLE_CUDA=1 -DTF_EXTRA_CUDA_CAPABILITIES=3.7,5.2,6.0,6.1,7.0)
++    add_definitions(-DGOOGLE_CUDA=1 -DTF_EXTRA_CUDA_CAPABILITIES=3.0)
+   else (WIN32)
+     # Without these double quotes, cmake in Linux makes it "-DTF_EXTRA_CUDA_CAPABILITIES=3.7, -D5.2, ..." for cc, which incurs build breaks
+-    add_definitions(-DGOOGLE_CUDA=1 -D"TF_EXTRA_CUDA_CAPABILITIES=3.7,5.2,6.0,6.1,7.0")
++    add_definitions(-DGOOGLE_CUDA=1 -D"TF_EXTRA_CUDA_CAPABILITIES=3.0")
+   endif (WIN32)
+ 
+   if (WIN32)
+@@ -417,7 +416,7 @@
+     endif(NOT CUDNN_HOME)
+     set(CUDNN_INCLUDE "${CUDNN_HOME}/include")
+ 
+-    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUFFT_LIBRARIES}
++    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_cublas_LIBRARY} ${CUDA_cufft_LIBRARY}
+       ${CUDA_curand_LIBRARY} ${CUDA_cupti_LIBRARY} ${CUDA_cusolver_LIBRARY} ${CUDNN_HOME}/lib/x64/cudnn.lib)
+   else (WIN32)
+     set(CUDNN_INCLUDE "${tensorflow_CUDNN_INCLUDE}")
+@@ -444,7 +443,7 @@
+       message("culibos-static: ${culibos_STATIC_LIBRARY}")
+     endif (NOT culibos_STATIC_LIBRARY)
+ 
+-    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUFFT_LIBRARIES}
++    set(CUDA_LIBRARIES ${CUDA_LIBRARIES} ${CUDA_CUDA_LIBRARY} ${CUDA_cublas_LIBRARY} ${CUDA_cufft_LIBRARY}
+       ${CUDA_curand_LIBRARY} ${CUDA_cupti_LIBRARY} ${CUDA_cusolver_LIBRARY} ${cudnn_STATIC_LIBRARY} ${culibos_STATIC_LIBRARY} ${nccl_STATIC_LIBRARY})
+   endif (WIN32)
+   include_directories(${CUDNN_INCLUDE})
+@@ -456,7 +455,7 @@
+   FILE(WRITE ${tensorflow_source_dir}/third_party/gpus/cuda/cuda_config.h
+     "#ifndef CUDA_CUDA_CONFIG_H_\n"
+     "#define CUDA_CUDA_CONFIG_H_\n"
+-    "#define TF_CUDA_CAPABILITIES CudaVersion(\"3.7\"),CudaVersion(\"5.2\"),CudaVersion(\"6.0\"),CudaVersion(\"6.1\"),CudaVersion(\"7.0\")\n"
++    "#define TF_CUDA_CAPABILITIES CudaVersion(\"3.0\")\n"
+     "#define TF_CUDA_VERSION \"64_${short_CUDA_VER}\"\n"
+     "#define TF_CUDNN_VERSION \"64_${tensorflow_CUDNN_VERSION}\"\n"
+     "#define TF_CUDA_TOOLKIT_PATH \"${CUDA_TOOLKIT_ROOT_DIR}\"\n"
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/external/FindAbseil.cmake tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/external/FindAbseil.cmake	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/external/FindAbseil.cmake	2018-09-27 14:14:44.901652376 +0900
+@@ -0,0 +1,86 @@
++# Copyright 2018 The Cartographer Authors
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++cmake_minimum_required(VERSION 3.2)
++
++if(NOT TARGET standalone_absl)
++  set(prefix Release/${CMAKE_STATIC_LIBRARY_PREFIX})
++  set(suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
++  include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
++  set(ABSEIL_PROJECT_NAME abseil)
++  set(ABSEIL_PROJECT_SRC_DIR
++    ${CMAKE_CURRENT_BINARY_DIR}/${ABSEIL_PROJECT_NAME}/src/${ABSEIL_PROJECT_NAME})
++  set(ABSEIL_PROJECT_BUILD_DIR
++    ${CMAKE_CURRENT_BINARY_DIR}/${ABSEIL_PROJECT_NAME}/src/${ABSEIL_PROJECT_NAME}-build)
++  set(ABSEIL_INCLUDE_DIRS ${ABSEIL_PROJECT_SRC_DIR})
++  set(ABSEIL_LIBRARY_PATH
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/synchronization/${prefix}absl_synchronization${suffix}")
++  set(ABSEIL_DEPENDENT_LIBRARIES
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_symbolize${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/time/${prefix}absl_time${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/strings/${prefix}absl_strings${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/strings/${prefix}str_format_internal${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/strings/${prefix}str_format_extension_internal${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/strings/${prefix}absl_str_format${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/algorithm/${prefix}absl_algorithm${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/base/${prefix}absl_base${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/base/${prefix}absl_dynamic_annotations${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/base/${prefix}absl_malloc_internal${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/base/${prefix}absl_spinlock_wait${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/base/${prefix}absl_throw_delegate${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/container/${prefix}absl_container${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/container/${prefix}test_instance_tracker_lib${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_debugging${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_examine_stack${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_failure_signal_handler${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_leak_check${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_stack_consumption${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/debugging/${prefix}absl_stacktrace${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/memory/${prefix}absl_memory${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/meta/${prefix}absl_meta${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/numeric/${prefix}absl_int128${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/numeric/${prefix}absl_numeric${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/synchronization/${prefix}absl_synchronization${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_any${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_bad_any_cast${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_bad_optional_access${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_optional${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_span${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_variant${suffix}"
++    "${ABSEIL_PROJECT_BUILD_DIR}/absl/utility/${prefix}absl_utility${suffix}"
++  )
++  ExternalProject_Add(${ABSEIL_PROJECT_NAME}
++    PREFIX ${ABSEIL_PROJECT_NAME}
++    GIT_REPOSITORY   https://github.com/abseil/abseil-cpp.git
++    GIT_TAG          f0f15c2778b0e4959244dd25e63f445a455870f5
++    INSTALL_COMMAND  ""
++    BUILD_COMMAND    ${CMAKE_COMMAND} --build "${ABSEIL_PROJECT_BUILD_DIR}" --config Release
++    CMAKE_CACHE_ARGS "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON;-DBUILD_TESTING:BOOL=OFF;-DCMAKE_BUILD_TYPE:STRING=Release"
++    BUILD_BYPRODUCTS "${ABSEIL_LIBRARY_PATH};${ABSEIL_DEPENDENT_LIBRARIES}"
++  )
++  add_library(standalone_absl STATIC IMPORTED GLOBAL)
++  set_target_properties(standalone_absl
++    PROPERTIES INTERFACE_INCLUDE_DIRECTORIES
++    ${ABSEIL_INCLUDE_DIRS}
++  )
++  set_target_properties(standalone_absl
++    PROPERTIES IMPORTED_LOCATION
++    ${ABSEIL_LIBRARY_PATH}
++    INTERFACE_LINK_LIBRARIES
++    "${ABSEIL_DEPENDENT_LIBRARIES}"
++  )
++  add_dependencies(standalone_absl ${ABSEIL_PROJECT_NAME})
++  unset(prefix)
++  unset(suffix)
++endif()
+diff -ruN tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/tf_tools.cmake tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/tf_tools.cmake
+--- tensorflow-1.11.0-rc2/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-21 03:15:35.000000000 +0900
++++ tensorflow-1.11.0-rc2-windows/tensorflow/contrib/cmake/tf_tools.cmake	2018-09-27 14:14:44.901652376 +0900
+@@ -32,7 +32,7 @@
+   tf_protos_cc
+ )
+ 
+-add_dependencies(${proto_text} tf_core_lib)
++add_dependencies(${proto_text} tf_core_lib standalone_absl)
+ if(tensorflow_ENABLE_GRPC_SUPPORT)
+     add_dependencies(${proto_text} grpc)
+ endif(tensorflow_ENABLE_GRPC_SUPPORT)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -33,13 +34,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.5")},
+    @Platform(include = "<cudnn.h>", link = "cudnn@.7"),
+    @Platform(value = "windows-x86_64", preload = "cudnn64_7")},
         target = "org.bytedeco.javacpp.cudnn")
+@NoException
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDNNWINAPI").cppTypes().annotations().cppText(""))
                .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
-               .put(new Info("cudnnTensorDescriptor_t").valueTypes("cudnnTensorStruct").pointerTypes("@Cast(\"cudnnTensorStruct**\") @ByPtrPtr cudnnTensorStruct"))
+               .put(new Info("cudnnTensorDescriptor_t").valueTypes("cudnnTensorStruct")
+                       .pointerTypes("@Cast(\"cudnnTensorStruct**\") @ByPtrPtr cudnnTensorStruct", "@Cast(\"cudnnTensorStruct**\") PointerPointer"))
                .put(new Info("cudnnFilterDescriptor_t").valueTypes("cudnnFilterStruct").pointerTypes("@ByPtrPtr cudnnFilterStruct"))
                .put(new Info("cudnnConvolutionDescriptor_t").valueTypes("cudnnConvolutionStruct").pointerTypes("@ByPtrPtr cudnnConvolutionStruct"))
                .put(new Info("cudnnPoolingDescriptor_t").valueTypes("cudnnPoolingStruct").pointerTypes("@ByPtrPtr cudnnPoolingStruct"))
@@ -47,7 +51,28 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnActivationDescriptor_t").valueTypes("cudnnActivationStruct").pointerTypes("@ByPtrPtr cudnnActivationStruct"))
                .put(new Info("cudnnSpatialTransformerDescriptor_t").valueTypes("cudnnSpatialTransformerStruct").pointerTypes("@ByPtrPtr cudnnSpatialTransformerStruct"))
                .put(new Info("cudnnOpTensorDescriptor_t").valueTypes("cudnnOpTensorStruct").pointerTypes("@ByPtrPtr cudnnOpTensorStruct"))
+               .put(new Info("cudnnReduceTensorDescriptor_t").valueTypes("cudnnReduceTensorStruct").pointerTypes("@ByPtrPtr cudnnReduceTensorStruct"))
+               .put(new Info("cudnnAlgorithmDescriptor_t").valueTypes("cudnnAlgorithmStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmStruct"))
+               .put(new Info("cudnnAlgorithmPerformance_t").valueTypes("cudnnAlgorithmPerformanceStruct").pointerTypes("@ByPtrPtr cudnnAlgorithmPerformanceStruct"))
                .put(new Info("cudnnRNNDescriptor_t").valueTypes("cudnnRNNStruct").pointerTypes("@ByPtrPtr cudnnRNNStruct"))
-               .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"));
+               .put(new Info("cudnnRNNDataDescriptor_t").valueTypes("cudnnRNNDataStruct").pointerTypes("@ByPtrPtr cudnnRNNDataStruct"))
+               .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
+               .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))
+               .put(new Info("cudnnCTCLossDescriptor_t").valueTypes("cudnnCTCLossStruct").pointerTypes("@ByPtrPtr cudnnCTCLossStruct"))
+
+               .put(new Info("cudnnSetConvolution2dDescriptor_v4").javaText(
+                          " public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,\n"
+                        + "        int pad_h, int pad_w, int u, int v, int dilation_h, int dilation_w, int mode) {\n"
+                        + "    return cudnnSetConvolution2dDescriptor_v4(convDesc, pad_h, pad_w, u, v, dilation_h, dilation_w, mode);\n"
+                        + "}\n"
+                        + "public static native @Cast(\"cudnnStatus_t\") int cudnnSetConvolution2dDescriptor_v4(\n"
+                        + "                                cudnnConvolutionStruct convDesc,\n"
+                        + "                                int pad_h,\n"
+                        + "                                int pad_w,\n"
+                        + "                                int u,\n"
+                        + "                                int v,\n"
+                        + "                                int dilation_h,\n"
+                        + "                                int dilation_w,\n"
+                        + "                                @Cast(\"cudnnConvolutionMode_t\") int mode );\n"));
     }
 }

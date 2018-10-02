@@ -1,7 +1,7 @@
 diff -ruN libfreenect-0.5.3/CMakeLists.txt libfreenect-0.5.3-windows/CMakeLists.txt
 --- libfreenect-0.5.3/CMakeLists.txt	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/CMakeLists.txt	2015-10-23 23:43:47.350418200 +0900
-@@ -127,7 +127,9 @@
++++ libfreenect-0.5.3-windows/CMakeLists.txt	2017-04-08 22:50:11.511319600 +0900
+@@ -127,7 +127,11 @@
  
  if(WIN32)
    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows")
@@ -9,12 +9,14 @@ diff -ruN libfreenect-0.5.3/CMakeLists.txt libfreenect-0.5.3-windows/CMakeLists.
 +  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/libusb10emu")
 +  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/libusb10emu/libusb-1.0")
 +endif(WIN32)
++
++add_definitions(-D_TIMESPEC_DEFINED)
  
  # Add library project
  add_subdirectory (src)
 diff -ruN libfreenect-0.5.3/platform/windows/unistd.h libfreenect-0.5.3-windows/platform/windows/unistd.h
 --- libfreenect-0.5.3/platform/windows/unistd.h	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/platform/windows/unistd.h	2015-10-23 23:43:47.350418200 +0900
++++ libfreenect-0.5.3-windows/platform/windows/unistd.h	2017-04-08 22:47:57.144922000 +0900
 @@ -37,15 +37,3 @@
  typedef long ssize_t;
  #endif // _SSIZE_T_DEFINED
@@ -33,7 +35,7 @@ diff -ruN libfreenect-0.5.3/platform/windows/unistd.h libfreenect-0.5.3-windows/
 -}
 diff -ruN libfreenect-0.5.3/src/cameras.c libfreenect-0.5.3-windows/src/cameras.c
 --- libfreenect-0.5.3/src/cameras.c	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/cameras.c	2015-10-23 23:43:47.350418200 +0900
++++ libfreenect-0.5.3-windows/src/cameras.c	2017-04-08 22:47:57.176175300 +0900
 @@ -868,12 +868,7 @@
  			return -1;
  	}
@@ -64,7 +66,7 @@ diff -ruN libfreenect-0.5.3/src/cameras.c libfreenect-0.5.3-windows/src/cameras.
  
 diff -ruN libfreenect-0.5.3/src/CMakeLists.txt libfreenect-0.5.3-windows/src/CMakeLists.txt
 --- libfreenect-0.5.3/src/CMakeLists.txt	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/CMakeLists.txt	2015-10-23 23:43:47.350418200 +0900
++++ libfreenect-0.5.3-windows/src/CMakeLists.txt	2017-04-08 22:47:57.191800600 +0900
 @@ -5,21 +5,10 @@
  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
  include_directories(${LIBUSB_1_INCLUDE_DIRS})
@@ -118,7 +120,7 @@ diff -ruN libfreenect-0.5.3/src/CMakeLists.txt libfreenect-0.5.3-windows/src/CMa
  install (FILES "../include/libfreenect.h" "../include/libfreenect_registration.h" "../include/libfreenect_audio.h"
 diff -ruN libfreenect-0.5.3/src/core.c libfreenect-0.5.3-windows/src/core.c
 --- libfreenect-0.5.3/src/core.c	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/core.c	2015-10-23 23:43:47.350418200 +0900
++++ libfreenect-0.5.3-windows/src/core.c	2017-04-08 22:47:57.191800600 +0900
 @@ -89,11 +89,6 @@
  			freenect_stop_video(dev);
  			freenect_stop_depth(dev);
@@ -133,7 +135,7 @@ diff -ruN libfreenect-0.5.3/src/core.c libfreenect-0.5.3-windows/src/core.c
  	return res;
 diff -ruN libfreenect-0.5.3/src/flags.c libfreenect-0.5.3-windows/src/flags.c
 --- libfreenect-0.5.3/src/flags.c	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/flags.c	2015-10-23 23:43:47.381690900 +0900
++++ libfreenect-0.5.3-windows/src/flags.c	2017-04-08 22:47:57.207426300 +0900
 @@ -60,7 +60,7 @@
  			int ret = write_register(dev, 0x0015, 0x0007);
  			if (ret < 0)
@@ -154,7 +156,7 @@ diff -ruN libfreenect-0.5.3/src/flags.c libfreenect-0.5.3-windows/src/flags.c
  	}
 diff -ruN libfreenect-0.5.3/src/usb_libusb10.c libfreenect-0.5.3-windows/src/usb_libusb10.c
 --- libfreenect-0.5.3/src/usb_libusb10.c	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/usb_libusb10.c	2015-10-23 23:54:59.112117100 +0900
++++ libfreenect-0.5.3-windows/src/usb_libusb10.c	2017-04-08 22:47:57.223049700 +0900
 @@ -68,42 +68,6 @@
  
  FN_INTERNAL libusb_device * fnusb_find_connected_audio_device(libusb_device * camera, libusb_device ** deviceList, int cnt)
@@ -453,7 +455,7 @@ diff -ruN libfreenect-0.5.3/src/usb_libusb10.c libfreenect-0.5.3-windows/src/usb
  }
 diff -ruN libfreenect-0.5.3/src/usb_libusb10.h libfreenect-0.5.3-windows/src/usb_libusb10.h
 --- libfreenect-0.5.3/src/usb_libusb10.h	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/src/usb_libusb10.h	2015-10-23 23:43:47.397295700 +0900
++++ libfreenect-0.5.3-windows/src/usb_libusb10.h	2017-04-08 22:47:57.301180300 +0900
 @@ -87,7 +87,6 @@
  
  int fnusb_start_iso(fnusb_dev *dev, fnusb_isoc_stream *strm, fnusb_iso_cb cb, unsigned char endpoint, int xfers, int pkts, int len);
@@ -464,7 +466,7 @@ diff -ruN libfreenect-0.5.3/src/usb_libusb10.h libfreenect-0.5.3-windows/src/usb
  int fnusb_bulk(fnusb_dev *dev, uint8_t endpoint, uint8_t *data, int len, int *transferred);
 diff -ruN libfreenect-0.5.3/wrappers/c_sync/CMakeLists.txt libfreenect-0.5.3-windows/wrappers/c_sync/CMakeLists.txt
 --- libfreenect-0.5.3/wrappers/c_sync/CMakeLists.txt	2015-10-19 03:58:07.000000000 +0900
-+++ libfreenect-0.5.3-windows/wrappers/c_sync/CMakeLists.txt	2015-10-23 23:43:47.397295700 +0900
++++ libfreenect-0.5.3-windows/wrappers/c_sync/CMakeLists.txt	2017-04-08 22:47:57.316806500 +0900
 @@ -1,24 +1,28 @@
  ######################################################################################
  # C Synchronous Interface

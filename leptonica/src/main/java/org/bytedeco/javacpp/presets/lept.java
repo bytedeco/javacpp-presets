@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,18 +33,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.lept", value={
-    @Platform(include={"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
+@Properties(target = "org.bytedeco.javacpp.lept", helper = "org.bytedeco.javacpp.helper.lept", value = {
+    @Platform(include = {"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/rbtree.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
-        "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"}, link="lept@.5"),
-    @Platform(value="android", link="lept"),
-    @Platform(value="windows", link="liblept", preload={"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libstdc++-6", "liblept-5"}),
-    @Platform(value="windows-x86", preloadpath="C:/msys64/mingw32/bin/"),
-    @Platform(value="windows-x86_64", preloadpath="C:/msys64/mingw64/bin/") })
+        "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"},
+        link = "lept@.5", resource = {"include", "lib"}),
+    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = "gomp@.1"),
+    @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
+    @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
+    @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
+    @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
+    @Platform(value = "android", link = "lept"),
+    @Platform(value = "windows", link = "liblept", preload = {"libwinpthread-1", "libgcc_s_dw2-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "liblept-5"}),
+    @Platform(value = "windows-x86", preloadpath = "C:/msys64/mingw32/bin/"),
+    @Platform(value = "windows-x86_64", preloadpath = "C:/msys64/mingw64/bin/") })
+@NoException
 public class lept implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LEPT_DLL", "LIBJP2K_HEADER", "L_END_LIST").cppTypes().annotations())
+               .put(new Info("PIX_NOT").cppTypes("int", "int"))
                .put(new Info("L_WallTimer").pointerTypes("L_WALLTIMER"))
                .put(new Info("Numa").pointerTypes("NUMA"))
                .put(new Info("Numaa").pointerTypes("NUMAA"))
@@ -78,7 +87,7 @@ public class lept implements InfoMapper {
                .put(new Info("Sel").pointerTypes("SEL"))
                .put(new Info("Sela").pointerTypes("SELA"))
                .put(new Info("L_Kernel").pointerTypes("L_KERNEL"))
-               .put(new Info("Pix").pointerTypes("PIX"))
+               .put(new Info("Pix").pointerTypes("PIX").base("AbstractPIX"))
                .put(new Info("PixColormap").pointerTypes("PIXCMAP"))
                .put(new Info("RGBA_Quad").pointerTypes("RGBA_QUAD"))
                .put(new Info("Pixa").pointerTypes("PIXA"))
@@ -90,9 +99,9 @@ public class lept implements InfoMapper {
                .put(new Info("Ptaa").pointerTypes("PTAA"))
                .put(new Info("Pixacc").pointerTypes("PIXACC"))
                .put(new Info("PixTiling").pointerTypes("PIXTILING"))
-               .put(new Info("FPix").pointerTypes("FPIX"))
+               .put(new Info("FPix").pointerTypes("FPIX").base("AbstractFPIX"))
                .put(new Info("FPixa").pointerTypes("FPIXA"))
-               .put(new Info("DPix").pointerTypes("DPIX"))
+               .put(new Info("DPix").pointerTypes("DPIX").base("AbstractDPIX"))
                .put(new Info("PixComp").pointerTypes("PIXC"))
                .put(new Info("PixaComp").pointerTypes("PIXAC"))
                .put(new Info("L_Recoga").pointerTypes("L_RECOGA"))
