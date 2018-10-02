@@ -86,6 +86,7 @@ cd ..
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
+patch -Np1 -d x265-$X265 < ../../x265.patch
 
 case $PLATFORM in
     android-arm)
@@ -373,6 +374,7 @@ case $PLATFORM in
         ;;
 
     linux-x86)
+        export AS="nasm"
         cd $ZLIB
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
@@ -407,10 +409,9 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
+        cd ../x265-$X265/build/linux
+        CC="gcc -m32" CXX="g++ -m32" ./multilib.sh -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        cd ../../
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-linux-gcc --as=yasm
         make -j $MAKEJ
@@ -438,6 +439,7 @@ case $PLATFORM in
         ;;
 
     linux-x86_64)
+        export AS="nasm"
         cd $ZLIB
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
@@ -472,10 +474,9 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
+        cd ../x265-$X265/build/linux
+        CC="gcc -m64" CXX="g++ -m64" ./multilib.sh -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        cd ../../
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-linux-gcc --as=yasm
         make -j $MAKEJ
@@ -773,6 +774,7 @@ case $PLATFORM in
         ;;
 
     macosx-*)
+        export AS="nasm"
         cd $ZLIB
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
@@ -807,10 +809,9 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
+        cd ../x265-$X265/build/linux
+        ./multilib.sh -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        cd ../../
         cd ../libvpx-$VPX_VERSION
         sedinplace '/avx512/d' configure
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
