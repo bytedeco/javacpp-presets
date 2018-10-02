@@ -1,5 +1,5 @@
 
- * Add support for Windows to presets for LiquidFun ([pull #536](https://github.com/bytedeco/javacpp-presets/pull/536))
+ * Add support for Windows to presets for LiquidFun ([pull #536](https://github.com/bytedeco/javacpp-presets/pull/536)) and MXNet ([pull #309](https://github.com/bytedeco/javacpp-presets/pull/309))
  * Add CUDA-enabled build for MXNet via `-gpu` extension ([pull #609](https://github.com/bytedeco/javacpp-presets/pull/609))
  * Prevent MKL-DNN from compiling code with `-march=native` ([pull #618](https://github.com/bytedeco/javacpp-presets/pull/618))
  * Add an RPATH to `libmkldnn.so.0` to avoid loading issues on Linux ([issue deeplearning4j/deeplearning4j#6366](https://github.com/deeplearning4j/deeplearning4j/issues/6366))
@@ -15,7 +15,7 @@
  * Add presets for Spinnaker 1.15.x ([pull #553](https://github.com/bytedeco/javacpp-presets/pull/553)), CPython 3.6.x, ONNX 1.3.0 ([pull #547](https://github.com/bytedeco/javacpp-presets/pull/547))
  * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
- * Enable MKL-DNN for TensorFlow
+ * Enable MKL-DNN for MXNet and TensorFlow
  * Upgrade presets for OpenCV 3.4.3, FFmpeg 4.0.2, HDF5 1.10.3, MKL 2019.0, MKL-DNN 0.16, OpenBLAS 0.3.3, ARPACK-NG 3.6.3, LLVM 7.0.0, Tesseract 4.0.0-beta.4, CUDA 10.0, cuDNN 7.3, MXNet 1.3.0, TensorFlow 1.11.0, TensorRT 5.0, and their dependencies
  * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
 
