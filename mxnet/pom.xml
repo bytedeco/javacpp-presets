@@ -26,6 +26,11 @@
       <version>0.3.3-${project.parent.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>mkl-dnn</artifactId>
+      <version>0.16-${project.parent.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>

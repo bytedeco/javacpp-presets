@@ -43,7 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/},
-        link = "mxnet", preload = "libmxnet", /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
+        link = "mxnet", preload = {"iomp5", "libiomp5md", "mklml", "mklml_intel", "mkldnn", "libmxnet"}, /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {

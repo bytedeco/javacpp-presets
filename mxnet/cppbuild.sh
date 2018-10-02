@@ -14,6 +14,7 @@ export CUDA_ARCH=-arch=sm_30
 export USE_CUDA=0
 export USE_CUDNN=0
 export USE_CUDA_PATH=
+export USE_MKLDNN=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export ADD_CFLAGS="$ADD_CFLAGS -DMXNET_USE_CUDA=1"
     export USE_CUDA=1
@@ -57,6 +58,7 @@ case $PLATFORM in
         export CC="gcc -m32"
         export CXX="g++ -m32"
         export BLAS="openblas"
+        export USE_MKLDNN=0
         ;;
     linux-x86_64)
         export CC="gcc -m64"
@@ -73,26 +75,28 @@ case $PLATFORM in
         export BLAS="openblas"
         ;;
     windows-x86_64)
+        # copy include files
+        mkdir -p ../include
+        cp -r include/mxnet 3rdparty/dmlc-core/include/dmlc 3rdparty/mshadow/mshadow ../include
+
         # configure the build
-        USE_X="-DUSE_CUDA=OFF -DUSE_CUDNN=OFF -DUSE_OPENCV=ON"
-        OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/ -DOpenCV_3RDPARTY_LIB_DIR_DBG=$OPENCV_PATH/lib/ -DOpenCV_3RDPARTY_LIB_DIR_OPT=$OPENCV_PATH/lib/ -DOpenCV_LIB_DIR_DBG=$OPENCV_PATH/lib/ -DOpenCV_LIB_DIR_OPT=$OPENCV_PATH/"
-        OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/include/lib/libopenblas.dll.a"
-        "$CMAKE" -G "Visual Studio 12 2013 Win64" $USE_X $OPENBLAS $OPENCV
+        mkdir -p ../build
+        cd ../build
+        USE_X="-DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
+        OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
+        OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
+        "$CMAKE" -G "Visual Studio 14 2015 Win64" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
 
         # build the project
-        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release
-
-        # copy include files
-        mkdir ../include
-        cp -a include/mxnet dmlc-core/include/dmlc mshadow/mshadow ../include
+        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
 
         # copy binary files
-        mkdir ../bin
-        cp -a Release/* ../bin
+        mkdir -p ../bin
+        cp Release/*.dll 3rdparty/mkldnn/src/Release/*.dll ../bin
 
         # copy library files
-        mkdir ../lib
-        cp -a Release/* ../lib
+        mkdir -p ../lib
+        cp Release/libmxnet.lib ../lib/mxnet.lib
 
         # finish
         cd ../..
@@ -110,9 +114,9 @@ export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_P
 
 sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
 sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
-cp -a include lib 3rdparty/dmlc-core/include ..
-cp -a 3rdparty/mshadow/mshadow ../include
+make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+cp -r include lib 3rdparty/dmlc-core/include ..
+cp -r 3rdparty/mshadow/mshadow ../include
 unset CC
 unset CXX
 

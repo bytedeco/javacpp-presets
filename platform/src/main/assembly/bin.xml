@@ -35,7 +35,6 @@
       <excludes>
         <exclude>*-javadoc.jar</exclude>
         <exclude>*-sources.jar</exclude>
-        <exclude>*-platform.jar</exclude>
       </excludes>
     </fileSet>
     <fileSet>

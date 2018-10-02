@@ -212,4 +212,9 @@ unset CC
 unset FC
 unset LDFLAGS
 
+if [[ -f ../lib/libopenblas.dll.a ]]; then
+    # bundle the import library for Windows under a friendly name for MSVC
+    cp ../lib/libopenblas.dll.a ../lib/openblas.lib
+fi
+
 cd ../..
