@@ -50,6 +50,7 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
+sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 
