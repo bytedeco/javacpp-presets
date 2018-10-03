@@ -140,6 +140,17 @@ for:
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    - wmic computersystem set AutomaticManagedPagefile=False
+    - wmic pagefile list /format:list
+#    - wmic pagefileset create name="C:\pagefile.sys"
+    - wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=8192,MaximumSize=8192
+    - wmic pagefileset list /format:list
+    - ps: write-host "Restarting..."
+    - ps: sleep 5
+    - ps: restart-computer -f
+    - ps: sleep 5
+    - ps: write-host "Restarted."
+    - wmic pagefile list /format:list
 
 install:
     - 'echo install section'
