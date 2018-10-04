@@ -23,7 +23,7 @@ export PATH=$NEWPATH
 set -vx
 
 export PROJ=$1
-cd $APPVEYOR_BUILD_FOLDER
+export APPVEYOR_BUILD_FOLDER=`pwd`
 
 echo Building $PROJ
 echo Platform: $OS
