@@ -409,8 +409,36 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265/build/linux
-        CC="gcc -m32" CXX="g++ -m32" ./multilib.sh -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
-        cd ../../
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
+        make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-linux-gcc --as=yasm
         make -j $MAKEJ
