@@ -139,10 +139,13 @@ curl -L -o mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/
 curl -L -o mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz
@@ -150,10 +153,13 @@ curl -L -o mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.or
 curl -L -o mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 
 DOWNLOAD_FILE="$PROJ-cppbuild.zip"
