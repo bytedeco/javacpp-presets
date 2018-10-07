@@ -2,7 +2,10 @@ dist: trusty
 sudo: required
 cache:
   directories:
+      - $HOME/.m2
+      - $HOME/.ccache
       - $HOME/downloads
+  timeout: 1000
 addons:
   apt:
     packages:
@@ -13,9 +16,10 @@ language: java
 services:
       - docker
 
-matrix:
+jobs:
    include:
-      - os: linux
+      - stage: build
+        os: linux
         env: PROJ=opencv,flandmark OS=android-arm
         install: true
         script: ./ci/install-travis.sh
@@ -736,7 +740,7 @@ matrix:
       - os: linux
         env: PROJ=tensorflow OS=linux-x86_64 EXT=-gpu
         install: true
-        script: ./ci/install-travis.sh
+        script: ./ci/install-travis.sh nodeploy
 
       - os: osx
         osx_image: xcode7.3
@@ -751,6 +755,17 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=tensorflow OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh nodeploy
+
+      - stage: deploy
+        os: linux
+        env: PROJ=tensorflow OS=linux-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
       - os: osx

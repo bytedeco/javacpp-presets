@@ -85,48 +85,36 @@ case $PLATFORM in
     # the value of Pkg.Revision needs to start with "12" for Bazel to accept GCC
     # Also, the last version of the NDK supported by TensorFlow is android-ndk-r15c
     android-arm)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-arm64)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sed -i "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-x86)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-x86_64)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-android.patch
         sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sed -i "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     linux-x86)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
+        # BoringSSL doesn't build on linux-x86
         patch -Np1 < ../../../tensorflow-unsecure.patch
         sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
     linux-x86_64)
-        export CC="/usr/bin/gcc"
-        export CXX="/usr/bin/g++"
         patch -Np1 < ../../../tensorflow-java.patch
-        export GCC_HOST_COMPILER_PATH=$CC
         export TF_NEED_MKL=1
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
@@ -134,10 +122,11 @@ case $PLATFORM in
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
-        sed -i '' 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
-        # https://github.com/tensorflow/tensorflow/issues/19676
+        sedinplace 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
+        sedinplace '/-lgomp/d' third_party/gpus/cuda/BUILD.tpl
         patch -Np1 < ../../../tensorflow-java.patch
-        patch -Np1 < ../../../tensorflow-macosx.patch || true
+        # no longer needed? https://github.com/tensorflow/tensorflow/issues/19676
+        # patch -Np1 < ../../../tensorflow-macosx.patch || true
         export TF_NEED_MKL=1
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
@@ -153,6 +142,7 @@ case $PLATFORM in
         sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
         mkdir -p ../build
         cd ../build
+        # Disable __forceinline for Eigen to speed up the build
         "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -Dtensorflow_DISABLE_EIGEN_FORCEINLINE=ON -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
         if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
             MSBuild.exe //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tensorflow_static.vcxproj

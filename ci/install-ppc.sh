@@ -5,14 +5,20 @@ while true; do echo .; sleep 60; done &
 
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
-ls -ltr $HOME/downloads
-ls -ltr $HOME/.m2
+sudo chown -R travis:travis $HOME
+du -csh $HOME/* $HOME/.m2/* $HOME/.cache/* $HOME/.ccache/* $HOME/downloads/*
 pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
 export MAKEJ=2
 echo "export MAKEJ=2" | tee --append $HOME/vars.list
+
+# Try to use ccache to speed up the build
+export CCACHE_DIR=$HOME/.ccache
+export PATH=/usr/lib64/ccache/:/usr/lib/ccache/:$PATH
+echo "export CCACHE_DIR=$HOME/.ccache" | tee --append $HOME/vars.list
+echo "export PATH=/usr/lib64/ccache/:/usr/lib/ccache/:\$PATH" | tee --append $HOME/vars.list
 
 if [[ "$TRAVIS_PULL_REQUEST" == "false" ]] && [[ "$TRAVIS_BRANCH" == "release" ]]; then
     python $TRAVIS_BUILD_DIR/ci/gDownload.py $HOME/settings.tar.gz
@@ -37,7 +43,7 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=ppc64el] ht
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:ppc64el libasound2-dev:ppc64el libusb-dev:ppc64el libusb-1.0-0-dev:ppc64el zlib1g-dev:ppc64el libxcb1-dev:ppc64el"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch default-jdk ant maven python python-dev python-numpy swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool perl nasm yasm curl cmake3"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-powerpc64le-linux-gnu g++-powerpc64le-linux-gnu gfortran-powerpc64le-linux-gnu linux-libc-dev-ppc64el-cross binutils-multiarch default-jdk ant maven python python-dev python-numpy swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool perl nasm yasm curl cmake3"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y remove libxdmcp-dev libx11-dev libxcb1-dev libxt-dev"
 
 if [[ "$PROJ" =~ cuda ]]; then
@@ -61,16 +67,22 @@ fi
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "powerpc64le-linux-gnu-gcc --version"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
 
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.m2 /root/.m2"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.cache /root/.cache"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.ccache /root/.ccache"
+
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
+
 echo "Running install for $PROJ"
 echo "container id is $DOCKER_CONTAINER_ID"
  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then 
      echo "Not a pull request so attempting to deploy using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
      if [ $BUILD_STATUS -eq 0 ]; then
        echo "Deploying platform"
        for i in ${PROJ//,/ }
        do
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS"; export BUILD_STATUS=$?
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS"; export BUILD_STATUS=$?
         if [ $BUILD_STATUS -ne 0 ]; then
          echo "Build Failed"
          exit $BUILD_STATUS
@@ -80,7 +92,7 @@ echo "container id is $DOCKER_CONTAINER_ID"
         
    else
      echo "Pull request so install using docker"
-     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
+     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets;mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -Djavacpp.platform=$OS -pl .,$PROJ"; export BUILD_STATUS=$?
  fi
 
  echo "Build status $BUILD_STATUS"
@@ -94,4 +106,8 @@ echo "container id is $DOCKER_CONTAINER_ID"
 
 docker stop $DOCKER_CONTAINER_ID
 docker rm -v $DOCKER_CONTAINER_ID
+
+sudo chown -R travis:travis $HOME
+du -csh $HOME/* $HOME/.m2/* $HOME/.cache/* $HOME/.ccache/* $HOME/downloads/*
+exit 0
 
