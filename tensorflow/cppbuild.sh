@@ -140,10 +140,16 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-java.patch
         patch -Np1 < ../../../tensorflow-windows.patch || true
         sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
+        sedinplace 's/mklml_win_2018.0.3.20180406.zip/mklml_win_2019.0.20180710.zip/g' tensorflow/contrib/cmake/external/mkl.cmake
+        sedinplace 's/mklml_mac_2018.0.3.20180406.tgz/mklml_mac_2019.0.20180710.tgz/g' tensorflow/contrib/cmake/external/mkl.cmake
+        sedinplace 's/mklml_lnx_2018.0.3.20180406.tgz/mklml_lnx_2019.0.20180710.tgz/g' tensorflow/contrib/cmake/external/mkl.cmake
+        sedinplace 's/v0.14/v0.16/g' tensorflow/contrib/cmake/external/mkl.cmake
+        sedinplace 's/3063b2e4c943983f6bf5f2fb9a490d4a998cd291/v0.16/g' tensorflow/contrib/cmake/external/mkldnn.cmake
+        sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
         mkdir -p ../build
         cd ../build
         # Disable __forceinline for Eigen to speed up the build
-        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -Dtensorflow_DISABLE_EIGEN_FORCEINLINE=ON -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
+        "$CMAKE" -A x64 -DCMAKE_BUILD_TYPE=Release -Dtensorflow_DISABLE_EIGEN_FORCEINLINE=ON -DPYTHON_EXECUTABLE="C:/Python27/python.exe" -DSWIG_EXECUTABLE="C:/swigwin-3.0.12/swig.exe" -Dtensorflow_BUILD_PYTHON_BINDINGS=ON -Dtensorflow_BUILD_SHARED_LIB=ON -Dtensorflow_WIN_CPU_SIMD_OPTIONS=/arch:AVX -G"Visual Studio 14" -Dtensorflow_ENABLE_MKL_SUPPORT=ON -Dtensorflow_ENABLE_MKLDNN_SUPPORT=ON $CMAKE_GPU_FLAGS -DCUDNN_HOME="$CUDA_PATH" ../tensorflow-$TENSORFLOW_VERSION/tensorflow/contrib/cmake
         if [[ ! -f ../build/Release/tensorflow_static.lib ]]; then
             MSBuild.exe //p:Configuration=Release //p:CL_MPCount=$MAKEJ //p:Platform=x64 //p:PreferredToolArchitecture=x64 //filelogger tensorflow_static.vcxproj
         fi

@@ -128,6 +128,8 @@
              <linkPath>${tensorflow.path}/../build/re2/src/re2/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/mkl/src/mkl/lib/</linkPath>
+             <linkPath>${tensorflow.path}/../build/mkldnn/src/mkldnn/src/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
           </linkPaths>
@@ -146,6 +148,19 @@
                 <include>org/bytedeco/javacpp/helper/*</include>
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>${javacpp.platform}${javacpp.platform.extension}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>
