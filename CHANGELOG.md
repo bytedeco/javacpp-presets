@@ -1,4 +1,5 @@
 
+ * Call `Pointer.setNull()` in custom deallocators for the C API of TensorFlow to prevent double free from occurring
  * Add profiles to parent `pom.xml` that allow multiple platforms: `mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ...`
  * Add support for Windows to presets for LiquidFun ([pull #536](https://github.com/bytedeco/javacpp-presets/pull/536)) and MXNet ([pull #309](https://github.com/bytedeco/javacpp-presets/pull/309))
  * Add CUDA-enabled build for MXNet via `-gpu` extension ([pull #609](https://github.com/bytedeco/javacpp-presets/pull/609))
