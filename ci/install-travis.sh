@@ -159,8 +159,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    brew install ccache gcc@7 swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
    brew link --overwrite gcc
    # Try to use ccache to speed up the build
-   export CCACHE_LIBEXEC="$(ls -d /usr/local/Cellar/ccache/*/libexec/ | head -n 1)"
-   export PATH=$CCACHE_LIBEXEC:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
+   export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
    mvn -version
    /usr/local/bin/gcc-? --version
