@@ -66,7 +66,7 @@ public class mxnet implements LoadEnabled, InfoMapper {
                     lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : "64_100";
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_100_0" : "64_100";
                     break;
                 default:
                     continue; // no CUDA

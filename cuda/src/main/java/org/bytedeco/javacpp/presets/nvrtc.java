@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = cuda.class, value = {
     @Platform(include = "<nvrtc.h>", link = "nvrtc@.10.0", preload = "nvrtc-builtins@.10.0"),
-    @Platform(value = "windows-x86_64", preload = {"nvrtc64_100", "nvrtc-builtins64_100"})},
+    @Platform(value = "windows-x86_64", preload = {"nvrtc64_100_0", "nvrtc-builtins64_100"})},
         target = "org.bytedeco.javacpp.nvrtc")
 @NoException
 public class nvrtc implements InfoMapper {

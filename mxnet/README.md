@@ -60,6 +60,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>1.3.0-1.4.3-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mxnet</artifactId>
+            <version>1.3.0-1.4.3-SNAPSHOT</version>
+            <classifier>windows-x86_64-gpu</classifier>
+        </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
@@ -73,6 +79,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>cuda</artifactId>
             <version>10.0-7.3-1.4.3-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
