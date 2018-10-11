@@ -1,0 +1,270 @@
+diff -ruN opencv_contrib-3.4.2/modules/bgsegm/src/bgfg_gsoc.cpp opencv_contrib-3.4.2-patch/modules/bgsegm/src/bgfg_gsoc.cpp
+--- opencv_contrib-3.4.2/modules/bgsegm/src/bgfg_gsoc.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/bgsegm/src/bgfg_gsoc.cpp	2018-07-11 19:00:20.709017987 +0900
+@@ -264,7 +264,7 @@
+ 
+ class BackgroundModelGSOC : public BackgroundModel<BackgroundSampleGSOC> {
+ public:
+-    BackgroundModelGSOC(Size sz, int S) : BackgroundModel(sz, S) {};
++    BackgroundModelGSOC(Size sz, int S) : BackgroundModel<BackgroundSampleGSOC>(sz, S) {};
+ 
+     float findClosest(int i, int j, const Point3f& color, int& indOut) const {
+         const int end = i * stride + (j + 1) * nSamples;
+@@ -315,7 +315,7 @@
+ 
+ class BackgroundModelLSBP : public BackgroundModel<BackgroundSampleLSBP> {
+ public:
+-    BackgroundModelLSBP(Size sz, int S) : BackgroundModel(sz, S) {};
++    BackgroundModelLSBP(Size sz, int S) : BackgroundModel<BackgroundSampleLSBP>(sz, S) {};
+ 
+     int countMatches(int i, int j, const Point3f& color, int desc, float threshold, int descThreshold, float& minDist) const {
+         const int end = i * stride + (j + 1) * nSamples;
+diff -ruN opencv_contrib-3.4.2/modules/face/include/opencv2/face/facemarkLBF.hpp opencv_contrib-3.4.2-patch/modules/face/include/opencv2/face/facemarkLBF.hpp
+--- opencv_contrib-3.4.2/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/face/include/opencv2/face/facemarkLBF.hpp	2018-07-11 19:00:20.710017987 +0900
+@@ -93,7 +93,7 @@
+ 
+     };
+ 
+-    class BBox {
++    class CV_EXPORTS BBox {
+     public:
+         BBox();
+         ~BBox();
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/feature.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/feature.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/feature.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/feature.hpp	2018-07-11 19:00:20.710017987 +0900
+@@ -100,8 +100,6 @@
+     (p3) = (rect).x + (rect).width - (rect).height                        \
+            + (step) * ((rect).y + (rect).width + (rect).height);
+ 
+-float calcNormFactor( const Mat& sum, const Mat& sqSum );
+-
+ template<class Feature>
+ void _writeFeatures( const std::vector<Feature> features, FileStorage &fs, const Mat& featureMap )
+ {
+@@ -117,7 +115,7 @@
+   fs << "]";
+ }
+ 
+-class CvParams
++class CV_EXPORTS CvParams
+ {
+  public:
+   CvParams();
+@@ -134,7 +132,7 @@
+   std::string name;
+ };
+ 
+-class CvFeatureParams : public CvParams
++class CV_EXPORTS CvFeatureParams : public CvParams
+ {
+  public:
+   enum
+@@ -153,7 +151,7 @@
+   int numFeatures;
+ };
+ 
+-class CvFeatureEvaluator
++class CV_EXPORTS CvFeatureEvaluator
+ {
+  public:
+   virtual ~CvFeatureEvaluator()
+@@ -195,7 +193,7 @@
+   Mat cls;
+ };
+ 
+-class CvHaarFeatureParams : public CvFeatureParams
++class CV_EXPORTS CvHaarFeatureParams : public CvFeatureParams
+ {
+  public:
+ 
+@@ -212,11 +210,11 @@
+   bool isIntegral;
+ };
+ 
+-class CvHaarEvaluator : public CvFeatureEvaluator
++class CV_EXPORTS CvHaarEvaluator : public CvFeatureEvaluator
+ {
+  public:
+ 
+-  class FeatureHaar
++  class CV_EXPORTS FeatureHaar
+   {
+ 
+    public:
+@@ -289,12 +287,12 @@
+   Mat sum; /* sum images (each row represents image) */
+ };
+ 
+-struct CvHOGFeatureParams : public CvFeatureParams
++struct CV_EXPORTS CvHOGFeatureParams : public CvFeatureParams
+ {
+   CvHOGFeatureParams();
+ };
+ 
+-class CvHOGEvaluator : public CvFeatureEvaluator
++class CV_EXPORTS CvHOGEvaluator : public CvFeatureEvaluator
+ {
+  public:
+   virtual ~CvHOGEvaluator()
+@@ -355,13 +353,13 @@
+   return res;
+ }
+ 
+-struct CvLBPFeatureParams : CvFeatureParams
++struct CV_EXPORTS CvLBPFeatureParams : CvFeatureParams
+ {
+   CvLBPFeatureParams();
+ 
+ };
+ 
+-class CvLBPEvaluator : public CvFeatureEvaluator
++class CV_EXPORTS CvLBPEvaluator : public CvFeatureEvaluator
+ {
+  public:
+   virtual ~CvLBPEvaluator() CV_OVERRIDE
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineBoosting.hpp	2018-07-11 19:00:20.710017987 +0900
+@@ -59,7 +59,7 @@
+ class ClassifierThreshold;
+ class Detector;
+ 
+-class StrongClassifierDirectSelection
++class CV_EXPORTS StrongClassifierDirectSelection
+ {
+  public:
+ 
+@@ -106,7 +106,7 @@
+   int swappedClassifier;
+ };
+ 
+-class BaseClassifier
++class CV_EXPORTS BaseClassifier
+ {
+  public:
+ 
+@@ -148,7 +148,7 @@
+ 
+ };
+ 
+-class EstimatedGaussDistribution
++class CV_EXPORTS EstimatedGaussDistribution
+ {
+  public:
+ 
+@@ -170,7 +170,7 @@
+   float m_R_sigma;
+ };
+ 
+-class WeakClassifierHaarFeature
++class CV_EXPORTS WeakClassifierHaarFeature
+ {
+ 
+  public:
+@@ -192,7 +192,7 @@
+ 
+ };
+ 
+-class Detector
++class CV_EXPORTS Detector
+ {
+  public:
+ 
+@@ -260,7 +260,7 @@
+   cv::Mat_<unsigned char> m_confImageDisplay;
+ };
+ 
+-class ClassifierThreshold
++class CV_EXPORTS ClassifierThreshold
+ {
+  public:
+ 
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineMIL.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/onlineMIL.hpp	2018-07-11 19:00:20.710017987 +0900
+@@ -87,7 +87,7 @@
+ 
+ };
+ 
+-class ClfOnlineStump
++class CV_EXPORTS ClfOnlineStump
+ {
+  public:
+   float _mu0, _mu1, _sig0, _sig1;
+diff -ruN opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/tracker.hpp opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/tracker.hpp
+--- opencv_contrib-3.4.2/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/include/opencv2/tracking/tracker.hpp	2018-07-11 19:00:20.711017987 +0900
+@@ -176,7 +176,7 @@
+   /** @overload
+     @param feature The TrackerFeature class
+     */
+-  bool addTrackerFeature( Ptr<TrackerFeature>& feature );
++  bool addTrackerFeature( Ptr<TrackerFeature> feature );
+ 
+   /** @brief Get the TrackerFeature collection (TrackerFeature name, TrackerFeature pointer)
+      */
+@@ -309,7 +309,7 @@
+   /** @overload
+     @param sampler The TrackerSamplerAlgorithm
+     */
+-  bool addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm>& sampler );
++  bool addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm> sampler );
+ 
+  private:
+   std::vector<std::pair<String, Ptr<TrackerSamplerAlgorithm> > > samplers;
+@@ -573,7 +573,7 @@
+   /**
+    * Implementation of the target state for TrackerStateEstimatorMILBoosting
+    */
+-  class TrackerMILTargetState : public TrackerTargetState
++  class CV_EXPORTS TrackerMILTargetState : public TrackerTargetState
+   {
+ 
+    public:
+@@ -648,7 +648,7 @@
+  public:
+   /** @brief Implementation of the target state for TrackerAdaBoostingTargetState
+     */
+-  class TrackerAdaBoostingTargetState : public TrackerTargetState
++  class CV_EXPORTS TrackerAdaBoostingTargetState : public TrackerTargetState
+   {
+ 
+    public:
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/onlineMIL.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/onlineMIL.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/onlineMIL.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/onlineMIL.cpp	2018-07-11 19:00:20.711017987 +0900
+@@ -364,7 +364,7 @@
+   return float( log_p1 - log_p0 );
+ }
+ 
+-inline std::vector<float> ClfOnlineStump::classifySetF( const Mat& x )
++CV_EXPORTS std::vector<float> ClfOnlineStump::classifySetF( const Mat& x )
+ {
+   std::vector<float> res( x.rows );
+ 
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/trackerFeatureSet.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/trackerFeatureSet.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/trackerFeatureSet.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/trackerFeatureSet.cpp	2018-07-11 19:00:20.711017987 +0900
+@@ -111,7 +111,7 @@
+   return true;
+ }
+ 
+-bool TrackerFeatureSet::addTrackerFeature( Ptr<TrackerFeature>& feature )
++bool TrackerFeatureSet::addTrackerFeature( Ptr<TrackerFeature> feature )
+ {
+   if( blockAddTrackerFeature )
+   {
+diff -ruN opencv_contrib-3.4.2/modules/tracking/src/trackerSampler.cpp opencv_contrib-3.4.2-patch/modules/tracking/src/trackerSampler.cpp
+--- opencv_contrib-3.4.2/modules/tracking/src/trackerSampler.cpp	2018-07-02 19:57:26.000000000 +0900
++++ opencv_contrib-3.4.2-patch/modules/tracking/src/trackerSampler.cpp	2018-07-11 19:00:20.711017987 +0900
+@@ -106,7 +106,7 @@
+   return true;
+ }
+ 
+-bool TrackerSampler::addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm>& sampler )
++bool TrackerSampler::addTrackerSamplerAlgorithm( Ptr<TrackerSamplerAlgorithm> sampler )
+ {
+   if( blockAddTrackerSampler )
+   {

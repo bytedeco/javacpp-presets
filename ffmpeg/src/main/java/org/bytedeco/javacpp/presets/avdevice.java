@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2014 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avfilter.class, target="org.bytedeco.javacpp.avdevice", value={
-    @Platform(cinclude="<libavdevice/avdevice.h>", link="avdevice@.57"),
-    @Platform(value="windows", preload="avdevice-57") })
+    @Platform(cinclude="<libavdevice/avdevice.h>", link="avdevice@.58"),
+    @Platform(value="windows", preload="avdevice-58") })
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("av_device_capabilities").skip());

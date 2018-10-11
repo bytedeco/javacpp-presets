@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FlyCapture 2.9.3.43  http://www.ptgrey.com/flycapture-sdk
+ * FlyCapture 2.11.3.121  http://www.ptgrey.com/flycapture-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,15 +34,15 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.flycapture</groupId>
     <artifactId>flycapture2test</artifactId>
-    <version>1.2</version>
+    <version>1.4.2</version>
     <properties>
         <exec.mainClass>FlyCapture2Test</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>flycapture</artifactId>
-            <version>2.9.3.43-1.2</version>
+            <artifactId>flycapture-platform</artifactId>
+            <version>2.11.3.121-1.4.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,28 @@
+diff -ruN OpenBLAS-0.3.0/common.h OpenBLAS-0.3.0-android/common.h
+--- OpenBLAS-0.3.0/common.h	2018-05-23 22:12:20.000000000 +0900
++++ OpenBLAS-0.3.0-android/common.h	2018-06-18 09:26:43.880728641 +0900
+@@ -100,9 +100,9 @@
+ #ifdef OS_ANDROID
+ #define NO_SYSV_IPC
+ //Android NDK only supports complex.h since Android 5.0
+-#if __ANDROID_API__ < 21
++//#if __ANDROID_API__ < 21
+ #define FORCE_OPENBLAS_COMPLEX_STRUCT
+-#endif
++//#endif
+ #endif
+ 
+ #ifdef OS_WINDOWS
+diff -ruN OpenBLAS-0.3.0/Makefile.system OpenBLAS-0.3.0-android/Makefile.system
+--- OpenBLAS-0.3.0/Makefile.system	2018-05-23 22:12:20.000000000 +0900
++++ OpenBLAS-0.3.0-android/Makefile.system	2018-06-18 10:05:38.104367497 +0900
+@@ -1000,7 +1000,9 @@
+ 
+ include $(TOPDIR)/Makefile.$(ARCH)
+ 
++ifneq ($(TOPDIR),.)
+ CCOMMON_OPT	+= -DASMNAME=$(FU)$(*F) -DASMFNAME=$(FU)$(*F)$(BU) -DNAME=$(*F)$(BU) -DCNAME=$(*F) -DCHAR_NAME=\"$(*F)$(BU)\" -DCHAR_CNAME=\"$(*F)\"
++endif 
+ 
+ ifeq ($(CORE), PPC440)
+ CCOMMON_OPT	+= -DALLOC_QALLOC

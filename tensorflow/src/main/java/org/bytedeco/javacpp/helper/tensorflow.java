@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -70,12 +70,277 @@ import static org.bytedeco.javacpp.tensorflow.DT_QUINT8;
 import static org.bytedeco.javacpp.tensorflow.DT_STRING;
 import static org.bytedeco.javacpp.tensorflow.DT_UINT8;
 import static org.bytedeco.javacpp.tensorflow.NewSession;
+import static org.bytedeco.javacpp.tensorflow.TF_AllocateTensor;
+import static org.bytedeco.javacpp.tensorflow.TF_Buffer;
+import static org.bytedeco.javacpp.tensorflow.TF_Graph;
+import static org.bytedeco.javacpp.tensorflow.TF_ImportGraphDefOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_Session;
+import static org.bytedeco.javacpp.tensorflow.TF_SessionOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_Status;
+import static org.bytedeco.javacpp.tensorflow.TF_Tensor;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteBuffer;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteGraph;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteImportGraphDefOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteSession;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteSessionOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteStatus;
+import static org.bytedeco.javacpp.tensorflow.TF_DeleteTensor;
+import static org.bytedeco.javacpp.tensorflow.TF_NewBuffer;
+import static org.bytedeco.javacpp.tensorflow.TF_NewGraph;
+import static org.bytedeco.javacpp.tensorflow.TF_NewImportGraphDefOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_NewBufferFromString;
+import static org.bytedeco.javacpp.tensorflow.TF_NewSession;
+import static org.bytedeco.javacpp.tensorflow.TF_NewSessionOptions;
+import static org.bytedeco.javacpp.tensorflow.TF_NewStatus;
+import static org.bytedeco.javacpp.tensorflow.TF_NewTensor;
 
 /**
  *
  * @author Samuel Audet
  */
 public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
+
+    public static abstract class AbstractTF_Status extends Pointer {
+        protected static class DeleteDeallocator extends TF_Status implements Pointer.Deallocator {
+            DeleteDeallocator(TF_Status s) { super(s); }
+            @Override public void deallocate() { TF_DeleteStatus(this); setNull(); }
+        }
+
+        public AbstractTF_Status(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewStatus(), and registers a deallocator.
+         * @return TF_Status created. Do not call TF_DeleteStatus() on it.
+         */
+        public static TF_Status newStatus() {
+            TF_Status s = TF_NewStatus();
+            if (s != null) {
+                s.deallocator(new DeleteDeallocator(s));
+            }
+            return s;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_Buffer extends Pointer {
+        protected static class DeleteDeallocator extends TF_Buffer implements Pointer.Deallocator {
+            DeleteDeallocator(TF_Buffer s) { super(s); }
+            @Override public void deallocate() { TF_DeleteBuffer(this); setNull(); }
+        }
+
+        public AbstractTF_Buffer(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewBuffer(), and registers a deallocator.
+         * @return TF_Buffer created. Do not call TF_DeleteBuffer() on it.
+         */
+        public static TF_Buffer newBuffer() {
+            TF_Buffer b = TF_NewBuffer();
+            if (b != null) {
+                b.deallocator(new DeleteDeallocator(b));
+            }
+            return b;
+        }
+
+        /** Returns {@code newBufferFromString(new BytePointer(proto)). */
+        public static TF_Buffer newBufferFromString(byte[] proto) {
+            return newBufferFromString(new BytePointer(proto));
+        }
+
+        /**
+         * Calls TF_NewBufferFromString(), and registers a deallocator.
+         * @return TF_Buffer created. Do not call TF_DeleteBuffer() on it.
+         */
+        public static TF_Buffer newBufferFromString(Pointer proto) {
+            TF_Buffer b = TF_NewBufferFromString(proto, proto.limit());
+            if (b != null) {
+                b.deallocator(new DeleteDeallocator(b));
+            }
+            return b;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_Tensor extends Pointer {
+        protected static class DeleteDeallocator extends TF_Tensor implements Pointer.Deallocator {
+            DeleteDeallocator(TF_Tensor s) { super(s); }
+            @Override public void deallocate() { TF_DeleteTensor(this); setNull(); }
+        }
+
+        /** TensorFlow crashes if we don't pass it a deallocator, so... */
+        protected static Deallocator_Pointer_long_Pointer dummyDeallocator = new Deallocator_Pointer_long_Pointer() {
+            @Override public void call(Pointer data, long len, Pointer arg) { }
+        };
+
+        /** A reference to prevent deallocation. */
+        protected Pointer pointer;
+
+        public AbstractTF_Tensor(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewTensor(), and registers a deallocator.
+         * @return TF_Tensor created. Do not call TF_DeleteTensor() on it.
+         */
+        public static TF_Tensor newTensor(int dtype, long[] dims, Pointer data) {
+            TF_Tensor t = TF_NewTensor(dtype, dims, dims.length, data, data.limit(), dummyDeallocator, null);
+            if (t != null) {
+                t.pointer = data;
+                t.deallocator(new DeleteDeallocator(t));
+            }
+            return t;
+        }
+
+        /**
+         * Calls TF_AllocateTensor(), and registers a deallocator.
+         * @return TF_Tensor created. Do not call TF_DeleteTensor() on it.
+         */
+        public static TF_Tensor allocateTensor(int dtype, long[] dims, long length) {
+            TF_Tensor t = TF_AllocateTensor(dtype, dims, dims.length, length);
+            if (t != null) {
+                t.deallocator(new DeleteDeallocator(t));
+            }
+            return t;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_SessionOptions extends Pointer {
+        protected static class DeleteDeallocator extends TF_SessionOptions implements Pointer.Deallocator {
+            DeleteDeallocator(TF_SessionOptions s) { super(s); }
+            @Override public void deallocate() { TF_DeleteSessionOptions(this); setNull(); }
+        }
+
+        public AbstractTF_SessionOptions(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewSessionOptions(), and registers a deallocator.
+         * @return TF_SessionOptions created. Do not call TF_DeleteSessionOptions() on it.
+         */
+        public static TF_SessionOptions newSessionOptions() {
+            TF_SessionOptions o = TF_NewSessionOptions();
+            if (o != null) {
+                o.deallocator(new DeleteDeallocator(o));
+            }
+            return o;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_Graph extends Pointer {
+        protected static class DeleteDeallocator extends TF_Graph implements Pointer.Deallocator {
+            DeleteDeallocator(TF_Graph s) { super(s); }
+            @Override public void deallocate() { TF_DeleteGraph(this); setNull(); }
+        }
+
+        public AbstractTF_Graph(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewGraph(), and registers a deallocator.
+         * @return TF_Graph created. Do not call TF_DeleteGraph() on it.
+         */
+        public static TF_Graph newGraph() {
+            TF_Graph g = TF_NewGraph();
+            if (g != null) {
+                g.deallocator(new DeleteDeallocator(g));
+            }
+            return g;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_ImportGraphDefOptions extends Pointer {
+        protected static class DeleteDeallocator extends TF_ImportGraphDefOptions implements Pointer.Deallocator {
+            DeleteDeallocator(TF_ImportGraphDefOptions s) { super(s); }
+            @Override public void deallocate() { TF_DeleteImportGraphDefOptions(this); setNull(); }
+        }
+
+        public AbstractTF_ImportGraphDefOptions(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewImportGraphDefOptions(), and registers a deallocator.
+         * @return TF_ImportGraphDefOptions created. Do not call TF_DeleteImportGraphDefOptions() on it.
+         */
+        public static TF_ImportGraphDefOptions newImportGraphDefOptions() {
+            TF_ImportGraphDefOptions o = TF_NewImportGraphDefOptions();
+            if (o != null) {
+                o.deallocator(new DeleteDeallocator(o));
+            }
+            return o;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
+
+    public static abstract class AbstractTF_Session extends Pointer {
+        protected static class DeleteDeallocator extends TF_Session implements Pointer.Deallocator {
+            DeleteDeallocator(TF_Session s) { super(s); }
+            @Override public void deallocate() { TF_DeleteSession(this, TF_Status.newStatus()); setNull(); }
+        }
+
+        /** References to prevent deallocation. */
+        protected TF_Graph graph;
+        protected TF_SessionOptions opts;
+        protected TF_Status status;
+
+        public AbstractTF_Session(Pointer p) { super(p); }
+
+        /**
+         * Calls TF_NewSession(), and registers a deallocator.
+         * @return TF_Session created. Do not call TF_DeleteSession() on it.
+         */
+        public static TF_Session newSession(TF_Graph graph, TF_SessionOptions opts, TF_Status status) {
+            TF_Session s = TF_NewSession(graph, opts, status);
+            if (s != null) {
+                s.graph = graph;
+                s.opts = opts;
+                s.status = status;
+                s.deallocator(new DeleteDeallocator(s));
+            }
+            return s;
+        }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
+        public void delete() {
+            deallocate();
+        }
+    }
 
     @Name("std::string") public static class StringArray extends Pointer {
         static { Loader.load(); }
@@ -140,9 +405,9 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
             return (B)createBuffer(0);
         }
         /** Returns {@link #tensor_data()} wrapped in a {@link Buffer} of appropriate type starting at given index. */
-        public <B extends Buffer> B createBuffer(int index) {
+        public <B extends Buffer> B createBuffer(long index) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            long size = TotalBytes();
             switch (dtype()) {
                 case DT_COMPLEX64:
                 case DT_FLOAT:    return (B)new FloatPointer(ptr).position(index).capacity(size/4).asBuffer();
@@ -169,15 +434,17 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
         }
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            int dims = dims();
+            long size = TotalBytes();
             boolean complex = dtype() == DT_COMPLEX64;
-            int dims = complex ? dims() + 1 : dims();
+            boolean scalar = dims == 0;
+            dims = (complex ? 1 : 0) + (scalar ? 1 : dims);
             long[] sizes = new long[dims];
             long[] strides = new long[dims];
-            sizes[dims - 1] = complex ? 2 : (int)dim_size(dims - 1);
+            sizes[dims - 1] = complex ? 2 : (scalar ? 1 : dim_size(dims - 1));
             strides[dims - 1] = 1;
             for (int i = dims - 2; i >= 0; i--) {
-                sizes[i] = (int)dim_size(i);
+                sizes[i] = scalar ? 1 : dim_size(i);
                 strides[i] = sizes[i + 1] * strides[i + 1];
             }
             switch (dtype()) {

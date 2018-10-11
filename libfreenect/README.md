@@ -34,26 +34,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
     <artifactId>glpclview</artifactId>
-    <version>1.2</version>
+    <version>1.4.2</version>
     <properties>
         <exec.mainClass>GLPCLView</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>libfreenect</artifactId>
-            <version>0.5.3-1.2</version>
+            <artifactId>libfreenect-platform</artifactId>
+            <version>0.5.3-1.4.2</version>
         </dependency>
         <dependency>
           <groupId>org.jogamp.gluegen</groupId>
           <artifactId>gluegen-rt-main</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
           <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.jogamp.jogl</groupId>
           <artifactId>jogl-all-main</artifactId>
-          <version>2.3.1</version>
+          <version>2.3.2</version>
           <optional>true</optional>
         </dependency>
     </dependencies>

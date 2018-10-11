@@ -1,0 +1,137 @@
+diff -ruN x265-2.6/android-arm64.cmake x265-2.6-android/android-arm64.cmake
+--- x265-2.6/android-arm64.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265-2.6-android/android-arm64.cmake	2018-02-25 20:38:29.545501742 +0900
+@@ -0,0 +1,23 @@
++# CMake toolchain to build for Android 5.0. Sample usage:
++#
++# ANDROID_BIN=$HOME/android-ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android \
++# ANDROID_CPP=$HOME/android-ndk/sources/cxx-stl/gnu-libstdc++/4.9/ \
++# ANDROID_ROOT=$HOME/android-ndk/platforms/android-21/arch-arm64/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_INSTALL_PREFIX=..
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR arm64)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/arm64-v8a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/arm64-v8a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions(--sysroot=$ENV{ANDROID_ROOT} -Wno-attributes -D__ANDROID_API__=21 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv8-a -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wl,--no-undefined)
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/arm64-v8a/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/aarch64-linux-android/")
+diff -ruN x265-2.6/android-arm.cmake x265-2.6-android/android-arm.cmake
+--- x265-2.6/android-arm.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265-2.6-android/android-arm.cmake	2018-02-25 21:01:54.714742472 +0900
+@@ -0,0 +1,23 @@
++# CMake toolchain to build for Android 4.0. Sample usage:
++#
++# ANDROID_BIN=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi \
++# ANDROID_CPP=$HOME/android-ndk/sources/cxx-stl/gnu-libstdc++/4.9/ \
++# ANDROID_ROOT=$HOME/android-ndk/platforms/android-14/arch-arm/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_INSTALL_PREFIX=..
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR arm)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/armeabi-v7a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/armeabi-v7a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions(--sysroot=$ENV{ANDROID_ROOT} -Wno-attributes -D__ANDROID_API__=14 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wl,--no-undefined)
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/armeabi-v7a/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/arm-linux-androideabi/")
+diff -ruN x265-2.6/android-x86_64.cmake x265-2.6-android/android-x86_64.cmake
+--- x265-2.6/android-x86_64.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265-2.6-android/android-x86_64.cmake	2018-02-25 20:38:46.002456841 +0900
+@@ -0,0 +1,23 @@
++# CMake toolchain to build for Android 5.0. Sample usage:
++#
++# ANDROID_BIN=$HOME/android-ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android \
++# ANDROID_CPP=$HOME/android-ndk/sources/cxx-stl/gnu-libstdc++/4.9/ \
++# ANDROID_ROOT=$HOME/android-ndk/platforms/android-21/arch-x86_64/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_INSTALL_PREFIX=..
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR atom64)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib64/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86_64/ -L$ENV{ANDROID_ROOT}/usr/lib64/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib64/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86_64/ -L$ENV{ANDROID_ROOT}/usr/lib64/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions(--sysroot=$ENV{ANDROID_ROOT} -Wno-attributes -D__ANDROID_API__=21 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=x86-64 -mtune=atom -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wl,--no-undefined)
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/x86_64/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/x86_64-linux-android/")
+diff -ruN x265-2.6/android-x86.cmake x265-2.6-android/android-x86.cmake
+--- x265-2.6/android-x86.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265-2.6-android/android-x86.cmake	2018-02-25 21:01:46.176778634 +0900
+@@ -0,0 +1,23 @@
++# CMake toolchain to build for Android 4.0. Sample usage:
++#
++# ANDROID_BIN=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android \
++# ANDROID_CPP=$HOME/android-ndk/sources/cxx-stl/gnu-libstdc++/4.9/ \
++# ANDROID_ROOT=$HOME/android-ndk/platforms/android-14/arch-x86/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_INSTALL_PREFIX=..
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR atom)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions(--sysroot=$ENV{ANDROID_ROOT} -Wno-attributes -D__ANDROID_API__=14 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=i686 -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -z text -Wl,--no-undefined)
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/x86/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/" "$ENV{ANDROID_NDK}/sysroot/usr/include/i686-linux-android/")
+diff -ruN x265-2.6/source/common/common.cpp x265-2.6-android/source/common/common.cpp
+--- x265-2.6/source/common/common.cpp	2017-11-29 12:21:40.000000000 +0900
++++ x265-2.6-android/source/common/common.cpp	2018-02-25 20:54:34.418607296 +0900
+@@ -78,7 +78,7 @@
+ {
+     void *ptr;
+ 
+-    if (posix_memalign((void**)&ptr, X265_ALIGNBYTES, size) == 0)
++    if ((ptr = memalign(X265_ALIGNBYTES, size)) != NULL)
+         return ptr;
+     else
+         return NULL;
+diff -ruN x265-2.6/source/common/common.h x265-2.6-android/source/common/common.h
+--- x265-2.6/source/common/common.h	2017-11-29 12:21:40.000000000 +0900
++++ x265-2.6-android/source/common/common.h	2018-02-25 20:39:14.870378080 +0900
+@@ -237,13 +237,8 @@
+         } \
+     }
+ 
+-#if defined(_MSC_VER)
+ #define X265_LOG2F(x) (logf((float)(x)) * 1.44269504088896405f)
+ #define X265_LOG2(x) (log((double)(x)) * 1.4426950408889640513713538072172)
+-#else
+-#define X265_LOG2F(x) log2f(x)
+-#define X265_LOG2(x)  log2(x)
+-#endif
+ 
+ #define NUM_CU_DEPTH            4                           // maximum number of CU depths
+ #define NUM_FULL_DEPTH          5                           // maximum number of full depths

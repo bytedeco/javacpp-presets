@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet  http://mxnet.readthedocs.org/
+ * MXNet 1.3.0  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -22,7 +22,7 @@ Sample Usage
 ------------
 Here is a simple example of the predict API of MXNet ported to Java from this C++ source file and for this data:
 
- * https://github.com/dmlc/mxnet/blob/master/example/cpp/image-classification/image-classification-predict.cc
+ * https://github.com/dmlc/mxnet/blob/v0.8.0/example/image-classification/predict-cpp/image-classification-predict.cc
  * http://data.dmlc.ml/mxnet/models/imagenet/inception-bn.tar.gz
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ImageClassificationPredict.java` source files below, simply execute on the command line:
@@ -36,16 +36,57 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.2</version>
+    <version>1.4.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>mxnet</artifactId>
-            <version>master-1.2</version>
+            <artifactId>mxnet-platform</artifactId>
+            <version>1.3.0-1.4.3-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mxnet</artifactId>
+            <version>1.3.0-1.4.3-SNAPSHOT</version>
+            <classifier>linux-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mxnet</artifactId>
+            <version>1.3.0-1.4.3-SNAPSHOT</version>
+            <classifier>macosx-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mxnet</artifactId>
+            <version>1.3.0-1.4.3-SNAPSHOT</version>
+            <classifier>windows-x86_64-gpu</classifier>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```
@@ -205,6 +246,9 @@ public class ImageClassificationPredict {
     }
 
     public static void main(String[] args) {
+        // Preload required by JavaCPP
+        Loader.load(org.bytedeco.javacpp.mxnet.class);
+
         if (args.length < 1) {
             System.out.println("No test image here.");
             System.out.println("Usage: java ImageClassificationPredict apple.jpg");
@@ -213,12 +257,9 @@ public class ImageClassificationPredict {
 
         String test_file = args[0];
 
-        // Preload required by JavaCPP
-        Loader.load(org.bytedeco.javacpp.mxnet.class);
-
         // Models path for your model, you have to modify it
-        BufferFile json_data = new BufferFile("model/Inception_BN-symbol.json");
-        BufferFile param_data = new BufferFile("model/Inception_BN-0039.params");
+        BufferFile json_data = new BufferFile("model/Inception-BN-symbol.json");
+        BufferFile param_data = new BufferFile("model/Inception-BN-0126.params");
 
         // Parameters
         int dev_type = 1;  // 1: cpu, 2: gpu

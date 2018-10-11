@@ -1,11 +1,23 @@
 JavaCPP Presets for CUDA
 ========================
 
+License Agreements
+------------------
+By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
+
+### CUDA Toolkit
+To view the license for the CUDA Toolkit included in these archives, click [here](http://docs.nvidia.com/cuda/eula/index.html)
+
+### CUDA Deep Neural Network library (cuDNN)
+To view the license for cuDNN included in these archives, click [here](https://developer.nvidia.com/cudnn/license_agreement)
+
+
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 7.5  https://developer.nvidia.com/cuda-zone
+ * CUDA 10.0  https://developer.nvidia.com/cuda-zone
+ * cuDNN 7.3  https://developer.nvidia.com/cudnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -17,6 +29,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/cuda/apidocs/
 
 &lowast; We can also [use Thrust with JavaCPP](https://github.com/bytedeco/javacpp/wiki/Interface-Thrust-and-CUDA).
+
 
 Sample Usage
 ------------
@@ -35,16 +48,43 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.2</version>
+    <version>1.4.2</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>cuda</artifactId>
-            <version>7.5-1.2</version>
+            <artifactId>cuda-platform</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>linux-ppc64le-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```
@@ -300,7 +340,7 @@ public class MNISTCUDNN {
                                                         0,0, // padding
                                                         1,1, // stride
                                                         1,1, // upscale
-                                                        CUDNN_CROSS_CORRELATION) );
+                                                        CUDNN_CROSS_CORRELATION, dataType) );
             // find dimension of convolution output
             checkCUDNN( cudnnGetConvolution2dForwardOutputDim(convDesc,
                                                     srcTensorDesc,

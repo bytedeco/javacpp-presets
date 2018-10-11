@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Samuel Audet
+ * Copyright (C) 2016-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,7 +22,10 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
@@ -37,28 +40,60 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {openblas.class, opencv_imgcodecs.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.mxnet", value = {
-    @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
+    @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/},
-        link = "mxnet", includepath = {"/usr/local/cuda/include/",
+        link = "mxnet", preload = {"iomp5", "libiomp5md", "mklml", "mklml_intel", "mkldnn@.0", "libmxnet"}, /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
-    @Platform(value = "macosx-x86_64", preload = "stdc++@.6", preloadpath = {"/usr/local/lib/", "/usr/local/opt/gcc5/lib/gcc/5/", "/usr/local/opt/gcc/lib/gcc/6/"}) })
-public class mxnet implements InfoMapper {
+    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1"}, extension = "-gpu") })
+public class mxnet implements LoadEnabled, InfoMapper {
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        String extension = properties.getProperty("platform.extension");
+        List<String> preloads = properties.get("platform.preload");
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
+            return;
+        }
+        int i = 0;
+        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn", "nvrtc"};
+        for (String lib : libs) {
+            switch (platform) {
+                case "linux-x86_64":
+                case "macosx-x86_64":
+                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
+                    break;
+                case "windows-x86_64":
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_100_0" : "64_100";
+                    break;
+                default:
+                    continue; // no CUDA
+            }
+            if (!preloads.contains(lib)) {
+                preloads.add(i++, lib);
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MXNET_EXTERN_C", "MXNET_DLL").cppTypes().annotations())
-               .put(new Info("NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("PointerPointer"))
-               .put(new Info("FunctionHandle").annotations("@Const").valueTypes("FunctionHandle").pointerTypes("PointerPointer"))
-               .put(new Info("AtomicSymbolCreator").valueTypes("AtomicSymbolCreator").pointerTypes("PointerPointer"))
-               .put(new Info("SymbolHandle").valueTypes("SymbolHandle").pointerTypes("PointerPointer"))
-               .put(new Info("AtomicSymbolHandle").valueTypes("AtomicSymbolHandle").pointerTypes("PointerPointer"))
-               .put(new Info("ExecutorHandle").valueTypes("ExecutorHandle").pointerTypes("PointerPointer"))
-               .put(new Info("DataIterCreator").valueTypes("DataIterCreator").pointerTypes("PointerPointer"))
-               .put(new Info("DataIterHandle").valueTypes("DataIterHandle").pointerTypes("PointerPointer"))
-               .put(new Info("KVStoreHandle").valueTypes("KVStoreHandle").pointerTypes("PointerPointer"))
-               .put(new Info("RecordIOHandle").valueTypes("RecordIOHandle").pointerTypes("PointerPointer"))
-               .put(new Info("RtcHandle").valueTypes("RtcHandle").pointerTypes("PointerPointer"))
-               .put(new Info("OptimizerCreator").valueTypes("OptimizerCreator").pointerTypes("PointerPointer"))
-               .put(new Info("OptimizerHandle").valueTypes("OptimizerHandle").pointerTypes("PointerPointer"));
+               .put(new Info("NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
+               .put(new Info("const NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("@Cast(\"NDArrayHandle*\") PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
+               .put(new Info("FunctionHandle").annotations("@Const").valueTypes("FunctionHandle").pointerTypes("PointerPointer", "@Cast(\"FunctionHandle*\") @ByPtrPtr FunctionHandle"))
+               .put(new Info("AtomicSymbolCreator").valueTypes("AtomicSymbolCreator").pointerTypes("PointerPointer", "@Cast(\"AtomicSymbolCreator*\") @ByPtrPtr AtomicSymbolCreator"))
+               .put(new Info("SymbolHandle").valueTypes("SymbolHandle").pointerTypes("PointerPointer", "@Cast(\"SymbolHandle*\") @ByPtrPtr SymbolHandle"))
+               .put(new Info("const SymbolHandle").valueTypes("SymbolHandle").pointerTypes("@Cast(\"SymbolHandle*\") PointerPointer", "@Cast(\"SymbolHandle*\") @ByPtrPtr SymbolHandle"))
+               .put(new Info("AtomicSymbolHandle").valueTypes("AtomicSymbolHandle").pointerTypes("PointerPointer", "@Cast(\"AtomicSymbolHandle*\") @ByPtrPtr AtomicSymbolHandle"))
+               .put(new Info("ExecutorHandle").valueTypes("ExecutorHandle").pointerTypes("PointerPointer", "@Cast(\"ExecutorHandle*\") @ByPtrPtr ExecutorHandle"))
+               .put(new Info("DataIterCreator").valueTypes("DataIterCreator").pointerTypes("PointerPointer", "@Cast(\"DataIterCreator*\") @ByPtrPtr DataIterCreator"))
+               .put(new Info("DataIterHandle").valueTypes("DataIterHandle").pointerTypes("PointerPointer", "@Cast(\"DataIterHandle*\") @ByPtrPtr DataIterHandle"))
+               .put(new Info("KVStoreHandle").valueTypes("KVStoreHandle").pointerTypes("PointerPointer", "@Cast(\"KVStoreHandle*\") @ByPtrPtr KVStoreHandle"))
+               .put(new Info("RecordIOHandle").valueTypes("RecordIOHandle").pointerTypes("PointerPointer", "@Cast(\"RecordIOHandle*\") @ByPtrPtr RecordIOHandle"))
+               .put(new Info("RtcHandle").valueTypes("RtcHandle").pointerTypes("PointerPointer", "@Cast(\"RtcHandle*\") @ByPtrPtr RtcHandle"))
+               .put(new Info("OptimizerCreator").valueTypes("OptimizerCreator").pointerTypes("PointerPointer", "@Cast(\"OptimizerCreator*\") @ByPtrPtr OptimizerCreator"))
+               .put(new Info("OptimizerHandle").valueTypes("OptimizerHandle").pointerTypes("PointerPointer", "@Cast(\"OptimizerHandle*\") @ByPtrPtr OptimizerHandle"));
 /*
         infoMap.put(new Info("DMLC_USE_REGEX", "DMLC_USE_CXX11", "DMLC_ENABLE_STD_THREAD").define())
                .put(new Info("!defined(__GNUC__)", "_MSC_VER < 1900", "__APPLE__", "defined(_MSC_VER) && _MSC_VER < 1900").define(false))

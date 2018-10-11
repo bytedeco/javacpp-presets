@@ -1,0 +1,24 @@
+diff -ruN leptonica-1.76.0/src/Makefile.am leptonica-1.76.0-android/src/Makefile.am
+--- leptonica-1.76.0/src/Makefile.am	2018-05-03 07:09:19.000000000 +0900
++++ leptonica-1.76.0-android/src/Makefile.am	2018-05-10 16:12:12.274513595 +0900
+@@ -4,7 +4,7 @@
+ lib_LTLIBRARIES = liblept.la
+ liblept_la_LIBADD = $(LIBM) $(ZLIB_LIBS) $(LIBPNG_LIBS) $(JPEG_LIBS) $(GIFLIB_LIBS) $(LIBTIFF_LIBS) $(LIBWEBP_LIBS) $(LIBJP2K_LIBS) $(GDI_LIBS)
+ 
+-liblept_la_LDFLAGS = -no-undefined -version-info 5:3:0
++liblept_la_LDFLAGS = -no-undefined -avoid-version
+ 
+ liblept_la_SOURCES = adaptmap.c affine.c                        \
+  affinecompose.c arrayaccess.c                                  \
+diff -ruN leptonica-1.76.0/src/Makefile.in leptonica-1.76.0-android/src/Makefile.in
+--- leptonica-1.76.0/src/Makefile.in	2018-05-03 07:13:53.000000000 +0900
++++ leptonica-1.76.0-android/src/Makefile.in	2018-05-10 16:12:25.326511546 +0900
+@@ -386,7 +386,7 @@
+ AM_CPPFLAGS = $(ZLIB_CFLAGS) $(LIBPNG_CFLAGS) $(JPEG_CFLAGS) $(LIBTIFF_CFLAGS) $(LIBWEBP_CFLAGS) $(LIBJP2K_CFLAGS)
+ lib_LTLIBRARIES = liblept.la
+ liblept_la_LIBADD = $(LIBM) $(ZLIB_LIBS) $(LIBPNG_LIBS) $(JPEG_LIBS) $(GIFLIB_LIBS) $(LIBTIFF_LIBS) $(LIBWEBP_LIBS) $(LIBJP2K_LIBS) $(GDI_LIBS)
+-liblept_la_LDFLAGS = -no-undefined -version-info 5:3:0
++liblept_la_LDFLAGS = -no-undefined -avoid-version
+ liblept_la_SOURCES = adaptmap.c affine.c                        \
+  affinecompose.c arrayaccess.c                                  \
+  bardecode.c baseline.c bbuffer.c                               \

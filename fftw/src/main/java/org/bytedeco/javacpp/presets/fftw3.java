@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,18 +33,21 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.fftw3", value={
-    @Platform(include="<fftw3.h>", link={"fftw3@.3", "fftw3f@.3"}),
-    @Platform(value="android", link={"fftw3", "fftw3f"}),
-    @Platform(value="windows", link={"libfftw3-3", "libfftw3f-3"}) })
+@Properties(target = "org.bytedeco.javacpp.fftw3", value = {
+    @Platform(include = "<fftw3.h>", link = {"fftw3@.3", "fftw3f@.3"}),
+    @Platform(value = "android", link = {"fftw3", "fftw3f"}),
+    @Platform(value = "windows", preload = {"libfftw3-3", "libfftw3f-3"}) })
+@NoException
 public class fftw3 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!defined(FFTW_NO_Complex) && defined(_Complex_I) && defined(complex) && defined(I)").define(false))
-               .put(new Info("FFTW_EXTERN").cppTypes().annotations())
+               .put(new Info("FFTW_EXTERN", "FFTW_CDECL").cppTypes().annotations())
                .put(new Info("fftw_plan_s").pointerTypes("fftw_plan")).put(new Info("fftw_plan").valueTypes("fftw_plan"))
                .put(new Info("fftwf_plan_s").pointerTypes("fftwf_plan")).put(new Info("fftwf_plan").valueTypes("fftwf_plan"))
                .put(new Info("fftwl_plan_s").pointerTypes("fftwl_plan")).put(new Info("fftwl_plan").valueTypes("fftwl_plan"))
                .put(new Info("fftwq_plan_s").pointerTypes("fftwq_plan")).put(new Info("fftwq_plan").valueTypes("fftwq_plan"))
+               .put(new Info("fftw_iodim_do_not_use_me", "fftwf_iodim").pointerTypes("fftw_iodim"))
+               .put(new Info("fftw_iodim64_do_not_use_me", "fftwf_iodim64").pointerTypes("fftw_iodim64"))
                .put(new Info("fftw_version").annotations("@Platform(not=\"windows\")").javaNames("fftw_version"))
                .put(new Info("fftw_cc").annotations("@Platform(not=\"windows\")").javaNames("fftw_cc"))
                .put(new Info("fftw_codelet_optim").annotations("@Platform(not=\"windows\")").javaNames("fftw_codelet_optim"))

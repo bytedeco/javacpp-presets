@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Caffe  http://caffe.berkeleyvision.org/
+ * Caffe 1.0  http://caffe.berkeleyvision.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is the main tool for training of Caffe ported to Java from this C++ source file:
 
- * https://github.com/BVLC/caffe/blob/master/tools/caffe.cpp
+ * https://github.com/BVLC/caffe/blob/1.0/tools/caffe.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, instead of the original `caffe` executable tool, after creating the `pom.xml` and `src/main/java/caffe.java` source files below, simply execute on the command line:
 ```bash
@@ -34,16 +34,45 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.caffe</groupId>
     <artifactId>caffe</artifactId>
-    <version>1.2</version>
+    <version>1.4.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>caffe</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>caffe</artifactId>
-            <version>master-1.2</version>
+            <artifactId>caffe-platform</artifactId>
+            <version>1.0-1.4.3-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>caffe</artifactId>
+            <version>1.0-1.4.3-SNAPSHOT</version>
+            <classifier>linux-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>caffe</artifactId>
+            <version>1.0-1.4.3-SNAPSHOT</version>
+            <classifier>macosx-x86_64-gpu</classifier>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.3-1.4.3-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```

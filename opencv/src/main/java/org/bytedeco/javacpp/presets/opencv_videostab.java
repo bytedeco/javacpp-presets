@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2017 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -39,11 +39,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",
         "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/inpainting.hpp>",
         "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/wobble_suppression.hpp>", "<opencv2/videostab/stabilizer.hpp>",
-        "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.3.1", preload = "opencv_cuda@.3.1"),
-    @Platform(value = "windows", link = "opencv_videostab310", preload = "opencv_cuda310")},
+        "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.3.4",
+              preload = {"opencv_cuda@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
+                         "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4",
+                         "opencv_cudaoptflow@.3.4", "opencv_cudawarping@.3.4"}),
+    @Platform(value = "ios", preload = "libopencv_videostab"),
+    @Platform(value = "windows", link = "opencv_videostab343",
+              preload = {"opencv_cuda343", "opencv_cudaarithm343", "opencv_cudafilters343",
+                         "opencv_cudaimgproc343", "opencv_cudafeatures2d343", "opencv_cudalegacy343",
+                         "opencv_cudaoptflow343", "opencv_cudawarping343"})},
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("cv::videostab::IFrameSource").virtualize());
     }
 }
+
