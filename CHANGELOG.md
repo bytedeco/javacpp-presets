@@ -1,4 +1,5 @@
 
+ * Add build for `linux-mips64el` to presets for OpenCV ([pull #621](https://github.com/bytedeco/javacpp-presets/pull/621))
  * Remove calls to deprecated functions from sample code for FFmpeg ([pull #323](https://github.com/bytedeco/javacpp-presets/pull/323))
  * Call `Pointer.setNull()` in custom deallocators for the C API of TensorFlow to prevent double free from occurring
  * Add profiles to parent `pom.xml` that allow multiple platforms: `mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ...`

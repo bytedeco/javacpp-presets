@@ -158,13 +158,25 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    brew update
    brew upgrade maven
    brew install ccache gcc@7 swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
-   brew link --overwrite gcc
+   brew link --overwrite gcc@7
    # Try to use ccache to speed up the build
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
    mvn -version
    /usr/local/bin/gcc-? --version
    gpg --version
+
+   # Fix up some binaries to support rpath
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
+   sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.3.0/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
 
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/lib/libSDL-1.2.0.dylib
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/lib/libusb-1.0.0.dylib
