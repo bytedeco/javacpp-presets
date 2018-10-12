@@ -157,6 +157,13 @@ case $PLATFORM in
         cp ../share/OpenCV/java/libopencv_java.so ../lib
         sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
         ;;
+    linux-mips64el)
+        CC="gcc -mabi=64" CXX="g++ -mabi=64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        make -j $MAKEJ
+        make install/strip
+        cp ../share/OpenCV/java/libopencv_java.so ../lib
+        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        ;;
     macosx-*)
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w"
         make -j $MAKEJ
