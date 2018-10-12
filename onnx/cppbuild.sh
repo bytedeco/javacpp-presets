@@ -66,6 +66,4 @@ cp onnx/version_converter/adapters/*.h ../include/onnx/version_converter/adapter
 cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
 cp $CMAKE_BUILD_DIR/*.so ../lib
 
-sed -i 's/final//g' ../include/onnx/optimizer/passes/*
-
 cd ../..
