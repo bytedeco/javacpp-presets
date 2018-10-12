@@ -60,6 +60,31 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::set<std::string>") public static class StringSet extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringSet(Pointer p) { super(p); }
+    public StringSet()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringSet put(@ByRef StringSet x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    public native void insert(@StdString BytePointer value);
+    public native void erase(@StdString BytePointer value);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @StdString BytePointer get();
+    }
+}
+
 @Name("std::vector<onnx::OpSchema::TypeConstraintParam>") public static class TypeConstraintParamVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -621,13 +646,13 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
-@Name("std::unordered_set<std::string>") public static class StringSet extends Pointer {
+@Name("std::unordered_set<std::string>") public static class UnorderedStringSet extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StringSet(Pointer p) { super(p); }
-    public StringSet()       { allocate();  }
+    public UnorderedStringSet(Pointer p) { super(p); }
+    public UnorderedStringSet()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringSet put(@ByRef StringSet x);
+    public native @Name("operator=") @ByRef UnorderedStringSet put(@ByRef UnorderedStringSet x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -1286,8 +1311,6 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   
 
   public native @StdString BytePointer domain();
-
-  public native @Const @ByRef StringAttributeMap attributes();
 
   // Get input formal parameters.
   public native @Const @ByRef FormalParameterVector inputs();
@@ -8439,7 +8462,7 @@ public static final int
         return (LexicalScopeContext)super.position(position);
     }
 
-  public native @ByRef StringSet output_names(); public native LexicalScopeContext output_names(StringSet output_names);
+  public native @ByRef UnorderedStringSet output_names(); public native LexicalScopeContext output_names(UnorderedStringSet output_names);
 }
 @Namespace("onnx::checker") public static native void check_value_info(@Const @ByRef ValueInfoProto value_info, @Const @ByRef CheckerContext arg1);
 @Namespace("onnx::checker") public static native void check_tensor(@Const @ByRef TensorProto tensor, @Const @ByRef CheckerContext arg1);
@@ -10853,6 +10876,556 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
    *  This is intended to be trivially copyable, so it should be passed by
    *  value. */
 
+ // namespace ONNX_NAMESPACE
+
+
+// Parsed from onnx/common/stl_backports.h
+
+// #pragma once
+
+// This file contains backports of STL features for newer C++.
+
+// #include <memory>
+// #include <type_traits>
+
+/*
+ * Use MOVE_CAPTURE_IF_CPP14 in a lambda capture so it gets
+ * copied in C++11 and moved in C++14.
+ * Example:
+ *   std::string mystring;
+ *   auto lambda = [MOVE_CAPTURE_IF_CPP14(mystring)] {
+ *     std::cout << mystring;
+ *   }
+ */
+// #ifdef __cpp_init_captures
+//   #define MOVE_CAPTURE_IF_CPP14(variable) variable = std::move(variable)
+// #else
+//   #define MOVE_CAPTURE_IF_CPP14(variable) variable
+// #endif
+
+
+/**
+ * For exception safety and consistency with make_shared. Erase me when
+ * we have std::make_unique().
+ *
+ * @author Louis Brandy (ldbrandy\fb.com)
+ * @author Xu Ning (xning\fb.com)
+ * @author Sebastian Messmer (messmer\fb.com)
+ */
+
+// #if __cplusplus >= 201402L || __cpp_lib_make_unique >= 201304L ||
+//     (__ANDROID__ && __cplusplus >= 201300L) || _MSC_VER >= 1900
+
+
+// #else
+
+
+
+// #endif
+
+
+// Parsed from onnx/common/ir.h
+
+// ATTENTION: The code in this file is highly EXPERIMENTAL.
+// Adventurous users should note that the APIs will probably change.
+
+// #pragma once
+
+// #include <atomic>
+// #include <algorithm>
+// #include <cstdint>
+// #include <functional>
+// #include <iostream>
+// #include <memory>
+// #include <sstream>
+// #include <stdint.h>
+// #include <string>
+// #include <unordered_set>
+// #include <vector>
+
+// #include "onnx/string_utils.h"
+// #include "onnx/common/array_ref.h"
+// #include "onnx/common/assertions.h"
+// #include "onnx/common/interned_strings.h"
+// #include "onnx/common/graph_node_list.h"
+// #include "onnx/common/tensor.h"
+
+
+// #define ONNX_DISALLOW_COPY_AND_ASSIGN(TypeName)
+//   TypeName(const TypeName&) = delete;
+//   void operator=(const TypeName&) = delete
+
+// Graph represents one "function" of computation.
+// It uses a simple ownership model where the graph owns all the nodes inside it.
+// All references inside the graph are raw pointers.
+// Destroying the Graph will invalidate any pointers to nodes in the graph.
+
+
+// Node is the base class of the IR graph. It represents one computation
+// and dependencies on a list of Values. The "prim-ops", so to speak.
+@Namespace("onnx") @Opaque public static class Node extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Node() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Node(Pointer p) { super(p); }
+}
+
+
+// A Value represents an input or output to node that is either a
+// Tensor or an opaque Handle object, as determined by type().
+
+
+@Name("onnx::Dimension") @NoOffset public static class DimensionIR extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DimensionIR(Pointer p) { super(p); }
+
+  public DimensionIR(@StdString BytePointer param) { super((Pointer)null); allocate(param); }
+  private native void allocate(@StdString BytePointer param);
+  public DimensionIR(@StdString String param) { super((Pointer)null); allocate(param); }
+  private native void allocate(@StdString String param);
+  public DimensionIR(@Cast("int64_t") int dim) { super((Pointer)null); allocate(dim); }
+  private native void allocate(@Cast("int64_t") int dim);
+
+  public native @Cast("bool") boolean is_int(); public native DimensionIR is_int(boolean is_int);
+  public native @Cast("int64_t") int dim(); public native DimensionIR dim(int dim);
+  public native @StdString BytePointer param(); public native DimensionIR param(BytePointer param);
+}
+
+
+/** enum class onnx::AttributeKind */
+public static final int
+  // float, float list, int, int list, string, string list,
+  // tensor, tensor list, subgraph, subgraph list
+  f = 0, fs = 1, i = 2, is = 3, s = 4, ss = 5, t = 6, ts = 7, g = 8, gs = 9;
+
+
+
+
+
+// CRTP so that Node which inherits Attributes can be return for
+// method chaining e.g:
+// Node * n = g->create(kSelect)->set_i(kOffset,3)->set_f(kValue,3.5);
+// we return Derived* pointers because Nodes are normally held as pointers.
+
+
+
+// Each use is represented by this type, see Node::uses()
+// 'user' is the consumer of the value, offset is the index into
+// 'user's input this where the produces will be found.
+@Namespace("onnx") @NoOffset public static class Use extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Use(Pointer p) { super(p); }
+
+  public Use(Node user, @Cast("size_t") long offset) { super((Pointer)null); allocate(user, offset); }
+  private native void allocate(Node user, @Cast("size_t") long offset);
+  public native Node user(); public native Use user(Node user);
+  public native @Cast("size_t") long offset(); public native Use offset(long offset);
+}
+
+@Namespace("onnx") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Use a, @Const @ByRef Use b);
+
+
+// the list types are intentionally simple, but we type-def
+// them here so if we need to change them, refactoring will be easier
+
+// A class with the same properties as OperatorSetIdProto, but without protobuf
+// overhead, resulting in a simpler and more readable workflow.
+@Namespace("onnx") @NoOffset public static class OpSetID extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpSetID(Pointer p) { super(p); }
+
+    public OpSetID(@Const @ByRef OperatorSetIdProto proto) { super((Pointer)null); allocate(proto); }
+    private native void allocate(@Const @ByRef OperatorSetIdProto proto);
+
+    // Default Domain Constructor
+    public OpSetID(@Cast("const int64_t") int version) { super((Pointer)null); allocate(version); }
+    private native void allocate(@Cast("const int64_t") int version);
+
+    public OpSetID(@StdString BytePointer domain, @Cast("int64_t") int version) { super((Pointer)null); allocate(domain, version); }
+    private native void allocate(@StdString BytePointer domain, @Cast("int64_t") int version);
+    public OpSetID(@StdString String domain, @Cast("int64_t") int version) { super((Pointer)null); allocate(domain, version); }
+    private native void allocate(@StdString String domain, @Cast("int64_t") int version);
+
+    // target must be in the form "<domain>&<version>"
+    
+
+    // target must be in the form "<domain>&<version>"
+    public static native @ByVal OpSetID fromString(@StdString BytePointer target);
+    public static native @ByVal OpSetID fromString(@StdString String target);
+
+    public native @StdString BytePointer domain();
+
+    public native @Cast("int64_t") int version();
+
+    public native void incrementVersion(@Cast("int64_t") int step);
+
+    public native void setVersion(@Cast("int64_t") int newVal);
+}
+
+@Namespace("onnx") @NoOffset public static class Graph extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Graph(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Graph(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Graph position(long position) {
+        return (Graph)super.position(position);
+    }
+
+
+  
+  public Graph() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @Cast("bool") boolean has_doc_string();
+  public native @StdString BytePointer docString();
+  public native void setDocString(@StdString BytePointer doc_string);
+  public native void setDocString(@StdString String doc_string);
+
+  public native void addInitializer(@ByVal Tensor initializer, @StdString BytePointer name);
+  public native void addInitializer(@ByVal Tensor initializer, @StdString String name);
+  public native void eraseInitializer(@StdString BytePointer name);
+  public native void eraseInitializer(@StdString String name);
+  public native void clearInitializers();
+  public native @StdVector Tensor initializers();
+  public native @Const @ByRef StringVector initializer_names();
+
+  public native @StdVector OpSetID opset_versions_mutable();
+
+  // These invocations of begin() on output of function are OK
+  // because graph_node_list is non-owning, so it doesn't matter
+  // if it immediately dies after the invocation.
+  public native Node return_node();
+  public native void eraseInput(@Cast("size_t") long i);
+  public native void advanceStage();
+  public native void setStage(@Cast("size_t") long new_stage);
+  public native @Cast("size_t") long stage();
+
+  public native Node appendNode(Node n);
+
+  public native Node prependNode(Node n);
+
+  //Adds to graph initializer list, initializer names list, and as a graph input
+  //Also syncs the initializer name, tensor name, and value name
+
+
+  //Erases from graph initializer list, initializer names list, and as a graph input
+  //Must have no uses
+
+  
+
+  public native @Cast("bool") boolean has_name();
+
+  public native @StdString BytePointer name();
+
+  public native void setName(@StdString BytePointer name);
+  public native void setName(@StdString String name);
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************* All nodes not required to be defined before Graph **************/
+
+
+
+
+
+
+
+ // namespace ONNX_NAMESPACE
+
+
+// Parsed from onnx/common/ir_pb_converter.h
+
+// ATTENTION: The code in this file is highly EXPERIMENTAL.
+// Adventurous users should note that the APIs will probably change.
+
+// #pragma once
+
+// #include "onnx/common/ir.h"
+// #include "onnx/onnx_pb.h"
+
+@Namespace("onnx") @NoOffset public static class ConvertError extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConvertError(Pointer p) { super(p); }
+
+
+  public ConvertError(@StdString BytePointer message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString BytePointer message);
+  public ConvertError(@StdString String message) { super((Pointer)null); allocate(message); }
+  private native void allocate(@StdString String message);
+
+  public native @Cast("const char*") BytePointer what();
+
+  public native void AppendContext(@StdString BytePointer context);
+  public native void AppendContext(@StdString String context);
+}
+
+// #define fail_convert(...)
+//   throw ConvertError(MakeString(__VA_ARGS__));
+
+@Namespace("onnx") public static native void ExportModelProto(ModelProto p_m, @SharedPtr Graph g);
+
+@Namespace("onnx") public static native @UniquePtr Graph ImportModelProto(@Const @ByRef ModelProto mp);
+
+@Namespace("onnx") public static native @ByVal ModelProto PrepareOutput(@Const @ByRef ModelProto mp_in);
+
+@Namespace("onnx") public static native void assertNonNull(@SharedPtr Graph g);
+ // namespace ONNX_NAMESPACE
+
+
+// Parsed from onnx/version_converter/adapters/adapter.h
+
+// Interface for Op Version Adapters
+
+// #pragma once
+
+// #include "onnx/onnx_pb.h"
+// #include "onnx/version_converter/helper.h"
+
+@Namespace("onnx::version_conversion") @NoOffset public static class Adapter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Adapter(Pointer p) { super(p); }
+
+
+    public native void adapt(@SharedPtr Graph arg0, Node node);
+
+    public native @StdString BytePointer name();
+
+    public native @Const @ByRef OpSetID initial_version();
+
+    public native @Const @ByRef OpSetID target_version();
+}
+
+ // namespace ONNX_NAMESPACE::version_conversion
+
+
+// Parsed from onnx/version_converter/helper.h
+
+// Helper Methods for Adapters
+
+// #pragma once
+
+// #include "onnx/common/ir.h"
+    @Namespace("onnx::version_conversion") public static native int check_numpy_unibroadcastable_and_require_broadcast(
+            @StdVector DimensionIR input1_sizes,
+            @StdVector DimensionIR input2_sizes);
+
+    @Namespace("onnx::version_conversion") public static native void assert_numpy_multibroadcastable(@StdVector DimensionIR input1_sizes,
+            @StdVector DimensionIR input2_sizes);
+
+    @Namespace("onnx::version_conversion") public static native void assertNotParams(@StdVector DimensionIR sizes);
+
+
+
+// Parsed from onnx/version_converter/BaseConverter.h
+
+// Version converter interface for ONNX models between different opset versions.
+
+// #pragma once
+
+// #include "onnx/common/ir.h"
+// #include "onnx/common/ir_pb_converter.h"
+// #include "onnx/common/stl_backports.h"
+// #include "onnx/proto_utils.h"
+// #include "onnx/defs/schema.h"
+// #include <utility>
+// #include <iostream>
+// #include <stdlib.h>
+// #include "onnx/version_converter/adapters/adapter.h"
+
+// TODO: Consider creating interface for this class.
+@Namespace("onnx::version_conversion") @NoOffset public static class BaseVersionConverter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BaseVersionConverter(Pointer p) { super(p); }
+
+
+    // adapter_lookup should be called in convert_version when the user would
+    // like to identify the proper registered adapter in the adapters map for
+    // a given Node from a certain version to another. It should only be called
+    // when the user knows that an adapter should exist for the given context.
+    public native @Const @ByRef Adapter adapter_lookup(@Const Node op,
+            @Const @ByRef OpSetID initial_version,
+            @Const @ByRef OpSetID target_version);
+
+  public native @ByVal ModelProto convert_version(
+        @Const @ByRef ModelProto mp_in,
+        @Const @ByRef OpSetID initial_version,
+        @Const @ByRef OpSetID target_version);
+
+  
+}
+
+ // namespace ONNX_NAMESPACE::version_conversion
+
+
+// Parsed from onnx/version_converter/convert.h
+
+// Default converter for ONNX models between different opset versions
+// in the default domain ("" or "ai.onnx").
+
+// #pragma once
+
+// #include "onnx/version_converter/BaseConverter.h"
+// #include "onnx/version_converter/adapters/no_previous_version.h"
+// #include "onnx/version_converter/adapters/broadcast_backward_compatibility.h"
+// #include "onnx/version_converter/adapters/broadcast_forward_compatibility.h"
+// #include "onnx/version_converter/adapters/type_restriction.h"
+// #include "onnx/version_converter/adapters/compatible.h"
+// #include "onnx/version_converter/adapters/remove_consumed_inputs.h"
+// #include "onnx/version_converter/adapters/gemm_7_6.h"
+// #include "onnx/version_converter/adapters/gemm_6_7.h"
+// #include "onnx/version_converter/adapters/batch_normalization_6_5.h"
+// #include "onnx/version_converter/adapters/batch_normalization_6_7.h"
+// #include "onnx/version_converter/adapters/set_is_test.h"
+// #include "onnx/version_converter/adapters/concat_3_4.h"
+// #include "onnx/version_converter/adapters/reshape_5_4.h"
+// #include "onnx/version_converter/adapters/reshape_4_5.h"
+// #include "onnx/version_converter/adapters/sum_8_7.h"
+// #include "onnx/version_converter/adapters/averagepool_7_6.h"
+// #include "onnx/version_converter/adapters/dropout_6_7.h"
+// #include "onnx/version_converter/adapters/maxpool_8_7.h"
+
+@Namespace("onnx::version_conversion") @NoOffset public static class DefaultVersionConverter extends BaseVersionConverter {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DefaultVersionConverter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DefaultVersionConverter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DefaultVersionConverter position(long position) {
+        return (DefaultVersionConverter)super.position(position);
+    }
+
+    public DefaultVersionConverter() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native @ByVal ModelProto convert_version(
+            @Const @ByRef ModelProto mp_in,
+            @Const @ByRef OpSetID initial_version,
+            @Const @ByRef OpSetID target_version);
+}
+
+@Namespace("onnx::version_conversion") public static native @ByVal ModelProto ConvertVersion(
+    @Const @ByRef ModelProto mp_in,
+    int target_version);
+ // namespace ONNX_NAMESPACE::version_conversion
+
+
+// Parsed from onnx/optimizer/passes/optimize_pass.h
+
+// ATTENTION: The code in this file is highly EXPERIMENTAL.
+// Adventurous users should note that the APIs will probably change.
+
+// #pragma once
+
+// #include "onnx/common/ir.h"
+// #include "onnx/onnx_pb.h"
+
+/** enum class onnx::optimization::API_TYPE */
+public static final int
+  PROTO = 0, IR = 1;
+
+@Namespace("onnx::optimization") @NoOffset public static class OptimizePass extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OptimizePass(Pointer p) { super(p); }
+
+
+  public native @StdString BytePointer name(); public native OptimizePass name(BytePointer name);
+  public native @Cast("onnx::optimization::API_TYPE") int type(); public native OptimizePass type(int type);
+
+  public OptimizePass(@StdString BytePointer name, @Cast("onnx::optimization::API_TYPE") int type) { super((Pointer)null); allocate(name, type); }
+  private native void allocate(@StdString BytePointer name, @Cast("onnx::optimization::API_TYPE") int type);
+  public OptimizePass(@StdString String name, @Cast("onnx::optimization::API_TYPE") int type) { super((Pointer)null); allocate(name, type); }
+  private native void allocate(@StdString String name, @Cast("onnx::optimization::API_TYPE") int type);
+
+  @Virtual public native void optimize(@ByRef ModelProto arg0);
+
+  @Virtual public native void optimize(@ByRef Graph arg0);
+
+}
+
+
+
+ // namespace ONNX_NAMESPACE::optimization
+
+
+// Parsed from onnx/optimizer/optimize.h
+
+// ATTENTION: The code in this file is highly EXPERIMENTAL.
+// Adventurous users should note that the APIs will probably change.
+
+// #pragma once
+
+// #include "onnx/common/ir.h"
+// #include "onnx/common/ir_pb_converter.h"
+// #include "onnx/common/stl_backports.h"
+// #include "onnx/optimizer/passes/eliminate_identity.h"
+// #include "onnx/optimizer/passes/eliminate_nop_transpose.h"
+// #include "onnx/optimizer/passes/eliminate_nop_pad.h"
+// #include "onnx/optimizer/passes/eliminate_unused_initializer.h"
+// #include "onnx/optimizer/passes/extract_constant_to_initializer.h"
+// #include "onnx/optimizer/passes/fuse_add_bias_into_conv.h"
+// #include "onnx/optimizer/passes/fuse_consecutive_squeezes.h"
+// #include "onnx/optimizer/passes/fuse_consecutive_transposes.h"
+// #include "onnx/optimizer/passes/fuse_transpose_into_gemm.h"
+// #include "onnx/optimizer/passes/lift_lexical_references.h"
+// #include "onnx/optimizer/passes/nop.h"
+// #include "onnx/optimizer/passes/split.h"
+// #include "onnx/optimizer/passes/fuse_bn_into_conv.h"
+// #include "onnx/proto_utils.h"
+
+@Namespace("onnx::optimization") public static class Optimizer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Optimizer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Optimizer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Optimizer position(long position) {
+        return (Optimizer)super.position(position);
+    }
+
+
+  public Optimizer() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @ByVal ModelProto optimize(
+        @Const @ByRef ModelProto mp_in,
+        @Const @ByRef StringVector names);
+}
+
+@Namespace("onnx::optimization") public static native @Const @ByVal StringVector GetAvailablePasses();
+
+@Namespace("onnx::optimization") public static native @ByVal ModelProto Optimize(
+    @Const @ByRef ModelProto mp_in,
+    @Const @ByRef StringVector names);
+
+ // namespace optimization
  // namespace ONNX_NAMESPACE
 
 

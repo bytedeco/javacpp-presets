@@ -50,14 +50,22 @@ export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
 python3 setup.py --quiet build
 
-mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/version_converter
+mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters
+
+
+patch onnx/optimizer/optimize.h ../../../optimize.h.patch
+patch onnx/optimizer/passes/optimize_pass.h ../../../optimize_pass.h.patch
 
 cp onnx/*.h ../include/onnx/
 cp onnx/common/*.h ../include/onnx/common/
 cp onnx/defs/*.h ../include/onnx/defs/
 cp onnx/optimizer/*.h ../include/onnx/optimizer/
+cp onnx/optimizer/passes/*.h ../include/onnx/optimizer/passes/
 cp onnx/version_converter/*.h ../include/onnx/version_converter/
+cp onnx/version_converter/adapters/*.h ../include/onnx/version_converter/adapters/
 cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
 cp $CMAKE_BUILD_DIR/*.so ../lib
+
+sed -i 's/final//g' ../include/onnx/optimizer/passes/*
 
 cd ../..
