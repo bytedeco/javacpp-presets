@@ -132,6 +132,14 @@ case $PLATFORM in
           make install-strip
         fi
         ;;
+    linux-mips64el)
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -mabi=64"
+        make -j $MAKEJ V=0
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -mabi=64" --enable-float
+        make -j $MAKEJ V=0
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../fftw-macosx.patch
         ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2
