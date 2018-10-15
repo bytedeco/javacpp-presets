@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.gsl</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.5-1.4.2</version>
+            <version>2.5-1.4.3</version>
         </dependency>
     </dependencies>
 </project>
