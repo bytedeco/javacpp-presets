@@ -25,6 +25,8 @@ export TF_NEED_MPI=0
 export TF_NEED_GDR=0
 export TF_NEED_TENSORRT=0
 export TF_NEED_NGRAPH=0
+export TF_NEED_IGNITE=0
+export TF_NEED_ROCM=0
 export TF_ENABLE_XLA=0
 export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=10.0
@@ -39,7 +41,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.11.0
+TENSORFLOW_VERSION=1.12.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 

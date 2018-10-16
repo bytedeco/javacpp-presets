@@ -1,4 +1,6 @@
 
+ * Upgrade presets for HDF5 1.10.4, Tesseract 4.0.0-rc3, TensorFlow 1.12.0-rc0, and their dependencies
+
 ### October 15, 2018 version 1.4.3
  * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`
  * Add build for `linux-mips64el` to presets for OpenCV ([pull #621](https://github.com/bytedeco/javacpp-presets/pull/621))

@@ -400,7 +400,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("__ANDROID__").define(android))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
-               .put(new Info("TENSORFLOW_USE_SYCL").define(false))
+               .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
@@ -535,12 +535,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::DataTypeSlice").cast().pointerTypes("DataTypeVector"))
                .put(new Info("tensorflow::NumberTypes", "tensorflow::QuantizedTypes", "tensorflow::RealAndQuantizedTypes").skip())
 
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>").pointerTypes("MutableTensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>::operator *()").skip())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>").pointerTypes("TensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::operator *()").skip())
-
-               .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
+               .put(new Info("tensorflow::OpArgIterator", "tensorflow::OpInputList::Iterator",
+                             "tensorflow::OpMutableInputList::Iterator", "tensorflow::OpOutputList::Iterator").skip())
+               .put(new Info("tensorflow::Tensor").base("AbstractTensor").pointerTypes("Tensor"))
                .put(new Info("tensorflow::TensorBuffer").virtualize())
                .put(new Info("tensorflow::Tensor(tensorflow::DataType, tensorflow::TensorShape&, tensorflow::TensorBuffer*)").javaText(
                        "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }\n"

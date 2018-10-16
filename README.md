@@ -118,7 +118,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * HDF5 1.10.3  https://support.hdfgroup.org/HDF5/
+ * HDF5 1.10.4  https://support.hdfgroup.org/HDF5/
  * MKL 2019.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.16  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.3  http://www.openblas.net/
@@ -130,12 +130,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 7.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.76.0  http://www.leptonica.org/download.html
- * Tesseract 4.0.0-rc2  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.0.0-rc3  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.0  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.3  https://developer.nvidia.com/cudnn
  * MXNet 1.3.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.11.0  https://github.com/tensorflow/tensorflow
+ * TensorFlow 1.12.0-rc0  https://github.com/tensorflow/tensorflow
  * TensorRT 5.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.3.0  https://github.com/onnx/onnx
