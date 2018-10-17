@@ -88,31 +88,32 @@ case $PLATFORM in
     # Also, the last version of the NDK supported by TensorFlow is android-ndk-r15c
     android-arm)
         patch -Np1 < ../../../tensorflow-android.patch
-        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
+        sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s --copt=-D__user="
         ;;
     android-arm64)
         patch -Np1 < ../../../tensorflow-android.patch
-        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sed -i "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     android-x86)
         patch -Np1 < ../../../tensorflow-android.patch
-        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s"
+        sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s --copt=-D__user="
         ;;
     android-x86_64)
         patch -Np1 < ../../../tensorflow-android.patch
-        sed -i "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sed -i "s/api_level=14/api_level=21/g" WORKSPACE
+        sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
+        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
         ;;
     linux-x86)
         patch -Np1 < ../../../tensorflow-java.patch
-        # BoringSSL doesn't build on linux-x86
+        # BoringSSL doesn't build on linux-x86, so disable secure grpc and leave undefined symbols
         patch -Np1 < ../../../tensorflow-unsecure.patch
-        sed -i "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
+        sedinplace '/-z defs/d' tensorflow/BUILD
+        sedinplace "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
     linux-x86_64)
@@ -181,7 +182,9 @@ cp -r tensorflow/java/src/main/java/* ../java
 cp -r tensorflow/contrib/android/java/* ../java
 cp -r tensorflow/contrib/lite/java/src/main/java/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
+# remove lines that require the Android SDK to compile
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java
+# add ops files we cannot get with CMake for Windows
 patch -Np1 -d ../java < ../../../tensorflow-java-ops.patch || true # bazel build //tensorflow/java:tensorflow
 
 cd ../..
