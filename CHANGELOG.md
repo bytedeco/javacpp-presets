@@ -1,4 +1,5 @@
 
+ * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
  * Upgrade presets for HDF5 1.10.4, Tesseract 4.0.0-rc3, TensorFlow 1.12.0-rc0, and their dependencies
 
 ### October 15, 2018 version 1.4.3

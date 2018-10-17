@@ -198,9 +198,11 @@ esac
 
 cp -r modules/java_bindings_generator/gen/java ..
 cp -r modules/java_bindings_generator/gen/android/java ..
+# remove files that require the Android SDK to compile
 rm ../java/org/opencv/android/AsyncServiceHelper.java
 rm ../java/org/opencv/android/CameraBridgeViewBase.java
 rm ../java/org/opencv/android/JavaCameraView.java
 rm ../java/org/opencv/android/OpenCVLoader.java
+rm ../java/*opencv* || true # remove stray binaries
 
 cd ../..
