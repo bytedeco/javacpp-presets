@@ -169,5 +169,7 @@ pacman -U --noconfirm *.pkg.tar.xz
 #    unzip -o $DOWNLOAD_FILE -d $APPVEYOR_BUILD_FOLDER
 #fi
 
+du -csh $HOME/* $HOME/.cache/* $HOME/.ccache/* /c/Users/appveyor/* /c/Users/appveyor/.m2/* /c/Users/downloads/*
+
 echo Finished setting up env in setup.sh
 
