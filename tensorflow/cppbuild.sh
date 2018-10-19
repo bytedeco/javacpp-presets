@@ -128,6 +128,8 @@ case $PLATFORM in
         sedinplace 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
         sedinplace '/-lgomp/d' third_party/gpus/cuda/BUILD.tpl
         patch -Np1 < ../../../tensorflow-java.patch
+        # allows us to use ccache with Bazel
+        export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
         # no longer needed? https://github.com/tensorflow/tensorflow/issues/19676
         # patch -Np1 < ../../../tensorflow-macosx.patch || true
         export TF_NEED_MKL=1

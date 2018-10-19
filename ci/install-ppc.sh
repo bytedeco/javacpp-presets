@@ -1,13 +1,25 @@
 #!/bin/bash 
 set -vx
 
-while true; do echo .; sleep 60; done &
+# Prevent Travis CI from terminating builds after 10 minutes with no output
+while true; do uptime; sleep 60; done &
+
+# Abort before the maximum build time to be able to save the cache
+# (needs to be less than 2 hours for this to work on Mac as well)
+(sleep 7000; sudo killall -s SIGINT java; sudo killall bazel) &
+
+# Allocate a swapfile on Linux as it's not enabled by default
+sudo fallocate -l 4GB /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 
 mkdir ./buildlogs
 mkdir $TRAVIS_BUILD_DIR/downloads
 sudo chown -R travis:travis $HOME
 du -csh $HOME/* $HOME/.m2/* $HOME/.cache/* $HOME/.ccache/* $HOME/downloads/*
-pip install requests
+curl https://bootstrap.pypa.io/get-pip.py | sudo python
+sudo pip install requests
 export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
