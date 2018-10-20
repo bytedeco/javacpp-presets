@@ -126,6 +126,13 @@ if [ "$PROJ" == "tensorflow" ]; then
        /c/Python27/python -m pip install numpy
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
+
+       echo "adding bazel for tensorflow"
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       if [ "$CURL_STATUS" != "0" ]; then
+         echo "Download failed here, so can't proceed with the build.. Failing.."
+         exit 1
+       fi
 fi
 
 # copy Python 3.6 back to default installation directory
