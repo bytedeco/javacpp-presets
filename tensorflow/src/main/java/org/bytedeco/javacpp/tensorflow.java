@@ -2717,6 +2717,333 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 // #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 
+// Parsed from google/protobuf/unknown_field_set.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Contains classes used to keep track of unrecognized fields seen while
+// parsing a protocol message.
+
+// #ifndef GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+// #define GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+
+// #include <assert.h>
+// #include <string>
+// #include <vector>
+// #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/stubs/logging.h>
+// #include <google/protobuf/message_lite.h>         // coded_stream.h        // coded_stream.h      // zero_copy_stream.h
+  
+    @Namespace("google::protobuf::internal") @Opaque public static class InternalMetadataWithArena extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public InternalMetadataWithArena() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public InternalMetadataWithArena(Pointer p) { super(p); }
+    }  // metadata.h
+    @Namespace("google::protobuf::internal") @Opaque public static class WireFormat extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public WireFormat() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public WireFormat(Pointer p) { super(p); }
+    }               // wire_format.h
+    @Namespace("google::protobuf::internal") @Opaque public static class MessageSetFieldSkipperUsingCord extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public MessageSetFieldSkipperUsingCord() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public MessageSetFieldSkipperUsingCord(Pointer p) { super(p); }
+    }
+                                    // extension_set_heavy.cc
+                        // message.h                 // below
+
+// An UnknownFieldSet contains fields that were encountered while parsing a
+// message but were not defined by its type.  Keeping track of these can be
+// useful, especially in that they may be written if the message is serialized
+// again without being cleared in between.  This means that software which
+// simply receives messages and forwards them to other servers does not need
+// to be updated every time a new field is added to the message definition.
+//
+// To get the UnknownFieldSet attached to any message, call
+// Reflection::GetUnknownFields().
+//
+// This class is necessarily tied to the protocol buffer wire format, unlike
+// the Reflection interface which is independent of any serialization scheme.
+@Namespace("google::protobuf") @NoOffset public static class UnknownFieldSet extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownFieldSet(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UnknownFieldSet(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public UnknownFieldSet position(long position) {
+        return (UnknownFieldSet)super.position(position);
+    }
+
+  public UnknownFieldSet() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  // Remove all fields.
+  public native void Clear();
+
+  // Remove all fields and deallocate internal data objects
+  public native void ClearAndFreeMemory();
+
+  // Is this set empty?
+  public native @Cast("bool") boolean empty();
+
+  // Merge the contents of some other UnknownFieldSet with this one.
+  public native void MergeFrom(@Const @ByRef UnknownFieldSet other);
+
+  // Similar to above, but this function will destroy the contents of other.
+  public native void MergeFromAndDestroy(UnknownFieldSet other);
+
+  // Merge the contents an UnknownFieldSet with the UnknownFieldSet in
+  // *metadata, if there is one.  If *metadata doesn't have an UnknownFieldSet
+  // then add one to it and make it be a copy of the first arg.
+  public static native void MergeToInternalMetdata(
+        @Const @ByRef UnknownFieldSet other,
+        InternalMetadataWithArena metadata);
+
+  // Swaps the contents of some other UnknownFieldSet with this one.
+  public native void Swap(UnknownFieldSet x);
+
+  // Computes (an estimate of) the total number of bytes currently used for
+  // storing the unknown fields in memory. Does NOT include
+  // sizeof(*this) in the calculation.
+  public native @Cast("size_t") long SpaceUsedExcludingSelfLong();
+
+  public native int SpaceUsedExcludingSelf();
+
+  // Version of SpaceUsed() including sizeof(*this).
+  public native @Cast("size_t") long SpaceUsedLong();
+
+  public native int SpaceUsed();
+
+  // Returns the number of fields present in the UnknownFieldSet.
+  public native int field_count();
+  // Get a field in the set, where 0 <= index < field_count().  The fields
+  // appear in the order in which they were added.
+  public native @Const @ByRef UnknownField field(int index);
+  // Get a mutable pointer to a field in the set, where
+  // 0 <= index < field_count().  The fields appear in the order in which
+  // they were added.
+  public native UnknownField mutable_field(int index);
+
+  // Adding fields ---------------------------------------------------
+
+  public native void AddVarint(int number, @Cast("google::protobuf::uint64") long value);
+  public native void AddFixed32(int number, @Cast("google::protobuf::uint32") int value);
+  public native void AddFixed64(int number, @Cast("google::protobuf::uint64") long value);
+  public native void AddLengthDelimited(int number, @StdString BytePointer value);
+  public native void AddLengthDelimited(int number, @StdString String value);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer AddLengthDelimited(int number);
+  public native UnknownFieldSet AddGroup(int number);
+
+  // Adds an unknown field from another set.
+  public native void AddField(@Const @ByRef UnknownField field);
+
+  // Delete fields with indices in the range [start .. start+num-1].
+  // Caution: implementation moves all fields with indices [start+num .. ].
+  public native void DeleteSubrange(int start, int num);
+
+  // Delete all fields with a specific field number. The order of left fields
+  // is preserved.
+  // Caution: implementation moves all fields after the first deleted field.
+  public native void DeleteByNumber(int number);
+
+  // Parsing helpers -------------------------------------------------
+  // These work exactly like the similarly-named methods of Message.
+
+  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
+  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
+  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
+  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
+  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParseFromString(@StdString String data);
+
+  public static native @Const UnknownFieldSet default_instance();
+}
+
+// Represents one field in an UnknownFieldSet.
+@Namespace("google::protobuf") public static class UnknownField extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public UnknownField() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UnknownField(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownField(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public UnknownField position(long position) {
+        return (UnknownField)super.position(position);
+    }
+
+  /** enum google::protobuf::UnknownField::Type */
+  public static final int
+    TYPE_VARINT = 0,
+    TYPE_FIXED32 = 1,
+    TYPE_FIXED64 = 2,
+    TYPE_LENGTH_DELIMITED = 3,
+    TYPE_GROUP = 4;
+
+  // The field's field number, as seen on the wire.
+  public native int number();
+
+  // The field type.
+  public native @Cast("google::protobuf::UnknownField::Type") int type();
+
+  // Accessors -------------------------------------------------------
+  // Each method works only for UnknownFields of the corresponding type.
+
+  public native @Cast("google::protobuf::uint64") long varint();
+  public native @Cast("google::protobuf::uint32") int fixed32();
+  public native @Cast("google::protobuf::uint64") long fixed64();
+  public native @StdString BytePointer length_delimited();
+  public native @Const @ByRef UnknownFieldSet group();
+
+  public native void set_varint(@Cast("google::protobuf::uint64") long value);
+  public native void set_fixed32(@Cast("google::protobuf::uint32") int value);
+  public native void set_fixed64(@Cast("google::protobuf::uint64") long value);
+  public native void set_length_delimited(@StdString BytePointer value);
+  public native void set_length_delimited(@StdString String value);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_length_delimited();
+  public native UnknownFieldSet mutable_group();
+
+  // Serialization API.
+  // These methods can take advantage of the underlying implementation and may
+  // archieve a better performance than using getters to retrieve the data and
+  // do the serialization yourself.
+  public native void SerializeLengthDelimitedNoTag(CodedOutputStream output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeLengthDelimitedNoTagToArray(@Cast("google::protobuf::uint8*") byte[] target);
+
+  public native @Cast("size_t") long GetLengthDelimitedSize();
+
+
+  // If this UnknownField contains a pointer, delete it.
+  public native void Delete();
+
+  // Reset all the underlying pointers to NULL. A special function to be only
+  // used while merging from a temporary UFS.
+  public native void Reset();
+
+  // Make a deep copy of any pointers in this UnknownField.
+  public native void DeepCopy(@Const @ByRef UnknownField other);
+
+  // Set the wire type of this UnknownField. Should only be used when this
+  // UnknownField is being created.
+  public native void SetType(@Cast("google::protobuf::UnknownField::Type") int type);
+
+  public static class LengthDelimited extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public LengthDelimited() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public LengthDelimited(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public LengthDelimited(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public LengthDelimited position(long position) {
+          return (LengthDelimited)super.position(position);
+      }
+  
+    public native @StdString @Cast({"char*", "std::string*"}) BytePointer string_value_(); public native LengthDelimited string_value_(BytePointer string_value_);
+  }
+
+  public native @Cast("google::protobuf::uint32") int number_(); public native UnknownField number_(int number_);
+  public native @Cast("google::protobuf::uint32") int type_(); public native UnknownField type_(int type_);
+    @Name("data_.varint_") public native @Cast("google::protobuf::uint64") long data__varint_(); public native UnknownField data__varint_(long data__varint_);
+    @Name("data_.fixed32_") public native @Cast("google::protobuf::uint32") int data__fixed32_(); public native UnknownField data__fixed32_(int data__fixed32_);
+    @Name("data_.fixed64_") public native @Cast("google::protobuf::uint64") long data__fixed64_(); public native UnknownField data__fixed64_(long data__fixed64_);
+    @Name("data_.length_delimited_") public native @ByRef LengthDelimited data__length_delimited_(); public native UnknownField data__length_delimited_(LengthDelimited data__length_delimited_);
+    @Name("data_.group_") public native UnknownFieldSet data__group_(); public native UnknownField data__group_(UnknownFieldSet data__group_);
+}
+
+// ===================================================================
+// inline implementations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
+
+
 // Parsed from tensorflow/core/platform/default/integral_types.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -2795,6 +3122,8 @@ limitations under the License.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bfloat16(Pointer p) { super(p); }
 
+  // The default constructor must yield a zero value, not an uninitialized
+  // value; some TF kernels use T() as a zero value.
   public bfloat16() { super((Pointer)null); allocate(); }
   private native void allocate();
 

@@ -60,6 +60,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -197,7 +198,7 @@ import java.util.List;
                 extension = "-gpu"),
         @Platform(
                 value = "windows",
-		        link = {"Advapi32#", "mklml"},
+                link = {"Advapi32#", "mklml"},
 // old hacks for the now obsolete CMake build
 //                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
 //                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
@@ -220,7 +221,7 @@ import java.util.List;
         @Platform(
                 value = "windows-x86_64",
                 extension = "-gpu",
-		        link = {"Advapi32#", "mklml", "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti"},
+                link = {"Advapi32#", "mklml", "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti"},
 // old hacks for the now obsolete CMake build
 //                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
 //                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
@@ -237,6 +238,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",

@@ -169,6 +169,13 @@ curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 
+# get rid of some stuff we don't use to avoid running out of disk space
+rm -Rf /c/go*
+rm -Rf /c/qt*
+rm -Rf /c/ruby*
+rm -Rf /c/cygwin*
+rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
+
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
 #DOWNLOAD_FILE="$PROJ-cppbuild.zip"
 #DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
