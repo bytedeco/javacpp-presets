@@ -1,8 +1,14 @@
 #!/bin/bash 
 set -vx
 
-while true; do echo .; sleep 60; done &
+# Prevent Travis CI from terminating builds after 10 minutes with no output
+while true; do uptime; sleep 60; done &
 
+# Abort before the maximum build time to be able to save the cache
+# (needs to be less than 2 hours for this to work on Mac as well)
+(sleep 7000; sudo killall -s SIGINT java; sudo killall bazel) &
+
+# Allocate a swapfile on Linux as it's not enabled by default
 sudo fallocate -l 4GB /swapfile
 sudo chmod 600 /swapfile
 sudo mkswap /swapfile
@@ -49,7 +55,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant maven python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6.1/repo/epel-$CENTOS_VERSION/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo -o /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
@@ -61,14 +67,14 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
 
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.m2 /root/.m2"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.cache /root/.cache"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s $HOME/.ccache /root/.ccache"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.m2 /root/.m2"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /usr/bin/python3.6 /usr/bin/python3"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -s /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
   if [ "$PROJ" == "flycapture" ]; then
@@ -123,7 +129,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [ "$PROJ" == "tensorrt" ]; then
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -s /usr/local/TensorRT* /usr/local/tensorrt"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi
 
@@ -158,13 +164,25 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    brew update
    brew upgrade maven
    brew install ccache gcc@7 swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
-   brew link --overwrite gcc
+   brew link --overwrite gcc@7
    # Try to use ccache to speed up the build
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
    mvn -version
    /usr/local/bin/gcc-? --version
    gpg --version
+
+   # Fix up some binaries to support rpath
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libstdc++.6.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgfortran.4.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
+   sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
+   sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.3.0/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+   sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
 
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libSDL-1.2.0.dylib /usr/local/lib/libSDL-1.2.0.dylib
    sudo install_name_tool -add_rpath @loader_path/. -id @rpath/libusb-1.0.0.dylib /usr/local/lib/libusb-1.0.0.dylib
@@ -182,7 +200,7 @@ if [[ "$OS" =~ android ]]; then
    fi
 
    unzip -qq $HOME/ndk.zip -d $HOME/
-   ln -s $HOME/android-ndk-r15c $HOME/android-ndk
+   ln -sf $HOME/android-ndk-r15c $HOME/android-ndk
    if [ "$PROJ" == "tensorflow" ]; then
      echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
      sed -i 's/15/12/g' $HOME/android-ndk/source.properties
@@ -290,8 +308,6 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
    echo "container id is $DOCKER_CONTAINER_ID"
     if [ "$1" == "nodeploy" ]; then
-       # abort before the maximum build time to be able to save the cache
-       (sleep 7200; sudo killall -s SIGINT java; sudo killall bazel) &
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
     elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
        echo "Not a pull request so attempting to deploy using docker"
@@ -322,8 +338,6 @@ if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ a
 else	
    echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT"
    if [ "$1" == "nodeploy" ]; then
-      # abort before the maximum build time to be able to save the cache
-      (sleep 7200; sudo killall -s SIGINT java; sudo killall bazel) &
       bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT; export BUILD_STATUS=0
    elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
       echo "Not a pull request so attempting to deploy"

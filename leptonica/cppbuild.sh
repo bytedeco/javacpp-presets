@@ -519,6 +519,7 @@ case $PLATFORM in
         ;;
 esac
 
-sedinplace '/dependency_libs/d' ../lib/liblept.la || true
+# remove broken dependency_libs from files for libtool
+sedinplace '/dependency_libs/d' ../lib/*.la || true
 
 cd ../..

@@ -463,11 +463,11 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
         protected static class ReleaseDeallocator extends IplImage implements Pointer.Deallocator {
             ReleaseDeallocator(IplImage p) { super(p); }
-            @Override public void deallocate() { cvReleaseImage(this); }
+            @Override public void deallocate() { if (isNull()) return; cvReleaseImage(this); setNull(); }
         }
         protected static class HeaderReleaseDeallocator extends IplImage implements Pointer.Deallocator {
             HeaderReleaseDeallocator(IplImage p) { super(p); }
-            @Override public void deallocate() { cvReleaseImageHeader(this); }
+            @Override public void deallocate() { if (isNull()) return; cvReleaseImageHeader(this); setNull(); }
         }
 
         public abstract int nChannels();
@@ -599,7 +599,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
         protected static class ReleaseDeallocator extends CvMat implements Pointer.Deallocator {
             ReleaseDeallocator(CvMat m) { super(m); }
-            @Override public void deallocate() { cvReleaseMat(this); }
+            @Override public void deallocate() { if (isNull()) return; cvReleaseMat(this); setNull(); }
         }
 
         public abstract int type(); public abstract CvMat type(int type);
@@ -998,7 +998,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
         protected static class ReleaseDeallocator extends CvMatND implements Pointer.Deallocator {
             ReleaseDeallocator(CvMatND p) { super(p); }
-            @Override public void deallocate() { cvReleaseMatND(this); }
+            @Override public void deallocate() { if (isNull()) return; cvReleaseMatND(this); setNull(); }
         }
     }
 
@@ -1036,7 +1036,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
         protected static class ReleaseDeallocator extends CvSparseMat implements Pointer.Deallocator {
             ReleaseDeallocator(CvSparseMat p) { super(p); }
-            @Override public void deallocate() { cvReleaseSparseMat(this); }
+            @Override public void deallocate() { if (isNull()) return; cvReleaseSparseMat(this); setNull(); }
         }
     }
 

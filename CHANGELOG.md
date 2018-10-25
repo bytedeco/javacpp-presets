@@ -1,4 +1,12 @@
 
+ * Add builds for `linux-mips64el` to presets for ARToolKitPlus, Chilitags, flandmark, OpenBLAS, and FFTW ([pull #637](https://github.com/bytedeco/javacpp-presets/pull/637))
+ * Update sample code for GSL with a more complex example ([issue #636](https://github.com/bytedeco/javacpp-presets/issues/636))
+ * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
+ * Upgrade presets for HDF5 1.10.4, Tesseract 4.0.0-rc3, TensorFlow 1.12.0-rc1, and their dependencies
+
+### October 15, 2018 version 1.4.3
+ * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`
+ * Add build for `linux-mips64el` to presets for OpenCV ([pull #621](https://github.com/bytedeco/javacpp-presets/pull/621))
  * Remove calls to deprecated functions from sample code for FFmpeg ([pull #323](https://github.com/bytedeco/javacpp-presets/pull/323))
  * Call `Pointer.setNull()` in custom deallocators for the C API of TensorFlow to prevent double free from occurring
  * Add profiles to parent `pom.xml` that allow multiple platforms: `mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ...`

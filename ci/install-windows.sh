@@ -126,6 +126,13 @@ if [ "$PROJ" == "tensorflow" ]; then
        /c/Python27/python -m pip install numpy
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
+
+       echo "adding bazel for tensorflow"
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       if [ "$CURL_STATUS" != "0" ]; then
+         echo "Download failed here, so can't proceed with the build.. Failing.."
+         exit 1
+       fi
 fi
 
 # copy Python 3.6 back to default installation directory
@@ -162,12 +169,21 @@ curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 
+# get rid of some stuff we don't use to avoid running out of disk space
+rm -Rf /c/go*
+rm -Rf /c/qt*
+rm -Rf /c/ruby*
+rm -Rf /c/cygwin*
+rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
+
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
 #DOWNLOAD_FILE="$PROJ-cppbuild.zip"
 #DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
 #if curl -fsSL -G -v -o "$DOWNLOAD_FILE" "$DOWNLOAD_ADDRESS" --data-urlencode "all=true" --data-urlencode "job=Environment: PROJ=$PROJ, OS=$OS, EXT=$EXT, PARTIAL_CPPBUILD=1"; then
 #    unzip -o $DOWNLOAD_FILE -d $APPVEYOR_BUILD_FOLDER
 #fi
+
+du -csh $HOME/* $HOME/.cache/* $HOME/.ccache/* /c/Users/appveyor/* /c/Users/appveyor/.m2/* /c/Users/downloads/*
 
 echo Finished setting up env in setup.sh
 
