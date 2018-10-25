@@ -43,6 +43,8 @@ make install
 cd ../onnx-$ONNX
 rm -df third_party/pybind11
 ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
+# work around issue in Xcode's version of Clang
+sedinplace 's/const std::string /std::string /g' onnx/defs/schema.h
 
 #to build with "Traditional ML" support. Untested.
 export ONNX_ML=1
@@ -52,10 +54,6 @@ python3 setup.py --quiet build
 
 mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/optimizer/passes ../include/onnx/version_converter ../include/onnx/version_converter/adapters
 
-
-patch onnx/optimizer/optimize.h ../../../optimize.h.patch
-patch onnx/optimizer/passes/optimize_pass.h ../../../optimize_pass.h.patch
-
 cp onnx/*.h ../include/onnx/
 cp onnx/common/*.h ../include/onnx/common/
 cp onnx/defs/*.h ../include/onnx/defs/
@@ -64,6 +62,6 @@ cp onnx/optimizer/passes/*.h ../include/onnx/optimizer/passes/
 cp onnx/version_converter/*.h ../include/onnx/version_converter/
 cp onnx/version_converter/adapters/*.h ../include/onnx/version_converter/adapters/
 cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
-cp $CMAKE_BUILD_DIR/*.so ../lib
+cp $CMAKE_BUILD_DIR/libonnx* ../lib
 
 cd ../..

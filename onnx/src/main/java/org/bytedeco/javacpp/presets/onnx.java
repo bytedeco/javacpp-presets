@@ -34,8 +34,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Properties(target = "org.bytedeco.javacpp.onnx", value = @Platform(
-    value = "linux-x86_64",
+@Properties(target = "org.bytedeco.javacpp.onnx", value = {@Platform(
+    value = {"linux", "macosx"},
     define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
     include = {
@@ -66,7 +66,8 @@ import java.lang.annotation.Target;
         "onnx/optimizer/passes/optimize_pass.h",
         "onnx/optimizer/optimize.h",
     },
-    link = {"onnx_proto", "onnx", "onnxifi"}))
+    link = {"onnx_proto", "onnx", "onnxifi"}),
+@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
@@ -82,10 +83,10 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("onnx::Dimension").pointerTypes("DimensionIR").define())
                .put(new Info("std::initializer_list", "std::function<void(OpSchema&&)>", "generic_graph_node_list",
-				       "generic_graph_node_list_iterator", "NodeKind", "graph_node_list",
-				       "graph_node_list_iterator", "reverse_iterator", "std::vector<onnx::Tensor>::const_iterator",
-				       "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
-				       "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard").skip())
+                             "generic_graph_node_list_iterator", "NodeKind", "graph_node_list",
+                             "graph_node_list_iterator", "reverse_iterator", "std::vector<onnx::Tensor>::const_iterator",
+                             "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
+                             "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
                .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>").skip())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
