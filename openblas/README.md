@@ -38,7 +38,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.3</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.3-1.4.3-SNAPSHOT</version>
+            <version>0.3.3-1.4.3</version>
         </dependency>
     </dependencies>
 </project>

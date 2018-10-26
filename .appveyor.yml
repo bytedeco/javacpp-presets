@@ -3,7 +3,8 @@ version: '{build}'
 os: Visual Studio 2015
 
 cache:
-  - C:\Downloads 
+  - C:\Users\appveyor\.m2 -> .appveyor.yml
+  - C:\Downloads -> .appveyor.yml
 
 environment:
   matrix:
@@ -121,10 +122,10 @@ environment:
     - PROJ: "mxnet"
       OS: windows-x86_64
       EXT: -gpu
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-      EXT: -gpu
-      PARTIAL_CPPBUILD: "1"
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -gpu
+#      PARTIAL_CPPBUILD: "1"
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu

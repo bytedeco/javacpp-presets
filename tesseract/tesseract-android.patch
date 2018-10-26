@@ -1,6 +1,6 @@
-diff -ruN tesseract-4.0.0-beta.4/src/api/baseapi.cpp tesseract-4.0.0-beta.4-android/src/api/baseapi.cpp
---- tesseract-4.0.0-beta.4/src/api/baseapi.cpp	2018-07-27 15:10:37.000000000 +0900
-+++ tesseract-4.0.0-beta.4-android/src/api/baseapi.cpp	2018-08-15 19:49:01.967641279 +0900
+diff -ruN tesseract-4.0.0-rc2/src/api/baseapi.cpp tesseract-4.0.0-rc2-android/src/api/baseapi.cpp
+--- tesseract-4.0.0-rc2/src/api/baseapi.cpp	2018-10-08 04:10:50.000000000 +0900
++++ tesseract-4.0.0-rc2-android/src/api/baseapi.cpp	2018-10-11 19:33:45.672781817 +0900
 @@ -42,6 +42,10 @@
  #include <unistd.h>
  #endif  // _WIN32
@@ -12,21 +12,50 @@ diff -ruN tesseract-4.0.0-beta.4/src/api/baseapi.cpp tesseract-4.0.0-beta.4-andr
  #include <clocale>             // for LC_ALL, LC_CTYPE, LC_NUMERIC
  #include <cmath>               // for round, M_PI
  #include <cstdint>             // for int32_t
-diff -ruN tesseract-4.0.0-beta.4/src/api/Makefile.am tesseract-4.0.0-beta.4-android/src/api/Makefile.am
---- tesseract-4.0.0-beta.4/src/api/Makefile.am	2018-07-27 15:10:37.000000000 +0900
-+++ tesseract-4.0.0-beta.4-android/src/api/Makefile.am	2018-08-15 19:48:24.839616888 +0900
+diff -ruN tesseract-4.0.0-rc2/src/api/Makefile.am tesseract-4.0.0-rc2-android/src/api/Makefile.am
+--- tesseract-4.0.0-rc2/src/api/Makefile.am	2018-10-08 04:10:50.000000000 +0900
++++ tesseract-4.0.0-rc2-android/src/api/Makefile.am	2018-10-11 19:33:45.672781817 +0900
 @@ -58,7 +58,7 @@
      ../ccutil/libtesseract_ccutil.la \
-     ../opencl/libtesseract_opencl.la 
+     ../opencl/libtesseract_opencl.la
  
 -libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) -no-undefined
 +libtesseract_la_LDFLAGS += -avoid-version -no-undefined
  
  bin_PROGRAMS = tesseract
  tesseract_SOURCES = tesseractmain.cpp
-diff -ruN tesseract-4.0.0-beta.4/src/lstm/lstm.cpp tesseract-4.0.0-beta.4-android/src/lstm/lstm.cpp
---- tesseract-4.0.0-beta.4/src/lstm/lstm.cpp	2018-07-27 15:10:37.000000000 +0900
-+++ tesseract-4.0.0-beta.4-android/src/lstm/lstm.cpp	2018-08-15 19:48:24.840616888 +0900
+diff -ruN tesseract-4.0.0-rc2/src/ccutil/fileio.cpp tesseract-4.0.0-rc2-android/src/ccutil/fileio.cpp
+--- tesseract-4.0.0-rc2/src/ccutil/fileio.cpp	2018-10-08 04:10:50.000000000 +0900
++++ tesseract-4.0.0-rc2-android/src/ccutil/fileio.cpp	2018-10-11 19:34:03.024789315 +0900
+@@ -19,7 +19,6 @@
+ #include <io.h>
+ #endif
+ #else
+-#include <glob.h>
+ #include <unistd.h>
+ #endif
+ 
+@@ -110,16 +109,7 @@
+ }
+ #else
+ bool File::DeleteMatchingFiles(const char* pattern) {
+-  glob_t pglob;
+-  char **paths;
+-  bool all_deleted = true;
+-  if (glob(pattern, 0, nullptr, &pglob) == 0) {
+-    for (paths = pglob.gl_pathv; *paths != nullptr; paths++) {
+-      all_deleted &= File::Delete(*paths);
+-    }
+-    globfree(&pglob);
+-  }
+-  return all_deleted;
++    return false;
+ }
+ #endif
+ 
+diff -ruN tesseract-4.0.0-rc2/src/lstm/lstm.cpp tesseract-4.0.0-rc2-android/src/lstm/lstm.cpp
+--- tesseract-4.0.0-rc2/src/lstm/lstm.cpp	2018-10-08 04:10:50.000000000 +0900
++++ tesseract-4.0.0-rc2-android/src/lstm/lstm.cpp	2018-10-11 19:33:45.673781818 +0900
 @@ -33,6 +33,10 @@
  #include "networkscratch.h"
  #include "tprintf.h"
@@ -38,9 +67,9 @@ diff -ruN tesseract-4.0.0-beta.4/src/lstm/lstm.cpp tesseract-4.0.0-beta.4-androi
  // Macros for openmp code if it is available, otherwise empty macros.
  #ifdef _OPENMP
  #define PARALLEL_IF_OPENMP(__num_threads)                                  \
-diff -ruN tesseract-4.0.0-beta.4/src/lstm/weightmatrix.cpp tesseract-4.0.0-beta.4-android/src/lstm/weightmatrix.cpp
---- tesseract-4.0.0-beta.4/src/lstm/weightmatrix.cpp	2018-07-27 15:10:37.000000000 +0900
-+++ tesseract-4.0.0-beta.4-android/src/lstm/weightmatrix.cpp	2018-08-15 19:48:24.840616888 +0900
+diff -ruN tesseract-4.0.0-rc2/src/lstm/weightmatrix.cpp tesseract-4.0.0-rc2-android/src/lstm/weightmatrix.cpp
+--- tesseract-4.0.0-rc2/src/lstm/weightmatrix.cpp	2018-10-08 04:10:50.000000000 +0900
++++ tesseract-4.0.0-rc2-android/src/lstm/weightmatrix.cpp	2018-10-11 19:33:45.673781818 +0900
 @@ -25,6 +25,10 @@
  #include "statistc.h"
  #include "tprintf.h"

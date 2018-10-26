@@ -88,8 +88,8 @@ case $PLATFORM in
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
         "$CMAKE" -G "Visual Studio 14 2015 Win64" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
 
-        # build the project
-        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //maxcpucount:$MAKEJ
+        # build the project without compiler parallelism to avoid "out of heap space"
+        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=1 //maxcpucount:$MAKEJ
 
         # copy binary files
         mkdir -p ../bin

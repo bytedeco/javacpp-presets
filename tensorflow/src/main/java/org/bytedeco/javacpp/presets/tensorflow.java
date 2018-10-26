@@ -60,6 +60,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -197,30 +198,36 @@ import java.util.List;
                 extension = "-gpu"),
         @Platform(
                 value = "windows",
-                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
-                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite",
-                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
+                link = {"Advapi32#", "mklml"},
+// old hacks for the now obsolete CMake build
+//                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
+//                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+//                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
+//                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
                 preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                            "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
                            "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140"}),
+                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140", "vcomp140"}),
         @Platform(
                 value = "windows-x86",
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
         @Platform(
                 value = "windows-x86_64",
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
         @Platform(
                 value = "windows-x86_64",
                 extension = "-gpu",
-                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
-                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite",
-                        "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
-                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
+                link = {"Advapi32#", "mklml", "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti"},
+// old hacks for the now obsolete CMake build
+//                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
+//                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+//                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
+//                        "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
+//                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
                 includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
                 linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/",
                                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/extras/CUPTI/libx64/"}),
@@ -231,6 +238,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -398,7 +406,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("__ANDROID__").define(android))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
-               .put(new Info("TENSORFLOW_USE_SYCL").define(false))
+               .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
@@ -533,12 +541,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::DataTypeSlice").cast().pointerTypes("DataTypeVector"))
                .put(new Info("tensorflow::NumberTypes", "tensorflow::QuantizedTypes", "tensorflow::RealAndQuantizedTypes").skip())
 
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>").pointerTypes("MutableTensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>::operator *()").skip())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>").pointerTypes("TensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::operator *()").skip())
-
-               .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
+               .put(new Info("tensorflow::OpArgIterator", "tensorflow::OpInputList::Iterator",
+                             "tensorflow::OpMutableInputList::Iterator", "tensorflow::OpOutputList::Iterator").skip())
+               .put(new Info("tensorflow::Tensor").base("AbstractTensor").pointerTypes("Tensor"))
                .put(new Info("tensorflow::TensorBuffer").virtualize())
                .put(new Info("tensorflow::Tensor(tensorflow::DataType, tensorflow::TensorShape&, tensorflow::TensorBuffer*)").javaText(
                        "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }\n"

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -121,6 +121,9 @@
             <phase>package</phase>
             <configuration>
               <excludes>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
                 <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*omp*</exclude>
               </excludes>

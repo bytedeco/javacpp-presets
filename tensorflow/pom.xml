@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.11.0</tensorflow.version>
+    <tensorflow.version>1.12.0-rc1</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
   </properties>
 
@@ -95,6 +95,7 @@
             <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_absl/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/zlib_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/nsync/public/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
@@ -109,6 +110,7 @@
           </includePaths>
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
+             <linkPath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/mkl_windows/lib/</linkPath>
              <linkPath>${tensorflow.path}/../build/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/base/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/types/Release/</linkPath>
@@ -128,6 +130,8 @@
              <linkPath>${tensorflow.path}/../build/re2/src/re2/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
+             <linkPath>${tensorflow.path}/../build/mkl/src/mkl/lib/</linkPath>
+             <linkPath>${tensorflow.path}/../build/mkldnn/src/mkldnn/src/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
           </linkPaths>
@@ -146,6 +150,19 @@
                 <include>org/bytedeco/javacpp/helper/*</include>
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>${javacpp.platform}${javacpp.platform.extension}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>
@@ -178,6 +195,8 @@
               <compilerOptions>
                 <compilerOption>/DCOMPILER_MSVC</compilerOption>
                 <compilerOption>/DTF_COMPILE_LIBRARY</compilerOption>
+                <compilerOption>@${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/objs.dos</compilerOption>
+<!-- old hacks for the now obsolete CMake build
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/exception_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/graph_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/operation_builder_jni.cc</compilerOption>
@@ -189,6 +208,7 @@
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/utils_jni.cc</compilerOption>
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
+-->
               </compilerOptions>
             </configuration>
           </plugin>

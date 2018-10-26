@@ -23,7 +23,7 @@ export PATH=$NEWPATH
 set -vx
 
 export PROJ=$1
-cd $APPVEYOR_BUILD_FOLDER
+export APPVEYOR_BUILD_FOLDER=`pwd`
 
 echo Building $PROJ
 echo Platform: $OS
@@ -126,6 +126,13 @@ if [ "$PROJ" == "tensorflow" ]; then
        /c/Python27/python -m pip install numpy
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
+
+       echo "adding bazel for tensorflow"
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       if [ "$CURL_STATUS" != "0" ]; then
+         echo "Download failed here, so can't proceed with the build.. Failing.."
+         exit 1
+       fi
 fi
 
 # copy Python 3.6 back to default installation directory
@@ -139,10 +146,13 @@ curl -L -o mingw-w64-i686-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/
 curl -L -o mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-fortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
-curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
+curl -L -o mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/i686/mingw-w64-i686-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-ada-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-objc-7.3.0-2-any.pkg.tar.xz
@@ -150,17 +160,30 @@ curl -L -o mingw-w64-x86_64-gcc-libs-7.3.0-2-any.pkg.tar.xz http://repo.msys2.or
 curl -L -o mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-fortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-gcc-libgfortran-7.3.0-2-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-binutils-2.31.1-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5176.1fd1a585-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
-curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5174.9726fb77-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-crt-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-tools-git-6.0.0.5111.3bc5ab74-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-headers-git-6.0.0.5136.897300fe-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libmangle-git-6.0.0.5079.3b7a42fd-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winstorecompat-git-5.0.0.4760.d3089b5-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
+curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 
-DOWNLOAD_FILE="$PROJ-cppbuild.zip"
-DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
-if curl -fsSL -G -v -o "$DOWNLOAD_FILE" "$DOWNLOAD_ADDRESS" --data-urlencode "all=true" --data-urlencode "job=Environment: PROJ=$PROJ, OS=$OS, EXT=$EXT, PARTIAL_CPPBUILD=1"; then
-    unzip -o $DOWNLOAD_FILE -d $APPVEYOR_BUILD_FOLDER
-fi
+# get rid of some stuff we don't use to avoid running out of disk space
+rm -Rf /c/go*
+rm -Rf /c/qt*
+rm -Rf /c/ruby*
+rm -Rf /c/cygwin*
+rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
+
+# try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
+#DOWNLOAD_FILE="$PROJ-cppbuild.zip"
+#DOWNLOAD_ADDRESS="https://ci.appveyor.com/api/projects/bytedeco/javacpp-presets/artifacts/$DOWNLOAD_FILE"
+#if curl -fsSL -G -v -o "$DOWNLOAD_FILE" "$DOWNLOAD_ADDRESS" --data-urlencode "all=true" --data-urlencode "job=Environment: PROJ=$PROJ, OS=$OS, EXT=$EXT, PARTIAL_CPPBUILD=1"; then
+#    unzip -o $DOWNLOAD_FILE -d $APPVEYOR_BUILD_FOLDER
+#fi
+
+du -csh $HOME/* $HOME/.cache/* $HOME/.ccache/* /c/Users/appveyor/* /c/Users/appveyor/.m2/* /c/Users/downloads/*
 
 echo Finished setting up env in setup.sh
 

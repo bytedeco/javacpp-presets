@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.0.0-beta.4
+TESSERACT_VERSION=4.0.0-rc3
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -22,7 +22,7 @@ fi
 # sedinplace '/tiff/d' src/api/Makefile.am
 # sedinplace '/strcmp(locale, "C")/d' src/api/baseapi.cpp
 # bash autogen.sh
-patch -Np1 < ../../../tesseract-configure.patch
+patch -Np1 < ../../../tesseract-configure.patch || true
 chmod 755 configure config/install-sh
 export AUTOCONF=:
 export AUTOHEADER=:
@@ -118,7 +118,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-ppc64le)
-        #patch -Np1 < ../../../tesseract-linux.patch
+        patch -Np1 < ../../../tesseract-openmp.patch
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"

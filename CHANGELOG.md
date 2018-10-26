@@ -1,4 +1,14 @@
 
+ * Add builds for `linux-mips64el` to presets for ARToolKitPlus, Chilitags, flandmark, OpenBLAS, and FFTW ([pull #637](https://github.com/bytedeco/javacpp-presets/pull/637))
+ * Update sample code for GSL with a more complex example ([issue #636](https://github.com/bytedeco/javacpp-presets/issues/636))
+ * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
+ * Upgrade presets for HDF5 1.10.4, Tesseract 4.0.0-rc3, TensorFlow 1.12.0-rc1, and their dependencies
+
+### October 15, 2018 version 1.4.3
+ * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`
+ * Add build for `linux-mips64el` to presets for OpenCV ([pull #621](https://github.com/bytedeco/javacpp-presets/pull/621))
+ * Remove calls to deprecated functions from sample code for FFmpeg ([pull #323](https://github.com/bytedeco/javacpp-presets/pull/323))
+ * Call `Pointer.setNull()` in custom deallocators for the C API of TensorFlow to prevent double free from occurring
  * Add profiles to parent `pom.xml` that allow multiple platforms: `mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ...`
  * Add support for Windows to presets for LiquidFun ([pull #536](https://github.com/bytedeco/javacpp-presets/pull/536)) and MXNet ([pull #309](https://github.com/bytedeco/javacpp-presets/pull/309))
  * Add CUDA-enabled build for MXNet via `-gpu` extension ([pull #609](https://github.com/bytedeco/javacpp-presets/pull/609))
@@ -17,7 +27,7 @@
  * Define `std::vector<tensorflow::OpDef>` type to `OpDefVector` for TensorFlow
  * Link HDF5 with zlib on Windows also ([issue deeplearning4j/deeplearning4j#6017](https://github.com/deeplearning4j/deeplearning4j/issues/6017))
  * Enable MKL-DNN for MXNet and TensorFlow
- * Upgrade presets for OpenCV 3.4.3, FFmpeg 4.0.2, HDF5 1.10.3, MKL 2019.0, MKL-DNN 0.16, OpenBLAS 0.3.3, ARPACK-NG 3.6.3, LLVM 7.0.0, Tesseract 4.0.0-beta.4, CUDA 10.0, cuDNN 7.3, MXNet 1.3.0, TensorFlow 1.11.0, TensorRT 5.0, and their dependencies
+ * Upgrade presets for OpenCV 3.4.3, FFmpeg 4.0.2, HDF5 1.10.3, MKL 2019.0, MKL-DNN 0.16, OpenBLAS 0.3.3, ARPACK-NG 3.6.3, LLVM 7.0.0, Tesseract 4.0.0-rc2, CUDA 10.0, cuDNN 7.3, MXNet 1.3.0, TensorFlow 1.11.0, TensorRT 5.0, and their dependencies
  * Fix loading issue with `opencv_cudaobjdetect` and `opencv_cudaoptflow` on Windows ([issue #592](https://github.com/bytedeco/javacpp-presets/issues/592))
 
 ### July 17, 2018 version 1.4.2

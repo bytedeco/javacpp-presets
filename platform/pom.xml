@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -122,7 +122,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.3-${project.version}</version>
+      <version>1.10.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -182,7 +182,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>4.0.0-beta.4-${project.version}</version>
+      <version>4.0.0-rc3-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -202,7 +202,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.11.0-${project.version}</version>
+      <version>1.12.0-rc1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
