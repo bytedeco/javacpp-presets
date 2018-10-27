@@ -52,6 +52,7 @@ import java.lang.annotation.Target;
         "onnx/proto_utils.h",
 //        "onnx/string_utils.h",
         "onnx/checker.h",
+//	"onnx/shape_inference/implementation.h",
         "onnx/onnxifi.h",
         "onnx/common/tensor.h",
         "onnx/common/array_ref.h",
@@ -87,13 +88,14 @@ public class onnx implements InfoMapper {
                              "graph_node_list_iterator", "reverse_iterator", "std::vector<onnx::Tensor>::const_iterator",
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard").skip())
+	       //.put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
                .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>").skip())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
-               .put(new Info("onnx::optimization::Optimizer", "onnx::optimization::OptimizePass").purify(false).virtualize())
+               .put(new Info("onnx::optimization::OptimizePass").purify())
                .put(new Info("onnx::version_conversion::BaseVersionConverter::registerAdapter").skip())
-               .put(new Info("onnx::Node::Value", "onnx::Graph::Value", "onnx::AttributeValue", "onnx::Value").skip())
+//               .put(new Info("onnx::Node::Value", "onnx::Graph::Value", "onnx::AttributeValue", "onnx::Value").skip())
                .put(new Info("std::iterator_traits<onnx::generic_graph_node_list_iterator<T> >").skip())
                .put(new Info("onnx::ArrayRef<onnx::Node::Value*>", "onnx::ArrayRef<onnx::Graph::Value*>", "std::vector<onnx::Node::Value*>").skip())
 //               .put(new Info("std::vector<onnx::Tensor>").pointerTypes("VectorTensor").define())
@@ -125,6 +127,9 @@ public class onnx implements InfoMapper {
                .put(new Info("std::pair<int,int>", "std::pair<onnx::OpSchema::UseType,int>").pointerTypes("UseTypeIntPair").define())
                .put(new Info("const std::map<std::string,onnx::OpSchema::Attribute>").pointerTypes("StringAttributeMap").define())
                .put(new Info("std::unordered_map<std::string,int>").pointerTypes("StringIntMap").define())
+	       .put(new Info("std::unordered_map<std::string,const onnx::TypeProto*>", "std::unordered_map<std::string,onnx::TypeProto*>").pointerTypes("StringTypeProtoMap").define())
+	       .put(new Info("std::unordered_map<std::string,const onnx::TensorProto*>", "std::unordered_map<std::string,onnx::TensorProto*>").pointerTypes("StringTensorProtoMap").define())
+	       .put(new Info("std::unordered_map<std::string,const onnx::AttributeProto*>", "std::unordered_map<std::string,onnx::AttributeProto*>").pointerTypes("StringAttributeProtoMap").define())
                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("StringIntIntPairMap").define())
                .put(new Info("std::unordered_map<int,int>").pointerTypes("IntIntMap").define())
                .put(new Info("std::unordered_set<onnx::DataType>").pointerTypes("DataTypeSet").define())

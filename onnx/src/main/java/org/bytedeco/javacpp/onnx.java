@@ -604,6 +604,87 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::unordered_map<std::string,const onnx::TypeProto*>") public static class StringTypeProtoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringTypeProtoMap(Pointer p) { super(p); }
+    public StringTypeProtoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringTypeProtoMap put(@ByRef StringTypeProtoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @Const TypeProto get(@StdString BytePointer i);
+    public native StringTypeProtoMap put(@StdString BytePointer i, TypeProto value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Const TypeProto second();
+    }
+}
+
+@Name("std::unordered_map<std::string,const onnx::TensorProto*>") public static class StringTensorProtoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringTensorProtoMap(Pointer p) { super(p); }
+    public StringTensorProtoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringTensorProtoMap put(@ByRef StringTensorProtoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @Const TensorProto get(@StdString BytePointer i);
+    public native StringTensorProtoMap put(@StdString BytePointer i, TensorProto value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Const TensorProto second();
+    }
+}
+
+@Name("std::unordered_map<std::string,const onnx::AttributeProto*>") public static class StringAttributeProtoMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringAttributeProtoMap(Pointer p) { super(p); }
+    public StringAttributeProtoMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringAttributeProtoMap put(@ByRef StringAttributeProtoMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @Const AttributeProto get(@StdString BytePointer i);
+    public native StringAttributeProtoMap put(@StdString BytePointer i, AttributeProto value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Const AttributeProto second();
+    }
+}
+
 @Name("std::unordered_map<std::string,std::pair<int,int> >") public static class StringIntIntPairMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -11008,6 +11089,16 @@ public static final int
 
 
 
+@Namespace("onnx") public static class AttributeValue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AttributeValue(Pointer p) { super(p); }
+
+  public native @Cast("onnx::AttributeKind") int kind();
+  public native @UniquePtr AttributeValue clone();
+}
+
+
 // CRTP so that Node which inherits Attributes can be return for
 // method chaining e.g:
 // Node * n = g->create(kSelect)->set_i(kOffset,3)->set_f(kValue,3.5);
@@ -11034,6 +11125,49 @@ public static final int
 
 // the list types are intentionally simple, but we type-def
 // them here so if we need to change them, refactoring will be easier
+
+
+@Namespace("onnx") @NoOffset public static class Value extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Value(Pointer p) { super(p); }
+
+  
+  
+  public Value(Node node_, @Cast("size_t") long offset_) { super((Pointer)null); allocate(node_, offset_); }
+  private native void allocate(Node node_, @Cast("size_t") long offset_);
+  public native Value setElemType(@Cast("onnx::TensorProto_DataType") int elem_type);
+  public native @Cast("onnx::TensorProto_DataType") int elemType();
+  public native @Cast("bool") boolean has_sizes();
+  public native Value setSizes(@StdVector DimensionIR sizes);
+  public native @StdVector DimensionIR sizes();
+  public native @Cast("size_t") long unique();
+  public native @Cast("bool") boolean has_unique_name();
+  public native @StdString BytePointer uniqueName();
+  public native Value setUniqueName(@StdString BytePointer name);
+  public native Value setUniqueName(@StdString String name);
+  public native Value setStage(@Cast("size_t") long s);
+  public native @Cast("size_t") long stage();
+  public native Node node();
+  public native @Cast("size_t") long offset();
+  public native Graph owningGraph();
+  // TODO: make this more const correct
+  public native @StdVector Use uses();
+
+  // Replaces all uses of this node with 'newValue'.
+  //
+  // Given:   %3 = f(%1, %2)
+  //          %4 = g(%3)
+  //          %5 = h(%3, %3)
+  // Execute: %3.replaceAllUsesWith(%6)
+  // Result:  %3 = f(%1, %2)
+  //          %4 = g(%6)
+  //          %5 = h(%6, %6)
+  public native void replaceAllUsesWith(Value newValue);
+
+  public native Value copyMetadata(Value from);
+
+}
 
 // A class with the same properties as OperatorSetIdProto, but without protobuf
 // overhead, resulting in a simpler and more readable workflow.
@@ -11105,10 +11239,14 @@ public static final int
   // because graph_node_list is non-owning, so it doesn't matter
   // if it immediately dies after the invocation.
   public native Node return_node();
+
+  public native Value addInput();
   public native void eraseInput(@Cast("size_t") long i);
   public native void advanceStage();
   public native void setStage(@Cast("size_t") long new_stage);
   public native @Cast("size_t") long stage();
+
+  public native @Cast("size_t") long registerOutput(Value n);
 
   public native Node appendNode(Node n);
 
@@ -11116,10 +11254,15 @@ public static final int
 
   //Adds to graph initializer list, initializer names list, and as a graph input
   //Also syncs the initializer name, tensor name, and value name
+  public native Value addInitializerAndInput(@Const @ByRef Tensor initializer, @StdString BytePointer name);
+  public native Value addInitializerAndInput(@Const @ByRef Tensor initializer, @StdString String name);
+
+  public native Value addInitializerAndInput(@Const @ByRef Tensor initializer);
 
 
   //Erases from graph initializer list, initializer names list, and as a graph input
   //Must have no uses
+  public native void eraseInitializerAndInput(Value v);
 
   
 
@@ -11363,14 +11506,9 @@ public static final int
   public native @StdString BytePointer name(); public native OptimizePass name(BytePointer name);
   public native @Cast("onnx::optimization::API_TYPE") int type(); public native OptimizePass type(int type);
 
-  public OptimizePass(@StdString BytePointer name, @Cast("onnx::optimization::API_TYPE") int type) { super((Pointer)null); allocate(name, type); }
-  private native void allocate(@StdString BytePointer name, @Cast("onnx::optimization::API_TYPE") int type);
-  public OptimizePass(@StdString String name, @Cast("onnx::optimization::API_TYPE") int type) { super((Pointer)null); allocate(name, type); }
-  private native void allocate(@StdString String name, @Cast("onnx::optimization::API_TYPE") int type);
+  public native void optimize(@ByRef ModelProto arg0);
 
-  @Virtual public native void optimize(@ByRef ModelProto arg0);
-
-  @Virtual public native void optimize(@ByRef Graph arg0);
+  public native void optimize(@ByRef Graph arg0);
 
 }
 
