@@ -65,6 +65,8 @@ public class LoadModel {
         ModelProto model = new ModelProto();
         ParseProtoFromBytes(model, new BytePointer(bytes), bytes.length);
 
+        check_model(model);
+
         System.out.println(model.graph().input_size());
     }
 }
