@@ -67,8 +67,12 @@ public class LoadModel {
 
         check_model(model);
 
+        InferShapes(model);
+
         StringVector passes = new StringVector("eliminate_nop_transpose", "eliminate_nop_pad", "fuse_consecutive_transposes", "fuse_transpose_into_gemm");
         Optimize(model, passes);
+
+        check_model(model);
 
         ConvertVersion(model, 8);
 

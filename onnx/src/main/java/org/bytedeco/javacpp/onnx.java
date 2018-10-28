@@ -8569,6 +8569,32 @@ public static final int
  // namespace ONNX_NAMESPACE
 
 
+// Parsed from onnx/shape_inference/implementation.h
+
+// #pragma once
+
+// #include "onnx/defs/schema.h"
+// #include "onnx/proto_utils.h"
+// #include "onnx/string_utils.h"
+
+@Namespace("onnx::shape_inference") public static native void checkShapesAndTypes(
+    @Const @ByRef TypeProto_Tensor inferredType,
+    @Const @ByRef TypeProto_Tensor existingType);
+
+@Namespace("onnx::shape_inference") public static native void mergeShapesAndTypes(
+    @Const @ByRef TypeProto_Tensor inferredType,
+    TypeProto_Tensor existingType);
+
+@Namespace("onnx::shape_inference") public static native void InferShapes(
+    @ByRef ModelProto m,
+    @Const ISchemaRegistry schema_registry/*=onnx::OpSchemaRegistry::Instance()*/);
+@Namespace("onnx::shape_inference") public static native void InferShapes(
+    @ByRef ModelProto m);
+
+ // namespace shape_inference
+ // namespace ONNX_NAMESPACE
+
+
 // Parsed from onnx/onnxifi.h
 
 // #ifndef ONNXIFI_H
