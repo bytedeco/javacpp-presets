@@ -70,6 +70,8 @@ public class LoadModel {
         StringVector passes = new StringVector("eliminate_nop_transpose", "eliminate_nop_pad", "fuse_consecutive_transposes", "fuse_transpose_into_gemm");
         Optimize(model, passes);
 
+        ConvertVersion(model, 8);
+
         System.out.println(model.graph().input_size());
     }
 }
