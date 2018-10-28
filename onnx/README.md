@@ -67,6 +67,9 @@ public class LoadModel {
 
         check_model(model);
 
+        StringVector passes = new StringVector("eliminate_nop_transpose", "eliminate_nop_pad", "fuse_consecutive_transposes", "fuse_transpose_into_gemm");
+        Optimize(model, passes);
+
         System.out.println(model.graph().input_size());
     }
 }
