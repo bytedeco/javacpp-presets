@@ -1,3 +1,15 @@
+diff -ruN tensorflow-1.8.0/tensorflow/BUILD tensorflow-1.8.0-java/tensorflow/BUILD
+--- tensorflow-1.8.0/tensorflow/BUILD  2018-04-28 01:36:49.000000000 +0900
++++ tensorflow-1.8.0-java/tensorflow/BUILD     2018-09-06 16:24:21.762107604 +0900
+@@ -2,7 +2,7 @@
+ # TensorFlow is a computational framework, primarily for use in machine
+ # learning applications.
+ 
+-package(default_visibility = [":internal"])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
 diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-java/tensorflow/BUILD
 --- tensorflow-1.12.0-rc0/tensorflow/BUILD	2018-10-09 03:36:57.000000000 +0900
 +++ tensorflow-1.12.0-rc0-java/tensorflow/BUILD	2018-10-20 19:19:05.999338515 +0900
@@ -64,6 +76,29 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/c/BUILD tensorflow-1.12.0-rc0-java/te
      deps = [
          ":c_api",
          ":c_api_internal",
+diff -ruN tensorflow-1.8.0/tensorflow/core/BUILD tensorflow-1.8.0-java/tensorflow/core/BUILD
+--- tensorflow-1.8.0/tensorflow/core/BUILD     2018-04-28 01:36:49.000000000 +0900
++++ tensorflow-1.8.0-java/tensorflow/core/BUILD        2018-09-06 16:24:59.417135685 +0900
+@@ -63,10 +63,7 @@
+ # //tensorflow/tensorflow.bzl) will include the necessary symbols in binary
+ # build targets.
+ 
+-package(default_visibility = [
+-    "//tensorflow:internal",
+-    "//tensorflow_models:__subpackages__",
+-])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
+@@ -2549,6 +2546,7 @@
+ 
+ tf_cuda_library(
+     name = "framework_internal_impl",
++    visibility = ["//visibility:public"],
+     srcs = FRAMEWORK_INTERNAL_PRIVATE_HEADERS + glob(
+         [
+             "example/**/*.cc",
 diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.12.0-rc0-java/tensorflow/core/framework/tensor.h
 --- tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h	2018-10-09 03:36:57.000000000 +0900
 +++ tensorflow-1.12.0-rc0-java/tensorflow/core/framework/tensor.h	2018-10-20 19:18:26.884365406 +0900
