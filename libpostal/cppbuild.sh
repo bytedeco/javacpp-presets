@@ -13,7 +13,9 @@ download https://github.com/openvenues/libpostal/archive/v$LIBPOSTAL_VERSION.tar
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=$(pwd)
-tar -xzvf ../libpostal-$LIBPOSTAL_VERSION.tar.gz
+
+echo "Decompressing archives..."
+tar --totals -xf ../libpostal-$LIBPOSTAL_VERSION.tar.gz
 cd libpostal-*
 
 case $PLATFORM in
@@ -21,7 +23,7 @@ case $PLATFORM in
         ./bootstrap.sh
         ./configure --prefix=$INSTALL_PATH --disable-data-download
         #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         ;;
     macosx-*)
@@ -29,7 +31,7 @@ case $PLATFORM in
         sed -i="" 's/-install_name \\$rpath/-install_name @rpath/g' configure
         ./configure --prefix=$INSTALL_PATH --disable-data-download
         #./configure --prefix=$INSTALL_PATH --datadir=[...some dir with a few GB of space...]
-        make -j $MAKEJ
+        make -j $MAKEJ V=0
         make install
         ;;
     windows-x86_64)
@@ -39,7 +41,7 @@ case $PLATFORM in
         bash -lc "cd $SOURCE_PATH && ./bootstrap.sh"
         bash -lc "cd $SOURCE_PATH && ./configure --prefix=$INSTALL_PATH --disable-data-download"
         #bash -lc "cd $SOURCE_PATH && ./configure --prefix=$INSTALL_PATH --datadir=/c/[...some dir with a few GB of space...]"
-        bash -lc "cd $SOURCE_PATH && make -j $MAKEJ"
+        bash -lc "cd $SOURCE_PATH && make -j $MAKEJ V=0"
         bash -lc "cd $SOURCE_PATH && make install"
         ;;
     *)

@@ -1,7 +1,7 @@
 JavaCPP Presets
 ===============
 
-[![Join the chat at https://gitter.im/bytedeco/javacpp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bytedeco/javacpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/) [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
+[![Join the chat at https://gitter.im/bytedeco/javacpp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bytedeco/javacpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/) <sup>Android, iOS, Linux, Mac OS X:</sup> [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) <sup>Windows:</sup> [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
 
 
 Introduction
@@ -24,27 +24,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.4.2</version>
+    <version>${moduleVersion}-1.4.3</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.4.2'
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.4.3'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco.javacpp-presets/" moduleName "-platform")) ~(str moduleVersion "-1.4.2")]
+    [~(symbol (str "org.bytedeco.javacpp-presets/" moduleName "-platform")) ~(str moduleVersion "-1.4.3")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.2"
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.3"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
@@ -102,13 +102,14 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.4.2  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.4.3  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 3.4.2  https://opencv.org/releases.html
+ * OpenCV 3.4.3  https://opencv.org/releases.html
  * FFmpeg 4.0.x  http://ffmpeg.org/download.html
  * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
+ * Spinnaker 1.15.x https://www.ptgrey.com/spinnaker-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
@@ -117,26 +118,27 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
- * HDF5 1.10.3  https://support.hdfgroup.org/HDF5/
- * MKL 2018.3  https://software.intel.com/intel-mkl
+ * HDF5 1.10.4  https://support.hdfgroup.org/HDF5/
+ * MKL 2019.0  https://software.intel.com/intel-mkl
  * MKL-DNN 0.16  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.0  http://www.openblas.net/
- * ARPACK-NG 3.6.2  https://github.com/opencollab/arpack-ng
+ * OpenBLAS 0.3.3  http://www.openblas.net/
+ * ARPACK-NG 3.6.3  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
- * LLVM 6.0.1  http://llvm.org/releases/download.html
+ * CPython 3.6.x  https://www.python.org/downloads/
+ * LLVM 7.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.76.0  http://www.leptonica.org/download.html
- * Tesseract 4.0.0-beta.4  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.0.0-rc3  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 9.2  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 7.2  https://developer.nvidia.com/cudnn
- * MXNet 1.2.1  https://github.com/dmlc/mxnet
- * TensorFlow 1.10.1  https://github.com/tensorflow/tensorflow
- * TensorRT 4.0  https://developer.nvidia.com/tensorrt
+ * CUDA 10.0  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 7.3  https://developer.nvidia.com/cudnn
+ * MXNet 1.3.0  https://github.com/dmlc/mxnet
+ * TensorFlow 1.12.0-rc2  https://github.com/tensorflow/tensorflow
+ * TensorRT 5.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.2.2  https://github.com/onnx/onnx
+ * ONNX 1.3.0  https://github.com/onnx/onnx
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
  * System APIs of the build environments:
@@ -166,7 +168,7 @@ With the above in working order, the scripts get launched automatically as part 
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le` `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 
@@ -199,6 +201,6 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 
 
 ----
-Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
+Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet&nbsp;at&nbsp;gmail.com)  
 Developer site: https://github.com/bytedeco/javacpp-presets  
 Discussion group: http://groups.google.com/group/javacpp-project

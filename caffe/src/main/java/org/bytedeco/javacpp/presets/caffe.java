@@ -40,8 +40,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_highgui.class, hdf5.class, openblas.class}, target = "org.bytedeco.javacpp.caffe", value = {
-    @Platform(value = {"linux-x86", "macosx"}, define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
-        "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h", "caffe/common.hpp",
+    @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
+        "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/arena.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h", "caffe/common.hpp",
         "google/protobuf/generated_message_table_driven.h", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", /*"caffe/data_reader.hpp",*/ "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
         "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
         "caffe/layers/dummy_data_layer.hpp", "caffe/layers/hdf5_data_layer.hpp", "caffe/layers/hdf5_output_layer.hpp", "caffe/layers/image_data_layer.hpp", "caffe/layers/memory_data_layer.hpp",
@@ -79,10 +79,10 @@ public class caffe implements LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    lib += lib.equals("cudnn") ? "64_7" : "64_100";
                     break;
                 default:
                     continue; // no CUDA
@@ -94,8 +94,8 @@ public class caffe implements LoadEnabled, InfoMapper {
     }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_DEPRECATED",
-                             "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
+        infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE",
+                             "GOOGLE_ATTRIBUTE_DEPRECATED", "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
                .put(new Info("NDEBUG", "CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG", "USE_CUDNN").define())
                .put(new Info("defined(_WIN32) && defined(GetMessage)", "LANG_CXX11").define(false))
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
@@ -110,6 +110,7 @@ public class caffe implements LoadEnabled, InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("LongLongPair").define())
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",

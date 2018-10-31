@@ -29,6 +29,7 @@ import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Adapter;
+import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -59,6 +60,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -106,6 +108,7 @@ import java.util.List;
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
                         "tensorflow/core/framework/node_def.pb.h",
+                        "tensorflow/core/framework/api_def.pb.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
@@ -132,7 +135,6 @@ import java.util.List;
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
                         "tensorflow/c/python_api.h",
-                        "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -149,6 +151,8 @@ import java.util.List;
                         "tensorflow/core/common_runtime/process_function_library_runtime.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
+                        "tensorflow/core/common_runtime/graph_runner.h",
+                        "tensorflow/core/common_runtime/shape_refiner.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/framework/selective_registration.h",
@@ -159,13 +163,14 @@ import java.util.List;
                         "tensorflow/core/graph/gradients.h",
                         "tensorflow/cc/framework/scope.h",
                         "tensorflow/cc/framework/ops.h",
-                        "tensorflow/core/framework/api_def.pb.h",
                         "tensorflow/core/framework/op_gen_lib.h",
                         "tensorflow/cc/framework/cc_op_gen.h",
                         "tensorflow/cc/framework/gradients.h",
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow/cc/saved_model/loader.h",
+                        "tensorflow/cc/saved_model/tag_constants.h",
+                        "tensorflow/cc/saved_model/signature_constants.h",
                         "tensorflow_adapters.h",
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",
@@ -193,32 +198,39 @@ import java.util.List;
                 extension = "-gpu"),
         @Platform(
                 value = "windows",
-                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
-                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
+                link = {"Advapi32#", "mklml"},
+// old hacks for the now obsolete CMake build
+//                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
+//                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+//                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
+//                        "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main", "tf_python_protos_cc", "tf_c_python_api"},
                 preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
                            "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
                            "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140"}),
+                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140", "vcomp140"}),
         @Platform(
                 value = "windows-x86",
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
         @Platform(
                 value = "windows-x86_64",
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                               "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
         @Platform(
                 value = "windows-x86_64",
                 extension = "-gpu",
-                link = {"Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
-                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "libprotobuf", "re2", "snappy", "sqlite",
-                        "cudart", "cudart_static", "cuda", "cublas", "cublas_device", "cudnn",
-                        "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
-                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v9.2/extras/CUPTI/libx64/"}),
+                link = {"Advapi32#", "mklml", "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti"},
+// old hacks for the now obsolete CMake build
+//                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
+//                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
+//                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
+//                        "cudart", "cudart_static", "cuda", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
+//                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/extras/CUPTI/libx64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -226,6 +238,7 @@ import java.util.List;
                 include = {
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
+                        "google/protobuf/unknown_field_set.h",
                         "tensorflow/core/platform/default/integral_types.h",
                         "tensorflow/core/lib/bfloat16/bfloat16.h",
                         "tensorflow/core/framework/numeric_types.h",
@@ -273,6 +286,7 @@ import java.util.List;
                         "tensorflow/core/framework/tensor.h",
                         "tensorflow/core/framework/attr_value.pb.h",
                         "tensorflow/core/framework/node_def.pb.h",
+                        "tensorflow/core/framework/api_def.pb.h",
                         "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/function.pb.h",
                         "tensorflow/core/framework/graph.pb.h",
@@ -298,7 +312,6 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
-                        "tensorflow/core/framework/op_def.pb.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -315,6 +328,8 @@ import java.util.List;
                         "tensorflow/core/common_runtime/process_function_library_runtime.h",
                         "tensorflow/core/graph/graph.h",
                         "tensorflow/core/graph/tensor_id.h",
+                        "tensorflow/core/common_runtime/graph_runner.h",
+                        "tensorflow/core/common_runtime/shape_refiner.h",
                         "tensorflow/core/framework/node_def_builder.h",
                         "tensorflow/core/framework/node_def_util.h",
                         "tensorflow/core/framework/selective_registration.h",
@@ -359,10 +374,10 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.9.2";
+                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : "64_92";
+                    lib += lib.equals("cudnn") ? "64_7" : "64_100";
                     break;
                 default:
                     continue; // no CUDA
@@ -391,7 +406,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
                .put(new Info("__ANDROID__").define(android))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
-               .put(new Info("TENSORFLOW_USE_SYCL").define(false))
+               .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
@@ -526,12 +541,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::DataTypeSlice").cast().pointerTypes("DataTypeVector"))
                .put(new Info("tensorflow::NumberTypes", "tensorflow::QuantizedTypes", "tensorflow::RealAndQuantizedTypes").skip())
 
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>").pointerTypes("MutableTensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpMutableInputList,tensorflow::Tensor*>::operator *()").skip())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>").pointerTypes("TensorOpArgIterator").define())
-               .put(new Info("tensorflow::OpArgIterator<tensorflow::OpOutputList,const tensorflow::Tensor*>::operator *()").skip())
-
-               .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
+               .put(new Info("tensorflow::OpArgIterator", "tensorflow::OpInputList::Iterator",
+                             "tensorflow::OpMutableInputList::Iterator", "tensorflow::OpOutputList::Iterator").skip())
+               .put(new Info("tensorflow::Tensor").base("AbstractTensor").pointerTypes("Tensor"))
                .put(new Info("tensorflow::TensorBuffer").virtualize())
                .put(new Info("tensorflow::Tensor(tensorflow::DataType, tensorflow::TensorShape&, tensorflow::TensorBuffer*)").javaText(
                        "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }\n"
@@ -578,8 +590,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::function<void(std::function<void()>)>").cast().pointerTypes("Pointer"))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
-               .put(new Info("tensorflow::ops::Cast").cppTypes("class tensorflow::ops::Cast").pointerTypes("CastOp"))
-               .put(new Info("tensorflow::ops::Const").cppTypes("class tensorflow::ops::Const").pointerTypes("ConstOp"))
+               .put(new Info("tensorflow::ops::Cast").pointerTypes("CastOp"))
+               .put(new Info("tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>").cast().pointerTypes("StringPieceVector"))
@@ -600,7 +612,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::gtl::FlatMap<TF_Session*,tensorflow::string>").pointerTypes("TF_SessionStringMap").define())
 
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
-               .put(new Info("tensorflow::CompositeOpScopes").skip())
+               .put(new Info("tensorflow::CompositeOpScopes", "tensorflow::ExtendedInferenceContext").skip())
 
                 // Fixed shape inference
                .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
@@ -639,6 +651,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
                .put(new Info("std::function<void(int64,int64,int)>").pointerTypes("ParallelForFn"))
                .put(new Info("std::function<tensorflow::FileSystem*()>").pointerTypes("FactoryFn"))
+               .put(new Info("std::function<bool(const KernelDef&)>").pointerTypes("KernelDefPredicateFn"))
                .put(new Info("tensorflow::OpRegistrationData::shape_inference_fn")
                        .javaText("@MemberSetter public native OpRegistrationData shape_inference_fn(@ByVal ShapeInferenceFn shape_inference_fn);"))
                .put(new Info("tensorflow::shape_inference::InferenceContext::Run")
@@ -793,6 +806,15 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         protected FactoryFn() { allocate(); }
         private native void allocate();
         public native @Cast("tensorflow::FileSystem*") Pointer call();
+    }
+
+    public static class KernelDefPredicateFn extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    KernelDefPredicateFn(Pointer p) { super(p); }
+        protected KernelDefPredicateFn() { allocate(); }
+        private native void allocate();
+        public native @Cast("bool") boolean call(@ByRef @Cast("const tensorflow::KernelDef*") Pointer kernelDef);
     }
 
     public static class ShapeInferenceFn extends FunctionPointer {

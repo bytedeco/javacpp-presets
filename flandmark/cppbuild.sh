@@ -85,6 +85,12 @@ case $PLATFORM in
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
+    linux-mips64el)
+        CC="$OLDCC -mabi=64" CXX="$OLDCXX -mabi=64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        make -j4 flandmark_static
+        cp libflandmark/*.h ../include
+        cp libflandmark/*.a ../lib
+        ;;
     macosx-*)
         CXX="g++ -fpermissive" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
         make -j4 flandmark_static

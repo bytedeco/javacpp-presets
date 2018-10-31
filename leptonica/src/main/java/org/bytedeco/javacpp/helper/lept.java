@@ -70,7 +70,7 @@ public class lept extends org.bytedeco.javacpp.presets.lept {
             boolean header = false;
             DestroyDeallocator(PIX p) { this(p, false); }
             DestroyDeallocator(PIX p, boolean header) { super(p); this.header = header; }
-            @Override public void deallocate() { if (header) this.data(null); pixDestroy(this); }
+            @Override public void deallocate() { if (isNull()) return; if (header) this.data(null); pixDestroy(this); setNull(); }
         }
 
         public AbstractPIX(Pointer p) { super(p); }
@@ -185,7 +185,7 @@ public class lept extends org.bytedeco.javacpp.presets.lept {
     public static abstract class AbstractFPIX extends Pointer implements Indexable {
         protected static class DestroyDeallocator extends FPIX implements Pointer.Deallocator {
             DestroyDeallocator(FPIX p) { super(p); }
-            @Override public void deallocate() { fpixDestroy(this); }
+            @Override public void deallocate() { if (isNull()) return; fpixDestroy(this); setNull(); }
         }
 
         public AbstractFPIX(Pointer p) { super(p); }
@@ -264,7 +264,7 @@ public class lept extends org.bytedeco.javacpp.presets.lept {
     public static abstract class AbstractDPIX extends Pointer implements Indexable {
         protected static class DestroyDeallocator extends DPIX implements Pointer.Deallocator {
             DestroyDeallocator(DPIX p) { super(p); }
-            @Override public void deallocate() { dpixDestroy(this); }
+            @Override public void deallocate() { if (isNull()) return; dpixDestroy(this); setNull(); }
         }
 
         public AbstractDPIX(Pointer p) { super(p); }

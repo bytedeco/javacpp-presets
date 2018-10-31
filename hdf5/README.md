@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * HDF5 1.10.3  https://support.hdfgroup.org/HDF5/
+ * HDF5 1.10.4  https://support.hdfgroup.org/HDF5/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.10.3-1.4.2</version>
+            <version>1.10.4-1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -112,7 +112,7 @@ public class H5tutrCmprss {
 
             // Create the dataset.
             DataSet dataset = new DataSet(file.createDataSet(DATASET_NAME,
-                                    new DataType(PredType.STD_I32BE()), dataspace, plist));
+                                    new DataType(PredType.STD_I32BE()), dataspace, plist, null, null));
 
             for (int i = 0; i <  DIM0; i++)
                 for (int j = 0; j < DIM1; j++)

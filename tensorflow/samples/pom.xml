@@ -5,7 +5,7 @@
 
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>tensorflow-samples</artifactId>
-    <version>1.10.1-1.4.3-SNAPSHOT</version>
+    <version>1.11.0-1.4.3</version>
     <name>JavaCPP Presets Samples for TensorFlow</name>
 
     <properties>

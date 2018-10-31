@@ -13,9 +13,9 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-export ONNX=1.2.2
-export PROTO=3.5.1
-export PYBIND=2.2.3
+export ONNX=1.3.0
+export PROTO=3.6.1
+export PYBIND=2.2.4
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
@@ -48,12 +48,15 @@ ln -sf $INSTALL_PATH/pybind11-$PYBIND third_party/pybind11
 export ONNX_ML=1
 export CMAKE_BUILD_DIR=.setuptools-cmake-build/
 export CMAKE_ARGS=-DBUILD_SHARED_LIBS=ON
-python3 setup.py build
+python3 setup.py --quiet build
 
-mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs
+mkdir -p ../include/onnx ../include/onnx/common ../include/onnx/defs ../include/onnx/optimizer/ ../include/onnx/version_converter
+
 cp onnx/*.h ../include/onnx/
 cp onnx/common/*.h ../include/onnx/common/
 cp onnx/defs/*.h ../include/onnx/defs/
+cp onnx/optimizer/*.h ../include/onnx/optimizer/
+cp onnx/version_converter/*.h ../include/onnx/version_converter/
 cp $CMAKE_BUILD_DIR/onnx/*.h ../include/onnx/
 cp $CMAKE_BUILD_DIR/*.so ../lib
 

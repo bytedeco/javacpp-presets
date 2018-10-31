@@ -46,19 +46,31 @@ import java.lang.annotation.Target;
         "onnx/defs/shape_inference.h",
         "onnx/onnx-operators-ml.pb.h",
         "onnx/onnx-ml.pb.h",
+        "google/protobuf/arena.h",
         "google/protobuf/message_lite.h",
         "google/protobuf/unknown_field_set.h",
         "onnx/proto_utils.h",
 //        "onnx/string_utils.h",
         "onnx/checker.h",
+        "onnx/onnxifi.h",
+        "onnx/common/tensor.h",
+        "onnx/common/array_ref.h",
+//        "onnx/common/graph_node_list.h",
+//        "onnx/common/interned_strings.h",
+//        "onnx/common/ir.h",
+//        "onnx/version_converter/BaseConverter.h",
+//        "onnx/version_converter/convert.h",
+//        "onnx/optimizer/optimize.h",
     },
-    link = {"onnx_proto", "onnx"}))
+    link = {"onnx_proto", "onnx", "onnxifi"}))
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
-               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL").cppTypes().annotations())
+               .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE",
+                             "ONNX_UNUSED", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC").cppTypes().annotations())
                .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
                              "onnx::OpSchema::UseType").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("onnx::OpSchema::SinceVersion").annotations("@Function"))
                .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::TensorShapeProto_Dimension", "onnx::TensorShapeProto::Dimension", "TensorShapeProto_Dimension").pointerTypes("Dimension"))
                .put(new Info("std::vector<float>").pointerTypes("FloatVector").define())
@@ -73,6 +85,7 @@ public class onnx implements InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("LongLongPair").define())
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
 
                .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
@@ -102,6 +115,8 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<onnx::OpSchema>").pointerTypes("OpSchemaVector").define())
                .put(new Info("std::vector<onnx::OpSchema::FormalParameter>").pointerTypes("FormalParameterVector").define())
                .put(new Info("const std::vector<onnx::OpSchema::TypeConstraintParam>").pointerTypes("TypeConstraintParamVector").define())
+               .put(new Info("onnx::TensorShapeProto").pointerTypes("TensorShapeProto"))
+               .put(new Info("std::vector<const onnx::TensorShapeProto*>").pointerTypes("TensorShapeProtoVector").define())
 
                .put(new Info("onnx::OpSchema::GetTypeAndShapeInferenceFunction", "onnx::RegisterSchema", "onnx::ReplaceAll").skip())
 

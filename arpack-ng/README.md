@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARPACK-NG 3.6.2  https://scilab.io/arpack-ng/
+ * ARPACK-NG 3.6.3  https://scilab.io/arpack-ng/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of ARPACK-NG ported to Java from this C source file:
 
- * https://github.com/opencollab/arpack-ng/blob/3.6.2/TESTS/icb_arpack_c.c
+ * https://github.com/opencollab/arpack-ng/blob/3.6.3/TESTS/icb_arpack_c.c
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/IcbArpackC.java` source files below, simply execute on the command line:
 ```bash
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.arpack</groupId>
     <artifactId>icbarpackc</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.3</version>
     <properties>
         <exec.mainClass>IcbArpackC</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>3.6.2-1.4.3-SNAPSHOT</version>
+            <version>3.6.3-1.4.3</version>
         </dependency>
     </dependencies>
 </project>

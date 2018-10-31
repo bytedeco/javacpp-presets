@@ -3,7 +3,8 @@ version: '{build}'
 os: Visual Studio 2015
 
 cache:
-  - C:\Downloads 
+  - C:\Users\appveyor\.m2 -> .appveyor.yml
+  - C:\Downloads -> .appveyor.yml
 
 environment:
   matrix:
@@ -12,6 +13,8 @@ environment:
     - PROJ: "ffmpeg"
       OS: windows-x86
     - PROJ: "flycapture"
+      OS: windows-x86
+    - PROJ: "spinnaker"
       OS: windows-x86
     - PROJ: "libdc1394"
       OS: windows-x86
@@ -47,6 +50,8 @@ environment:
       OS: windows-x86
     - PROJ: "ale"
       OS: windows-x86
+    - PROJ: "liquidfun"
+      OS: windows-x86
     - PROJ: "systems"
       OS: windows-x86
 
@@ -55,6 +60,8 @@ environment:
     - PROJ: "ffmpeg"
       OS: windows-x86_64
     - PROJ: "flycapture"
+      OS: windows-x86_64
+    - PROJ: "spinnaker"
       OS: windows-x86_64
     - PROJ: "libdc1394"
       OS: windows-x86_64
@@ -86,6 +93,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "gsl"
       OS: windows-x86_64
+    - PROJ: "cpython"
+      OS: windows-x86_64
     - PROJ: "llvm"
       OS: windows-x86_64
     - PROJ: "libpostal"
@@ -96,9 +105,13 @@ environment:
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64
+    - PROJ: "mxnet"
+      OS: windows-x86_64
     - PROJ: "tensorflow"
       OS: windows-x86_64
     - PROJ: "ale"
+      OS: windows-x86_64
+    - PROJ: "liquidfun"
       OS: windows-x86_64
     - PROJ: "systems"
       OS: windows-x86_64
@@ -106,10 +119,13 @@ environment:
     - PROJ: "opencv"
       OS: windows-x86_64
       EXT: -gpu
-    - PROJ: "tensorflow"
+    - PROJ: "mxnet"
       OS: windows-x86_64
       EXT: -gpu
-      PARTIAL_CPPBUILD: "1"
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -gpu
+#      PARTIAL_CPPBUILD: "1"
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
@@ -125,6 +141,17 @@ for:
 init:
 # uncomment this if you need to enable RDP for this build run
 #    - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    - wmic computersystem set AutomaticManagedPagefile=False
+    - wmic pagefile list /format:list
+#    - wmic pagefileset create name="C:\pagefile.sys"
+    - wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=8192,MaximumSize=8192
+    - wmic pagefileset list /format:list
+    - ps: write-host "Restarting..."
+    - ps: sleep 5
+    - ps: restart-computer -f
+    - ps: sleep 5
+    - ps: write-host "Restarted."
+    - wmic pagefile list /format:list
 
 install:
     - 'echo install section'

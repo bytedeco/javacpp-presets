@@ -40,11 +40,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
             "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"},
-            link = {"nppial@.9.2", "nppicc@.9.2", "nppicom@.9.2", "nppidei@.9.2", "nppif@.9.2",
-                    "nppig@.9.2", "nppim@.9.2", "nppist@.9.2", "nppisu@.9.2", "nppitc@.9.2"}),
+            link = {"nppial@.10.0", "nppicc@.10.0", "nppicom@.10.0", "nppidei@.10.0", "nppif@.10.0",
+                    "nppig@.10.0", "nppim@.10.0", "nppist@.10.0", "nppisu@.10.0", "nppitc@.10.0"}),
     @Platform(value = "windows-x86_64",
-            preload = {"nppial64_92", "nppicc64_92", "nppicom64_92", "nppidei64_92", "nppif64_92",
-                       "nppig64_92", "nppim64_92", "nppist64_92", "nppisu64_92", "nppitc64_92"})},
+            preload = {"nppial64_100", "nppicc64_100", "nppicom64_100", "nppidei64_100", "nppif64_100",
+                       "nppig64_100", "nppim64_100", "nppist64_100", "nppisu64_100", "nppitc64_100"})},
         target = "org.bytedeco.javacpp.nppi")
 @NoException
 public class nppi implements InfoMapper {

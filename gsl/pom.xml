@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.0-${project.parent.version}</version>
+      <version>0.3.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -48,12 +48,12 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.0-${project.parent.version}</version>
+            <version>0.3.3-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.0-${project.parent.version}</version>
+            <version>0.3.3-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>

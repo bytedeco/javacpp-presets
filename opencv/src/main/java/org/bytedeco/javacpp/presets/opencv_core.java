@@ -54,21 +54,24 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
         "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.4", "opencv_imgproc@.3.4"},
-        resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}, linkresource = "lib"),
+        resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}, linkresource = "lib",
+        preload = {"gomp@.1", "opencv_cudev@.3.4"}),
     @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
-    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}, preload = {"gomp@.1", "opencv_cudev@.3.4"}),
+    @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
     @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
     @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
     @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core342", "opencv_imgproc342"}, preload = {
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core343", "opencv_imgproc343"}, preload = {
         "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
         "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
         "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
-        "vcruntime140", "msvcp140", "concrt140", "opencv_cudev342"}),
+        "vcruntime140", "msvcp140", "concrt140", "vcomp140", "opencv_cudev343"}),
     @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                                                    "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                                                       "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
                                                        "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
     @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
@@ -90,10 +93,10 @@ public class opencv_core implements LoadEnabled, InfoMapper {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += "@.9.2";
+                    lib += "@.10.0";
                     break;
                 case "windows-x86_64":
-                    lib += "64_92";
+                    lib += "64_100";
                     break;
                 default:
                     continue; // no CUDA
@@ -114,7 +117,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func",
                              "CV__ErrorNoReturn", "CV__ErrorNoReturn_", "CV_ErrorNoReturn", "CV_ErrorNoReturn_").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE", "CV__DEBUG_NS_BEGIN", "CV__DEBUG_NS_END",
-                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL").annotations().cppTypes())
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END", "CV_CATCH_ALL", "CV_NODISCARD").annotations().cppTypes())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
 
                .put(new Info("CV_DEPRECATED").cppText("#define CV_DEPRECATED deprecated").cppTypes())

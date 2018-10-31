@@ -36,6 +36,7 @@ import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerScope;
 import org.bytedeco.javacpp.ShortPointer;
 import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Cast;
@@ -103,7 +104,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_Status extends Pointer {
         protected static class DeleteDeallocator extends TF_Status implements Pointer.Deallocator {
             DeleteDeallocator(TF_Status s) { super(s); }
-            @Override public void deallocate() { TF_DeleteStatus(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteStatus(this); setNull(); }
         }
 
         public AbstractTF_Status(Pointer p) { super(p); }
@@ -131,7 +132,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_Buffer extends Pointer {
         protected static class DeleteDeallocator extends TF_Buffer implements Pointer.Deallocator {
             DeleteDeallocator(TF_Buffer s) { super(s); }
-            @Override public void deallocate() { TF_DeleteBuffer(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteBuffer(this); setNull(); }
         }
 
         public AbstractTF_Buffer(Pointer p) { super(p); }
@@ -176,13 +177,20 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_Tensor extends Pointer {
         protected static class DeleteDeallocator extends TF_Tensor implements Pointer.Deallocator {
             DeleteDeallocator(TF_Tensor s) { super(s); }
-            @Override public void deallocate() { TF_DeleteTensor(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteTensor(this); setNull(); }
         }
 
         /** TensorFlow crashes if we don't pass it a deallocator, so... */
         protected static Deallocator_Pointer_long_Pointer dummyDeallocator = new Deallocator_Pointer_long_Pointer() {
             @Override public void call(Pointer data, long len, Pointer arg) { }
         };
+
+        static {
+            PointerScope s = PointerScope.getInnerScope();
+            if (s != null) {
+                s.detach(dummyDeallocator);
+            }
+        }
 
         /** A reference to prevent deallocation. */
         protected Pointer pointer;
@@ -225,7 +233,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_SessionOptions extends Pointer {
         protected static class DeleteDeallocator extends TF_SessionOptions implements Pointer.Deallocator {
             DeleteDeallocator(TF_SessionOptions s) { super(s); }
-            @Override public void deallocate() { TF_DeleteSessionOptions(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteSessionOptions(this); setNull(); }
         }
 
         public AbstractTF_SessionOptions(Pointer p) { super(p); }
@@ -253,7 +261,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_Graph extends Pointer {
         protected static class DeleteDeallocator extends TF_Graph implements Pointer.Deallocator {
             DeleteDeallocator(TF_Graph s) { super(s); }
-            @Override public void deallocate() { TF_DeleteGraph(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteGraph(this); setNull(); }
         }
 
         public AbstractTF_Graph(Pointer p) { super(p); }
@@ -281,7 +289,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_ImportGraphDefOptions extends Pointer {
         protected static class DeleteDeallocator extends TF_ImportGraphDefOptions implements Pointer.Deallocator {
             DeleteDeallocator(TF_ImportGraphDefOptions s) { super(s); }
-            @Override public void deallocate() { TF_DeleteImportGraphDefOptions(this); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteImportGraphDefOptions(this); setNull(); }
         }
 
         public AbstractTF_ImportGraphDefOptions(Pointer p) { super(p); }
@@ -309,7 +317,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     public static abstract class AbstractTF_Session extends Pointer {
         protected static class DeleteDeallocator extends TF_Session implements Pointer.Deallocator {
             DeleteDeallocator(TF_Session s) { super(s); }
-            @Override public void deallocate() { TF_DeleteSession(this, TF_Status.newStatus()); }
+            @Override public void deallocate() { if (!isNull()) TF_DeleteSession(this, TF_Status.newStatus()); setNull(); }
         }
 
         /** References to prevent deallocation. */
@@ -405,9 +413,9 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
             return (B)createBuffer(0);
         }
         /** Returns {@link #tensor_data()} wrapped in a {@link Buffer} of appropriate type starting at given index. */
-        public <B extends Buffer> B createBuffer(int index) {
+        public <B extends Buffer> B createBuffer(long index) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            long size = TotalBytes();
             switch (dtype()) {
                 case DT_COMPLEX64:
                 case DT_FLOAT:    return (B)new FloatPointer(ptr).position(index).capacity(size/4).asBuffer();
@@ -434,15 +442,17 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
         }
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             BytePointer ptr = tensor_data();
-            int size = (int)TotalBytes();
+            int dims = dims();
+            long size = TotalBytes();
             boolean complex = dtype() == DT_COMPLEX64;
-            int dims = complex ? dims() + 1 : dims();
+            boolean scalar = dims == 0;
+            dims = (complex ? 1 : 0) + (scalar ? 1 : dims);
             long[] sizes = new long[dims];
             long[] strides = new long[dims];
-            sizes[dims - 1] = complex ? 2 : (int)dim_size(dims - 1);
+            sizes[dims - 1] = complex ? 2 : (scalar ? 1 : dim_size(dims - 1));
             strides[dims - 1] = 1;
             for (int i = dims - 2; i >= 0; i--) {
-                sizes[i] = (int)dim_size(i);
+                sizes[i] = scalar ? 1 : dim_size(i);
                 strides[i] = sizes[i + 1] * strides[i + 1];
             }
             switch (dtype()) {
@@ -493,7 +503,7 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
 
         protected static class DeleteDeallocator extends Session implements Pointer.Deallocator {
             DeleteDeallocator(Session p) { super(p); }
-            @Override public void deallocate() { Session.delete(this); setNull(); }
+            @Override public void deallocate() { if (!isNull()) Session.delete(this); setNull(); }
         }
     }
 }

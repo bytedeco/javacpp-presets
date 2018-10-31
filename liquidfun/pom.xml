@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -14,10 +14,6 @@
   <version>20170717-43d53e0-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for LiquidFun</name>
-
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -37,18 +33,6 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

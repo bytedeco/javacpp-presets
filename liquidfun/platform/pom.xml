@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.3-SNAPSHOT</version>
+    <version>1.4.4-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
@@ -43,6 +43,18 @@
       <version>${project.version}</version>
       <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86_64}</classifier>
+    </dependency>
   </dependencies>
 
   <build>
@@ -55,7 +67,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>

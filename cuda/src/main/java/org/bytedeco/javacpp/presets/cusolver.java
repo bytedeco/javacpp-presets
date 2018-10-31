@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {cublas.class, cusparse.class}, value = {
-    @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverRf.h>", "cusolverSp.h"}, link = "cusolver@.9.2"),
-    @Platform(value = "windows-x86_64", preload = "cusolver64_92")},
+    @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverRf.h>", "cusolverSp.h"}, link = "cusolver@.10.0"),
+    @Platform(value = "windows-x86_64", preload = "cusolver64_100")},
         target = "org.bytedeco.javacpp.cusolver")
 @NoException
 public class cusolver implements InfoMapper {

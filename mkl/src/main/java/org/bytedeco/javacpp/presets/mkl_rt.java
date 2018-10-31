@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -83,9 +83,10 @@ public class mkl_rt implements InfoMapper {
                              "mkl_dc_type", "mkl_dc_real_type", "mkl_dc_native_type", "mkl_dc_veclen", "MKL_DC_PREC_LETTER",
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",
                              "mkl_dc_getrf", "mkl_dc_lapacke_getrf_convert", "mkl_dc_getri", "mkl_dc_lapacke_getri_convert", "mkl_dc_getrs", "mkl_dc_lapacke_getrs_convert",
-                             "__inline", "MKL_DIRECT_CALL_INIT_FLAG").cppTypes().annotations())
+                             "__inline", "MKL_DIRECT_CALL_INIT_FLAG", "mkl_jit_create_dgemm", "mkl_jit_create_sgemm").cppTypes().annotations())
 
                .put(new Info("DEPRECATED").cppText("#define DEPRECATED deprecated").cppTypes())
+               .put(new Info("MKL_DEPRECATED").cppText("#define MKL_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
@@ -122,7 +123,7 @@ public class mkl_rt implements InfoMapper {
                              "mkl_sparse_c_create_vector", "mkl_sparse_d_create_vector", "mkl_sparse_s_create_vector", "mkl_sparse_z_create_vector",
                              "mkl_sparse_c_export_vector", "mkl_sparse_d_export_vector", "mkl_sparse_s_export_vector", "mkl_sparse_z_export_vector",
                              "mkl_sparse_destroy_vector", "mkl_sparse_c_spmspvd", "mkl_sparse_d_spmspvd", "mkl_sparse_s_spmspvd", "mkl_sparse_z_spmspvd",
-                             "mkl_sparse_set_spmspvd_hint", "replace_operation", "PardisopivotEntry",
+                             "mkl_sparse_set_spmspvd_hint", "replace_operation", "PardisopivotEntry", "MKL_Verbose_Output_File",
                              "MKL_MIC_Enable", "MKL_MIC_Disable", "MKL_MIC_Get_Device_Count", "MKL_MIC_Get_Cpuinfo", "MKL_MIC_Get_Meminfo",
                              "MKL_MIC_Set_Workdivision", "MKL_MIC_Get_Workdivision", "MKL_MIC_Set_Max_Memory", "MKL_MIC_Free_Memory",
                              "MKL_MIC_Set_Offload_Report", "MKL_MIC_Set_Device_Num_Threads", "MKL_MIC_Set_Resource_Limit", "MKL_MIC_Get_Resource_Limit",

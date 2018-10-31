@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.4.4-SNAPSHOT</version>
+    <relativePath>../../</relativePath>
+  </parent>
+
+  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <artifactId>cpython-platform</artifactId>
+  <version>3.6-${project.parent.version}</version>
+  <name>JavaCPP Presets Platform for CPython</name>
+
+  <properties>
+    <javacpp.moduleId>cpython</javacpp.moduleId>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86_64}</classifier>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

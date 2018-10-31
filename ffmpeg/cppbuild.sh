@@ -75,6 +75,8 @@ if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
 fi
 
 cd nasm-$NASM_VERSION
+# fix for build with GCC 8.x
+sedinplace 's/void pure_func/void/g' include/nasmlib.h
 ./configure --prefix=$INSTALL_PATH
 make -j $MAKEJ V=0
 make install
@@ -864,7 +866,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc --disable-avx512
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -879,7 +881,7 @@ case $PLATFORM in
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -922,7 +924,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-win64-gcc
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-win64-gcc --disable-avx512
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -937,7 +939,7 @@ case $PLATFORM in
         cd ../nv-codec-headers-n$NVCODEC_VERSION
         make install PREFIX=$INSTALL_PATH
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-cuda --enable-cuvid --enable-nvenc --enable-libmfx --enable-w32threads --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lgcc_eh -lWs2_32 -lcrypt32 -lpthread -lz -lm -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
