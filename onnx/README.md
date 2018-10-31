@@ -35,7 +35,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.onnx</groupId>
     <artifactId>loadmodel</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>LoadModel</exec.mainClass>
     </properties>
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.3.0-1.4.3</version>
+            <version>1.3.0-1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -64,6 +64,17 @@ public class LoadModel {
 
         ModelProto model = new ModelProto();
         ParseProtoFromBytes(model, new BytePointer(bytes), bytes.length);
+
+        check_model(model);
+
+        InferShapes(model);
+
+        StringVector passes = new StringVector("eliminate_nop_transpose", "eliminate_nop_pad", "fuse_consecutive_transposes", "fuse_transpose_into_gemm");
+        Optimize(model, passes);
+
+        check_model(model);
+
+        ConvertVersion(model, 8);
 
         System.out.println(model.graph().input_size());
     }

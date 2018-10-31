@@ -1232,6 +1232,7 @@
         <module>mxnet</module>
         <module>tensorflow</module>
         <module>ale</module>
+        <module>onnx</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
