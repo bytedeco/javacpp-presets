@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL-DNN 0.16  https://01.org/mkl-dnn
+ * MKL-DNN 0.17-rc  https://01.org/mkl-dnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/mkl-dnn/apidocs/
 
-&lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the `java.library.path`, then we can set the "org.bytedeco.javacpp.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system.
+&lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.javacpp.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system.
 
 
 Sample Usage
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.16-1.4.4-SNAPSHOT</version>
+            <version>0.17-rc-1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

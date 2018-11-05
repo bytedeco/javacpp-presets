@@ -71,13 +71,13 @@ public class mklml extends org.bytedeco.javacpp.presets.mklml {
 // #ifndef _MKL_VERSION_H_
 // #define _MKL_VERSION_H_
 
-public static final int __INTEL_MKL_BUILD_DATE = 20180710;
+public static final int __INTEL_MKL_BUILD_DATE = 20180928;
 
 public static final int __INTEL_MKL__ = 2019;
 public static final int __INTEL_MKL_MINOR__ = 0;
-public static final int __INTEL_MKL_UPDATE__ = 0;
+public static final int __INTEL_MKL_UPDATE__ = 1;
 
-public static final int INTEL_MKL_VERSION = 20190000;
+public static final int INTEL_MKL_VERSION = 20190001;
 
 // #endif
 
@@ -1946,6 +1946,8 @@ public static native void cblas_zher2k(@Cast("const CBLAS_LAYOUT") int Layout, @
  */
 public static native FloatPointer cblas_sgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
                  int M, int N, int K);
+public static native int cblas_sgemm_pack_get_size(@Cast("const CBLAS_IDENTIFIER") int identifier,
+                            int M, int N, int K);
 public static native void cblas_sgemm_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
                  @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N,
                  int K, float alpha, @Const FloatPointer src,
@@ -1978,6 +1980,8 @@ public static native void cblas_sgemm_free(FloatBuffer dest);
 public static native void cblas_sgemm_free(float[] dest);
 public static native DoublePointer cblas_dgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
                  int M, int N, int K);
+public static native int cblas_dgemm_pack_get_size(@Cast("const CBLAS_IDENTIFIER") int identifier,
+                            int M, int N, int K);
 public static native void cblas_dgemm_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
                  @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N,
                  int K, double alpha, @Const DoublePointer src,
@@ -2048,6 +2052,73 @@ public static native void cblas_gemm_s8u8s32(@Cast("const CBLAS_LAYOUT") int Lay
                           float alpha, @Const Pointer A, int lda, byte ao,
                           @Const Pointer B, int ldb, byte bo, float beta,
                           int[] C, int ldc, @Const int[] cb);
+
+public static native int cblas_gemm_s8u8s32_pack_get_size(@Cast("const CBLAS_IDENTIFIER") int identifier,
+                                   int M, int N, int K);
+public static native int cblas_gemm_s16s16s32_pack_get_size(@Cast("const CBLAS_IDENTIFIER") int identifier,
+                                     int M, int N, int K);
+
+public static native void cblas_gemm_s8u8s32_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
+                 @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N, int K,
+                 @Const Pointer src, int ld, Pointer dest);
+public static native void cblas_gemm_s16s16s32_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
+                 @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N, int K,
+                 @Const ShortPointer src, int ld, ShortPointer dest);
+public static native void cblas_gemm_s16s16s32_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
+                 @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N, int K,
+                 @Const ShortBuffer src, int ld, ShortBuffer dest);
+public static native void cblas_gemm_s16s16s32_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
+                 @Cast("const CBLAS_TRANSPOSE") int Trans, int M, int N, int K,
+                 @Const short[] src, int ld, short[] dest);
+
+public static native void cblas_gemm_s8u8s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const Pointer A, int lda, byte ao,
+                 @Const Pointer B, int ldb, byte bo,
+                 float beta,
+                 IntPointer C, int ldc, @Const IntPointer co);
+public static native void cblas_gemm_s8u8s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const Pointer A, int lda, byte ao,
+                 @Const Pointer B, int ldb, byte bo,
+                 float beta,
+                 IntBuffer C, int ldc, @Const IntBuffer co);
+public static native void cblas_gemm_s8u8s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const Pointer A, int lda, byte ao,
+                 @Const Pointer B, int ldb, byte bo,
+                 float beta,
+                 int[] C, int ldc, @Const int[] co);
+public static native void cblas_gemm_s16s16s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const ShortPointer A, int lda, short ao,
+                 @Const ShortPointer B, int ldb, short bo,
+                 float beta,
+                 IntPointer C, int ldc, @Const IntPointer co);
+public static native void cblas_gemm_s16s16s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const ShortBuffer A, int lda, short ao,
+                 @Const ShortBuffer B, int ldb, short bo,
+                 float beta,
+                 IntBuffer C, int ldc, @Const IntBuffer co);
+public static native void cblas_gemm_s16s16s32_compute(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_TRANSPOSE") int TransA,
+                 @Cast("const CBLAS_TRANSPOSE") int TransB, @Cast("const CBLAS_OFFSET") int offsetc,
+                 int M, int N, int K, 
+                 float alpha,
+                 @Const short[] A, int lda, short ao,
+                 @Const short[] B, int ldb, short bo,
+                 float beta,
+                 int[] C, int ldc, @Const int[] co);
 
 /*
  * Jit routines

@@ -68,6 +68,7 @@ public class mkldnn implements InfoMapper {
                .put(new Info("mkldnn_stream_t").valueTypes("mkldnn_stream").pointerTypes("@ByPtrPtr mkldnn_stream", "@Cast(\"mkldnn_stream_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_stream_t").valueTypes("@Const mkldnn_stream").pointerTypes("@Const @ByPtrPtr mkldnn_stream", "@Cast(\"const_mkldnn_stream_t*\") PointerPointer"))
 
+               .put(new Info("mkldnn::primitive_desc").pointerTypes("mkldnn.primitive_desc"))
                .put(new Info("mkldnn::memory::dims").annotations("@StdVector(\"std::remove_extent<mkldnn_dims_t>::type\")").pointerTypes("IntPointer", "IntBuffer", "int[]"))
 //               .put(new Info("std::vector<const_mkldnn_primitive_desc_t>").annotations("@StdVector @Cast(\"const_mkldnn_primitive_desc_t*\")").pointerTypes("PointerPointer"))
                .put(new Info("mkldnn::primitive::at").pointerTypes("primitive.at").define())

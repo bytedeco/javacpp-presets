@@ -300,13 +300,39 @@ public static final int
 
 /** Memory format specification.
  *
- * Intel(R) MKL-DNN uses the following notation for memory format names:
+ * Intel MKL-DNN formats describe physical data layout. The physical layout
+ * is described as a sequence of the dimensions as they are laid out in the
+ * memory (from the outer-most to the inner-most). Note that this order
+ * doesn't affect the logical order of the dimensions that is kept in the
+ * {@code dims} field of mkldnn_memory_desc_t structure. The logical order of the
+ * dimensions is specified by the type of tensor.
+ *
+ * For example, CNN 5D tensor always has its logical dimensions in order
+ * {@code (batch, channels, depth, height, width)}, while physical layout might
+ * be #mkldnn_ncdhw or #mkldnn_ndhwc:
+ *
+ * ~~~cpp
+ * int batch = 2, channels = 16, depth = 13, height = 13, width = 13;
+ *
+ * int ndims = 5; // 5D tensor
+ * mkldnn_dims_t dims = {batch, channels, depth, height, width};
+ *
+ * mkldnn_memory_desc_t data_in_ncdhw;
+ * mkldnn_memory_desc_init(&data_in_ncdhw, 5, dims, mlkdnn_ncdhw);
+ *
+ * // note that in both cases dims passed are the same
+ * mkldnn_memory_desc_t data_in_ndhwc;
+ * mkldnn_memory_desc_init(&data_in_ndhwc, 5, dims, mlkdnn_ndhwc);
+ * ~~~
+ *
+ * The following notation for memory format names:
  *  - \c 'n' denotes the mini-batch dimension
  *  - \c 'c' denotes a channels dimension
  *  - When there are multiple channel dimensions (for example, in convolution
  *    weights tensor), \c 'i' and \c 'o' denote dimensions of input and output
  *    channels
- *  - \c 'h' and \c 'w' denote spatial width and height
+ *  - \c 'd', \c 'h', and \c 'w' denote spatial depth, height, and width
+ *    respectively
  *  - Upper-case letters indicate that the data is laid out in blocks
  *    for a particular dimension. In such cases, the format name contains both
  *    upper- and lower-case letters for that dimension with lower-case letter
@@ -319,6 +345,8 @@ public static final int
  *    Channel designations can be different. For example: both the \c
  *    'mkldnn_nc' and \c 'mkldnn_io' formats can be used to describe a 2D
  *    tensor.
+ *
+ * \sa \ref understanding_memory_formats
  */
 /** enum mkldnn_memory_format_t */
 public static final int
@@ -335,217 +363,217 @@ public static final int
     mkldnn_x = 3,
     /** 2D data tensor. */
     mkldnn_nc = 4,
-    /** 4D data tensor in the \c nchw format typically used in Caffe. */
-    mkldnn_nchw = 5,
-    /** 4D data tensor in the \c nhwc format typically used in TensorFlow. */
-    mkldnn_nhwc = 6,
-    /** 4D data tensor in the \c chwn format typically used in Neon. */
-    mkldnn_chwn = 7,
-    /** 4D data tensor in the \c nchw format with channels data laid out in
-     * memory in 8-element blocks. */
-    mkldnn_nChw8c = 8,
-    /** 4D data tensor in the \c nchw format with channels data laid out in
-     * memory in 16-element blocks. */
-    mkldnn_nChw16c = 9,
-    /** 5D data tensor in the \c ncdhw format. */
+    /** 3D data tensor with the physical layout \c ncw.
+     * Logical dimensions come in the order: (n, c, w) */
+    mkldnn_ncw = 5,
+    /** 3D data tensor with the physical layout \c nwc.
+     * Logical dimensions come in the order: (n, c, w) */
+    mkldnn_nwc = 6,
+    /** 4D data tensor with the physical layout \c nchw, used in Caffe.
+     * Logical dimensions come in the order: (n, c, h, w) */
+    mkldnn_nchw = 7,
+    /** 4D data tensor with the physical layout \c nhwc, used in TensorFlow.
+     * Logical dimensions come in the order: (n, c, h, w) */
+    mkldnn_nhwc = 8,
+    /** 4D data tensor with the physical layout \c chwn, used in Neon.
+     * Logical dimensions come in the order: (n, c, h, w) */
+    mkldnn_chwn = 9,
+    /** 5D data tensor with the physical layout \c ncdhw.
+     * Logical dimensions come in the order: (n, c, d, h, w) */
     mkldnn_ncdhw = 10,
-    /** 5D data tensor in the \c ndhwc format typically used in TensorFlow. */
+    /** 5D data tensor with the physical layout \c ndhwc, used in TensorFlow.
+     * Logical dimensions come in the order: (n, c, d, h, w) */
     mkldnn_ndhwc = 11,
-    /** 5D data tensor in the \c ncdhw format with channels data laid out in
-     * memory in 16-element blocks. */
-    mkldnn_nCdhw16c = 12,
-    /** 2D weights tensor in the format (input channels, output channels). */
-    mkldnn_oi = 13,
-    /** 2D weights tensor in the format (input channels, output channels). */
-    mkldnn_io = 14,
-    /** 4D weights tensor in the format (input channels, output channels,
-     * width, height). */
-    mkldnn_oihw = 15,
-    /** 4D weights tensor in the format (input channels, height, width,
-     * output channels). */
-    mkldnn_ihwo = 16,
-    /** 4D weights tensor in the format (height, width, input channels,
-     * output channels). */
+    /** 2D weights tensor with physical layout \c oi.
+     * Logical dimensions come in the order: (o, i) */
+    mkldnn_oi = 12,
+    /** 2D weights tensor with physical layout \c io.
+     * Logical dimensions come in the order: (o, i) */
+    mkldnn_io = 13,
+    /** 3D weights tensor with physical layout \c oiw.
+     * Logical dimensions come in the order: (o, i, w) */
+    mkldnn_oiw = 14,
+    /** 3D weights tensor with physical layout \c wio.
+     * Logical dimensions come in the order: (o, i, w) */
+    mkldnn_wio = 15,
+    /** 4D weights tensor with physical layout \c oihw, used in Caffe.
+     * Logical dimensions come in the order: (o, i, h, w) */
+    mkldnn_oihw = 16,
+    /** 4D weights tensor with physical layout \c hwio, used in TensorFlow.
+     * Logical dimensions come in the order: (o, i, h, w) */
     mkldnn_hwio = 17,
-    /** 5D weights tensor in the format (depth, height, width, input channels,
-     * output channels). */
-    mkldnn_dhwio = 18,
-    /** 5D weight tensor in the \c oidhw format. */
+    /** 4D weights tensor with physical layout \c ihwo.
+     * Logical dimensions come in the order: (o, i, h, w) */
+    mkldnn_ihwo = 18,
+    /** 5D weights tensor with physical layout \c iodhw, used in Caffe.
+     * Logical dimensions come in the order: (o, i, d, h, w) */
     mkldnn_oidhw = 19,
-   /** 6D weights tensor in the \c oidhw format with output channels data
-    * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_OIdhw16i16o = 20,
-    /** 6D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIdhw16o16i = 21,
-    /** 5D weights tensor in the blocked version of \c oidhw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_Oidhw16o = 22,
-    /** 5D weights tensor in the blocked version of \c oidhw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_Odhwi16o = 23,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 8-element blocks. */
-    mkldnn_OIhw8i8o = 24,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIhw16i16o = 25,
-    /** 4D weights tensor in the \c oihw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_OIhw4i16o4i = 26,
-    /** 4D weights tensor in the \c oihw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_OIhw8i16o2i = 27,
-    /** 5D weights tensor in the \c oidhw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_OIdhw8i16o2i = 28,
-    /** 4D weights tensor in the \c oihw format with input channels data
-     * laid out in memory in 16-element blocks and output channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_OIhw8o16i2o = 29,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 8-element blocks. */
-    mkldnn_OIhw8o8i = 30,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_OIhw16o16i = 31,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_IOhw16o16i = 32,
-    /** 4D weights tensor in the format (output channels, input channels,
-     * height, width) with output channels data laid out in memory in 8-element
-     * blocks. */
-    mkldnn_Oihw8o = 33,
-    /** 4D weights tensor in the format (output channels, input channels,
-     * height, width) with output channels data laid out in memory in
-     * 16-element blocks. */
-    mkldnn_Oihw16o = 34,
-    /** 4D weights tensor in the format (output channels, width, height, input
-     * channels) with output channels data laid out in memory in 8-element
-     * blocks. */
-    mkldnn_Ohwi8o = 35,
-    /** 4D weights tensor in the format (output channels, width, height, input
-     * channels) with output channels data laid out in memory in 16-element
-     * blocks. */
-    mkldnn_Ohwi16o = 36,
-    /** 4D weights tensor in the \c oihw format with both input and output
-     * channels data laid out in memory in 16-element and 4-element blocks. */
-    mkldnn_OhIw16o4i = 37,
-    /** 5D weights tensor in the \c oihw format with extra outer dimension for
-     * groups. */
-    mkldnn_goihw = 38,
-    /** 5D weights tensor in the \c hwio format with extra dimension for
-     * groups that comes after the output channels. */
-    mkldnn_hwigo = 39,
-    /** 5D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 8-element blocks.
-     */
-    mkldnn_gOIhw8i8o = 40,
-    /** 5D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 16-element blocks.
-     */
-    mkldnn_gOIhw16i16o = 41,
-    /** 5D weights tensor in the \c oihw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_gOIhw4i16o4i = 42,
-    /** 5D weights tensor in the \c oihw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_gOIhw8i16o2i = 43,
-    /** 6D weights tensor in the \c oidhw format with output channels data
-     * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_gOIdhw8i16o2i = 44,
-    /** 5D weights tensor in the \c oihw format with input channels data
-     * laid out in memory in 16-element blocks and output channels data
-     * laid out in memory in 8-element blocks blocked by pairs. */
-    mkldnn_gOIhw8o16i2o = 45,
-    /** 5D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 8-element blocks.
-     */
-    mkldnn_gOIhw8o8i = 46,
-    /** 5D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 16-element blocks.
-     */
-    mkldnn_gOIhw16o16i = 47,
-    /** 5D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 16-element blocks.
-     */
-    mkldnn_gIOhw16o16i = 48,
-    /** 5D weights tensor in the blocked version of \c goihw format with output
-     * channels data laid out in memory in 8-element blocks. */
-    mkldnn_gOihw8o = 49,
-    /** 5D weights tensor in the blocked version of \c goihw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOihw16o = 50,
-    /** 5D weights tensor in the blocked version of \c goihw format with output
-     * channels data laid out in memory in 8-element blocks. */
-    mkldnn_gOhwi8o = 51,
-    /** 5D weights tensor in the blocked version of \c goihw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOhwi16o = 52,
-    /** 5D weights tensor in the blocked version of \c goihw format with group
-     * data laid out in memory in 8-element blocks. */
-    mkldnn_Goihw8g = 53,
-    /** 5D weights tensor in the blocked version of \c goihw format with group
-     * data laid out in memory in 16-element blocks. */
-    mkldnn_Goihw16g = 54,
-    /** 5D weights tensor in the \c goihw format with both input and output
-     * channels data laid out in memory in 16-element and 4-element blocks. */
-    mkldnn_gOhIw16o4i = 55,
-    /** 6D weight tensor in the \c goidhw format with extra dimension for
-     * groups */
-    mkldnn_goidhw = 56,
-   /** 6D weights tensor in the \c oidhw format with output channels data
-    * laid out in memory in 16-element blocks and input channels data
-     * laid out in memory in 4-element blocks blocked by quadruple. */
-    mkldnn_gOIdhw16i16o = 57,
-    /** 6D weights tensor in the blocked version of \c goihw format with both
-     * input and output channels data laid out in memory in 16-element blocks.
-     */
-    mkldnn_gOIdhw16o16i = 58,
-    /** 6D weights tensor in the blocked version of \c goidhw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOidhw16o = 59,
-    /** 6D weights tensor in the blocked version of \c goidhw format with output
-     * channels data laid out in memory in 16-element blocks. */
-    mkldnn_gOdhwi16o = 60,
-    /** 3D data tensor in the format (batch, seq_length, input channels). */
-    mkldnn_ntc = 61,
-    /** 3D data tensor in the format (seq_length, batch, input channels). */
-    mkldnn_tnc = 62,
-    /** 5D states tensor in the format (num_layers, num_directions, num_states,
-     * batch, state channels). */
-    mkldnn_ldsnc = 63,
-    /** 5D weights tensor in the format (num_layers, num_directions,
-     *  input_chanels, num_gates, output_channels). */
-    mkldnn_ldigo = 64,
-    /** 5D weights tensor in the blocked format. */
-    mkldnn_ldigo_p = 65,
-    /** 5D weights tensor in the format (num_layers, num_directions, num_gates,
-     *  output_channels, input_chanels). */
-    mkldnn_ldgoi = 66,
-    /** 5D weights tensor in the blocked format. */
-    mkldnn_ldgoi_p = 67,
-    /** 4D bias tensor in the format (num_layers, num_directions, num_gates,
-     * output_channels). */
-    mkldnn_ldgo = 68,
-    /** General tensor format for integer 8bit winograd convolution. */
-    mkldnn_wino_fmt = 69,
+    /** 5D weights tensor with physical layout \c dhwio, used in TensorFlow.
+     * Logical dimensions come in the order: (o, i, d, h, w) */
+    mkldnn_dhwio = 20,
+    /** 4D grouped weights tensor with the physical layout \c goiw.
+     * Logical dimensions come in the order: (g, o, i, w) */
+    mkldnn_goiw = 21,
+    /** 5D grouped weights tensor with the physical layout \c goihw,
+     * used in Caffe.
+     * Logical dimensions come in the order: (g, o, i, h, w) */
+    mkldnn_goihw = 22,
+    /** 5D grouped weights tensor with the physical layout \c hwigo,
+     * used in TensorFlow.
+     * Logical dimensions come in the order: (g, o, i, h, w) */
+    mkldnn_hwigo = 23,
+    /** 6D grouped weights tensor with the physical layout \c goidhw,
+     * used in Caffe.
+     * Logical dimensions come in the order: (g, o, i, d, h, w) */
+    mkldnn_goidhw = 24,
+    /** 3D RNN data tensor in the format (batch, seq_length, input channels). */
+    mkldnn_ntc = 25,
+    /** 3D RNN data tensor in the format (seq_length, batch, input channels). */
+    mkldnn_tnc = 26,
+    /** 5D RNN states tensor in the format (num_layers, num_directions,
+     * num_states, batch, state channels). */
+    mkldnn_ldsnc = 27,
+    /** 5D RNN weights tensor in the format (num_layers, num_directions,
+     *  input_channels, num_gates, output_channels).
+     *
+     *  - For LSTM cells, the gates order is input, forget, candidate
+     *    and output gate.
+     *  - For GRU cells, the gates order is update, reset and output gate. */
+    mkldnn_ldigo = 28,
+    /** 5D RNN weights tensor in the format (num_layers, num_directions,
+     * num_gates, output_channels, input_channels).
+     *
+     *  - For LSTM cells, the gates order is input, forget, candidate
+     *    and output gate.
+     *  - For GRU cells, the gates order is update, reset and output gate. */
+    mkldnn_ldgoi = 29,
+    /** 4D RNN bias tensor in the format (num_layers, num_directions,
+     * num_gates, output_channels).
+     *
+     *  - For LSTM cells, the gates order is input, forget, candidate
+     *    and output gate.
+     * - For GRU cells, the gates order is update, reset and output gate. */
+    mkldnn_ldgo = 30,
+
+    /* Opaque data types, are not to be used explicitly */
+
+    /* data */
+    mkldnn_nCw8c = 31,
+    mkldnn_nCw16c = 32,
+    mkldnn_nChw8c = 33,
+    mkldnn_nChw16c = 34,
+    mkldnn_nCdhw8c = 35,
+    mkldnn_nCdhw16c = 36,
+
+    /* weights, 3D */
+    mkldnn_Owi8o = 37,
+    mkldnn_OIw8i8o = 38,
+    mkldnn_OIw8o8i = 39,
+    mkldnn_OIw16i16o = 40,
+    mkldnn_OIw16o16i = 41,
+    mkldnn_Oiw16o = 42,
+    mkldnn_Owi16o = 43,
+    mkldnn_OIw8i16o2i = 44,
+    mkldnn_OIw8o16i2o = 45,
+    mkldnn_IOw16o16i = 46,
+
+    /* weights, 4D */
+    /** weights format with additional buffer
+     * size equal to the number of output channels
+     * and containing the values:
+     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_hwio_s8s8 = 47,
+    mkldnn_oIhw8i = 48,
+    mkldnn_oIhw16i = 49,
+    mkldnn_OIhw8i8o = 50,
+    mkldnn_OIhw16i16o = 51,
+    mkldnn_OIhw4i16o4i = 52,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * and containing the values:
+     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_OIhw4i16o4i_s8s8 = 53,
+    mkldnn_OIhw8i16o2i = 54,
+    mkldnn_OIhw8o16i2o = 55,
+    mkldnn_OIhw8o8i = 56,
+    mkldnn_OIhw16o16i = 57,
+    mkldnn_IOhw16o16i = 58,
+    mkldnn_Oihw8o = 59,
+    mkldnn_Oihw16o = 60,
+    mkldnn_Ohwi8o = 61,
+    mkldnn_Ohwi16o = 62,
+    mkldnn_OhIw16o4i = 63,
+
+    /* weights, 5D */
+    mkldnn_oIdhw8i = 64,
+    mkldnn_oIdhw16i = 65,
+    mkldnn_OIdhw8i8o = 66,
+    mkldnn_OIdhw8o8i = 67,
+    mkldnn_Odhwi8o = 68,
+    mkldnn_OIdhw16i16o = 69,
+    mkldnn_OIdhw16o16i = 70,
+    mkldnn_Oidhw16o = 71,
+    mkldnn_Odhwi16o = 72,
+    mkldnn_OIdhw8i16o2i = 73,
+
+    /* weights w/ groups, 4D */
+    mkldnn_gOwi8o = 74,
+    mkldnn_gOIw8o8i = 75,
+    mkldnn_gOIw8i8o = 76,
+    mkldnn_gOIw16i16o = 77,
+    mkldnn_gOIw16o16i = 78,
+    mkldnn_gOiw16o = 79,
+    mkldnn_gOwi16o = 80,
+    mkldnn_gOIw8i16o2i = 81,
+    mkldnn_gOIw8o16i2o = 82,
+    mkldnn_gIOw16o16i = 83,
+
+    /* weights w/ groups, 5D */
+    /** weights format with additional buffer
+     * size equal to the number of output channels
+     * multiplied by number of groups and containing the values:
+     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_hwigo_s8s8 = 84,
+    mkldnn_gOIhw8i8o = 85,
+    mkldnn_gOIhw16i16o = 86,
+    mkldnn_gOIhw4i16o4i = 87,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * multiplied by number of groups and containing the values:
+     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_gOIhw4i16o4i_s8s8 = 88,
+    mkldnn_gOIhw8i16o2i = 89,
+    mkldnn_gOIhw8o16i2o = 90,
+    mkldnn_gOIhw8o8i = 91,
+    mkldnn_gOIhw16o16i = 92,
+    mkldnn_gIOhw16o16i = 93,
+    mkldnn_gOihw8o = 94,
+    mkldnn_gOihw16o = 95,
+    mkldnn_gOhwi8o = 96,
+    mkldnn_gOhwi16o = 97,
+    mkldnn_Goihw8g = 98,
+    mkldnn_Goihw16g = 99,
+    mkldnn_gOhIw16o4i = 100,
+
+    /* weights w/ groups, 6D */
+    mkldnn_gOIdhw8i8o = 101,
+    mkldnn_gOIdhw8o8i = 102,
+    mkldnn_gOdhwi8o = 103,
+    mkldnn_gOIdhw8i16o2i = 104,
+    mkldnn_gOIdhw16i16o = 105,
+    mkldnn_gOIdhw16o16i = 106,
+    mkldnn_gOidhw16o = 107,
+    mkldnn_gOdhwi16o = 108,
+
+    mkldnn_wino_fmt = 109,
+
+    /* RNN packed weights */
+    mkldnn_ldigo_p = 110,
+    mkldnn_ldgoi_p = 111,
+
     /** Just a sentinel, not real memory format. Must be changed after new
      * format is added. */
-    mkldnn_format_last = 70,
-    /** 4D weights tensor in the oihw format with input channels data laid out
-     * in memory in 8-element blocks. */
-    mkldnn_oIhw8i = mkldnn_nChw8c,
-    /** 4D weights tensor in the oihw format with input channels data laid out
-     * in memory in 16-element blocks. */
-    mkldnn_oIhw16i = mkldnn_nChw16c;
+    mkldnn_format_last = 112;
 
 /** Kinds of padding. Define how to interpret the data in padding regions. */
 /** enum mkldnn_padding_kind_t */
@@ -591,18 +619,20 @@ public static final int
     mkldnn_view = 2,
     /** A reorder primitive.*/
     mkldnn_reorder = 3,
+    /** A shuffle primitive.*/
+    mkldnn_shuffle = 4,
     /** A (out-of-place) concat primitive. */
-    mkldnn_concat = 4,
+    mkldnn_concat = 5,
     /** A (in-place) concat primitive. */
-    mkldnn_concat_inplace = 5,
+    mkldnn_concat_inplace = 6,
     /** A sum primitive. */
-    mkldnn_sum = 6,
+    mkldnn_sum = 7,
     /** A convolution primitive. */
-    mkldnn_convolution = 7,
+    mkldnn_convolution = 8,
     /** A deconvolution primitive. */
-    mkldnn_deconvolution = 8,
+    mkldnn_deconvolution = 9,
     /** An element-wise primitive. */
-    mkldnn_eltwise = 9,
+    mkldnn_eltwise = 10,
     /** A ReLU primitive. @deprecated */
     mkldnn_relu = mkldnn_eltwise,
     /** A Softmax primitive. */
@@ -740,7 +770,9 @@ public static final int TENSOR_MAX_DIMS = 12;
 /** A type to describe tensor dimensions. */
 /** A type to describe strides within a tensor. */
 
-/** Generic description of blocked data layout for most memory formats. */
+/** Generic description of blocked data layout for most memory formats.
+ *
+ * \sa \ref understanding_memory_formats */
 public static class mkldnn_blocking_desc_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -782,7 +814,7 @@ public static final int
     /** Tensor of weights for 4x3 convolution. */
     mkldnn_wino_wei_OBaaIBOIio = 4;
 
-/** Description of tensor of weights for integer 8bit winograd convolution. */
+/** Description of tensor of weights for winograd 2x3 convolution. */
 public static class mkldnn_wino_desc_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -806,6 +838,7 @@ public static class mkldnn_wino_desc_t extends Pointer {
     public native int oc_block(); public native mkldnn_wino_desc_t oc_block(int oc_block);
     public native int ic2_block(); public native mkldnn_wino_desc_t ic2_block(int ic2_block);
     public native int oc2_block(); public native mkldnn_wino_desc_t oc2_block(int oc2_block);
+    public native float adj_scale(); public native mkldnn_wino_desc_t adj_scale(float adj_scale);
     public native @Cast("size_t") long size(); public native mkldnn_wino_desc_t size(long size);
 }
 
@@ -850,8 +883,21 @@ public static class mkldnn_memory_desc_t extends Pointer {
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_memory_desc_t primitive_kind(int primitive_kind);
     /** Number of dimensions */
     public native int ndims(); public native mkldnn_memory_desc_t ndims(int ndims);
-    /** Dimensions in the following order: mini-batch, channel, spatial. For
-     * example: <code>{N, C, H, W}</code>. */
+    /** Dimensions in the following order:
+     * - CNN data tensors: mini-batch, channel, spatial
+     *   (<code>{N, C, [[D,] H,] W}</code>)
+     * - CNN weight tensors: group (optional), output channel, input channel,
+     *   spatial (<code>{[G,] O, I, [[D,] H,] W}</code>)
+     * - RNN data tensors: time, mini-batch, channels (<code>{T, N, C}</code>)
+     *   or layers, directions, states, mini-batch, channels (<code>{L, D, S, N, C}</code>)
+     * - RNN weight tensor: layers, directions, input channel, gates, output channels
+     *   (<code>{L, D, I, G, O}</code>).
+     *
+     * \note
+     *    The order of dimensions does not depend on the memory format, so
+     *    no matter whether the data is laid in #mkldnn_nchw or #mkldnn_nhwc
+     *    the dims for 4D CN data tensor would be <code>{N, C, H, W}</code>
+     */
     @MemberGetter public native @Const IntPointer dims();
     /** Data type of the tensor elements. */
     public native @Cast("mkldnn_data_type_t") int data_type(); public native mkldnn_memory_desc_t data_type(int data_type);
@@ -924,6 +970,36 @@ public static class mkldnn_convolution_desc_t extends Pointer {
 }
 
 /** A descriptor of a deconvolution operation. */
+
+/** A descriptor of a shuffle operation. */
+public static class mkldnn_shuffle_desc_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public mkldnn_shuffle_desc_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_shuffle_desc_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public mkldnn_shuffle_desc_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public mkldnn_shuffle_desc_t position(long position) {
+        return (mkldnn_shuffle_desc_t)super.position(position);
+    }
+
+    /** The kind of primitive. Used for self identifying the primitive
+     * descriptor. Must be #mkldnn_convolution. */
+    public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_shuffle_desc_t primitive_kind(int primitive_kind);
+    /** The kind of propagation. Possible values: #mkldnn_forward_training,
+     * #mkldnn_forward_inference, #mkldnn_backward_data*/
+    public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_shuffle_desc_t prop_kind(int prop_kind);
+    /** Source and destination memory descriptor.
+     *  and source and destination gradient memory descriptor. */
+    public native @ByRef mkldnn_memory_desc_t data_desc(); public native mkldnn_shuffle_desc_t data_desc(mkldnn_memory_desc_t data_desc);
+    /** axis for shuffling. */
+    public native int axis(); public native mkldnn_shuffle_desc_t axis(int axis);
+    /** number of groups in group convolution */
+    public native int group_size(); public native mkldnn_shuffle_desc_t group_size(int group_size);
+}
 
 /** A descriptor of a element-wise operation. */
 public static class mkldnn_eltwise_desc_t extends Pointer {
@@ -1484,6 +1560,7 @@ public static class mkldnn_primitive_at_t extends Pointer {
  *      *_s64                        | ptrdiff_t *
  *      *_f64                        | double *
  *      *_str                        | const char **
+ *      #mkldnn_query_op_d           | const_mkldnn_op_desc_t *
  *      *_md                         | const mkldnn_memory_desc_t **
  *      *_${op}_d                    | const mkldnn_${op}_desc_t **
  *      *_pd                         | const_mkldnn_primitive_desc_t *
@@ -1526,14 +1603,18 @@ public static final int
     /* memory and op descriptor section */
     /** stub */
     mkldnn_query_some_d = 64,
+    /** op descriptor */
+    mkldnn_query_op_d = 65,
     /** memory descriptor for memory and view */
-    mkldnn_query_memory_d = 65,
+    mkldnn_query_memory_d = 66,
     /** convolution descriptor */
-    mkldnn_query_convolution_d = 66,
+    mkldnn_query_convolution_d = 67,
     /** deconvolution descriptor */
-    mkldnn_query_deconvolution_d = 67,
+    mkldnn_query_deconvolution_d = 68,
+    /** shuffle descriptor */
+    mkldnn_query_shuffle_d = 69,
     /** eltwise descriptor */
-    mkldnn_query_eltwise_d = 68,
+    mkldnn_query_eltwise_d = 70,
     /** @deprecated */
     mkldnn_query_relu_d = mkldnn_query_eltwise_d,
     /** softmax descriptor */
@@ -1749,27 +1830,74 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_destroy(
 
 /** Queries primitive descriptor
  *
- * \sa mkldnn_query_t */
+ * One of the most typical use cases is to query a convolution primitive
+ * descriptor created with source, weights and destination formats equal
+ * to #mkldnn_any about the corresponding memory primitive descriptors
+ * (\p what equals #mkldnn_query_src_pd, #mkldnn_query_weights_pd, and
+ * #mkldnn_query_dst_pd respectively) to be able to prepare memory and
+ * create reorders if required.
+ *
+ * Another quite typical use case is to query an operation primitive
+ * descriptor for a workspace (\p what equals #mkldnn_query_workspace_pd).
+ * Returned status #mkldnn_not_required indicates that workspace is
+ * not required.
+ *
+ * Few other possibilities:
+ *  - query a memory primitive descriptor for the underlying memory
+ *    descriptor (#mkldnn_query_memory_d)
+ *  - query an operation primitive descriptor for the underlying operation
+ *    descriptor (#mkldnn_query_convolution_d, #mkldnn_query_eltwise_d,
+ *    #mkldnn_query_rnn_d, etc)
+ *  - query an operation primitive descriptor for the implementation
+ *    information string (#mkldnn_query_impl_info_str)
+ *  - query an operation primitive descriptor for the number of inputs and
+ *    outputs (#mkldnn_query_num_of_inputs_s32 and
+ *    #mkldnn_query_num_of_outputs_s32 respectively)
+ *
+ * \sa mkldnn_query_t for more options
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_query(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index, Pointer result);
 
 /** Queries primitive descriptor for memory descriptor
  *
- * @return NULL in case of any error */
+ * @return NULL in case of any error (in particular if queried entity is
+ * not of type mkldnn_memory_desc_t).
+ *
+ * This is just a specialized version of mkldnn_primitive_desc_query
+ * used for convenience.
+ */
 public static native @Const mkldnn_memory_desc_t mkldnn_primitive_desc_query_memory_d(
         @Const mkldnn_primitive_desc primitive_desc);
 
 /** Queries primitive descriptor for primitive descriptor
  *
- * @return NULL in case of any error */
+ * @return NULL in case of any error (in particular if queried entity is
+ * not of type const_mkldnn_primitive_desc_t).
+ *
+ * This is just a specialized version of mkldnn_primitive_desc_query
+ * used for convenience.
+ *
+ * Example: query an operation primitive descriptor for a workspace
+ *         (\p what equals #mkldnn_query_workspace_pd). Returned
+ *         NULL indicates the primitive does not require a workspace.
+ *         Otherwise a user should prepare the workspace and pass it
+ *         to the corresponding primitive.
+ */
 public static native @Const mkldnn_primitive_desc mkldnn_primitive_desc_query_pd(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index);
 
 /** Queries primitive descriptor for signed 32bit int
  *
- * @return 0 in case of any error */
+ * @return 0 in case of any error (in particular if queried entity is
+ * not of type int32_t). Note that 0 might also be the actual returned
+ * value.
+ *
+ * This is just a specialized version of mkldnn_primitive_desc_query
+ * used for convenience.
+ */
 public static native int mkldnn_primitive_desc_query_s32(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index);
@@ -2058,7 +2186,83 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_elt
 /** \} */
 
 /** \addtogroup c_api_memory Memory
- * A primitive to describe data.
+ * A primitive to describe and store data.
+ *
+ * The library supports various data types and formats. Memory hierarchy
+ * consists of three levels of abstraction:
+ * 1. **Memory descriptor** -- engine agnostic logical description of data
+ *      (number of dimensions, dimensions themselves and data type), and
+ *      optionally the format/layout that describes the physical representation
+ *      of data in memory. If the format/layout is not known yet one can pass
+ *      #mkldnn_any. This approach is used to allow compute intensive
+ *      primitives to specify the most appropriate layout on their own with
+ *      users required to reorder the data if the incoming layout doesn't match
+ *      the primitive's selection. Memory descriptor can be created with
+ *      mkldnn_memory_desc_init() function or by directly filling the
+ *      mkldnn_memory_desc_t structure. The later requires deep knowledge of
+ *      how the physical data representation is mapped to the structure. The
+ *      \ref understanding_memory_formats topic should shed some light on that.
+ * 2. **Memory primitive descriptor** -- logical description of data that is
+ *      fully defined, i.e. cannot contain #mkldnn_any as a format. It also
+ *      has the engine specified. A memory primitive descriptor is created by
+ *      calling mkldnn_memory_primitive_desc_create() with two arguments: an
+ *      mkldnn_memory_desc_t and an mkldnn_engine_t. It has the same type as
+ *      other primitive descriptors and can be:
+ *      - queried to return the underlying memory descriptor using
+ *        mkldnn_primitive_desc_query() and
+ *        mkldnn_primitive_desc_query_memory_d().
+ *      - compared with another memory primitive descriptor using
+ *        mkldnn_memory_primitive_desc_equal(). This is especially useful when
+ *        checking whether a primitive requires reorder from user's data layout
+ *        to the primitive's one.
+ *      - queried to return the size of the data using
+ *        mkldnn_memory_primitive_desc_get_size(). As described in
+ *        \ref understanding_memory_formats the size of data sometimes cannot
+ *        be computed as a product of dimensions times the size of data type.
+ *        So users are encouraged to use this function to have better code
+ *        portability.
+ * 3. **Memory primitive** or simply **memory** -- a pseudo-primitive that is
+ *      defined by a memory primitive descriptor and a handle to the data
+ *      itself (in case of CPU engine the handle is simply a pointer {@code void*}).
+ *      The data handle can be queried using mkldnn_memory_get_data_handle()
+ *      and be set using mkldnn_memory_set_data_handle(). The latter function
+ *      always sets the memory in the padding region to zero which is the
+ *      invariant maintained by all the primitives in Intel MKL-DNN. See
+ *      \ref understanding_memory_formats for more details.
+ *      A memory primitive can be created using mkldnn_primitive_create() with
+ *      empty inputs and outputs. In this case, the memory primitive's data
+ *      handle needs to be set manually using mkldnn_memory_set_data_handle().
+ *
+ * Along with ordinary memory with all dimensions being positive, Intel
+ * MKL-DNN supports *zero-volume* memory with one or more dimensions set to
+ * zero. This is to support NumPy\* convention.
+ * If a *zero-volume* memory is passed to a primitive, the primitive would
+ * not perform any computations on this memory. For example:
+ *  - Convolution with {@code (0 batch, 3 input channels, 13 height, 13 width)}
+ *    source and {@code (16 output channels, 3 inputs, channel, 3 height, 3 width)}
+ *    weights would produce {@code (0 batch, 16 ouput channels, 11 height, 11 width)}
+ *    destination (assuming strides are {@code 1} and paddings are zero) and perform
+ *    zero multiply-add operations.
+ *  - Concatenation of 3 memories of shapes {@code (3, 4, 13, 13)}, {@code (3, 0, 13, 13)},
+ *    and {@code (3, 1, 13, 13)} along the second axis would produce the output of
+ *    the shape {@code (3, 5, 13, 13)}, effectively ignoring the second input
+ *    (however if user created a concatenation primitive descriptor with 3
+ *    inputs they should also provide all 3 memories to the concatenation
+ *    primitive, including the one with zero second dimension).
+ *  - However, Intel MKL-DNN would return an error when attempting to create a
+ *    convolution with *zero-volume* memory passed for weights because such
+ *    convolution is not well-defined:
+ *    ~~~
+ *    dst(1, 16, 11, 11) <-- src(1, 0, 13, 13) (*) wei(16, 0, 3, 3)
+ *    ~~~
+ *    Should the values in the destination be zeroes or just not accessed at
+ *    all? Moreover, backward pass w.r.t. weights in such cases is not
+ *    well-defined as well.
+ *
+ *  Data handle of *zero-volume* memory is never accessed and hence can be
+ *  unset (NULL in case of CPU engine).
+ *
+ * \sa \ref understanding_memory_formats
  * \{ */
 
 /** Initializes a \p memory_desc memory descriptor using \p ndims, \p dims, \p
@@ -2148,7 +2352,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_set_data_handle(
  * \{ */
 
 /** Initializes a \p reorder_primitive_desc using descriptors of \p input and
- * \p output memory primitives. */
+ * \p output memory primitives.
+ *
+ * Order of inputs:
+ *  - input (#mkldnn_query_input_pd, 0)
+ *
+ * Order of outputs:
+ *  - output (#mkldnn_query_output_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc reorder_primitive_desc,
         @Const mkldnn_primitive_desc input,
@@ -2159,7 +2370,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_
         @Const mkldnn_primitive_desc output);
 
 /** Initializes a \p reorder_primitive_desc using an \p attr attribute and
- * descriptors of \p input and \p output memory primitives. */
+ * descriptors of \p input and \p output memory primitives.
+ *
+ * Order of inputs:
+ *  - input (#mkldnn_query_input_pd, 0)
+ *
+ * Order of outputs:
+ *  - output (#mkldnn_query_output_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create_v2(
         @ByPtrPtr mkldnn_primitive_desc reorder_primitive_desc,
         @Const mkldnn_primitive_desc input,
@@ -2181,7 +2399,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_
  * inputs by \p concat_dimension with resulting \p output_desc memory
  * descriptor. \p output_desc can be NULL or be specified with #mkldnn_any
  * format -- in this case appropriate memory format would be chosen
- * automatically. */
+ * automatically.
+ *
+ * Order of inputs:
+ *  - input 0 (#mkldnn_query_input_pd, 0)
+ *  - input 1 (#mkldnn_query_input_pd, 1)
+ *  - ...
+ *  - input \p n - 1 (#mkldnn_query_input_pd, \p n - 1)
+ *
+ * Order of outputs:
+ *  - output (#mkldnn_query_output_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc concat_primitive_desc,
         @Const mkldnn_memory_desc_t output_desc, int n, int concat_dimension,
@@ -2204,7 +2432,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_c
  * inputs multiplied by scale with resulting \p output_desc memory
  * descriptor. \p output_desc can be NULL or be specified with #mkldnn_any
  * format -- in this case appropriate memory format would be chosen
- * automatically. */
+ * automatically.
+ *
+ * Order of inputs:
+ *  - input 0 (#mkldnn_query_input_pd, 0)
+ *  - input 1 (#mkldnn_query_input_pd, 1)
+ *  - ...
+ *  - input \p n - 1 (#mkldnn_query_input_pd, \p n - 1)
+ *
+ * Order of outputs:
+ *  - output (#mkldnn_query_output_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc sum_primitive_desc,
         @Const mkldnn_memory_desc_t output_desc, int n, @Const FloatPointer scales,
@@ -2262,7 +2500,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_crea
  * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
@@ -2299,7 +2546,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_des
  * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
@@ -2330,7 +2586,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_for
  * padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2358,7 +2622,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_da
  * strides, \p dilates \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2386,7 +2658,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
  * \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2417,7 +2698,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_we
  * \p dilates \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2461,7 +2751,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
  * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
@@ -2498,7 +2797,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_d
  * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
@@ -2529,7 +2837,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_f
  * padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2557,7 +2873,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
  * strides, \p dilates, \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2585,7 +2909,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
  * \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2616,7 +2949,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
  * \p strides, \p dilates, \p padding_l, \p padding_r, and \p padding_kind.
  *
  * \note memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind. */
+ * value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2644,6 +2986,42 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
 
 /** \} */
 
+/** \addtogroup c_api_shuffle Shuffle
+ * A primitive to shuffle data along the axis.
+ * \{ */
+
+/** Initializes a \p shuffle_desc for forward propagation using \p prop_kind,
+ * \p memory descriptor \p data_desc, \p axis and \p group
+ * number.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ *
+ */
+public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_init(
+        mkldnn_shuffle_desc_t shuffle_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Const mkldnn_memory_desc_t data_desc, int axis, int group_size);
+
+/** Initializes a \p shuffle_desc for backward propagation using \p memory
+ * descriptor \p diff_data_desc, \p axis and \p group number.
+ *
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ *
+ */
+public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_backward_desc_init(
+        mkldnn_shuffle_desc_t shuffle_desc,
+        @Const mkldnn_memory_desc_t diff_data_desc, int axis, int group_size);
+
+/** \} */
+
 /** \addtogroup c_api_eltwise Eltwise
  * A primitive to compute element wise operations like parametric rectifier
  * linear unit (ReLU).
@@ -2664,7 +3042,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
  * (possible values are #mkldnn_forward_training or #mkldnn_forward_inference),
  * \p alg_kind algorithm, memory descriptor \p data_desc, and \p alpha,
  * \p beta parameters.
- * \sa mkldnn_eltwise_desc_t for details */
+ *
+ * \sa mkldnn_eltwise_desc_t for details
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_forward_desc_init(
         mkldnn_eltwise_desc_t eltwise_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
@@ -2673,7 +3059,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_forward_desc_in
 /** Initializes a \p eltwise_desc for backward propagation using \p alg_kind
  * algorithm memory descriptors \p diff_data_desc and \p data_desc, and
  * \p alpha, \p beta parameters.
- * \sa mkldnn_eltwise_desc_t for details */
+ *
+ * \sa mkldnn_eltwise_desc_t for details
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_backward_desc_init(
         mkldnn_eltwise_desc_t eltwise_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
@@ -2693,7 +3088,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_backward_desc_i
  * \p negative_slope and memory descriptor \p data_desc.
  *
  * @deprecated use mkldnn_eltwise_forward_desc_init() instead, with \p alpha
- * equals \p negative_slope */
+ * equals \p negative_slope
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") @Deprecated int mkldnn_relu_forward_desc_init(
         @Cast("mkldnn_relu_desc_t*") mkldnn_eltwise_desc_t relu_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, float negative_slope);
@@ -2702,7 +3104,15 @@ public static native @Cast("mkldnn_status_t") @Deprecated int mkldnn_relu_forwar
  * and memory descriptors \p diff_data_desc and \p data_desc.
  *
  * @deprecated use mkldnn_eltwise_backward_desc_init() instead, with \p alpha
- * equals \p negative_slope */
+ * equals \p negative_slope
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") @Deprecated int mkldnn_relu_backward_desc_init(
         @Cast("mkldnn_relu_desc_t*") mkldnn_eltwise_desc_t relu_desc,
         @Const mkldnn_memory_desc_t diff_data_desc,
@@ -2715,7 +3125,7 @@ public static native @Cast("mkldnn_status_t") @Deprecated int mkldnn_relu_backwa
  *
  * \f[dst[u][c][in] =
  *    \frac{\exp(src[ou][c][in]) - \max\limits_{c}(src[ou][c][in])}
- *    {\sum\limits_{c}\{\exp(src[ou][c][in]) 
+ *    {\sum\limits_{c}\{\exp(src[ou][c][in])
  *    - \max\limits_{c}(src[ou][c][in])\}},\f]
  *
  * where \f$ou, iu\f$ are outer and inner sizes repectively, defined
@@ -2724,13 +3134,28 @@ public static native @Cast("mkldnn_status_t") @Deprecated int mkldnn_relu_backwa
 
 /** Initializes a \p softmax_desc for forward propagation using \p prop_kind
  * (possible value are #mkldnn_forward_training or #mkldnn_forward_inference)
- * and memory descriptor \p data_desc. */
+ * and memory descriptor \p data_desc.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_softmax_forward_desc_init(
         mkldnn_softmax_desc_t softmax_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, int softmax_axis);
 
 /** Initializes a \p softmax_desc for backward propagation using memory
- * descriptors \p diff_desc and \p data_desc. */
+ * descriptors \p diff_desc and \p data_desc.
+ *
+ * Order of inputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_init(
         mkldnn_softmax_desc_t softmax_desc,
         @Const mkldnn_memory_desc_t diff_desc,
@@ -2740,7 +3165,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_i
 
 /** \addtogroup c_api_pooling Pooling
  * A primitive to perform max or average pooling.
- * 
+ *
  * Max pooling:
  * \f[dst[n][oc][oh][ow] =
  *     \max\limits_{kw,kh}
@@ -2754,6 +3179,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_i
  * where \f$p_l, p_r\f$ are \p padding_l and \p padding_r
  * respectively and output spatial dimensions are calculated
  * similarly as done in convolution.
+ *
+ * During training max pooling requires workspace on forward
+ * (#mkldnn_forward_training) and backward (#mkldnn_backward) passes to
+ * save indices where maximum was found. Workspace layout is opaque and
+ * the indices cannot be restored from it. However one can use backward
+ * pooling to perform up-sampling (used in some detection topologies).
+ *
  * \{ */
 
 /** Initializes a pooling descriptor \p pool_desc for forward propagation using
@@ -2764,7 +3196,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_i
  *
  * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
  *
- * \todo clarify! */
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if \p alg_kind = #mkldnn_pooling_max and
+ *      \p prop_kind = #mkldnn_forward_training
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
@@ -2789,7 +3229,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_in
  * domain: \p strides, \p kernel sizes, \p padding_l, \p padding_r, and \p
  * padding_kind.
  *
- * \todo clarify! */
+ * \note if \p padding_r is \c NULL, the padding is supposed to be symmetric
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if \p alg_kind = #mkldnn_pooling_max
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2813,8 +3262,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_i
 
 /** \addtogroup c_api_lrn LRN
  * A primitive to perform local response normalization (LRN) across or within
- * channels. 
- * 
+ * channels.
+ *
  * LRN accross channels:
  * \f[dst[n][c][h][w] = \left\{k + \frac{\alpha}{n_{l}}
  *                      \sum\limits_{i=-(n_{l}-1)/2}^{(n_{l}+1)/2}
@@ -2828,12 +3277,33 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_i
  *                      src[n][c][h][w],\f]
  *
  * where \f$n_{l}\f$ is the \p local_size.
+ *
+ * During training LRN might or might not require workspace on forward
+ * (#mkldnn_forward_training) and backward (#mkldnn_backward) passes. The
+ * behavior is implementation specific. Optimized implementations typically
+ * require workspace and use it to save some intermediate results from the
+ * forward pass that accelerate computations on the backward pass.
+ *
+ * To check whether workspace is required one should query the LRN primitive
+ * descriptor for the workspace (#mkldnn_query_workspace_pd). Success would
+ * indicate the workspace is required and its description would be returned.
+ * \sa mkldnn_primitive_desc_query and mkldnn_primitive_desc_query_pd
+ *
  * \{ */
 
 /** Initializes an \p lrn_desc for forward propagation using \p prop_kind
  * (possible values are #mkldnn_forward_training or #mkldnn_forward_inference),
  * \p alg_kind, memory descriptor \p data_desc, and regularization
- * parameters \p local_size, \p alpha, \p beta, and \p k. */
+ * parameters \p local_size, \p alpha, \p beta, and \p k.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if the underlying implementation requires
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
@@ -2841,7 +3311,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
 
 /** Initializes an \p lrn_desc for backward propagation using \p alg_kind,
  * memory descriptors \p data_desc, and \p diff_data_desc, and regularization
- * parameters \p local_size, \p alpha, \p beta, and \p k. */
+ * parameters \p local_size, \p alpha, \p beta, and \p k.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if the underlying implementation requires
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
@@ -2868,15 +3348,48 @@ public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
  * and dst point to the same memory for forward, and diff_dst and diff_src
  * point to the same memory for backward pass.
  *
+ * Batch normalization supports different flavors controlled by
+ * mkldnn_batch_normalization_desc_t. For example batch normalization can
+ * compute the mean and variance on its own or can take them as inputs.
+ * It can either perform scaling and shifting using gamma and beta parameters
+ * or not. Optionally it can also perform a fused ReLU, which in case of
+ * training would also require a workspace.
+ *
+ * \sa mkldnn_batch_normalization_desc_t
  * \{ */
 
 /** Initializes a batch normalization descriptor \p bnrm_desc for forward
  * propagation using \p prop_kind, (possible values are
  * #mkldnn_forward_training or #mkldnn_forward_inference), memory descriptor
- * \p data_desc, normalization parameter \p epsilon and flags (possible values
- * are #mkldnn_use_global_stats and #mkldnn_use_scaleshift).
+ * \p data_desc, normalization parameter \p epsilon and \p flags set using bit
+ * flags of type mkldnn_batch_normalization_desc_t.
  *
- * \sa mkldnn_batch_normalization_desc_t */
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - mean (#mkldnn_query_src_pd, 1),
+ *      if #mkldnn_use_global_stats bit-flags is set in \p flags
+ *  - variance (#mkldnn_query_src_pd, 2),
+ *      if #mkldnn_use_global_stats bit-flags is set in \p flags
+ *  - scale_and_shift (#mkldnn_query_weights_pd, 0),
+ *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ *  - mean (#mkldnn_query_dst_pd, 1),
+ *      if #mkldnn_use_global_stats bit-flags is not set in \p flags
+ *      \p prop_kind = #mkldnn_forward_training
+ *  - variance (#mkldnn_query_dst_pd, 2),
+ *      if #mkldnn_use_global_stats bit-flags is not set in \p flags
+ *      and \p prop_kind = #mkldnn_forward_training
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if #mkldnn_fuse_bn_relu bit-flags is set in \p flags
+ *      and \p prop_kind = #mkldnn_forward_training
+ *
+ * \note in-place operation is supported,
+ *       i.e. dst points to the same memory as src.
+ *
+ * \sa mkldnn_batch_normalization_desc_t
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_forward_desc_init(
         mkldnn_batch_normalization_desc_t bnrm_desc,
         @Cast("mkldnn_prop_kind_t") int prop_kind, @Const mkldnn_memory_desc_t data_desc,
@@ -2885,10 +3398,30 @@ public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_for
 /** Initializes a batch normalization descriptor \p bnrm_desc for backward
  * propagation with respect to data and scale-shift parameters using memory
  * descriptors \p data_desc and \p diff_data_desc, and normalization parameter
- * \p epsilon and flags (possible values are #mkldnn_use_global_stats and
- * #mkldnn_use_scaleshift).
+ * \p epsilon and \p flags set using bit flags of type
+ * mkldnn_batch_normalization_desc_t.
  *
- * \sa mkldnn_batch_normalization_desc_t */
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - mean (#mkldnn_query_src_pd, 1)
+ *  - variance (#mkldnn_query_src_pd, 2)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - scale_and_shift (#mkldnn_query_weights_pd, 0),
+ *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if #mkldnn_fuse_bn_relu bit-flags is set in \p flags
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ *  - diff_scale_and_shift (#mkldnn_query_diff_weights_pd, 0),
+ *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ *      and \p prop_kind = #mkldnn_backward
+ *
+ * \note in-place operation is supported,
+ *       i.e. diff_src points to the same memory as diff_dst.
+ *
+ * \sa mkldnn_batch_normalization_desc_t
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_backward_desc_init(
         mkldnn_batch_normalization_desc_t bnrm_desc,
         @Cast("mkldnn_prop_kind_t") int prop_kind,
@@ -2917,7 +3450,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_bac
  *
  * \note
  *     memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind. */
+ *     of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_forward_desc_init(
         mkldnn_inner_product_desc_t ip_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2930,7 +3472,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_forward_d
  *
  * \note
  *     memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind. */
+ *     of \p format_kind.
+ *
+ * Order of inputs:
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src (#mkldnn_query_diff_src_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_data_desc_init(
         mkldnn_inner_product_desc_t ip_desc,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2942,7 +3492,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_
  *
  * \note
  *     memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind. */
+ *     of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_weights_desc_init(
         mkldnn_inner_product_desc_t ip_desc,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2961,7 +3520,17 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_
  * descriptor \p conv_desc and ReLU parameter \p negative slope.
  *
  * @deprecated use mkldnn_convolution_desc_init with
- * mkldnn_post_ops_append_eltwise to append ReLU */
+ * mkldnn_post_ops_append_eltwise to append ReLU
+ *
+ * Order of inputs:
+ *  - src (#mkldnn_query_src_pd, 0)
+ *  - weights (#mkldnn_query_weights_pd, 0)
+ *  - bias (#mkldnn_query_weights_pd, 1),
+ *      if convolution is created with bias
+ *
+ * Order of outputs:
+ *  - dst (#mkldnn_query_dst_pd, 0)
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_relu_desc_init(
         mkldnn_convolution_relu_desc_t conv_relu_desc,
         @Const mkldnn_convolution_desc_t conv_desc, float negative_slope);
@@ -2997,10 +3566,28 @@ public static native int mkldnn_rnn_cell_get_states_count(
 /** Initializes a rnn descriptor \p rnn_desc for forward propagation
  * using \p prop_kind, \p rnn_cell_desc, \p direction, and memory descriptors.
  * \note if \p prop_kind equals #mkldnn_forward_training, you need to query a
- * worskpace memory descriptor before creating the primitive.
+ * workspace memory descriptor before creating the primitive.
+ *
+ * \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to be
+ * either NULL or point to a zero memory descriptor that would indicate
+ * RNN primitive should not use them.
  *
  * \note all memory descriptors except \p src_iter_desc are allowed to be
- * initialized with #mkldnn_any value of \p format_kind. */
+ * initialized with #mkldnn_any value of \p format_kind.
+ *
+ * Order of inputs:
+ *  - src_layer (#mkldnn_query_src_pd, 0)
+ *  - src_iter (#mkldnn_query_src_pd, 1), if used
+ *  - weights_layer (#mkldnn_query_weights_pd, 0)
+ *  - weights_iter (#mkldnn_query_weights_pd, 1)
+ *  - bias (#mkldnn_query_weights_pd, 2), if used
+ *
+ * Order of outputs:
+ *  - dst_layer (#mkldnn_query_dst_pd, 0)
+ *  - dst_iter (#mkldnn_query_dst_pd, 1), if used
+ *  - workspace (#mkldnn_query_workspace_pd, 0),
+ *      if \p prop_kind equals #mkldnn_forward_training
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_rnn_forward_desc_init(
         mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_rnn_cell_desc_t rnn_cell_desc,
@@ -3016,7 +3603,33 @@ public static native @Cast("mkldnn_status_t") int mkldnn_rnn_forward_desc_init(
 /** Initializes a rnn descriptor \p rnn_desc for backward propagation
  * using \p prop_kind, \p rnn_cell_desc, \p direction, and memory descriptors.
  * \note all memory descriptors are allowed to be initialized with
- * #mkldnn_any value of \p format_kind. */
+ * #mkldnn_any value of \p format_kind.
+ *
+ * \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
+ * \p bias_desc (simultaneously with \p diff_bias_desc), and
+ * \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed
+ * to be either NULL or point to a zero memory descriptor that would indicate
+ * RNN primitive should not use them.
+ *
+ * Order of inputs:
+ *  - src_layer (#mkldnn_query_src_pd, 0)
+ *  - src_iter (#mkldnn_query_src_pd, 1), if used
+ *  - weights_layer (#mkldnn_query_weights_pd, 0)
+ *  - weights_iter (#mkldnn_query_weights_pd, 1)
+ *  - bias (#mkldnn_query_weights_pd, 2), if used
+ *  - dst_layer (#mkldnn_query_dst_pd, 0)
+ *  - dst_iter (#mkldnn_query_dst_pd, 1), if used
+ *  - diff_dst_layer (#mkldnn_query_diff_dst_pd, 0)
+ *  - diff_dst_iter (#mkldnn_query_diff_dst_pd, 1), if used
+ *  - workspace (#mkldnn_query_workspace_pd, 0)
+ *
+ * Order of outputs:
+ *  - diff_src_layer (#mkldnn_query_diff_src_pd, 0)
+ *  - diff_src_iter (#mkldnn_query_diff_src_pd, 1), if used
+ *  - diff_weights_layer (#mkldnn_query_diff_weights_pd, 0)
+ *  - diff_weights_iter (#mkldnn_query_diff_weights_pd, 1)
+ *  - diff_bias (#mkldnn_query_diff_weights_pd, 2), if used
+ */
 public static native @Cast("mkldnn_status_t") int mkldnn_rnn_backward_desc_init(
         mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_rnn_cell_desc_t rnn_cell_desc,
@@ -3164,6 +3777,86 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
         @Const float[] B, @Const int[] ldb,
         @Const float[] beta, float[] C, @Const int[] ldc);
 
+/** gemm_s8u8s32 and gemm_s8s8s32 perform matrix-matrix multiplication operation
+ * and add the result to a scalar-matrix product. To get the final result,
+ * a vector is added to each row or column of the output matrix.
+ * The operation is defined as:
+ * C := alpha*(op(A) + A_offset) * (op(B) + B_offset) + beta*C + C_offset
+ * where op( X ) = X or op( X ) = X**T,
+ * A_offset is an m-by-k matrix with every element equal to the value oa,
+ * B_offset is an k-by-n matrix with every element equal to the value ob,
+ * C_offset is an m-by-n matrix defined by the oc array, size len:
+ * if offsetc = F: len must be at least 1
+ * if offsetc = C: len must be at least max(1, m)
+ * if offsetc = R: len must be at least max(1, n)
+ * alpha and beta are scalars, and A, B and C are matrices, with op( A )
+ * an m-by-k matrix, op( B ) a k-by-n matrix and C an m-by-n matrix.
+ * \note
+ *      API is different compared to standard BLAS routine
+ *      as it returns mkldnn_status_t for error handling.
+ *      XERBLA is not supported: no error message will be printed
+ *      in case of incorrect parameters */
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntPointer M, @Const IntPointer N,
+        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
+        @Const BytePointer ao, @Cast("const uint8_t*") BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
+        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
+        String transb, String offsetc, @Const IntBuffer M, @Const IntBuffer N,
+        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
+        @Const ByteBuffer ao, @Cast("const uint8_t*") ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
+        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const int[] M, @Const int[] N,
+        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
+        @Const byte[] ao, @Cast("const uint8_t*") byte[] B, @Const int[] ldb, @Const byte[] bo,
+        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
+        String transb, String offsetc, @Const IntPointer M, @Const IntPointer N,
+        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
+        @Const BytePointer ao, @Cast("const uint8_t*") BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
+        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntBuffer M, @Const IntBuffer N,
+        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
+        @Const ByteBuffer ao, @Cast("const uint8_t*") ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
+        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
+        String transb, String offsetc, @Const int[] M, @Const int[] N,
+        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
+        @Const byte[] ao, @Cast("const uint8_t*") byte[] B, @Const int[] ldb, @Const byte[] bo,
+        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
+
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntPointer M, @Const IntPointer N,
+        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
+        @Const BytePointer ao, @Const BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
+        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
+        String transb, String offsetc, @Const IntBuffer M, @Const IntBuffer N,
+        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
+        @Const ByteBuffer ao, @Const ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
+        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const int[] M, @Const int[] N,
+        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
+        @Const byte[] ao, @Const byte[] B, @Const int[] ldb, @Const byte[] bo,
+        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
+        String transb, String offsetc, @Const IntPointer M, @Const IntPointer N,
+        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
+        @Const BytePointer ao, @Const BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
+        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntBuffer M, @Const IntBuffer N,
+        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
+        @Const ByteBuffer ao, @Const ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
+        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
+        String transb, String offsetc, @Const int[] M, @Const int[] N,
+        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
+        @Const byte[] ao, @Const byte[] B, @Const int[] ldb, @Const byte[] bo,
+        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
 /** \} */
 
 /** \} */
@@ -3223,6 +3916,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_engine_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_engine_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_engine_handle position(long position) {
+        return (mkldnn_engine_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_engine_handle(mkldnn_engine t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_engine t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_engine_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_engine_handle(@Const @ByRef mkldnn_engine_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_engine_handle other);
@@ -3243,6 +3950,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_primitive_desc_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_primitive_desc_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_primitive_desc_handle position(long position) {
+        return (mkldnn_primitive_desc_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_primitive_desc_handle(mkldnn_primitive_desc t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_primitive_desc t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_primitive_desc_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_primitive_desc_handle(@Const @ByRef mkldnn_primitive_desc_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_primitive_desc_handle other);
@@ -3263,6 +3984,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_primitive_attr_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_primitive_attr_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_primitive_attr_handle position(long position) {
+        return (mkldnn_primitive_attr_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_primitive_attr_handle(mkldnn_primitive_attr t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_primitive_attr t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_primitive_attr_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_primitive_attr_handle(@Const @ByRef mkldnn_primitive_attr_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_primitive_attr_handle other);
@@ -3283,6 +4018,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_post_ops_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_post_ops_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_post_ops_handle position(long position) {
+        return (mkldnn_post_ops_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_post_ops_handle(mkldnn_post_ops t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_post_ops t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_post_ops_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_post_ops_handle(@Const @ByRef mkldnn_post_ops_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_post_ops_handle other);
@@ -3303,6 +4052,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_primitive_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_primitive_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_primitive_handle position(long position) {
+        return (mkldnn_primitive_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_primitive_handle(mkldnn_primitive t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_primitive t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_primitive_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_primitive_handle(@Const @ByRef mkldnn_primitive_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_primitive_handle other);
@@ -3323,6 +4086,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mkldnn_stream_handle(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public mkldnn_stream_handle(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public mkldnn_stream_handle position(long position) {
+        return (mkldnn_stream_handle)super.position(position);
+    }
+
+    /** Constructs a C handle wrapper.
+     *  @param t The C handle to wrap.
+     *  @param weak A flag to specify whether to construct a weak wrapper. */
+    public mkldnn_stream_handle(mkldnn_stream t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_stream t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_stream_handle() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     public mkldnn_stream_handle(@Const @ByRef mkldnn_stream_handle other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef mkldnn_stream_handle other);
@@ -3346,10 +4123,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
 /** Base class for all computational primitives. */
 @Namespace("mkldnn") public static class primitive extends mkldnn_primitive_handle {
     static { Loader.load(); }
-
-    
-        public primitive(@Const @ByRef primitive other) { super((Pointer)null); allocate(other); }
-        private native void allocate(@Const @ByRef primitive other);
     /** Default native constructor. */
     public primitive() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
@@ -3374,6 +4147,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
         sum = mkldnn_sum,
         convolution = mkldnn_convolution,
         deconvolution = mkldnn_deconvolution,
+        shuffle = mkldnn_shuffle,
         eltwise = mkldnn_eltwise,
         relu = mkldnn_relu,
         softmax = mkldnn_softmax,
@@ -3561,9 +4335,11 @@ public static final int
 
     impl_info_str = mkldnn_query_impl_info_str,
 
+    op_d = mkldnn_query_op_d,
     memory_d = mkldnn_query_memory_d,
     convolution_d = mkldnn_query_convolution_d,
     deconvolution_d = mkldnn_query_deconvolution_d,
+    shuffle_d = mkldnn_query_shuffle_d,
     eltwise_d = mkldnn_query_eltwise_d,
     relu_d = mkldnn_query_relu_d,
     softmax_d = mkldnn_query_softmax_d,
@@ -3718,13 +4494,13 @@ public static final int
 
 /** \}
  <p>
- *  \addtogroup cpp_api_primitives Primitives
+ *  \addtogroup cpp_api_memory_related Memory and memory related operations
  *  \{
  <p>
  *  \addtogroup cpp_api_memory Memory
- *  A primitive to describe data.
+ *  A primitive to describe and store data.
  * 
- *  \sa \ref c_api_memory in \ref c_api
+ *  For more information please refer to \ref c_api_memory in \ref c_api
  *  \{
  <p>
  *  Memory primitive that describes the data. */
@@ -3754,27 +4530,50 @@ public static final int
         blocked = mkldnn_blocked,
         x = mkldnn_x,
         nc = mkldnn_nc,
+        ncw = mkldnn_ncw,
+        nwc = mkldnn_nwc,
+        nCw16c = mkldnn_nCw16c,
         nchw = mkldnn_nchw,
         nhwc = mkldnn_nhwc,
         chwn = mkldnn_chwn,
+        nCw8c = mkldnn_nCw8c,
         nChw8c = mkldnn_nChw8c,
         nChw16c = mkldnn_nChw16c,
         ncdhw = mkldnn_ncdhw,
         ndhwc = mkldnn_ndhwc,
+        nCdhw8c = mkldnn_nCdhw8c,
         nCdhw16c = mkldnn_nCdhw16c,
         oi = mkldnn_oi,
         io = mkldnn_io,
+        oiw = mkldnn_oiw,
+        wio = mkldnn_wio,
+        Owi8o = mkldnn_Owi8o,
+        OIw8o8i = mkldnn_OIw8o8i,
+        OIw8i8o = mkldnn_OIw8i8o,
+        OIw16i16o = mkldnn_OIw16i16o,
+        OIw16o16i = mkldnn_OIw16o16i,
+        Oiw16o = mkldnn_Oiw16o,
+        Owi16o = mkldnn_Owi16o,
+        OIw8i16o2i = mkldnn_OIw8i16o2i,
+        OIw8o16i2o = mkldnn_OIw8o16i2o,
+        IOw16o16i = mkldnn_IOw16o16i,
         oihw = mkldnn_oihw,
         ihwo = mkldnn_ihwo,
         hwio = mkldnn_hwio,
+        hwio_s8s8 = mkldnn_hwio_s8s8,
         dhwio = mkldnn_dhwio,
         oidhw = mkldnn_oidhw,
+        OIdhw8i8o = mkldnn_OIdhw8i8o,
+        OIdhw8o8i = mkldnn_OIdhw8o8i,
+        Odhwi8o = mkldnn_Odhwi8o,
         OIdhw16i16o = mkldnn_OIdhw16i16o,
         OIdhw16o16i = mkldnn_OIdhw16o16i,
         Oidhw16o = mkldnn_Oidhw16o,
         Odhwi16o = mkldnn_Odhwi16o,
         oIhw8i = mkldnn_oIhw8i,
         oIhw16i = mkldnn_oIhw16i,
+        oIdhw8i = mkldnn_oIdhw8i,
+        oIdhw16i = mkldnn_oIdhw16i,
         OIhw8i8o = mkldnn_OIhw8i8o,
         OIhw16i16o = mkldnn_OIhw16i16o,
         OIhw8o8i = mkldnn_OIhw8o8i,
@@ -3784,19 +4583,36 @@ public static final int
         OIdhw8i16o2i = mkldnn_OIdhw8i16o2i,
         OIhw8o16i2o = mkldnn_OIhw8o16i2o,
         OIhw4i16o4i = mkldnn_OIhw4i16o4i,
+        OIhw4i16o4i_s8s8 = mkldnn_OIhw4i16o4i_s8s8,
         Oihw8o = mkldnn_Oihw8o,
         Oihw16o = mkldnn_Oihw16o,
         Ohwi8o = mkldnn_Ohwi8o,
         Ohwi16o = mkldnn_Ohwi16o,
         OhIw16o4i = mkldnn_OhIw16o4i,
+        goiw = mkldnn_goiw,
+        gOwi8o = mkldnn_gOwi8o,
+        gOIw8o8i = mkldnn_gOIw8o8i,
+        gOIw8i8o = mkldnn_gOIw8i8o,
+        gOIw16i16o = mkldnn_gOIw16i16o,
+        gOIw16o16i = mkldnn_gOIw16o16i,
+        gOiw16o = mkldnn_gOiw16o,
+        gOwi16o = mkldnn_gOwi16o,
+        gOIw8i16o2i = mkldnn_gOIw8i16o2i,
+        gIOw16o16i = mkldnn_gIOw16o16i,
+        gOIw8o16i2o = mkldnn_gOIw8o16i2o,
         goihw = mkldnn_goihw,
         hwigo = mkldnn_hwigo,
+        hwigo_s8s8 = mkldnn_hwigo_s8s8,
+        gOIdhw8i8o = mkldnn_gOIdhw8i8o,
+        gOIdhw8o8i = mkldnn_gOIdhw8o8i,
+        gOdhwi8o = mkldnn_gOdhwi8o,
         gOIhw8i8o = mkldnn_gOIhw8i8o,
         gOIhw16i16o = mkldnn_gOIhw16i16o,
         gOIhw8i16o2i = mkldnn_gOIhw8i16o2i,
         gOIdhw8i16o2i = mkldnn_gOIdhw8i16o2i,
         gOIhw8o16i2o = mkldnn_gOIhw8o16i2o,
         gOIhw4i16o4i = mkldnn_gOIhw4i16o4i,
+        gOIhw4i16o4i_s8s8 = mkldnn_gOIhw4i16o4i_s8s8,
         gOihw8o = mkldnn_gOihw8o,
         gOihw16o = mkldnn_gOihw16o,
         gOhwi8o = mkldnn_gOhwi8o,
@@ -4165,6 +4981,52 @@ public static final int
 
 /** \}
  <p>
+ *  \}
+ <p>
+ *  \addtogroup cpp_api_primitives Primitives
+ *  \{
+ <p>
+ *  \addtogroup cpp_api_primitive_descriptors Primitive descriptors
+ *  \{
+ <p>
+ *  A base class for all primitive descriptors */
+@Name("mkldnn::primitive_desc") @NoOffset public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public primitive_desc(Pointer p) { super(p); }
+
+    public primitive_desc(const_mkldnn_op_desc_t desc, @Const primitive_attr attr,
+                @Const @ByRef engine e, @Const mkldnn_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+    private native void allocate(const_mkldnn_op_desc_t desc, @Const primitive_attr attr,
+                @Const @ByRef engine e, @Const mkldnn_primitive_desc hint_fwd_pd);
+
+    public native @ByVal engine get_engine();
+
+    /** Returns implementation name */
+    
+    ///
+    public native @Cast("const char*") BytePointer impl_info_str();
+
+    /** Advances the next implementation for the given op descriptor
+     * 
+     *  Returns:
+     *  - \c true on success
+     *  - \c false if the last implementation reached, and
+     *    the primitive descriptor itself is kept unchanged */
+    public native @Cast("bool") boolean next_impl();
+
+    /** Queries and returns requested memory primitive descriptor */
+    public native @ByVal memory.primitive_desc query_mpd(@Cast("mkldnn::query") int what, int idx/*=0*/);
+    public native @ByVal memory.primitive_desc query_mpd(@Cast("mkldnn::query") int what);
+
+    // register specialized queries, e.g. src_primitive_desc()
+// #   define REG_QUERY_MPD(name, what, idx)
+//     memory::primitive_desc name ## _primitive_desc() const
+//     { return query_mpd(what ## _pd, idx); }
+}
+
+/** \}
+ <p>
  *  \addtogroup cpp_api_convolution Convolution
  *  A primitive to compute convolution using different algorithms.
  * 
@@ -4399,28 +5261,22 @@ public static final int
                         @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aattr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public convolution_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -4552,22 +5408,25 @@ public static final int
                         @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
+
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public convolution_backward_data(@Const @ByRef primitive_desc aprimitive_desc,
@@ -4808,24 +5667,25 @@ public static final int
 
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef convolution_forward.primitive_desc hint_fwd_pd);
+
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public convolution_backward_weights(@Const @ByRef primitive_desc aprimitive_desc,
@@ -4864,15 +5724,18 @@ public static final int
                         float negative_slope);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc src_primitive_desc();
+        public native @ByVal memory.primitive_desc weights_primitive_desc();
+        public native @ByVal memory.primitive_desc bias_primitive_desc();
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
     }
 
     /** @deprecated consider using convolution_forward + post_ops */
@@ -5128,28 +5991,22 @@ public static final int
                         @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aattr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public deconvolution_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5281,22 +6138,25 @@ public static final int
                         @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd);
+
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public deconvolution_backward_data(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5536,24 +6396,25 @@ public static final int
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef deconvolution_forward.primitive_desc hint_fwd_pd);
+
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public deconvolution_backward_weights(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5604,21 +6465,20 @@ public static final int
                     int local_size, float alpha, float beta);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public lrn_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5663,23 +6523,24 @@ public static final int
                     int local_size, float alpha, float beta);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef lrn_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef lrn_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef lrn_forward.primitive_desc hint_fwd_pd);
 
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public lrn_backward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5766,21 +6627,20 @@ public static final int
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
-
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public pooling_forward(@Const @ByRef primitive_desc aprimitive_desc, @Const @ByRef primitive.at src,
@@ -5855,21 +6715,24 @@ public static final int
                         @Cast("const mkldnn::padding_kind") int apadding_kind);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef pooling_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef pooling_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef pooling_forward.primitive_desc hint_fwd_pd);
 
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
         public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public pooling_backward(@Const @ByRef primitive_desc aprimitive_desc, @Const @ByRef primitive.at diff_dst,
@@ -5915,17 +6778,19 @@ public static final int
                         float negative_slope);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
+
+        public native @ByVal memory.primitive_desc src_primitive_desc();
         public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public eltwise_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -5958,19 +6823,24 @@ public static final int
                     float negative_slope);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef eltwise_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                @Const @ByRef eltwise_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef eltwise_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef eltwise_forward.primitive_desc hint_fwd_pd);
 
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef eltwise_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef eltwise_forward.primitive_desc hint_fwd_pd);
+
+        public native @ByVal memory.primitive_desc src_primitive_desc();
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
     }
 
     public eltwise_backward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6009,15 +6879,19 @@ public static final int
                      int softmax_axis);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public native @ByVal engine get_engine();
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
+
+        public native @ByVal memory.primitive_desc src_primitive_desc();
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
     }
 
     public softmax_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6043,19 +6917,25 @@ public static final int
                         int softmax_axis);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd);
 
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef softmax_forward.primitive_desc hint_fwd_pd);
+
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public softmax_backward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6091,30 +6971,24 @@ public static final int
                         @Cast("unsigned") int flags);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aattr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
+        public native @ByVal memory.primitive_desc src_primitive_desc();
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
-        public native @ByVal memory.primitive_desc mean_primitive_desc();
-
-        public native @ByVal memory.primitive_desc variance_primitive_desc();
-
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
         public native @ByVal memory.primitive_desc workspace_primitive_desc();
 
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc mean_primitive_desc();
+        public native @ByVal memory.primitive_desc variance_primitive_desc();
     }
 
     public batch_normalization_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6211,29 +7085,31 @@ public static final int
                         @Const @ByRef memory.desc data_desc, float epsilon, @Cast("unsigned") int flags);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc weights_primitive_desc();
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
-
+        public native @ByVal memory.primitive_desc src_primitive_desc();
         public native @ByVal memory.primitive_desc mean_primitive_desc();
-
         public native @ByVal memory.primitive_desc variance_primitive_desc();
-
+        public native @ByVal memory.primitive_desc weights_primitive_desc();
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
         public native @ByVal memory.primitive_desc workspace_primitive_desc();
 
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc diff_src_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
     }
 
     // Prop_kind == backward
@@ -6320,28 +7196,21 @@ public static final int
                         @Const @ByRef memory.desc dst_desc);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aattr, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef primitive_attr aattr,
-                        @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_primitive_desc();
-
         public native @ByVal memory.primitive_desc bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_primitive_desc();
-
-        public native @ByVal engine get_engine();
     }
 
     public inner_product_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6378,23 +7247,24 @@ public static final int
                         @Const @ByRef memory.desc diff_dst_desc);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal memory.primitive_desc weights_primitive_desc();
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
         public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc weights_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
     }
 
     public inner_product_backward_data(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6432,25 +7302,25 @@ public static final int
                         @Const @ByRef memory.desc diff_dst_desc);
     }
 
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_primitive_desc) { super((Pointer)null); allocate(adesc, aengine, hint_fwd_primitive_desc); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine,
-                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_primitive_desc);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef inner_product_forward.primitive_desc hint_fwd_pd);
 
         public native @ByVal memory.primitive_desc src_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
     }
 
     public inner_product_backward_weights(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6551,31 +7421,26 @@ public static final int
                     );
 
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
         public native @ByVal memory.primitive_desc src_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc src_iter_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_iter_primitive_desc();
-
         public native @ByVal memory.primitive_desc bias_primitive_desc();
-
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_iter_primitive_desc();
-
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc workspace_primitive_desc();
     }
 
     public rnn_forward(@Const @ByRef primitive_desc aprimitive_desc,
@@ -6637,46 +7502,43 @@ public static final int
                         @Const @ByRef memory.desc diff_dst_iter_desc);
 
     }
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
     
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native @Deprecated void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef rnn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef rnn_forward.primitive_desc hint_fwd_pd);
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef rnn_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
+                        @Const @ByRef rnn_forward.primitive_desc hint_fwd_pd);
 
         public native @ByVal memory.primitive_desc src_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc src_iter_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc weights_iter_primitive_desc();
-
         public native @ByVal memory.primitive_desc bias_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_layer_primitive_desc();
-
         public native @ByVal memory.primitive_desc dst_iter_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_src_layer_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_src_iter_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_weights_layer_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_weights_iter_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_dst_layer_primitive_desc();
-
-        public native @ByVal memory.primitive_desc diff_dst_iter_primitive_desc();
-
         public native @ByVal memory.primitive_desc workspace_primitive_desc();
 
-        public native @ByVal engine get_engine();
+        public native @ByVal memory.primitive_desc diff_src_layer_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_src_iter_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_weights_layer_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_weights_iter_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_bias_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_layer_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_iter_primitive_desc();
     }
+
     // With last iteration (with and without input src_iter)
     public rnn_backward(@Const @ByRef primitive_desc aprimitive_desc,
                      @Const @ByRef primitive.at src_layer,
@@ -6713,6 +7575,85 @@ public static final int
 }
 
 /** \}
+ <p>
+ *  \addtogroup cpp_api_shuffle Shuffle
+ *  A primitive to shuffle data along the axis.
+ * 
+ *  \sa \ref c_api_shuffle in \ref c_api
+ *  \{ */
+
+@Namespace("mkldnn") public static class shuffle_forward extends primitive {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public shuffle_forward(Pointer p) { super(p); }
+
+    @NoOffset public static class desc extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public desc(Pointer p) { super(p); }
+    
+        public native @ByRef mkldnn_shuffle_desc_t data(); public native desc data(mkldnn_shuffle_desc_t data);
+        public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
+                        int axis, int group_size) { super((Pointer)null); allocate(aprop_kind, data_desc, axis, group_size); }
+        private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
+                        int axis, int group_size);
+    }
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public primitive_desc(Pointer p) { super(p); }
+    
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
+
+        public native @ByVal memory.primitive_desc src_primitive_desc();
+        public native @ByVal memory.primitive_desc dst_primitive_desc();
+    }
+
+    public shuffle_forward(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at src, @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, dst); }
+    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at src, @Const @ByRef memory dst);
+}
+
+@Namespace("mkldnn") public static class shuffle_backward extends primitive {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public shuffle_backward(Pointer p) { super(p); }
+
+    @NoOffset public static class desc extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public desc(Pointer p) { super(p); }
+    
+        public native @ByRef mkldnn_shuffle_desc_t data(); public native desc data(mkldnn_shuffle_desc_t data);
+        public desc(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size) { super((Pointer)null); allocate(diff_data_desc, axis, group_size); }
+        private native void allocate(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size);
+    }
+
+    public static class primitive_desc extends mkldnn.primitive_desc {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public primitive_desc(Pointer p) { super(p); }
+    
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd);
+
+        public native @ByVal memory.primitive_desc diff_src_primitive_desc();
+        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
+    }
+
+    public shuffle_backward(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at diff_dst, @Const @ByRef memory diff_src) { super((Pointer)null); allocate(aprimitive_desc, diff_dst, diff_src); }
+    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
+                @Const @ByRef primitive.at diff_dst, @Const @ByRef memory diff_src);
+}
+
+/** \}
+ <p>
  *  \} Primitives
  <p>
  *  \addtogroup cpp_api_stream Stream
@@ -6726,10 +7667,6 @@ public static final int
 
 @Namespace("mkldnn") public static class stream extends mkldnn_stream_handle {
     static { Loader.load(); }
-
-    
-        public stream(@Const @ByRef stream other) { super((Pointer)null); allocate(other); }
-        private native void allocate(@Const @ByRef stream other);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public stream(Pointer p) { super(p); }
 
@@ -6765,6 +7702,8 @@ public static final int
 
     public native @ByRef stream rerun();
 }
+
+// #undef REG_QUERY_MPD
 
 /** \}
  <p>
