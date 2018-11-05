@@ -18,18 +18,18 @@ NASM_VERSION=2.13.03
 ZLIB=zlib-1.2.11
 LAME=lame-3.100
 SPEEX=speex-1.2.0
-OPUS=opus-1.2.1
+OPUS=opus-1.3
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.0h
+OPENSSL=openssl-1.1.0i
 OPENH264_VERSION=1.8.0
-X265=2.8
+X265=2.9
 VPX_VERSION=1.7.0
 ALSA_VERSION=1.1.6
 FREETYPE_VERSION=2.9.1
-MFX_VERSION=1.23
-NVCODEC_VERSION=8.1.24.2
-FFMPEG_VERSION=4.0.2
+MFX_VERSION=1.25
+NVCODEC_VERSION=8.2.15.5
+FFMPEG_VERSION=4.0.3
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -86,6 +86,7 @@ cd ..
 patch -Np1 -d $LAME < ../../lame.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
+sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 
 case $PLATFORM in
     android-arm)
