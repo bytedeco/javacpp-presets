@@ -174,6 +174,10 @@ rm -Rf /c/go*
 rm -Rf /c/qt*
 rm -Rf /c/ruby*
 rm -Rf /c/cygwin*
+rm -Rf /c/miniconda*
+rm -Rf /c/libraries/llvm*
+rm -Rf "/c/Program Files/LLVM*"
+rm -Rf "/c/Program Files (x86)/Microsoft DirectX SDK*"
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
