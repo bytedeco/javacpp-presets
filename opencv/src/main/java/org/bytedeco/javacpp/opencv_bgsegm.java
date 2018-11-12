@@ -222,15 +222,15 @@ means some automatic value.
     public BackgroundSubtractorCNT(Pointer p) { super(p); }
 
     // BackgroundSubtractor interface
-    public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
-    public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
-    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
-    public native void getBackgroundImage(@ByVal Mat backgroundImage);
-    public native void getBackgroundImage(@ByVal UMat backgroundImage);
-    public native void getBackgroundImage(@ByVal GpuMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal Mat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal UMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal GpuMat backgroundImage);
 
     /** \brief Returns number of frames with same pixel color to consider stable.
     */
@@ -290,16 +290,16 @@ This algorithm demonstrates better performance on CDNET 2014 dataset compared to
     public BackgroundSubtractorGSOC(Pointer p) { super(p); }
 
     // BackgroundSubtractor interface
-    public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
-    public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
-    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 
-    public native void getBackgroundImage(@ByVal Mat backgroundImage);
-    public native void getBackgroundImage(@ByVal UMat backgroundImage);
-    public native void getBackgroundImage(@ByVal GpuMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal Mat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal UMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal GpuMat backgroundImage);
 }
 
 /** \brief Background Subtraction using Local SVD Binary Pattern. More details about the algorithm can be found at \cite LGuo2016
@@ -310,16 +310,16 @@ This algorithm demonstrates better performance on CDNET 2014 dataset compared to
     public BackgroundSubtractorLSBP(Pointer p) { super(p); }
 
     // BackgroundSubtractor interface
-    public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
-    public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
-    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 
-    public native void getBackgroundImage(@ByVal Mat backgroundImage);
-    public native void getBackgroundImage(@ByVal UMat backgroundImage);
-    public native void getBackgroundImage(@ByVal GpuMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal Mat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal UMat backgroundImage);
+    public native @Override void getBackgroundImage(@ByVal GpuMat backgroundImage);
 }
 
 /** \brief This is for calculation of the LSBP descriptors.

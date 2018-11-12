@@ -3163,8 +3163,18 @@ public static final int
      */
     AV_PIX_FMT_OPENCL = AV_PIX_FMT_GBRP + 109,
 
+    /**        Y        , 14bpp, big-endian */
+    AV_PIX_FMT_GRAY14BE = AV_PIX_FMT_GBRP + 110,
+    /**        Y        , 14bpp, little-endian */
+    AV_PIX_FMT_GRAY14LE = AV_PIX_FMT_GBRP + 111,
+
+    /** IEEE-754 single precision Y, 32bpp, big-endian */
+    AV_PIX_FMT_GRAYF32BE = AV_PIX_FMT_GBRP + 112,
+    /** IEEE-754 single precision Y, 32bpp, little-endian */
+    AV_PIX_FMT_GRAYF32LE = AV_PIX_FMT_GBRP + 113,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 110;
+    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 114;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -3191,6 +3201,8 @@ public static native @MemberGetter int AV_PIX_FMT_GRAY10();
 public static final int AV_PIX_FMT_GRAY10 = AV_PIX_FMT_GRAY10();
 public static native @MemberGetter int AV_PIX_FMT_GRAY12();
 public static final int AV_PIX_FMT_GRAY12 = AV_PIX_FMT_GRAY12();
+public static native @MemberGetter int AV_PIX_FMT_GRAY14();
+public static final int AV_PIX_FMT_GRAY14 = AV_PIX_FMT_GRAY14();
 public static native @MemberGetter int AV_PIX_FMT_GRAY16();
 public static final int AV_PIX_FMT_GRAY16 = AV_PIX_FMT_GRAY16();
 public static native @MemberGetter int AV_PIX_FMT_YA16();
@@ -3281,6 +3293,9 @@ public static native @MemberGetter int AV_PIX_FMT_GBRPF32();
 public static final int AV_PIX_FMT_GBRPF32 = AV_PIX_FMT_GBRPF32();
 public static native @MemberGetter int AV_PIX_FMT_GBRAPF32();
 public static final int AV_PIX_FMT_GBRAPF32 = AV_PIX_FMT_GBRAPF32();
+
+public static native @MemberGetter int AV_PIX_FMT_GRAYF32();
+public static final int AV_PIX_FMT_GRAYF32 = AV_PIX_FMT_GRAYF32();
 
 public static native @MemberGetter int AV_PIX_FMT_YUVA420P9();
 public static final int AV_PIX_FMT_YUVA420P9 = AV_PIX_FMT_YUVA420P9();
@@ -3638,8 +3653,16 @@ public static final int
      * AV_FRAME_DATA_QP_TABLE_PROPERTIES. Use av_frame_set_qp_table() and
      * av_frame_get_qp_table() to access this instead.
      */
-    AV_FRAME_DATA_QP_TABLE_DATA = 17;
+    AV_FRAME_DATA_QP_TABLE_DATA = 17,
 // #endif
+
+    /**
+     * Timecode which conforms to SMPTE ST 12-1. The data is an array of 4 uint32_t
+     * where the first uint32_t describes how many (1-3) of the other timecodes are used.
+     * The timecode format is described in the av_timecode_get_smpte_from_framenum()
+     * function in libavutil/timecode.c.
+     */
+    AV_FRAME_DATA_S12M_TIMECODE = 18;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -5702,6 +5725,8 @@ public static final int AV_OPT_FLAG_READONLY =        128;
 public static final int AV_OPT_FLAG_BSF_PARAM =       (1<<8);
 /** a generic parameter which can be set by the user for filtering */
 public static final int AV_OPT_FLAG_FILTERING_PARAM = (1<<16);
+/** set if option is deprecated, users should refer to AVOption.help text for more information */
+public static final int AV_OPT_FLAG_DEPRECATED =      (1<<17);
 //FIXME think about enc-audio, ... style flags
 
     /**
@@ -6655,12 +6680,8 @@ public static final int AV_PIX_FMT_FLAG_PSEUDOPAL =    (1 << 6);
 
 /**
  * The pixel format has an alpha channel. This is set on all formats that
- * support alpha in some way. The exception is AV_PIX_FMT_PAL8, which can
- * carry alpha as part of the palette. Details are explained in the
- * AVPixelFormat enum, and are also encoded in the corresponding
- * AVPixFmtDescriptor.
- *
- * The alpha is always straight, never pre-multiplied.
+ * support alpha in some way, including AV_PIX_FMT_PAL8. The alpha is always
+ * straight, never pre-multiplied.
  *
  * If a codec or a filter does not support alpha, it should set all alpha to
  * opaque, or use the equivalent pixel formats without alpha component, e.g.
@@ -6849,7 +6870,25 @@ public static final int AV_PIX_FMT_FLAG_FLOAT =        (1 << 9);
  * format writes the values corresponding to the palette
  * component c in data[1] to dst, rather than the palette indexes in
  * data[0]. The behavior is undefined if the format is not paletted.
+ * @param dst_element_size size of elements in dst array (2 or 4 byte)
  */
+@NoException public static native void av_read_image_line2(Pointer dst, @Cast("const uint8_t**") PointerPointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component,
+                        int dst_element_size);
+@NoException public static native void av_read_image_line2(Pointer dst, @Cast("const uint8_t**") @ByPtrPtr BytePointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component,
+                        int dst_element_size);
+@NoException public static native void av_read_image_line2(Pointer dst, @Cast("const uint8_t**") @ByPtrPtr ByteBuffer data,
+                        @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component,
+                        int dst_element_size);
+@NoException public static native void av_read_image_line2(Pointer dst, @Cast("const uint8_t**") @ByPtrPtr byte[] data,
+                        @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component,
+                        int dst_element_size);
+
 @NoException public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") PointerPointer data,
                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
                         int x, int y, int c, int w, int read_pal_component);
@@ -6876,7 +6915,21 @@ public static final int AV_PIX_FMT_FLAG_FLOAT =        (1 << 9);
  * @param y the vertical coordinate of the first pixel to write
  * @param w the width of the line to write, that is the number of
  * values to write to the image line
+ * @param src_element_size size of elements in src array (2 or 4 byte)
  */
+@NoException public static native void av_write_image_line2(@Const Pointer src, @Cast("uint8_t**") PointerPointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w, int src_element_size);
+@NoException public static native void av_write_image_line2(@Const Pointer src, @Cast("uint8_t**") @ByPtrPtr BytePointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w, int src_element_size);
+@NoException public static native void av_write_image_line2(@Const Pointer src, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
+                         @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w, int src_element_size);
+@NoException public static native void av_write_image_line2(@Const Pointer src, @Cast("uint8_t**") @ByPtrPtr byte[] data,
+                         @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w, int src_element_size);
+
 @NoException public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") PointerPointer data,
                          @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
                          int x, int y, int c, int w);
@@ -7706,7 +7759,7 @@ public static class AVStereo3D extends Pointer {
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "4.0.3";
+public static final String FFMPEG_VERSION = "4.1";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

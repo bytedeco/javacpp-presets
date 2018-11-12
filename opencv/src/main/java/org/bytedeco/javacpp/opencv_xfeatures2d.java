@@ -100,7 +100,7 @@ They are competitive alternatives to existing keypoints in particular for embedd
    -   An example on how to use the FREAK descriptor can be found at
         opencv_source_code/samples/cpp/freak_demo.cpp
  */
-@Namespace("cv::xfeatures2d") public static class FREAK extends Feature2D {
+@Namespace("cv::xfeatures2d") @NoOffset public static class FREAK extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
     public FREAK() { super((Pointer)null); allocate(); }
@@ -115,9 +115,12 @@ They are competitive alternatives to existing keypoints in particular for embedd
     }
 
 
-    /** enum cv::xfeatures2d::FREAK:: */
-    public static final int
-        NB_SCALES = 64, NB_PAIRS = 512, NB_ORIENPAIRS = 45;
+    @MemberGetter public static native int NB_SCALES();
+    public static final int NB_SCALES = NB_SCALES();
+    @MemberGetter public static native int NB_PAIRS();
+    public static final int NB_PAIRS = NB_PAIRS();
+    @MemberGetter public static native int NB_ORIENPAIRS();
+    public static final int NB_ORIENPAIRS = NB_ORIENPAIRS();
 
     /**
     @param orientationNormalized Enable orientation normalization.
@@ -288,18 +291,18 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DAISY(Pointer p) { super(p); }
 
-    /** enum cv::xfeatures2d::DAISY:: */
+    /** enum cv::xfeatures2d::DAISY::NormalizationType */
     public static final int
         NRM_NONE = 100, NRM_PARTIAL = 101, NRM_FULL = 102, NRM_SIFT = 103;
     public static native @Ptr DAISY create( float radius/*=15*/, int q_radius/*=3*/, int q_theta/*=8*/,
-                    int q_hist/*=8*/, int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat H,
+                    int q_hist/*=8*/, @Cast("cv::xfeatures2d::DAISY::NormalizationType") int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat H,
                     @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
     public static native @Ptr DAISY create( );
     public static native @Ptr DAISY create( float radius/*=15*/, int q_radius/*=3*/, int q_theta/*=8*/,
-                    int q_hist/*=8*/, int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat H,
+                    int q_hist/*=8*/, @Cast("cv::xfeatures2d::DAISY::NormalizationType") int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat H,
                     @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
     public static native @Ptr DAISY create( float radius/*=15*/, int q_radius/*=3*/, int q_theta/*=8*/,
-                    int q_hist/*=8*/, int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat H,
+                    int q_hist/*=8*/, @Cast("cv::xfeatures2d::DAISY::NormalizationType") int norm/*=cv::xfeatures2d::DAISY::NRM_NONE*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat H,
                     @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
 
     /** \overload
@@ -307,17 +310,17 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
      * @param keypoints of interest within image
      * @param descriptors resulted descriptors array
      */
-    public native void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
-    public native void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
-    public native void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat descriptors );
+    public native @Override void compute( @ByVal Mat image, @ByRef KeyPointVector keypoints, @ByVal Mat descriptors );
+    public native @Override void compute( @ByVal UMat image, @ByRef KeyPointVector keypoints, @ByVal UMat descriptors );
+    public native @Override void compute( @ByVal GpuMat image, @ByRef KeyPointVector keypoints, @ByVal GpuMat descriptors );
 
-    public native void compute( @ByVal MatVector images,
+    public native @Override void compute( @ByVal MatVector images,
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal MatVector descriptors );
-    public native void compute( @ByVal UMatVector images,
+    public native @Override void compute( @ByVal UMatVector images,
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal UMatVector descriptors );
-    public native void compute( @ByVal GpuMatVector images,
+    public native @Override void compute( @ByVal GpuMatVector images,
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal GpuMatVector descriptors );
 
@@ -1222,15 +1225,15 @@ FastFeatureDetector::TYPE_5_8
 Detects corners using the FAST algorithm by \cite Rosten06 .
  */
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal Mat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, @Cast("cv::FastFeatureDetector::DetectorType") int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, @Cast("cv::FastFeatureDetector::DetectorType") int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal UMat image, @ByRef KeyPointVector keypoints,
                       int threshold);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/, @Cast("cv::FastFeatureDetector::DetectorType") int type/*=cv::FastFeatureDetector::TYPE_9_16*/);
 @Namespace("cv::xfeatures2d") public static native void FASTForPointSet( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
                       int threshold);
 

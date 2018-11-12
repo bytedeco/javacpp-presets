@@ -72,7 +72,7 @@ the use of this software, even if advised of the possibility of such damage.
 // #include <utility>
 // #include <cfloat>
 
-// #include "opencv2/core/cvstd.hpp"
+// #include "opencv2/core/base.hpp"
 /** \addtogroup face
  *  \{
 /** \brief Abstract base class for all strategies of prediction result handling
@@ -136,9 +136,9 @@ Trace minimal distance with treshhold checking (that is default behavior for mos
     public StandardCollector() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** \brief overloaded interface method */
-    public native void init(@Cast("size_t") long size);
+    public native @Override void init(@Cast("size_t") long size);
     /** \brief overloaded interface method */
-    public native @Cast("bool") boolean collect(int label, double dist);
+    public native @Cast("bool") @Override boolean collect(int label, double dist);
     /** \brief Returns label with minimal distance */
     public native int getMinLabel();
     /** \brief Returns minimal distance value */
@@ -534,13 +534,13 @@ String name = model->name();
     Saves this model to a given FileStorage.
     @param fs The FileStorage to store this FaceRecognizer to.
     */
-    public native void write(@ByRef FileStorage fs);
+    public native @Override void write(@ByRef FileStorage fs);
 
     /** \overload */
-    public native void read(@Const @ByRef FileNode fn);
+    public native @Override void read(@Const @ByRef FileNode fn);
 
     /** \overload */
-    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") @Override boolean empty();
 
     /** \brief Sets string info for the specified model's label.
     <p>
@@ -613,18 +613,18 @@ String name = model->name();
     /** \copybrief getNumComponents @see getNumComponents */
     public native void setNumComponents(int val);
     /** @see setThreshold */
-    public native double getThreshold();
+    public native @Override double getThreshold();
     /** \copybrief getThreshold @see getThreshold */
-    public native void setThreshold(double val);
+    public native @Override void setThreshold(double val);
     public native @ByVal MatVector getProjections();
     public native @ByVal Mat getLabels();
     public native @ByVal Mat getEigenValues();
     public native @ByVal Mat getEigenVectors();
     public native @ByVal Mat getMean();
 
-    public native void read(@Const @ByRef FileNode fn);
-    public native void write(@ByRef FileStorage fs);
-    public native @Cast("bool") boolean empty();
+    public native @Override void read(@Const @ByRef FileNode fn);
+    public native @Override void write(@ByRef FileStorage fs);
+    public native @Cast("bool") @Override boolean empty();
 }
 
 @Namespace("cv::face") public static class EigenFaceRecognizer extends BasicFaceRecognizer {
@@ -727,9 +727,9 @@ String name = model->name();
     /** \copybrief getNeighbors @see getNeighbors */
     public native void setNeighbors(int val);
     /** @see setThreshold */
-    public native double getThreshold();
+    public native @Override double getThreshold();
     /** \copybrief getThreshold @see getThreshold */
-    public native void setThreshold(double val);
+    public native @Override void setThreshold(double val);
     public native @ByVal MatVector getHistograms();
     public native @ByVal Mat getLabels();
 

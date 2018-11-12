@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,18 +33,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
-    @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.3.4",
-              preload = {"opencv_cuda@.3.4", "opencv_cudacodec@.3.4", "opencv_cudaarithm@.3.4", "opencv_cudafilters@.3.4",
-                         "opencv_cudaimgproc@.3.4", "opencv_cudafeatures2d@.3.4", "opencv_cudalegacy@.3.4",
-                         "opencv_cudaoptflow@.3.4", "opencv_cudawarping@.3.4"}),
-    @Platform(value = "windows", link = "opencv_superres343",
-              preload = {"opencv_cuda343", "opencv_cudacodec343", "opencv_cudaarithm343", "opencv_cudafilters343",
-                         "opencv_cudaimgproc343", "opencv_cudafeatures2d343", "opencv_cudalegacy343",
-                         "opencv_cudaoptflow343", "opencv_cudawarping343"})},
+    @Platform(not = "ios", include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link = "opencv_superres@.4.0",
+              preload = {"opencv_cuda@.4.0", "opencv_cudacodec@.4.0", "opencv_cudaarithm@.4.0", "opencv_cudafilters@.4.0",
+                         "opencv_cudaimgproc@.4.0", "opencv_cudafeatures2d@.4.0", "opencv_cudalegacy@.4.0",
+                         "opencv_cudaoptflow@.4.0", "opencv_cudawarping@.4.0"}),
+    @Platform(value = "windows", link = "opencv_superres400",
+              preload = {"opencv_cuda400", "opencv_cudacodec400", "opencv_cudaarithm400", "opencv_cudafilters400",
+                         "opencv_cudaimgproc400", "opencv_cudafeatures2d400", "opencv_cudalegacy400",
+                         "opencv_cudaoptflow400", "opencv_cudawarping400"})},
         target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::superres::FarnebackOpticalFlow").pointerTypes("SuperResFarnebackOpticalFlow"))
+        infoMap.put(new Info("override").annotations()) // classes with multiple parents cannot inherit all functions, so disable override annotation
+               .put(new Info("cv::superres::FarnebackOpticalFlow").pointerTypes("SuperResFarnebackOpticalFlow"))
                .put(new Info("cv::superres::DualTVL1OpticalFlow").pointerTypes("SuperResDualTVL1OpticalFlow"));
     }
 }

@@ -72,10 +72,6 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #include "opencv2/video/tracking.hpp"
 // #include "opencv2/video/background_segm.hpp"
 
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/video/tracking_c.h"
-// #endif
-
 // #endif //OPENCV_VIDEO_HPP
 
 
@@ -190,10 +186,6 @@ public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvAr
 /* Modification of a previous sparse optical flow algorithm to calculate
    affine flow */
 
-
-/* Estimate rigid transformation between 2 images or 2 point sets */
-public static native int cvEstimateRigidTransform( @Const CvArr A, @Const CvArr B,
-                                      CvMat M, int full_affine );
 
 /* Estimate optical flow for each pixel using the two-frame G. Farneback algorithm */
 public static native void cvCalcOpticalFlowFarneback( @Const CvArr prev, @Const CvArr next,
@@ -681,19 +673,15 @@ where src[i] and dst[i] are the i-th points in src and dst, respectively
 \f[\begin{bmatrix} a_{11} & a_{12} & b_1  \\ -a_{12} & a_{11} & b_2  \end{bmatrix}\f]
 when fullAffine=false.
 <p>
+@deprecated Use cv::estimateAffine2D, cv::estimateAffinePartial2D instead. If you are using this fuction
+with images, extract points using cv::calcOpticalFlowPyrLK and then use the estimation fuctions.
+<p>
 \sa
 estimateAffine2D, estimateAffinePartial2D, getAffineTransform, getPerspectiveTransform, findHomography
  */
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine);
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine);
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine);
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
-                                         int ransacSize0);
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
-                                         int ransacSize0);
-@Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine, int ransacMaxIters, double ransacGoodRatio,
-                                         int ransacSize0);
-
+@Namespace("cv") public static native @Deprecated @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
+@Namespace("cv") public static native @Deprecated @ByVal Mat estimateRigidTransform( @ByVal UMat src, @ByVal UMat dst, @Cast("bool") boolean fullAffine );
+@Namespace("cv") public static native @Deprecated @ByVal Mat estimateRigidTransform( @ByVal GpuMat src, @ByVal GpuMat dst, @Cast("bool") boolean fullAffine );
 
 /** enum cv:: */
 public static final int
@@ -1356,11 +1344,11 @@ and \cite Zivkovic2006 .
     rate. 0 means that the background model is not updated at all, 1 means that the background model
     is completely reinitialized from the last frame.
      */
-    public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
-    public native void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal UMat image, @ByVal UMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal UMat image, @ByVal UMat fgmask);
-    public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
+    public native @Override void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal GpuMat image, @ByVal GpuMat fgmask);
 }
 

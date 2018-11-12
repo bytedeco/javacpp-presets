@@ -1511,10 +1511,6 @@ value could be 0 or 1. (__Optional__)
 
  // cv
 
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/highgui/highgui_c.h"
-// #endif
-
 // #endif
 
 

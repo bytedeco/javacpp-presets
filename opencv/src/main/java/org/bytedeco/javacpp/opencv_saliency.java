@@ -323,8 +323,8 @@ map, which suggests the positions of proto-objects.
   public native @Cast("bool") boolean computeSaliency( @ByVal UMat image, @ByVal UMat saliencyMap );
   public native @Cast("bool") boolean computeSaliency( @ByVal GpuMat image, @ByVal GpuMat saliencyMap );
 
-  public native void read( @Const @ByRef FileNode fn );
-  public native void write( @ByRef FileStorage fs );
+  public native @Override void read( @Const @ByRef FileNode fn );
+  public native @Override void write( @ByRef FileStorage fs );
 
   public native int getImageWidth();
   public native void setImageWidth(int val);

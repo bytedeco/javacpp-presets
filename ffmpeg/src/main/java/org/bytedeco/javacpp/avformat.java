@@ -2313,6 +2313,8 @@ public static final int AV_DISPOSITION_DESCRIPTIONS = 0x20000;
 public static final int AV_DISPOSITION_METADATA =     0x40000;
 /** dependent audio stream (mix_type=0 in mpegts) */
 public static final int AV_DISPOSITION_DEPENDENT =    0x80000;
+/** still images in video stream (still_picture_flag=1 in mpegts) */
+public static final int AV_DISPOSITION_STILL_IMAGE = 0x100000;
 
 /**
  * Options for behavior on timestamp wrap detection.
@@ -2588,6 +2590,13 @@ public static final int MAX_REORDER_DELAY = 16;
      */
     public native int stream_identifier(); public native AVStream stream_identifier(int stream_identifier);
 
+    /**
+     * Details of the MPEG-TS program which created this stream.
+     */
+    public native int program_num(); public native AVStream program_num(int program_num);
+    public native int pmt_version(); public native AVStream pmt_version(int pmt_version);
+    public native int pmt_stream_idx(); public native AVStream pmt_stream_idx(int pmt_stream_idx);
+
     public native @Cast("int64_t") long interleaver_chunk_size(); public native AVStream interleaver_chunk_size(long interleaver_chunk_size);
     public native @Cast("int64_t") long interleaver_chunk_duration(); public native AVStream interleaver_chunk_duration(long interleaver_chunk_duration);
 
@@ -2759,6 +2768,7 @@ public static class AVProgram extends Pointer {
     public native int program_num(); public native AVProgram program_num(int program_num);
     public native int pmt_pid(); public native AVProgram pmt_pid(int pmt_pid);
     public native int pcr_pid(); public native AVProgram pcr_pid(int pcr_pid);
+    public native int pmt_version(); public native AVProgram pmt_version(int pmt_version);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -3041,8 +3051,10 @@ public static final int AVFMT_FLAG_FLUSH_PACKETS =    0x0200;
  * This flag is mainly intended for testing.
  */
 public static final int AVFMT_FLAG_BITEXACT =         0x0400;
-/** Enable RTP MP4A-LATM payload */
+// #if FF_API_LAVF_MP4A_LATM
+/** Deprecated, does nothing. */
 public static final int AVFMT_FLAG_MP4A_LATM =    0x8000;
+// #endif
 /** try to interleave outputted packets by dts (using this flag can slow demuxing down) */
 public static final int AVFMT_FLAG_SORT_DTS =    0x10000;
 /** Enable use of private options by delaying codec open (this could be made default once all code is converted) */
@@ -3529,6 +3541,13 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * - decoding: set by user
      */
     public native int max_streams(); public native AVFormatContext max_streams(int max_streams);
+
+    /**
+     * Skip duration calcuation in estimate_timings_from_pts.
+     * - encoding: unused
+     * - decoding: set by user
+     */
+    public native int skip_estimate_duration_from_pts(); public native AVFormatContext skip_estimate_duration_from_pts(int skip_estimate_duration_from_pts);
 }
 
 // #if FF_API_FORMAT_GET_SET

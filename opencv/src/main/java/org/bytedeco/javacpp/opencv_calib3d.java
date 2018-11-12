@@ -541,6 +541,45 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
 public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
                                    CvArr _3dImage, @Const CvMat Q );
 
+/** \brief Transforms the input image to compensate lens distortion
+@see cv::undistort
+*/
+public static native void cvUndistort2( @Const CvArr src, CvArr dst,
+                          @Const CvMat camera_matrix,
+                          @Const CvMat distortion_coeffs,
+                          @Const CvMat new_camera_matrix/*=0*/ );
+public static native void cvUndistort2( @Const CvArr src, CvArr dst,
+                          @Const CvMat camera_matrix,
+                          @Const CvMat distortion_coeffs );
+
+/** \brief Computes transformation map from intrinsic camera parameters
+   that can used by cvRemap
+*/
+public static native void cvInitUndistortMap( @Const CvMat camera_matrix,
+                                @Const CvMat distortion_coeffs,
+                                CvArr mapx, CvArr mapy );
+
+/** \brief Computes undistortion+rectification map for a head of stereo camera
+@see cv::initUndistortRectifyMap
+*/
+public static native void cvInitUndistortRectifyMap( @Const CvMat camera_matrix,
+                                       @Const CvMat dist_coeffs,
+                                       @Const CvMat R, @Const CvMat new_camera_matrix,
+                                       CvArr mapx, CvArr mapy );
+
+/** \brief Computes the original (undistorted) feature coordinates
+   from the observed (distorted) coordinates
+@see cv::undistortPoints
+*/
+public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
+                               @Const CvMat camera_matrix,
+                               @Const CvMat dist_coeffs,
+                               @Const CvMat R/*=0*/,
+                               @Const CvMat P/*=0*/);
+public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
+                               @Const CvMat camera_matrix,
+                               @Const CvMat dist_coeffs);
+
 /** \} calib3d_c */
 
 // #ifdef __cplusplus // extern "C"
@@ -858,7 +897,9 @@ public static final int SOLVEPNP_ITERATIVE = 0,
 public static final int CALIB_CB_ADAPTIVE_THRESH = 1,
        CALIB_CB_NORMALIZE_IMAGE = 2,
        CALIB_CB_FILTER_QUADS    = 4,
-       CALIB_CB_FAST_CHECK      = 8;
+       CALIB_CB_FAST_CHECK      = 8,
+       CALIB_CB_EXHAUSTIVE      = 16,
+       CALIB_CB_ACCURACY        = 32;
 
 /** enum cv:: */
 public static final int CALIB_CB_SYMMETRIC_GRID  = 1,
@@ -1602,7 +1643,7 @@ object point has z-coordinate =0.
 <p>
 @param image Source chessboard view. It must be an 8-bit grayscale or color image.
 @param patternSize Number of inner corners per a chessboard row and column
-( patternSize = cvSize(points_per_row,points_per_colum) = cvSize(columns,rows) ).
+( patternSize = cv::Size(points_per_row,points_per_colum) = cv::Size(columns,rows) ).
 @param corners Output array of detected corners.
 @param flags Various operation flags that can be zero or a combination of the following values:
 -   **CALIB_CB_ADAPTIVE_THRESH** Use adaptive thresholding to convert the image to black
@@ -1656,6 +1697,43 @@ square grouping and ordering algorithm fails.
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize, @ByVal GpuMat corners,
                                          int flags/*=cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE*/ );
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize, @ByVal GpuMat corners );
+
+/** \brief Finds the positions of internal corners of the chessboard using a sector based approach.
+<p>
+@param image Source chessboard view. It must be an 8-bit grayscale or color image.
+@param patternSize Number of inner corners per a chessboard row and column
+( patternSize = cv::Size(points_per_row,points_per_colum) = cv::Size(columns,rows) ).
+@param corners Output array of detected corners.
+@param flags Various operation flags that can be zero or a combination of the following values:
+-   **CALIB_CB_NORMALIZE_IMAGE** Normalize the image gamma with equalizeHist before detection.
+-   **CALIB_CB_EXHAUSTIVE ** Run an exhaustive search to improve detection rate.
+-   **CALIB_CB_ACCURACY ** Up sample input image to improve sub-pixel accuracy due to aliasing effects.
+This should be used if an accurate camera calibration is required.
+<p>
+The function is analog to findchessboardCorners but uses a localized radon
+transformation approximated by box filters being more robust to all sort of
+noise, faster on larger images and is able to directly return the sub-pixel
+position of the internal chessboard corners. The Method is based on the paper
+\cite duda2018 "Accurate Detection and Localization of Checkerboard Corners for
+Calibration" demonstrating that the returned sub-pixel positions are more
+accurate than the one returned by cornerSubPix allowing a precise camera
+calibration for demanding applications.
+<p>
+\note The function requires a white boarder with roughly the same width as one
+of the checkerboard fields around the whole board to improve the detection in
+various environments. In addition, because of the localized radon
+transformation it is beneficial to use round corners for the field corners
+which are located on the outside of the board. The following figure illustrates
+a sample checkerboard optimized for the detection. However, any other checkerboard
+can be used as well.
+![Checkerboard](pics/checkerboard_radon.png)
+ */
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal Mat image,@ByVal Size patternSize, @ByVal Mat corners,int flags/*=0*/);
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal Mat image,@ByVal Size patternSize, @ByVal Mat corners);
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal UMat image,@ByVal Size patternSize, @ByVal UMat corners,int flags/*=0*/);
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal UMat image,@ByVal Size patternSize, @ByVal UMat corners);
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal GpuMat image,@ByVal Size patternSize, @ByVal GpuMat corners,int flags/*=0*/);
+@Namespace("cv") public static native @Cast("bool") boolean findChessboardCornersSB(@ByVal GpuMat image,@ByVal Size patternSize, @ByVal GpuMat corners);
 
 /** finds subpixel-accurate positions of the chessboard corners */
 @Namespace("cv") public static native @Cast("bool") boolean find4QuadCornerSubpix( @ByVal Mat img, @ByVal Mat corners, @ByVal Size region_size );
@@ -1712,27 +1790,15 @@ found, or as colored corners connected with lines if the board was found.
     public static final int
       SYMMETRIC_GRID = 0, ASYMMETRIC_GRID = 1;
     public native @Cast("cv::CirclesGridFinderParameters::GridType") int gridType(); public native CirclesGridFinderParameters gridType(int gridType);
-}
-
-@Namespace("cv") @NoOffset public static class CirclesGridFinderParameters2 extends CirclesGridFinderParameters {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CirclesGridFinderParameters2(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CirclesGridFinderParameters2(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CirclesGridFinderParameters2 position(long position) {
-        return (CirclesGridFinderParameters2)super.position(position);
-    }
-
-    public CirclesGridFinderParameters2() { super((Pointer)null); allocate(); }
-    private native void allocate();
 
     /** Distance between two adjacent points. Used by CALIB_CB_CLUSTERING. */
-    public native float squareSize(); public native CirclesGridFinderParameters2 squareSize(float squareSize);
+    public native float squareSize(); public native CirclesGridFinderParameters squareSize(float squareSize);
     /** Max deviation from predicion. Used by CALIB_CB_CLUSTERING. */
-    public native float maxRectifiedDistance(); public native CirclesGridFinderParameters2 maxRectifiedDistance(float maxRectifiedDistance);
+    public native float maxRectifiedDistance(); public native CirclesGridFinderParameters maxRectifiedDistance(float maxRectifiedDistance);
 }
+
+// #ifndef DISABLE_OPENCV_3_COMPATIBILITY
+// #endif
 
 /** \brief Finds centers in the grid of circles.
 <p>
@@ -1769,29 +1835,15 @@ the board to make the detection more robust in various environments.
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal Mat image, @ByVal Size patternSize,
                                    @ByVal Mat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters parameters);
+                                   @Const @ByRef CirclesGridFinderParameters parameters);
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal UMat image, @ByVal Size patternSize,
                                    @ByVal UMat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters parameters);
+                                   @Const @ByRef CirclesGridFinderParameters parameters);
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal GpuMat image, @ByVal Size patternSize,
                                    @ByVal GpuMat centers, int flags,
                                    @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters parameters);
-
-/** \overload */
-@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal Mat image, @ByVal Size patternSize,
-                                   @ByVal Mat centers, int flags,
-                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters2 parameters);
-@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal UMat image, @ByVal Size patternSize,
-                                   @ByVal UMat centers, int flags,
-                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters2 parameters);
-@Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid2( @ByVal GpuMat image, @ByVal Size patternSize,
-                                   @ByVal GpuMat centers, int flags,
-                                   @Cast("cv::FeatureDetector*") @Ptr Feature2D blobDetector,
-                                   @ByVal CirclesGridFinderParameters2 parameters);
+                                   @Const @ByRef CirclesGridFinderParameters parameters);
 
 /** \overload */
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal Mat image, @ByVal Size patternSize,
@@ -4007,6 +4059,271 @@ check, quadratic interpolation and speckle filtering).
     public static native @Ptr StereoSGBM create();
 }
 
+
+/** cv::undistort mode */
+/** enum cv::UndistortTypes */
+public static final int
+    PROJ_SPHERICAL_ORTHO  = 0,
+    PROJ_SPHERICAL_EQRECT = 1;
+
+/** \brief Transforms an image to compensate for lens distortion.
+<p>
+The function transforms an image to compensate radial and tangential lens distortion.
+<p>
+The function is simply a combination of #initUndistortRectifyMap (with unity R ) and #remap
+(with bilinear interpolation). See the former function for details of the transformation being
+performed.
+<p>
+Those pixels in the destination image, for which there is no correspondent pixels in the source
+image, are filled with zeros (black color).
+<p>
+A particular subset of the source image that will be visible in the corrected image can be regulated
+by newCameraMatrix. You can use #getOptimalNewCameraMatrix to compute the appropriate
+newCameraMatrix depending on your requirements.
+<p>
+The camera matrix and the distortion parameters can be determined using #calibrateCamera. If
+the resolution of images is different from the resolution used at the calibration stage, \f$f_x,
+f_y, c_x\f$ and \f$c_y\f$ need to be scaled accordingly, while the distortion coefficients remain
+the same.
+<p>
+@param src Input (distorted) image.
+@param dst Output (corrected) image that has the same size and type as src .
+@param cameraMatrix Input camera matrix \f$A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
+@param distCoeffs Input vector of distortion coefficients
+\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
+of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
+@param newCameraMatrix Camera matrix of the distorted image. By default, it is the same as
+cameraMatrix but you may additionally scale and shift the result by using a different matrix.
+ */
+@Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
+                             @ByVal Mat cameraMatrix,
+                             @ByVal Mat distCoeffs,
+                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat newCameraMatrix );
+@Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
+                             @ByVal Mat cameraMatrix,
+                             @ByVal Mat distCoeffs );
+@Namespace("cv") public static native void undistort( @ByVal UMat src, @ByVal UMat dst,
+                             @ByVal UMat cameraMatrix,
+                             @ByVal UMat distCoeffs,
+                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat newCameraMatrix );
+@Namespace("cv") public static native void undistort( @ByVal UMat src, @ByVal UMat dst,
+                             @ByVal UMat cameraMatrix,
+                             @ByVal UMat distCoeffs );
+@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
+                             @ByVal GpuMat cameraMatrix,
+                             @ByVal GpuMat distCoeffs,
+                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat newCameraMatrix );
+@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
+                             @ByVal GpuMat cameraMatrix,
+                             @ByVal GpuMat distCoeffs );
+
+/** \brief Computes the undistortion and rectification transformation map.
+<p>
+The function computes the joint undistortion and rectification transformation and represents the
+result in the form of maps for remap. The undistorted image looks like original, as if it is
+captured with a camera using the camera matrix =newCameraMatrix and zero distortion. In case of a
+monocular camera, newCameraMatrix is usually equal to cameraMatrix, or it can be computed by
+#getOptimalNewCameraMatrix for a better control over scaling. In case of a stereo camera,
+newCameraMatrix is normally set to P1 or P2 computed by #stereoRectify .
+<p>
+Also, this new camera is oriented differently in the coordinate space, according to R. That, for
+example, helps to align two heads of a stereo camera so that the epipolar lines on both images
+become horizontal and have the same y- coordinate (in case of a horizontally aligned stereo camera).
+<p>
+The function actually builds the maps for the inverse mapping algorithm that is used by remap. That
+is, for each pixel \f$(u, v)\f$ in the destination (corrected and rectified) image, the function
+computes the corresponding coordinates in the source image (that is, in the original image from
+camera). The following process is applied:
+\f[
+\begin{array}{l}
+x  \leftarrow (u - {c'}_x)/{f'}_x  \\
+y  \leftarrow (v - {c'}_y)/{f'}_y  \\
+{[X\,Y\,W]} ^T  \leftarrow R^{-1}*[x \, y \, 1]^T  \\
+x'  \leftarrow X/W  \\
+y'  \leftarrow Y/W  \\
+r^2  \leftarrow x'^2 + y'^2 \\
+x''  \leftarrow x' \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6}
++ 2p_1 x' y' + p_2(r^2 + 2 x'^2)  + s_1 r^2 + s_2 r^4\\
+y''  \leftarrow y' \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6}
++ p_1 (r^2 + 2 y'^2) + 2 p_2 x' y' + s_3 r^2 + s_4 r^4 \\
+s\vecthree{x'''}{y'''}{1} =
+\vecthreethree{R_{33}(\tau_x, \tau_y)}{0}{-R_{13}((\tau_x, \tau_y)}
+{0}{R_{33}(\tau_x, \tau_y)}{-R_{23}(\tau_x, \tau_y)}
+{0}{0}{1} R(\tau_x, \tau_y) \vecthree{x''}{y''}{1}\\
+map_x(u,v)  \leftarrow x''' f_x + c_x  \\
+map_y(u,v)  \leftarrow y''' f_y + c_y
+\end{array}
+\f]
+where \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
+are the distortion coefficients.
+<p>
+In case of a stereo camera, this function is called twice: once for each camera head, after
+stereoRectify, which in its turn is called after #stereoCalibrate. But if the stereo camera
+was not calibrated, it is still possible to compute the rectification transformations directly from
+the fundamental matrix using #stereoRectifyUncalibrated. For each camera, the function computes
+homography H as the rectification transformation in a pixel domain, not a rotation matrix R in 3D
+space. R can be computed from H as
+\f[\texttt{R} = \texttt{cameraMatrix} ^{-1} \cdot \texttt{H} \cdot \texttt{cameraMatrix}\f]
+where cameraMatrix can be chosen arbitrarily.
+<p>
+@param cameraMatrix Input camera matrix \f$A=\vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
+@param distCoeffs Input vector of distortion coefficients
+\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
+of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
+@param R Optional rectification transformation in the object space (3x3 matrix). R1 or R2 ,
+computed by #stereoRectify can be passed here. If the matrix is empty, the identity transformation
+is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
+@param newCameraMatrix New camera matrix \f$A'=\vecthreethree{f_x'}{0}{c_x'}{0}{f_y'}{c_y'}{0}{0}{1}\f$.
+@param size Undistorted image size.
+@param m1type Type of the first output map that can be CV_32FC1, CV_32FC2 or CV_16SC2, see #convertMaps
+@param map1 The first output map.
+@param map2 The second output map.
+ */
+@Namespace("cv") public static native void initUndistortRectifyMap(@ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                             @ByVal Mat R, @ByVal Mat newCameraMatrix,
+                             @ByVal Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
+@Namespace("cv") public static native void initUndistortRectifyMap(@ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                             @ByVal UMat R, @ByVal UMat newCameraMatrix,
+                             @ByVal Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2);
+@Namespace("cv") public static native void initUndistortRectifyMap(@ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                             @ByVal GpuMat R, @ByVal GpuMat newCameraMatrix,
+                             @ByVal Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
+
+/** initializes maps for #remap for wide-angle */
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal Mat map1, @ByVal Mat map2,
+                           @Cast("cv::UndistortTypes") int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal Mat map1, @ByVal Mat map2);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal UMat map1, @ByVal UMat map2,
+                           @Cast("cv::UndistortTypes") int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal UMat map1, @ByVal UMat map2);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2,
+                           @Cast("cv::UndistortTypes") int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal Mat map1, @ByVal Mat map2,
+                           int projType);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal UMat map1, @ByVal UMat map2,
+                           int projType);
+@Namespace("cv") public static native float initWideAngleProjMap(@ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                           @ByVal Size imageSize, int destImageWidth,
+                           int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2,
+                           int projType);
+
+/** \brief Returns the default new camera matrix.
+<p>
+The function returns the camera matrix that is either an exact copy of the input cameraMatrix (when
+centerPrinicipalPoint=false ), or the modified one (when centerPrincipalPoint=true).
+<p>
+In the latter case, the new camera matrix will be:
+<p>
+\f[\begin{bmatrix} f_x && 0 && ( \texttt{imgSize.width} -1)*0.5  \\ 0 && f_y && ( \texttt{imgSize.height} -1)*0.5  \\ 0 && 0 && 1 \end{bmatrix} ,\f]
+<p>
+where \f$f_x\f$ and \f$f_y\f$ are \f$(0,0)\f$ and \f$(1,1)\f$ elements of cameraMatrix, respectively.
+<p>
+By default, the undistortion functions in OpenCV (see #initUndistortRectifyMap, #undistort) do not
+move the principal point. However, when you work with stereo, it is important to move the principal
+points in both views to the same y-coordinate (which is required by most of stereo correspondence
+algorithms), and may be to the same x-coordinate too. So, you can form the new camera matrix for
+each view where the principal points are located at the center.
+<p>
+@param cameraMatrix Input camera matrix.
+@param imgsize Camera view image size in pixels.
+@param centerPrincipalPoint Location of the principal point in the new camera matrix. The
+parameter indicates whether this location should be at the image center or not.
+ */
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal Mat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
+                              @Cast("bool") boolean centerPrincipalPoint/*=false*/);
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal Mat cameraMatrix);
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal UMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
+                              @Cast("bool") boolean centerPrincipalPoint/*=false*/);
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal UMat cameraMatrix);
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal GpuMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
+                              @Cast("bool") boolean centerPrincipalPoint/*=false*/);
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix(@ByVal GpuMat cameraMatrix);
+
+/** \brief Computes the ideal point coordinates from the observed point coordinates.
+<p>
+The function is similar to #undistort and #initUndistortRectifyMap but it operates on a
+sparse set of points instead of a raster image. Also the function performs a reverse transformation
+to projectPoints. In case of a 3D object, it does not reconstruct its 3D coordinates, but for a
+planar object, it does, up to a translation vector, if the proper R is specified.
+<p>
+For each observed point coordinate \f$(u, v)\f$ the function computes:
+\f[
+\begin{array}{l}
+x^{"}  \leftarrow (u - c_x)/f_x  \\
+y^{"}  \leftarrow (v - c_y)/f_y  \\
+(x',y') = undistort(x^{"},y^{"}, \texttt{distCoeffs}) \\
+{[X\,Y\,W]} ^T  \leftarrow R*[x' \, y' \, 1]^T  \\
+x  \leftarrow X/W  \\
+y  \leftarrow Y/W  \\
+\text{only performed if P is specified:} \\
+u'  \leftarrow x {f'}_x + {c'}_x  \\
+v'  \leftarrow y {f'}_y + {c'}_y
+\end{array}
+\f]
+<p>
+where *undistort* is an approximate iterative algorithm that estimates the normalized original
+point coordinates out of the normalized distorted point coordinates ("normalized" means that the
+coordinates do not depend on the camera matrix).
+<p>
+The function can be used for both a stereo camera head or a monocular camera (when R is empty).
+<p>
+@param src Observed point coordinates, 1xN or Nx1 2-channel (CV_32FC2 or CV_64FC2).
+@param dst Output ideal point coordinates after undistortion and reverse perspective
+transformation. If matrix P is identity or omitted, dst will contain normalized point coordinates.
+@param cameraMatrix Camera matrix \f$\vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
+@param distCoeffs Input vector of distortion coefficients
+\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
+of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
+@param R Rectification transformation in the object space (3x3 matrix). R1 or R2 computed by
+#stereoRectify can be passed here. If the matrix is empty, the identity transformation is used.
+@param P New camera matrix (3x3) or new projection matrix (3x4) \f$\begin{bmatrix} {f'}_x & 0 & {c'}_x & t_x \\ 0 & {f'}_y & {c'}_y & t_y \\ 0 & 0 & 1 & t_z \end{bmatrix}\f$. P1 or P2 computed by
+#stereoRectify can be passed here. If the matrix is empty, the identity new camera matrix is used.
+ */
+@Namespace("cv") public static native void undistortPoints(@ByVal Mat src, @ByVal Mat dst,
+                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat P);
+@Namespace("cv") public static native void undistortPoints(@ByVal Mat src, @ByVal Mat dst,
+                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs);
+@Namespace("cv") public static native void undistortPoints(@ByVal UMat src, @ByVal UMat dst,
+                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
+@Namespace("cv") public static native void undistortPoints(@ByVal UMat src, @ByVal UMat dst,
+                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs);
+@Namespace("cv") public static native void undistortPoints(@ByVal GpuMat src, @ByVal GpuMat dst,
+                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P);
+@Namespace("cv") public static native void undistortPoints(@ByVal GpuMat src, @ByVal GpuMat dst,
+                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs);
+/** \overload
+    \note Default version of #undistortPoints does 5 iterations to compute undistorted points.
+ */
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter(@ByVal Mat src, @ByVal Mat dst,
+                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                     @ByVal Mat R, @ByVal Mat P, @ByVal TermCriteria criteria);
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter(@ByVal UMat src, @ByVal UMat dst,
+                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                     @ByVal UMat R, @ByVal UMat P, @ByVal TermCriteria criteria);
+@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter(@ByVal GpuMat src, @ByVal GpuMat dst,
+                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                     @ByVal GpuMat R, @ByVal GpuMat P, @ByVal TermCriteria criteria);
+
 /** \} calib3d
 <p>
 /** \brief The methods in this namespace use a so-called fisheye camera model.
@@ -4100,18 +4417,6 @@ check, quadratic interpolation and speckle filtering).
     @param P New camera matrix (3x3) or new projection matrix (3x4)
     @param undistorted Output array of image points, 1xN/Nx1 2-channel, or vector\<Point2f\> .
      */
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
-            @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat P);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
-            @ByVal Mat K, @ByVal Mat D);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
-            @ByVal UMat K, @ByVal UMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal UMat distorted, @ByVal UMat undistorted,
-            @ByVal UMat K, @ByVal UMat D);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
-            @ByVal GpuMat K, @ByVal GpuMat D, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P);
-    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal GpuMat distorted, @ByVal GpuMat undistorted,
-            @ByVal GpuMat K, @ByVal GpuMat D);
 
     /** \brief Computes undistortion and rectification maps for image transform by cv::remap(). If D is empty zero
     distortion is used, if R or P is empty identity matrixes are used.
@@ -4127,12 +4432,6 @@ check, quadratic interpolation and speckle filtering).
     @param map1 The first output map.
     @param map2 The second output map.
      */
-    @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal Mat K, @ByVal Mat D, @ByVal Mat R, @ByVal Mat P,
-            @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
-    @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal UMat K, @ByVal UMat D, @ByVal UMat R, @ByVal UMat P,
-            @Const @ByRef Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2);
-    @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMat R, @ByVal GpuMat P,
-            @Const @ByRef Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
 
     /** \brief Transforms an image to compensate for fisheye lens distortion.
     <p>
@@ -4426,10 +4725,6 @@ optimization. It stays at the center or at a different location specified when C
  // end namespace fisheye
 
  //end namespace cv
-
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/calib3d/calib3d_c.h"
-// #endif
 
 // #endif
 

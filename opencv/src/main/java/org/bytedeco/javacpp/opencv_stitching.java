@@ -1130,20 +1130,20 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
         return (AKAZEFeaturesFinder)super.position(position);
     }
 
-    public AKAZEFeaturesFinder(int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
+    public AKAZEFeaturesFinder(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
                             int descriptor_size/*=0*/,
                             int descriptor_channels/*=3*/,
                             float threshold/*=0.001f*/,
                             int nOctaves/*=4*/,
                             int nOctaveLayers/*=4*/,
-                            int diffusivity/*=cv::KAZE::DIFF_PM_G2*/) { super((Pointer)null); allocate(descriptor_type, descriptor_size, descriptor_channels, threshold, nOctaves, nOctaveLayers, diffusivity); }
-    private native void allocate(int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
+                            @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/) { super((Pointer)null); allocate(descriptor_type, descriptor_size, descriptor_channels, threshold, nOctaves, nOctaveLayers, diffusivity); }
+    private native void allocate(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
                             int descriptor_size/*=0*/,
                             int descriptor_channels/*=3*/,
                             float threshold/*=0.001f*/,
                             int nOctaves/*=4*/,
                             int nOctaveLayers/*=4*/,
-                            int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
+                            @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
     public AKAZEFeaturesFinder() { super((Pointer)null); allocate(); }
     private native void allocate();
 }

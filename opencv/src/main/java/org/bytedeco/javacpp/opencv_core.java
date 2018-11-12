@@ -1972,6 +1972,8 @@ public static final int CV_HAL_ERROR_UNKNOWN = -1;
 // #  define CV_BIG_UINT(n)  n##ULL
 // #endif
 
+// #define CV_USRTYPE1 (void)"CV_USRTYPE1 support has been dropped in OpenCV 4.0"
+
 public static final int CV_CN_MAX =     512;
 public static final int CV_CN_SHIFT =   3;
 public static final int CV_DEPTH_MAX =  (1 << CV_CN_SHIFT);
@@ -1983,7 +1985,7 @@ public static final int CV_16S =  3;
 public static final int CV_32S =  4;
 public static final int CV_32F =  5;
 public static final int CV_64F =  6;
-public static final int CV_USRTYPE1 = 7;
+public static final int CV_16F =  7;
 
 public static final int CV_MAT_DEPTH_MASK =       (CV_DEPTH_MAX - 1);
 public static native int CV_MAT_DEPTH(int flags);
@@ -2032,6 +2034,16 @@ public static final int CV_64FC2 = CV_MAKETYPE(CV_64F,2);
 public static final int CV_64FC3 = CV_MAKETYPE(CV_64F,3);
 public static final int CV_64FC4 = CV_MAKETYPE(CV_64F,4);
 public static native int CV_64FC(int n);
+
+public static native @MemberGetter int CV_16FC1();
+public static final int CV_16FC1 = CV_16FC1();
+public static native @MemberGetter int CV_16FC2();
+public static final int CV_16FC2 = CV_16FC2();
+public static native @MemberGetter int CV_16FC3();
+public static final int CV_16FC3 = CV_16FC3();
+public static native @MemberGetter int CV_16FC4();
+public static final int CV_16FC4 = CV_16FC4();
+// #define CV_16FC(n) CV_MAKETYPE(CV_16F,(n))
 /** \}
  <p>
  *  \name Comparison operation
@@ -2173,7 +2185,7 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #endif
 
 // #define __CV_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
-// #define __CV_VA_NUM_ARGS(...) __CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+// #define __CV_VA_NUM_ARGS(...) __CV_EXPAND(__CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
 
 // undef problematic defines sometimes defined by system headers (windows.h in particular)
 // #undef small
@@ -2320,11 +2332,9 @@ public static class Cv16suf extends Pointer {
     }
 
     public native short i(); public native Cv16suf i(short i);
+    public native @Cast("ushort") short u(); public native Cv16suf u(short u);
 // #if CV_FP16_TYPE
 // #endif
-        @Name("fmt.significand") public native @Cast("unsigned int") @NoOffset int fmt_significand(); public native Cv16suf fmt_significand(int fmt_significand);
-        @Name("fmt.exponent") public native @Cast("unsigned int") @NoOffset int fmt_exponent(); public native Cv16suf fmt_exponent(int fmt_exponent);
-        @Name("fmt.sign") public native @Cast("unsigned int") @NoOffset int fmt_sign(); public native Cv16suf fmt_sign(int fmt_sign);
 }
 
 public static class Cv32suf extends Pointer {
@@ -2344,9 +2354,6 @@ public static class Cv32suf extends Pointer {
     public native int i(); public native Cv32suf i(int i);
     public native @Cast("unsigned") int u(); public native Cv32suf u(int u);
     public native float f(); public native Cv32suf f(float f);
-        @Name("fmt.significand") public native @Cast("unsigned int") @NoOffset int fmt_significand(); public native Cv32suf fmt_significand(int fmt_significand);
-        @Name("fmt.exponent") public native @Cast("unsigned int") @NoOffset int fmt_exponent(); public native Cv32suf fmt_exponent(int fmt_exponent);
-        @Name("fmt.sign") public native @Cast("unsigned int") @NoOffset int fmt_sign(); public native Cv32suf fmt_sign(int fmt_sign);
 }
 
 public static class Cv64suf extends Pointer {
@@ -2368,7 +2375,7 @@ public static class Cv64suf extends Pointer {
     public native double f(); public native Cv64suf f(double f);
 }
 
-public static final int OPENCV_ABI_COMPATIBILITY = 300;
+public static final int OPENCV_ABI_COMPATIBILITY = 400;
 
 // #ifdef __OPENCV_BUILD
 // #endif
@@ -2417,6 +2424,9 @@ public static final int OPENCV_ABI_COMPATIBILITY = 300;
 // #define CV_PROP_RW
 // #define CV_WRAP
 // #define CV_WRAP_AS(synonym)
+// #define CV_WRAP_MAPPABLE(mappable)
+// #define CV_WRAP_PHANTOM(phantom_header)
+// #define CV_WRAP_DEFAULT(val)
 
 /****************************************************************************************\
 *                                  Matrix type (Mat)                                     *
@@ -2435,13 +2445,10 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #define CV_IS_SUBMAT(flags)     ((flags) & CV_MAT_SUBMAT_FLAG)
 
 /** Size of each channel item,
-   0x8442211 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
-// #define CV_ELEM_SIZE1(type)
-//     ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
+   0x28442211 = 0010 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
+// #define CV_ELEM_SIZE1(type) ((0x28442211 >> CV_MAT_DEPTH(type)*4) & 15)
 
-/** 0x3a50 = 11 10 10 01 01 00 00 ~ array of log2(sizeof(arr_type_elem)) */
-// #define CV_ELEM_SIZE(type)
-//     (CV_MAT_CN(type) << ((((sizeof(size_t)/4+1)*16384|0x3a50) >> CV_MAT_DEPTH(type)*2) & 3))
+// #define CV_ELEM_SIZE(type) (CV_MAT_CN(type)*CV_ELEM_SIZE1(type))
 
 // #ifndef MIN
 // #  define MIN(a,b)  ((a) > (b) ? (b) : (a))
@@ -2450,6 +2457,142 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #ifndef MAX
 // #  define MAX(a,b)  ((a) < (b) ? (b) : (a))
 // #endif
+
+///////////////////////////////////////// Enum operators ///////////////////////////////////////
+
+/**
+<p>
+Provides compatibility operators for both classical and C++11 enum classes,
+as well as exposing the C++11 enum class members for backwards compatibility
+<p>
+<pre>{@code
+    // Provides operators required for flag enums
+    CV_ENUM_FLAGS(AccessFlag);
+
+    // Exposes the listed members of the enum class AccessFlag to the current namespace
+    CV_ENUM_CLASS_EXPOSE(AccessFlag, ACCESS_READ [, ACCESS_WRITE [, ...] ]);
+}</pre>
+*/
+
+// #define __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST)
+// static const EnumType MEMBER_CONST = EnumType::MEMBER_CONST;                                          
+
+// #define __CV_ENUM_CLASS_EXPOSE_2(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_1(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_3(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_2(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_4(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_3(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_5(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_4(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_6(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_5(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_7(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_6(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_8(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_7(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_CLASS_EXPOSE_9(EnumType, MEMBER_CONST, ...)
+// __CV_ENUM_CLASS_EXPOSE_1(EnumType, MEMBER_CONST);
+// __CV_EXPAND(__CV_ENUM_CLASS_EXPOSE_8(EnumType, __VA_ARGS__));                                         
+
+// #define __CV_ENUM_FLAGS_LOGICAL_NOT(EnumType)
+// static inline bool operator!(const EnumType& val)
+// {
+//     typedef std::underlying_type<EnumType>::type UnderlyingType;
+//     return !static_cast<UnderlyingType>(val);
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_LOGICAL_NOT_EQ(Arg1Type, Arg2Type)
+// static inline bool operator!=(const Arg1Type& a, const Arg2Type& b)
+// {
+//     return static_cast<int>(a) != static_cast<int>(b);
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_LOGICAL_EQ(Arg1Type, Arg2Type)
+// static inline bool operator==(const Arg1Type& a, const Arg2Type& b)
+// {
+//     return static_cast<int>(a) == static_cast<int>(b);
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_NOT(EnumType)
+// static inline EnumType operator~(const EnumType& val)
+// {
+//     typedef std::underlying_type<EnumType>::type UnderlyingType;
+//     return static_cast<EnumType>(~static_cast<UnderlyingType>(val));
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_OR(EnumType, Arg1Type, Arg2Type)
+// static inline EnumType operator|(const Arg1Type& a, const Arg2Type& b)
+// {
+//     typedef std::underlying_type<EnumType>::type UnderlyingType;
+//     return static_cast<EnumType>(static_cast<UnderlyingType>(a) | static_cast<UnderlyingType>(b));
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_AND(EnumType, Arg1Type, Arg2Type)
+// static inline EnumType operator&(const Arg1Type& a, const Arg2Type& b)
+// {
+//     typedef std::underlying_type<EnumType>::type UnderlyingType;
+//     return static_cast<EnumType>(static_cast<UnderlyingType>(a) & static_cast<UnderlyingType>(b));
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_XOR(EnumType, Arg1Type, Arg2Type)
+// static inline EnumType operator^(const Arg1Type& a, const Arg2Type& b)
+// {
+//     typedef std::underlying_type<EnumType>::type UnderlyingType;
+//     return static_cast<EnumType>(static_cast<UnderlyingType>(a) ^ static_cast<UnderlyingType>(b));
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_OR_EQ(EnumType, Arg1Type)
+// static inline EnumType& operator|=(EnumType& _this, const Arg1Type& val)
+// {
+//     _this = static_cast<EnumType>(static_cast<int>(_this) | static_cast<int>(val));
+//     return _this;
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_AND_EQ(EnumType, Arg1Type)
+// static inline EnumType& operator&=(EnumType& _this, const Arg1Type& val)
+// {
+//     _this = static_cast<EnumType>(static_cast<int>(_this) & static_cast<int>(val));
+//     return _this;
+// }                                                                                                     
+
+// #define __CV_ENUM_FLAGS_BITWISE_XOR_EQ(EnumType, Arg1Type)
+// static inline EnumType& operator^=(EnumType& _this, const Arg1Type& val)
+// {
+//     _this = static_cast<EnumType>(static_cast<int>(_this) ^ static_cast<int>(val));
+//     return _this;
+// }                                                                                                     
+
+// #define CV_ENUM_CLASS_EXPOSE(EnumType, ...)
+// __CV_EXPAND(__CV_CAT(__CV_ENUM_CLASS_EXPOSE_, __CV_VA_NUM_ARGS(__VA_ARGS__))(EnumType, __VA_ARGS__)); 
+
+// #define CV_ENUM_FLAGS(EnumType)
+// __CV_ENUM_FLAGS_LOGICAL_NOT      (EnumType);
+// __CV_ENUM_FLAGS_LOGICAL_EQ       (EnumType, int);
+// __CV_ENUM_FLAGS_LOGICAL_NOT_EQ   (EnumType, int);
+// 
+// __CV_ENUM_FLAGS_BITWISE_NOT      (EnumType);
+// __CV_ENUM_FLAGS_BITWISE_OR       (EnumType, EnumType, EnumType);
+// __CV_ENUM_FLAGS_BITWISE_AND      (EnumType, EnumType, EnumType);
+// __CV_ENUM_FLAGS_BITWISE_XOR      (EnumType, EnumType, EnumType);
+// 
+// __CV_ENUM_FLAGS_BITWISE_OR_EQ    (EnumType, EnumType);
+// __CV_ENUM_FLAGS_BITWISE_AND_EQ   (EnumType, EnumType);
+// __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType);                                                
 
 /****************************************************************************************\
 *                                    static analysys                                     *
@@ -2532,62 +2675,37 @@ public static final int CV_STATIC_ANALYSIS = 1;
 // #  endif
 // #else
 // #endif
+// #ifndef CV_CXX11
+// #  error "OpenCV 4.x+ requires enabled C++11 support"
+// #endif
 
-
-/****************************************************************************************\
-*                                    C++ Move semantics                                  *
-\****************************************************************************************/
-
-// #ifndef CV_CXX_MOVE_SEMANTICS
-// #  if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(_MSC_VER) && _MSC_VER >= 1600)
 public static final int CV_CXX_MOVE_SEMANTICS = 1;
-// #  elif defined(__clang)
-// #    if __has_feature(cxx_rvalue_references)
-// #    endif
-// #  endif
-// #else
-// #  if CV_CXX_MOVE_SEMANTICS == 0
-// #    undef CV_CXX_MOVE_SEMANTICS
-// #  endif
-// #endif
-
-/****************************************************************************************\
-*                                    C++11 std::array                                    *
-\****************************************************************************************/
-
-// #ifndef CV_CXX_STD_ARRAY
-// #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900/*MSVS 2015*/)
 public static final int CV_CXX_STD_ARRAY = 1;
-// #    include <array>
-// #  endif
-// #else
-// #  if CV_CXX_STD_ARRAY == 0
-// #    undef CV_CXX_STD_ARRAY
-// #  endif
-// #endif
-
-
-/****************************************************************************************\
-*                                 C++11 override / final                                 *
-\****************************************************************************************/
-
+// #include <array>
 // #ifndef CV_OVERRIDE
-// #  ifdef CV_CXX11
-// #  endif
-// #endif
-// #ifndef CV_OVERRIDE
-// #  define CV_OVERRIDE
-// #endif
-
-// #ifndef CV_FINAL
-// #  ifdef CV_CXX11
-// #  endif
+// #  define CV_OVERRIDE override
 // #endif
 // #ifndef CV_FINAL
-// #  define CV_FINAL
+// #  define CV_FINAL final
 // #endif
 
+// #ifndef CV_NOEXCEPT
+// #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900/*MSVS 2015*/)
+// #    define CV_NOEXCEPT noexcept
+// #  endif
+// #endif
+// #ifndef CV_NOEXCEPT
+// #  define CV_NOEXCEPT
+// #endif
 
+// #ifndef CV_CONSTEXPR
+// #  if __cplusplus >= 201103L || (defined(_MSC_VER) && _MSC_VER >= 1900/*MSVS 2015*/)
+// #    define CV_CONSTEXPR constexpr
+// #  endif
+// #endif
+// #ifndef CV_CONSTEXPR
+// #  define CV_CONSTEXPR const
+// #endif
 
 // Integer types portatibility
 // #ifdef OPENCV_STDINT_HEADER
@@ -2606,6 +2724,36 @@ public static final int CV_CXX_STD_ARRAY = 1;
 // #include <stdint.h>
 // #endif
 
+// #ifdef __cplusplus
+
+@Namespace("cv") @NoOffset public static class float16_t extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public float16_t(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public float16_t(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public float16_t position(long position) {
+        return (float16_t)super.position(position);
+    }
+
+// #if CV_FP16_TYPE
+
+// #else
+    public float16_t() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public float16_t(float x) { super((Pointer)null); allocate(x); }
+    private native void allocate(float x);
+
+    public native @Name("operator float") float asFloat();
+
+    public static native @ByVal float16_t fromBits(@Cast("ushort") short b);
+    public static native @ByVal @Name("zero") float16_t _zero();
+    public native @Cast("ushort") short bits();
+}
+
+
+// #endif
 
 /** \} */
 
@@ -3062,6 +3210,20 @@ public static final int CV_CXX_STD_ARRAY = 1;
 @Namespace("cv::hal") public static native void addWeighted64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
 @Namespace("cv::hal") public static native void addWeighted64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
 
+@Namespace("cv::hal") public static native void cvt16f32f( @Const float16_t src, FloatPointer dst, int len );
+@Namespace("cv::hal") public static native void cvt16f32f( @Const float16_t src, FloatBuffer dst, int len );
+@Namespace("cv::hal") public static native void cvt16f32f( @Const float16_t src, float[] dst, int len );
+@Namespace("cv::hal") public static native void cvt32f16f( @Const FloatPointer src, float16_t dst, int len );
+@Namespace("cv::hal") public static native void cvt32f16f( @Const FloatBuffer src, float16_t dst, int len );
+@Namespace("cv::hal") public static native void cvt32f16f( @Const float[] src, float16_t dst, int len );
+
+@Namespace("cv::hal") public static native void addRNGBias32f( FloatPointer arr, @Const FloatPointer scaleBiasPairs, int len );
+@Namespace("cv::hal") public static native void addRNGBias32f( FloatBuffer arr, @Const FloatBuffer scaleBiasPairs, int len );
+@Namespace("cv::hal") public static native void addRNGBias32f( float[] arr, @Const float[] scaleBiasPairs, int len );
+@Namespace("cv::hal") public static native void addRNGBias64f( DoublePointer arr, @Const DoublePointer scaleBiasPairs, int len );
+@Namespace("cv::hal") public static native void addRNGBias64f( DoubleBuffer arr, @Const DoubleBuffer scaleBiasPairs, int len );
+@Namespace("cv::hal") public static native void addRNGBias64f( double[] arr, @Const double[] scaleBiasPairs, int len );
+
 @Namespace("cv::hal") public static class DFT1D extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3233,16 +3395,11 @@ public static final int CV_CXX_STD_ARRAY = 1;
 // #else
 // #endif
 
-// #ifdef HAVE_TEGRA_OPTIMIZATION
-// #  include "tegra_round.hpp"
-// #endif
-
 // #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__ && !defined(__CUDACC__)
     // 1. general scheme
 //     #define ARM_ROUND(_value, _asm_string)
 //         int res;
 //         float temp;
-//         (void)temp;
 //         __asm__(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
 //         return res
     // 2. version for double
@@ -3418,6 +3575,7 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("uchar") byte v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("uchar") byte v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("uchar") byte v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(@Cast("uchar") byte v);
 /** \overload */
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("ushort") short v);
@@ -3428,6 +3586,7 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("ushort") short v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("ushort") short v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("ushort") short v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(@Cast("ushort") short v);
 /** \overload */
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("unsigned") int v);
@@ -3438,6 +3597,7 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("unsigned") int v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("unsigned") int v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("unsigned") int v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(@Cast("unsigned") int v);
 /** \overload */
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
@@ -3448,6 +3608,7 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(float v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(float v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(float v);
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
@@ -3457,6 +3618,7 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(double v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(double v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(double v);
 /** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("int64") long v);
@@ -3466,8 +3628,23 @@ public static native int cvIsInf( float value );
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(@Cast("int64") long v);
 /** \overload */
 // we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
+
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@ByVal float16_t v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Cast("uint64") @Name("saturate_cast<uint64>") int uint64SaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @Cast("int64") @Name("saturate_cast<int64>") long int64SaturateCast(@ByVal float16_t v);
+@Namespace("cv") public static native @ByVal @Name("saturate_cast<cv::float16_t>") float16_t float16SaturateCast(@ByVal float16_t v);
+
+// in theory, we could use a LUT for 8u/8s->16f conversion,
+// but with hardware support for FP32->FP16 conversion the current approach is preferable
 
 /** \} */
 
@@ -3485,10 +3662,10 @@ public static native int cvIsInf( float value );
 // #ifndef OPENCV_VERSION_HPP
 // #define OPENCV_VERSION_HPP
 
-public static final int CV_VERSION_MAJOR =    3;
-public static final int CV_VERSION_MINOR =    4;
-public static final int CV_VERSION_REVISION = 3;
-public static final String CV_VERSION_STATUS =   "";
+public static final int CV_VERSION_MAJOR =    4;
+public static final int CV_VERSION_MINOR =    0;
+public static final int CV_VERSION_REVISION = 0;
+public static final String CV_VERSION_STATUS =   "-beta";
 
 // #define CVAUX_STR_EXP(__A)  #__A
 // #define CVAUX_STR(__A)      CVAUX_STR_EXP(__A)
@@ -3927,24 +4104,8 @@ It is possible to alternate error processing by using redirectError().
 @param _line - line number in the source file where the error has occurred
 @see CV_Error, CV_Error_, CV_Assert, CV_DbgAssert
  */
-@Namespace("cv") public static native void error(int _code, @Str BytePointer _err, @Cast("const char*") BytePointer _func, @Cast("const char*") BytePointer _file, int _line);
+/* nothing by default */ @Namespace("cv") public static native void error(int _code, @Str BytePointer _err, @Cast("const char*") BytePointer _func, @Cast("const char*") BytePointer _file, int _line);
 @Namespace("cv") public static native void error(int _code, @Str String _err, String _func, String _file, int _line);
-
-// #ifdef __GNUC__
-// # if defined __clang__ || defined __APPLE__
-// #   pragma GCC diagnostic push
-// #   pragma GCC diagnostic ignored "-Winvalid-noreturn"
-// # endif
-// #endif
-
-/** same as cv::error, but does not return */
-@Namespace("cv") public static native void errorNoReturn(int _code, @Str BytePointer _err, @Cast("const char*") BytePointer _func, @Cast("const char*") BytePointer _file, int _line);
-@Namespace("cv") public static native void errorNoReturn(int _code, @Str String _err, String _func, String _file, int _line);
-// #ifdef __GNUC__
-// # if defined __clang__ || defined __APPLE__
-// #   pragma GCC diagnostic pop
-// # endif
-// #endif
 
 // #if defined __GNUC__
 // #elif defined _MSC_VER
@@ -3960,39 +4121,36 @@ It is possible to alternate error processing by using redirectError().
 // #define CV_Error(...) do { abort(); } while (0)
 // #define CV_Error_( code, args ) do { cv::format args; abort(); } while (0)
 // #define CV_Assert( expr ) do { if (!(expr)) abort(); } while (0)
+// #define CV_ErrorNoReturn CV_Error
+// #define CV_ErrorNoReturn_ CV_Error_
 
 // #else // CV_STATIC_ANALYSIS
 
 // #endif // CV_STATIC_ANALYSIS
 
 /** \cond IGNORED */
-
-// #if defined OPENCV_FORCE_MULTIARG_ASSERT_CHECK && defined CV_STATIC_ANALYSIS
-// #warning "OPENCV_FORCE_MULTIARG_ASSERT_CHECK can't be used with CV_STATIC_ANALYSIS"
-// #undef OPENCV_FORCE_MULTIARG_ASSERT_CHECK
+// #if !defined(__OPENCV_BUILD)  // TODO: backward compatibility only
+// #ifndef CV_ErrorNoReturn
+// #define CV_ErrorNoReturn CV_Error
+// #endif
+// #ifndef CV_ErrorNoReturn_
+// #define CV_ErrorNoReturn_ CV_Error_
+// #endif
 // #endif
 
-// #ifdef OPENCV_FORCE_MULTIARG_ASSERT_CHECK
-// #define CV_Assert_1( expr ) do { if(!!(expr)) ; else cv::error( cv::Error::StsAssert, #expr, CV_Func, __FILE__, __LINE__ ); } while(0)
-// #else
 // #define CV_Assert_1 CV_Assert
-// #endif
-// #define CV_Assert_2( expr1, expr2 ) CV_Assert_1(expr1); CV_Assert_1(expr2)
-// #define CV_Assert_3( expr1, expr2, expr3 ) CV_Assert_2(expr1, expr2); CV_Assert_1(expr3)
-// #define CV_Assert_4( expr1, expr2, expr3, expr4 ) CV_Assert_3(expr1, expr2, expr3); CV_Assert_1(expr4)
-// #define CV_Assert_5( expr1, expr2, expr3, expr4, expr5 ) CV_Assert_4(expr1, expr2, expr3, expr4); CV_Assert_1(expr5)
-// #define CV_Assert_6( expr1, expr2, expr3, expr4, expr5, expr6 ) CV_Assert_5(expr1, expr2, expr3, expr4, expr5); CV_Assert_1(expr6)
-// #define CV_Assert_7( expr1, expr2, expr3, expr4, expr5, expr6, expr7 ) CV_Assert_6(expr1, expr2, expr3, expr4, expr5, expr6 ); CV_Assert_1(expr7)
-// #define CV_Assert_8( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8 ) CV_Assert_7(expr1, expr2, expr3, expr4, expr5, expr6, expr7 ); CV_Assert_1(expr8)
-// #define CV_Assert_9( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ) CV_Assert_8(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8 ); CV_Assert_1(expr9)
-// #define CV_Assert_10( expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9, expr10 ) CV_Assert_9(expr1, expr2, expr3, expr4, expr5, expr6, expr7, expr8, expr9 ); CV_Assert_1(expr10)
+// #define CV_Assert_2( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_1( __VA_ARGS__ ))
+// #define CV_Assert_3( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_2( __VA_ARGS__ ))
+// #define CV_Assert_4( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_3( __VA_ARGS__ ))
+// #define CV_Assert_5( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_4( __VA_ARGS__ ))
+// #define CV_Assert_6( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_5( __VA_ARGS__ ))
+// #define CV_Assert_7( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_6( __VA_ARGS__ ))
+// #define CV_Assert_8( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_7( __VA_ARGS__ ))
+// #define CV_Assert_9( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_8( __VA_ARGS__ ))
+// #define CV_Assert_10( expr, ... ) CV_Assert_1(expr); __CV_EXPAND(CV_Assert_9( __VA_ARGS__ ))
 
-// #define CV_Assert_N(...) do { __CV_CAT(CV_Assert_, __CV_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__); } while(0)
+// #define CV_Assert_N(...) do { __CV_EXPAND(__CV_CAT(CV_Assert_, __CV_VA_NUM_ARGS(__VA_ARGS__)) (__VA_ARGS__)); } while(0)
 
-// #ifdef OPENCV_FORCE_MULTIARG_ASSERT_CHECK
-// #undef CV_Assert
-// #define CV_Assert CV_Assert_N
-// #endif
 /** \endcond */
 
 // #if defined _DEBUG || defined CV_STATIC_ANALYSIS
@@ -4020,8 +4178,8 @@ It is possible to alternate error processing by using redirectError().
         return (Hamming)super.position(position);
     }
 
-    /** enum cv::Hamming:: */
-    public static final int normType = NORM_HAMMING;
+    @MemberGetter public static native @Cast("const cv::NormTypes") int normType();
+    public static final int normType = normType();
 
     /** this will count the bits in a ^ b
      */
@@ -4095,10 +4253,7 @@ It is possible to alternate error processing by using redirectError().
 
 
 
-// #if OPENCV_ABI_COMPATIBILITY > 300
 @Namespace("cv::ipp") public static native @Cast("unsigned long long") long getIppFeatures();
-// #else
-// #endif
 @Namespace("cv::ipp") public static native void setIppStatus(int status, @Cast("const char*") BytePointer funcname/*=NULL*/, @Cast("const char*") BytePointer filename/*=NULL*/,
                              int line/*=0*/);
 @Namespace("cv::ipp") public static native void setIppStatus(int status);
@@ -4201,6 +4356,8 @@ It is possible to alternate error processing by using redirectError().
     @Namespace("cv") public static native @Cast("unsigned") int abs(@Cast("unsigned") int a);
 
 
+// #include "cvstd_wrapper.hpp"
+
 /** \addtogroup core_utils
  *  \{
 <p>
@@ -4229,284 +4386,33 @@ double memory deallocation.
 
 /** \} core_utils
  <p>
- *  \cond IGNORED */
-
-// Metafunction to avoid taking a reference to void.
-
-@Name("cv::detail::RefOrVoid<void>") public static class RefOrVoid extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public RefOrVoid() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public RefOrVoid(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public RefOrVoid(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public RefOrVoid position(long position) {
-        return (RefOrVoid)super.position(position);
-    }
- @Opaque public static class type extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public type() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public type(Pointer p) { super(p); }
-} }
-
-// This class would be private to Ptr, if it didn't have to be a non-template.
-@Namespace("cv::detail") @Opaque public static class PtrOwner extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public PtrOwner() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PtrOwner(Pointer p) { super(p); }
-}
-
-
-
-/** \endcond
+ *  \endcond
  <p>
  *  \addtogroup core_basic
  *  \{
 <p>
-/** \brief Template class for smart pointers with shared ownership
-<p>
-A Ptr\<T\> pretends to be a pointer to an object of type T. Unlike an ordinary pointer, however, the
-object will be automatically cleaned up once all Ptr instances pointing to it are destroyed.
-<p>
-Ptr is similar to boost::shared_ptr that is part of the Boost library
-(<http://www.boost.org/doc/libs/release/libs/smart_ptr/shared_ptr.htm>) and std::shared_ptr from
-the [C++11](http://en.wikipedia.org/wiki/C++11) standard.
-<p>
-This class provides the following advantages:
--   Default constructor, copy constructor, and assignment operator for an arbitrary C++ class or C
-    structure. For some objects, like files, windows, mutexes, sockets, and others, a copy
-    constructor or an assignment operator are difficult to define. For some other objects, like
-    complex classifiers in OpenCV, copy constructors are absent and not easy to implement. Finally,
-    some of complex OpenCV and your own data structures may be written in C. However, copy
-    constructors and default constructors can simplify programming a lot. Besides, they are often
-    required (for example, by STL containers). By using a Ptr to such an object instead of the
-    object itself, you automatically get all of the necessary constructors and the assignment
-    operator.
--   *O(1)* complexity of the above-mentioned operations. While some structures, like std::vector,
-    provide a copy constructor and an assignment operator, the operations may take a considerable
-    amount of time if the data structures are large. But if the structures are put into a Ptr, the
-    overhead is small and independent of the data size.
--   Automatic and customizable cleanup, even for C structures. See the example below with FILE\*.
--   Heterogeneous collections of objects. The standard STL and most other C++ and OpenCV containers
-    can store only objects of the same type and the same size. The classical solution to store
-    objects of different types in the same container is to store pointers to the base class (Base\*)
-    instead but then you lose the automatic memory management. Again, by using Ptr\<Base\> instead
-    of raw pointers, you can solve the problem.
-<p>
-A Ptr is said to *own* a pointer - that is, for each Ptr there is a pointer that will be deleted
-once all Ptr instances that own it are destroyed. The owned pointer may be null, in which case
-nothing is deleted. Each Ptr also *stores* a pointer. The stored pointer is the pointer the Ptr
-pretends to be; that is, the one you get when you use Ptr::get or the conversion to T\*. It's
-usually the same as the owned pointer, but if you use casts or the general shared-ownership
-constructor, the two may diverge: the Ptr will still own the original pointer, but will itself point
-to something else.
-<p>
-The owned pointer is treated as a black box. The only thing Ptr needs to know about it is how to
-delete it. This knowledge is encapsulated in the *deleter* - an auxiliary object that is associated
-with the owned pointer and shared between all Ptr instances that own it. The default deleter is an
-instance of DefaultDeleter, which uses the standard C++ delete operator; as such it will work with
-any pointer allocated with the standard new operator.
-<p>
-However, if the pointer must be deleted in a different way, you must specify a custom deleter upon
-Ptr construction. A deleter is simply a callable object that accepts the pointer as its sole
-argument. For example, if you want to wrap FILE, you may do so as follows:
-<pre>{@code
-    Ptr<FILE> f(fopen("myfile.txt", "w"), fclose);
-    if(!f) throw ...;
-    fprintf(f, ....);
-    ...
-    // the file will be closed automatically by f's destructor.
-}</pre>
-Alternatively, if you want all pointers of a particular type to be deleted the same way, you can
-specialize DefaultDeleter<T>::operator() for that type, like this:
-<pre>{@code
-    namespace cv {
-    template<> void DefaultDeleter<FILE>::operator ()(FILE * obj) const
-    {
-        fclose(obj);
-    }
-    }
-}</pre>
-For convenience, the following types from the OpenCV C API already have such a specialization that
-calls the appropriate release function:
--   CvCapture
--   CvFileStorage
--   CvHaarClassifierCascade
--   CvMat
--   CvMatND
--   CvMemStorage
--   CvSparseMat
--   CvVideoWriter
--   IplImage
-\note The shared ownership mechanism is implemented with reference counting. As such, cyclic
-ownership (e.g. when object a contains a Ptr to object b, which contains a Ptr to object a) will
-lead to all involved objects never being cleaned up. Avoid such situations.
-\note It is safe to concurrently read (but not write) a Ptr instance from multiple threads and
-therefore it is normally safe to use it in multi-threaded applications. The same is true for Mat and
-other C++ OpenCV classes that use internal reference counts.
-*/
-
-/** Equivalent to ptr1.swap(ptr2). Provided to help write generic algorithms. */
-
-/** Return whether ptr1.get() and ptr2.get() are equal and not equal, respectively. */
-
-/** {@code makePtr<T>(...)} is equivalent to {@code Ptr<T>(new T(...))}. It is shorter than the latter, and it's
-marginally safer than using a constructor or Ptr::reset, since it ensures that the owned pointer
-is new and thus not owned by any other Ptr instance.
-Unfortunately, perfect forwarding is impossible to implement in C++03, and so makePtr is limited
-to constructors of T that have up to 10 arguments, none of which are non-const references.
- */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-/** \overload */
-
-//////////////////////////////// string class //////////////////////////////// //for string constructor from FileNode
-
-/** \} core_basic
-<p>
-////////////////////////// cv::String implementation /////////////////////////
- <p>
- *  \cond IGNORED */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//////////////////////////////// string class //////////////////////////////// */ //for string constructor from FileNode
+
+// #ifndef OPENCV_DISABLE_STRING_LOWER_UPPER_CONVERSIONS
+
+/** \cond IGNORED */
+// std::tolower is int->int
+@Namespace("cv::details") public static native @Cast("char") byte char_tolower(@Cast("char") byte ch);
+// std::toupper is int->int
+@Namespace("cv::details") public static native @Cast("char") byte char_toupper(@Cast("char") byte ch);
+ // namespace details
 /** \endcond */
 
-// ************************* cv::String non-member functions *************************
+@Namespace("cv") public static native @StdString BytePointer toLowerCase(@StdString BytePointer str);
+@Namespace("cv") public static native @StdString String toLowerCase(@StdString String str);
 
-/** \relates cv::String
-/** \{ */
+@Namespace("cv") public static native @StdString BytePointer toUpperCase(@StdString BytePointer str);
+@Namespace("cv") public static native @StdString String toUpperCase(@StdString String str);
 
-@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Str @Name("operator +") String add(@Str String lhs, @Str String rhs);
+// #endif // OPENCV_DISABLE_STRING_LOWER_UPPER_CONVERSIONS
 
-@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Str BytePointer lhs, @Cast("char") byte rhs);
-@Namespace("cv") public static native @Str @Name("operator +") String add(@Str String lhs, @Cast("char") byte rhs);
-
-@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Cast("char") byte lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Str @Name("operator +") String add(@Cast("char") byte lhs, @Str String rhs);
-
-@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str String lhs, @Str String rhs);
-
-/** \} relates cv::String */
-
+/** \} core_basic */
  // cv
-    @Namespace("std") public static native void swap(@Str BytePointer a, @Str BytePointer b);
-    @Namespace("std") public static native void swap(@Str String a, @Str String b);
-
-
-// #include "opencv2/core/ptr.inl.hpp"
 
 // #endif //OPENCV_CORE_CVSTD_HPP
 
@@ -4570,7 +4476,10 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 // #include "opencv2/core.hpp"
 // #include <ostream>
 
-// #ifdef CV_CXX11
+// #include <functional>
+
+// #if !defined(_M_CEE)
+// #include <mutex>  // std::mutex, std::lock_guard
 // #endif
 
 // #ifdef CV_COLLECT_IMPL_DATA
@@ -4961,51 +4870,27 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body, double nstripes/*=-1.*/);
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body);
 
-// #ifdef CV_CXX11
-// #endif
+@Namespace("cv") @NoOffset public static class ParallelLoopBodyLambdaWrapper extends ParallelLoopBody {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ParallelLoopBodyLambdaWrapper(Pointer p) { super(p); }
+
+    public ParallelLoopBodyLambdaWrapper(@ByVal Functor functor) { super((Pointer)null); allocate(functor); }
+    private native void allocate(@ByVal Functor functor);
+
+    public native @Name("operator ()") @Override void apply(@Const @ByRef Range range);
+}
+
+@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor, double nstripes/*=-1.*/);
+@Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @ByVal Functor functor);
 
 /////////////////////////////// forEach method of cv::Mat ////////////////////////////
 
 
 /////////////////////////// Synchronization Primitives ///////////////////////////////
 
-@Namespace("cv") @NoOffset public static class Mutex extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Mutex(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Mutex(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Mutex position(long position) {
-        return (Mutex)super.position(position);
-    }
-
-    public Mutex() { super((Pointer)null); allocate(); }
-    private native void allocate();
-    public Mutex(@Const @ByRef Mutex m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef Mutex m);
-    public native @ByRef @Name("operator =") Mutex put(@Const @ByRef Mutex m);
-
-    public native void lock();
-    public native @Cast("bool") boolean trylock();
-    public native void unlock();
-
-    @Opaque public static class Impl extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public Impl() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public Impl(Pointer p) { super(p); }
-    }
-}
-
-@Namespace("cv") @NoOffset public static class AutoLock extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AutoLock(Pointer p) { super(p); }
-
-    public AutoLock(@ByRef Mutex m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@ByRef Mutex m);
-}
+// #if !defined(_M_CEE)
+// #endif
 
 // TLS interface
 @Namespace("cv") @NoOffset public static class TLSDataContainer extends Pointer {
@@ -5013,12 +4898,6 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TLSDataContainer(Pointer p) { super(p); }
 
-    public native Pointer getData();
-// #endif
-    public native Pointer createDataInstance();
-    public native void deleteDataInstance(Pointer pData);
-
-    public native int key_(); public native TLSDataContainer key_(int key_);
     public native void cleanup(); /** Release created TLS data container objects. It is similar to release() call, but it keeps TLS container valid. */
 }
 
@@ -5128,9 +5007,6 @@ For the described keys:
  *  \cond IGNORED
 <p>
 /////////////////////////////// AutoBuffer implementation //////////////////////////////////////// */
-
-
-
 
 
 
@@ -5283,10 +5159,6 @@ public static final int
 
  //namespace cv
 
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/core/core_c.h"
-// #endif
-
 // #endif //OPENCV_CORE_UTILITY_H
 
 
@@ -5337,6 +5209,28 @@ public static final int
 
 // #ifndef OPENCV_CORE_TYPES_H
 // #define OPENCV_CORE_TYPES_H
+
+// #if !defined(__OPENCV_BUILD) && !defined(CV__DISABLE_C_API_CTORS)
+// #define CV__ENABLE_C_API_CTORS // enable C API ctors (must be removed)
+// #endif
+
+//#define CV__VALIDATE_UNUNITIALIZED_VARS 1  // C++11 & GCC only
+
+// #ifdef __cplusplus
+
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
+// #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+public static native @MemberGetter int CV_STRUCT_INITIALIZER();
+public static final int CV_STRUCT_INITIALIZER = CV_STRUCT_INITIALIZER();
+// #else
+// #if defined(__GNUC__) && __GNUC__ == 4  // GCC 4.x warns on "= {}" initialization, fixed in GCC 5.0
+// #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+// #endif
+// #endif
+
+// #else
+// #endif
+
 
 // #ifdef HAVE_IPL
 // #  ifndef __IPL_H__
@@ -5609,6 +5503,10 @@ public static final int IPL_BORDER_REPLICATE =  1;
 public static final int IPL_BORDER_REFLECT =    2;
 public static final int IPL_BORDER_WRAP =       3;
 
+// #ifdef __cplusplus
+public static native @ByVal IplImage cvIplImage(@Const @ByRef Mat m);
+// #endif
+
 /** The IplImage is taken from the Intel Image Processing Library, in which the format is native. OpenCV
 only supports a subset of possible IplImage formats, as outlined in the parameter list above.
 <p>
@@ -5685,13 +5583,15 @@ destination images (or ROIs), allowing them to vary independently.
                                    needed for correct deallocation */
     public native @Cast("char*") BytePointer imageDataOrigin(); public native IplImage imageDataOrigin(BytePointer imageDataOrigin);
 
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public IplImage() { super((Pointer)null); allocate(); }
     private native void allocate();
     public IplImage(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
 }
+
+public static native @ByVal IplImage cvIplImage();
 
 @Opaque public static class IplTileInfo extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -5852,16 +5752,12 @@ CV_MAT_ELEM(matrix, type, i, j\*nchannels + channel_idx).
 // #else
 // #endif
 
-
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvMat() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvMat(@Const @ByRef CvMat m) { super((Pointer)null); allocate(m); }
-    private native void allocate(@Const @ByRef CvMat m);
     public CvMat(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
-
 }
 
 
@@ -5909,8 +5805,10 @@ public static native @ByVal CvMat cvMat( int rows, int cols, int type, Pointer d
 public static native @ByVal CvMat cvMat( int rows, int cols, int type);
 
 // #ifdef __cplusplus
+public static native @ByVal CvMat cvMat();
+public static native @ByVal CvMat cvMat(@Const @ByRef CvMat m);
 
-// #endif
+// #endif // __cplusplus
 
 
 // #define CV_MAT_ELEM_PTR_FAST( mat, row, col, pix_size )
@@ -5960,6 +5858,10 @@ public static final String CV_TYPE_NAME_MATND =    "opencv-nd-matrix";
 
 public static final int CV_MAX_DIM =            32;
 
+// #ifdef __cplusplus
+public static native @ByVal CvMatND cvMatND(@Const @ByRef Mat m);
+// #endif
+
 /**
   @deprecated consider using cv::Mat instead
   */
@@ -5989,13 +5891,16 @@ public static final int CV_MAX_DIM =            32;
         @Name({"dim", ".size"}) public native int dim_size(int i); public native CvMatND dim_size(int i, int dim_size);
         @Name({"dim", ".step"}) public native int dim_step(int i); public native CvMatND dim_step(int i, int dim_step);
 
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvMatND() { super((Pointer)null); allocate(); }
     private native void allocate();
     public CvMatND(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
 }
+
+
+public static native @ByVal CvMatND cvMatND();
 
 // #define CV_IS_MATND_HDR(mat)
 //     ((mat) != NULL && (((const CvMatND*)(mat))->type & CV_MAGIC_MASK) == CV_MATND_MAGIC_VAL)
@@ -6045,7 +5950,7 @@ public static class CvSparseMat extends AbstractCvSparseMat {
 }
 
 // #ifdef __cplusplus
-    public static native CvSparseMat cvCreateSparseMat(@Const @ByRef SparseMat m);
+public static native CvSparseMat cvCreateSparseMat(@Const @ByRef SparseMat m);
 // #endif
 
 // #define CV_IS_SPARSE_MAT_HDR(mat)
@@ -6177,17 +6082,22 @@ public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgpr
     public native int width(); public native CvRect width(int width);
     public native int height(); public native CvRect height(int height);
 
-// #ifdef __cplusplus
-    public CvRect(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(_x, _y, w, h); }
-    private native void allocate(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvRect() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvRect(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(_x, _y, w, h); }
+    private native void allocate(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
 /** constructs CvRect structure. */
 public static native @ByVal CvRect cvRect( int x, int y, int width, int height );
-
+// #ifdef __cplusplus
+public static native @ByVal CvRect cvRect(@Const @ByRef Rect rc);
+// #endif
 
 public static native @ByVal IplROI cvRectToROI( @ByVal CvRect rect, int coi );
 
@@ -6219,20 +6129,23 @@ public static final int CV_TERMCRIT_EPS =     2;
     public native int type(); public native CvTermCriteria type(int type);
     public native int max_iter(); public native CvTermCriteria max_iter(int max_iter);
     public native double epsilon(); public native CvTermCriteria epsilon(double epsilon);
-
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvTermCriteria(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/) { super((Pointer)null); allocate(_type, _iter, _eps); }
     private native void allocate(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/);
     public CvTermCriteria() { super((Pointer)null); allocate(); }
     private native void allocate();
     public CvTermCriteria(@Const @ByRef TermCriteria t) { super((Pointer)null); allocate(t); }
     private native void allocate(@Const @ByRef TermCriteria t);
+// #endif
+// #ifdef __cplusplus
     public native @ByVal @Name("operator cv::TermCriteria") TermCriteria asTermCriteria();
 // #endif
-
 }
 
 public static native @ByVal CvTermCriteria cvTermCriteria( int type, int max_iter, double epsilon );
+// #ifdef __cplusplus
+public static native @ByVal CvTermCriteria cvTermCriteria(@Const @ByRef TermCriteria t);
+// #endif
 
 
 /******************************* CvPoint and variants ***********************************/
@@ -6251,17 +6164,22 @@ public static native @ByVal CvTermCriteria cvTermCriteria( int type, int max_ite
     public native int x(); public native CvPoint x(int x);
     public native int y(); public native CvPoint y(int y);
 
-// #ifdef __cplusplus
-    public CvPoint(int _x/*=0*/, int _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
-    private native void allocate(int _x/*=0*/, int _y/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvPoint() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvPoint(int _x/*=0*/, int _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
+    private native void allocate(int _x/*=0*/, int _y/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
 /** constructs CvPoint structure. */
 public static native @ByVal CvPoint cvPoint( int x, int y );
-
+// #ifdef __cplusplus
+public static native @ByVal CvPoint cvPoint(@Const @ByRef Point pt);
+// #endif
 
 @NoOffset public static class CvPoint2D32f extends AbstractCvPoint2D32f {
     static { Loader.load(); }
@@ -6277,11 +6195,14 @@ public static native @ByVal CvPoint cvPoint( int x, int y );
     public native float x(); public native CvPoint2D32f x(float x);
     public native float y(); public native CvPoint2D32f y(float y);
 
-// #ifdef __cplusplus
-    public CvPoint2D32f(float _x/*=0*/, float _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
-    private native void allocate(float _x/*=0*/, float _y/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvPoint2D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvPoint2D32f(float _x/*=0*/, float _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
+    private native void allocate(float _x/*=0*/, float _y/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
@@ -6317,27 +6238,30 @@ public static native @ByVal @Cast("CvPoint*") int[] cvPointFrom32f( @ByVal @Cast
     public native float y(); public native CvPoint3D32f y(float y);
     public native float z(); public native CvPoint3D32f z(float z);
 
-// #ifdef __cplusplus
-    public CvPoint3D32f(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/) { super((Pointer)null); allocate(_x, _y, _z); }
-    private native void allocate(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvPoint3D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvPoint3D32f(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/) { super((Pointer)null); allocate(_x, _y, _z); }
+    private native void allocate(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
 /** constructs CvPoint3D32f structure. */
 public static native @ByVal CvPoint3D32f cvPoint3D32f( double x, double y, double z );
 
+// #ifdef __cplusplus
+// #endif
 
-public static class CvPoint2D64f extends AbstractCvPoint2D64f {
+
+@NoOffset public static class CvPoint2D64f extends AbstractCvPoint2D64f {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public CvPoint2D64f() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvPoint2D64f(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint2D64f(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvPoint2D64f(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public CvPoint2D64f position(long position) {
         return (CvPoint2D64f)super.position(position);
@@ -6345,21 +6269,22 @@ public static class CvPoint2D64f extends AbstractCvPoint2D64f {
 
     public native double x(); public native CvPoint2D64f x(double x);
     public native double y(); public native CvPoint2D64f y(double y);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
+    public CvPoint2D64f() { super((Pointer)null); allocate(); }
+    private native void allocate();
+// #endif
 }
 
 /** constructs CvPoint2D64f structure.*/
 public static native @ByVal CvPoint2D64f cvPoint2D64f( double x, double y );
 
 
-public static class CvPoint3D64f extends AbstractCvPoint3D64f {
+@NoOffset public static class CvPoint3D64f extends AbstractCvPoint3D64f {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public CvPoint3D64f() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvPoint3D64f(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint3D64f(Pointer p) { super(p); }
-    private native void allocate();
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvPoint3D64f(long size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(long size);
     @Override public CvPoint3D64f position(long position) {
         return (CvPoint3D64f)super.position(position);
@@ -6368,6 +6293,10 @@ public static class CvPoint3D64f extends AbstractCvPoint3D64f {
     public native double x(); public native CvPoint3D64f x(double x);
     public native double y(); public native CvPoint3D64f y(double y);
     public native double z(); public native CvPoint3D64f z(double z);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
+    public CvPoint3D64f() { super((Pointer)null); allocate(); }
+    private native void allocate();
+// #endif
 }
 
 /** constructs CvPoint3D64f structure. */
@@ -6390,16 +6319,23 @@ public static native @ByVal CvPoint3D64f cvPoint3D64f( double x, double y, doubl
     public native int width(); public native CvSize width(int width);
     public native int height(); public native CvSize height(int height);
 
-// #ifdef __cplusplus
-    public CvSize(int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(w, h); }
-    private native void allocate(int w/*=0*/, int h/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvSize() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvSize(int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(w, h); }
+    private native void allocate(int w/*=0*/, int h/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
 /** constructs CvSize structure. */
 public static native @ByVal CvSize cvSize( int width, int height );
+
+// #ifdef __cplusplus
+public static native @ByVal CvSize cvSize(@Const @ByRef Size sz);
+// #endif
 
 @NoOffset public static class CvSize2D32f extends AbstractCvSize2D32f {
     static { Loader.load(); }
@@ -6415,16 +6351,21 @@ public static native @ByVal CvSize cvSize( int width, int height );
     public native float width(); public native CvSize2D32f width(float width);
     public native float height(); public native CvSize2D32f height(float height);
 
-// #ifdef __cplusplus
-    public CvSize2D32f(float w/*=0*/, float h/*=0*/) { super((Pointer)null); allocate(w, h); }
-    private native void allocate(float w/*=0*/, float h/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvSize2D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
+    public CvSize2D32f(float w/*=0*/, float h/*=0*/) { super((Pointer)null); allocate(w, h); }
+    private native void allocate(float w/*=0*/, float h/*=0*/);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
 /** constructs CvSize2D32f structure. */
 public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height );
+// #ifdef __cplusplus
+// #endif
 
 /** \sa RotatedRect
  */
@@ -6447,7 +6388,7 @@ public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height
     /** and the first side (i.e. length) in degrees */
     public native float angle(); public native CvBox2D angle(float angle);
 
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
     private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
     public CvBox2D() { super((Pointer)null); allocate(); }
@@ -6458,9 +6399,20 @@ public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height
     private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
     public CvBox2D(@Const @ByRef RotatedRect rr) { super((Pointer)null); allocate(rr); }
     private native void allocate(@Const @ByRef RotatedRect rr);
+// #endif
+// #ifdef __cplusplus
     public native @ByVal @Name("operator cv::RotatedRect") RotatedRect asRotatedRect();
 // #endif
 }
+
+
+// #ifdef __cplusplus
+public static native @ByVal CvBox2D cvBox2D(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
+public static native @ByVal CvBox2D cvBox2D();
+public static native @ByVal CvBox2D cvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
+public static native @ByVal CvBox2D cvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s, float a/*=0*/);
+public static native @ByVal CvBox2D cvBox2D(@Const @ByRef RotatedRect rr);
+// #endif
 
 
 /** Line iterator state: */
@@ -6509,11 +6461,13 @@ public static final CvSlice CV_WHOLE_SEQ =  cvSlice(0, CV_WHOLE_SEQ_END_INDEX);
     public native int start_index(); public native CvSlice start_index(int start_index);
     public native int end_index(); public native CvSlice end_index(int end_index);
 
-// #if defined(__cplusplus) && !defined(__CUDACC__)
-    public CvSlice(int start/*=0*/, int end/*=0*/) { super((Pointer)null); allocate(start, end); }
-    private native void allocate(int start/*=0*/, int end/*=0*/);
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvSlice() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #endif
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus) && !defined(__CUDACC__)
+    public CvSlice(int start/*=0*/, int end/*=0*/) { super((Pointer)null); allocate(start, end); }
+    private native void allocate(int start/*=0*/, int end/*=0*/);
     public CvSlice(@Const @ByRef Range r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Range r);
     public native @ByVal @Name("operator cv::Range") Range asRange();
@@ -6522,6 +6476,9 @@ public static final CvSlice CV_WHOLE_SEQ =  cvSlice(0, CV_WHOLE_SEQ_END_INDEX);
 
 public static native @ByVal CvSlice cvSlice( int start, int end );
 
+// #if defined(__cplusplus)
+public static native @ByVal CvSlice cvSlice(@Const @ByRef Range r);
+// #endif
 
 
 /************************************* CvScalar *****************************************/
@@ -6541,13 +6498,16 @@ public static native @ByVal CvSlice cvSlice( int start, int end );
     public native double val(int i); public native CvScalar val(int i, double val);
     @MemberGetter public native DoublePointer val();
 
-// #ifdef __cplusplus
+// #ifdef CV__VALIDATE_UNUNITIALIZED_VARS
     public CvScalar() { super((Pointer)null); allocate(); }
     private native void allocate();
+// #elif defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvScalar(double d0, double d1/*=0*/, double d2/*=0*/, double d3/*=0*/) { super((Pointer)null); allocate(d0, d1, d2, d3); }
     private native void allocate(double d0, double d1/*=0*/, double d2/*=0*/, double d3/*=0*/);
     public CvScalar(double d0) { super((Pointer)null); allocate(d0); }
     private native void allocate(double d0);
+// #endif
+// #ifdef __cplusplus
 // #endif
 }
 
@@ -6555,6 +6515,10 @@ public static native @ByVal CvScalar cvScalar( double val0, double val1/*=0*/,
                                double val2/*=0*/, double val3/*=0*/);
 public static native @ByVal CvScalar cvScalar( double val0);
 
+// #ifdef __cplusplus
+public static native @ByVal CvScalar cvScalar();
+public static native @ByVal CvScalar cvScalar(@Const @ByRef Scalar s);
+// #endif
 
 public static native @ByVal CvScalar cvRealScalar( double val0 );
 
@@ -6657,9 +6621,9 @@ public static class CvSeqBlock extends Pointer {
     public native CvSeqBlock prev(); public native CvSeqBlock prev(CvSeqBlock prev);
     /** Next sequence block.                       */
     public native CvSeqBlock next(); public native CvSeqBlock next(CvSeqBlock next);
-  /** Index of the first element in the block +  */
-  /** sequence->first->start_index.              */
-  public native int start_index(); public native CvSeqBlock start_index(int start_index);
+    /** Index of the first element in the block +  */
+    /** sequence->first->start_index.              */
+    public native int start_index(); public native CvSeqBlock start_index(int start_index);
     /** Number of elements in the block.           */
     public native int count(); public native CvSeqBlock count(int count);
     /** Pointer to the first element of the block. */
@@ -7095,9 +7059,11 @@ public static final int CV_SEQ_ELTYPE_POINT =          CV_32SC2;
 /** freeman code: 0..7 */
 public static final int CV_SEQ_ELTYPE_CODE =           CV_8UC1;
 public static final int CV_SEQ_ELTYPE_GENERIC =        0;
-public static final int CV_SEQ_ELTYPE_PTR =            CV_USRTYPE1;
+public static native @MemberGetter int CV_SEQ_ELTYPE_PTR();
+public static final int CV_SEQ_ELTYPE_PTR = CV_SEQ_ELTYPE_PTR();
 /** &(x,y) */
-public static final int CV_SEQ_ELTYPE_PPOINT =         CV_SEQ_ELTYPE_PTR;
+public static native @MemberGetter int CV_SEQ_ELTYPE_PPOINT();
+public static final int CV_SEQ_ELTYPE_PPOINT = CV_SEQ_ELTYPE_PPOINT();
 /** #(x,y) */
 public static final int CV_SEQ_ELTYPE_INDEX =          CV_32SC1;
 /** &next_o, &next_d, &vtx_o, &vtx_d */
@@ -10910,11 +10876,20 @@ public static final String cvFuncName = "";
 
 ////// specialized implementations of DefaultDeleter::operator() for classic OpenCV types //////
 
-
-
-
-
-
+@Name("cv::DefaultDeleter<CvMat>") public static class CvMatDefaultDeleter extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CvMatDefaultDeleter() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvMatDefaultDeleter(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvMatDefaultDeleter(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CvMatDefaultDeleter position(long position) {
+        return (CvMatDefaultDeleter)super.position(position);
+    }
+ public native @Name("operator ()") void apply(CvMat obj); }
 
 ////////////// convenient wrappers for operating old-style dynamic structures //////////////
 
@@ -11379,9 +11354,6 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3i put(@Const @ByRef Point3i pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
-// #if OPENCV_ABI_COMPATIBILITY > 300
-// #else
-// #endif
 
     /** dot product */
     public native int dot(@Const @ByRef Point3i pt);
@@ -11421,9 +11393,6 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3f put(@Const @ByRef Point3f pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
-// #if OPENCV_ABI_COMPATIBILITY > 300
-// #else
-// #endif
 
     /** dot product */
     public native float dot(@Const @ByRef Point3f pt);
@@ -11463,9 +11432,6 @@ The following Point3_\<\> aliases are available:
     public native @ByRef @Name("operator =") Point3d put(@Const @ByRef Point3d pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
-// #if OPENCV_ABI_COMPATIBILITY > 300
-// #else
-// #endif
 
     /** dot product */
     public native double dot(@Const @ByRef Point3d pt);
@@ -11522,6 +11488,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size put(@Const @ByRef Size sz);
     /** the area (width*height) */
     public native int area();
+    /** aspect ratio (width/height) */
+    public native double aspectRatio();
     /** true if empty */
     public native @Cast("bool") boolean empty();
 
@@ -11557,6 +11525,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size2f put(@Const @ByRef Size2f sz);
     /** the area (width*height) */
     public native float area();
+    /** aspect ratio (width/height) */
+    public native double aspectRatio();
     /** true if empty */
     public native @Cast("bool") boolean empty();
 
@@ -11592,6 +11562,8 @@ OpenCV defines the following Size_\<\> aliases:
     public native @ByRef @Name("operator =") Size2d put(@Const @ByRef Size2d sz);
     /** the area (width*height) */
     public native double area();
+    /** aspect ratio (width/height) */
+    public native double aspectRatio();
     /** true if empty */
     public native @Cast("bool") boolean empty();
 
@@ -11943,6 +11915,11 @@ OpenCV to pass pixel values.
     public Scalar(double v0) { super((Pointer)null); allocate(v0); }
     private native void allocate(double v0);
 
+    public Scalar(@Const @ByRef Scalar s) { super((Pointer)null); allocate(s); }
+    private native void allocate(@Const @ByRef Scalar s);
+
+    public native @ByRef @Name("operator =") Scalar put(@Const @ByRef Scalar s);
+
     /** returns a scalar with all elements set to v0 */
     public static native @ByVal Scalar all(double v0);
 
@@ -11978,6 +11955,11 @@ OpenCV to pass pixel values.
     private native void allocate(int v0, int v1);
     public Scalar4i(int v0) { super((Pointer)null); allocate(v0); }
     private native void allocate(int v0);
+
+    public Scalar4i(@Const @ByRef Scalar4i s) { super((Pointer)null); allocate(s); }
+    private native void allocate(@Const @ByRef Scalar4i s);
+
+    public native @ByRef @Name("operator =") Scalar4i put(@Const @ByRef Scalar4i s);
 
     /** returns a scalar with all elements set to v0 */
     public static native @ByVal Scalar4i all(int v0);
@@ -12372,6 +12354,10 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
+
+
+
+
 //////////////////////////////// 3D Point ///////////////////////////////
 
 
@@ -12386,11 +12372,11 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
-// #if OPENCV_ABI_COMPATIBILITY > 300
 
-// #else
 
-// #endif
+
+
+
 
 
 
@@ -12403,6 +12389,12 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 ////////////////////////////////// Size /////////////////////////////////
+
+
+
+
+
+
 
 
 
@@ -12450,6 +12442,10 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
+
+
+
+
 /**
  * \brief measure dissimilarity between two sample sets
  *
@@ -12458,8 +12454,6 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
  */
 
 ////////////////////////////// RotatedRect //////////////////////////////
-
-
 
 
 
@@ -12497,6 +12491,14 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 ///////////////////////////////// Scalar ////////////////////////////////
+
+
+
+
+
+
+
+
 
 
 
@@ -12672,6 +12674,7 @@ It is possible to alternate error processing by using #redirectError().
 @param exc the exception raisen.
 @deprecated drop this version
  */
+/* nothing by default */
 
 /** enum cv::SortFlags */
 public static final int /** each matrix row is sorted independently */
@@ -12741,39 +12744,6 @@ public static final int
         further attempts, use the random or semi-random centers. Use one of KMEANS_\*_CENTERS flag
         to specify the exact method.*/
     KMEANS_USE_INITIAL_LABELS = 1;
-
-/** type of line */
-/** enum cv::LineTypes */
-public static final int
-    FILLED  = -1,
-    /** 4-connected line */
-    LINE_4  = 4,
-    /** 8-connected line */
-    LINE_8  = 8,
-    /** antialiased line */
-    LINE_AA = 16;
-
-/** Only a subset of Hershey fonts <https://en.wikipedia.org/wiki/Hershey_fonts> are supported */
-/** enum cv::HersheyFonts */
-public static final int
-    /** normal size sans-serif font */
-    FONT_HERSHEY_SIMPLEX        = 0,
-    /** small size sans-serif font */
-    FONT_HERSHEY_PLAIN          = 1,
-    /** normal size sans-serif font (more complex than FONT_HERSHEY_SIMPLEX) */
-    FONT_HERSHEY_DUPLEX         = 2,
-    /** normal size serif font */
-    FONT_HERSHEY_COMPLEX        = 3,
-    /** normal size serif font (more complex than FONT_HERSHEY_COMPLEX) */
-    FONT_HERSHEY_TRIPLEX        = 4,
-    /** smaller version of FONT_HERSHEY_COMPLEX */
-    FONT_HERSHEY_COMPLEX_SMALL  = 5,
-    /** hand-writing style font */
-    FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
-    /** more complex variant of FONT_HERSHEY_SCRIPT_SIMPLEX */
-    FONT_HERSHEY_SCRIPT_COMPLEX = 7,
-    /** flag for italic font */
-    FONT_ITALIC                 = 16;
 
 /** enum cv::ReduceTypes */
 public static final int /** the output is the sum of all rows/columns of the matrix. */
@@ -13022,8 +12992,13 @@ The function cv::divide divides one array by another:
 or a scalar by an array when there is no src1 :
 \f[\texttt{dst(I) = saturate(scale/src2(I))}\f]
 <p>
-When src2(I) is zero, dst(I) will also be zero. Different channels of
-multi-channel arrays are processed independently.
+Different channels of multi-channel arrays are processed independently.
+<p>
+For integer types when src2(I) is zero, dst(I) will also be zero.
+<p>
+\note In case of floating point data there is no special defined behavior for zero src2(I) values.
+Regular floating-point division is used.
+Expect correct IEEE-754 behaviour for floating-point data (with NaN, Inf result values).
 <p>
 \note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
@@ -13232,7 +13207,7 @@ or
     // access pixel coordinates
     Point pnt = locations[i];
 }</pre>
-@param src single-channel array (type CV_8UC1)
+@param src single-channel array
 @param idx the output array, type of cv::Mat or std::vector<Point>, corresponding to non-zero indices in the input
 */
 @Namespace("cv") public static native void findNonZero( @ByVal Mat src, @ByVal Mat idx );
@@ -13358,7 +13333,8 @@ The type of norm to calculate is specified using #NormTypes.
 
 /** \brief Computes the Peak Signal-to-Noise Ratio (PSNR) image quality metric.
 <p>
-This function calculates the Peak Signal-to-Noise Ratio (PSNR) image quality metric in decibels (dB), between two input arrays src1 and src2. Arrays must have depth CV_8U.
+This function calculates the Peak Signal-to-Noise Ratio (PSNR) image quality metric in decibels (dB),
+between two input arrays src1 and src2. The arrays must have the same type.
 <p>
 The PSNR is calculated as follows:
 <p>
@@ -13366,14 +13342,19 @@ The PSNR is calculated as follows:
 \texttt{PSNR} = 10 \cdot \log_{10}{\left( \frac{R^2}{MSE} \right) }
 \f]
 <p>
-where R is the maximum integer value of depth CV_8U (255) and MSE is the mean squared error between the two arrays.
+where R is the maximum integer value of depth (e.g. 255 in the case of CV_8U data)
+and MSE is the mean squared error between the two arrays.
 <p>
 @param src1 first input array.
 @param src2 second input array of the same size as src1.
+@param R the maximum pixel value (255 by default)
   <p>
   */
+@Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2, double R/*=255.*/);
 @Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
+@Namespace("cv") public static native double PSNR(@ByVal UMat src1, @ByVal UMat src2, double R/*=255.*/);
 @Namespace("cv") public static native double PSNR(@ByVal UMat src1, @ByVal UMat src2);
+@Namespace("cv") public static native double PSNR(@ByVal GpuMat src1, @ByVal GpuMat src2, double R/*=255.*/);
 @Namespace("cv") public static native double PSNR(@ByVal GpuMat src1, @ByVal GpuMat src2);
 
 /** \brief naive nearest neighbor finder
@@ -16293,8 +16274,9 @@ pass them with the ( flags = #KMEANS_USE_INITIAL_LABELS ) flag, and then choose 
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Formatter(Pointer p) { super(p); }
 
-    /** enum cv::Formatter:: */
-    public static final int FMT_DEFAULT = 0,
+    /** enum cv::Formatter::FormatType */
+    public static final int
+           FMT_DEFAULT = 0,
            FMT_MATLAB  = 1,
            FMT_CSV     = 2,
            FMT_PYTHON  = 3,
@@ -16303,6 +16285,8 @@ pass them with the ( flags = #KMEANS_USE_INITIAL_LABELS ) flag, and then choose 
 
     public native @Ptr Formatted format(@Const @ByRef Mat mtx);
 
+    public native void set16fPrecision(int p/*=4*/);
+    public native void set16fPrecision();
     public native void set32fPrecision(int p/*=8*/);
     public native void set32fPrecision();
     public native void set64fPrecision(int p/*=16*/);
@@ -16310,7 +16294,7 @@ pass them with the ( flags = #KMEANS_USE_INITIAL_LABELS ) flag, and then choose 
     public native void setMultiline(@Cast("bool") boolean ml/*=true*/);
     public native void setMultiline();
 
-    public static native @Ptr Formatter get(int fmt/*=cv::Formatter::FMT_DEFAULT*/);
+    public static native @Ptr Formatter get(@Cast("cv::Formatter::FormatType") int fmt/*=cv::Formatter::FMT_DEFAULT*/);
     public static native @Ptr Formatter get();
 
 }
@@ -16417,24 +16401,10 @@ Here is example of SimpleBlobDetector use in your application via Algorithm inte
     public native @Str BytePointer getDefaultName();
 }
 
-@Namespace("cv") public static class Param extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public Param() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Param(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Param(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public Param position(long position) {
-        return (Param)super.position(position);
-    }
-
-    /** enum cv::Param:: */
-    public static final int INT = 0, BOOLEAN = 1, REAL = 2, STRING = 3, MAT = 4, MAT_VECTOR = 5, ALGORITHM = 6, FLOAT = 7,
-           UNSIGNED_INT = 8, UINT64 = 9, UCHAR = 11, SCALAR = 12;
-}
+/** enum struct cv::Param */
+public static final int
+    INT = 0, BOOLEAN = 1, REAL = 2, STRING = 3, MAT = 4, MAT_VECTOR = 5, ALGORITHM = 6, FLOAT = 7,
+    UNSIGNED_INT = 8, UINT64 = 9, UCHAR = 11, SCALAR = 12;
 
 /** \} core_basic */
 
@@ -17061,37 +17031,37 @@ Pinned Memory APIs* document or *CUDA C Programming Guide*.
     /** enum cv::cuda::HostMem::AllocType */
     public static final int PAGE_LOCKED = 1, SHARED = 2, WRITE_COMBINED = 4;
 
-    public static native MatAllocator getAllocator(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public static native MatAllocator getAllocator(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public static native MatAllocator getAllocator();
 
-    public HostMem(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(alloc_type); }
-    private native void allocate(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(alloc_type); }
+    private native void allocate(@Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public HostMem(@Const @ByRef HostMem m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef HostMem m);
 
-    public HostMem(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(rows, cols, type, alloc_type); }
-    private native void allocate(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(rows, cols, type, alloc_type); }
+    private native void allocate(int rows, int cols, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem(int rows, int cols, int type) { super((Pointer)null); allocate(rows, cols, type); }
     private native void allocate(int rows, int cols, int type);
-    public HostMem(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(size, type, alloc_type); }
-    private native void allocate(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(size, type, alloc_type); }
+    private native void allocate(@ByVal Size size, int type, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
     private native void allocate(@ByVal Size size, int type);
 
     /** creates from host memory with coping data */
-    public HostMem(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
-    private native void allocate(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal Mat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem(@ByVal Mat arr) { super((Pointer)null); allocate(arr); }
     private native void allocate(@ByVal Mat arr);
-    public HostMem(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
-    private native void allocate(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal UMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem(@ByVal UMat arr) { super((Pointer)null); allocate(arr); }
     private native void allocate(@ByVal UMat arr);
-    public HostMem(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
-    private native void allocate(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::PAGE_LOCKED*/);
+    public HostMem(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/) { super((Pointer)null); allocate(arr, alloc_type); }
+    private native void allocate(@ByVal GpuMat arr, @Cast("cv::cuda::HostMem::AllocType") int alloc_type/*=cv::cuda::HostMem::AllocType::PAGE_LOCKED*/);
     public HostMem(@ByVal GpuMat arr) { super((Pointer)null); allocate(arr); }
     private native void allocate(@ByVal GpuMat arr);
 
@@ -17282,8 +17252,8 @@ In multi-threading environment the stream objects must be passed explicitly (see
         /** Event is suitable for interprocess use. DisableTiming must be set */
         INTERPROCESS   = 0x04;
 
-    public Event(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/) { super((Pointer)null); allocate(flags); }
-    private native void allocate(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::DEFAULT*/);
+    public Event(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/) { super((Pointer)null); allocate(flags); }
+    private native void allocate(@Cast("cv::cuda::Event::CreateFlags") int flags/*=cv::cuda::Event::CreateFlags::DEFAULT*/);
     public Event() { super((Pointer)null); allocate(); }
     private native void allocate();
 
@@ -18042,7 +18012,7 @@ capability can always be compiled to binary code of greater or equal compute cap
     public KernelArg() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    public static native @ByVal KernelArg Local();
+    public static native @ByVal KernelArg Local(@Cast("size_t") long localMemSize);
     public static native @ByVal KernelArg PtrWriteOnly(@Const @ByRef UMat m);
     public static native @ByVal KernelArg PtrReadOnly(@Const @ByRef UMat m);
     public static native @ByVal KernelArg PtrReadWrite(@Const @ByRef UMat m);
@@ -18613,6 +18583,12 @@ public static final int
 
 // #include <cstdio>
 
+// #if defined(__GNUC__) || defined(__clang__) // at least GCC 3.1+, clang 3.5+
+// #  define CV_FORMAT_PRINTF(string_idx, first_to_check) __attribute__ ((format (printf, string_idx, first_to_check)))
+// #else
+// #  define CV_FORMAT_PRINTF(A, B)
+// #endif
+
 /** \cond IGNORED */
 
 ////////////////////////////// Matx methods depending on core API /////////////////////////////
@@ -18720,15 +18696,26 @@ public static final int
 The function acts like sprintf but forms and returns an STL string. It can be used to form an error
 message in the Exception constructor.
 @param fmt printf-compatible formatting specifiers.
+<p>
+**Note**:
+|Type|Specifier|
+|-|-|
+|{@code const char*}|{@code %s}|
+|{@code char}|{@code %c}|
+|{@code float} / {@code double}|{@code %f},{@code %g}|
+|{@code int}, {@code long}, {@code long long}|{@code %d}, {@code %ld}, {@code }%lld{@code |
+|}unsigned{@code , }unsigned long{@code , }unsigned long long{@code |}%u{@code , }%lu{@code , }%llu{@code |
+|}uint64{@code  -> }uintmax_t{@code , }int64{@code  -> }intmax_t{@code |}%ju{@code , }%jd{@code |
+|}size_t{@code |}%zu{@code |
  */
 @Namespace("cv") public static native @Str BytePointer format( @Cast("const char*") BytePointer fmt );
 @Namespace("cv") public static native @Str String format( String fmt );
 
 ///////////////////////////////// Formatted output of cv::Mat /////////////////////////////////
 
-@Namespace("cv") public static native @Ptr Formatted format(@ByVal Mat mtx, int fmt);
-@Namespace("cv") public static native @Ptr Formatted format(@ByVal UMat mtx, int fmt);
-@Namespace("cv") public static native @Ptr Formatted format(@ByVal GpuMat mtx, int fmt);
+@Namespace("cv") public static native @Ptr Formatted format(@ByVal Mat mtx, @Cast("cv::Formatter::FormatType") int fmt);
+@Namespace("cv") public static native @Ptr Formatted format(@ByVal UMat mtx, @Cast("cv::Formatter::FormatType") int fmt);
+@Namespace("cv") public static native @Ptr Formatted format(@ByVal GpuMat mtx, @Cast("cv::Formatter::FormatType") int fmt);
 
 @Namespace("cv") public static native int print(@Ptr Formatted fmtd, @Cast("FILE*") Pointer stream/*=stdout*/);
 @Namespace("cv") public static native int print(@Ptr Formatted fmtd);
@@ -18863,15 +18850,30 @@ may or may not be in the same class.
 
 // #include "opencv2/core/bufferpool.hpp"
 
-// #ifdef CV_CXX11
-// #endif
+// #include <type_traits>
 
 /** \addtogroup core_basic
  *  \{ */
 
-/** enum cv:: */
+/** enum cv::AccessFlag */
 public static final int ACCESS_READ = 1<<24, ACCESS_WRITE = 1<<25,
     ACCESS_RW = 3<<24, ACCESS_MASK = ACCESS_RW, ACCESS_FAST = 1<<26;
+@Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::AccessFlag") int a, int b);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::AccessFlag") int a, int b);
+@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator |") int or(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator &") int and(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+@Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator ^") int xor(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
+@Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
 
 //////////////////////// Input/Output Array Arguments /////////////////////////////////
 
@@ -18951,8 +18953,13 @@ synonym is needed to generate Python/Java etc. wrappers properly. At the functio
 level their use is similar, but _InputArray::getMat(idx) should be used to get header for the
 idx-th component of the outer vector and _InputArray::size().area() should be used to find the
 number of components (vectors/matrices) of the outer vector.
+<p>
+In general, type support is limited to cv::Mat types. Other types are forbidden.
+But in some cases we need to support passing of custom non-general Mat types, like arrays of cv::KeyPoint, cv::DMatch, etc.
+This data is not intented to be interpreted as an image data, or processed somehow like regular cv::Mat.
+To pass such custom type use rawIn() / rawOut() / rawInOut() wrappers.
+Custom type is wrapped as Mat-compatible {@code CV_8UC<N>} values (N = sizeof(T), N <= CV_CN_MAX).
  */
-
 
 /** \brief This type is very similar to InputArray except that it is used for input/output and output function
 parameters.
@@ -18979,6 +18986,10 @@ generators:
     typedef OutputArray InputOutputArrayOfArrays;
 }</pre>
  */
+
+/** Helper to wrap custom types. @see InputArray */
+/** Helper to wrap custom types. @see InputArray */
+/** Helper to wrap custom types. @see InputArray */
 
 public static Mat noArray() { return null; }
 
@@ -19009,14 +19020,14 @@ public static final int
     //                      uchar*& datastart, uchar*& data, size_t* step) = 0;
     //virtual void deallocate(int* refcount, uchar* datastart, uchar* data) = 0;
     public native @Name("allocate") UMatData _allocate(int dims, @Const IntPointer sizes, int type,
-                                   Pointer data, @Cast("size_t*") SizeTPointer step, int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
+                                   Pointer data, @Cast("size_t*") SizeTPointer step, @Cast("cv::AccessFlag") int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
     public native @Name("allocate") UMatData _allocate(int dims, @Const IntBuffer sizes, int type,
-                                   Pointer data, @Cast("size_t*") SizeTPointer step, int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
+                                   Pointer data, @Cast("size_t*") SizeTPointer step, @Cast("cv::AccessFlag") int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
     public native @Name("allocate") UMatData _allocate(int dims, @Const int[] sizes, int type,
-                                   Pointer data, @Cast("size_t*") SizeTPointer step, int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
-    public native @Cast("bool") @Name("allocate") boolean _allocate(UMatData data, int accessflags, @Cast("cv::UMatUsageFlags") int usageFlags);
+                                   Pointer data, @Cast("size_t*") SizeTPointer step, @Cast("cv::AccessFlag") int flags, @Cast("cv::UMatUsageFlags") int usageFlags);
+    public native @Cast("bool") @Name("allocate") boolean _allocate(UMatData data, @Cast("cv::AccessFlag") int accessflags, @Cast("cv::UMatUsageFlags") int usageFlags);
     public native @Name("deallocate") void _deallocate(UMatData data);
-    public native void map(UMatData data, int accessflags);
+    public native void map(UMatData data, @Cast("cv::AccessFlag") int accessflags);
     public native void unmap(UMatData data);
     public native void download(UMatData data, Pointer dst, int dims, @Cast("const size_t*") SizeTPointer sz,
                               @Cast("const size_t*") SizeTPointer srcofs, @Cast("const size_t*") SizeTPointer srcstep,
@@ -19062,7 +19073,7 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatData(Pointer p) { super(p); }
 
-    /** enum cv::UMatData:: */
+    /** enum cv::UMatData::MemoryFlag */
     public static final int COPY_ON_MAP = 1, HOST_COPY_OBSOLETE = 2,
         DEVICE_COPY_OBSOLETE = 4, TEMP_UMAT = 8, TEMP_COPIED_UMAT = 24,
         USER_ALLOCATED = 32, DEVICE_MEM_MAPPED = 64,
@@ -19092,7 +19103,7 @@ public static final int
     public native @Cast("uchar*") BytePointer origdata(); public native UMatData origdata(BytePointer origdata);
     public native @Cast("size_t") long size(); public native UMatData size(long size);
 
-    public native int flags(); public native UMatData flags(int flags);
+    public native @Cast("cv::UMatData::MemoryFlag") int flags(); public native UMatData flags(int flags);
     public native Pointer handle(); public native UMatData handle(Pointer handle);
     public native Pointer userdata(); public native UMatData userdata(Pointer userdata);
     public native int allocatorFlags_(); public native UMatData allocatorFlags_(int allocatorFlags_);
@@ -19638,13 +19649,14 @@ including std::sort().
     destructed.
     */
 
-// #ifdef CV_CXX11
-// #endif
-
-// #ifdef CV_CXX_STD_ARRAY
     /** \overload
     */
-// #endif
+
+    /** \overload
+    */
+
+    /** \overload
+    */
 
     /** \overload
     */
@@ -19687,8 +19699,8 @@ including std::sort().
     public native @ByRef @Name("operator =") Mat put(@Const @ByRef MatExpr expr);
 
     /** retrieve UMat from Mat */
-    public native @ByVal UMat getUMat(int accessFlags, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public native @ByVal UMat getUMat(int accessFlags);
+    public native @ByVal UMat getUMat(@Cast("cv::AccessFlag") int accessFlags, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
+    public native @ByVal UMat getUMat(@Cast("cv::AccessFlag") int accessFlags);
 
     /** \brief Creates a matrix header for the specified matrix row.
     <p>
@@ -20303,9 +20315,6 @@ including std::sort().
     // //! converts header to IplImage; no data is copied
     // operator IplImage() const;
 
-// #ifdef CV_CXX_STD_ARRAY
-// #endif
-
     /** \brief Reports whether the matrix is continuous or not.
     <p>
     The method returns true if the matrix elements are stored continuously without gaps at the end of
@@ -20700,9 +20709,6 @@ including std::sort().
      */
     /** \overload */
 
-// #ifdef CV_CXX_MOVE_SEMANTICS
-// #endif
-
     /** enum cv::Mat:: */
     public static final int MAGIC_VAL  = 0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG = CV_MAT_CONT_FLAG, SUBMATRIX_FLAG = CV_SUBMAT_FLAG;
     /** enum cv::Mat:: */
@@ -20896,7 +20902,7 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     /** assignment operators */
     public native @ByRef @Name("operator =") UMat put(@Const @ByRef UMat m);
 
-    public native @ByVal Mat getMat(int flags);
+    public native @ByVal Mat getMat(@Cast("cv::AccessFlag") int flags);
 
     /** returns a new matrix header for the specified row */
     public native @ByVal UMat row(int y);
@@ -21055,14 +21061,11 @@ void applyTable(Mat_<uchar>& I, const uchar* const table)
     public native int checkVector(int elemChannels, int depth/*=-1*/, @Cast("bool") boolean requireContinuous/*=true*/);
     public native int checkVector(int elemChannels);
 
-// #ifdef CV_CXX_MOVE_SEMANTICS
-// #endif
-
     /** Returns the OpenCL buffer handle on which UMat operates on.
         The UMat instance should be kept alive during the use of the handle to prevent the buffer to be
         returned to the OpenCV buffer pool.
      */
-    public native Pointer handle(int accessFlags);
+    public native Pointer handle(@Cast("cv::AccessFlag") int accessFlags);
     public native void ndoffset(@Cast("size_t*") SizeTPointer ofs);
 
     /** enum cv::UMat:: */
@@ -22598,12 +22601,11 @@ reading data to/from a file.
     public native void write(@Str BytePointer name, @Str BytePointer val);
     public native void write(@Str String name, @Str String val);
     /** \overload */
-    public native void write(@Str BytePointer name, @ByVal Mat val);
-    public native void write(@Str String name, @ByVal Mat val);
-    public native void write(@Str String name, @ByVal UMat val);
-    public native void write(@Str BytePointer name, @ByVal UMat val);
-    public native void write(@Str BytePointer name, @ByVal GpuMat val);
-    public native void write(@Str String name, @ByVal GpuMat val);
+    public native void write(@Str BytePointer name, @Const @ByRef Mat val);
+    public native void write(@Str String name, @Const @ByRef Mat val);
+    /** \overload */
+    public native void write(@Str BytePointer name, @Const @ByRef StringVector val);
+    public native void write(@Str String name, @Const @ByRef StringVector val);
 
     /** \brief Writes a comment.
     <p>
@@ -22639,8 +22641,6 @@ reading data to/from a file.
     /** the writer state */
     public native int state(); public native FileStorage state(int state);
 }
-
-
 
 /** \brief File Storage Node class.
 <p>
@@ -22734,6 +22734,11 @@ storage is opened for writing, no data is stored in memory after it is written.
     */
     public native @ByVal @Name("operator []") FileNode at(int i);
 
+    /** \brief Returns keys of a mapping node.
+    @return Keys of a mapping node.
+     */
+    public native @ByVal StringVector keys();
+
     /** \brief Returns type of the node.
     @return Type of the node. See FileNode::Type
      */
@@ -22766,7 +22771,7 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** returns the node content as double */
     public native @Name("operator double") double asDouble();
     /** returns the node content as text string */
-    public native @Name("operator cv::String") @Str BytePointer asBytePointer();
+    public native @Name("operator std::string") @StdString BytePointer asBytePointer();
 
     /** returns pointer to the underlying file node */
     public native @Name("operator *") CvFileNode multiply();
@@ -22969,8 +22974,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DoublePointer value, double default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DoubleBuffer value, double default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef double[] value, double default_value);
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Str BytePointer value, @Str BytePointer default_value);
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Str String value, @Str String default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @StdString @ByRef BytePointer value, @StdString BytePointer default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @StdString @ByRef BytePointer value, @StdString String default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat, @Const @ByRef(nullValue = "cv::Mat()") Mat default_mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef(nullValue = "cv::SparseMat()") SparseMat default_mat );
@@ -23133,8 +23138,6 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 /** \} FileNodeIterator
  <p>
  *  \cond IGNORED */
-
-
 
 
 
@@ -23506,7 +23509,9 @@ and the remaining to \f$A\f$. It should contain 32- or 64-bit floating point num
 formulation above. It will contain 64-bit floating point numbers.
 @return One of cv::SolveLPResult
  */
-@Namespace("cv") public static native int solveLP(@Const @ByRef Mat Func, @Const @ByRef Mat Constr, @ByRef Mat z);
+@Namespace("cv") public static native int solveLP(@ByVal Mat Func, @ByVal Mat Constr, @ByVal Mat z);
+@Namespace("cv") public static native int solveLP(@ByVal UMat Func, @ByVal UMat Constr, @ByVal UMat z);
+@Namespace("cv") public static native int solveLP(@ByVal GpuMat Func, @ByVal GpuMat Constr, @ByVal GpuMat z);
 
 /** \} */
 

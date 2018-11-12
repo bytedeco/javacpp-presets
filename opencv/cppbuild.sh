@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=3.4.3
+OPENCV_VERSION=4.0.0-beta
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -23,7 +23,6 @@ patch -Np1 < ../../../opencv_contrib.patch
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
-patch -Np1 < ../../../opencv_java.patch
 
 # fixes for iOS
 if [[ $PLATFORM == ios* ]]; then
@@ -43,7 +42,7 @@ fi
 # fix for CUDA
 sed -i="" '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 
-BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
+BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
 
 WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_LAPACK=OFF -DWITH_OPENCL=ON -DOPENCV_ENABLE_NONFREE=ON"
 
@@ -57,6 +56,11 @@ fi
 case $PLATFORM in
     android-arm)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=armeabi-v7a -DANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 -DANDROID_NATIVE_API_LEVEL=14 -DHAVE_MMAP=0 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
         cp -r ../sdk/native/jni/include ..
@@ -67,6 +71,11 @@ case $PLATFORM in
         ;;
     android-arm64)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_TOOLCHAIN_NAME=aarch64-linux-android-4.9 -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
         cp -r ../sdk/native/jni/include ..
@@ -77,6 +86,11 @@ case $PLATFORM in
         ;;
     android-x86)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=x86 -DANDROID_TOOLCHAIN_NAME=x86-4.9 -DANDROID_NATIVE_API_LEVEL=14 -DHAVE_MMAP=0 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
         cp -r ../sdk/native/jni/include ..
@@ -87,6 +101,11 @@ case $PLATFORM in
         ;;
     android-x86_64)
         $CMAKE -DCMAKE_TOOLCHAIN_FILE=platforms/android/android.toolchain.cmake -DANDROID_ABI=x86_64 -DANDROID_TOOLCHAIN_NAME=x86_64-4.9 -DANDROID_NATIVE_API_LEVEL=21 -DCMAKE_C_FLAGS="$ANDROID_FLAGS" -DCMAKE_CXX_FLAGS="$ANDROID_FLAGS" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DBUILD_SHARED_LIBS=ON $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
         cp -r ../sdk/native/jni/include ..
@@ -97,82 +116,135 @@ case $PLATFORM in
         ;;
     ios-arm64)
         $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake -DIOS_ARCH=arm64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         xcodebuild -arch arm64 -sdk iphoneos -configuration Release -parallelizeTargets -jobs $MAKEJ ONLY_ACTIVE_ARCH=NO -target ALL_BUILD build > /dev/null
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -P cmake_install.cmake
-        cp ../share/OpenCV/3rdparty/lib/* ../lib
-        cp ../share/OpenCV/java/libopencv_java.a ../lib
+        cp ../share/java/opencv4/libopencv_java.a ../lib
         ;;
     ios-x86_64)
         $CMAKE -GXcode -DCMAKE_TOOLCHAIN_FILE=platforms/ios/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake -DIOS_ARCH=x86_64 -DAPPLE_FRAMEWORK=ON -DCMAKE_MACOSX_BUNDLE=ON -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE=NO -DBUILD_opencv_world=OFF -DBUILD_SHARED_LIBS=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         xcodebuild -arch x86_64 -sdk iphonesimulator -configuration Release -parallelizeTargets -jobs $MAKEJ ONLY_ACTIVE_ARCH=NO -target ALL_BUILD build > /dev/null
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -P cmake_install.cmake
-        cp ../share/OpenCV/3rdparty/lib/* ../lib
-        cp ../share/OpenCV/java/libopencv_java.a ../lib
+        cp ../share/java/opencv4/libopencv_java.a ../lib
         ;;
     linux-x86)
         CC="gcc -m32" CXX="g++ -m32" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DENABLE_SSE3=OFF $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-x86_64)
         CC="gcc -m64" CXX="g++ -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm)
         CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF -DWITH_OPENMP=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-armhf)
         CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm64)
         CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64" CXX="g++ -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+          CC="gcc -m64" CXX="g++ -m64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS="-mpower8-vector" -DCMAKE_C_FLAGS="-mpower8-vector" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
         else
           echo "Not native ppc so assume cross compiling"
-          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+          PKG_CONFIG_PATH=/usr/lib/powerpc64le-linux-gnu/pkgconfig/ CC="powerpc64le-linux-gnu-gcc" CXX="powerpc64le-linux-gnu-g++" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS="-mpower8-vector" -DCMAKE_C_FLAGS="-mpower8-vector" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        fi
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
         fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-mips64el)
         CC="gcc -mabi=64" CXX="g++ -mabi=64" $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=ON $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/g++ -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.so ../lib
-        sedinplace "s/.so.$OPENCV_VERSION/.so/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.so ../lib
+        sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     macosx-*)
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ -DWITH_IPP=OFF $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         make -j $MAKEJ
         make install/strip
-        cp ../share/OpenCV/java/libopencv_java.dylib ../lib
-        sedinplace "s/.$OPENCV_VERSION.dylib/.dylib/g" ../share/OpenCV/OpenCVModules-release.cmake
+        cp ../share/java/opencv4/libopencv_java.dylib ../lib
+        sedinplace "s/.$OPENCV_VERSION.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cp -r ../x86/vc14/lib ..
         cp -r ../x86/vc14/bin ..
@@ -182,7 +254,14 @@ case $PLATFORM in
         sedinplace "s:/x86/vc14/bin/:/:g" ../x86/vc14/lib/OpenCVModules-release.cmake
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X
+        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X -DWITH_OPENMP=OFF $GPU_FLAGS -DWITH_IPP=OFF $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe"
+        # download files CMake failed to download
+        if [[ -f download_with_curl.sh ]]; then
+            bash download_with_curl.sh
+            $CMAKE .
+        fi
+        # work around some bug in the CUDA build
+        [[ ! -f modules/cudev/opencv_cudev_main.cpp ]] || sedinplace '/__termination/d' modules/cudev/opencv_cudev_main.cpp
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cp -r ../x64/vc14/lib ..
         cp -r ../x64/vc14/bin ..
@@ -195,6 +274,11 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+# link the include directory back to a sane default
+if [[ -d ../include/opencv4 ]]; then
+    ln -sf opencv4/opencv2 ../include
+fi
 
 cp -r modules/java_bindings_generator/gen/java ..
 cp -r modules/java_bindings_generator/gen/android/java ..

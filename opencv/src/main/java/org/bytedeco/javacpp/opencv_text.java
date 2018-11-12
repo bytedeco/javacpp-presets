@@ -1224,44 +1224,24 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseOCR(Pointer p) { super(p); }
 
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text);
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text);
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 }
@@ -1299,45 +1279,25 @@ Notice that it is compiled only when tesseract-ocr is correctly installed.
     for the recognition of individual text elements found (e.g. words or text lines).
     @param component_level OCR_LEVEL_WORD (by default), or OCR_LEVEL_TEXTLINE.
      */
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
@@ -1478,24 +1438,14 @@ public static final int
     <p>
     @param component_level Only OCR_LEVEL_WORD is supported.
      */
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
@@ -1522,24 +1472,14 @@ public static final int
     <p>
     @param component_level Only OCR_LEVEL_WORD is supported.
      */
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
@@ -1574,60 +1514,61 @@ public static final int
     @param mode HMM Decoding algorithm. Only OCR_DECODER_VITERBI is available for the moment
     (<http://en.wikipedia.org/wiki/Viterbi_algorithm>).
      */
+
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
+                                         @Str BytePointer vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/);
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/);
     public static native @Ptr OCRHMMDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
+                                         @Str String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)         // HMM Decoding algorithm (only Viterbi for the moment)
+                                         @ByVal GpuMat emission_probabilities_table);         // HMM Decoding algorithm (only Viterbi for the moment)
 
     /** \brief Creates an instance of the OCRHMMDecoder class. Loads and initializes HMMDecoder from the specified path
      <p>
@@ -1768,12 +1709,9 @@ at each window location.
  *    -   (C++) An alternative would be to load the default generic language transition table provided in the text module samples folder (created from ispell 42869 english words list) :
  *            <https://github.com/opencv/opencv_contrib/blob/master/modules/text/samples/OCRHMM_transitions_table.xml>
  **/
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
-@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString String vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal Mat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal UMat transition_probabilities_table);
+@Namespace("cv::text") public static native void createOCRHMMTransitionsTable(@StdString @ByRef BytePointer vocabulary, @ByRef StdStringVector lexicon, @ByVal GpuMat transition_probabilities_table);
 
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str BytePointer vocabulary, @ByRef StringVector lexicon);
 @Namespace("cv::text") public static native @ByVal Mat createOCRHMMTransitionsTable(@Str String vocabulary, @ByRef StringVector lexicon);
@@ -1868,45 +1806,25 @@ at each window location.
     <p>
     @param component_level Only OCR_LEVEL_WORD is supported.
      */
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString BytePointer output_text, RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/, @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=0*/);
-    public native void run(@ByRef Mat image, @ByRef Mat mask, @StdString String output_text, RectVector component_rects/*=NULL*/,
+    public native @Override void run(@ByRef Mat image, @ByRef Mat mask, @StdString @ByRef BytePointer output_text, RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/, @StdVector float[] component_confidences/*=NULL*/,
                          int component_level/*=0*/);
 
@@ -1950,10 +1868,6 @@ at each window location.
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
-                                         @ByVal Mat transition_probabilities_table,
-                                         @ByVal Mat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
                                          @ByVal Mat emission_probabilities_table,
@@ -1961,18 +1875,10 @@ at each window location.
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
-                                         @ByVal Mat transition_probabilities_table,
-                                         @ByVal Mat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
                                          int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
@@ -1981,20 +1887,6 @@ at each window location.
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
-                                         @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table,
-                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString BytePointer vocabulary,
-                                         @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
-                                         @StdString String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
                                          @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
@@ -2002,7 +1894,9 @@ at each window location.
     public static native @Ptr OCRBeamSearchDecoder create(@Ptr ClassifierCallback classifier,
                                          @StdString String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         @Cast("cv::text::decoder_mode") int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);                              // Size of the beam in Beam Search algorithm                              // Size of the beam in Beam Search algorithm
 
     /** \brief Creates an instance of the OCRBeamSearchDecoder class. Initializes HMMDecoder from the specified path.
     <p>
@@ -2015,10 +1909,6 @@ at each window location.
                                          @ByVal Mat emission_probabilities_table,
                                          int mode/*=cv::text::OCR_DECODER_VITERBI*/,
                                          int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
-                                         @Str BytePointer vocabulary,
-                                         @ByVal Mat transition_probabilities_table,
-                                         @ByVal Mat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal Mat transition_probabilities_table,
@@ -2027,18 +1917,10 @@ at each window location.
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
-                                         @ByVal Mat transition_probabilities_table,
-                                         @ByVal Mat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
-                                         @Str String vocabulary,
                                          @ByVal UMat transition_probabilities_table,
                                          @ByVal UMat emission_probabilities_table,
                                          int mode/*=cv::text::OCR_DECODER_VITERBI*/,
                                          int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
-                                         @Str String vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
     public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
                                          @Str BytePointer vocabulary,
                                          @ByVal UMat transition_probabilities_table,
@@ -2047,20 +1929,6 @@ at each window location.
                                          int beam_size/*=500*/);
     public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
                                          @Str BytePointer vocabulary,
-                                         @ByVal UMat transition_probabilities_table,
-                                         @ByVal UMat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
-                                         @Str BytePointer vocabulary,
-                                         @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table,
-                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
-                                         int beam_size/*=500*/);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str BytePointer filename,
-                                         @Str BytePointer vocabulary,
-                                         @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table);
-    public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
-                                         @Str String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
                                          @ByVal GpuMat emission_probabilities_table,
                                          int mode/*=cv::text::OCR_DECODER_VITERBI*/,
@@ -2068,7 +1936,9 @@ at each window location.
     public static native @Ptr OCRBeamSearchDecoder create(@Str String filename,
                                          @Str String vocabulary,
                                          @ByVal GpuMat transition_probabilities_table,
-                                         @ByVal GpuMat emission_probabilities_table);
+                                         @ByVal GpuMat emission_probabilities_table,
+                                         int mode/*=cv::text::OCR_DECODER_VITERBI*/,
+                                         int beam_size/*=500*/);
 }
 
 /** \brief Allow to implicitly load the default character classifier when creating an OCRBeamSearchDecoder object.
@@ -2098,42 +1968,22 @@ at each window location.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OCRHolisticWordRecognizer(Pointer p) { super(p); }
 
-    public native void run(@ByRef Mat image,
-                         @StdString BytePointer output_text,
+    public native @Override void run(@ByRef Mat image,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=cv::text::OCR_LEVEL_WORD*/);
     public native void run(@ByRef Mat image,
-                         @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image,
-                         @StdString String output_text,
+                         @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @StdString String output_text);
-    public native void run(@ByRef Mat image,
-                         @StdString BytePointer output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @StdString String output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @StdString BytePointer output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @StdString String output_text,
+    public native @Override void run(@ByRef Mat image,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector float[] component_confidences/*=NULL*/,
@@ -2162,50 +2012,26 @@ at each window location.
     <p>
     @param component_level must be OCR_LEVEL_WORD.
      */
-    public native void run(@ByRef Mat image,
+    public native @Override void run(@ByRef Mat image,
                          @ByRef Mat mask,
-                         @StdString BytePointer output_text,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector FloatPointer component_confidences/*=NULL*/,
                          int component_level/*=cv::text::OCR_LEVEL_WORD*/);
     public native void run(@ByRef Mat image,
                          @ByRef Mat mask,
-                         @StdString BytePointer output_text);
-    public native void run(@ByRef Mat image,
+                         @StdString @ByRef BytePointer output_text);
+    public native @Override void run(@ByRef Mat image,
                          @ByRef Mat mask,
-                         @StdString String output_text,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector FloatBuffer component_confidences/*=NULL*/,
                          int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
+    public native @Override void run(@ByRef Mat image,
                          @ByRef Mat mask,
-                         @StdString String output_text);
-    public native void run(@ByRef Mat image,
-                         @ByRef Mat mask,
-                         @StdString BytePointer output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector float[] component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @ByRef Mat mask,
-                         @StdString String output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector FloatPointer component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @ByRef Mat mask,
-                         @StdString BytePointer output_text,
-                         RectVector component_rects/*=NULL*/,
-                         StdStringVector component_texts/*=NULL*/,
-                         @StdVector FloatBuffer component_confidences/*=NULL*/,
-                         int component_level/*=cv::text::OCR_LEVEL_WORD*/);
-    public native void run(@ByRef Mat image,
-                         @ByRef Mat mask,
-                         @StdString String output_text,
+                         @StdString @ByRef BytePointer output_text,
                          RectVector component_rects/*=NULL*/,
                          StdStringVector component_texts/*=NULL*/,
                          @StdVector float[] component_confidences/*=NULL*/,
@@ -2287,15 +2113,15 @@ at each window location.
     @param Bbox a vector of Rect that will store the detected word bounding box
     @param confidence a vector of float that will be updated with the confidence the classifier has for the selected bounding box
     */
-    public native void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
-    public native void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
-    public native void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
-    public native void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
-    public native void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
-    public native void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
-    public native void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
-    public native void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
-    public native void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
+    public native @Override void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
+    public native @Override void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
+    public native @Override void detect(@ByVal Mat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
+    public native @Override void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
+    public native @Override void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
+    public native @Override void detect(@ByVal UMat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
+    public native @Override void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector FloatPointer confidence);
+    public native @Override void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector FloatBuffer confidence);
+    public native @Override void detect(@ByVal GpuMat inputImage, @ByRef RectVector Bbox, @StdVector float[] confidence);
 
     /** \brief Creates an instance of the TextDetectorCNN class using the provided parameters.
     <p>

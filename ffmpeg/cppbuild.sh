@@ -29,7 +29,7 @@ ALSA_VERSION=1.1.6
 FREETYPE_VERSION=2.9.1
 MFX_VERSION=1.25
 NVCODEC_VERSION=8.2.15.5
-FFMPEG_VERSION=4.0.3
+FFMPEG_VERSION=4.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz

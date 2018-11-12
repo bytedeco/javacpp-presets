@@ -851,23 +851,23 @@ For more information see \cite GW03 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlignMTB(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
 
     /** \brief Short version of process, that doesn't take extra arguments.
@@ -1056,23 +1056,23 @@ For more information see \cite DM97 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeDebevec(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
@@ -1105,23 +1105,23 @@ For more information see \cite MK07 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeMertens(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     /** \brief Short version of process, that doesn't take extra arguments.
     <p>
@@ -1167,23 +1167,23 @@ For more information see \cite RB99 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeRobertson(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
@@ -1412,10 +1412,6 @@ contrast while preserving, or enhancing, high-contrast features.
  *  \} photo */
 
  // cv
-
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/photo/photo_c.h"
-// #endif
 
 // #endif
 

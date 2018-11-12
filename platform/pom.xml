@@ -62,12 +62,12 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>3.4.3-${project.version}</version>
+      <version>4.0.0-beta-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ffmpeg-platform</artifactId>
-      <version>4.0.3-${project.version}</version>
+      <version>4.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

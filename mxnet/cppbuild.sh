@@ -54,6 +54,10 @@ sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 
+sedinplace '/#include <opencv2\/opencv.hpp>/a\
+#include <opencv2/imgproc/types_c.h>\
+' src/io/image_augmenter.h src/io/image_io.cc
+
 case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"

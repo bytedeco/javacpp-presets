@@ -76,6 +76,7 @@ public class opencv_cudaobjdetect extends org.bytedeco.javacpp.presets.opencv_cu
 // #endif
 
 // #include "opencv2/core/cuda.hpp"
+// #include "opencv2/objdetect.hpp"
 
 /**
   \addtogroup cuda
@@ -105,11 +106,6 @@ public class opencv_cudaobjdetect extends org.bytedeco.javacpp.presets.opencv_cu
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HOG(Pointer p) { super(p); }
-
-    /** enum cv::cuda::HOG:: */
-    public static final int
-        DESCR_FORMAT_ROW_BY_ROW = 0,
-        DESCR_FORMAT_COL_BY_COL = 1;
 
     /** \brief Creates the HOG descriptor and detector.
     <p>
@@ -166,8 +162,8 @@ public class opencv_cudaobjdetect extends org.bytedeco.javacpp.presets.opencv_cu
     /** Descriptor storage format:
      *    - **DESCR_FORMAT_ROW_BY_ROW** - Row-major order.
      *    - **DESCR_FORMAT_COL_BY_COL** - Column-major order. */
-    public native void setDescriptorFormat(int descr_format);
-    public native int getDescriptorFormat();
+    public native void setDescriptorFormat(@Cast("cv::HOGDescriptor::DescriptorStorageFormat") int descr_format);
+    public native @Cast("cv::HOGDescriptor::DescriptorStorageFormat") int getDescriptorFormat();
 
     /** \brief Returns the number of coefficients required for the classification.
      */

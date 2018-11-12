@@ -57,19 +57,19 @@ case $PLATFORM in
         cp libflandmark/*.a ../lib
         ;;
     linux-x86)
-        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CC="$OLDCC -m32" CXX="$OLDCXX -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
     linux-x86_64)
-        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
     linux-armhf)
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
@@ -77,22 +77,22 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+          CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         else
-          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+          CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         fi
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
     linux-mips64el)
-        CC="$OLDCC -mabi=64" CXX="$OLDCXX -mabi=64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CC="$OLDCC -mabi=64" CXX="$OLDCXX -mabi=64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
     macosx-*)
-        CXX="g++ -fpermissive" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CXX="g++ -fpermissive" $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
