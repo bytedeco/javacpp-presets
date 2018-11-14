@@ -21,7 +21,7 @@ SPEEX=speex-1.2.0
 OPUS=opus-1.3
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.0i
+OPENSSL=openssl-1.1.1
 OPENH264_VERSION=1.8.0
 X265=2.9
 VPX_VERSION=1.7.0
@@ -131,7 +131,8 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-armeabi "$CFLAGS" no-shared
+        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
+        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-arm "$CFLAGS" no-shared -D__ANDROID_API__=14
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
@@ -158,6 +159,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
         ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
         make -j $MAKEJ
         make install
         ;;
@@ -202,7 +204,8 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android64-aarch64 "$CFLAGS" no-shared
+        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
+        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-arm64 "$CFLAGS" no-shared -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
@@ -227,6 +230,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/arm64-v8a/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
         make -j $MAKEJ
         make install
         ;;
@@ -273,7 +277,8 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared
+        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
+        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared -D__ANDROID_API__=14
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
@@ -300,6 +305,7 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
         ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
         make -j $MAKEJ
         make install
         ;;
@@ -344,7 +350,8 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure --prefix=$INSTALL_PATH android64 "$CFLAGS" no-shared
+        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
+        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-x86_64 "$CFLAGS" no-shared -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
@@ -369,6 +376,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86_64/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
+        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
         make -j $MAKEJ
         make install
         ;;

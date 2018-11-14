@@ -46,7 +46,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
-  if [[ "librealsense cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="python36-devel python36-setuptools"
   fi
@@ -77,7 +77,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
-  if [ "$PROJ" == "flycapture" ]; then
+  if [[ "$PROJ" =~ flycapture ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap64 in cache and size seems ok" 
@@ -98,12 +98,12 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
     fi 
   fi 
-  if [ "$PROJ" == "spinnaker" ]; then
+  if [[ "$PROJ" =~ spinnaker ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found spinnaker in cache and size seems ok"
         else
-          echo "Downloading flycap64 as not found in cache or too small"
+          echo "Downloading spinnaker as not found in cache or too small"
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
         fi
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /"
@@ -147,7 +147,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	pushd $HOME/userland
 	bash buildme
 	popd
-	if [ "$PROJ" == "flycapture" ]; then
+	if [[ "$PROJ" =~ flycapture ]]; then
           if [[ $(find $HOME/downloads/flycapture.2.11.3.121_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
           else

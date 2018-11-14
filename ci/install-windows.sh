@@ -51,7 +51,7 @@ fi
 
 echo Perform download files out of main repo
 cd ..
-if [ "$PROJ" == "flycapture" ]; then
+if [[ "$PROJ" =~ flycapture ]]; then
        echo Flycapture install
        if [ "$OS" == "windows-x86_64" ]; then
            if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
@@ -61,7 +61,8 @@ if [ "$PROJ" == "flycapture" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
            fi
            unzip /c/Downloads/pgr.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
@@ -70,13 +71,14 @@ if [ "$PROJ" == "flycapture" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
            fi
            unzip /c/Downloads/pgr32.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        fi
        echo "Finished flycapture install"
 fi
 
-if [ "$PROJ" == "spinnaker" ]; then
-       echo Flycapture install
+if [[ "$PROJ" =~ spinnaker ]]; then
+       echo Spinnaker install
        if [ "$OS" == "windows-x86_64" ]; then
            if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
@@ -85,7 +87,8 @@ if [ "$PROJ" == "spinnaker" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
            fi
            unzip /c/Downloads/spinnaker.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
@@ -94,7 +97,8 @@ if [ "$PROJ" == "spinnaker" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
            fi
            unzip /c/Downloads/spinnaker.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        fi
        echo "Finished spinnaker install"
 fi

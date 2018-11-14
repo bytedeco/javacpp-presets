@@ -56,7 +56,7 @@ sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-
 
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\
-' src/io/image_augmenter.h src/io/image_io.cc
+' src/io/image_augmenter.h src/io/image_io.cc tools/im2rec.cc
 
 case $PLATFORM in
     linux-x86)
