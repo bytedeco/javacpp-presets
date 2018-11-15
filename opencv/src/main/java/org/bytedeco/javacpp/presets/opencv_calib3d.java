@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,99 @@ public class opencv_calib3d implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CvPOSITObject").base("AbstractCvPOSITObject"))
                .put(new Info("CvStereoBMState").base("AbstractCvStereoBMState"))
-               .put(new Info("cv::InputArrayOfArrays").pointerTypes("Point3fVectorVector"))
+               .put(new Info("cv::initCameraMatrix2D").javaText(
+                        "@Namespace(\"cv\") public static native @ByVal Mat initCameraMatrix2D( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints,\n"
+                      + "                                     @ByVal Size imageSize, double aspectRatio/*=1.0*/ );\n"
+                      + "@Namespace(\"cv\") public static native @ByVal Mat initCameraMatrix2D( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints,\n"
+                      + "                                     @ByVal Size imageSize );"))
+               .put(new Info("cv::calibrateCamera").javaText(
+                        "@Namespace(\"cv\") public static native @Name(\"calibrateCamera\") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat stdDeviationsIntrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsExtrinsics,\n"
+                      + "                                     @ByVal Mat perViewErrors,\n"
+                      + "                                     int flags/*=0*/, @ByVal(nullValue = \"cv::TermCriteria(\"\n"
+                      + "                                         + \"cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native @Name(\"calibrateCamera\") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat stdDeviationsIntrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsExtrinsics,\n"
+                      + "                                     @ByVal Mat perViewErrors );\n"
+                      + "@Namespace(\"cv\") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     int flags/*=0*/, @ByVal(nullValue = \"cv::TermCriteria(\"\n"
+                      + "                                         + \"cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );\n"))
+               .put(new Info("cv::calibrateCameraRO").javaText(
+                        "@Namespace(\"cv\") public static native @Name(\"calibrateCameraRO\") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat newObjPoints,\n"
+                      + "                                     @ByVal Mat stdDeviationsIntrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsExtrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsObjPoints,\n"
+                      + "                                     @ByVal Mat perViewErrors,\n"
+                      + "                                     int flags/*=0*/, @ByVal(nullValue = \"cv::TermCriteria(\"\n"
+                      + "                                         + \"cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native @Name(\"calibrateCameraRO\") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat newObjPoints,\n"
+                      + "                                     @ByVal Mat stdDeviationsIntrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsExtrinsics,\n"
+                      + "                                     @ByVal Mat stdDeviationsObjPoints,\n"
+                      + "                                     @ByVal Mat perViewErrors );"
+                      + "@Namespace(\"cv\") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat newObjPoints,\n"
+                      + "                                     int flags/*=0*/, @ByVal(nullValue = \"cv::TermCriteria(\"\n"
+                      + "                                         + \"cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,\n"
+                      + "                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,\n"
+                      + "                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,\n"
+                      + "                                     @ByVal Mat newObjPoints );\n"))
+               .put(new Info("cv::stereoCalibrate").javaText(
+                        "@Namespace(\"cv\") public static native @Name(\"stereoCalibrate\") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                      + "                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,\n"
+                      + "                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,\n"
+                      + "                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,\n"
+                      + "                                     @ByVal Mat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,\n"
+                      + "                                     @ByVal(nullValue = \"cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native @Name(\"stereoCalibrate\") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                      + "                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,\n"
+                      + "                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,\n"
+                      + "                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,\n"
+                      + "                                     @ByVal Mat perViewErrors );\n"
+                      + "@Namespace(\"cv\") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                      + "                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,\n"
+                      + "                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,\n"
+                      + "                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,\n"
+                      + "                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,\n"
+                      + "                                     @ByVal(nullValue = \"cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)\") TermCriteria criteria );\n"
+                      + "@Namespace(\"cv\") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,\n"
+                      + "                                     @ByVal Point2fVectorVector imagePoints1, @ByVal Point2fVectorVector imagePoints2,\n"
+                      + "                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,\n"
+                      + "                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,\n"
+                      + "                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );\n"))
                .put(new Info("cv::fisheye::CALIB_USE_INTRINSIC_GUESS").javaNames("FISHEYE_CALIB_USE_INTRINSIC_GUESS"))
                .put(new Info("cv::fisheye::CALIB_RECOMPUTE_EXTRINSIC").javaNames("FISHEYE_CALIB_RECOMPUTE_EXTRINSIC"))
                .put(new Info("cv::fisheye::CALIB_CHECK_COND").javaNames("FISHEYE_CALIB_CHECK_COND"))

@@ -1,4 +1,5 @@
 
+ * Fix mapping of `initCameraMatrix2D`, `calibrateCamera`, and `stereoCalibrate` functions from `opencv_calib3d`
  * Build OpenCV with pthreads instead of OpenMP or GCD due to thread-safety and usability issues ([issue bytedeco/javacv#396](https://github.com/bytedeco/javacv/issues/396))
  * Include IR, optimizer, and version converter for ONNX ([pull #622](https://github.com/bytedeco/javacpp-presets/pull/622))
  * Add build for Mac OS X to presets for ONNX ([issue #638](https://github.com/bytedeco/javacpp-presets/issues/638))
