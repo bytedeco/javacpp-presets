@@ -66,53 +66,10 @@ public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
 // #ifndef OPENCV_CALIB3D_C_H
 // #define OPENCV_CALIB3D_C_H
 
-// #include "opencv2/core/core_c.h"
+// #include "opencv2/core/types_c.h"
 
 // #ifdef __cplusplus
 // #endif
-
-/** \addtogroup calib3d_c
-  \{
-  */
-
-/****************************************************************************************\
-*                      Camera Calibration, Pose Estimation and Stereo                    *
-\****************************************************************************************/
-
-@Opaque public static class CvPOSITObject extends AbstractCvPOSITObject {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CvPOSITObject() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvPOSITObject(Pointer p) { super(p); }
-}
-
-/* Allocates and initializes CvPOSITObject structure before doing cvPOSIT */
-public static native CvPOSITObject cvCreatePOSITObject( CvPoint3D32f points, int point_count );
-public static native CvPOSITObject cvCreatePOSITObject( @Cast("CvPoint3D32f*") FloatBuffer points, int point_count );
-public static native CvPOSITObject cvCreatePOSITObject( @Cast("CvPoint3D32f*") float[] points, int point_count );
-
-
-/* Runs POSIT (POSe from ITeration) algorithm for determining 3d position of
-   an object given its model and projection in a weak-perspective case */
-public static native void cvPOSIT(  CvPOSITObject posit_object, CvPoint2D32f image_points,
-                       double focal_length, @ByVal CvTermCriteria criteria,
-                       FloatPointer rotation_matrix, FloatPointer translation_vector);
-public static native void cvPOSIT(  CvPOSITObject posit_object, @Cast("CvPoint2D32f*") FloatBuffer image_points,
-                       double focal_length, @ByVal CvTermCriteria criteria,
-                       FloatBuffer rotation_matrix, FloatBuffer translation_vector);
-public static native void cvPOSIT(  CvPOSITObject posit_object, @Cast("CvPoint2D32f*") float[] image_points,
-                       double focal_length, @ByVal CvTermCriteria criteria,
-                       float[] rotation_matrix, float[] translation_vector);
-
-/* Releases CvPOSITObject structure */
-public static native void cvReleasePOSITObject( @Cast("CvPOSITObject**") PointerPointer posit_object );
-public static native void cvReleasePOSITObject( @ByPtrPtr CvPOSITObject posit_object );
-
-/* updates the number of RANSAC iterations */
-public static native int cvRANSACUpdateNumIters( double p, double err_prob,
-                                   int model_points, int max_iters );
-
-public static native void cvConvertPointsHomogeneous( @Const CvMat src, CvMat dst );
 
 /* Calculates fundamental matrix given a set of corresponding points */
 public static final int CV_FM_7POINT = 1;
@@ -133,206 +90,10 @@ public static final int
     CV_P3P = 2, // X.S. Gao, X.-R. Hou, J. Tang, H.-F. Chang; "Complete Solution Classification for the Perspective-Three-Point Problem"
     CV_DLS = 3; // Joel A. Hesch and Stergios I. Roumeliotis. "A Direct Least-Squares (DLS) Method for PnP"
 
-public static native int cvFindFundamentalMat( @Const CvMat points1, @Const CvMat points2,
-                                 CvMat fundamental_matrix,
-                                 int method/*=CV_FM_RANSAC*/,
-                                 double param1/*=3.*/, double param2/*=0.99*/,
-                                 CvMat status/*=NULL*/ );
-public static native int cvFindFundamentalMat( @Const CvMat points1, @Const CvMat points2,
-                                 CvMat fundamental_matrix );
-
-/* For each input point on one of images
-   computes parameters of the corresponding
-   epipolar line on the other image */
-public static native void cvComputeCorrespondEpilines( @Const CvMat points,
-                                         int which_image,
-                                         @Const CvMat fundamental_matrix,
-                                         CvMat correspondent_lines );
-
-/* Triangulation functions */
-
-public static native void cvTriangulatePoints(CvMat projMatr1, CvMat projMatr2,
-                                CvMat projPoints1, CvMat projPoints2,
-                                CvMat points4D);
-
-public static native void cvCorrectMatches(CvMat F, CvMat points1, CvMat points2,
-                             CvMat new_points1, CvMat new_points2);
-
-
-/* Computes the optimal new camera matrix according to the free scaling parameter alpha:
-   alpha=0 - only valid pixels will be retained in the undistorted image
-   alpha=1 - all the source image pixels will be retained in the undistorted image
-*/
-public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matrix,
-                                         @Const CvMat dist_coeffs,
-                                         @ByVal CvSize image_size, double alpha,
-                                         CvMat new_camera_matrix,
-                                         @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize new_imag_size,
-                                         CvRect valid_pixel_ROI/*=0*/,
-                                         int center_principal_point/*=0*/);
-public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matrix,
-                                         @Const CvMat dist_coeffs,
-                                         @ByVal CvSize image_size, double alpha,
-                                         CvMat new_camera_matrix);
-
-/* Converts rotation vector to rotation matrix or vice versa */
-public static native int cvRodrigues2( @Const CvMat src, CvMat dst,
-                         CvMat jacobian/*=0*/ );
-public static native int cvRodrigues2( @Const CvMat src, CvMat dst );
-
-/* Finds perspective transformation between the object plane and image (view) plane */
-public static native int cvFindHomography( @Const CvMat src_points,
-                             @Const CvMat dst_points,
-                             CvMat homography,
-                             int method/*=0*/,
-                             double ransacReprojThreshold/*=3*/,
-                             CvMat mask/*=0*/,
-                             int maxIters/*=2000*/,
-                             double confidence/*=0.995*/);
-public static native int cvFindHomography( @Const CvMat src_points,
-                             @Const CvMat dst_points,
-                             CvMat homography);
-
-/* Computes RQ decomposition for 3x3 matrices */
-public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*=NULL*/,
-                           CvMat matrixQy/*=NULL*/,
-                           CvMat matrixQz/*=NULL*/,
-                           CvPoint3D64f eulerAngles/*=NULL*/);
-public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ);
-public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*=NULL*/,
-                           CvMat matrixQy/*=NULL*/,
-                           CvMat matrixQz/*=NULL*/,
-                           @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*=NULL*/);
-public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*=NULL*/,
-                           CvMat matrixQy/*=NULL*/,
-                           CvMat matrixQz/*=NULL*/,
-                           @Cast("CvPoint3D64f*") double[] eulerAngles/*=NULL*/);
-
-/* Computes projection matrix decomposition */
-public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
-                                         CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*=NULL*/,
-                                         CvMat rotMatrY/*=NULL*/,
-                                         CvMat rotMatrZ/*=NULL*/,
-                                         CvPoint3D64f eulerAngles/*=NULL*/);
-public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
-                                         CvMat rotMatr, CvMat posVect);
-public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
-                                         CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*=NULL*/,
-                                         CvMat rotMatrY/*=NULL*/,
-                                         CvMat rotMatrZ/*=NULL*/,
-                                         @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*=NULL*/);
-public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
-                                         CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*=NULL*/,
-                                         CvMat rotMatrY/*=NULL*/,
-                                         CvMat rotMatrZ/*=NULL*/,
-                                         @Cast("CvPoint3D64f*") double[] eulerAngles/*=NULL*/);
-
-/* Computes d(AB)/dA and d(AB)/dB */
-public static native void cvCalcMatMulDeriv( @Const CvMat A, @Const CvMat B, CvMat dABdA, CvMat dABdB );
-
-/* Computes r3 = rodrigues(rodrigues(r2)*rodrigues(r1)),
-   t3 = rodrigues(r2)*t1 + t2 and the respective derivatives */
-public static native void cvComposeRT( @Const CvMat _rvec1, @Const CvMat _tvec1,
-                         @Const CvMat _rvec2, @Const CvMat _tvec2,
-                         CvMat _rvec3, CvMat _tvec3,
-                         CvMat dr3dr1/*=0*/, CvMat dr3dt1/*=0*/,
-                         CvMat dr3dr2/*=0*/, CvMat dr3dt2/*=0*/,
-                         CvMat dt3dr1/*=0*/, CvMat dt3dt1/*=0*/,
-                         CvMat dt3dr2/*=0*/, CvMat dt3dt2/*=0*/ );
-public static native void cvComposeRT( @Const CvMat _rvec1, @Const CvMat _tvec1,
-                         @Const CvMat _rvec2, @Const CvMat _tvec2,
-                         CvMat _rvec3, CvMat _tvec3 );
-
-/* Projects object points to the view plane using
-   the specified extrinsic and intrinsic camera parameters */
-public static native void cvProjectPoints2( @Const CvMat object_points, @Const CvMat rotation_vector,
-                              @Const CvMat translation_vector, @Const CvMat camera_matrix,
-                              @Const CvMat distortion_coeffs, CvMat image_points,
-                              CvMat dpdrot/*=NULL*/, CvMat dpdt/*=NULL*/,
-                              CvMat dpdf/*=NULL*/, CvMat dpdc/*=NULL*/,
-                              CvMat dpddist/*=NULL*/,
-                              double aspect_ratio/*=0*/);
-public static native void cvProjectPoints2( @Const CvMat object_points, @Const CvMat rotation_vector,
-                              @Const CvMat translation_vector, @Const CvMat camera_matrix,
-                              @Const CvMat distortion_coeffs, CvMat image_points);
-
-/* Finds extrinsic camera parameters from
-   a few known corresponding point pairs and intrinsic parameters */
-public static native void cvFindExtrinsicCameraParams2( @Const CvMat object_points,
-                                          @Const CvMat image_points,
-                                          @Const CvMat camera_matrix,
-                                          @Const CvMat distortion_coeffs,
-                                          CvMat rotation_vector,
-                                          CvMat translation_vector,
-                                          int use_extrinsic_guess/*=0*/ );
-public static native void cvFindExtrinsicCameraParams2( @Const CvMat object_points,
-                                          @Const CvMat image_points,
-                                          @Const CvMat camera_matrix,
-                                          @Const CvMat distortion_coeffs,
-                                          CvMat rotation_vector,
-                                          CvMat translation_vector );
-
-/* Computes initial estimate of the intrinsic camera parameters
-   in case of planar calibration target (e.g. chessboard) */
-public static native void cvInitIntrinsicParams2D( @Const CvMat object_points,
-                                     @Const CvMat image_points,
-                                     @Const CvMat npoints, @ByVal CvSize image_size,
-                                     CvMat camera_matrix,
-                                     double aspect_ratio/*=1.*/ );
-public static native void cvInitIntrinsicParams2D( @Const CvMat object_points,
-                                     @Const CvMat image_points,
-                                     @Const CvMat npoints, @ByVal CvSize image_size,
-                                     CvMat camera_matrix );
-
 public static final int CV_CALIB_CB_ADAPTIVE_THRESH =  1;
 public static final int CV_CALIB_CB_NORMALIZE_IMAGE =  2;
 public static final int CV_CALIB_CB_FILTER_QUADS =     4;
 public static final int CV_CALIB_CB_FAST_CHECK =       8;
-
-// Performs a fast check if a chessboard is in the input image. This is a workaround to
-// a problem of cvFindChessboardCorners being slow on images with no chessboard
-// - src: input image
-// - size: chessboard size
-// Returns 1 if a chessboard can be in this image and findChessboardCorners should be called,
-// 0 if there is no chessboard, -1 in case of error
-public static native int cvCheckChessboard(IplImage src, @ByVal CvSize size);
-
-    /* Detects corners on a chessboard calibration pattern */
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    CvPoint2D32f corners,
-                                    IntPointer corner_count/*=NULL*/,
-                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    CvPoint2D32f corners );
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    @Cast("CvPoint2D32f*") FloatBuffer corners,
-                                    IntBuffer corner_count/*=NULL*/,
-                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    @Cast("CvPoint2D32f*") FloatBuffer corners );
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    @Cast("CvPoint2D32f*") float[] corners,
-                                    int[] corner_count/*=NULL*/,
-                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
-public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
-                                    @Cast("CvPoint2D32f*") float[] corners );
-
-/* Draws individual chessboard corners or the whole chessboard detected */
-public static native void cvDrawChessboardCorners( CvArr image, @ByVal CvSize pattern_size,
-                                     CvPoint2D32f corners,
-                                     int count, int pattern_was_found );
-public static native void cvDrawChessboardCorners( CvArr image, @ByVal CvSize pattern_size,
-                                     @Cast("CvPoint2D32f*") FloatBuffer corners,
-                                     int count, int pattern_was_found );
-public static native void cvDrawChessboardCorners( CvArr image, @ByVal CvSize pattern_size,
-                                     @Cast("CvPoint2D32f*") float[] corners,
-                                     int count, int pattern_was_found );
 
 public static final int CV_CALIB_USE_INTRINSIC_GUESS =  1;
 public static final int CV_CALIB_FIX_ASPECT_RATIO =     2;
@@ -354,233 +115,14 @@ public static final int CV_CALIB_FIX_TANGENT_DIST = 2097152;
 
 public static final int CV_CALIB_NINTRINSIC = 18;
 
-/* Finds intrinsic and extrinsic camera parameters
-   from a few views of known calibration pattern */
-public static native double cvCalibrateCamera2( @Const CvMat object_points,
-                                @Const CvMat image_points,
-                                @Const CvMat point_counts,
-                                @ByVal CvSize image_size,
-                                CvMat camera_matrix,
-                                CvMat distortion_coeffs,
-                                CvMat rotation_vectors/*=NULL*/,
-                                CvMat translation_vectors/*=NULL*/,
-                                int flags/*=0*/,
-                                @ByVal(nullValue = "CvTermCriteria(cvTermCriteria("
-                                     + "CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON))") CvTermCriteria term_crit );
-public static native double cvCalibrateCamera2( @Const CvMat object_points,
-                                @Const CvMat image_points,
-                                @Const CvMat point_counts,
-                                @ByVal CvSize image_size,
-                                CvMat camera_matrix,
-                                CvMat distortion_coeffs );
-
-/* Computes various useful characteristics of the camera from the data computed by
-   cvCalibrateCamera2 */
-public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
-                                @ByVal CvSize image_size,
-                                double aperture_width/*=0*/,
-                                double aperture_height/*=0*/,
-                                DoublePointer fovx/*=NULL*/,
-                                DoublePointer fovy/*=NULL*/,
-                                DoublePointer focal_length/*=NULL*/,
-                                CvPoint2D64f principal_point/*=NULL*/,
-                                DoublePointer pixel_aspect_ratio/*=NULL*/);
-public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
-                                @ByVal CvSize image_size);
-public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
-                                @ByVal CvSize image_size,
-                                double aperture_width/*=0*/,
-                                double aperture_height/*=0*/,
-                                DoubleBuffer fovx/*=NULL*/,
-                                DoubleBuffer fovy/*=NULL*/,
-                                DoubleBuffer focal_length/*=NULL*/,
-                                @Cast("CvPoint2D64f*") DoubleBuffer principal_point/*=NULL*/,
-                                DoubleBuffer pixel_aspect_ratio/*=NULL*/);
-public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
-                                @ByVal CvSize image_size,
-                                double aperture_width/*=0*/,
-                                double aperture_height/*=0*/,
-                                double[] fovx/*=NULL*/,
-                                double[] fovy/*=NULL*/,
-                                double[] focal_length/*=NULL*/,
-                                @Cast("CvPoint2D64f*") double[] principal_point/*=NULL*/,
-                                double[] pixel_aspect_ratio/*=NULL*/);
-
 public static final int CV_CALIB_FIX_INTRINSIC =  256;
 public static final int CV_CALIB_SAME_FOCAL_LENGTH = 512;
 
-/* Computes the transformation from one camera coordinate system to another one
-   from a few correspondent views of the same calibration target. Optionally, calibrates
-   both cameras */
-public static native double cvStereoCalibrate( @Const CvMat object_points, @Const CvMat image_points1,
-                               @Const CvMat image_points2, @Const CvMat npoints,
-                               CvMat camera_matrix1, CvMat dist_coeffs1,
-                               CvMat camera_matrix2, CvMat dist_coeffs2,
-                               @ByVal CvSize image_size, CvMat R, CvMat T,
-                               CvMat E/*=0*/, CvMat F/*=0*/,
-                               int flags/*=CV_CALIB_FIX_INTRINSIC*/,
-                               @ByVal(nullValue = "CvTermCriteria(cvTermCriteria("
-                                    + "CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6))") CvTermCriteria term_crit );
-public static native double cvStereoCalibrate( @Const CvMat object_points, @Const CvMat image_points1,
-                               @Const CvMat image_points2, @Const CvMat npoints,
-                               CvMat camera_matrix1, CvMat dist_coeffs1,
-                               CvMat camera_matrix2, CvMat dist_coeffs2,
-                               @ByVal CvSize image_size, CvMat R, CvMat T );
-
 public static final int CV_CALIB_ZERO_DISPARITY = 1024;
 
-/* Computes 3D rotations (+ optional shift) for each camera coordinate system to make both
-   views parallel (=> to make all the epipolar lines horizontal or vertical) */
-public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const CvMat camera_matrix2,
-                             @Const CvMat dist_coeffs1, @Const CvMat dist_coeffs2,
-                             @ByVal CvSize image_size, @Const CvMat R, @Const CvMat T,
-                             CvMat R1, CvMat R2, CvMat P1, CvMat P2,
-                             CvMat Q/*=0*/,
-                             int flags/*=CV_CALIB_ZERO_DISPARITY*/,
-                             double alpha/*=-1*/,
-                             @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize new_image_size,
-                             CvRect valid_pix_ROI1/*=0*/,
-                             CvRect valid_pix_ROI2/*=0*/);
-public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const CvMat camera_matrix2,
-                             @Const CvMat dist_coeffs1, @Const CvMat dist_coeffs2,
-                             @ByVal CvSize image_size, @Const CvMat R, @Const CvMat T,
-                             CvMat R1, CvMat R2, CvMat P1, CvMat P2);
-
-/* Computes rectification transformations for uncalibrated pair of images using a set
-   of point correspondences */
-public static native int cvStereoRectifyUncalibrated( @Const CvMat points1, @Const CvMat points2,
-                                        @Const CvMat F, @ByVal CvSize img_size,
-                                        CvMat H1, CvMat H2,
-                                        double threshold/*=5*/);
-public static native int cvStereoRectifyUncalibrated( @Const CvMat points1, @Const CvMat points2,
-                                        @Const CvMat F, @ByVal CvSize img_size,
-                                        CvMat H1, CvMat H2);
-
-
-
 /* stereo correspondence parameters and functions */
-
 public static final int CV_STEREO_BM_NORMALIZED_RESPONSE =  0;
 public static final int CV_STEREO_BM_XSOBEL =               1;
-
-/* Block matching algorithm structure */
-public static class CvStereoBMState extends AbstractCvStereoBMState {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvStereoBMState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvStereoBMState(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvStereoBMState(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvStereoBMState position(long position) {
-        return (CvStereoBMState)super.position(position);
-    }
-
-    // pre-filtering (normalization of input images)
-    public native int preFilterType(); public native CvStereoBMState preFilterType(int preFilterType); // =CV_STEREO_BM_NORMALIZED_RESPONSE now
-    public native int preFilterSize(); public native CvStereoBMState preFilterSize(int preFilterSize); // averaging window size: ~5x5..21x21
-    public native int preFilterCap(); public native CvStereoBMState preFilterCap(int preFilterCap); // the output of pre-filtering is clipped by [-preFilterCap,preFilterCap]
-
-    // correspondence using Sum of Absolute Difference (SAD)
-    public native int SADWindowSize(); public native CvStereoBMState SADWindowSize(int SADWindowSize); // ~5x5..21x21
-    public native int minDisparity(); public native CvStereoBMState minDisparity(int minDisparity);  // minimum disparity (can be negative)
-    public native int numberOfDisparities(); public native CvStereoBMState numberOfDisparities(int numberOfDisparities); // maximum disparity - minimum disparity (> 0)
-
-    // post-filtering
-    public native int textureThreshold(); public native CvStereoBMState textureThreshold(int textureThreshold);  // the disparity is only computed for pixels
-                           // with textured enough neighborhood
-    public native int uniquenessRatio(); public native CvStereoBMState uniquenessRatio(int uniquenessRatio);   // accept the computed disparity d* only if
-                           // SAD(d) >= SAD(d*)*(1 + uniquenessRatio/100.)
-                           // for any d != d*+/-1 within the search range.
-    public native int speckleWindowSize(); public native CvStereoBMState speckleWindowSize(int speckleWindowSize); // disparity variation window
-    public native int speckleRange(); public native CvStereoBMState speckleRange(int speckleRange); // acceptable range of variation in window
-
-    public native int trySmallerWindows(); public native CvStereoBMState trySmallerWindows(int trySmallerWindows); // if 1, the results may be more accurate,
-                           // at the expense of slower processing
-    public native @ByRef CvRect roi1(); public native CvStereoBMState roi1(CvRect roi1);
-    public native @ByRef CvRect roi2(); public native CvStereoBMState roi2(CvRect roi2);
-    public native int disp12MaxDiff(); public native CvStereoBMState disp12MaxDiff(int disp12MaxDiff);
-
-    // temporary buffers
-    public native CvMat preFilteredImg0(); public native CvStereoBMState preFilteredImg0(CvMat preFilteredImg0);
-    public native CvMat preFilteredImg1(); public native CvStereoBMState preFilteredImg1(CvMat preFilteredImg1);
-    public native CvMat slidingSumBuf(); public native CvStereoBMState slidingSumBuf(CvMat slidingSumBuf);
-    public native CvMat cost(); public native CvStereoBMState cost(CvMat cost);
-    public native CvMat disp(); public native CvStereoBMState disp(CvMat disp);
-}
-
-public static final int CV_STEREO_BM_BASIC = 0;
-public static final int CV_STEREO_BM_FISH_EYE = 1;
-public static final int CV_STEREO_BM_NARROW = 2;
-
-public static native CvStereoBMState cvCreateStereoBMState(int preset/*=CV_STEREO_BM_BASIC*/,
-                                              int numberOfDisparities/*=0*/);
-public static native CvStereoBMState cvCreateStereoBMState();
-
-public static native void cvReleaseStereoBMState( @Cast("CvStereoBMState**") PointerPointer state );
-public static native void cvReleaseStereoBMState( @ByPtrPtr CvStereoBMState state );
-
-public static native void cvFindStereoCorrespondenceBM( @Const CvArr left, @Const CvArr right,
-                                          CvArr disparity, CvStereoBMState state );
-
-public static native @ByVal CvRect cvGetValidDisparityROI( @ByVal CvRect roi1, @ByVal CvRect roi2, int minDisparity,
-                                      int numberOfDisparities, int SADWindowSize );
-
-public static native void cvValidateDisparity( CvArr disparity, @Const CvArr cost,
-                                 int minDisparity, int numberOfDisparities,
-                                 int disp12MaxDiff/*=1*/ );
-public static native void cvValidateDisparity( CvArr disparity, @Const CvArr cost,
-                                 int minDisparity, int numberOfDisparities );
-
-/* Reprojects the computed disparity image to the 3D space using the specified 4x4 matrix */
-public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
-                                   CvArr _3dImage, @Const CvMat Q,
-                                   int handleMissingValues/*=0*/ );
-public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
-                                   CvArr _3dImage, @Const CvMat Q );
-
-/** \brief Transforms the input image to compensate lens distortion
-@see cv::undistort
-*/
-public static native void cvUndistort2( @Const CvArr src, CvArr dst,
-                          @Const CvMat camera_matrix,
-                          @Const CvMat distortion_coeffs,
-                          @Const CvMat new_camera_matrix/*=0*/ );
-public static native void cvUndistort2( @Const CvArr src, CvArr dst,
-                          @Const CvMat camera_matrix,
-                          @Const CvMat distortion_coeffs );
-
-/** \brief Computes transformation map from intrinsic camera parameters
-   that can used by cvRemap
-*/
-public static native void cvInitUndistortMap( @Const CvMat camera_matrix,
-                                @Const CvMat distortion_coeffs,
-                                CvArr mapx, CvArr mapy );
-
-/** \brief Computes undistortion+rectification map for a head of stereo camera
-@see cv::initUndistortRectifyMap
-*/
-public static native void cvInitUndistortRectifyMap( @Const CvMat camera_matrix,
-                                       @Const CvMat dist_coeffs,
-                                       @Const CvMat R, @Const CvMat new_camera_matrix,
-                                       CvArr mapx, CvArr mapy );
-
-/** \brief Computes the original (undistorted) feature coordinates
-   from the observed (distorted) coordinates
-@see cv::undistortPoints
-*/
-public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
-                               @Const CvMat camera_matrix,
-                               @Const CvMat dist_coeffs,
-                               @Const CvMat R/*=0*/,
-                               @Const CvMat P/*=0*/);
-public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
-                               @Const CvMat camera_matrix,
-                               @Const CvMat dist_coeffs);
-
-/** \} calib3d_c */
 
 // #ifdef __cplusplus // extern "C"
 
@@ -764,9 +306,10 @@ v = f_y*y'' + c_y
 tangential distortion coefficients. \f$s_1\f$, \f$s_2\f$, \f$s_3\f$, and \f$s_4\f$, are the thin prism distortion
 coefficients. Higher-order coefficients are not considered in OpenCV.
 <p>
-The next figure shows two common types of radial distortion: barrel distortion (typically \f$ k_1 > 0 \f$) and pincushion distortion (typically \f$ k_1 < 0 \f$).
+The next figures show two common types of radial distortion: barrel distortion (typically \f$ k_1 < 0 \f$) and pincushion distortion (typically \f$ k_1 > 0 \f$).
 <p>
 ![](pics/distortion_examples.png)
+![](pics/distortion_examples2.png)
 <p>
 In some cases the image sensor may be tilted in order to focus an oblique plane in front of the
 camera (Scheimpfug condition). This can be useful for particle image velocimetry (PIV) or
@@ -816,7 +359,7 @@ pattern (every view is described by several 3D-2D point correspondences).
 *rectification* transformation that makes the camera optical axes parallel.
 <p>
 \note
-   -   A calibration sample for 3 cameras in horizontal position can be found at
+    -   A calibration sample for 3 cameras in horizontal position can be found at
         opencv_source_code/samples/cpp/3calibration.cpp
     -   A calibration sample based on a sequence of images can be found at
         opencv_source_code/samples/cpp/calibration.cpp
@@ -907,7 +450,8 @@ public static final int CALIB_CB_SYMMETRIC_GRID  = 1,
        CALIB_CB_CLUSTERING      = 4;
 
 /** enum cv:: */
-public static final int CALIB_USE_INTRINSIC_GUESS = 0x00001,
+public static final int CALIB_NINTRINSIC          = 18,
+       CALIB_USE_INTRINSIC_GUESS = 0x00001,
        CALIB_FIX_ASPECT_RATIO    = 0x00002,
        CALIB_FIX_PRINCIPAL_POINT = 0x00004,
        CALIB_ZERO_TANGENT_DIST   = 0x00008,
@@ -978,6 +522,75 @@ An example program about pose estimation from coplanar points
 <p>
 Check \ref tutorial_homography "the corresponding tutorial" for more details
 */
+
+/** Levenberg-Marquardt solver. Starting with the specified vector of parameters it
+    optimizes the target vector criteria "err"
+    (finds local minima of each target vector component absolute value).
+    <p>
+    When needed, it calls user-provided callback.
+*/
+@Namespace("cv") public static class LMSolver extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LMSolver(Pointer p) { super(p); }
+
+    public static class Callback extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Callback(Pointer p) { super(p); }
+    
+        /**
+         computes error and Jacobian for the specified vector of parameters
+         <p>
+         @param param the current vector of parameters
+         @param err output vector of errors: err_i = actual_f_i - ideal_f_i
+         @param J output Jacobian: J_ij = d(err_i)/d(param_j)
+         <p>
+         when J=noArray(), it means that it does not need to be computed.
+         Dimensionality of error vector and param vector can be different.
+         The callback should explicitly allocate (with "create" method) each output array
+         (unless it's noArray()).
+        */
+        public native @Cast("bool") boolean compute(@ByVal Mat param, @ByVal Mat err, @ByVal Mat J);
+        public native @Cast("bool") boolean compute(@ByVal UMat param, @ByVal UMat err, @ByVal UMat J);
+        public native @Cast("bool") boolean compute(@ByVal GpuMat param, @ByVal GpuMat err, @ByVal GpuMat J);
+    }
+
+    /**
+       Runs Levenberg-Marquardt algorithm using the passed vector of parameters as the start point.
+       The final vector of parameters (whether the algorithm converged or not) is stored at the same
+       vector. The method returns the number of iterations used. If it's equal to the previously specified
+       maxIters, there is a big chance the algorithm did not converge.
+       <p>
+       @param param initial/final vector of parameters.
+       <p>
+       Note that the dimensionality of parameter space is defined by the size of param vector,
+       and the dimensionality of optimized criteria is defined by the size of err vector
+       computed by the callback.
+    */
+    public native int run(@ByVal Mat param);
+    public native int run(@ByVal UMat param);
+    public native int run(@ByVal GpuMat param);
+
+    /**
+       Sets the maximum number of iterations
+       @param maxIters the number of iterations
+    */
+    public native void setMaxIters(int maxIters);
+    /**
+       Retrieves the current maximum number of iterations
+    */
+    public native int getMaxIters();
+
+    /**
+       Creates Levenberg-Marquard solver
+       <p>
+       @param cb callback
+       @param maxIters maximum number of iterations that can be further
+         modified using setMaxIters() method.
+    */
+    public static native @Ptr LMSolver create(@Ptr Callback cb, int maxIters);
+}
 
 /** \brief Finds a perspective transformation between two planes.
 <p>
@@ -1620,23 +1233,11 @@ The function estimates and returns an initial camera matrix for the camera calib
 Currently, the function only supports planar calibration patterns, which are patterns where each
 object point has z-coordinate =0.
  */
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints,
+@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints,
                                      @ByVal Size imageSize, double aspectRatio/*=1.0*/ );
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints,
-                                     @ByVal Size imageSize );
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints,
-                                     @ByVal Size imageSize, double aspectRatio/*=1.0*/ );
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints,
-                                     @ByVal Size imageSize );
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints,
-                                     @ByVal Size imageSize, double aspectRatio/*=1.0*/ );
-@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints,
+@Namespace("cv") public static native @ByVal Mat initCameraMatrix2D( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints,
                                      @ByVal Size imageSize );
 
 /** \brief Finds the positions of internal corners of the chessboard.
@@ -1698,6 +1299,14 @@ square grouping and ordering algorithm fails.
                                          int flags/*=cv::CALIB_CB_ADAPTIVE_THRESH + cv::CALIB_CB_NORMALIZE_IMAGE*/ );
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize, @ByVal GpuMat corners );
 
+/*
+   Checks whether the image contains chessboard of the specific size or not.
+   If yes, nonzero value is returned.
+*/
+@Namespace("cv") public static native @Cast("bool") boolean checkChessboard(@ByVal Mat img, @ByVal Size size);
+@Namespace("cv") public static native @Cast("bool") boolean checkChessboard(@ByVal UMat img, @ByVal Size size);
+@Namespace("cv") public static native @Cast("bool") boolean checkChessboard(@ByVal GpuMat img, @ByVal Size size);
+
 /** \brief Finds the positions of internal corners of the chessboard using a sector based approach.
 <p>
 @param image Source chessboard view. It must be an 8-bit grayscale or color image.
@@ -1758,6 +1367,36 @@ found, or as colored corners connected with lines if the board was found.
                                          @ByVal UMat corners, @Cast("bool") boolean patternWasFound );
 @Namespace("cv") public static native void drawChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize,
                                          @ByVal GpuMat corners, @Cast("bool") boolean patternWasFound );
+
+/** \brief Draw axes of the world/object coordinate system from pose estimation. \sa solvePnP
+<p>
+@param image Input/output image. It must have 1 or 3 channels. The number of channels is not altered.
+@param cameraMatrix Input 3x3 floating-point matrix of camera intrinsic parameters.
+\f$A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$
+@param distCoeffs Input vector of distortion coefficients
+\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6 [, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$ of
+4, 5, 8, 12 or 14 elements. If the vector is empty, the zero distortion coefficients are assumed.
+@param rvec Rotation vector (see \ref Rodrigues ) that, together with tvec , brings points from
+the model coordinate system to the camera coordinate system.
+@param tvec Translation vector.
+@param length Length of the painted axes in the same unit than tvec (usually in meters).
+@param thickness Line thickness of the painted axes.
+<p>
+This function draws the axes of the world/object coordinate system w.r.t. to the camera frame.
+OX is drawn in red, OY in green and OZ in blue.
+ */
+@Namespace("cv") public static native void drawFrameAxes(@ByVal Mat image, @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                @ByVal Mat rvec, @ByVal Mat tvec, float length, int thickness/*=3*/);
+@Namespace("cv") public static native void drawFrameAxes(@ByVal Mat image, @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                @ByVal Mat rvec, @ByVal Mat tvec, float length);
+@Namespace("cv") public static native void drawFrameAxes(@ByVal UMat image, @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                @ByVal UMat rvec, @ByVal UMat tvec, float length, int thickness/*=3*/);
+@Namespace("cv") public static native void drawFrameAxes(@ByVal UMat image, @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                @ByVal UMat rvec, @ByVal UMat tvec, float length);
+@Namespace("cv") public static native void drawFrameAxes(@ByVal GpuMat image, @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                @ByVal GpuMat rvec, @ByVal GpuMat tvec, float length, int thickness/*=3*/);
+@Namespace("cv") public static native void drawFrameAxes(@ByVal GpuMat image, @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                @ByVal GpuMat rvec, @ByVal GpuMat tvec, float length);
 
 @Namespace("cv") @NoOffset public static class CirclesGridFinderParameters extends Pointer {
     static { Loader.load(); }
@@ -1973,10 +1612,10 @@ The algorithm performs the following steps:
     patternSize=cvSize(cols,rows) in findChessboardCorners .
 <p>
 \sa
-   findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
+   calibrateCameraRO, findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
  */
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
@@ -1984,15 +1623,15 @@ The algorithm performs the following steps:
                                      @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
                                      @ByVal Mat stdDeviationsExtrinsics,
                                      @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
@@ -2000,15 +1639,15 @@ The algorithm performs the following steps:
                                      @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
                                      @ByVal Mat stdDeviationsExtrinsics,
                                      @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
@@ -2016,15 +1655,15 @@ The algorithm performs the following steps:
                                      @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal Mat stdDeviationsIntrinsics,
                                      @ByVal Mat stdDeviationsExtrinsics,
                                      @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
@@ -2032,15 +1671,15 @@ The algorithm performs the following steps:
                                      @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
                                      @ByVal UMat stdDeviationsExtrinsics,
                                      @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
@@ -2048,15 +1687,15 @@ The algorithm performs the following steps:
                                      @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
                                      @ByVal UMat stdDeviationsExtrinsics,
                                      @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
@@ -2064,15 +1703,15 @@ The algorithm performs the following steps:
                                      @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal UMat stdDeviationsIntrinsics,
                                      @ByVal UMat stdDeviationsExtrinsics,
                                      @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
@@ -2080,15 +1719,15 @@ The algorithm performs the following steps:
                                      @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
                                      @ByVal GpuMat stdDeviationsExtrinsics,
                                      @ByVal GpuMat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
@@ -2096,15 +1735,15 @@ The algorithm performs the following steps:
                                      @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
                                      @ByVal GpuMat stdDeviationsExtrinsics,
                                      @ByVal GpuMat perViewErrors );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
@@ -2112,112 +1751,453 @@ The algorithm performs the following steps:
                                      @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
                                      @ByVal GpuMat stdDeviationsIntrinsics,
                                      @ByVal GpuMat stdDeviationsExtrinsics,
                                      @ByVal GpuMat perViewErrors );
 
-/** \overload double calibrateCamera( InputArrayOfArrays objectPoints,
-                                     InputArrayOfArrays imagePoints, Size imageSize,
-                                     InputOutputArray cameraMatrix, InputOutputArray distCoeffs,
-                                     OutputArrayOfArrays rvecs, OutputArrayOfArrays tvecs,
-                                     OutputArray stdDeviations, OutputArray perViewErrors,
-                                     int flags = 0, TermCriteria criteria = TermCriteria(
-                                        TermCriteria::COUNT + TermCriteria::EPS, 30, DBL_EPSILON) )
+/** \overload */
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCamera( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
+
+/** \brief Finds the camera intrinsic and extrinsic parameters from several views of a calibration pattern.
+<p>
+This function is an extension of calibrateCamera() with the method of releasing object which was
+proposed in \cite strobl2011iccv. In many common cases with inaccurate, unmeasured, roughly planar
+targets (calibration plates), this method can dramatically improve the precision of the estimated
+camera parameters. Both the object-releasing method and standard method are supported by this
+function. Use the parameter **iFixedPoint** for method selection. In the internal implementation,
+calibrateCamera() is a wrapper for this function.
+<p>
+@param objectPoints Vector of vectors of calibration pattern points in the calibration pattern
+coordinate space. See calibrateCamera() for details. If the method of releasing object to be used,
+the identical calibration board must be used in each view and it must be fully visible, and all
+objectPoints[i] must be the same and all points should be roughly close to a plane. **The calibration
+target has to be rigid, or at least static if the camera (rather than the calibration target) is
+shifted for grabbing images.**
+@param imagePoints Vector of vectors of the projections of calibration pattern points. See
+calibrateCamera() for details.
+@param imageSize Size of the image used only to initialize the intrinsic camera matrix.
+@param iFixedPoint The index of the 3D object point in objectPoints[0] to be fixed. It also acts as
+a switch for calibration method selection. If object-releasing method to be used, pass in the
+parameter in the range of [1, objectPoints[0].size()-2], otherwise a value out of this range will
+make standard calibration method selected. Usually the top-right corner point of the calibration
+board grid is recommended to be fixed when object-releasing method being utilized. According to
+\cite strobl2011iccv, two other points are also fixed. In this implementation, objectPoints[0].front
+and objectPoints[0].back.z are used. With object-releasing method, accurate rvecs, tvecs and
+newObjPoints are only possible if coordinates of these three fixed points are accurate enough.
+@param cameraMatrix Output 3x3 floating-point camera matrix. See calibrateCamera() for details.
+@param distCoeffs Output vector of distortion coefficients. See calibrateCamera() for details.
+@param rvecs Output vector of rotation vectors estimated for each pattern view. See calibrateCamera()
+for details.
+@param tvecs Output vector of translation vectors estimated for each pattern view.
+@param newObjPoints The updated output vector of calibration pattern points. The coordinates might
+be scaled based on three fixed points. The returned coordinates are accurate only if the above
+mentioned three fixed points are accurate. If not needed, noArray() can be passed in. This parameter
+is ignored with standard calibration method.
+@param stdDeviationsIntrinsics Output vector of standard deviations estimated for intrinsic parameters.
+See calibrateCamera() for details.
+@param stdDeviationsExtrinsics Output vector of standard deviations estimated for extrinsic parameters.
+See calibrateCamera() for details.
+@param stdDeviationsObjPoints Output vector of standard deviations estimated for refined coordinates
+of calibration pattern points. It has the same size and order as objectPoints[0] vector. This
+parameter is ignored with standard calibration method.
+ @param perViewErrors Output vector of the RMS re-projection error estimated for each pattern view.
+@param flags Different flags that may be zero or a combination of some predefined values. See
+calibrateCamera() for details. If the method of releasing object is used, the calibration time may
+be much longer. CALIB_USE_QR or CALIB_USE_LU could be used for faster calibration with potentially
+less precise and less stable in some rare cases.
+@param criteria Termination criteria for the iterative optimization algorithm.
+<p>
+@return the overall RMS re-projection error.
+<p>
+The function estimates the intrinsic camera parameters and extrinsic parameters for each of the
+views. The algorithm is based on \cite Zhang2000, \cite BouguetMCT and \cite strobl2011iccv. See
+calibrateCamera() for other detailed explanations.
+\sa
+   calibrateCamera, findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
  */
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     @ByVal Mat stdDeviationsIntrinsics,
+                                     @ByVal Mat stdDeviationsExtrinsics,
+                                     @ByVal Mat stdDeviationsObjPoints,
+                                     @ByVal Mat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     @ByVal UMat stdDeviationsIntrinsics,
+                                     @ByVal UMat stdDeviationsExtrinsics,
+                                     @ByVal UMat stdDeviationsObjPoints,
+                                     @ByVal UMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors );
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
                                      @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors,
                                      int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
                                          + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
-@Namespace("cv") public static native double calibrateCamera( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints, @ByVal Size imageSize,
+@Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
                                      @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs );
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     @ByVal GpuMat stdDeviationsIntrinsics,
+                                     @ByVal GpuMat stdDeviationsExtrinsics,
+                                     @ByVal GpuMat stdDeviationsObjPoints,
+                                     @ByVal GpuMat perViewErrors );
+
+/** \overload */
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal Mat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal Mat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal Mat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal UMat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal UMat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal UMat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal MatVector rvecs, @ByVal MatVector tvecs,
+                                     @ByVal GpuMat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal UMatVector rvecs, @ByVal UMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints,
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                         + "cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria );
+@Namespace("cv") public static native double calibrateCameraRO( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints, @ByVal Size imageSize, int iFixedPoint,
+                                     @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
+                                     @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs,
+                                     @ByVal GpuMat newObjPoints );
 
 /** \brief Computes useful camera characteristics from the camera matrix.
 <p>
@@ -2380,230 +2360,80 @@ Similarly to calibrateCamera , the function minimizes the total re-projection er
 points in all the available views from both cameras. The function returns the final value of the
 re-projection error.
  */
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
                                      @ByVal Mat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
                                      @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     @ByVal Mat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     @ByVal Mat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     @ByVal Mat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
                                      @ByVal UMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
                                      @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     @ByVal UMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     @ByVal UMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     @ByVal UMat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
                                      @ByVal GpuMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     @ByVal GpuMat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     @ByVal GpuMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     @ByVal GpuMat perViewErrors );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     @ByVal GpuMat perViewErrors, int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+@Namespace("cv") public static native @Name("stereoCalibrate") double stereoCalibrateExtended( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
                                      @ByVal GpuMat perViewErrors );
 
 /** \overload */
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
                                      int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                     @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal Mat R,@ByVal Mat T, @ByVal Mat E, @ByVal Mat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
                                      int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                     @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal UMat R,@ByVal UMat T, @ByVal UMat E, @ByVal UMat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
                                      int flags/*=cv::CALIB_FIX_INTRINSIC*/,
                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
-                                     @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal UMatVector objectPoints,
-                                     @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                     @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                     @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                     @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F,
-                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/,
-                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria );
-@Namespace("cv") public static native double stereoCalibrate( @ByVal GpuMatVector objectPoints,
-                                     @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+@Namespace("cv") public static native double stereoCalibrate( @ByVal Point3fVectorVector objectPoints,
+                                     @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                      @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal GpuMat R,@ByVal GpuMat T, @ByVal GpuMat E, @ByVal GpuMat F );
@@ -2785,27 +2615,7 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
 @Namespace("cv") public static native float rectify3Collinear( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                       @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
                                       @ByVal Mat cameraMatrix3, @ByVal Mat distCoeffs3,
-                                      @ByVal MatVector imgpt1, @ByVal MatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal Mat R12, @ByVal Mat T12,
-                                      @ByVal Mat R13, @ByVal Mat T13,
-                                      @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat R3,
-                                      @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat P3,
-                                      @ByVal Mat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                      @ByVal Mat cameraMatrix3, @ByVal Mat distCoeffs3,
-                                      @ByVal UMatVector imgpt1, @ByVal UMatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal Mat R12, @ByVal Mat T12,
-                                      @ByVal Mat R13, @ByVal Mat T13,
-                                      @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat R3,
-                                      @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat P3,
-                                      @ByVal Mat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
-                                      @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
-                                      @ByVal Mat cameraMatrix3, @ByVal Mat distCoeffs3,
-                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Point3fVectorVector imgpt1, @ByVal Point3fVectorVector imgpt3,
                                       @ByVal Size imageSize, @ByVal Mat R12, @ByVal Mat T12,
                                       @ByVal Mat R13, @ByVal Mat T13,
                                       @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat R3,
@@ -2815,27 +2625,7 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
 @Namespace("cv") public static native float rectify3Collinear( @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
                                       @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
                                       @ByVal UMat cameraMatrix3, @ByVal UMat distCoeffs3,
-                                      @ByVal MatVector imgpt1, @ByVal MatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal UMat R12, @ByVal UMat T12,
-                                      @ByVal UMat R13, @ByVal UMat T13,
-                                      @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat R3,
-                                      @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat P3,
-                                      @ByVal UMat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                      @ByVal UMat cameraMatrix3, @ByVal UMat distCoeffs3,
-                                      @ByVal UMatVector imgpt1, @ByVal UMatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal UMat R12, @ByVal UMat T12,
-                                      @ByVal UMat R13, @ByVal UMat T13,
-                                      @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat R3,
-                                      @ByVal UMat P1, @ByVal UMat P2, @ByVal UMat P3,
-                                      @ByVal UMat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal UMat cameraMatrix1, @ByVal UMat distCoeffs1,
-                                      @ByVal UMat cameraMatrix2, @ByVal UMat distCoeffs2,
-                                      @ByVal UMat cameraMatrix3, @ByVal UMat distCoeffs3,
-                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Point3fVectorVector imgpt1, @ByVal Point3fVectorVector imgpt3,
                                       @ByVal Size imageSize, @ByVal UMat R12, @ByVal UMat T12,
                                       @ByVal UMat R13, @ByVal UMat T13,
                                       @ByVal UMat R1, @ByVal UMat R2, @ByVal UMat R3,
@@ -2845,27 +2635,7 @@ homography matrices H1 and H2 . The function implements the algorithm \cite Hart
 @Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
                                       @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
                                       @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
-                                      @ByVal MatVector imgpt1, @ByVal MatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
-                                      @ByVal GpuMat R13, @ByVal GpuMat T13,
-                                      @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
-                                      @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat P3,
-                                      @ByVal GpuMat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                      @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
-                                      @ByVal UMatVector imgpt1, @ByVal UMatVector imgpt3,
-                                      @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
-                                      @ByVal GpuMat R13, @ByVal GpuMat T13,
-                                      @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
-                                      @ByVal GpuMat P1, @ByVal GpuMat P2, @ByVal GpuMat P3,
-                                      @ByVal GpuMat Q, double alpha, @ByVal Size newImgSize,
-                                      Rect roi1, Rect roi2, int flags );
-@Namespace("cv") public static native float rectify3Collinear( @ByVal GpuMat cameraMatrix1, @ByVal GpuMat distCoeffs1,
-                                      @ByVal GpuMat cameraMatrix2, @ByVal GpuMat distCoeffs2,
-                                      @ByVal GpuMat cameraMatrix3, @ByVal GpuMat distCoeffs3,
-                                      @ByVal GpuMatVector imgpt1, @ByVal GpuMatVector imgpt3,
+                                      @ByVal Point3fVectorVector imgpt1, @ByVal Point3fVectorVector imgpt3,
                                       @ByVal Size imageSize, @ByVal GpuMat R12, @ByVal GpuMat T12,
                                       @ByVal GpuMat R13, @ByVal GpuMat T13,
                                       @ByVal GpuMat R1, @ByVal GpuMat R2, @ByVal GpuMat R3,
@@ -3770,102 +3540,36 @@ homographies are consistent with all visible reference points being in front of 
 are left unchanged; the filtered solution set is returned as indices into the existing one.
 <p>
 */
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal Mat beforePoints,
                                                            @ByVal Mat afterPoints,
                                                            @ByVal Mat possibleSolutions,
                                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal Mat beforePoints,
                                                            @ByVal Mat afterPoints,
                                                            @ByVal Mat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal Mat beforePoints,
-                                                           @ByVal Mat afterPoints,
-                                                           @ByVal Mat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal Mat beforePoints,
-                                                           @ByVal Mat afterPoints,
-                                                           @ByVal Mat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
-                                                           @ByVal Mat beforePoints,
-                                                           @ByVal Mat afterPoints,
-                                                           @ByVal Mat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
-                                                           @ByVal Mat beforePoints,
-                                                           @ByVal Mat afterPoints,
-                                                           @ByVal Mat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal UMat beforePoints,
                                                            @ByVal UMat afterPoints,
                                                            @ByVal UMat possibleSolutions,
                                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal UMat beforePoints,
                                                            @ByVal UMat afterPoints,
                                                            @ByVal UMat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal UMat beforePoints,
-                                                           @ByVal UMat afterPoints,
-                                                           @ByVal UMat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal UMat beforePoints,
-                                                           @ByVal UMat afterPoints,
-                                                           @ByVal UMat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
-                                                           @ByVal UMat beforePoints,
-                                                           @ByVal UMat afterPoints,
-                                                           @ByVal UMat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
-                                                           @ByVal UMat beforePoints,
-                                                           @ByVal UMat afterPoints,
-                                                           @ByVal UMat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal GpuMat beforePoints,
                                                            @ByVal GpuMat afterPoints,
                                                            @ByVal GpuMat possibleSolutions,
                                                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal MatVector rotations,
-                                                           @ByVal MatVector normals,
-                                                           @ByVal GpuMat beforePoints,
-                                                           @ByVal GpuMat afterPoints,
-                                                           @ByVal GpuMat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal GpuMat beforePoints,
-                                                           @ByVal GpuMat afterPoints,
-                                                           @ByVal GpuMat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal UMatVector rotations,
-                                                           @ByVal UMatVector normals,
-                                                           @ByVal GpuMat beforePoints,
-                                                           @ByVal GpuMat afterPoints,
-                                                           @ByVal GpuMat possibleSolutions);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
-                                                           @ByVal GpuMat beforePoints,
-                                                           @ByVal GpuMat afterPoints,
-                                                           @ByVal GpuMat possibleSolutions,
-                                                           @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat pointsMask);
-@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal GpuMatVector rotations,
-                                                           @ByVal GpuMatVector normals,
+@Namespace("cv") public static native void filterHomographyDecompByVisibleRefpoints(@ByVal Point3fVectorVector rotations,
+                                                           @ByVal Point3fVectorVector normals,
                                                            @ByVal GpuMat beforePoints,
                                                            @ByVal GpuMat afterPoints,
                                                            @ByVal GpuMat possibleSolutions);
@@ -4533,50 +4237,50 @@ of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion 
 optimization. It stays at the center or at a different location specified when CALIB_USE_INTRINSIC_GUESS is set too.
     @param criteria Termination criteria for the iterative optimization algorithm.
      */
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal UMat K, @ByVal UMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal UMatVector rvecs, @ByVal UMatVector tvecs);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs, int flags/*=0*/,
                 @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double calibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints, @Const @ByRef Size image_size,
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints, @Const @ByRef Size image_size,
             @ByVal GpuMat K, @ByVal GpuMat D, @ByVal GpuMatVector rvecs, @ByVal GpuMatVector tvecs);
 
     /** \brief Stereo rectification for fisheye camera model
@@ -4657,67 +4361,25 @@ optimization. It stays at the center or at a different location specified when C
     zero.
     @param criteria Termination criteria for the iterative optimization algorithm.
      */
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
                                       @ByVal Mat R, @ByVal Mat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
                                       @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
                                       @ByVal Mat R, @ByVal Mat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
-                                      @ByVal Mat R, @ByVal Mat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
-                                      @ByVal Mat R, @ByVal Mat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
-                                      @ByVal Mat R, @ByVal Mat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
-                                      @ByVal Mat R, @ByVal Mat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
                                       @ByVal UMat R, @ByVal UMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
                                       @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
                                       @ByVal UMat R, @ByVal UMat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
-                                      @ByVal UMat R, @ByVal UMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
-                                      @ByVal UMat R, @ByVal UMat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
-                                      @ByVal UMat R, @ByVal UMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                      @ByVal UMat K1, @ByVal UMat D1, @ByVal UMat K2, @ByVal UMat D2, @ByVal Size imageSize,
-                                      @ByVal UMat R, @ByVal UMat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
                                       @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
                                       @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
-                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
-                                      @ByVal GpuMat R, @ByVal GpuMat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
-                                      @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal UMatVector objectPoints, @ByVal UMatVector imagePoints1, @ByVal UMatVector imagePoints2,
-                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
-                                      @ByVal GpuMat R, @ByVal GpuMat T);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
-                                      @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
-                                      @ByVal GpuMat R, @ByVal GpuMat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria);
-    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal GpuMatVector objectPoints, @ByVal GpuMatVector imagePoints1, @ByVal GpuMatVector imagePoints2,
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal Point3fVectorVector objectPoints, @ByVal Point3fVectorVector imagePoints1, @ByVal Point3fVectorVector imagePoints2,
                                       @ByVal GpuMat K1, @ByVal GpuMat D1, @ByVal GpuMat K2, @ByVal GpuMat D2, @ByVal Size imageSize,
                                       @ByVal GpuMat R, @ByVal GpuMat T);
 
@@ -4725,6 +4387,9 @@ optimization. It stays at the center or at a different location specified when C
  // end namespace fisheye
 
  //end namespace cv
+
+// #if 0 //def __cplusplus
+// #endif
 
 // #endif
 

@@ -711,25 +711,25 @@ See \ref videoio_overview for more information.
 public static final int
        /** Auto detect == 0 */
        CAP_ANY          = 0,
-       /** Video For Windows (platform native) */
+       /** Video For Windows (obsolete, removed) */
        CAP_VFW          = 200,
-       /** V4L/V4L2 capturing support via libv4l */
+       /** V4L/V4L2 capturing support */
        CAP_V4L          = 200,
        /** Same as CAP_V4L */
        CAP_V4L2         = CAP_V4L,
        /** IEEE 1394 drivers */
        CAP_FIREWIRE     = 300,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_FIREWARE     = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_IEEE1394     = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_DC1394       = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_CMU1394      = CAP_FIREWIRE,
-       /** QuickTime */
+       /** QuickTime (obsolete, removed) */
        CAP_QT           = 500,
-       /** Unicap drivers */
+       /** Unicap drivers (obsolete, removed) */
        CAP_UNICAP       = 600,
        /** DirectShow (via videoInput) */
        CAP_DSHOW        = 700,
@@ -846,10 +846,16 @@ public static final int
        CAP_PROP_SAR_NUM       = 40,
        /** Sample aspect ratio: num/den (den) */
        CAP_PROP_SAR_DEN       = 41,
-       /** current backend (enum VideoCaptureAPIs). Read-only property */
+       /** Current backend (enum VideoCaptureAPIs). Read-only property */
        CAP_PROP_BACKEND       = 42,
+       /** Video input or Channel Number (only for those cameras that support) */
+       CAP_PROP_CHANNEL       = 43,
+       /** enable/ disable auto white-balance */
+       CAP_PROP_AUTO_WB       = 44,
+       /** white-balance color temperature */
+       CAP_PROP_WB_TEMPERATURE = 45,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 43;
+       CV__CAP_PROP_LATEST = 46;
 // #endif
 
 
@@ -1635,7 +1641,7 @@ Here is how the class can be used:
     <p>
     \note In \ref videoio_c "C API", functions cvRetrieveFrame() and cv.RetrieveFrame() return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
-    :ocvcvCloneImage and then do whatever you want with the copy.
+    cvCloneImage and then do whatever you want with the copy.
      */
     public native @Cast("bool") boolean retrieve(@ByVal Mat image, int flag/*=0*/);
     public native @Cast("bool") boolean retrieve(@ByVal Mat image);
@@ -1666,7 +1672,7 @@ Here is how the class can be used:
     <p>
     \note In \ref videoio_c "C API", functions cvRetrieveFrame() and cv.RetrieveFrame() return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
-    :ocvcvCloneImage and then do whatever you want with the copy.
+    cvCloneImage and then do whatever you want with the copy.
      */
     public native @Cast("bool") boolean read(@ByVal Mat image);
     public native @Cast("bool") boolean read(@ByVal UMat image);
@@ -1743,8 +1749,8 @@ The class provides C++ API for writing video files or image sequences.
     <p>
     The constructors/functions initialize video writers.
     -   On Linux FFMPEG is used to write videos;
-    -   On Windows FFMPEG or VFW is used;
-    -   On MacOSX QTKit is used.
+    -   On Windows FFMPEG or MSWF or DSHOW is used;
+    -   On MacOSX AVFoundation is used.
      */
     public VideoWriter() { super((Pointer)null); allocate(); }
     private native void allocate();

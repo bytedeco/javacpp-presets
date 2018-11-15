@@ -41,6 +41,7 @@ public class opencv_calib3d implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CvPOSITObject").base("AbstractCvPOSITObject"))
                .put(new Info("CvStereoBMState").base("AbstractCvStereoBMState"))
+               .put(new Info("cv::InputArrayOfArrays").pointerTypes("Point3fVectorVector"))
                .put(new Info("cv::fisheye::CALIB_USE_INTRINSIC_GUESS").javaNames("FISHEYE_CALIB_USE_INTRINSIC_GUESS"))
                .put(new Info("cv::fisheye::CALIB_RECOMPUTE_EXTRINSIC").javaNames("FISHEYE_CALIB_RECOMPUTE_EXTRINSIC"))
                .put(new Info("cv::fisheye::CALIB_CHECK_COND").javaNames("FISHEYE_CALIB_CHECK_COND"))

@@ -1417,21 +1417,32 @@ public static final int
  *  orientation will be drawn. */
   DRAW_RICH_KEYPOINTS = 4;
 @Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::DrawMatchesFlags") int val);
+
 @Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::DrawMatchesFlags") int a, int b);
+
 @Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::DrawMatchesFlags") int a, int b);
+
+
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator |") int or(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator &") int and(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator ^") int xor(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
 
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
 @Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
+
 
 /** \brief Draws keypoints.
 <p>

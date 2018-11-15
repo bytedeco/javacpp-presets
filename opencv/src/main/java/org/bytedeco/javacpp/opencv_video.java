@@ -75,261 +75,6 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #endif //OPENCV_VIDEO_HPP
 
 
-// Parsed from <opencv2/video/tracking_c.h>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef OPENCV_TRACKING_C_H
-// #define OPENCV_TRACKING_C_H
-
-// #include "opencv2/imgproc/types_c.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/** \addtogroup video_c
-  \{
-*/
-
-/****************************************************************************************\
-*                                  Motion Analysis                                       *
-\****************************************************************************************/
-
-/************************************ optical flow ***************************************/
-
-public static final int CV_LKFLOW_PYR_A_READY =       1;
-public static final int CV_LKFLOW_PYR_B_READY =       2;
-public static final int CV_LKFLOW_INITIAL_GUESSES =   4;
-public static final int CV_LKFLOW_GET_MIN_EIGENVALS = 8;
-
-/* It is Lucas & Kanade method, modified to use pyramids.
-   Also it does several iterations to get optical flow for
-   every point at every pyramid level.
-   Calculates optical flow between two images for certain set of points (i.e.
-   it is a "sparse" optical flow, which is opposite to the previous 3 methods) */
-public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                     CvArr prev_pyr, CvArr curr_pyr,
-                                     @Const CvPoint2D32f prev_features,
-                                     CvPoint2D32f curr_features,
-                                     int count,
-                                     @ByVal CvSize win_size,
-                                     int level,
-                                     @Cast("char*") BytePointer status,
-                                     FloatPointer track_error,
-                                     @ByVal CvTermCriteria criteria,
-                                     int flags );
-public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                     CvArr prev_pyr, CvArr curr_pyr,
-                                     @Cast("const CvPoint2D32f*") FloatBuffer prev_features,
-                                     @Cast("CvPoint2D32f*") FloatBuffer curr_features,
-                                     int count,
-                                     @ByVal CvSize win_size,
-                                     int level,
-                                     @Cast("char*") ByteBuffer status,
-                                     FloatBuffer track_error,
-                                     @ByVal CvTermCriteria criteria,
-                                     int flags );
-public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                     CvArr prev_pyr, CvArr curr_pyr,
-                                     @Cast("const CvPoint2D32f*") float[] prev_features,
-                                     @Cast("CvPoint2D32f*") float[] curr_features,
-                                     int count,
-                                     @ByVal CvSize win_size,
-                                     int level,
-                                     @Cast("char*") byte[] status,
-                                     float[] track_error,
-                                     @ByVal CvTermCriteria criteria,
-                                     int flags );
-
-
-/* Modification of a previous sparse optical flow algorithm to calculate
-   affine flow */
-
-
-/* Estimate optical flow for each pixel using the two-frame G. Farneback algorithm */
-public static native void cvCalcOpticalFlowFarneback( @Const CvArr prev, @Const CvArr next,
-                                        CvArr flow, double pyr_scale, int levels,
-                                        int winsize, int iterations, int poly_n,
-                                        double poly_sigma, int flags );
-
-/********************************* motion templates *************************************/
-
-/****************************************************************************************\
-*        All the motion template functions work only with single channel images.         *
-*        Silhouette image must have depth IPL_DEPTH_8U or IPL_DEPTH_8S                   *
-*        Motion history image must have depth IPL_DEPTH_32F,                             *
-*        Gradient mask - IPL_DEPTH_8U or IPL_DEPTH_8S,                                   *
-*        Motion orientation image - IPL_DEPTH_32F                                        *
-*        Segmentation mask - IPL_DEPTH_32F                                               *
-*        All the angles are in degrees, all the times are in milliseconds                *
-\****************************************************************************************/
-
-/* Updates motion history image given motion silhouette */
-
-
-/* Calculates gradient of the motion history image and fills
-   a mask indicating where the gradient is valid */
-
-
-/* Calculates average motion direction within a selected motion region
-   (region can be selected by setting ROIs and/or by composing a valid gradient mask
-   with the region mask) */
-
-
-/* Splits a motion history image into a few parts corresponding to separate independent motions
-   (e.g. left hand, right hand) */
-
-
-/****************************************************************************************\
-*                                       Tracking                                         *
-\****************************************************************************************/
-
-/* Implements CAMSHIFT algorithm - determines object position, size and orientation
-   from the object histogram back project (extension of meanshift) */
-public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
-                        @ByVal CvTermCriteria criteria, CvConnectedComp comp,
-                        CvBox2D box/*=NULL*/ );
-public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
-                        @ByVal CvTermCriteria criteria, CvConnectedComp comp );
-
-/* Implements MeanShift algorithm - determines object position
-   from the object histogram back project */
-public static native int cvMeanShift( @Const CvArr prob_image, @ByVal CvRect window,
-                         @ByVal CvTermCriteria criteria, CvConnectedComp comp );
-
-/*
-standard Kalman filter (in G. Welch' and G. Bishop's notation):
-
-  x(k)=A*x(k-1)+B*u(k)+w(k)  p(w)~N(0,Q)
-  z(k)=H*x(k)+v(k),   p(v)~N(0,R)
-*/
-public static class CvKalman extends AbstractCvKalman {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvKalman() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvKalman(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvKalman(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvKalman position(long position) {
-        return (CvKalman)super.position(position);
-    }
-
-    public native int MP(); public native CvKalman MP(int MP);                     /* number of measurement vector dimensions */
-    public native int DP(); public native CvKalman DP(int DP);                     /* number of state vector dimensions */
-    public native int CP(); public native CvKalman CP(int CP);                     /* number of control vector dimensions */
-
-    /* backward compatibility fields */
-// #if 1
-    public native FloatPointer PosterState(); public native CvKalman PosterState(FloatPointer PosterState);         /* =state_pre->data.fl */
-    public native FloatPointer PriorState(); public native CvKalman PriorState(FloatPointer PriorState);          /* =state_post->data.fl */
-    public native FloatPointer DynamMatr(); public native CvKalman DynamMatr(FloatPointer DynamMatr);           /* =transition_matrix->data.fl */
-    public native FloatPointer MeasurementMatr(); public native CvKalman MeasurementMatr(FloatPointer MeasurementMatr);     /* =measurement_matrix->data.fl */
-    public native FloatPointer MNCovariance(); public native CvKalman MNCovariance(FloatPointer MNCovariance);        /* =measurement_noise_cov->data.fl */
-    public native FloatPointer PNCovariance(); public native CvKalman PNCovariance(FloatPointer PNCovariance);        /* =process_noise_cov->data.fl */
-    public native FloatPointer KalmGainMatr(); public native CvKalman KalmGainMatr(FloatPointer KalmGainMatr);        /* =gain->data.fl */
-    public native FloatPointer PriorErrorCovariance(); public native CvKalman PriorErrorCovariance(FloatPointer PriorErrorCovariance);/* =error_cov_pre->data.fl */
-    public native FloatPointer PosterErrorCovariance(); public native CvKalman PosterErrorCovariance(FloatPointer PosterErrorCovariance);/* =error_cov_post->data.fl */
-    public native FloatPointer Temp1(); public native CvKalman Temp1(FloatPointer Temp1);               /* temp1->data.fl */
-    public native FloatPointer Temp2(); public native CvKalman Temp2(FloatPointer Temp2);               /* temp2->data.fl */
-// #endif
-
-    public native CvMat state_pre(); public native CvKalman state_pre(CvMat state_pre);           /* predicted state (x'(k)):
-                                    x(k)=A*x(k-1)+B*u(k) */
-    public native CvMat state_post(); public native CvKalman state_post(CvMat state_post);          /* corrected state (x(k)):
-                                    x(k)=x'(k)+K(k)*(z(k)-H*x'(k)) */
-    public native CvMat transition_matrix(); public native CvKalman transition_matrix(CvMat transition_matrix);   /* state transition matrix (A) */
-    public native CvMat control_matrix(); public native CvKalman control_matrix(CvMat control_matrix);      /* control matrix (B)
-                                   (it is not used if there is no control)*/
-    public native CvMat measurement_matrix(); public native CvKalman measurement_matrix(CvMat measurement_matrix);  /* measurement matrix (H) */
-    public native CvMat process_noise_cov(); public native CvKalman process_noise_cov(CvMat process_noise_cov);   /* process noise covariance matrix (Q) */
-    public native CvMat measurement_noise_cov(); public native CvKalman measurement_noise_cov(CvMat measurement_noise_cov); /* measurement noise covariance matrix (R) */
-    public native CvMat error_cov_pre(); public native CvKalman error_cov_pre(CvMat error_cov_pre);       /* priori error estimate covariance matrix (P'(k)):
-                                    P'(k)=A*P(k-1)*At + Q)*/
-    public native CvMat gain(); public native CvKalman gain(CvMat gain);                /* Kalman gain matrix (K(k)):
-                                    K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R)*/
-    public native CvMat error_cov_post(); public native CvKalman error_cov_post(CvMat error_cov_post);      /* posteriori error estimate covariance matrix (P(k)):
-                                    P(k)=(I-K(k)*H)*P'(k) */
-    public native CvMat temp1(); public native CvKalman temp1(CvMat temp1);               /* temporary matrices */
-    public native CvMat temp2(); public native CvKalman temp2(CvMat temp2);
-    public native CvMat temp3(); public native CvKalman temp3(CvMat temp3);
-    public native CvMat temp4(); public native CvKalman temp4(CvMat temp4);
-    public native CvMat temp5(); public native CvKalman temp5(CvMat temp5);
-}
-
-/* Creates Kalman filter and sets A, B, Q, R and state to some initial values */
-public static native CvKalman cvCreateKalman( int dynam_params, int measure_params,
-                                 int control_params/*=0*/);
-public static native CvKalman cvCreateKalman( int dynam_params, int measure_params);
-
-/* Releases Kalman filter state */
-public static native void cvReleaseKalman( @Cast("CvKalman**") PointerPointer kalman);
-public static native void cvReleaseKalman( @ByPtrPtr CvKalman kalman);
-
-/* Updates Kalman filter by time (predicts future state of the system) */
-public static native @Const CvMat cvKalmanPredict( CvKalman kalman,
-                                      @Const CvMat control/*=NULL*/);
-public static native @Const CvMat cvKalmanPredict( CvKalman kalman);
-
-/* Updates Kalman filter by measurement
-   (corrects state of the system and internal matrices) */
-public static native @Const CvMat cvKalmanCorrect( CvKalman kalman, @Const CvMat measurement );
-
-public static native @Const CvMat cvKalmanUpdateByTime(CvKalman arg1, CvMat arg2);
-public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvMat arg2);
-
-/** \} video_c */
-
-// #ifdef __cplusplus // extern "C"
-// #endif
-
-
-// #endif // OPENCV_TRACKING_C_H
-
-
 // Parsed from <opencv2/video/tracking.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -380,6 +125,13 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
+
+/** enum  */
+public static final int
+    CV_LKFLOW_PYR_A_READY = 1,
+    CV_LKFLOW_PYR_B_READY = 2,
+    CV_LKFLOW_INITIAL_GUESSES = 4,
+    CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
 /** \addtogroup video_track
  *  \{ */
@@ -852,6 +604,35 @@ with cvReleaseKalman(&kalmanFilter)
 }
 
 
+/** \brief Read a .flo file
+ <p>
+ @param path Path to the file to be loaded
+ <p>
+ The function readOpticalFlow loads a flow field from a file and returns it as a single matrix.
+ Resulting Mat has a type CV_32FC2 - floating-point, 2-channel. First channel corresponds to the
+ flow in the horizontal direction (u), second - vertical (v).
+ */
+@Namespace("cv") public static native @ByVal Mat readOpticalFlow( @Str BytePointer path );
+@Namespace("cv") public static native @ByVal Mat readOpticalFlow( @Str String path );
+/** \brief Write a .flo to disk
+ <p>
+ @param path Path to the file to be written
+ @param flow Flow field to be stored
+ <p>
+ The function stores a flow field in a file, returns true on success, false otherwise.
+ The flow field must be a 2-channel, floating-point matrix (CV_32FC2). First channel corresponds
+ to the flow in the horizontal direction (u), second - vertical (v).
+ */
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal Mat flow );
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal Mat flow );
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal UMat flow );
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal UMat flow );
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal GpuMat flow );
+@Namespace("cv") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal GpuMat flow );
+
+/**
+   Base class for dense optical flow algorithms
+*/
 @Namespace("cv") public static class DenseOpticalFlow extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -911,134 +692,6 @@ with cvReleaseKalman(&kalmanFilter)
                           @ByVal GpuMat status);
 }
 
-/** \brief "Dual TV L1" Optical Flow Algorithm.
-<p>
-The class implements the "Dual TV L1" optical flow algorithm described in \cite Zach2007 and
-\cite Javier2012 .
-Here are important members of the class that control the algorithm, which you can set after
-constructing the class instance:
-<p>
--   member double tau
-    Time step of the numerical scheme.
-<p>
--   member double lambda
-    Weight parameter for the data term, attachment parameter. This is the most relevant
-    parameter, which determines the smoothness of the output. The smaller this parameter is,
-    the smoother the solutions we obtain. It depends on the range of motions of the images, so
-    its value should be adapted to each image sequence.
-<p>
--   member double theta
-    Weight parameter for (u - v)\^2, tightness parameter. It serves as a link between the
-    attachment and the regularization terms. In theory, it should have a small value in order
-    to maintain both parts in correspondence. The method is stable for a large range of values
-    of this parameter.
-<p>
--   member int nscales
-    Number of scales used to create the pyramid of images.
-<p>
--   member int warps
-    Number of warpings per scale. Represents the number of times that I1(x+u0) and grad(
-    I1(x+u0) ) are computed per scale. This is a parameter that assures the stability of the
-    method. It also affects the running time, so it is a compromise between speed and
-    accuracy.
-<p>
--   member double epsilon
-    Stopping criterion threshold used in the numerical scheme, which is a trade-off between
-    precision and running time. A small value will yield more accurate solutions at the
-    expense of a slower convergence.
-<p>
--   member int iterations
-    Stopping criterion iterations number used in the numerical scheme.
-<p>
-C. Zach, T. Pock and H. Bischof, "A Duality Based Approach for Realtime TV-L1 Optical Flow".
-Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flow Estimation".
-*/
-@Namespace("cv") public static class DualTVL1OpticalFlow extends DenseOpticalFlow {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DualTVL1OpticalFlow(Pointer p) { super(p); }
-
-    /** \brief Time step of the numerical scheme
-    /** @see setTau */
-    public native double getTau();
-    /** \copybrief getTau @see getTau */
-    public native void setTau(double val);
-    /** \brief Weight parameter for the data term, attachment parameter
-    /** @see setLambda */
-    public native double getLambda();
-    /** \copybrief getLambda @see getLambda */
-    public native void setLambda(double val);
-    /** \brief Weight parameter for (u - v)^2, tightness parameter
-    /** @see setTheta */
-    public native double getTheta();
-    /** \copybrief getTheta @see getTheta */
-    public native void setTheta(double val);
-    /** \brief coefficient for additional illumination variation term
-    /** @see setGamma */
-    public native double getGamma();
-    /** \copybrief getGamma @see getGamma */
-    public native void setGamma(double val);
-    /** \brief Number of scales used to create the pyramid of images
-    /** @see setScalesNumber */
-    public native int getScalesNumber();
-    /** \copybrief getScalesNumber @see getScalesNumber */
-    public native void setScalesNumber(int val);
-    /** \brief Number of warpings per scale
-    /** @see setWarpingsNumber */
-    public native int getWarpingsNumber();
-    /** \copybrief getWarpingsNumber @see getWarpingsNumber */
-    public native void setWarpingsNumber(int val);
-    /** \brief Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time
-    /** @see setEpsilon */
-    public native double getEpsilon();
-    /** \copybrief getEpsilon @see getEpsilon */
-    public native void setEpsilon(double val);
-    /** \brief Inner iterations (between outlier filtering) used in the numerical scheme
-    /** @see setInnerIterations */
-    public native int getInnerIterations();
-    /** \copybrief getInnerIterations @see getInnerIterations */
-    public native void setInnerIterations(int val);
-    /** \brief Outer iterations (number of inner loops) used in the numerical scheme
-    /** @see setOuterIterations */
-    public native int getOuterIterations();
-    /** \copybrief getOuterIterations @see getOuterIterations */
-    public native void setOuterIterations(int val);
-    /** \brief Use initial flow
-    /** @see setUseInitialFlow */
-    public native @Cast("bool") boolean getUseInitialFlow();
-    /** \copybrief getUseInitialFlow @see getUseInitialFlow */
-    public native void setUseInitialFlow(@Cast("bool") boolean val);
-    /** \brief Step between scales (<1)
-    /** @see setScaleStep */
-    public native double getScaleStep();
-    /** \copybrief getScaleStep @see getScaleStep */
-    public native void setScaleStep(double val);
-    /** \brief Median filter kernel size (1 = no filter) (3 or 5)
-    /** @see setMedianFiltering */
-    public native int getMedianFiltering();
-    /** \copybrief getMedianFiltering @see getMedianFiltering */
-    public native void setMedianFiltering(int val);
-
-    /** \brief Creates instance of cv::DualTVL1OpticalFlow*/
-    public static native @Ptr DualTVL1OpticalFlow create(
-                                                double tau/*=0.25*/,
-                                                double lambda/*=0.15*/,
-                                                double theta/*=0.3*/,
-                                                int nscales/*=5*/,
-                                                int warps/*=5*/,
-                                                double epsilon/*=0.01*/,
-                                                int innnerIterations/*=30*/,
-                                                int outerIterations/*=10*/,
-                                                double scaleStep/*=0.8*/,
-                                                double gamma/*=0.0*/,
-                                                int medianFiltering/*=5*/,
-                                                @Cast("bool") boolean useInitialFlow/*=false*/);
-    public static native @Ptr DualTVL1OpticalFlow create();
-}
-
-/** \brief Creates instance of cv::DenseOpticalFlow
-*/
-@Namespace("cv") public static native @Ptr DualTVL1OpticalFlow createOptFlow_DualTVL1();
 
 /** \brief Class computing a dense optical flow using the Gunnar Farneback's algorithm.
  */
@@ -1083,6 +736,172 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
     public static native @Ptr FarnebackOpticalFlow create();
 }
 
+/** \brief Variational optical flow refinement
+<p>
+This class implements variational refinement of the input flow field, i.e.
+it uses input flow to initialize the minimization of the following functional:
+\f$E(U) = \int_{\Omega} \delta \Psi(E_I) + \gamma \Psi(E_G) + \alpha \Psi(E_S) \f$,
+where \f$E_I,E_G,E_S\f$ are color constancy, gradient constancy and smoothness terms
+respectively. \f$\Psi(s^2)=\sqrt{s^2+\epsilon^2}\f$ is a robust penalizer to limit the
+influence of outliers. A complete formulation and a description of the minimization
+procedure can be found in \cite Brox2004
+*/
+@Namespace("cv") public static class VariationalRefinement extends DenseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public VariationalRefinement(Pointer p) { super(p); }
+
+    /** \brief \ref calc function overload to handle separate horizontal (u) and vertical (v) flow components
+    (to avoid extra splits/merges) */
+    public native void calcUV(@ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow_u, @ByVal Mat flow_v);
+    public native void calcUV(@ByVal UMat I0, @ByVal UMat I1, @ByVal UMat flow_u, @ByVal UMat flow_v);
+    public native void calcUV(@ByVal GpuMat I0, @ByVal GpuMat I1, @ByVal GpuMat flow_u, @ByVal GpuMat flow_v);
+
+    /** \brief Number of outer (fixed-point) iterations in the minimization procedure.
+    @see setFixedPointIterations */
+    public native int getFixedPointIterations();
+    /** \copybrief getFixedPointIterations @see getFixedPointIterations */
+    public native void setFixedPointIterations(int val);
+
+    /** \brief Number of inner successive over-relaxation (SOR) iterations
+        in the minimization procedure to solve the respective linear system.
+    @see setSorIterations */
+    public native int getSorIterations();
+    /** \copybrief getSorIterations @see getSorIterations */
+    public native void setSorIterations(int val);
+
+    /** \brief Relaxation factor in SOR
+    @see setOmega */
+    public native float getOmega();
+    /** \copybrief getOmega @see getOmega */
+    public native void setOmega(float val);
+
+    /** \brief Weight of the smoothness term
+    @see setAlpha */
+    public native float getAlpha();
+    /** \copybrief getAlpha @see getAlpha */
+    public native void setAlpha(float val);
+
+    /** \brief Weight of the color constancy term
+    @see setDelta */
+    public native float getDelta();
+    /** \copybrief getDelta @see getDelta */
+    public native void setDelta(float val);
+
+    /** \brief Weight of the gradient constancy term
+    @see setGamma */
+    public native float getGamma();
+    /** \copybrief getGamma @see getGamma */
+    public native void setGamma(float val);
+
+    /** \brief Creates an instance of VariationalRefinement
+    */
+    public static native @Ptr VariationalRefinement create();
+}
+
+/** \brief DIS optical flow algorithm.
+<p>
+This class implements the Dense Inverse Search (DIS) optical flow algorithm. More
+details about the algorithm can be found at \cite Kroeger2016 . Includes three presets with preselected
+parameters to provide reasonable trade-off between speed and quality. However, even the slowest preset is
+still relatively fast, use DeepFlow if you need better quality and don't care about speed.
+<p>
+This implementation includes several additional features compared to the algorithm described in the paper,
+including spatial propagation of flow vectors (\ref getUseSpatialPropagation), as well as an option to
+utilize an initial flow approximation passed to \ref calc (which is, essentially, temporal propagation,
+if the previous frame's flow field is passed).
+*/
+@Namespace("cv") public static class DISOpticalFlow extends DenseOpticalFlow {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DISOpticalFlow(Pointer p) { super(p); }
+
+    /** enum cv::DISOpticalFlow:: */
+    public static final int
+        PRESET_ULTRAFAST = 0,
+        PRESET_FAST = 1,
+        PRESET_MEDIUM = 2;
+
+    /** \brief Finest level of the Gaussian pyramid on which the flow is computed (zero level
+        corresponds to the original image resolution). The final flow is obtained by bilinear upscaling.
+        @see setFinestScale */
+    public native int getFinestScale();
+    /** \copybrief getFinestScale @see getFinestScale */
+    public native void setFinestScale(int val);
+
+    /** \brief Size of an image patch for matching (in pixels). Normally, default 8x8 patches work well
+        enough in most cases.
+        @see setPatchSize */
+    public native int getPatchSize();
+    /** \copybrief getPatchSize @see getPatchSize */
+    public native void setPatchSize(int val);
+
+    /** \brief Stride between neighbor patches. Must be less than patch size. Lower values correspond
+        to higher flow quality.
+        @see setPatchStride */
+    public native int getPatchStride();
+    /** \copybrief getPatchStride @see getPatchStride */
+    public native void setPatchStride(int val);
+
+    /** \brief Maximum number of gradient descent iterations in the patch inverse search stage. Higher values
+        may improve quality in some cases.
+        @see setGradientDescentIterations */
+    public native int getGradientDescentIterations();
+    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
+    public native void setGradientDescentIterations(int val);
+
+    /** \brief Number of fixed point iterations of variational refinement per scale. Set to zero to
+        disable variational refinement completely. Higher values will typically result in more smooth and
+        high-quality flow.
+    @see setGradientDescentIterations */
+    public native int getVariationalRefinementIterations();
+    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
+    public native void setVariationalRefinementIterations(int val);
+
+    /** \brief Weight of the smoothness term
+    @see setVariationalRefinementAlpha */
+    public native float getVariationalRefinementAlpha();
+    /** \copybrief getVariationalRefinementAlpha @see getVariationalRefinementAlpha */
+    public native void setVariationalRefinementAlpha(float val);
+
+    /** \brief Weight of the color constancy term
+    @see setVariationalRefinementDelta */
+    public native float getVariationalRefinementDelta();
+    /** \copybrief getVariationalRefinementDelta @see getVariationalRefinementDelta */
+    public native void setVariationalRefinementDelta(float val);
+
+    /** \brief Weight of the gradient constancy term
+    @see setVariationalRefinementGamma */
+    public native float getVariationalRefinementGamma();
+    /** \copybrief getVariationalRefinementGamma @see getVariationalRefinementGamma */
+    public native void setVariationalRefinementGamma(float val);
+
+
+    /** \brief Whether to use mean-normalization of patches when computing patch distance. It is turned on
+        by default as it typically provides a noticeable quality boost because of increased robustness to
+        illumination variations. Turn it off if you are certain that your sequence doesn't contain any changes
+        in illumination.
+    @see setUseMeanNormalization */
+    public native @Cast("bool") boolean getUseMeanNormalization();
+    /** \copybrief getUseMeanNormalization @see getUseMeanNormalization */
+    public native void setUseMeanNormalization(@Cast("bool") boolean val);
+
+    /** \brief Whether to use spatial propagation of good optical flow vectors. This option is turned on by
+        default, as it tends to work better on average and can sometimes help recover from major errors
+        introduced by the coarse-to-fine scheme employed by the DIS optical flow algorithm. Turning this
+        option off can make the output flow field a bit smoother, however.
+    @see setUseSpatialPropagation */
+    public native @Cast("bool") boolean getUseSpatialPropagation();
+    /** \copybrief getUseSpatialPropagation @see getUseSpatialPropagation */
+    public native void setUseSpatialPropagation(@Cast("bool") boolean val);
+
+    /** \brief Creates an instance of DISOpticalFlow
+    <p>
+    @param preset one of PRESET_ULTRAFAST, PRESET_FAST and PRESET_MEDIUM
+    */
+    public static native @Ptr DISOpticalFlow create(int preset/*=cv::DISOpticalFlow::PRESET_FAST*/);
+    public static native @Ptr DISOpticalFlow create();
+}
 
 /** \brief Class used for calculating a sparse optical flow.
 <p>

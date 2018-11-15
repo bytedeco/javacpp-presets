@@ -12,273 +12,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdetect {
     static { Loader.load(); }
 
-// Parsed from <opencv2/objdetect/objdetect_c.h>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef OPENCV_OBJDETECT_C_H
-// #define OPENCV_OBJDETECT_C_H
-
-// #include "opencv2/core/core_c.h"
-
-// #ifdef __cplusplus
-// #include <deque>
-// #include <vector>
-// #endif
-
-/** \addtogroup objdetect_c
-  \{
-  */
-
-/****************************************************************************************\
-*                         Haar-like Object Detection functions                           *
-\****************************************************************************************/
-
-public static final int CV_HAAR_MAGIC_VAL =    0x42500000;
-public static final String CV_TYPE_NAME_HAAR =    "opencv-haar-classifier";
-
-// #define CV_IS_HAAR_CLASSIFIER( haar )
-//     ((haar) != NULL &&
-//     (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
-
-public static final int CV_HAAR_FEATURE_MAX =  3;
-public static final int CV_HAAR_STAGE_MAX = 1000;
-
-public static class CvHaarFeature extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarFeature() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarFeature(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarFeature(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarFeature position(long position) {
-        return (CvHaarFeature)super.position(position);
-    }
-
-    public native int tilted(); public native CvHaarFeature tilted(int tilted);
-        @Name({"rect", ".r"}) public native @ByRef CvRect rect_r(int i); public native CvHaarFeature rect_r(int i, CvRect rect_r);
-        @Name({"rect", ".weight"}) public native float rect_weight(int i); public native CvHaarFeature rect_weight(int i, float rect_weight);
-}
-
-public static class CvHaarClassifier extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarClassifier(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarClassifier(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarClassifier position(long position) {
-        return (CvHaarClassifier)super.position(position);
-    }
-
-    public native int count(); public native CvHaarClassifier count(int count);
-    public native CvHaarFeature haar_feature(); public native CvHaarClassifier haar_feature(CvHaarFeature haar_feature);
-    public native FloatPointer threshold(); public native CvHaarClassifier threshold(FloatPointer threshold);
-    public native IntPointer left(); public native CvHaarClassifier left(IntPointer left);
-    public native IntPointer right(); public native CvHaarClassifier right(IntPointer right);
-    public native FloatPointer alpha(); public native CvHaarClassifier alpha(FloatPointer alpha);
-}
-
-public static class CvHaarStageClassifier extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarStageClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarStageClassifier(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarStageClassifier(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarStageClassifier position(long position) {
-        return (CvHaarStageClassifier)super.position(position);
-    }
-
-    public native int count(); public native CvHaarStageClassifier count(int count);
-    public native float threshold(); public native CvHaarStageClassifier threshold(float threshold);
-    public native CvHaarClassifier classifier(); public native CvHaarStageClassifier classifier(CvHaarClassifier classifier);
-
-    public native int next(); public native CvHaarStageClassifier next(int next);
-    public native int child(); public native CvHaarStageClassifier child(int child);
-    public native int parent(); public native CvHaarStageClassifier parent(int parent);
-}
-
-@Opaque public static class CvHidHaarClassifierCascade extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CvHidHaarClassifierCascade() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHidHaarClassifierCascade(Pointer p) { super(p); }
-}
-
-public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCascade {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarClassifierCascade() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarClassifierCascade(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarClassifierCascade(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarClassifierCascade position(long position) {
-        return (CvHaarClassifierCascade)super.position(position);
-    }
-
-    public native int flags(); public native CvHaarClassifierCascade flags(int flags);
-    public native int count(); public native CvHaarClassifierCascade count(int count);
-    public native @ByRef CvSize orig_window_size(); public native CvHaarClassifierCascade orig_window_size(CvSize orig_window_size);
-    public native @ByRef CvSize real_window_size(); public native CvHaarClassifierCascade real_window_size(CvSize real_window_size);
-    public native double scale(); public native CvHaarClassifierCascade scale(double scale);
-    public native CvHaarStageClassifier stage_classifier(); public native CvHaarClassifierCascade stage_classifier(CvHaarStageClassifier stage_classifier);
-    public native CvHidHaarClassifierCascade hid_cascade(); public native CvHaarClassifierCascade hid_cascade(CvHidHaarClassifierCascade hid_cascade);
-}
-
-public static class CvAvgComp extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvAvgComp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvAvgComp(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvAvgComp(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvAvgComp position(long position) {
-        return (CvAvgComp)super.position(position);
-    }
-
-    public native @ByRef CvRect rect(); public native CvAvgComp rect(CvRect rect);
-    public native int neighbors(); public native CvAvgComp neighbors(int neighbors);
-}
-
-/* Loads haar classifier cascade from a directory.
-   It is obsolete: convert your cascade to xml and use cvLoad instead */
-public static native CvHaarClassifierCascade cvLoadHaarClassifierCascade(
-                    @Cast("const char*") BytePointer directory, @ByVal CvSize orig_window_size);
-public static native CvHaarClassifierCascade cvLoadHaarClassifierCascade(
-                    String directory, @ByVal CvSize orig_window_size);
-
-public static native void cvReleaseHaarClassifierCascade( @Cast("CvHaarClassifierCascade**") PointerPointer cascade );
-public static native void cvReleaseHaarClassifierCascade( @ByPtrPtr CvHaarClassifierCascade cascade );
-
-public static final int CV_HAAR_DO_CANNY_PRUNING =    1;
-public static final int CV_HAAR_SCALE_IMAGE =         2;
-public static final int CV_HAAR_FIND_BIGGEST_OBJECT = 4;
-public static final int CV_HAAR_DO_ROUGH_SEARCH =     8;
-
-public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize max_size);
-public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage);
-
-/* sets images for haar classifier cascade */
-public static native void cvSetImagesForHaarClassifierCascade( CvHaarClassifierCascade cascade,
-                                                @Const CvArr sum, @Const CvArr sqsum,
-                                                @Const CvArr tilted_sum, double scale );
-
-/* runs the cascade on the specified window */
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal CvPoint pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal CvPoint pt);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") IntBuffer pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") IntBuffer pt);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") int[] pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") int[] pt);
-
-/** \} objdetect_c */
-
-// #ifdef __cplusplus
-
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector int[] rejectLevels, @StdVector double[] levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector int[] rejectLevels, @StdVector double[] levelWeightds );
-
-// #endif
-
-// #endif /* OPENCV_OBJDETECT_C_H */
-
-
 // Parsed from <opencv2/objdetect.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -389,6 +122,13 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
 \}
  */
 
+@Opaque public static class CvHaarClassifierCascade extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvHaarClassifierCascade() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvHaarClassifierCascade(Pointer p) { super(p); }
+}
+
 /** \addtogroup objdetect
  *  \{
 <p>
@@ -473,21 +213,6 @@ cluster, the average rectangle is computed and put into the output rectangle lis
                                             double detectThreshold/*=0.0*/, @ByVal(nullValue = "cv::Size(64, 128)") Size winDetSize);
 @Namespace("cv") public static native void groupRectangles_meanshift(@ByRef RectVector rectList, @StdVector double[] foundWeights,
                                             @StdVector double[] foundScales);
-
-@Name("cv::DefaultDeleter<CvHaarClassifierCascade>") public static class CvHaarClassifierCascadeDefaultDeleter extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarClassifierCascadeDefaultDeleter() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarClassifierCascadeDefaultDeleter(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarClassifierCascadeDefaultDeleter(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarClassifierCascadeDefaultDeleter position(long position) {
-        return (CvHaarClassifierCascadeDefaultDeleter)super.position(position);
-    }
- public native @Name("operator ()") void apply(CvHaarClassifierCascade obj); }
 
 /** enum cv:: */
 public static final int CASCADE_DO_CANNY_PRUNING    = 1,
@@ -1640,41 +1365,57 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public QRCodeDetector() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** \brief sets the epsilon used during the horizontal scan of QR code stop marker detection.
+     @param epsX Epsilon neighborhood, which allows you to determine the horizontal pattern
+     of the scheme 1:1:3:1:1 according to QR code standard.
+    */
     public native void setEpsX(double epsX);
+    /** \brief sets the epsilon used during the vertical scan of QR code stop marker detection.
+     @param epsY Epsilon neighborhood, which allows you to determine the vertical pattern
+     of the scheme 1:1:3:1:1 according to QR code standard.
+     */
     public native void setEpsY(double epsY);
 
-    public native @Cast("bool") boolean detect(@ByVal Mat in, @ByVal Mat points);
-    public native @Cast("bool") boolean detect(@ByVal UMat in, @ByVal UMat points);
-    public native @Cast("bool") boolean detect(@ByVal GpuMat in, @ByVal GpuMat points);
+    /** \brief Detects QR code in image and returns the quadrangle containing the code.
+     @param img grayscale or color (BGR) image containing (or not) QR code.
+     @param points Output vector of vertices of the minimum-area quadrangle containing the code.
+     */
+    public native @Cast("bool") boolean detect(@ByVal Mat img, @ByVal Mat points);
+    public native @Cast("bool") boolean detect(@ByVal UMat img, @ByVal UMat points);
+    public native @Cast("bool") boolean detect(@ByVal GpuMat img, @ByVal GpuMat points);
+
+    /** \brief Decodes QR code in image once it's found by the detect() method.
+     Returns UTF8-encoded output string or empty string if the code cannot be decoded.
+     <p>
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points Quadrangle vertices found by detect() method (or some other algorithm).
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @StdString BytePointer decode(@ByVal Mat img, @ByVal Mat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @StdString BytePointer decode(@ByVal Mat img, @ByVal Mat points);
+    public native @StdString String decode(@ByVal UMat img, @ByVal UMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @StdString String decode(@ByVal UMat img, @ByVal UMat points);
+    public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points);
+
+    /** \brief Both detects and decodes QR code
+     <p>
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points opiotnal output array of vertices of the found QR code quadrangle. Will be empty if not found.
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @StdString BytePointer detectAndDecode(@ByVal Mat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @StdString BytePointer detectAndDecode(@ByVal Mat img);
+    public native @StdString String detectAndDecode(@ByVal UMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @StdString String detectAndDecode(@ByVal UMat img);
+    public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img);
 }
 
-/** \brief Detect QR code in image and return minimum area of quadrangle that describes QR code.
-    @param in  Matrix of the type CV_8U containing an image where QR code are detected.
-    @param points Output vector of vertices of a quadrangle of minimal area that describes QR code.
-    @param eps_x Epsilon neighborhood, which allows you to determine the horizontal pattern of the scheme 1:1:3:1:1 according to QR code standard.
-    @param eps_y Epsilon neighborhood, which allows you to determine the vertical pattern of the scheme 1:1:3:1:1 according to QR code standard.
-    */
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points);
-
-/** \brief Decode QR code in image and return text that is encrypted in QR code.
-    @param in  Matrix of the type CV_8UC1 containing an image where QR code are detected.
-    @param points Input vector of vertices of a quadrangle of minimal area that describes QR code.
-    @param decoded_info String information that is encrypted in QR code.
-    @param straight_qrcode Matrix of the type CV_8UC1 containing an binary straight QR code.
-    */
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal Mat in, @ByVal Mat points, @StdString @ByRef BytePointer decoded_info, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal Mat in, @ByVal Mat points, @StdString @ByRef BytePointer decoded_info);
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal UMat in, @ByVal UMat points, @StdString @ByRef BytePointer decoded_info, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal UMat in, @ByVal UMat points, @StdString @ByRef BytePointer decoded_info);
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal GpuMat in, @ByVal GpuMat points, @StdString @ByRef BytePointer decoded_info, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
-@Namespace("cv") public static native @Cast("bool") boolean decodeQRCode(@ByVal GpuMat in, @ByVal GpuMat points, @StdString @ByRef BytePointer decoded_info);
 /** \} objdetect */
-
 
 
 // #include "opencv2/objdetect/detection_based_tracker.hpp"

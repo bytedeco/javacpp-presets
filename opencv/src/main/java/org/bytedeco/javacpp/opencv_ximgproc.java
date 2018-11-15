@@ -81,6 +81,7 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 // #include "ximgproc/brightedges.hpp"
 // #include "ximgproc/run_length_morphology.hpp"
 // #include "ximgproc/edgepreserving_filter.hpp"
+// #include "ximgproc/color_match.hpp"
 
 
 /** \defgroup ximgproc Extended Image Processing
@@ -681,9 +682,9 @@ For more details about this solver see \cite BarronPoole2016 .
 
     /** \brief Apply smoothing operation to the source image.
     <p>
-    @param src source image for filtering with unsigned 8-bit or signed 16-bit or floating-point 32-bit depth and up to 4 channels.
+    @param src source image for filtering with unsigned 8-bit or signed 16-bit or floating-point 32-bit depth and up to 3 channels.
     <p>
-    @param confidence confidence image with unsigned 8-bit or signed 16-bit or floating-point 32-bit confidence and 1 channel.
+    @param confidence confidence image with unsigned 8-bit or floating-point 32-bit confidence and 1 channel.
     <p>
     @param dst destination image.
     */
@@ -704,9 +705,10 @@ For more details about this solver see \cite BarronPoole2016 .
 <p>
 @param num_iter number of iterations used for solving, 25 is usually enough.
 <p>
-@param max_tol solving tolerance used for solving, 25 is usually enough.
+@param max_tol solving tolerance used for solving.
 <p>
 For more details about the Fast Bilateral Solver parameters, see the original paper \cite BarronPoole2016.
+<p>
 */
 @Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
@@ -723,7 +725,7 @@ guide then use FastBilateralSolverFilter interface to avoid extra computations.
 <p>
 @param src source image for filtering with unsigned 8-bit or signed 16-bit or floating-point 32-bit depth and up to 4 channels.
 <p>
-@param confidence confidence image with unsigned 8-bit or signed 16-bit or floating-point 32-bit confidence and 1 channel.
+@param confidence confidence image with unsigned 8-bit or floating-point 32-bit confidence and 1 channel.
 <p>
 @param dst destination image.
 <p>
@@ -735,7 +737,9 @@ guide then use FastBilateralSolverFilter interface to avoid extra computations.
 <p>
 @param num_iter number of iterations used for solving, 25 is usually enough.
 <p>
-@param max_tol solving tolerance used for solving, 25 is usually enough.
+@param max_tol solving tolerance used for solving.
+<p>
+\note Confidence images with CV_8U depth are expected to in [0, 255] and CV_32F in [0, 1] range.
 */
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst);
@@ -743,8 +747,7 @@ guide then use FastBilateralSolverFilter interface to avoid extra computations.
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst);
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
+
 
 /** \brief Interface for implementations of Fast Global Smoother filter.
 <p>

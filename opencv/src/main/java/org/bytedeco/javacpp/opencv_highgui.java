@@ -62,12 +62,6 @@ public class opencv_highgui extends org.bytedeco.javacpp.presets.opencv_highgui 
 
 // #include "opencv2/core/core_c.h"
 // #include "opencv2/imgproc/imgproc_c.h"
-// #ifdef HAVE_OPENCV_IMGCODECS
-// #include "opencv2/imgcodecs/imgcodecs_c.h"
-// #endif
-// #ifdef HAVE_OPENCV_VIDEOIO
-// #include "opencv2/videoio/videoio_c.h"
-// #endif
 
 // #ifdef __cplusplus
 // #endif /* __cplusplus */
@@ -1116,7 +1110,7 @@ displayed in the specified window winname.
 <p>
 \note
 <p>
-[__Qt Backend Only__] winname can be empty (or NULL) if the trackbar should be attached to the
+[__Qt Backend Only__] winname can be empty if the trackbar should be attached to the
 control panel.
 <p>
 Clicking the label of each trackbar enables editing the trackbar values manually.
@@ -1176,7 +1170,7 @@ The function returns the current position of the specified trackbar.
 <p>
 \note
 <p>
-[__Qt Backend Only__] winname can be empty (or NULL) if the trackbar is attached to the control
+[__Qt Backend Only__] winname can be empty if the trackbar is attached to the control
 panel.
 <p>
 @param trackbarname Name of the trackbar.
@@ -1191,7 +1185,7 @@ The function sets the position of the specified trackbar in the specified window
 <p>
 \note
 <p>
-[__Qt Backend Only__] winname can be empty (or NULL) if the trackbar is attached to the control
+[__Qt Backend Only__] winname can be empty if the trackbar is attached to the control
 panel.
 <p>
 @param trackbarname Name of the trackbar.
@@ -1207,7 +1201,7 @@ The function sets the maximum position of the specified trackbar in the specifie
 <p>
 \note
 <p>
-[__Qt Backend Only__] winname can be empty (or NULL) if the trackbar is attached to the control
+[__Qt Backend Only__] winname can be empty if the trackbar is attached to the control
 panel.
 <p>
 @param trackbarname Name of the trackbar.
@@ -1223,7 +1217,7 @@ The function sets the minimum position of the specified trackbar in the specifie
 <p>
 \note
 <p>
-[__Qt Backend Only__] winname can be empty (or NULL) if the trackbar is attached to the control
+[__Qt Backend Only__] winname can be empty if the trackbar is attached to the control
 panel.
 <p>
 @param trackbarname Name of the trackbar.
@@ -1479,7 +1473,7 @@ QT_NEW_BUTTONBAR flag is added to the type.
 <p>
 See below various examples of the cv::createButton function call: :
 <pre>{@code
-    createButton(NULL,callbackButton);//create a push button "button 0", that will call callbackButton.
+    createButton("",callbackButton);//create a push button "button 0", that will call callbackButton.
     createButton("button2",callbackButton,NULL,QT_CHECKBOX,0);
     createButton("button3",callbackButton,&value);
     createButton("button5",callbackButton1,NULL,QT_RADIOBOX);

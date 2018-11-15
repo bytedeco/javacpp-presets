@@ -265,7 +265,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                              "cv::SparseMatIterator_", "cv::SparseMatConstIterator_", "cv::SparseMatConstIterator::operator --",
                              "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser",
                              "cv::cvStartWriteRawData_Base64", "cv::cvWriteRawData_Base64", "cv::cvEndWriteRawData_Base64",
-                             "cv::cvWriteMat_Base64", "cv::cvWriteMatND_Base64").skip())
+                             "cv::cvWriteMat_Base64", "cv::cvWriteMatND_Base64", "cv::FileStorage::Impl").skip())
                .put(new Info("cv::AutoBuffer<double>").cast().pointerTypes("Pointer"))
 
                .put(new Info("cv::Mat").base("AbstractMat"))

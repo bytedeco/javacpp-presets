@@ -1323,7 +1323,8 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE = 1,
         DNN_BACKEND_INFERENCE_ENGINE = 2,
-        DNN_BACKEND_OPENCV = 3;
+        DNN_BACKEND_OPENCV = 3,
+        DNN_BACKEND_VKCOM = 4;
 
     /**
      * \brief Enum of target devices for computations.
@@ -1334,7 +1335,8 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
         DNN_TARGET_CPU = 0,
         DNN_TARGET_OPENCL = 1,
         DNN_TARGET_OPENCL_FP16 = 2,
-        DNN_TARGET_MYRIAD = 3;
+        DNN_TARGET_MYRIAD = 3,
+        DNN_TARGET_VULKAN = 4;
 
     /** \brief This class provides all data needed to initialize layer.
      *
@@ -1539,7 +1541,6 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
          * it helps prevent some memory management issues (if something wrong,
          * Halide tests will be failed).
          */
-
        /**
         * \brief Automatic Halide scheduling based on layer hyper-parameters.
         * @param [in] node Backend node with Halide functions.

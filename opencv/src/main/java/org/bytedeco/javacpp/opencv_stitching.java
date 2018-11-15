@@ -981,9 +981,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 // #include "opencv2/opencv_modules.hpp"
 
-// #ifdef HAVE_OPENCV_XFEATURES2D
-// #endif
-
 /** \addtogroup stitching_match
  *  \{
 <p>
@@ -1008,148 +1005,61 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByRef UMat descriptors(); public native ImageFeatures descriptors(UMat descriptors);
 }
 
-/** \brief Feature finders base class */
-@Namespace("cv::detail") public static class FeaturesFinder extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FeaturesFinder(Pointer p) { super(p); }
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal MatVector images,
+    @StdVector ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal MatVector images,
+    @StdVector ImageFeatures features);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal UMatVector images,
+    @StdVector ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal UMatVector images,
+    @StdVector ImageFeatures features);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal GpuMatVector images,
+    @StdVector ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal GpuMatVector images,
+    @StdVector ImageFeatures features);
 
-    /** \overload */
-    public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features);
-    public native @Name("operator ()") void apply(@ByVal UMat image, @ByRef ImageFeatures features);
-    public native @Name("operator ()") void apply(@ByVal GpuMat image, @ByRef ImageFeatures features);
-    /** \brief Finds features in the given image.
-    <p>
-    @param image Source image
-    @param features Found features
-    @param rois Regions of interest
-    <p>
-    \sa detail::ImageFeatures, Rect_
-    */
-    public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
-    public native @Name("operator ()") void apply(@ByVal UMat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
-    public native @Name("operator ()") void apply(@ByVal GpuMat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
-    /** \brief Finds features in the given images in parallel.
-    <p>
-    @param images Source images
-    @param features Found features for each image
-    @param rois Regions of interest for each image
-    <p>
-    \sa detail::ImageFeatures, Rect_
-    */
-    public native @Name("operator ()") void apply(@ByVal MatVector images, @StdVector ImageFeatures features,
-                         @Const @ByRef RectVectorVector rois);
-    public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features,
-                         @Const @ByRef RectVectorVector rois);
-    public native @Name("operator ()") void apply(@ByVal GpuMatVector images, @StdVector ImageFeatures features,
-                         @Const @ByRef RectVectorVector rois);
-    /** \overload */
-    public native @Name("operator ()") void apply(@ByVal MatVector images, @StdVector ImageFeatures features);
-    public native @Name("operator ()") void apply(@ByVal UMatVector images, @StdVector ImageFeatures features);
-    public native @Name("operator ()") void apply(@ByVal GpuMatVector images, @StdVector ImageFeatures features);
-    /** \brief Frees unused memory allocated before if there is any. */
-    public native void collectGarbage();
-}
-
-/** \brief SURF features finder.
-<p>
-\sa detail::FeaturesFinder, SURF
-*/
-@Namespace("cv::detail") @NoOffset public static class SurfFeaturesFinder extends FeaturesFinder {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public SurfFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SurfFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SurfFeaturesFinder position(long position) {
-        return (SurfFeaturesFinder)super.position(position);
-    }
-
-    public SurfFeaturesFinder(double hess_thresh/*=300.*/, int num_octaves/*=3*/, int num_layers/*=4*/,
-                           int num_octaves_descr/*=3*/, int num_layers_descr/*=4*/) { super((Pointer)null); allocate(hess_thresh, num_octaves, num_layers, num_octaves_descr, num_layers_descr); }
-    private native void allocate(double hess_thresh/*=300.*/, int num_octaves/*=3*/, int num_layers/*=4*/,
-                           int num_octaves_descr/*=3*/, int num_layers_descr/*=4*/);
-    public SurfFeaturesFinder() { super((Pointer)null); allocate(); }
-    private native void allocate();
-}
-
-
-/** \brief SIFT features finder.
-<p>
-\sa detail::FeaturesFinder, SIFT
-*/
-@Namespace("cv::detail") @NoOffset public static class SiftFeaturesFinder extends FeaturesFinder {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public SiftFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public SiftFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public SiftFeaturesFinder position(long position) {
-        return (SiftFeaturesFinder)super.position(position);
-    }
-
-    public SiftFeaturesFinder() { super((Pointer)null); allocate(); }
-    private native void allocate();
-}
-
-/** \brief ORB features finder. :
-<p>
-\sa detail::FeaturesFinder, ORB
-*/
-@Namespace("cv::detail") @NoOffset public static class OrbFeaturesFinder extends FeaturesFinder {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OrbFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public OrbFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public OrbFeaturesFinder position(long position) {
-        return (OrbFeaturesFinder)super.position(position);
-    }
-
-    public OrbFeaturesFinder(@ByVal(nullValue = "cv::Size(3,1)") Size _grid_size, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/) { super((Pointer)null); allocate(_grid_size, nfeatures, scaleFactor, nlevels); }
-    private native void allocate(@ByVal(nullValue = "cv::Size(3,1)") Size _grid_size, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/);
-    public OrbFeaturesFinder() { super((Pointer)null); allocate(); }
-    private native void allocate();
-}
-
-/** \brief AKAZE features finder. :
-<p>
-\sa detail::FeaturesFinder, AKAZE
-*/
-@Namespace("cv::detail") @NoOffset public static class AKAZEFeaturesFinder extends FeaturesFinder {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AKAZEFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AKAZEFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public AKAZEFeaturesFinder position(long position) {
-        return (AKAZEFeaturesFinder)super.position(position);
-    }
-
-    public AKAZEFeaturesFinder(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
-                            int descriptor_size/*=0*/,
-                            int descriptor_channels/*=3*/,
-                            float threshold/*=0.001f*/,
-                            int nOctaves/*=4*/,
-                            int nOctaveLayers/*=4*/,
-                            @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/) { super((Pointer)null); allocate(descriptor_type, descriptor_size, descriptor_channels, threshold, nOctaves, nOctaveLayers, diffusivity); }
-    private native void allocate(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
-                            int descriptor_size/*=0*/,
-                            int descriptor_channels/*=3*/,
-                            float threshold/*=0.001f*/,
-                            int nOctaves/*=4*/,
-                            int nOctaveLayers/*=4*/,
-                            @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
-    public AKAZEFeaturesFinder() { super((Pointer)null); allocate(); }
-    private native void allocate();
-}
-
-// #ifdef HAVE_OPENCV_XFEATURES2D
-// #endif
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal Mat image,
+    @ByRef ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal Mat image,
+    @ByRef ImageFeatures features);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal UMat image,
+    @ByRef ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal UMat image,
+    @ByRef ImageFeatures features);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal GpuMat image,
+    @ByRef ImageFeatures features,
+    @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
+@Namespace("cv::detail") public static native void computeImageFeatures(
+    @Ptr Feature2D featuresFinder,
+    @ByVal GpuMat image,
+    @ByRef ImageFeatures features);
 
 /** \brief Structure containing information about matches between two images.
 <p>
@@ -3044,6 +2954,10 @@ Homography model, as they work with different transformations.
 A basic example on image stitching
 */
 
+/** \example samples/python/stitching.py
+A basic example on image stitching in Python.
+*/
+
 /** \example samples/cpp/stitching_detailed.cpp
 A detailed example on image stitching
 */
@@ -3055,10 +2969,12 @@ be able to achieve higher stitching stability and quality of the final images at
 familiar with the theory is recommended.
 <p>
 \note
-   -   A basic example on image stitching can be found at
-        opencv_source_code/samples/cpp/stitching.cpp
-    -   A detailed example on image stitching can be found at
-        opencv_source_code/samples/cpp/stitching_detailed.cpp
+-   A basic example on image stitching can be found at
+    opencv_source_code/samples/cpp/stitching.cpp
+-   A basic example on image stitching in Python can be found at
+    opencv_source_code/samples/python/stitching.py
+-   A detailed example on image stitching can be found at
+    opencv_source_code/samples/cpp/stitching_detailed.cpp
  */
 @Namespace("cv") public static class Stitcher extends Pointer {
     static { Loader.load(); }
@@ -3074,14 +2990,20 @@ familiar with the theory is recommended.
         return (Stitcher)super.position(position);
     }
 
-    /** enum cv::Stitcher:: */
-    public static final int ORIG_RESOL = -1;
+    /**
+     * When setting a resolution for stitching, this values is a placeholder
+     * for preserving the original resolution.
+     */
+    @MemberGetter public static native double ORIG_RESOL();
+    public static final double ORIG_RESOL = ORIG_RESOL();
+
     /** enum cv::Stitcher::Status */
     public static final int
         OK = 0,
         ERR_NEED_MORE_IMGS = 1,
         ERR_HOMOGRAPHY_EST_FAIL = 2,
         ERR_CAMERA_PARAMS_ADJUST_FAIL = 3;
+
     /** enum cv::Stitcher::Mode */
     public static final int
         /** Mode for creating photo panoramas. Expects images under perspective
@@ -3097,23 +3019,14 @@ familiar with the theory is recommended.
         */
         SCANS = 1;
 
-   // Stitcher() {}
-    /** \brief Creates a stitcher with the default parameters.
-    <p>
-    @param try_use_gpu Flag indicating whether GPU should be used whenever it's possible.
-    @return Stitcher class instance.
-     */
-    public static native @ByVal Stitcher createDefault(@Cast("bool") boolean try_use_gpu/*=false*/);
-    public static native @ByVal Stitcher createDefault();
     /** \brief Creates a Stitcher configured in one of the stitching modes.
     <p>
     @param mode Scenario for stitcher operation. This is usually determined by source of images
     to stitch and their transformation. Default parameters will be chosen for operation in given
     scenario.
-    @param try_use_gpu Flag indicating whether GPU should be used whenever it's possible.
     @return Stitcher class instance.
      */
-    public static native @Ptr Stitcher create(@Cast("cv::Stitcher::Mode") int mode/*=cv::Stitcher::PANORAMA*/, @Cast("bool") boolean try_use_gpu/*=false*/);
+    public static native @Ptr Stitcher create(@Cast("cv::Stitcher::Mode") int mode/*=cv::Stitcher::PANORAMA*/);
     public static native @Ptr Stitcher create();
 
     public native double registrationResol();
@@ -3134,8 +3047,8 @@ familiar with the theory is recommended.
     public native @Cast("cv::detail::WaveCorrectKind") int waveCorrectKind();
     public native void setWaveCorrectKind(@Cast("cv::detail::WaveCorrectKind") int kind);
 
-    public native @Ptr FeaturesFinder featuresFinder();
-    public native void setFeaturesFinder(@Ptr FeaturesFinder features_finder);
+    public native @Ptr Feature2D featuresFinder();
+    public native void setFeaturesFinder(@Ptr Feature2D features_finder);
 
     public native @Ptr FeaturesMatcher featuresMatcher();
     public native void setFeaturesMatcher(@Ptr FeaturesMatcher features_matcher);
@@ -3146,12 +3059,8 @@ familiar with the theory is recommended.
     public native @Ptr BundleAdjusterBase bundleAdjuster();
     public native void setBundleAdjuster(@Ptr BundleAdjusterBase bundle_adjuster);
 
-    /* TODO OpenCV ABI 4.x
-    Ptr<detail::Estimator> estimator() { return estimator_; }
-    const Ptr<detail::Estimator> estimator() const { return estimator_; }
-    void setEstimator(Ptr<detail::Estimator> estimator)
-        { estimator_ = estimator; }
-    */
+    public native @Ptr Estimator estimator();
+    public native void setEstimator(@Ptr Estimator estimator);
 
     public native @Ptr WarperCreator warper();
     public native void setWarper(@Ptr WarperCreator creator);
@@ -3165,22 +3074,21 @@ familiar with the theory is recommended.
     public native @Ptr Blender blender();
     public native void setBlender(@Ptr Blender b);
 
-    /** \overload */
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images);
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images);
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images);
     /** \brief These functions try to match the given images and to estimate rotations of each camera.
     <p>
     \note Use the functions only if you're aware of the stitching pipeline, otherwise use
     Stitcher::stitch.
     <p>
     @param images Input images.
-    @param rois Region of interest rectangles.
+    @param masks Masks for each input image specifying where to look for keypoints (optional).
     @return Status code.
      */
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images, @Const @ByRef RectVectorVector rois);
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois);
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images, @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") MatVector masks);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images, @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") UMatVector masks);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal UMatVector images);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images, @ByVal(nullValue = "cv::InputArrayOfArrays(cv::noArray())") GpuMatVector masks);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal GpuMatVector images);
 
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat pano);
@@ -3220,27 +3128,34 @@ familiar with the theory is recommended.
     /** \brief These functions try to stitch the given images.
     <p>
     @param images Input images.
-    @param rois Region of interest rectangles.
+    @param masks Masks for each input image specifying where to look for keypoints (optional).
     @param pano Final pano.
     @return Status code.
      */
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal UMat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @Const @ByRef RectVectorVector rois, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal MatVector masks, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal UMatVector masks, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMatVector masks, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal MatVector masks, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal UMatVector masks, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMatVector masks, @ByVal UMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal MatVector masks, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal UMatVector images, @ByVal UMatVector masks, @ByVal GpuMat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal GpuMatVector images, @ByVal GpuMatVector masks, @ByVal GpuMat pano);
 
     public native @StdVector IntPointer component();
     public native @StdVector CameraParams cameras();
     public native double workScale();
 }
 
+/**
+ * @deprecated use Stitcher::create
+ */
 @Namespace("cv") public static native @Ptr Stitcher createStitcher(@Cast("bool") boolean try_use_gpu/*=false*/);
 @Namespace("cv") public static native @Ptr Stitcher createStitcher();
+
+/**
+ * @deprecated use Stitcher::create
+ */
 @Namespace("cv") public static native @Ptr Stitcher createStitcherScans(@Cast("bool") boolean try_use_gpu/*=false*/);
 @Namespace("cv") public static native @Ptr Stitcher createStitcherScans();
 

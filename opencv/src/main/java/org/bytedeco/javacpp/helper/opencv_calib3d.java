@@ -27,69 +27,69 @@ import org.bytedeco.javacpp.Pointer;
 // required by javac to resolve circular dependencies
 import org.bytedeco.javacpp.opencv_calib3d.*;
 import org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_calib3d.cvCreatePOSITObject;
-import static org.bytedeco.javacpp.opencv_calib3d.cvCreateStereoBMState;
-import static org.bytedeco.javacpp.opencv_calib3d.cvReleasePOSITObject;
-import static org.bytedeco.javacpp.opencv_calib3d.cvReleaseStereoBMState;
+//import static org.bytedeco.javacpp.opencv_calib3d.cvCreatePOSITObject;
+//import static org.bytedeco.javacpp.opencv_calib3d.cvCreateStereoBMState;
+//import static org.bytedeco.javacpp.opencv_calib3d.cvReleasePOSITObject;
+//import static org.bytedeco.javacpp.opencv_calib3d.cvReleaseStereoBMState;
 
 public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d {
 
-    public static abstract class AbstractCvPOSITObject extends Pointer {
-        public AbstractCvPOSITObject(Pointer p) { super(p); }
-
-        /**
-         * Calls cvCreatePOSITObject(), and registers a deallocator.
-         * @return CvPOSITObject created. Do not call cvReleasePOSITObject() on it.
-         */
-        public static CvPOSITObject create(CvPoint3D32f points, int point_count) {
-            CvPOSITObject p = cvCreatePOSITObject(points, point_count);
-            if (p != null) {
-                p.deallocator(new ReleaseDeallocator(p));
-            }
-            return p;
-        }
-
-        /**
-         * Calls the deallocator, if registered, otherwise has no effect.
-         */
-        public void release() {
-            deallocate();
-        }
-        static class ReleaseDeallocator extends CvPOSITObject implements Deallocator {
-            ReleaseDeallocator(CvPOSITObject p) { super(p); }
-            @Override public void deallocate() { cvReleasePOSITObject(this); }
-        }
-    }
-
-    public static abstract class AbstractCvStereoBMState extends Pointer {
-        public AbstractCvStereoBMState(Pointer p) { super(p); }
-
-        @Override public CvStereoBMState position(long position) {
-            return (CvStereoBMState)super.position(position);
-        }
-
-        /**
-         * Calls cvCreateStereoBMState(), and registers a deallocator.
-         * @return CvStereoBMState created. Do not call cvReleaseStereoBMState() on it.
-         */
-        public static CvStereoBMState create(int preset, int numberOfDisparities) {
-            CvStereoBMState p = cvCreateStereoBMState(preset, numberOfDisparities);
-            if (p != null) {
-                p.deallocator(new ReleaseDeallocator(p));
-            }
-            return p;
-        }
-
-        /**
-         * Calls the deallocator, if registered, otherwise has no effect.
-         */
-        public void release() {
-            deallocate();
-        }
-        static class ReleaseDeallocator extends CvStereoBMState implements Deallocator {
-            ReleaseDeallocator(CvStereoBMState p) { super(p); }
-            @Override public void deallocate() { cvReleaseStereoBMState(this); }
-        }
-    }
+//    public static abstract class AbstractCvPOSITObject extends Pointer {
+//        public AbstractCvPOSITObject(Pointer p) { super(p); }
+//
+//        /**
+//         * Calls cvCreatePOSITObject(), and registers a deallocator.
+//         * @return CvPOSITObject created. Do not call cvReleasePOSITObject() on it.
+//         */
+//        public static CvPOSITObject create(CvPoint3D32f points, int point_count) {
+//            CvPOSITObject p = cvCreatePOSITObject(points, point_count);
+//            if (p != null) {
+//                p.deallocator(new ReleaseDeallocator(p));
+//            }
+//            return p;
+//        }
+//
+//        /**
+//         * Calls the deallocator, if registered, otherwise has no effect.
+//         */
+//        public void release() {
+//            deallocate();
+//        }
+//        static class ReleaseDeallocator extends CvPOSITObject implements Deallocator {
+//            ReleaseDeallocator(CvPOSITObject p) { super(p); }
+//            @Override public void deallocate() { cvReleasePOSITObject(this); }
+//        }
+//    }
+//
+//    public static abstract class AbstractCvStereoBMState extends Pointer {
+//        public AbstractCvStereoBMState(Pointer p) { super(p); }
+//
+//        @Override public CvStereoBMState position(long position) {
+//            return (CvStereoBMState)super.position(position);
+//        }
+//
+//        /**
+//         * Calls cvCreateStereoBMState(), and registers a deallocator.
+//         * @return CvStereoBMState created. Do not call cvReleaseStereoBMState() on it.
+//         */
+//        public static CvStereoBMState create(int preset, int numberOfDisparities) {
+//            CvStereoBMState p = cvCreateStereoBMState(preset, numberOfDisparities);
+//            if (p != null) {
+//                p.deallocator(new ReleaseDeallocator(p));
+//            }
+//            return p;
+//        }
+//
+//        /**
+//         * Calls the deallocator, if registered, otherwise has no effect.
+//         */
+//        public void release() {
+//            deallocate();
+//        }
+//        static class ReleaseDeallocator extends CvStereoBMState implements Deallocator {
+//            ReleaseDeallocator(CvStereoBMState p) { super(p); }
+//            @Override public void deallocate() { cvReleaseStereoBMState(this); }
+//        }
+//    }
 
 }

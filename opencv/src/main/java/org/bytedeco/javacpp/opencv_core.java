@@ -2187,6 +2187,52 @@ public static final int CV_HAL_GEMM_3_T = 4;
 // #define __CV_VA_NUM_ARGS_HELPER(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, N, ...) N
 // #define __CV_VA_NUM_ARGS(...) __CV_EXPAND(__CV_VA_NUM_ARGS_HELPER(__VA_ARGS__, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0))
 
+// #if defined __GNUC__
+// #elif defined _MSC_VER
+// #define CV_Func __FUNCTION__
+// #else
+// #define CV_Func ""
+// #endif
+
+/** \cond IGNORED
+<p>
+//////////////// static assert ///////////////// */
+// #define CVAUX_CONCAT_EXP(a, b) a##b
+// #define CVAUX_CONCAT(a, b) CVAUX_CONCAT_EXP(a,b)
+
+// #if defined(__clang__)
+// #elif defined(__GNUC__)
+// #elif defined(_MSC_VER)
+// #endif
+// #ifndef CV_StaticAssert
+// #endif
+
+// Suppress warning "-Wdeprecated-declarations" / C4996
+// #if defined(_MSC_VER)
+// #elif defined(__GNUC__)
+// #else
+//     #define CV_DO_PRAGMA(x)
+// #endif
+
+// #ifdef _MSC_VER
+// #define CV_SUPPRESS_DEPRECATED_START
+//     CV_DO_PRAGMA(warning(push))
+//     CV_DO_PRAGMA(warning(disable: 4996))
+// #define CV_SUPPRESS_DEPRECATED_END CV_DO_PRAGMA(warning(pop))
+// #elif defined (__clang__) || ((__GNUC__)  && (__GNUC__*100 + __GNUC_MINOR__ > 405))
+// #define CV_SUPPRESS_DEPRECATED_START
+//     CV_DO_PRAGMA(GCC diagnostic push)
+//     CV_DO_PRAGMA(GCC diagnostic ignored "-Wdeprecated-declarations")
+// #define CV_SUPPRESS_DEPRECATED_END CV_DO_PRAGMA(GCC diagnostic pop)
+// #else
+// #define CV_SUPPRESS_DEPRECATED_START
+// #define CV_SUPPRESS_DEPRECATED_END
+// #endif
+
+// #define CV_UNUSED(name) (void)name
+
+/** \endcond */
+
 // undef problematic defines sometimes defined by system headers (windows.h in particular)
 // #undef small
 // #undef min
@@ -2467,7 +2513,7 @@ as well as exposing the C++11 enum class members for backwards compatibility
 <p>
 <pre>{@code
     // Provides operators required for flag enums
-    CV_ENUM_FLAGS(AccessFlag);
+    CV_ENUM_FLAGS(AccessFlag)
 
     // Exposes the listed members of the enum class AccessFlag to the current namespace
     CV_ENUM_CLASS_EXPOSE(AccessFlag, ACCESS_READ [, ACCESS_WRITE [, ...] ]);
@@ -2581,18 +2627,18 @@ as well as exposing the C++11 enum class members for backwards compatibility
 // __CV_EXPAND(__CV_CAT(__CV_ENUM_CLASS_EXPOSE_, __CV_VA_NUM_ARGS(__VA_ARGS__))(EnumType, __VA_ARGS__)); 
 
 // #define CV_ENUM_FLAGS(EnumType)
-// __CV_ENUM_FLAGS_LOGICAL_NOT      (EnumType);
-// __CV_ENUM_FLAGS_LOGICAL_EQ       (EnumType, int);
-// __CV_ENUM_FLAGS_LOGICAL_NOT_EQ   (EnumType, int);
+// __CV_ENUM_FLAGS_LOGICAL_NOT      (EnumType)
+// __CV_ENUM_FLAGS_LOGICAL_EQ       (EnumType, int)
+// __CV_ENUM_FLAGS_LOGICAL_NOT_EQ   (EnumType, int)
 // 
-// __CV_ENUM_FLAGS_BITWISE_NOT      (EnumType);
-// __CV_ENUM_FLAGS_BITWISE_OR       (EnumType, EnumType, EnumType);
-// __CV_ENUM_FLAGS_BITWISE_AND      (EnumType, EnumType, EnumType);
-// __CV_ENUM_FLAGS_BITWISE_XOR      (EnumType, EnumType, EnumType);
+// __CV_ENUM_FLAGS_BITWISE_NOT      (EnumType)
+// __CV_ENUM_FLAGS_BITWISE_OR       (EnumType, EnumType, EnumType)
+// __CV_ENUM_FLAGS_BITWISE_AND      (EnumType, EnumType, EnumType)
+// __CV_ENUM_FLAGS_BITWISE_XOR      (EnumType, EnumType, EnumType)
 // 
-// __CV_ENUM_FLAGS_BITWISE_OR_EQ    (EnumType, EnumType);
-// __CV_ENUM_FLAGS_BITWISE_AND_EQ   (EnumType, EnumType);
-// __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType);                                                
+// __CV_ENUM_FLAGS_BITWISE_OR_EQ    (EnumType, EnumType)
+// __CV_ENUM_FLAGS_BITWISE_AND_EQ   (EnumType, EnumType)
+// __CV_ENUM_FLAGS_BITWISE_XOR_EQ   (EnumType, EnumType)                                                 
 
 /****************************************************************************************\
 *                                    static analysys                                     *
@@ -3665,7 +3711,7 @@ public static native int cvIsInf( float value );
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    0;
 public static final int CV_VERSION_REVISION = 0;
-public static final String CV_VERSION_STATUS =   "-beta";
+public static final String CV_VERSION_STATUS =   "-rc";
 
 // #define CVAUX_STR_EXP(__A)  #__A
 // #define CVAUX_STR(__A)      CVAUX_STR_EXP(__A)
@@ -4038,59 +4084,6 @@ public static final int
  <p>
  *  \addtogroup core_utils
  *  \{
- <p>
- *  \cond IGNORED
-<p>
-//////////////// static assert ///////////////// */
-// #define CVAUX_CONCAT_EXP(a, b) a##b
-// #define CVAUX_CONCAT(a, b) CVAUX_CONCAT_EXP(a,b)
-
-// #if defined(__clang__)
-// #elif defined(__GNUC__)
-// #elif defined(_MSC_VER)
-// #endif
-// #ifndef CV_StaticAssert
-// #endif
-
-// Suppress warning "-Wdeprecated-declarations" / C4996
-// #if defined(_MSC_VER)
-// #elif defined(__GNUC__)
-// #else
-//     #define CV_DO_PRAGMA(x)
-// #endif
-
-// #ifdef _MSC_VER
-// #define CV_SUPPRESS_DEPRECATED_START
-//     CV_DO_PRAGMA(warning(push))
-//     CV_DO_PRAGMA(warning(disable: 4996))
-// #define CV_SUPPRESS_DEPRECATED_END CV_DO_PRAGMA(warning(pop))
-// #elif defined (__clang__) || ((__GNUC__)  && (__GNUC__*100 + __GNUC_MINOR__ > 405))
-// #define CV_SUPPRESS_DEPRECATED_START
-//     CV_DO_PRAGMA(GCC diagnostic push)
-//     CV_DO_PRAGMA(GCC diagnostic ignored "-Wdeprecated-declarations")
-// #define CV_SUPPRESS_DEPRECATED_END CV_DO_PRAGMA(GCC diagnostic pop)
-// #else
-// #define CV_SUPPRESS_DEPRECATED_START
-// #define CV_SUPPRESS_DEPRECATED_END
-// #endif
-
-// #define CV_UNUSED(name) (void)name
-
-// #if defined __GNUC__ && !defined __EXCEPTIONS
-// #define CV_TRY
-// #define CV_CATCH(A, B) for (A B; false; )
-// #define CV_CATCH_ALL if (false)
-// #define CV_THROW(A) abort()
-// #define CV_RETHROW() abort()
-// #else
-// #define CV_TRY try
-// #define CV_CATCH(A, B) catch(const A & B)
-// #define CV_CATCH_ALL catch(...)
-// #define CV_THROW(A) throw A
-// #define CV_RETHROW() throw
-// #endif
-
-/** \endcond
 <p>
 /** \brief Signals an error and raises the exception.
 <p>
@@ -4107,13 +4100,6 @@ It is possible to alternate error processing by using redirectError().
 /* nothing by default */ @Namespace("cv") public static native void error(int _code, @Str BytePointer _err, @Cast("const char*") BytePointer _func, @Cast("const char*") BytePointer _file, int _line);
 @Namespace("cv") public static native void error(int _code, @Str String _err, String _func, String _file, int _line);
 
-// #if defined __GNUC__
-// #elif defined _MSC_VER
-// #define CV_Func __FUNCTION__
-// #else
-// #define CV_Func ""
-// #endif
-
 // #ifdef CV_STATIC_ANALYSIS
 
 // In practice, some macro are not processed correctly (noreturn is not detected).
@@ -4121,8 +4107,6 @@ It is possible to alternate error processing by using redirectError().
 // #define CV_Error(...) do { abort(); } while (0)
 // #define CV_Error_( code, args ) do { cv::format args; abort(); } while (0)
 // #define CV_Assert( expr ) do { if (!(expr)) abort(); } while (0)
-// #define CV_ErrorNoReturn CV_Error
-// #define CV_ErrorNoReturn_ CV_Error_
 
 // #else // CV_STATIC_ANALYSIS
 
@@ -4266,9 +4250,13 @@ It is possible to alternate error processing by using redirectError().
 @Namespace("cv::ipp") public static native @Str BytePointer getIppVersion();
 
 // IPP Not-Exact mode. This function may force use of IPP then both IPP and OpenCV provide proper results
-// but have internal accuracy differences which have to much direct or indirect impact on accuracy tests.
+// but have internal accuracy differences which have too much direct or indirect impact on accuracy tests.
+@Namespace("cv::ipp") public static native @Cast("bool") boolean useIPP_NotExact();
+@Namespace("cv::ipp") public static native void setUseIPP_NotExact(@Cast("bool") boolean flag);
+// #ifndef DISABLE_OPENCV_3_COMPATIBILITY
 @Namespace("cv::ipp") public static native @Cast("bool") boolean useIPP_NE();
 @Namespace("cv::ipp") public static native void setUseIPP_NE(@Cast("bool") boolean flag);
+// #endif
 
  // ipp
 
@@ -4830,9 +4818,19 @@ Use this function instead of {@code ceil((float)a / b)} expressions.
 /** \overload */
 @Namespace("cv") public static native @Cast("size_t") long divUp(@Cast("size_t") long a, @Cast("unsigned int") int b);
 
+/** \brief Round first value up to the nearest multiple of second value.
+<p>
+Use this function instead of {@code ceil((float)a / b) * b} expressions.
+<p>
+\sa divUp
+*/
+@Namespace("cv") public static native int roundUp(int a, @Cast("unsigned int") int b);
+/** \overload */
+@Namespace("cv") public static native @Cast("size_t") long roundUp(@Cast("size_t") long a, @Cast("unsigned int") int b);
+
 /** \brief Enables or disables the optimized code.
 <p>
-The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX,
+The function can be used to dynamically turn on and off optimized dispatched code (code that uses SSE4.2, AVX/AVX2,
 and other instructions on the platforms that support it). It sets a global flag that is further
 checked by OpenCV functions. Since the flag is not checked in the inner OpenCV loops, it is only
 safe to call the function on the very top level in your application where you can be sure that no
@@ -7368,317 +7366,8 @@ public static class CvSeqReader extends Pointer {
 *             Data structures for persistence (a.k.a serialization) functionality        *
 \****************************************************************************************/
 
-/** "black box" file storage */
-@Opaque public static class CvFileStorage extends AbstractCvFileStorage {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CvFileStorage() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvFileStorage(Pointer p) { super(p); }
-}
-
-/** Storage flags: */
-public static final int CV_STORAGE_READ =          0;
-public static final int CV_STORAGE_WRITE =         1;
-public static final int CV_STORAGE_WRITE_TEXT =    CV_STORAGE_WRITE;
-public static final int CV_STORAGE_WRITE_BINARY =  CV_STORAGE_WRITE;
-public static final int CV_STORAGE_APPEND =        2;
-public static final int CV_STORAGE_MEMORY =        4;
-public static final int CV_STORAGE_FORMAT_MASK =   (7<<3);
-public static final int CV_STORAGE_FORMAT_AUTO =   0;
-public static final int CV_STORAGE_FORMAT_XML =    8;
-public static final int CV_STORAGE_FORMAT_YAML =  16;
-public static final int CV_STORAGE_FORMAT_JSON =  24;
-public static final int CV_STORAGE_BASE64 =       64;
-public static final int CV_STORAGE_WRITE_BASE64 =  (CV_STORAGE_BASE64 | CV_STORAGE_WRITE);
-
-/** \brief List of attributes. :
-<p>
-In the current implementation, attributes are used to pass extra parameters when writing user
-objects (see cvWrite). XML attributes inside tags are not supported, aside from the object type
-specification (type_id attribute).
-@see cvAttrList, cvAttrValue
- */
-public static class CvAttrList extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvAttrList() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvAttrList(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvAttrList(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvAttrList position(long position) {
-        return (CvAttrList)super.position(position);
-    }
-
-    /** NULL-terminated array of (attribute_name,attribute_value) pairs. */
-    @MemberGetter public native @Cast("const char*") BytePointer attr(int i);
-    @MemberGetter public native @Cast("const char**") PointerPointer attr();
-    /** Pointer to next chunk of the attributes list.                    */
-    public native CvAttrList next(); public native CvAttrList next(CvAttrList next);
-}
-
-/** initializes CvAttrList structure */
-public static native @ByVal CvAttrList cvAttrList( @Cast("const char**") PointerPointer attr/*=NULL*/,
-                                 CvAttrList next/*=NULL*/ );
-public static native @ByVal CvAttrList cvAttrList( );
-public static native @ByVal CvAttrList cvAttrList( @Cast("const char**") @ByPtrPtr BytePointer attr/*=NULL*/,
-                                 CvAttrList next/*=NULL*/ );
-public static native @ByVal CvAttrList cvAttrList( @Cast("const char**") @ByPtrPtr ByteBuffer attr/*=NULL*/,
-                                 CvAttrList next/*=NULL*/ );
-public static native @ByVal CvAttrList cvAttrList( @Cast("const char**") @ByPtrPtr byte[] attr/*=NULL*/,
-                                 CvAttrList next/*=NULL*/ );
-
-public static final int CV_NODE_NONE =        0;
-public static final int CV_NODE_INT =         1;
-public static final int CV_NODE_INTEGER =     CV_NODE_INT;
-public static final int CV_NODE_REAL =        2;
-public static final int CV_NODE_FLOAT =       CV_NODE_REAL;
-public static final int CV_NODE_STR =         3;
-public static final int CV_NODE_STRING =      CV_NODE_STR;
-/** not used */
-public static final int CV_NODE_REF =         4;
-public static final int CV_NODE_SEQ =         5;
-public static final int CV_NODE_MAP =         6;
-public static final int CV_NODE_TYPE_MASK =   7;
-
-// #define CV_NODE_TYPE(flags)  ((flags) & CV_NODE_TYPE_MASK)
-
-/** file node flags */
-/**Used only for writing structures in YAML format. */
-public static final int CV_NODE_FLOW =        8;
-public static final int CV_NODE_USER =        16;
-public static final int CV_NODE_EMPTY =       32;
-public static final int CV_NODE_NAMED =       64;
-
-// #define CV_NODE_IS_INT(flags)        (CV_NODE_TYPE(flags) == CV_NODE_INT)
-// #define CV_NODE_IS_REAL(flags)       (CV_NODE_TYPE(flags) == CV_NODE_REAL)
-// #define CV_NODE_IS_STRING(flags)     (CV_NODE_TYPE(flags) == CV_NODE_STRING)
-// #define CV_NODE_IS_SEQ(flags)        (CV_NODE_TYPE(flags) == CV_NODE_SEQ)
-// #define CV_NODE_IS_MAP(flags)        (CV_NODE_TYPE(flags) == CV_NODE_MAP)
-// #define CV_NODE_IS_COLLECTION(flags) (CV_NODE_TYPE(flags) >= CV_NODE_SEQ)
-// #define CV_NODE_IS_FLOW(flags)       (((flags) & CV_NODE_FLOW) != 0)
-// #define CV_NODE_IS_EMPTY(flags)      (((flags) & CV_NODE_EMPTY) != 0)
-// #define CV_NODE_IS_USER(flags)       (((flags) & CV_NODE_USER) != 0)
-// #define CV_NODE_HAS_NAME(flags)      (((flags) & CV_NODE_NAMED) != 0)
-
-public static final int CV_NODE_SEQ_SIMPLE = 256;
-// #define CV_NODE_SEQ_IS_SIMPLE(seq) (((seq)->flags & CV_NODE_SEQ_SIMPLE) != 0)
-
-public static class CvString extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvString() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvString(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvString(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvString position(long position) {
-        return (CvString)super.position(position);
-    }
-
-    public native int len(); public native CvString len(int len);
-    public native @Cast("char*") BytePointer ptr(); public native CvString ptr(BytePointer ptr);
-}
-
-/** All the keys (names) of elements in the read file storage
-   are stored in the hash to speed up the lookup operations: */
-public static class CvStringHashNode extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvStringHashNode() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvStringHashNode(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvStringHashNode(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvStringHashNode position(long position) {
-        return (CvStringHashNode)super.position(position);
-    }
-
-    public native @Cast("unsigned") int hashval(); public native CvStringHashNode hashval(int hashval);
-    public native @ByRef CvString str(); public native CvStringHashNode str(CvString str);
-    public native CvStringHashNode next(); public native CvStringHashNode next(CvStringHashNode next);
-}
-
-@Opaque public static class CvFileNodeHash extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CvFileNodeHash() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvFileNodeHash(Pointer p) { super(p); }
-}
-
-/** Basic element of the file storage - scalar or collection: */
-public static class CvFileNode extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvFileNode() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvFileNode(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvFileNode(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvFileNode position(long position) {
-        return (CvFileNode)super.position(position);
-    }
-
-    public native int tag(); public native CvFileNode tag(int tag);
-    /** type information
-                (only for user-defined object, for others it is 0) */
-    public native CvTypeInfo info(); public native CvFileNode info(CvTypeInfo info);
-        /** scalar floating-point number */
-        @Name("data.f") public native double data_f(); public native CvFileNode data_f(double data_f);
-        /** scalar integer number */
-        @Name("data.i") public native int data_i(); public native CvFileNode data_i(int data_i);
-        /** text string */
-        @Name("data.str") public native @ByRef CvString data_str(); public native CvFileNode data_str(CvString data_str);
-        /** sequence (ordered collection of file nodes) */
-        @Name("data.seq") public native CvSeq data_seq(); public native CvFileNode data_seq(CvSeq data_seq);
-        /** map (collection of named file nodes) */
-        @Name("data.map") public native CvFileNodeHash data_map(); public native CvFileNode data_map(CvFileNodeHash data_map);
-}
-
-// #ifdef __cplusplus
+// #if 0
 // #endif
-@Convention("CV_CDECL") public static class CvIsInstanceFunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CvIsInstanceFunc(Pointer p) { super(p); }
-    protected CvIsInstanceFunc() { allocate(); }
-    private native void allocate();
-    public native int call( @Const Pointer struct_ptr );
-}
-@Convention("CV_CDECL") public static class CvReleaseFunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CvReleaseFunc(Pointer p) { super(p); }
-    protected CvReleaseFunc() { allocate(); }
-    private native void allocate();
-    public native void call( @Cast("void**") @ByPtrPtr Pointer struct_dblptr );
-}
-@Convention("CV_CDECL") public static class CvReadFunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CvReadFunc(Pointer p) { super(p); }
-    protected CvReadFunc() { allocate(); }
-    private native void allocate();
-    public native Pointer call( CvFileStorage storage, CvFileNode node );
-}
-@Convention("CV_CDECL") public static class CvWriteFunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CvWriteFunc(Pointer p) { super(p); }
-    protected CvWriteFunc() { allocate(); }
-    private native void allocate();
-    public native void call( CvFileStorage storage, @Cast("const char*") BytePointer name,
-                                      @Const Pointer struct_ptr, @ByVal CvAttrList attributes );
-}
-@Convention("CV_CDECL") public static class CvCloneFunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CvCloneFunc(Pointer p) { super(p); }
-    protected CvCloneFunc() { allocate(); }
-    private native void allocate();
-    public native Pointer call( @Const Pointer struct_ptr );
-}
-// #ifdef __cplusplus
-// #endif
-
-/** \brief Type information
-<p>
-The structure contains information about one of the standard or user-defined types. Instances of the
-type may or may not contain a pointer to the corresponding CvTypeInfo structure. In any case, there
-is a way to find the type info structure for a given object using the cvTypeOf function.
-Alternatively, type info can be found by type name using cvFindType, which is used when an object
-is read from file storage. The user can register a new type with cvRegisterType that adds the type
-information structure into the beginning of the type list. Thus, it is possible to create
-specialized types from generic standard types and override the basic methods.
- */
-public static class CvTypeInfo extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvTypeInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvTypeInfo(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvTypeInfo(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvTypeInfo position(long position) {
-        return (CvTypeInfo)super.position(position);
-    }
-
-    /** not used */
-    public native int flags(); public native CvTypeInfo flags(int flags);
-    /** sizeof(CvTypeInfo) */
-    public native int header_size(); public native CvTypeInfo header_size(int header_size);
-    /** previous registered type in the list */
-    public native CvTypeInfo prev(); public native CvTypeInfo prev(CvTypeInfo prev);
-    /** next registered type in the list */
-    public native CvTypeInfo next(); public native CvTypeInfo next(CvTypeInfo next);
-    /** type name, written to file storage */
-    @MemberGetter public native @Cast("const char*") BytePointer type_name();
-    /** checks if the passed object belongs to the type */
-    public native CvIsInstanceFunc is_instance(); public native CvTypeInfo is_instance(CvIsInstanceFunc is_instance);
-    /** releases object (memory etc.) */
-    public native CvReleaseFunc release(); public native CvTypeInfo release(CvReleaseFunc release);
-    /** reads object from file storage */
-    public native CvReadFunc read(); public native CvTypeInfo read(CvReadFunc read);
-    /** writes object to file storage */
-    public native CvWriteFunc write(); public native CvTypeInfo write(CvWriteFunc write);
-    /** creates a copy of the object */
-    public native CvCloneFunc clone(); public native CvTypeInfo clone(CvCloneFunc clone);
-}
-
-
-/**** System data types ******/
-
-public static class CvPluginFuncInfo extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvPluginFuncInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvPluginFuncInfo(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvPluginFuncInfo(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvPluginFuncInfo position(long position) {
-        return (CvPluginFuncInfo)super.position(position);
-    }
-
-    public native Pointer func_addr(int i); public native CvPluginFuncInfo func_addr(int i, Pointer func_addr);
-    public native @Cast("void**") PointerPointer func_addr(); public native CvPluginFuncInfo func_addr(PointerPointer func_addr);
-    public native Pointer default_func_addr(); public native CvPluginFuncInfo default_func_addr(Pointer default_func_addr);
-    @MemberGetter public native @Cast("const char*") BytePointer func_names();
-    public native int search_modules(); public native CvPluginFuncInfo search_modules(int search_modules);
-    public native int loaded_from(); public native CvPluginFuncInfo loaded_from(int loaded_from);
-}
-
-public static class CvModuleInfo extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvModuleInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvModuleInfo(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvModuleInfo(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvModuleInfo position(long position) {
-        return (CvModuleInfo)super.position(position);
-    }
-
-    public native CvModuleInfo next(); public native CvModuleInfo next(CvModuleInfo next);
-    @MemberGetter public native @Cast("const char*") BytePointer name();
-    @MemberGetter public native @Cast("const char*") BytePointer version();
-    public native CvPluginFuncInfo func_tab(); public native CvModuleInfo func_tab(CvPluginFuncInfo func_tab);
-}
 
 /** \} */
 
@@ -9405,12 +9094,8 @@ public static native void cvRestoreMemStoragePos( CvMemStorage storage, CvMemSto
 public static native Pointer cvMemStorageAlloc( CvMemStorage storage, @Cast("size_t") long size );
 
 /** Allocates string in memory storage */
-public static native @ByVal CvString cvMemStorageAllocString( CvMemStorage storage, @Cast("const char*") BytePointer ptr,
-                                         int len/*=-1*/ );
-public static native @ByVal CvString cvMemStorageAllocString( CvMemStorage storage, @Cast("const char*") BytePointer ptr );
-public static native @ByVal CvString cvMemStorageAllocString( CvMemStorage storage, String ptr,
-                                         int len/*=-1*/ );
-public static native @ByVal CvString cvMemStorageAllocString( CvMemStorage storage, String ptr );
+//CVAPI(CvString) cvMemStorageAllocString( CvMemStorage* storage, const char* ptr,
+//                                         int len CV_DEFAULT(-1) );
 
 /** Creates new empty sequence that will reside in the specified storage */
 public static native CvSeq cvCreateSeq( int seq_flags, @Cast("size_t") long header_size,
@@ -9901,653 +9586,14 @@ public static native void cvSetIPLAllocators( Cv_iplCreateImageHeader create_hea
 *                                    Data Persistence                                    *
 \****************************************************************************************/
 
-/********************************** High-level functions ********************************/
+// #if 0
 
-/** \brief Opens file storage for reading or writing data.
-<p>
-The function opens file storage for reading or writing data. In the latter case, a new file is
-created or an existing file is rewritten. The type of the read or written file is determined by the
-filename extension: .xml for XML, .yml or .yaml for YAML and .json for JSON.
-<p>
-At the same time, it also supports adding parameters like "example.xml?base64".
-<p>
-The function returns a pointer to the CvFileStorage structure.
-If the file cannot be opened then the function returns NULL.
-@param filename Name of the file associated with the storage
-@param memstorage Memory storage used for temporary data and for
-:   storing dynamic structures, such as CvSeq or CvGraph . If it is NULL, a temporary memory
-    storage is created and used.
-@param flags Can be one of the following:
-> -   **CV_STORAGE_READ** the storage is open for reading
-> -   **CV_STORAGE_WRITE** the storage is open for writing
-      (use **CV_STORAGE_WRITE | CV_STORAGE_WRITE_BASE64** to write rawdata in Base64)
-@param encoding
- */
-public static native CvFileStorage cvOpenFileStorage( @Cast("const char*") BytePointer filename, CvMemStorage memstorage,
-                                          int flags, @Cast("const char*") BytePointer encoding/*=NULL*/ );
-public static native CvFileStorage cvOpenFileStorage( @Cast("const char*") BytePointer filename, CvMemStorage memstorage,
-                                          int flags );
-public static native CvFileStorage cvOpenFileStorage( String filename, CvMemStorage memstorage,
-                                          int flags, String encoding/*=NULL*/ );
-public static native CvFileStorage cvOpenFileStorage( String filename, CvMemStorage memstorage,
-                                          int flags );
-
-/** \brief Releases file storage.
-<p>
-The function closes the file associated with the storage and releases all the temporary structures.
-It must be called after all I/O operations with the storage are finished.
-@param fs Double pointer to the released file storage
- */
-public static native void cvReleaseFileStorage( @Cast("CvFileStorage**") PointerPointer fs );
-public static native void cvReleaseFileStorage( @ByPtrPtr CvFileStorage fs );
-
-/** returns attribute value or 0 (NULL) if there is no such attribute */
-public static native @Cast("const char*") BytePointer cvAttrValue( @Const CvAttrList attr, @Cast("const char*") BytePointer attr_name );
-public static native String cvAttrValue( @Const CvAttrList attr, String attr_name );
-
-/** \brief Starts writing a new structure.
-<p>
-The function starts writing a compound structure (collection) that can be a sequence or a map. After
-all the structure fields, which can be scalars or structures, are written, cvEndWriteStruct should
-be called. The function can be used to group some objects or to implement the write function for a
-some user object (see CvTypeInfo).
-@param fs File storage
-@param name Name of the written structure. The structure can be accessed by this name when the
-storage is read.
-@param struct_flags A combination one of the following values:
--   **CV_NODE_SEQ** the written structure is a sequence (see discussion of CvFileStorage ),
-    that is, its elements do not have a name.
--   **CV_NODE_MAP** the written structure is a map (see discussion of CvFileStorage ), that
-    is, all its elements have names.
-One and only one of the two above flags must be specified
--   **CV_NODE_FLOW** the optional flag that makes sense only for YAML streams. It means that
-     the structure is written as a flow (not as a block), which is more compact. It is
-     recommended to use this flag for structures or arrays whose elements are all scalars.
-@param type_name Optional parameter - the object type name. In
-    case of XML it is written as a type_id attribute of the structure opening tag. In the case of
-    YAML it is written after a colon following the structure name (see the example in
-    CvFileStorage description). In case of JSON it is written as a name/value pair.
-    Mainly it is used with user objects. When the storage is read, the
-    encoded type name is used to determine the object type (see CvTypeInfo and cvFindType ).
-@param attributes This parameter is not used in the current implementation
- */
-public static native void cvStartWriteStruct( CvFileStorage fs, @Cast("const char*") BytePointer name,
-                                int struct_flags, @Cast("const char*") BytePointer type_name/*=NULL*/,
-                                @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvStartWriteStruct( CvFileStorage fs, @Cast("const char*") BytePointer name,
-                                int struct_flags);
-public static native void cvStartWriteStruct( CvFileStorage fs, String name,
-                                int struct_flags, String type_name/*=NULL*/,
-                                @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvStartWriteStruct( CvFileStorage fs, String name,
-                                int struct_flags);
-
-/** \brief Finishes writing to a file node collection.
-@param fs File storage
-\sa cvStartWriteStruct.
- */
-public static native void cvEndWriteStruct( CvFileStorage fs );
-
-/** \brief Writes an integer value.
-<p>
-The function writes a single integer value (with or without a name) to the file storage.
-@param fs File storage
-@param name Name of the written value. Should be NULL if and only if the parent structure is a
-sequence.
-@param value The written value
- */
-public static native void cvWriteInt( CvFileStorage fs, @Cast("const char*") BytePointer name, int value );
-public static native void cvWriteInt( CvFileStorage fs, String name, int value );
-
-/** \brief Writes a floating-point value.
-<p>
-The function writes a single floating-point value (with or without a name) to file storage. Special
-values are encoded as follows: NaN (Not A Number) as .NaN, infinity as +.Inf or -.Inf.
-<p>
-The following example shows how to use the low-level writing functions to store custom structures,
-such as termination criteria, without registering a new type. :
-<pre>{@code
-    void write_termcriteria( CvFileStorage* fs, const char* struct_name,
-                             CvTermCriteria* termcrit )
-    {
-        cvStartWriteStruct( fs, struct_name, CV_NODE_MAP, NULL, cvAttrList(0,0));
-        cvWriteComment( fs, "termination criteria", 1 ); // just a description
-        if( termcrit->type & CV_TERMCRIT_ITER )
-            cvWriteInteger( fs, "max_iterations", termcrit->max_iter );
-        if( termcrit->type & CV_TERMCRIT_EPS )
-            cvWriteReal( fs, "accuracy", termcrit->epsilon );
-        cvEndWriteStruct( fs );
-    }
-}</pre>
-@param fs File storage
-@param name Name of the written value. Should be NULL if and only if the parent structure is a
-sequence.
-@param value The written value
-*/
-public static native void cvWriteReal( CvFileStorage fs, @Cast("const char*") BytePointer name, double value );
-public static native void cvWriteReal( CvFileStorage fs, String name, double value );
-
-/** \brief Writes a text string.
-<p>
-The function writes a text string to file storage.
-@param fs File storage
-@param name Name of the written string . Should be NULL if and only if the parent structure is a
-sequence.
-@param str The written text string
-@param quote If non-zero, the written string is put in quotes, regardless of whether they are
-required. Otherwise, if the flag is zero, quotes are used only when they are required (e.g. when
-the string starts with a digit or contains spaces).
- */
-public static native void cvWriteString( CvFileStorage fs, @Cast("const char*") BytePointer name,
-                           @Cast("const char*") BytePointer str, int quote/*=0*/ );
-public static native void cvWriteString( CvFileStorage fs, @Cast("const char*") BytePointer name,
-                           @Cast("const char*") BytePointer str );
-public static native void cvWriteString( CvFileStorage fs, String name,
-                           String str, int quote/*=0*/ );
-public static native void cvWriteString( CvFileStorage fs, String name,
-                           String str );
-
-/** \brief Writes a comment.
-<p>
-The function writes a comment into file storage. The comments are skipped when the storage is read.
-@param fs File storage
-@param comment The written comment, single-line or multi-line
-@param eol_comment If non-zero, the function tries to put the comment at the end of current line.
-If the flag is zero, if the comment is multi-line, or if it does not fit at the end of the current
-line, the comment starts a new line.
- */
-public static native void cvWriteComment( CvFileStorage fs, @Cast("const char*") BytePointer comment,
-                            int eol_comment );
-public static native void cvWriteComment( CvFileStorage fs, String comment,
-                            int eol_comment );
-
-/** \brief Writes an object to file storage.
-<p>
-The function writes an object to file storage. First, the appropriate type info is found using
-cvTypeOf. Then, the write method associated with the type info is called.
-<p>
-Attributes are used to customize the writing procedure. The standard types support the following
-attributes (all the dt attributes have the same format as in cvWriteRawData):
-<p>
--# CvSeq
-    -   **header_dt** description of user fields of the sequence header that follow CvSeq, or
-        CvChain (if the sequence is a Freeman chain) or CvContour (if the sequence is a contour or
-        point sequence)
-    -   **dt** description of the sequence elements.
-    -   **recursive** if the attribute is present and is not equal to "0" or "false", the whole
-        tree of sequences (contours) is stored.
--# CvGraph
-    -   **header_dt** description of user fields of the graph header that follows CvGraph;
-    -   **vertex_dt** description of user fields of graph vertices
-    -   **edge_dt** description of user fields of graph edges (note that the edge weight is
-        always written, so there is no need to specify it explicitly)
-<p>
-Below is the code that creates the YAML file shown in the CvFileStorage description:
-<pre>{@code
-    #include "cxcore.h"
-
-    int main( int argc, char** argv )
-    {
-        CvMat* mat = cvCreateMat( 3, 3, CV_32F );
-        CvFileStorage* fs = cvOpenFileStorage( "example.yml", 0, CV_STORAGE_WRITE );
-
-        cvSetIdentity( mat );
-        cvWrite( fs, "A", mat, cvAttrList(0,0) );
-
-        cvReleaseFileStorage( &fs );
-        cvReleaseMat( &mat );
-        return 0;
-    }
-}</pre>
-@param fs File storage
-@param name Name of the written object. Should be NULL if and only if the parent structure is a
-sequence.
-@param ptr Pointer to the object
-@param attributes The attributes of the object. They are specific for each particular type (see
-the discussion below).
- */
-public static native void cvWrite( CvFileStorage fs, @Cast("const char*") BytePointer name, @Const Pointer ptr,
-                         @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvWrite( CvFileStorage fs, @Cast("const char*") BytePointer name, @Const Pointer ptr);
-public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer ptr,
-                         @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer ptr);
-
-/** \brief Starts the next stream.
-<p>
-The function finishes the currently written stream and starts the next stream. In the case of XML
-the file with multiple streams looks like this:
-<pre>{@code {.xml}
-    <opencv_storage>
-    <!-- stream #1 data -->
-    </opencv_storage>
-    <opencv_storage>
-    <!-- stream #2 data -->
-    </opencv_storage>
-    ...
-}</pre>
-The YAML file will look like this:
-<pre>{@code {.yaml}
-    %YAML 1.0
-    # stream #1 data
-    ...
-    ---
-    # stream #2 data
-}</pre>
-This is useful for concatenating files or for resuming the writing process.
-@param fs File storage
- */
-public static native void cvStartNextStream( CvFileStorage fs );
-
-/** \brief Writes multiple numbers.
-<p>
-The function writes an array, whose elements consist of single or multiple numbers. The function
-call can be replaced with a loop containing a few cvWriteInt and cvWriteReal calls, but a single
-call is more efficient. Note that because none of the elements have a name, they should be written
-to a sequence rather than a map.
-@param fs File storage
-@param src Pointer to the written array
-@param len Number of the array elements to write
-@param dt Specification of each array element, see \ref format_spec "format specification"
- */
-public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
-                                int len, @Cast("const char*") BytePointer dt );
-public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
-                                int len, String dt );
-
-/** \brief Writes multiple numbers in Base64.
-<p>
-If either CV_STORAGE_WRITE_BASE64 or cv::FileStorage::WRITE_BASE64 is used,
-this function will be the same as cvWriteRawData. If neither, the main
-difference is that it outputs a sequence in Base64 encoding rather than
-in plain text.
-<p>
-This function can only be used to write a sequence with a type "binary".
-<p>
-@param fs File storage
-@param src Pointer to the written array
-@param len Number of the array elements to write
-@param dt Specification of each array element, see \ref format_spec "format specification"
-*/
-public static native void cvWriteRawDataBase64( CvFileStorage fs, @Const Pointer src,
-                                 int len, @Cast("const char*") BytePointer dt );
-public static native void cvWriteRawDataBase64( CvFileStorage fs, @Const Pointer src,
-                                 int len, String dt );
-
-/** \brief Returns a unique pointer for a given name.
-<p>
-The function returns a unique pointer for each particular file node name. This pointer can be then
-passed to the cvGetFileNode function that is faster than cvGetFileNodeByName because it compares
-text strings by comparing pointers rather than the strings' content.
-<p>
-Consider the following example where an array of points is encoded as a sequence of 2-entry maps:
-<pre>{@code
-    points:
-      - { x: 10, y: 10 }
-      - { x: 20, y: 20 }
-      - { x: 30, y: 30 }
-      # ...
-}</pre>
-Then, it is possible to get hashed "x" and "y" pointers to speed up decoding of the points. :
-<pre>{@code
-    #include "cxcore.h"
-
-    int main( int argc, char** argv )
-    {
-        CvFileStorage* fs = cvOpenFileStorage( "points.yml", 0, CV_STORAGE_READ );
-        CvStringHashNode* x_key = cvGetHashedNode( fs, "x", -1, 1 );
-        CvStringHashNode* y_key = cvGetHashedNode( fs, "y", -1, 1 );
-        CvFileNode* points = cvGetFileNodeByName( fs, 0, "points" );
-
-        if( CV_NODE_IS_SEQ(points->tag) )
-        {
-            CvSeq* seq = points->data.seq;
-            int i, total = seq->total;
-            CvSeqReader reader;
-            cvStartReadSeq( seq, &reader, 0 );
-            for( i = 0; i < total; i++ )
-            {
-                CvFileNode* pt = (CvFileNode*)reader.ptr;
-    #if 1 // faster variant
-                CvFileNode* xnode = cvGetFileNode( fs, pt, x_key, 0 );
-                CvFileNode* ynode = cvGetFileNode( fs, pt, y_key, 0 );
-                assert( xnode && CV_NODE_IS_INT(xnode->tag) &&
-                        ynode && CV_NODE_IS_INT(ynode->tag));
-                int x = xnode->data.i; // or x = cvReadInt( xnode, 0 );
-                int y = ynode->data.i; // or y = cvReadInt( ynode, 0 );
-    #elif 1 // slower variant; does not use x_key & y_key
-                CvFileNode* xnode = cvGetFileNodeByName( fs, pt, "x" );
-                CvFileNode* ynode = cvGetFileNodeByName( fs, pt, "y" );
-                assert( xnode && CV_NODE_IS_INT(xnode->tag) &&
-                        ynode && CV_NODE_IS_INT(ynode->tag));
-                int x = xnode->data.i; // or x = cvReadInt( xnode, 0 );
-                int y = ynode->data.i; // or y = cvReadInt( ynode, 0 );
-    #else // the slowest yet the easiest to use variant
-                int x = cvReadIntByName( fs, pt, "x", 0 );
-                int y = cvReadIntByName( fs, pt, "y", 0 );
-    #endif
-                CV_NEXT_SEQ_ELEM( seq->elem_size, reader );
-                printf("
-            }
-        }
-        cvReleaseFileStorage( &fs );
-        return 0;
-    }
-}</pre>
-Please note that whatever method of accessing a map you are using, it is still much slower than
-using plain sequences; for example, in the above example, it is more efficient to encode the points
-as pairs of integers in a single numeric sequence.
-@param fs File storage
-@param name Literal node name
-@param len Length of the name (if it is known apriori), or -1 if it needs to be calculated
-@param create_missing Flag that specifies, whether an absent key should be added into the hash table
-*/
-public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, @Cast("const char*") BytePointer name,
-                                        int len/*=-1*/,
-                                        int create_missing/*=0*/);
-public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, @Cast("const char*") BytePointer name);
-public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, String name,
-                                        int len/*=-1*/,
-                                        int create_missing/*=0*/);
-public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, String name);
-
-/** \brief Retrieves one of the top-level nodes of the file storage.
-<p>
-The function returns one of the top-level file nodes. The top-level nodes do not have a name, they
-correspond to the streams that are stored one after another in the file storage. If the index is out
-of range, the function returns a NULL pointer, so all the top-level nodes can be iterated by
-subsequent calls to the function with stream_index=0,1,..., until the NULL pointer is returned.
-This function can be used as a base for recursive traversal of the file storage.
-@param fs File storage
-@param stream_index Zero-based index of the stream. See cvStartNextStream . In most cases,
-there is only one stream in the file; however, there can be several.
- */
-public static native CvFileNode cvGetRootFileNode( @Const CvFileStorage fs,
-                                     int stream_index/*=0*/ );
-public static native CvFileNode cvGetRootFileNode( @Const CvFileStorage fs );
-
-/** \brief Finds a node in a map or file storage.
-<p>
-The function finds a file node. It is a faster version of cvGetFileNodeByName (see
-cvGetHashedKey discussion). Also, the function can insert a new node, if it is not in the map yet.
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches a top-level node. If both map and
-key are NULLs, the function returns the root file node - a map that contains top-level nodes.
-@param key Unique pointer to the node name, retrieved with cvGetHashedKey
-@param create_missing Flag that specifies whether an absent node should be added to the map
- */
-public static native CvFileNode cvGetFileNode( CvFileStorage fs, CvFileNode map,
-                                 @Const CvStringHashNode key,
-                                 int create_missing/*=0*/ );
-public static native CvFileNode cvGetFileNode( CvFileStorage fs, CvFileNode map,
-                                 @Const CvStringHashNode key );
-
-/** \brief Finds a node in a map or file storage.
-<p>
-The function finds a file node by name. The node is searched either in map or, if the pointer is
-NULL, among the top-level file storage nodes. Using this function for maps and cvGetSeqElem (or
-sequence reader) for sequences, it is possible to navigate through the file storage. To speed up
-multiple queries for a certain key (e.g., in the case of an array of structures) one may use a
-combination of cvGetHashedKey and cvGetFileNode.
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches in all the top-level nodes
-(streams), starting with the first one.
-@param name The file node name
- */
-public static native CvFileNode cvGetFileNodeByName( @Const CvFileStorage fs,
-                                       @Const CvFileNode map,
-                                       @Cast("const char*") BytePointer name );
-public static native CvFileNode cvGetFileNodeByName( @Const CvFileStorage fs,
-                                       @Const CvFileNode map,
-                                       String name );
-
-/** \brief Retrieves an integer value from a file node.
-<p>
-The function returns an integer that is represented by the file node. If the file node is NULL, the
-default_value is returned (thus, it is convenient to call the function right after cvGetFileNode
-without checking for a NULL pointer). If the file node has type CV_NODE_INT, then node-\>data.i is
-returned. If the file node has type CV_NODE_REAL, then node-\>data.f is converted to an integer
-and returned. Otherwise the error is reported.
-@param node File node
-@param default_value The value that is returned if node is NULL
- */
-public static native int cvReadInt( @Const CvFileNode node, int default_value/*=0*/ );
-public static native int cvReadInt( @Const CvFileNode node );
-
-/** \brief Finds a file node and returns its value.
-<p>
-The function is a simple superposition of cvGetFileNodeByName and cvReadInt.
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches a top-level node.
-@param name The node name
-@param default_value The value that is returned if the file node is not found
- */
-public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                         @Cast("const char*") BytePointer name, int default_value/*=0*/ );
-public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                         @Cast("const char*") BytePointer name );
-public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                         String name, int default_value/*=0*/ );
-public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                         String name );
-
-/** \brief Retrieves a floating-point value from a file node.
-<p>
-The function returns a floating-point value that is represented by the file node. If the file node
-is NULL, the default_value is returned (thus, it is convenient to call the function right after
-cvGetFileNode without checking for a NULL pointer). If the file node has type CV_NODE_REAL ,
-then node-\>data.f is returned. If the file node has type CV_NODE_INT , then node-:math:\>data.f
-is converted to floating-point and returned. Otherwise the result is not determined.
-@param node File node
-@param default_value The value that is returned if node is NULL
- */
-public static native double cvReadReal( @Const CvFileNode node, double default_value/*=0.*/ );
-public static native double cvReadReal( @Const CvFileNode node );
-
-/** \brief Finds a file node and returns its value.
-<p>
-The function is a simple superposition of cvGetFileNodeByName and cvReadReal .
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches a top-level node.
-@param name The node name
-@param default_value The value that is returned if the file node is not found
- */
-public static native double cvReadRealByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        @Cast("const char*") BytePointer name, double default_value/*=0.*/ );
-public static native double cvReadRealByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        @Cast("const char*") BytePointer name );
-public static native double cvReadRealByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        String name, double default_value/*=0.*/ );
-public static native double cvReadRealByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        String name );
-
-/** \brief Retrieves a text string from a file node.
-<p>
-The function returns a text string that is represented by the file node. If the file node is NULL,
-the default_value is returned (thus, it is convenient to call the function right after
-cvGetFileNode without checking for a NULL pointer). If the file node has type CV_NODE_STR , then
-node-:math:\>data.str.ptr is returned. Otherwise the result is not determined.
-@param node File node
-@param default_value The value that is returned if node is NULL
- */
-public static native @Cast("const char*") BytePointer cvReadString( @Const CvFileNode node,
-                        @Cast("const char*") BytePointer default_value/*=NULL*/ );
-public static native @Cast("const char*") BytePointer cvReadString( @Const CvFileNode node );
-public static native String cvReadString( @Const CvFileNode node,
-                        String default_value/*=NULL*/ );
-
-/** \brief Finds a file node by its name and returns its value.
-<p>
-The function is a simple superposition of cvGetFileNodeByName and cvReadString .
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches a top-level node.
-@param name The node name
-@param default_value The value that is returned if the file node is not found
- */
-public static native @Cast("const char*") BytePointer cvReadStringByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer default_value/*=NULL*/ );
-public static native @Cast("const char*") BytePointer cvReadStringByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        @Cast("const char*") BytePointer name );
-public static native String cvReadStringByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        String name, String default_value/*=NULL*/ );
-public static native String cvReadStringByName( @Const CvFileStorage fs, @Const CvFileNode map,
-                        String name );
-
-
-/** \brief Decodes an object and returns a pointer to it.
-<p>
-The function decodes a user object (creates an object in a native representation from the file
-storage subtree) and returns it. The object to be decoded must be an instance of a registered type
-that supports the read method (see CvTypeInfo). The type of the object is determined by the type
-name that is encoded in the file. If the object is a dynamic structure, it is created either in
-memory storage and passed to cvOpenFileStorage or, if a NULL pointer was passed, in temporary
-memory storage, which is released when cvReleaseFileStorage is called. Otherwise, if the object is
-not a dynamic structure, it is created in a heap and should be released with a specialized function
-or by using the generic cvRelease.
-@param fs File storage
-@param node The root object node
-@param attributes Unused parameter
- */
-public static native Pointer cvRead( CvFileStorage fs, CvFileNode node,
-                        CvAttrList attributes/*=NULL*/);
-public static native Pointer cvRead( CvFileStorage fs, CvFileNode node);
-
-/** \brief Finds an object by name and decodes it.
-<p>
-The function is a simple superposition of cvGetFileNodeByName and cvRead.
-@param fs File storage
-@param map The parent map. If it is NULL, the function searches a top-level node.
-@param name The node name
-@param attributes Unused parameter
- */
-public static native Pointer cvReadByName( CvFileStorage fs, @Const CvFileNode map,
-                              @Cast("const char*") BytePointer name, CvAttrList attributes/*=NULL*/ );
-public static native Pointer cvReadByName( CvFileStorage fs, @Const CvFileNode map,
-                              @Cast("const char*") BytePointer name );
-public static native Pointer cvReadByName( CvFileStorage fs, @Const CvFileNode map,
-                              String name, CvAttrList attributes/*=NULL*/ );
-public static native Pointer cvReadByName( CvFileStorage fs, @Const CvFileNode map,
-                              String name );
-
-
-/** \brief Initializes the file node sequence reader.
-<p>
-The function initializes the sequence reader to read data from a file node. The initialized reader
-can be then passed to cvReadRawDataSlice.
-@param fs File storage
-@param src The file node (a sequence) to read numbers from
-@param reader Pointer to the sequence reader
- */
-public static native void cvStartReadRawData( @Const CvFileStorage fs, @Const CvFileNode src,
-                               CvSeqReader reader );
-
-/** \brief Initializes file node sequence reader.
-<p>
-The function reads one or more elements from the file node, representing a sequence, to a
-user-specified array. The total number of read sequence elements is a product of total and the
-number of components in each array element. For example, if dt=2if, the function will read total\*3
-sequence elements. As with any sequence, some parts of the file node sequence can be skipped or read
-repeatedly by repositioning the reader using cvSetSeqReaderPos.
-@param fs File storage
-@param reader The sequence reader. Initialize it with cvStartReadRawData .
-@param count The number of elements to read
-@param dst Pointer to the destination array
-@param dt Specification of each array element. It has the same format as in cvWriteRawData .
- */
-public static native void cvReadRawDataSlice( @Const CvFileStorage fs, CvSeqReader reader,
-                               int count, Pointer dst, @Cast("const char*") BytePointer dt );
-public static native void cvReadRawDataSlice( @Const CvFileStorage fs, CvSeqReader reader,
-                               int count, Pointer dst, String dt );
-
-/** \brief Reads multiple numbers.
-<p>
-The function reads elements from a file node that represents a sequence of scalars.
-@param fs File storage
-@param src The file node (a sequence) to read numbers from
-@param dst Pointer to the destination array
-@param dt Specification of each array element. It has the same format as in cvWriteRawData .
- */
-public static native void cvReadRawData( @Const CvFileStorage fs, @Const CvFileNode src,
-                          Pointer dst, @Cast("const char*") BytePointer dt );
-public static native void cvReadRawData( @Const CvFileStorage fs, @Const CvFileNode src,
-                          Pointer dst, String dt );
-
-/** \brief Writes a file node to another file storage.
-<p>
-The function writes a copy of a file node to file storage. Possible applications of the function are
-merging several file storages into one and conversion between XML, YAML and JSON formats.
-@param fs Destination file storage
-@param new_node_name New name of the file node in the destination file storage. To keep the
-existing name, use cvcvGetFileNodeName
-@param node The written node
-@param embed If the written node is a collection and this parameter is not zero, no extra level of
-hierarchy is created. Instead, all the elements of node are written into the currently written
-structure. Of course, map elements can only be embedded into another map, and sequence elements
-can only be embedded into another sequence.
- */
-public static native void cvWriteFileNode( CvFileStorage fs, @Cast("const char*") BytePointer new_node_name,
-                            @Const CvFileNode node, int embed );
-public static native void cvWriteFileNode( CvFileStorage fs, String new_node_name,
-                            @Const CvFileNode node, int embed );
-
-/** \brief Returns the name of a file node.
-<p>
-The function returns the name of a file node or NULL, if the file node does not have a name or if
-node is NULL.
-@param node File node
- */
-public static native @Cast("const char*") BytePointer cvGetFileNodeName( @Const CvFileNode node );
-
-/*********************************** Adding own types ***********************************/
-
-/** \brief Registers a new type.
-<p>
-The function registers a new type, which is described by info . The function creates a copy of the
-structure, so the user should delete it after calling the function.
-@param info Type info structure
- */
-public static native void cvRegisterType( @Const CvTypeInfo info );
-
-/** \brief Unregisters the type.
-<p>
-The function unregisters a type with a specified name. If the name is unknown, it is possible to
-locate the type info by an instance of the type using cvTypeOf or by iterating the type list,
-starting from cvFirstType, and then calling cvUnregisterType(info-\>typeName).
-@param type_name Name of an unregistered type
- */
-public static native void cvUnregisterType( @Cast("const char*") BytePointer type_name );
-public static native void cvUnregisterType( String type_name );
-
-/** \brief Returns the beginning of a type list.
-<p>
-The function returns the first type in the list of registered types. Navigation through the list can
-be done via the prev and next fields of the CvTypeInfo structure.
- */
-public static native CvTypeInfo cvFirstType();
-
-/** \brief Finds a type by its name.
-<p>
-The function finds a registered type by its name. It returns NULL if there is no type with the
-specified name.
-@param type_name Type name
- */
-public static native CvTypeInfo cvFindType( @Cast("const char*") BytePointer type_name );
-public static native CvTypeInfo cvFindType( String type_name );
-
-/** \brief Returns the type of an object.
-<p>
-The function finds the type of a given object. It iterates through the list of registered types and
-calls the is_instance function/method for every type info structure with that object until one of
-them returns non-zero or until the whole list has been traversed. In the latter case, the function
-returns NULL.
-@param struct_ptr The object pointer
- */
-public static native CvTypeInfo cvTypeOf( @Const Pointer struct_ptr );
+// #endif
 
 /** \brief Releases an object.
-<p>
-The function finds the type of a given object and calls release with the double pointer.
-@param struct_ptr Double pointer to the object
+ <p>
+ The function finds the type of a given object and calls release with the double pointer.
+ @param struct_ptr Double pointer to the object
  */
 public static native void cvRelease( @Cast("void**") PointerPointer struct_ptr );
 public static native void cvRelease( @Cast("void**") @ByPtrPtr Pointer struct_ptr );
@@ -10560,73 +9606,6 @@ function, like cvCloneMat.
 @param struct_ptr The object to clone
  */
 public static native Pointer cvClone( @Const Pointer struct_ptr );
-
-/** \brief Saves an object to a file.
-<p>
-The function saves an object to a file. It provides a simple interface to cvWrite .
-@param filename File name
-@param struct_ptr Object to save
-@param name Optional object name. If it is NULL, the name will be formed from filename .
-@param comment Optional comment to put in the beginning of the file
-@param attributes Optional attributes passed to cvWrite
- */
-public static native void cvSave( @Cast("const char*") BytePointer filename, @Const Pointer struct_ptr,
-                    @Cast("const char*") BytePointer name/*=NULL*/,
-                    @Cast("const char*") BytePointer comment/*=NULL*/,
-                    @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvSave( @Cast("const char*") BytePointer filename, @Const Pointer struct_ptr);
-public static native void cvSave( String filename, @Const Pointer struct_ptr,
-                    String name/*=NULL*/,
-                    String comment/*=NULL*/,
-                    @ByVal(nullValue = "CvAttrList(cvAttrList())") CvAttrList attributes);
-public static native void cvSave( String filename, @Const Pointer struct_ptr);
-
-/** \brief Loads an object from a file.
-<p>
-The function loads an object from a file. It basically reads the specified file, find the first
-top-level node and calls cvRead for that node. If the file node does not have type information or
-the type information can not be found by the type name, the function returns NULL. After the object
-is loaded, the file storage is closed and all the temporary buffers are deleted. Thus, to load a
-dynamic structure, such as a sequence, contour, or graph, one should pass a valid memory storage
-destination to the function.
-@param filename File name
-@param memstorage Memory storage for dynamic structures, such as CvSeq or CvGraph . It is not used
-for matrices or images.
-@param name Optional object name. If it is NULL, the first top-level object in the storage will be
-loaded.
-@param real_name Optional output parameter that will contain the name of the loaded object
-(useful if name=NULL )
- */
-public static native Pointer cvLoad( @Cast("const char*") BytePointer filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     @Cast("const char*") BytePointer name/*=NULL*/,
-                     @Cast("const char**") PointerPointer real_name/*=NULL*/ );
-public static native Pointer cvLoad( @Cast("const char*") BytePointer filename );
-public static native Pointer cvLoad( @Cast("const char*") BytePointer filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     @Cast("const char*") BytePointer name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr BytePointer real_name/*=NULL*/ );
-public static native Pointer cvLoad( String filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     String name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr ByteBuffer real_name/*=NULL*/ );
-public static native Pointer cvLoad( String filename );
-public static native Pointer cvLoad( @Cast("const char*") BytePointer filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     @Cast("const char*") BytePointer name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr byte[] real_name/*=NULL*/ );
-public static native Pointer cvLoad( String filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     String name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr BytePointer real_name/*=NULL*/ );
-public static native Pointer cvLoad( @Cast("const char*") BytePointer filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     @Cast("const char*") BytePointer name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr ByteBuffer real_name/*=NULL*/ );
-public static native Pointer cvLoad( String filename,
-                     CvMemStorage memstorage/*=NULL*/,
-                     String name/*=NULL*/,
-                     @Cast("const char**") @ByPtrPtr byte[] real_name/*=NULL*/ );
 
 /*********************************** Measuring Execution Time ***************************/
 
@@ -10802,43 +9781,6 @@ public static final String cvFuncName = "";
 // #endif
 
 // #ifdef __cplusplus
-
-/** \addtogroup core_c_glue
- *  \{
- <p>
- *  class for automatic module/RTTI data registration/unregistration */
-@NoOffset public static class CvType extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvType(Pointer p) { super(p); }
-
-    public CvType( @Cast("const char*") BytePointer type_name,
-                CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { super((Pointer)null); allocate(type_name, is_instance, release, read, write, clone); }
-    private native void allocate( @Cast("const char*") BytePointer type_name,
-                CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ );
-    public CvType( @Cast("const char*") BytePointer type_name,
-                CvIsInstanceFunc is_instance ) { super((Pointer)null); allocate(type_name, is_instance); }
-    private native void allocate( @Cast("const char*") BytePointer type_name,
-                CvIsInstanceFunc is_instance );
-    public CvType( String type_name,
-                CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { super((Pointer)null); allocate(type_name, is_instance, release, read, write, clone); }
-    private native void allocate( String type_name,
-                CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ );
-    public CvType( String type_name,
-                CvIsInstanceFunc is_instance ) { super((Pointer)null); allocate(type_name, is_instance); }
-    private native void allocate( String type_name,
-                CvIsInstanceFunc is_instance );
-    public native CvTypeInfo info(); public native CvType info(CvTypeInfo info);
-
-    
-    
-}
-
-/** \} */
 
 // #include "opencv2/core/utility.hpp"
 
@@ -14200,6 +13142,19 @@ You may even get a negative value in the case of overflow.
 @Namespace("cv") public static native void absdiff(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
 @Namespace("cv") public static native void absdiff(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst);
 
+/** \brief  This is an overloaded member function, provided for convenience (python)
+Copies the matrix to another one.
+When the operation mask is specified, if the Mat::create call shown above reallocates the matrix, the newly allocated matrix is initialized with all zeros before copying the data.
+@param src source matrix.
+@param dst Destination matrix. If it does not have a proper size or type before the operation, it is
+reallocated.
+@param mask Operation mask of the same size as \*this. Its non-zero elements indicate which matrix
+elements need to be copied. The mask has to be of type CV_8U and can have 1 or multiple channels.
+*/
+
+@Namespace("cv") public static native void copyTo(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat mask);
+@Namespace("cv") public static native void copyTo(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat mask);
+@Namespace("cv") public static native void copyTo(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat mask);
 /** \brief  Checks if array elements lie between the elements of two other arrays.
 <p>
 The function checks the range as follows:
@@ -16202,7 +15157,7 @@ An example on K-means clustering
 /** \brief Finds centers of clusters and groups input samples around the clusters.
 <p>
 The function kmeans implements a k-means algorithm that finds the centers of cluster_count clusters
-and groups the input samples around the clusters. As an output, \f$\texttt{labels}_i\f$ contains a
+and groups the input samples around the clusters. As an output, \f$\texttt{bestLabels}_i\f$ contains a
 0-based cluster index for the sample stored in the \f$i^{th}\f$ row of the samples matrix.
 <p>
 \note
@@ -18859,21 +17814,33 @@ may or may not be in the same class.
 public static final int ACCESS_READ = 1<<24, ACCESS_WRITE = 1<<25,
     ACCESS_RW = 3<<24, ACCESS_MASK = ACCESS_RW, ACCESS_FAST = 1<<26;
 @Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::AccessFlag") int val);
+
 @Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::AccessFlag") int a, int b);
+
 @Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::AccessFlag") int a, int b);
+
+
 @Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator |") int or(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+
 @Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator &") int and(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+
 @Namespace("cv") public static native @Cast("cv::AccessFlag") @Name("operator ^") int xor(@Cast("const cv::AccessFlag") int a, @Cast("const cv::AccessFlag") int b);
+
 
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::AccessFlag*") @ByRef IntPointer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::AccessFlag*") @ByRef IntBuffer _this, @Cast("const cv::AccessFlag") int val);
 @Namespace("cv") public static native @Cast("cv::AccessFlag*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::AccessFlag*") @ByRef int[] _this, @Cast("const cv::AccessFlag") int val);
+
+
+
 
 //////////////////////// Input/Output Array Arguments /////////////////////////////////
 
@@ -18960,6 +17927,18 @@ This data is not intented to be interpreted as an image data, or processed someh
 To pass such custom type use rawIn() / rawOut() / rawInOut() wrappers.
 Custom type is wrapped as Mat-compatible {@code CV_8UC<N>} values (N = sizeof(T), N <= CV_CN_MAX).
  */
+
+
+
+
+
+
+
+
+
+
+
+
 
 /** \brief This type is very similar to InputArray except that it is used for input/output and output function
 parameters.
@@ -19112,6 +18091,17 @@ public static final int
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 @Namespace("cv") @NoOffset public static class MatSize extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -19170,12 +18160,11 @@ Note that {@code M.step[i] >= M.step[i+1]} (in fact, {@code M.step[i] >= M.step[
 that 2-dimensional matrices are stored row-by-row, 3-dimensional matrices are stored plane-by-plane,
 and so on. M.step[M.dims-1] is minimal and always equal to the element size M.elemSize() .
 <p>
-So, the data layout in Mat is fully compatible with CvMat, IplImage, and CvMatND types from OpenCV
-1.x. It is also compatible with the majority of dense array types from the standard toolkits and
-SDKs, such as Numpy (ndarray), Win32 (independent device bitmaps), and others, that is, with any
-array that uses *steps* (or *strides*) to compute the position of a pixel. Due to this
-compatibility, it is possible to make a Mat header for user-allocated data and process it in-place
-using OpenCV functions.
+So, the data layout in Mat is compatible with the majority of dense array types from the standard
+toolkits and SDKs, such as Numpy (ndarray), Win32 (independent device bitmaps), and others,
+that is, with any array that uses *steps* (or *strides*) to compute the position of a pixel.
+Due to this compatibility, it is possible to make a Mat header for user-allocated data and process
+it in-place using OpenCV functions.
 <p>
 There are many different ways to create a Mat object. The most popular options are listed below:
 <p>
@@ -19260,10 +18249,6 @@ sub-matrices.
         Mat M = Mat(3, 3, CV_64F, m).inv();
     }</pre>
     .
-    Partial yet very common cases of this *user-allocated data* case are conversions from CvMat and
-    IplImage to Mat. For this purpose, there is function cv::cvarrToMat taking pointers to CvMat or
-    IplImage and the optional flag indicating whether to copy the data or not.
-    \snippet samples/cpp/image.cpp iplimage
 <p>
 - Use MATLAB-style array initializers, zeros(), ones(), eye(), for example:
 <pre>{@code
@@ -20307,13 +19292,6 @@ including std::sort().
     /** \overload
     @param ranges Array of selected ranges along each array dimension.
     */
-
-    // //! converts header to CvMat; no data is copied
-    // operator CvMat() const;
-    // //! converts header to CvMatND; no data is copied
-    // operator CvMatND() const;
-    // //! converts header to IplImage; no data is copied
-    // operator IplImage() const;
 
     /** \brief Reports whether the matrix is continuous or not.
     <p>
@@ -22466,16 +21444,16 @@ reading data to/from a file.
         INSIDE_MAP     = 4;
 
     /** \brief The constructors.
-    <p>
-    The full constructor opens the file. Alternatively you can use the default constructor and then
-    call FileStorage::open.
+     <p>
+     The full constructor opens the file. Alternatively you can use the default constructor and then
+     call FileStorage::open.
      */
     public FileStorage() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** \overload
-    \copydoc open()
-    */
+     \copydoc open()
+     */
     public FileStorage(@Str BytePointer filename, int flags, @Str BytePointer encoding/*=cv::String()*/) { super((Pointer)null); allocate(filename, flags, encoding); }
     private native void allocate(@Str BytePointer filename, int flags, @Str BytePointer encoding/*=cv::String()*/);
     public FileStorage(@Str BytePointer filename, int flags) { super((Pointer)null); allocate(filename, flags); }
@@ -22485,28 +21463,22 @@ reading data to/from a file.
     public FileStorage(@Str String filename, int flags) { super((Pointer)null); allocate(filename, flags); }
     private native void allocate(@Str String filename, int flags);
 
-    /** \overload */
-    public FileStorage(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/) { super((Pointer)null); allocate(fs, owning); }
-    private native void allocate(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/);
-    public FileStorage(CvFileStorage fs) { super((Pointer)null); allocate(fs); }
-    private native void allocate(CvFileStorage fs);
-
     /** the destructor. calls release() */
 
     /** \brief Opens a file.
-    <p>
-    See description of parameters in FileStorage::FileStorage. The method calls FileStorage::release
-    before opening the file.
-    @param filename Name of the file to open or the text string to read the data from.
-       Extension of the file (.xml, .yml/.yaml or .json) determines its format (XML, YAML or JSON
-        respectively). Also you can append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both
-        FileStorage::WRITE and FileStorage::MEMORY flags are specified, source is used just to specify
-        the output file format (e.g. mydata.xml, .yml etc.). A file name can also contain parameters.
-        You can use this format, "*?base64" (e.g. "file.json?base64" (case sensitive)), as an alternative to
-        FileStorage::BASE64 flag.
-    @param flags Mode of operation. One of FileStorage::Mode
-    @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
-    you should use 8-bit encoding instead of it.
+     <p>
+     See description of parameters in FileStorage::FileStorage. The method calls FileStorage::release
+     before opening the file.
+     @param filename Name of the file to open or the text string to read the data from.
+     Extension of the file (.xml, .yml/.yaml or .json) determines its format (XML, YAML or JSON
+     respectively). Also you can append .gz to work with compressed files, for example myHugeMatrix.xml.gz. If both
+     FileStorage::WRITE and FileStorage::MEMORY flags are specified, source is used just to specify
+     the output file format (e.g. mydata.xml, .yml etc.). A file name can also contain parameters.
+     You can use this format, "*?base64" (e.g. "file.json?base64" (case sensitive)), as an alternative to
+     FileStorage::BASE64 flag.
+     @param flags Mode of operation. One of FileStorage::Mode
+     @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
+     you should use 8-bit encoding instead of it.
      */
     public native @Cast("bool") boolean open(@Str BytePointer filename, int flags, @Str BytePointer encoding/*=cv::String()*/);
     public native @Cast("bool") boolean open(@Str BytePointer filename, int flags);
@@ -22514,41 +21486,41 @@ reading data to/from a file.
     public native @Cast("bool") boolean open(@Str String filename, int flags);
 
     /** \brief Checks whether the file is opened.
-    <p>
-    @return true if the object is associated with the current file and false otherwise. It is a
-    good practice to call this method after you tried to open a file.
+     <p>
+     @return true if the object is associated with the current file and false otherwise. It is a
+     good practice to call this method after you tried to open a file.
      */
     public native @Cast("bool") boolean isOpened();
 
     /** \brief Closes the file and releases all the memory buffers.
-    <p>
-    Call this method after all I/O operations with the storage are finished.
+     <p>
+     Call this method after all I/O operations with the storage are finished.
      */
     public native void release();
 
     /** \brief Closes the file and releases all the memory buffers.
-    <p>
-    Call this method after all I/O operations with the storage are finished. If the storage was
-    opened for writing data and FileStorage::WRITE was specified
+     <p>
+     Call this method after all I/O operations with the storage are finished. If the storage was
+     opened for writing data and FileStorage::WRITE was specified
      */
     public native @Str BytePointer releaseAndGetString();
 
     /** \brief Returns the first element of the top-level mapping.
-    @return The first element of the top-level mapping.
+     @return The first element of the top-level mapping.
      */
     public native @ByVal FileNode getFirstTopLevelNode();
 
     /** \brief Returns the top-level mapping
-    @param streamidx Zero-based index of the stream. In most cases there is only one stream in the file.
-    However, YAML supports multiple streams and so there can be several.
-    @return The top-level mapping.
+     @param streamidx Zero-based index of the stream. In most cases there is only one stream in the file.
+     However, YAML supports multiple streams and so there can be several.
+     @return The top-level mapping.
      */
     public native @ByVal FileNode root(int streamidx/*=0*/);
     public native @ByVal FileNode root();
 
     /** \brief Returns the specified element of the top-level mapping.
-    @param nodename Name of the file node.
-    @return Node with the given name.
+     @param nodename Name of the file node.
+     @return Node with the given name.
      */
     public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
@@ -22556,36 +21528,6 @@ reading data to/from a file.
     /** \overload */
     public native @ByVal @Name("operator []") FileNode getNode(@Cast("const char*") BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode getNode(String nodename);
-
-    /** \brief Returns the obsolete C FileStorage structure.
-    @return Pointer to the underlying C FileStorage structure
-     */
-    public native @Name("operator *") CvFileStorage multiply();
-
-    /** \overload */
-
-    /** \brief Writes multiple numbers.
-    <p>
-    Writes one or more numbers of the specified format to the currently written structure. Usually it is
-    more convenient to use operator {@code <<} instead of this method.
-    @param fmt Specification of each array element, see \ref format_spec "format specification"
-    @param vec Pointer to the written array.
-    @param len Number of the uchar elements to write.
-     */
-    public native void writeRaw( @Str BytePointer fmt, @Cast("const uchar*") BytePointer vec, @Cast("size_t") long len );
-    public native void writeRaw( @Str String fmt, @Cast("const uchar*") ByteBuffer vec, @Cast("size_t") long len );
-    public native void writeRaw( @Str BytePointer fmt, @Cast("const uchar*") byte[] vec, @Cast("size_t") long len );
-    public native void writeRaw( @Str String fmt, @Cast("const uchar*") BytePointer vec, @Cast("size_t") long len );
-    public native void writeRaw( @Str BytePointer fmt, @Cast("const uchar*") ByteBuffer vec, @Cast("size_t") long len );
-    public native void writeRaw( @Str String fmt, @Cast("const uchar*") byte[] vec, @Cast("size_t") long len );
-
-    /** \brief Writes the registered C structure (CvMat, CvMatND, CvSeq).
-    @param name Name of the written object.
-    @param obj Pointer to the object.
-    @see ocvWrite for details.
-     */
-    public native void writeObj( @Str BytePointer name, @Const Pointer obj );
-    public native void writeObj( @Str String name, @Const Pointer obj );
 
     /**
      * \brief Simplified writing API to use with bindings.
@@ -22607,22 +21549,37 @@ reading data to/from a file.
     public native void write(@Str BytePointer name, @Const @ByRef StringVector val);
     public native void write(@Str String name, @Const @ByRef StringVector val);
 
+    /** \brief Writes multiple numbers.
+     <p>
+     Writes one or more numbers of the specified format to the currently written structure. Usually it is
+     more convenient to use operator {@code <<} instead of this method.
+     @param fmt Specification of each array element, see \ref format_spec "format specification"
+     @param vec Pointer to the written array.
+     @param len Number of the uchar elements to write.
+     */
+    public native void writeRaw( @Str BytePointer fmt, @Const Pointer vec, @Cast("size_t") long len );
+    public native void writeRaw( @Str String fmt, @Const Pointer vec, @Cast("size_t") long len );
+
     /** \brief Writes a comment.
-    <p>
-    The function writes a comment into file storage. The comments are skipped when the storage is read.
-    @param comment The written comment, single-line or multi-line
-    @param append If true, the function tries to put the comment at the end of current line.
-    Else if the comment is multi-line, or if it does not fit at the end of the current
-    line, the comment starts a new line.
+     <p>
+     The function writes a comment into file storage. The comments are skipped when the storage is read.
+     @param comment The written comment, single-line or multi-line
+     @param append If true, the function tries to put the comment at the end of current line.
+     Else if the comment is multi-line, or if it does not fit at the end of the current
+     line, the comment starts a new line.
      */
     public native void writeComment(@Str BytePointer comment, @Cast("bool") boolean append/*=false*/);
     public native void writeComment(@Str BytePointer comment);
     public native void writeComment(@Str String comment, @Cast("bool") boolean append/*=false*/);
     public native void writeComment(@Str String comment);
 
+    public native void startWriteStruct(@Str BytePointer name, int flags, @Str BytePointer typeName);
+    public native void startWriteStruct(@Str String name, int flags, @Str String typeName);
+    public native void endWriteStruct();
+
     /** \brief Returns the normalized object name for the specified name of a file.
-    @param filename Name of a file
-    @return The normalized object name.
+     @param filename Name of a file
+     @return The normalized object name.
      */
     public static native @Str BytePointer getDefaultObjectName(@Str BytePointer filename);
     public static native @Str String getDefaultObjectName(@Str String filename);
@@ -22632,14 +21589,8 @@ reading data to/from a file.
      */
     public native int getFormat();
 
-    /** the underlying C FileStorage structure */
-    public native @Ptr CvFileStorage fs(); public native FileStorage fs(CvFileStorage fs);
-    /** the currently written element */
-    public native @Str BytePointer elname(); public native FileStorage elname(BytePointer elname);
-    /** the stack of written structures */
-    public native @Cast("char*") @StdVector BytePointer structs(); public native FileStorage structs(BytePointer structs);
-    /** the writer state */
     public native int state(); public native FileStorage state(int state);
+    public native @StdString BytePointer elname(); public native FileStorage elname(BytePointer elname);
 }
 
 /** \brief File Storage Node class.
@@ -22666,7 +21617,7 @@ storage is opened for writing, no data is stored in memory after it is written.
     }
 
     /** type of the file storage node */
-    /** enum cv::FileNode::Type */
+    /** enum cv::FileNode:: */
     public static final int
         /** empty node */
         NONE      = 0,
@@ -22680,67 +21631,68 @@ storage is opened for writing, no data is stored in memory after it is written.
         STR       = 3,
         /** synonym for STR */
         STRING    = STR,
-        /** integer of size size_t. Typically used for storing complex dynamic structures where some elements reference the others */
-        REF       = 4,
         /** sequence */
-        SEQ       = 5,
+        SEQ       = 4,
         /** mapping */
-        MAP       = 6,
+        MAP       = 5,
         TYPE_MASK = 7,
+
         /** compact representation of a sequence or mapping. Used only by YAML writer */
         FLOW      = 8,
-        /** a registered object (e.g. a matrix) */
-        USER      = 16,
+        /** if set, means that all the collection elements are numbers of the same type (real's or int's).
+ *  UNIFORM is used only when reading FileStorage; FLOW is used only when writing. So they share the same bit */
+        UNIFORM   = 8,
         /** empty structure (sequence or mapping) */
-        EMPTY     = 32,
-        /** the node has a name (i.e. it is element of a mapping) */
-        NAMED     = 64;
+        EMPTY     = 16,
+        /** the node has a name (i.e. it is element of a mapping). */
+        NAMED     = 32;
     /** \brief The constructors.
-    <p>
-    These constructors are used to create a default file node, construct it from obsolete structures or
-    from the another file node.
+     <p>
+     These constructors are used to create a default file node, construct it from obsolete structures or
+     from the another file node.
      */
     public FileNode() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** \overload
-    @param fs Pointer to the obsolete file storage structure.
-    @param node File node to be used as initialization for the created file node.
-    */
-    public FileNode(@Const CvFileStorage fs, @Const CvFileNode node) { super((Pointer)null); allocate(fs, node); }
-    private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node);
+     @param fs Pointer to the file storage structure.
+     @param blockIdx Index of the memory block where the file node is stored
+     @param ofs Offset in bytes from the beginning of the serialized storage
+     */
+    public FileNode(@Const FileStorage fs, @Cast("size_t") long blockIdx, @Cast("size_t") long ofs) { super((Pointer)null); allocate(fs, blockIdx, ofs); }
+    private native void allocate(@Const FileStorage fs, @Cast("size_t") long blockIdx, @Cast("size_t") long ofs);
 
     /** \overload
-    @param node File node to be used as initialization for the created file node.
-    */
+     @param node File node to be used as initialization for the created file node.
+     */
     public FileNode(@Const @ByRef FileNode node) { super((Pointer)null); allocate(node); }
     private native void allocate(@Const @ByRef FileNode node);
 
     /** \brief Returns element of a mapping node or a sequence node.
-    @param nodename Name of an element in the mapping node.
-    @return Returns the element with the given identifier.
+     @param nodename Name of an element in the mapping node.
+     @return Returns the element with the given identifier.
      */
     public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
     /** \overload
-    @param nodename Name of an element in the mapping node.
-    */
+     @param nodename Name of an element in the mapping node.
+     */
     public native @ByVal @Name("operator []") FileNode getNode(@Cast("const char*") BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode getNode(String nodename);
 
     /** \overload
-    @param i Index of an element in the sequence node.
-    */
+     @param i Index of an element in the sequence node.
+     */
     public native @ByVal @Name("operator []") FileNode at(int i);
 
     /** \brief Returns keys of a mapping node.
-    @return Keys of a mapping node.
+     @return Keys of a mapping node.
      */
     public native @ByVal StringVector keys();
 
     /** \brief Returns type of the node.
-    @return Type of the node. See FileNode::Type
+     @return Type of the node. See FileNode::Type
      */
     public native int type();
 
@@ -22761,9 +21713,11 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** returns true if the node has a name */
     public native @Cast("bool") boolean isNamed();
     /** returns the node name or an empty string if the node is nameless */
-    public native @Str BytePointer name();
+    public native @StdString BytePointer name();
     /** returns the number of elements in the node, if it is a sequence or mapping, or 1 otherwise. */
     public native @Cast("size_t") long size();
+    /** returns raw size of the FileNode in bytes */
+    public native @Cast("size_t") long rawSize();
     /** returns the node content as an integer. If the node stores floating-point number, it is rounded. */
     public native @Name("operator int") int asInt();
     /** returns the node content as float */
@@ -22773,9 +21727,13 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** returns the node content as text string */
     public native @Name("operator std::string") @StdString BytePointer asBytePointer();
 
-    /** returns pointer to the underlying file node */
-    public native @Name("operator *") CvFileNode multiply();
-    /** returns pointer to the underlying file node */
+    public static native @Cast("bool") boolean isMap(int flags);
+    public static native @Cast("bool") boolean isSeq(int flags);
+    public static native @Cast("bool") boolean isCollection(int flags);
+    public static native @Cast("bool") boolean isEmptyCollection(int flags);
+    public static native @Cast("bool") boolean isFlow(int flags);
+
+    public native @Cast("uchar*") BytePointer ptr();
 
     /** returns iterator pointing to the first node element */
     public native @ByVal FileNodeIterator begin();
@@ -22783,22 +21741,21 @@ storage is opened for writing, no data is stored in memory after it is written.
     public native @ByVal FileNodeIterator end();
 
     /** \brief Reads node elements to the buffer with the specified format.
-    <p>
-    Usually it is more convenient to use operator {@code >>} instead of this method.
-    @param fmt Specification of each array element. See \ref format_spec "format specification"
-    @param vec Pointer to the destination array.
-    @param len Number of elements to read. If it is greater than number of remaining elements then all
-    of them will be read.
+     <p>
+     Usually it is more convenient to use operator {@code >>} instead of this method.
+     @param fmt Specification of each array element. See \ref format_spec "format specification"
+     @param vec Pointer to the destination array.
+     @param len Number of elements to read. If it is greater than number of remaining elements then all
+     of them will be read.
      */
-    public native void readRaw( @Str BytePointer fmt, @Cast("uchar*") BytePointer vec, @Cast("size_t") long len );
-    public native void readRaw( @Str String fmt, @Cast("uchar*") ByteBuffer vec, @Cast("size_t") long len );
-    public native void readRaw( @Str BytePointer fmt, @Cast("uchar*") byte[] vec, @Cast("size_t") long len );
-    public native void readRaw( @Str String fmt, @Cast("uchar*") BytePointer vec, @Cast("size_t") long len );
-    public native void readRaw( @Str BytePointer fmt, @Cast("uchar*") ByteBuffer vec, @Cast("size_t") long len );
-    public native void readRaw( @Str String fmt, @Cast("uchar*") byte[] vec, @Cast("size_t") long len );
+    public native void readRaw( @Str BytePointer fmt, Pointer vec, @Cast("size_t") long len );
+    public native void readRaw( @Str String fmt, Pointer vec, @Cast("size_t") long len );
 
-    /** reads the registered object and returns pointer to it */
-    public native Pointer readObj();
+    /** Internal method used when reading FileStorage.
+     Sets the type (int, real or string) and value of the previously created node.
+     */
+    public native void setValue( int type, @Const Pointer value, int len/*=-1*/ );
+    public native void setValue( int type, @Const Pointer value );
 
     /** Simplified reading API to use with bindings. */
     public native double real();
@@ -22807,16 +21764,17 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** Simplified reading API to use with bindings. */
     public native @ByVal Mat mat();
 
-    // do not use wrapper pointer classes for better efficiency
-    @MemberGetter public native @Const CvFileStorage fs();
-    @MemberGetter public native @Const CvFileNode node();
+    //protected:
+    @MemberGetter public native @Const FileStorage fs();
+    public native @Cast("size_t") long blockIdx(); public native FileNode blockIdx(long blockIdx);
+    public native @Cast("size_t") long ofs(); public native FileNode ofs(long ofs);
 }
 
 
 /** \brief used to iterate through sequences and mappings.
-<p>
-A standard STL notation, with node.begin(), node.end() denoting the beginning and the end of a
-sequence, stored in node. See the data reading sample in the beginning of the section.
+ <p>
+ A standard STL notation, with node.begin(), node.end() denoting the beginning and the end of a
+ sequence, stored in node. See the data reading sample in the beginning of the section.
  */
 @Namespace("cv") @NoOffset public static class FileNodeIterator extends Pointer {
     static { Loader.load(); }
@@ -22830,26 +21788,27 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     }
 
     /** \brief The constructors.
-    <p>
-    These constructors are used to create a default iterator, set it to specific element in a file node
-    or construct it from another iterator.
+     <p>
+     These constructors are used to create a default iterator, set it to specific element in a file node
+     or construct it from another iterator.
      */
     public FileNodeIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** \overload
-    @param fs File storage for the iterator.
-    @param node File node for the iterator.
-    @param ofs Index of the element in the node. The created iterator will point to this element.
-    */
-    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node, @Cast("size_t") long ofs/*=0*/) { super((Pointer)null); allocate(fs, node, ofs); }
-    private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node, @Cast("size_t") long ofs/*=0*/);
-    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node) { super((Pointer)null); allocate(fs, node); }
-    private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node);
+     @param node File node - the collection to iterate over;
+        it can be a scalar (equivalent to 1-element collection) or "none" (equivalent to empty collection).
+     @param seekEnd - true if iterator needs to be set after the last element of the node;
+        that is:
+            * node.begin() => FileNodeIterator(node, false)
+            * node.end() => FileNodeIterator(node, true)
+     */
+    public FileNodeIterator(@Const @ByRef FileNode node, @Cast("bool") boolean seekEnd) { super((Pointer)null); allocate(node, seekEnd); }
+    private native void allocate(@Const @ByRef FileNode node, @Cast("bool") boolean seekEnd);
 
     /** \overload
-    @param it Iterator to be used as initialization for the created iterator.
-    */
+     @param it Iterator to be used as initialization for the created iterator.
+     */
     public FileNodeIterator(@Const @ByRef FileNodeIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef FileNodeIterator it);
 
@@ -22862,70 +21821,28 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     public native @ByRef @Name("operator ++") FileNodeIterator increment();
     /** moves iterator to the next node */
     public native @ByVal @Name("operator ++") FileNodeIterator increment(int arg0);
-    /** moves iterator to the previous node */
-    public native @ByRef @Name("operator --") FileNodeIterator decrement();
-    /** moves iterator to the previous node */
-    public native @ByVal @Name("operator --") FileNodeIterator decrement(int arg0);
     /** moves iterator forward by the specified offset (possibly negative) */
     public native @ByRef @Name("operator +=") FileNodeIterator addPut(int ofs);
-    /** moves iterator backward by the specified offset (possibly negative) */
-    public native @ByRef @Name("operator -=") FileNodeIterator subtractPut(int ofs);
 
     /** \brief Reads node elements to the buffer with the specified format.
-    <p>
-    Usually it is more convenient to use operator {@code >>} instead of this method.
-    @param fmt Specification of each array element. See \ref format_spec "format specification"
-    @param vec Pointer to the destination array.
-    @param maxCount Number of elements to read. If it is greater than number of remaining elements then
-    all of them will be read.
+     <p>
+     Usually it is more convenient to use operator {@code >>} instead of this method.
+     @param fmt Specification of each array element. See \ref format_spec "format specification"
+     @param vec Pointer to the destination array.
+     @param maxCount Number of elements to read. If it is greater than number of remaining elements then
+     all of them will be read.
      */
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") BytePointer vec,
+    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, Pointer vec,
                                    @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") BytePointer vec );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") ByteBuffer vec,
+    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, Pointer vec );
+    public native @ByRef FileNodeIterator readRaw( @Str String fmt, Pointer vec,
                                    @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") ByteBuffer vec );
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") byte[] vec,
-                                   @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") byte[] vec );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") BytePointer vec,
-                                   @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") BytePointer vec );
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") ByteBuffer vec,
-                                   @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str BytePointer fmt, @Cast("uchar*") ByteBuffer vec );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") byte[] vec,
-                                   @Cast("size_t") long maxCount/*=(size_t)INT_MAX*/ );
-    public native @ByRef FileNodeIterator readRaw( @Str String fmt, @Cast("uchar*") byte[] vec );
+    public native @ByRef FileNodeIterator readRaw( @Str String fmt, Pointer vec );
 
-    public static class SeqReader extends Pointer {
-        static { Loader.load(); }
-        /** Default native constructor. */
-        public SeqReader() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public SeqReader(long size) { super((Pointer)null); allocateArray(size); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public SeqReader(Pointer p) { super(p); }
-        private native void allocate();
-        private native void allocateArray(long size);
-        @Override public SeqReader position(long position) {
-            return (SeqReader)super.position(position);
-        }
-    
-      public native int header_size(); public native SeqReader header_size(int header_size);
-      public native Pointer seq(); public native SeqReader seq(Pointer seq);        /* sequence, beign read; CvSeq      */
-      public native Pointer block(); public native SeqReader block(Pointer block);      /* current block;        CvSeqBlock */
-      public native @Cast("schar*") BytePointer ptr(); public native SeqReader ptr(BytePointer ptr);        /* pointer to element be read next */
-      public native @Cast("schar*") BytePointer block_min(); public native SeqReader block_min(BytePointer block_min);  /* pointer to the beginning of block */
-      public native @Cast("schar*") BytePointer block_max(); public native SeqReader block_max(BytePointer block_max);  /* pointer to the end of block */
-      public native int delta_index(); public native SeqReader delta_index(int delta_index);/* = seq->first->start_index   */
-      public native @Cast("schar*") BytePointer prev_elem(); public native SeqReader prev_elem(BytePointer prev_elem);  /* pointer to previous element */
-    }
+    /** returns the number of remaining (not read yet) elements */
+    public native @Cast("size_t") long remaining();
 
-    @MemberGetter public native @Const CvFileStorage fs();
-    @MemberGetter public native @Const CvFileNode container();
-    public native @ByRef SeqReader reader(); public native FileNodeIterator reader(SeqReader reader);
-    public native @Cast("size_t") long remaining(); public native FileNodeIterator remaining(long remaining);
+    public native @Cast("bool") boolean equalTo(@Const @ByRef FileNodeIterator it);
 }
 
 /** \} core_xml
@@ -23128,54 +22045,13 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  *  \{ */
 
 @Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
-
 @Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
 @Namespace("cv") public static native @Cast("ptrdiff_t") @Name("operator -") long subtract(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
 @Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
-/** \} FileNodeIterator
- <p>
- *  \cond IGNORED */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** \endcond */
-
-
-
-
-
-
-
-
-
-
-
+/** \} FileNodeIterator */
 
  // cv
 
