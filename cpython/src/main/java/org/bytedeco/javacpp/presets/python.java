@@ -50,6 +50,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "moduleobject.h",
                 "pyarena.h",
                 "pystate.h",
+                "ceval.h",
                 "asdl.h",
                 "Python-ast.h",
                 "node.h",
@@ -90,7 +91,10 @@ public class python implements InfoMapper {
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "PyMODINIT_FUNC", "Py_VA_COPY",
                              "PyMem_Del", "PyMem_DEL", "PyDescr_COMMON",
                              "PyObject_HEAD", "PyObject_VAR_HEAD", "Py_RETURN_NONE", "Py_RETURN_NOTIMPLEMENTED",
-                             "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec").cppTypes().annotations())
+                             "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec",
+                             "Py_ALLOW_RECURSION", "Py_END_ALLOW_RECURSION",
+                             "Py_BEGIN_ALLOW_THREADS", "Py_END_ALLOW_THREADS",
+                             "Py_BLOCK_THREADS", "Py_UNBLOCK_THREADS").cppTypes().annotations())
 
                .put(new Info("HAVE_GCC_ASM_FOR_X87",
                              "defined(_MSC_VER) && !defined(_WIN64)",
