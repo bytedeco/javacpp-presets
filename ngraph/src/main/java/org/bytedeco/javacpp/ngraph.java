@@ -348,126 +348,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
-// Parsed from ngraph/backend.hpp
-
-//*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>  // std::shared_ptr
-// #include <string>  // std::string
-// #include <utility> // std::move
-// #include <vector>  // std::vector
-
-// #include "ngraph/function.hpp"
-// #include "ngraph/runtime/backend.hpp"
-// #include "ngraph/runtime/tensor.hpp"
-        /** \brief ONNXIFI extensions to nGraph backend */
-        @Namespace("ngraph::onnxifi") public static class Backend extends Pointer {
-            static { Loader.load(); }
-            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public Backend(Pointer p) { super(p); }
-        
-//            Backend(const Backend&) = delete;
-//            Backend& operator=(const Backend&) = delete;
-
-//            Backend(Backend&&) = default;
-//            Backend& operator=(Backend&&) = default;
-
-//            Backend() = delete;
-
-           
-          
-         
-        
-
-            public native @StdString BytePointer get_type();
-            public native @Cast("bool") boolean compile(@Const @SharedPtr @ByRef Function function);
-
-            public native @Cast("bool") boolean call(@Const @SharedPtr @ByRef Function function,
-                                  @SharedPtr @StdVector RuntimeTensor outputs,
-                                  @SharedPtr @StdVector RuntimeTensor inputs);
-
-            public native @Cast("bool") boolean call_with_validate(
-                            @Const @SharedPtr @ByRef Function function,
-                            @SharedPtr @StdVector RuntimeTensor outputs,
-                            @SharedPtr @StdVector RuntimeTensor inputs);
-        }
-
-     // namespace onnxifi
-
- // namespace ngraph
-
-
-// Parsed from ngraph/backend_manager.hpp
-
-//*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <cstddef> // std::size_t, std::uintptr_t
-// #include <map>     // std::map
-// #include <mutex>   // std::mutex
-
-// #include "onnxifi.h"
-
-// #include "ngraph/runtime/backend.hpp"
-
-// #include "backend.hpp"
-        /** \brief ONNXIFI backend manager */
-        @Namespace("ngraph::onnxifi") @NoOffset public static class BackendManager extends Pointer {
-            static { Loader.load(); }
-            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public BackendManager(Pointer p) { super(p); }
-        
-            
-            
-
-            
-            
-
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongPointer count);
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongBuffer count);
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") long[] count);
-
-            public static native void unregister(@ByVal onnxBackendID backend_id);
-
-            public static native @Const @ByRef Backend get(@ByVal onnxBackendID backend_id);
-        }
-
-     // namespace onnxifi
-
- // namespace ngraph
-
-
 // Parsed from ngraph/descriptor/tensor.hpp
 
 //*****************************************************************************
@@ -1731,6 +1611,12 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include "ngraph/coordinate.hpp"
 // #include "ngraph/node_vector.hpp"
 // #include "ngraph/strides.hpp"
+        @Namespace("ngraph::runtime") @Opaque public static class Backend extends Pointer {
+            /** Empty constructor. Calls {@code super((Pointer)null)}. */
+            public Backend() { super((Pointer)null); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Backend(Pointer p) { super(p); }
+        }
         @Namespace("ngraph::runtime") @Opaque public static class Manager extends Pointer {
             /** Empty constructor. Calls {@code super((Pointer)null)}. */
             public Manager() { super((Pointer)null); }
