@@ -12,81 +12,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_photo extends org.bytedeco.javacpp.presets.opencv_photo {
     static { Loader.load(); }
 
-// Parsed from <opencv2/photo/photo_c.h>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2008-2012, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef OPENCV_PHOTO_C_H
-// #define OPENCV_PHOTO_C_H
-
-// #include "opencv2/core/core_c.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/** \addtogroup photo_c
-  \{
-  */
-
-/* Inpainting algorithms */
-/** enum InpaintingModes */
-public static final int
-    CV_INPAINT_NS      = 0,
-    CV_INPAINT_TELEA   = 1;
-
-
-/* Inpaints the selected region in the image */
-public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask,
-                       CvArr dst, double inpaintRange, int flags );
-
-/** \} */
-
-// #ifdef __cplusplus //extern "C"
-// #endif
-
-// #endif //OPENCV_PHOTO_C_H
-
-
 // Parsed from <opencv2/photo.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -151,6 +76,11 @@ camera calibration with multiple exposures and exposure fusion.
     \defgroup photo_c C API
 \}
   */
+
+/** enum InpaintingModes */
+public static final int
+    CV_INPAINT_NS      = 0,
+    CV_INPAINT_TELEA   = 1;
 
 /** \addtogroup photo
  *  \{
@@ -851,23 +781,23 @@ For more information see \cite GW03 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlignMTB(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal MatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal UMatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByRef MatVector dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
 
     /** \brief Short version of process, that doesn't take extra arguments.
@@ -1056,23 +986,23 @@ For more information see \cite DM97 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeDebevec(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
@@ -1105,23 +1035,23 @@ For more information see \cite MK07 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeMertens(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     /** \brief Short version of process, that doesn't take extra arguments.
     <p>
@@ -1167,23 +1097,23 @@ For more information see \cite RB99 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeRobertson(Pointer p) { super(p); }
 
-    public native void process(@ByVal MatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal UMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal Mat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
-    public native void process(@ByVal MatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal UMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal UMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal UMat dst,
                                      @ByVal UMat times, @ByVal UMat response);
-    public native void process(@ByVal MatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal MatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal UMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal UMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
-    public native void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
+    public native @Override void process(@ByVal GpuMatVector src, @ByVal GpuMat dst,
                                      @ByVal GpuMat times, @ByVal GpuMat response);
     public native void process(@ByVal MatVector src, @ByVal Mat dst, @ByVal Mat times);
     public native void process(@ByVal UMatVector src, @ByVal Mat dst, @ByVal Mat times);
@@ -1412,10 +1342,6 @@ contrast while preserving, or enhancing, high-contrast features.
  *  \} photo */
 
  // cv
-
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/photo/photo_c.h"
-// #endif
 
 // #endif
 

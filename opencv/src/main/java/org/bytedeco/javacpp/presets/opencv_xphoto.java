@@ -39,10 +39,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/xphoto/dct_image_denoising.hpp>",
                 "<opencv2/xphoto/bm3d_image_denoising.hpp>",
             },
-            link = "opencv_xphoto@.3.4"
+            link = "opencv_xphoto@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_xphoto"),
-        @Platform(value = "windows", link = "opencv_xphoto343")
+        @Platform(value = "windows", link = "opencv_xphoto400")
     },
     target = "org.bytedeco.javacpp.opencv_xphoto"
 )

@@ -762,17 +762,18 @@ public static final int N_CELLS = 4;
         return (CvFeatureParams)super.position(position);
     }
 
-  /** enum cv::CvFeatureParams:: */
+  /** enum cv::CvFeatureParams::FeatureType */
   public static final int
     HAAR = 0,
     LBP = 1,
     HOG = 2;
+
   public CvFeatureParams() { super((Pointer)null); allocate(); }
   private native void allocate();
   public native void init( @Const @ByRef CvFeatureParams fp );
   public native void write( @ByRef FileStorage fs );
   public native @Cast("bool") boolean read( @Const @ByRef FileNode node );
-  public static native @Ptr CvFeatureParams create( int featureType );
+  public static native @Ptr CvFeatureParams create(@Cast("cv::CvFeatureParams::FeatureType") int featureType);
   public native int maxCatCount(); public native CvFeatureParams maxCatCount(int maxCatCount);  // 0 in case of numerical features
   public native int featSize(); public native CvFeatureParams featSize(int featSize);  // 1 in case of simple features (HAAR, LBP) and N_BINS(9)*N_CELLS(4) in case of Dalal's HOG features
   public native int numFeatures(); public native CvFeatureParams numFeatures(int numFeatures);
@@ -787,7 +788,7 @@ public static final int N_CELLS = 4;
   public native void setImage( @Const @ByRef Mat img, @Cast("uchar") byte clsLabel, int idx );
   public native void writeFeatures( @ByRef FileStorage fs, @Const @ByRef Mat featureMap );
   public native @Name("operator ()") float apply( int featureIdx, int sampleIdx );
-  public static native @Ptr CvFeatureEvaluator create( int type );
+  public static native @Ptr CvFeatureEvaluator create(@Cast("cv::CvFeatureParams::FeatureType") int type);
 
   public native int getNumFeatures();
   public native int getMaxCatCount();
@@ -3307,6 +3308,9 @@ occlusions, object absence etc.
     public native float scale_model_max_area(); public native Params scale_model_max_area(float scale_model_max_area);
     public native float scale_lr(); public native Params scale_lr(float scale_lr);
     public native float scale_step(); public native Params scale_step(float scale_step);
+
+    /** we lost the target, if the psr is lower than this. */
+    public native float psr_threshold(); public native Params psr_threshold(float psr_threshold);
   }
 
   /** \brief Constructor
@@ -3316,7 +3320,9 @@ occlusions, object absence etc.
 
   public static native @Ptr TrackerCSRT create();
 
-  public native void setInitialMask(@Const @ByVal Mat mask);
+  public native void setInitialMask(@ByVal Mat mask);
+  public native void setInitialMask(@ByVal UMat mask);
+  public native void setInitialMask(@ByVal GpuMat mask);
 }
 
  /* namespace cv */

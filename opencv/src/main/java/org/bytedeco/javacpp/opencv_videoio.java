@@ -711,25 +711,25 @@ See \ref videoio_overview for more information.
 public static final int
        /** Auto detect == 0 */
        CAP_ANY          = 0,
-       /** Video For Windows (platform native) */
+       /** Video For Windows (obsolete, removed) */
        CAP_VFW          = 200,
-       /** V4L/V4L2 capturing support via libv4l */
+       /** V4L/V4L2 capturing support */
        CAP_V4L          = 200,
        /** Same as CAP_V4L */
        CAP_V4L2         = CAP_V4L,
        /** IEEE 1394 drivers */
        CAP_FIREWIRE     = 300,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_FIREWARE     = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_IEEE1394     = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_DC1394       = CAP_FIREWIRE,
-       /** Same as CAP_FIREWIRE */
+       /** Same value as CAP_FIREWIRE */
        CAP_CMU1394      = CAP_FIREWIRE,
-       /** QuickTime */
+       /** QuickTime (obsolete, removed) */
        CAP_QT           = 500,
-       /** Unicap drivers */
+       /** Unicap drivers (obsolete, removed) */
        CAP_UNICAP       = 600,
        /** DirectShow (via videoInput) */
        CAP_DSHOW        = 700,
@@ -846,8 +846,16 @@ public static final int
        CAP_PROP_SAR_NUM       = 40,
        /** Sample aspect ratio: num/den (den) */
        CAP_PROP_SAR_DEN       = 41,
+       /** Current backend (enum VideoCaptureAPIs). Read-only property */
+       CAP_PROP_BACKEND       = 42,
+       /** Video input or Channel Number (only for those cameras that support) */
+       CAP_PROP_CHANNEL       = 43,
+       /** enable/ disable auto white-balance */
+       CAP_PROP_AUTO_WB       = 44,
+       /** white-balance color temperature */
+       CAP_PROP_WB_TEMPERATURE = 45,
 // #ifndef CV_DOXYGEN
-       CV__CAP_PROP_LATEST = 42;
+       CV__CAP_PROP_LATEST = 46;
 // #endif
 
 
@@ -1515,17 +1523,7 @@ Here is how the class can be used:
     private native void allocate();
 
     /** \overload
-    \brief  Open video file or a capturing device or a IP video stream for video capturing
-    <p>
-    Same as VideoCapture(const String& filename, int apiPreference) but using default Capture API backends
-    */
-    public VideoCapture(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
-    private native void allocate(@Str BytePointer filename);
-    public VideoCapture(@Str String filename) { super((Pointer)null); allocate(filename); }
-    private native void allocate(@Str String filename);
-
-    /** \overload
-    \brief  Open video file or a capturing device or a IP video stream for video capturing with API Preference
+    \brief  Opens a video file or a capturing device or an IP video stream for video capturing with API Preference
     <p>
     @param filename it can be:
     - name of video file (eg. {@code video.avi})
@@ -1537,20 +1535,27 @@ Here is how the class can be used:
     implementation if multiple are available: e.g. cv::CAP_FFMPEG or cv::CAP_IMAGES or cv::CAP_DSHOW.
     \sa The list of supported API backends cv::VideoCaptureAPIs
     */
-    public VideoCapture(@Str BytePointer filename, int apiPreference) { super((Pointer)null); allocate(filename, apiPreference); }
-    private native void allocate(@Str BytePointer filename, int apiPreference);
-    public VideoCapture(@Str String filename, int apiPreference) { super((Pointer)null); allocate(filename, apiPreference); }
-    private native void allocate(@Str String filename, int apiPreference);
+    public VideoCapture(@Str BytePointer filename, int apiPreference/*=cv::CAP_ANY*/) { super((Pointer)null); allocate(filename, apiPreference); }
+    private native void allocate(@Str BytePointer filename, int apiPreference/*=cv::CAP_ANY*/);
+    public VideoCapture(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
+    private native void allocate(@Str BytePointer filename);
+    public VideoCapture(@Str String filename, int apiPreference/*=cv::CAP_ANY*/) { super((Pointer)null); allocate(filename, apiPreference); }
+    private native void allocate(@Str String filename, int apiPreference/*=cv::CAP_ANY*/);
+    public VideoCapture(@Str String filename) { super((Pointer)null); allocate(filename); }
+    private native void allocate(@Str String filename);
 
     /** \overload
-    \brief  Open a camera for video capturing
+    \brief  Opens a camera for video capturing
     <p>
-    @param index camera_id + domain_offset (CAP_*) id of the video capturing device to open. To open default camera using default backend just pass 0.
-    Use a {@code domain_offset} to enforce a specific reader implementation if multiple are available like cv::CAP_FFMPEG or cv::CAP_IMAGES or cv::CAP_DSHOW.
-    e.g. to open Camera 1 using the MS Media Foundation API use {@code index = 1 + cv::CAP_MSMF}
+    @param index id of the video capturing device to open. To open default camera using default backend just pass 0.
+    (to backward compatibility usage of camera_id + domain_offset (CAP_*) is valid when apiPreference is CAP_ANY)
+    @param apiPreference preferred Capture API backends to use. Can be used to enforce a specific reader
+    implementation if multiple are available: e.g. cv::CAP_DSHOW or cv::CAP_MSMF or cv::CAP_V4L.
     <p>
     \sa The list of supported API backends cv::VideoCaptureAPIs
     */
+    public VideoCapture(int index, int apiPreference/*=cv::CAP_ANY*/) { super((Pointer)null); allocate(index, apiPreference); }
+    private native void allocate(int index, int apiPreference/*=cv::CAP_ANY*/);
     public VideoCapture(int index) { super((Pointer)null); allocate(index); }
     private native void allocate(int index);
 
@@ -1559,38 +1564,31 @@ Here is how the class can be used:
     The method first calls VideoCapture::release to close the already opened file or camera.
     */
 
-    /** \brief  Open video file or a capturing device or a IP video stream for video capturing
+    /** \brief  Opens a video file or a capturing device or an IP video stream for video capturing.
     <p>
     \overload
     <p>
-    Parameters are same as the constructor VideoCapture(const String& filename)
+    Parameters are same as the constructor VideoCapture(const String& filename, int apiPreference = CAP_ANY)
     @return {@code true} if the file has been successfully opened
     <p>
     The method first calls VideoCapture::release to close the already opened file or camera.
      */
+    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference/*=cv::CAP_ANY*/);
     public native @Cast("bool") boolean open(@Str BytePointer filename);
+    public native @Cast("bool") boolean open(@Str String filename, int apiPreference/*=cv::CAP_ANY*/);
     public native @Cast("bool") boolean open(@Str String filename);
 
-    /** \brief  Open a camera for video capturing
+    /** \brief  Opens a camera for video capturing
     <p>
     \overload
     <p>
-    Parameters are same as the constructor VideoCapture(int index)
+    Parameters are same as the constructor VideoCapture(int index, int apiPreference = CAP_ANY)
     @return {@code true} if the camera has been successfully opened.
     <p>
     The method first calls VideoCapture::release to close the already opened file or camera.
     */
+    public native @Cast("bool") boolean open(int index, int apiPreference/*=cv::CAP_ANY*/);
     public native @Cast("bool") boolean open(int index);
-
-   /** \brief  Open a camera for video capturing
-    <p>
-    \overload
-    <p>
-    Parameters are similar as the constructor VideoCapture(int index),except it takes an additional argument apiPreference.
-    Definitely, is same as open(int index) where {@code index=cameraNum + apiPreference}
-    @return {@code true} if the camera has been successfully opened.
-    */
-    public native @Cast("bool") boolean open(int cameraNum, int apiPreference);
 
     /** \brief Returns true if video capturing has been initialized already.
     <p>
@@ -1643,7 +1641,7 @@ Here is how the class can be used:
     <p>
     \note In \ref videoio_c "C API", functions cvRetrieveFrame() and cv.RetrieveFrame() return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
-    :ocvcvCloneImage and then do whatever you want with the copy.
+    cvCloneImage and then do whatever you want with the copy.
      */
     public native @Cast("bool") boolean retrieve(@ByVal Mat image, int flag/*=0*/);
     public native @Cast("bool") boolean retrieve(@ByVal Mat image);
@@ -1674,7 +1672,7 @@ Here is how the class can be used:
     <p>
     \note In \ref videoio_c "C API", functions cvRetrieveFrame() and cv.RetrieveFrame() return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
-    :ocvcvCloneImage and then do whatever you want with the copy.
+    cvCloneImage and then do whatever you want with the copy.
      */
     public native @Cast("bool") boolean read(@ByVal Mat image);
     public native @Cast("bool") boolean read(@ByVal UMat image);
@@ -1710,17 +1708,11 @@ Here is how the class can be used:
     */
     public native double get(int propId);
 
-    /** \brief Open video file or a capturing device or a IP video stream for video capturing with API Preference
-    <p>
-    \overload
-    <p>
-    Parameters are same as the constructor VideoCapture(const String& filename, int apiPreference)
-    @return {@code true} if the file has been successfully opened
-    <p>
-    The method first calls VideoCapture::release to close the already opened file or camera.
-    */
-    public native @Cast("bool") boolean open(@Str BytePointer filename, int apiPreference);
-    public native @Cast("bool") boolean open(@Str String filename, int apiPreference);
+    /** \brief Returns used backend API name
+     <p>
+     \note Stream should be opened.
+     */
+    public native @Str BytePointer getBackendName();
 }
 
 @Namespace("cv") @Opaque public static class IVideoWriter extends Pointer {
@@ -1757,8 +1749,8 @@ The class provides C++ API for writing video files or image sequences.
     <p>
     The constructors/functions initialize video writers.
     -   On Linux FFMPEG is used to write videos;
-    -   On Windows FFMPEG or VFW is used;
-    -   On MacOSX QTKit is used.
+    -   On Windows FFMPEG or MSWF or DSHOW is used;
+    -   On MacOSX AVFoundation is used.
      */
     public VideoWriter() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -1871,6 +1863,11 @@ The class provides C++ API for writing video files or image sequences.
     */
     public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef Mat image);
 
+    /** \overload
+    \sa write
+    */
+    public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef UMat image);
+
     /** \brief Writes the next video frame
     <p>
     @param image The written frame. In general, color images are expected in BGR format.
@@ -1878,7 +1875,9 @@ The class provides C++ API for writing video files or image sequences.
     The function/method writes the specified image to video file. It must have the same size as has
     been specified when opening the video writer.
      */
-    public native void write(@Const @ByRef Mat image);
+    public native void write(@ByVal Mat image);
+    public native void write(@ByVal UMat image);
+    public native void write(@ByVal GpuMat image);
 
     /** \brief Sets a property in the VideoWriter.
      <p>
@@ -1908,10 +1907,42 @@ The class provides C++ API for writing video files or image sequences.
     VideoWriter::VideoWriter or VideoWriter::open.
      */
     public static native int fourcc(@Cast("char") byte c1, @Cast("char") byte c2, @Cast("char") byte c3, @Cast("char") byte c4);
+
+    /** \brief Returns used backend API name
+     <p>
+     \note Stream should be opened.
+     */
+    public native @Str BytePointer getBackendName();
 }
 
-
-
+@Name("cv::DefaultDeleter<CvCapture>") public static class CvCaptureDefaultDeleter extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CvCaptureDefaultDeleter() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvCaptureDefaultDeleter(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvCaptureDefaultDeleter(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CvCaptureDefaultDeleter position(long position) {
+        return (CvCaptureDefaultDeleter)super.position(position);
+    }
+ public native @Name("operator ()") void apply(CvCapture obj); }
+@Name("cv::DefaultDeleter<CvVideoWriter>") public static class CvVideoWriterDefaultDeleter extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CvVideoWriterDefaultDeleter() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvVideoWriterDefaultDeleter(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvVideoWriterDefaultDeleter(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CvVideoWriterDefaultDeleter position(long position) {
+        return (CvVideoWriterDefaultDeleter)super.position(position);
+    }
+ public native @Name("operator ()") void apply(CvVideoWriter obj); }
 
 /** \} videoio */
 

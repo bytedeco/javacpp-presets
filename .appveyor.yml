@@ -8,25 +8,11 @@ cache:
 
 environment:
   matrix:
-    - PROJ: "opencv,flandmark"
+    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86
     - PROJ: "ffmpeg"
       OS: windows-x86
-    - PROJ: "flycapture"
-      OS: windows-x86
-    - PROJ: "spinnaker"
-      OS: windows-x86
-    - PROJ: "libdc1394"
-      OS: windows-x86
-    - PROJ: "libfreenect"
-      OS: windows-x86
-    - PROJ: "librealsense"
-      OS: windows-x86
-    - PROJ: "videoinput"
-      OS: windows-x86
-    - PROJ: "artoolkitplus"
-      OS: windows-x86
-    - PROJ: "chilitags"
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
       OS: windows-x86
     - PROJ: "hdf5"
       OS: windows-x86
@@ -34,19 +20,11 @@ environment:
       OS: windows-x86
     - PROJ: "openblas"
       OS: windows-x86
-    - PROJ: "arpack-ng"
-      OS: windows-x86
-    - PROJ: "cminpack"
-      OS: windows-x86
-    - PROJ: "fftw"
-      OS: windows-x86
-    - PROJ: "gsl"
+    - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
-    - PROJ: "leptonica"
-      OS: windows-x86
-    - PROJ: "tesseract"
+    - PROJ: "leptonica,tesseract"
       OS: windows-x86
     - PROJ: "ale"
       OS: windows-x86
@@ -55,27 +33,11 @@ environment:
     - PROJ: "systems"
       OS: windows-x86
 
-    - PROJ: "opencv,flandmark"
+    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
-    - PROJ: "flycapture"
-      OS: windows-x86_64
-    - PROJ: "spinnaker"
-      OS: windows-x86_64
-    - PROJ: "libdc1394"
-      OS: windows-x86_64
-    - PROJ: "libfreenect"
-      OS: windows-x86_64
-    - PROJ: "libfreenect2"
-      OS: windows-x86_64
-    - PROJ: "librealsense"
-      OS: windows-x86_64
-    - PROJ: "videoinput"
-      OS: windows-x86_64
-    - PROJ: "artoolkitplus"
-      OS: windows-x86_64
-    - PROJ: "chilitags"
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
       OS: windows-x86_64
     - PROJ: "hdf5"
       OS: windows-x86_64
@@ -85,13 +47,7 @@ environment:
       OS: windows-x86_64
     - PROJ: "openblas"
       OS: windows-x86_64
-    - PROJ: "arpack-ng"
-      OS: windows-x86_64
-    - PROJ: "cminpack"
-      OS: windows-x86_64
-    - PROJ: "fftw"
-      OS: windows-x86_64
-    - PROJ: "gsl"
+    - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86_64
     - PROJ: "cpython"
       OS: windows-x86_64
@@ -99,9 +55,7 @@ environment:
       OS: windows-x86_64
     - PROJ: "libpostal"
       OS: windows-x86_64
-    - PROJ: "leptonica"
-      OS: windows-x86_64
-    - PROJ: "tesseract"
+    - PROJ: "leptonica,tesseract"
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64

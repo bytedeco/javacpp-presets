@@ -220,6 +220,20 @@ public static final int
 // #include "opencv2/core.hpp"
 // #include "opencv2/flann/defines.h"
 
+/** enum cv::flann::FlannIndexType */
+public static final int
+    FLANN_INDEX_TYPE_8U = CV_8U,
+    FLANN_INDEX_TYPE_8S = CV_8S,
+    FLANN_INDEX_TYPE_16U = CV_16U,
+    FLANN_INDEX_TYPE_16S = CV_16S,
+    FLANN_INDEX_TYPE_32S = CV_32S,
+    FLANN_INDEX_TYPE_32F = CV_32F,
+    FLANN_INDEX_TYPE_64F = CV_64F,
+    FLANN_INDEX_TYPE_STRING = CV_64F + 1,
+    FLANN_INDEX_TYPE_BOOL = CV_64F + 2,
+    FLANN_INDEX_TYPE_ALGORITHM = CV_64F + 3,
+    LAST_VALUE_FLANN_INDEX_TYPE = FLANN_INDEX_TYPE_ALGORITHM;
+
 @Namespace("cv::flann") @NoOffset public static class IndexParams extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -259,16 +273,17 @@ public static final int
     public native void setBool(@Str String key, @Cast("bool") boolean value);
     public native void setAlgorithm(int value);
 
+    // FIXIT: replace by void write(FileStorage& fs) const + read()
     public native void getAll(@ByRef StringVector names,
-                    @StdVector IntPointer types,
+                    @Cast("cv::flann::FlannIndexType*") @StdVector IntPointer types,
                     @ByRef StringVector strValues,
                     @StdVector DoublePointer numValues);
     public native void getAll(@ByRef StringVector names,
-                    @StdVector IntBuffer types,
+                    @Cast("cv::flann::FlannIndexType*") @StdVector IntBuffer types,
                     @ByRef StringVector strValues,
                     @StdVector DoubleBuffer numValues);
     public native void getAll(@ByRef StringVector names,
-                    @StdVector int[] types,
+                    @Cast("cv::flann::FlannIndexType*") @StdVector int[] types,
                     @ByRef StringVector strValues,
                     @StdVector double[] numValues);
 

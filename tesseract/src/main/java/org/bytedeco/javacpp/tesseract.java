@@ -2424,9 +2424,9 @@ public static final int
   public native @Cast("char*") BytePointer GetUTF8Text(@Cast("tesseract::PageIteratorLevel") int level);
 
   /**
-   * Returns the glyph confidences for every LSTM timestep for the current Word
+   * Returns the LSTM choices for every LSTM timestep for the current word.
   */
-  public native StringFloatPairVectorVector GetGlyphConfidences();
+  public native StringFloatPairVectorVector GetBestLSTMSymbolChoices();
 
   /**
    * Return whether the current paragraph's dominant reading direction
@@ -3487,7 +3487,6 @@ public static class FileWriter extends FunctionPointer {
 // File:        baseapi.h
 // Description: Simple API for calling tesseract.
 // Author:      Ray Smith
-// Created:     Fri Oct 06 15:35:01 PDT 2006
 //
 // (C) Copyright 2006, Google Inc.
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -3926,7 +3925,7 @@ public static class FileWriter extends FunctionPointer {
   public native void GetLoadedLanguagesAsVector(StringGenericVector langs);
 
   /**
-   * Returns the available languages in the vector of STRINGs.
+   * Returns the available languages in the sorted vector of STRINGs.
    */
   public native void GetAvailableLanguagesAsVector(StringGenericVector langs);
 

@@ -92,8 +92,8 @@ import static org.bytedeco.javacpp.opencv_core.cvCreateSparseMat;
 import static org.bytedeco.javacpp.opencv_core.cvGet2D;
 import static org.bytedeco.javacpp.opencv_core.cvGetImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetMat;
-import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
-import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseGraphScanner;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImageHeader;
@@ -1696,39 +1696,39 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvFileStorage extends Pointer {
-        public AbstractCvFileStorage(Pointer p) { super(p); }
-
-        /**
-         * Calls cvOpenFileStorage(), and registers a deallocator. Uses default encoding.
-         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
-         */
-        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags) {
-            return open(filename, memstorage, flags, null);
-        }
-        /**
-         * Calls cvOpenFileStorage(), and registers a deallocator.
-         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
-         */
-        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags, String encoding) {
-            CvFileStorage f = cvOpenFileStorage(filename, memstorage, flags, encoding);
-            if (f != null) {
-                f.deallocator(new ReleaseDeallocator(f));
-            }
-            return f;
-        }
-
-        /**
-         * Calls the deallocator, if registered, otherwise has no effect.
-         */
-        public void release() {
-            deallocate();
-        }
-        protected static class ReleaseDeallocator extends CvFileStorage implements Deallocator {
-            ReleaseDeallocator(CvFileStorage p) { super(p); }
-            @Override public void deallocate() { cvReleaseFileStorage(this); }
-        }
-    }
+//    public static abstract class AbstractCvFileStorage extends Pointer {
+//        public AbstractCvFileStorage(Pointer p) { super(p); }
+//
+//        /**
+//         * Calls cvOpenFileStorage(), and registers a deallocator. Uses default encoding.
+//         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+//         */
+//        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags) {
+//            return open(filename, memstorage, flags, null);
+//        }
+//        /**
+//         * Calls cvOpenFileStorage(), and registers a deallocator.
+//         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+//         */
+//        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags, String encoding) {
+//            CvFileStorage f = cvOpenFileStorage(filename, memstorage, flags, encoding);
+//            if (f != null) {
+//                f.deallocator(new ReleaseDeallocator(f));
+//            }
+//            return f;
+//        }
+//
+//        /**
+//         * Calls the deallocator, if registered, otherwise has no effect.
+//         */
+//        public void release() {
+//            deallocate();
+//        }
+//        protected static class ReleaseDeallocator extends CvFileStorage implements Deallocator {
+//            ReleaseDeallocator(CvFileStorage p) { super(p); }
+//            @Override public void deallocate() { cvReleaseFileStorage(this); }
+//        }
+//    }
 
     public static abstract class AbstractCvGraphScanner extends Pointer {
         public AbstractCvGraphScanner(Pointer p) { super(p); }

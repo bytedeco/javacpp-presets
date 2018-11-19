@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -24,16 +24,36 @@ package org.bytedeco.javacpp.helper;
 
 // required by javac to resolve circular dependencies
 import org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_core.CvArr;
+import static org.bytedeco.javacpp.opencv_core.cvarrToMat;
+import static org.bytedeco.javacpp.opencv_core.cvClone;
 import static org.bytedeco.javacpp.opencv_core.cvCreateImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetSize;
+import static org.bytedeco.javacpp.opencv_core.cvIplImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.CV_LOAD_IMAGE_COLOR;
-import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+//import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
+import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2BGRA;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2RGBA;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 
 public class opencv_imgcodecs extends org.bytedeco.javacpp.presets.opencv_imgcodecs {
+
+    public static IplImage cvLoadImage(String filename) {
+        return cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
+    }
+    public static IplImage cvLoadImage(String filename, int iscolor) {
+        return new IplImage(cvClone(cvIplImage(imread(filename, iscolor))));
+    }
+
+    public static int cvSaveImage(String filename, CvArr arr) {
+        return cvSaveImage(filename, arr, null);
+    }
+    public static int cvSaveImage(String filename, CvArr arr, int[] params) {
+        return imwrite(filename, cvarrToMat(arr), params) ? 1 : 0;
+    }
 
     public static IplImage cvLoadImageBGRA(String filename) {
         IplImage imageBGR = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);

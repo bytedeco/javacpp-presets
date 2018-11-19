@@ -66,6 +66,7 @@ public class opencv_xphoto extends org.bytedeco.javacpp.presets.opencv_xphoto {
 // #include "xphoto/white_balance.hpp"
 // #include "xphoto/dct_image_denoising.hpp"
 // #include "xphoto/bm3d_image_denoising.hpp"
+// #include "xphoto/oilpainting.hpp"
 // #endif
 
 

@@ -41,16 +41,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/tracking/tldDataset.hpp>",
                 "<opencv2/tracking/tracker.hpp>",
             },
-            link = "opencv_tracking@.3.4"
+            link = "opencv_tracking@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_tracking"),
-        @Platform(value = "windows", link = "opencv_tracking343")
+        @Platform(value = "windows", link = "opencv_tracking400")
     },
     target = "org.bytedeco.javacpp.opencv_tracking"
 )
 public class opencv_tracking implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::Ptr<cv::Tracker>").annotations("@Ptr").pointerTypes("Tracker"))
+        infoMap.put(new Info("override").annotations()) // pure virtual functions are not mapped unless virtualized, so disable override annotation
+               .put(new Info("cv::Ptr<cv::Tracker>").annotations("@Ptr").pointerTypes("Tracker"))
                .put(new Info("cv::Ptr<cv::TrackerFeature>").annotations("@Ptr").pointerTypes("TrackerFeature"))
                .put(new Info("cv::Ptr<cv::TrackerTargetState>").annotations("@Ptr").pointerTypes("TrackerTargetState"))
                .put(new Info("cv::Ptr<cv::TrackerSamplerAlgorithm>").annotations("@Ptr").pointerTypes("TrackerSamplerAlgorithm"))

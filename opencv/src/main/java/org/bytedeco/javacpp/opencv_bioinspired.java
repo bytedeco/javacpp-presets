@@ -431,7 +431,7 @@ more informations in the above cited Jeanny Heraults's book.
     public native void write( @Str String fs );
 
     /** \overload */
-    public native void write( @ByRef FileStorage fs );
+    public native @Override void write( @ByRef FileStorage fs );
 
     /** \brief Setup the OPL and IPL parvo channels (see biologocal model)
     <p>
@@ -964,7 +964,7 @@ to the neighborhood otion energy, then the area is considered as moving and is s
     /** \brief write xml/yml formated parameters information
     @param fs : a cv::Filestorage object ready to be filled
     */
-    public native void write( @ByRef FileStorage fs );
+    public native @Override void write( @ByRef FileStorage fs );
 
     /** \brief main processing method, get result using methods getSegmentationPicture()
     @param inputToSegment : the image to process, it must match the instance buffer size !
