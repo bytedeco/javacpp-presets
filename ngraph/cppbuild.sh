@@ -13,7 +13,7 @@ cmake .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=~/ngraph_dist -DN
 make -j 8
 make install
 
-mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/op/util ../../include/ngraph/autodiff/ ../../include/ngraph/descriptor ../../include/ngraph/descriptor/layout ../../include/ngraph/runtime ../../include/ngraph/runtime/cpu ../../include/ngraph/type ../../include/onnx ../../lib
+mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/pass ../../include/ngraph/state ../../include/ngraph/codegen ../../include/ngraph/op/util ../../include/ngraph/autodiff/ ../../include/ngraph/descriptor ../../include/ngraph/descriptor/layout ../../include/ngraph/runtime ../../include/ngraph/runtime/cpu ../../include/ngraph/type ../../include/onnx ../../lib
 
 patch ../src/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
 patch ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
@@ -38,6 +38,9 @@ cp ../src/ngraph/op/util/*.hpp ../../include/ngraph/op/util/
 cp ../src/ngraph/descriptor/*.hpp ../../include/ngraph/descriptor/
 cp ../src/ngraph/descriptor/layout/*.hpp ../../include/ngraph/descriptor/layout/
 cp ../src/ngraph/autodiff/*.hpp ../../include/ngraph/autodiff/
+cp ../src/ngraph/codegen/*.hpp ../../include/ngraph/codegen/
+cp ../src/ngraph/pass/*.hpp ../../include/ngraph/pass/
+cp ../src/ngraph/state/*.hpp ../../include/ngraph/state/
 cp ../src/ngraph/*.hpp ../../include/ngraph/
 
 cd ../../..

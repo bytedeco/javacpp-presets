@@ -43,9 +43,10 @@ import java.lang.annotation.Target;
 //	"ngraph/backend_manager.hpp",
 	"ngraph/descriptor/tensor.hpp",
 	"ngraph/runtime/tensor.hpp",
-//	"ngraph/runtime/backend.hpp",
-//	"ngraph/runtime/cpu/cpu_backend.hpp",
-//	"ngraph/runtime/performance_counter.hpp",
+	"ngraph/runtime/backend.hpp",
+	"ngraph/runtime/cpu/cpu_backend.hpp",
+//	"ngraph/runtime/cpu/cpu_external_function.hpp",
+	"ngraph/runtime/performance_counter.hpp",
         "ngraph/type/element_type.hpp",
         "ngraph/shape.hpp",
         "ngraph/function.hpp",
@@ -73,32 +74,36 @@ import java.lang.annotation.Target;
     public class ngraph implements InfoMapper {
     public void map(InfoMap infoMap) {
 
-    	   infoMap.put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
-		  .put(new Info("ngraph::runtime::Tensor").pointerTypes("RuntimeTensor"))
-		  .put(new Info("ngraph::descriptor::Tensor").purify(true))
-		  .put(new Info("ngraph::runtime::Tensor").purify(false).virtualize())
+    	   infoMap
+		   //.put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+		  .put(new Info("ngraph::descriptor::Tensor").purify(true).pointerTypes("DescriptorTensor"))
+		  .put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("DescriptorTensor"))
+		  .put(new Info("ngraph::runtime::Tensor").purify(true)) //.purify(false).virtualize())
                   .put(new Info("ngraph::onnxifi::Backend").purify(true))
 		  .put(new Info("ngraph::op::Parameter").purify(true))
                   .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
-                  .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("RuntimeTensor"))
+                  .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
 		  //		  .put(new Info("ngraph::Node").purify(false).virtualize())
 		  .put(new Info("std::shared_ptr<const Node>", "std::shared_ptr<ngraph::Node>").annotations("@SharedPtr").pointerTypes("Node"))
                   .put(new Info("std::shared_ptr<ngraph::op::Parameter>", "std::shared_ptr<op::Parameter>").annotations("@SharedPtr").pointerTypes("Parameter"))
 		  .put(new Info("std::shared_ptr<ngraph::Function>", "std::shared_ptr<Function>").annotations("@SharedPtr").pointerTypes("Function"))
                   .put(new Info("std::size_t", "size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-		  .put(new Info("std::enable_shared_from_this<ngraph::Node>", "std::enable_shared_from_this<Node>").pointerTypes("Pointer"))
+		  .put(new Info("std::enable_shared_from_this<ngraph::Node>", "std::enable_shared_from_this<Node>", "std::enable_shared_from_this<ngraph::runtime::cpu::CPU_ExternalFunction>").pointerTypes("Pointer"))
                   .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
-		  .put(new Info("std::list<std::shared_ptr<Node> >", "PartialShape", "std::pair<std::shared_ptr<ngraph::op::Result>,std::shared_ptr<ngraph::op::Parameter> >", "std::deque<ngraph::Node::descriptor::Input>", "std::deque<descriptor::Output>", "std::set<ngraph::Node::descriptor::Input*>", "std::unordered_set<descriptor::Tensor*>", "std::stringstream", "size_t", "ngraph::Node::has_same_type", "ngraph::descriptor::Tensor::set_tensor_layout").skip())
+		  .put(new Info("std::list<std::shared_ptr<Node> >", "PartialShape", "std::pair<std::shared_ptr<ngraph::op::Result>,std::shared_ptr<ngraph::op::Parameter> >", "std::deque<ngraph::Node::descriptor::Input>", "std::deque<descriptor::Output>", "std::set<ngraph::Node::descriptor::Input*>", "std::unordered_set<descriptor::Tensor*>", "std::stringstream", "size_t", "ngraph::Node::has_same_type", "ngraph::descriptor::Tensor::set_tensor_layout", "ngraph::runtime::cpu::CPU_ExternalFunction::get_executor", "ngraph::runtime::cpu::CPU_ExternalFunction::get_callees", "ngraph::runtime::cpu::CPU_ExternalFunction::get_halide_functions", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_params", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_sizes", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_ptrs", "ngraph::runtime::cpu::CPU_ExternalFunction::get_parameter_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_result_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_mkldnn_emitter", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::get_functors", "ngraph::runtime::cpu::CPU_Backend::make_call_frame").skip())
  		  .put(new Info("ONNXIFI_ABI", "ONNXIFI_PUBLIC", "ONNXIFI_CHECK_RESULT").cppTypes().annotations())
       		  .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>", 
 				    "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
-            .put(new Info("std::vector<size_t>").pointerTypes("SizeTVector").define())
-	    .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("NgraphResultVector").define())
+                  .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+      		  .put(new Info("std::vector<size_t>").pointerTypes("SizeTVector").define())
+	          .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("NgraphResultVector").define())
 //            .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
 //	    .put(new Info("std::vector<std::shared_ptr<op::Parameter> >", "std::vector<std::shared_ptr<ngraph::op::Parameter> >").pointerTypes("Pointer"))
-            .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("NgraphParameterVector").define())
-	    .put(new Info("std::vector<std::shared_ptr<ngraph::Node> >").pointerTypes("NgraphNodeVector").define())
-	    .put(new Info("std::vector<std::shared_ptr<ngraph::Function> >").pointerTypes("NgraphFunctionVector").define());
+                  .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())
+		  .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("NgraphParameterVector").define())
+	          .put(new Info("std::vector<std::shared_ptr<ngraph::Node> >").pointerTypes("NgraphNodeVector").define())
+	          .put(new Info("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >", "std::vector<std::shared_ptr<runtime::Tensor> >").pointerTypes("NgraphTensorVector").define())
+	          .put(new Info("std::vector<std::shared_ptr<ngraph::Function> >").pointerTypes("NgraphFunctionVector").define());
 
 	   //TODO: std::list<std::shared_ptr<Node> >   ?
     }

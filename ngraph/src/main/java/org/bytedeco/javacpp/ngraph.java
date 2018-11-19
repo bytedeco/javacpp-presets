@@ -9,6 +9,94 @@ import org.bytedeco.javacpp.annotation.*;
 public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     static { Loader.load(); }
 
+@Name("std::vector<std::string>") public static class StringVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer value) { this(1); put(0, value); }
+    public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String value) { this(1); put(0, value); }
+    public StringVector(String ... array) { this(array.length); put(array); }
+    public StringVector()       { allocate();  }
+    public StringVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @StdString BytePointer get(@Cast("size_t") long i);
+    public native StringVector put(@Cast("size_t") long i, BytePointer value);
+    @ValueSetter @Index(function = "at") public native StringVector put(@Cast("size_t") long i, @StdString String value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @StdString BytePointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @StdString BytePointer get();
+    }
+
+    public BytePointer[] get() {
+        BytePointer[] array = new BytePointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public BytePointer pop_back() {
+        long size = size();
+        BytePointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public StringVector push_back(BytePointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StringVector put(BytePointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public StringVector put(BytePointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+
+    public StringVector push_back(String value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public StringVector put(String value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public StringVector put(String ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<size_t>") public static class SizeTVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -280,6 +368,74 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
+@Name("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >") public static class NgraphTensorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NgraphTensorVector(Pointer p) { super(p); }
+    public NgraphTensorVector(Tensor value) { this(1); put(0, value); }
+    public NgraphTensorVector(Tensor ... array) { this(array.length); put(array); }
+    public NgraphTensorVector()       { allocate();  }
+    public NgraphTensorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef NgraphTensorVector put(@ByRef NgraphTensorVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @SharedPtr Tensor get(@Cast("size_t") long i);
+    public native NgraphTensorVector put(@Cast("size_t") long i, Tensor value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Tensor value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr @Const Tensor get();
+    }
+
+    public Tensor[] get() {
+        Tensor[] array = new Tensor[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Tensor pop_back() {
+        long size = size();
+        Tensor value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NgraphTensorVector push_back(Tensor value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public NgraphTensorVector put(Tensor value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public NgraphTensorVector put(Tensor ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<std::shared_ptr<ngraph::Function> >") public static class NgraphFunctionVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -348,6 +504,33 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
+@Name("std::unordered_map<std::string,void*>") public static class StringVoidMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringVoidMap(Pointer p) { super(p); }
+    public StringVoidMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringVoidMap put(@ByRef StringVoidMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native Pointer get(@StdString BytePointer i);
+    public native StringVoidMap put(@StdString BytePointer i, Pointer value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @Const Pointer second();
+    }
+}
+
 // Parsed from ngraph/descriptor/tensor.hpp
 
 //*****************************************************************************
@@ -384,10 +567,10 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         
 
         /** \brief Compile-time descriptor of a first-class value that is a view of a tensor. */
-        @Namespace("ngraph::descriptor") public static class Tensor extends Pointer {
+        @Name("ngraph::descriptor::Tensor") public static class DescriptorTensor extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public Tensor(Pointer p) { super(p); }
+            public DescriptorTensor(Pointer p) { super(p); }
         
 
             public native @StdString BytePointer get_name();
@@ -404,7 +587,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public native @Cast("size_t") long size();
         }
 
-        @Namespace("ngraph::descriptor") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, @Const @ByRef Tensor arg1);
+        @Namespace("ngraph::descriptor") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer arg0, @Const @ByRef DescriptorTensor arg1);
     
 
 
@@ -444,12 +627,12 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public Value(Pointer p) { super(p); }
         }
     
-        @Name("ngraph::runtime::Tensor") @NoOffset public static class RuntimeTensor extends Pointer {
+        @Namespace("ngraph::runtime") @NoOffset public static class Tensor extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public RuntimeTensor(Pointer p) { super(p); }
+            public Tensor(Pointer p) { super(p); }
         
-            public native @ByRef @Name("operator =") RuntimeTensor put(@Const @ByRef RuntimeTensor arg0);
+            public native @ByRef @Name("operator =") Tensor put(@Const @ByRef Tensor arg0);
 
             /** \brief Get tensor shape
              *  @return const reference to a Shape */
@@ -503,6 +686,244 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
              *  @param n Number of bytes to read, must be integral number of elements. */
             public native void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+        }
+    
+
+
+
+// Parsed from ngraph/runtime/backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/runtime/performance_counter.hpp"
+// #include "ngraph/shape.hpp"
+// #include "ngraph/type/element_type.hpp"
+        @Namespace("ngraph::runtime") @Opaque public static class ExternalFunction extends Pointer {
+            /** Empty constructor. Calls {@code super((Pointer)null)}. */
+            public ExternalFunction() { super((Pointer)null); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public ExternalFunction(Pointer p) { super(p); }
+        }
+    
+
+
+/** \brief Interface to a generic backend.
+ * 
+ *  Backends are responsible for function execution and value allocation. */
+@Name("ngraph::runtime::Backend") public static class Backend extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Backend(Pointer p) { super(p); }
+
+    /** \brief Create a new Backend object
+     *  @param type The name of a registered backend, such as "CPU" or "GPU".
+     *    To select a subdevice use "GPU:N" where s{@code N} is the subdevice number.
+     *  @return unique_ptr to a new Backend or nullptr if the named backend
+     *    does not exist. */
+    public static native @UniquePtr Backend create(@StdString BytePointer type);
+    public static native @UniquePtr Backend create(@StdString String type);
+
+    /** \brief Query the list of registered devices
+     *  @return A vector of all registered devices. */
+    public static native @ByVal StringVector get_registered_devices();
+
+    /** \brief Create a tensor specific to this backend
+     *  @param element_type The type of the tensor element
+     *  @param shape The shape of the tensor
+     *  @return shared_ptr to a new backend-specific tensor */
+    public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type, @Const @ByRef Shape shape);
+
+    /** \brief Create a tensor specific to this backend
+     *  @param element_type The type of the tensor element
+     *  @param shape The shape of the tensor
+     *  @param memory_pointer A pointer to a buffer used for this tensor. The size of the buffer
+     *      must be sufficient to contain the tensor. The lifetime of the buffer is the
+     *      responsibility of the caller.
+     *  @return shared_ptr to a new backend-specific tensor */
+    public native @SharedPtr @ByVal Tensor create_tensor(
+            @Const @ByRef Type element_type, @Const @ByRef Shape shape, Pointer memory_pointer);
+
+    /** \brief Create a tensor of C type T specific to this backend
+     *  @param shape The shape of the tensor
+     *  @return shared_ptr to a new backend specific tensor */
+
+    /** \brief Compiles a Function.
+     *  @param func The function to compile
+     *  @return true if compile is successful, false otherwise */
+    public native @Cast("bool") boolean compile(@SharedPtr @ByVal Function func);
+
+    /** \brief Executes a single iteration of a Function. If func is not compiled the call will
+     *      compile it.
+     *  @param func The function to execute
+     *  @return true if iteration is successful, false otherwise */
+    public native @Cast("bool") boolean call(@SharedPtr @ByVal Function func,
+                          @Const @ByRef NgraphTensorVector outputs,
+                          @Const @ByRef NgraphTensorVector inputs);
+
+    /** \brief Executes a single iteration of a Function. If func is not compiled the call will
+     *      compile it. Optionally validates the inputs and outputs against the function graph.
+     *  @param func The function to execute
+     *  @return true if iteration is successful, false otherwise */
+    public native @Cast("bool") boolean call_with_validate(@SharedPtr @ByVal Function func,
+                                @Const @ByRef NgraphTensorVector outputs,
+                                @Const @ByRef NgraphTensorVector inputs);
+
+    /** \brief Compiled functions may be cached. This function removes a compiled function
+     *      from the cache.
+     *  @param func The function to execute */
+    public native void remove_compiled_function(@SharedPtr @ByVal Function func);
+
+    /** \brief Enable the collection of per-op performance information on a specified Function.
+     *      Data collection is via the {@code get_performance_data} method.
+     *  @param func The function to collect perfomance data on.
+     *  @param enable Set to true to enable or false to disable data collection */
+    public native void enable_performance_data(@SharedPtr @ByVal Function func, @Cast("bool") boolean enable);
+    /** \brief Collect performance information gathered on a Function.
+     *  @param func The function to get collected data.
+     *  @return Vector of PerformanceCounter information. */
+    public native @StdVector PerformanceCounter get_performance_data(@SharedPtr @ByVal Function func);
+
+    /** \brief Test if a backend is capable of supporting an op
+     *  @param node is the op to test.
+     *  @return true if the op is supported, false otherwise. */
+    public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
+}
+
+
+// Parsed from ngraph/runtime/cpu/cpu_backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <map>
+// #include <memory>
+
+// #include "ngraph/runtime/backend.hpp"
+            @Namespace("ngraph::runtime::cpu") @Opaque public static class CPU_ExternalFunction extends Pointer {
+                /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                public CPU_ExternalFunction() { super((Pointer)null); }
+                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                public CPU_ExternalFunction(Pointer p) { super(p); }
+            }
+            @Namespace("ngraph::runtime::cpu") @Opaque public static class CPU_CallFrame extends Pointer {
+                /** Empty constructor. Calls {@code super((Pointer)null)}. */
+                public CPU_CallFrame() { super((Pointer)null); }
+                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                public CPU_CallFrame(Pointer p) { super(p); }
+            }
+
+            @Namespace("ngraph::runtime::cpu") @NoOffset public static class CPU_Backend extends Backend {
+                static { Loader.load(); }
+                /** Default native constructor. */
+                public CPU_Backend() { super((Pointer)null); allocate(); }
+                /** Native array allocator. Access with {@link Pointer#position(long)}. */
+                public CPU_Backend(long size) { super((Pointer)null); allocateArray(size); }
+                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                public CPU_Backend(Pointer p) { super(p); }
+                private native void allocate();
+                private native void allocateArray(long size);
+                @Override public CPU_Backend position(long position) {
+                    return (CPU_Backend)super.position(position);
+                }
+            
+                
+
+                public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
+                                                  @Const @ByRef Shape shape,
+                                                  Pointer memory_pointer);
+
+                public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
+                                                  @Const @ByRef Shape shape);
+
+                public native @Cast("bool") boolean compile(@SharedPtr @ByVal Function func);
+
+                public native @Cast("bool") boolean call(@SharedPtr @ByVal Function func,
+                                          @Const @ByRef NgraphTensorVector outputs,
+                                          @Const @ByRef NgraphTensorVector inputs);
+
+                public native void remove_compiled_function(@SharedPtr @ByVal Function func);
+                public native @SharedPtr CPU_CallFrame get_call_frame(@SharedPtr @ByVal Function func);
+
+                public native void enable_performance_data(@SharedPtr @ByVal Function func, @Cast("bool") boolean enable);
+                public native @StdVector PerformanceCounter get_performance_data(@SharedPtr @ByVal Function func);
+            }
+        
+    
+
+
+
+// Parsed from ngraph/runtime/performance_counter.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <string>
+        @Namespace("ngraph::runtime") @NoOffset public static class PerformanceCounter extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public PerformanceCounter(Pointer p) { super(p); }
+        
+            public PerformanceCounter(@Cast("const char*") BytePointer n, @Cast("size_t") long us, @Cast("size_t") long calls) { super((Pointer)null); allocate(n, us, calls); }
+            private native void allocate(@Cast("const char*") BytePointer n, @Cast("size_t") long us, @Cast("size_t") long calls);
+            public PerformanceCounter(String n, @Cast("size_t") long us, @Cast("size_t") long calls) { super((Pointer)null); allocate(n, us, calls); }
+            private native void allocate(String n, @Cast("size_t") long us, @Cast("size_t") long calls);
+            public native @StdString BytePointer name();
+            public native @Cast("size_t") long total_microseconds();
+            public native @Cast("size_t") long microseconds();
+            public native @Cast("size_t") long call_count();
+            public native @StdString BytePointer m_name(); public native PerformanceCounter m_name(BytePointer m_name);
+            public native @Cast("size_t") long m_total_microseconds(); public native PerformanceCounter m_total_microseconds(long m_total_microseconds);
+            public native @Cast("size_t") long m_call_count(); public native PerformanceCounter m_call_count(long m_call_count);
         }
     
 
@@ -1257,7 +1678,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             /** @return the tensor of the connected output */
 
             /** @return the tensor of the connected output */
-            public native @ByRef Tensor get_tensor();
+            public native @ByRef DescriptorTensor get_tensor();
 
             public native void replace_output(@SharedPtr Node node, @Cast("size_t") long i);
             public native void replace_output(@ByRef Output output);
@@ -1312,16 +1733,16 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             /** @param node Node that owns this output.
              *  @param index Position of the output tensor in all output tensors
              *  @param tensor The view of this tensor; where the value will be written */
-            public Output(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef Tensor tensor) { super((Pointer)null); allocate(node, index, tensor); }
-            private native void allocate(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef Tensor tensor);
+            public Output(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef DescriptorTensor tensor) { super((Pointer)null); allocate(node, index, tensor); }
+            private native void allocate(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef DescriptorTensor tensor);
 
             public native @SharedPtr @ByVal Node get_node();
             public native @Cast("size_t") long get_index();
-            public native @SharedPtr @ByVal Tensor get_tensor_ptr();
-            public native void set_tensor_ptr(@Const @SharedPtr @ByRef Tensor tensor);
+            public native @SharedPtr @ByVal DescriptorTensor get_tensor_ptr();
+            public native void set_tensor_ptr(@Const @SharedPtr @ByRef DescriptorTensor tensor);
             public native void add_input(Input input);
             public native void remove_input(Input input);
-            public native @ByRef Tensor get_tensor();
+            public native @ByRef DescriptorTensor get_tensor();
 
             /** @return the shape of the output */
             public native @Const @ByRef Shape get_shape();
@@ -1611,12 +2032,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include "ngraph/coordinate.hpp"
 // #include "ngraph/node_vector.hpp"
 // #include "ngraph/strides.hpp"
-        @Namespace("ngraph::runtime") @Opaque public static class Backend extends Pointer {
-            /** Empty constructor. Calls {@code super((Pointer)null)}. */
-            public Backend() { super((Pointer)null); }
-            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public Backend(Pointer p) { super(p); }
-        }
         @Namespace("ngraph::runtime") @Opaque public static class Manager extends Pointer {
             /** Empty constructor. Calls {@code super((Pointer)null)}. */
             public Manager() { super((Pointer)null); }
@@ -1812,16 +2227,16 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Const @ByRef Shape get_shape();
 
         /** Returns the tensor for output i */
-        public native @ByRef Tensor get_output_tensor(@Cast("size_t") long i);
+        public native @ByRef DescriptorTensor get_output_tensor(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its tensor. */
-        public native @ByRef Tensor get_output_tensor();
+        public native @ByRef DescriptorTensor get_output_tensor();
 
         /** Returns the tensor view of output i */
-        public native @SharedPtr @ByVal Tensor get_output_tensor_ptr(@Cast("size_t") long i);
+        public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its tensor view. */
-        public native @SharedPtr @ByVal Tensor get_output_tensor_ptr();
+        public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr();
 
         /** Returns the set of inputs using output i */
 
