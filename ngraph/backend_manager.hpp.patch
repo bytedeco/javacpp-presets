@@ -1,0 +1,11 @@
+--- cppbuild/linux-x86_64/include/ngraph/backend_manager.hpp	2018-11-09 19:41:46.242067874 -0500
++++ backend_manager.hpp	2018-11-09 19:43:44.359491045 -0500
+@@ -20,7 +20,7 @@
+ #include <map>     // std::map
+ #include <mutex>   // std::mutex
+ 
+-#include <onnxifi.h>
++#include "onnxifi.h"
+ 
+ #include "ngraph/runtime/backend.hpp"
+ 
