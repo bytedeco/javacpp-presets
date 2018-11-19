@@ -74,10 +74,14 @@ import java.lang.annotation.Target;
     public void map(InfoMap infoMap) {
 
     	   infoMap.put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
+		  .put(new Info("ngraph::runtime::Tensor").pointerTypes("RuntimeTensor"))
 		  .put(new Info("ngraph::descriptor::Tensor").purify(true))
+		  .put(new Info("ngraph::runtime::Tensor").purify(false).virtualize())
+                  .put(new Info("ngraph::onnxifi::Backend").purify(true))
 		  .put(new Info("ngraph::op::Parameter").purify(true))
                   .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
-//		  .put(new Info("ngraph::Node").purify(false).virtualize())
+                  .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("RuntimeTensor"))
+		  //		  .put(new Info("ngraph::Node").purify(false).virtualize())
 		  .put(new Info("std::shared_ptr<const Node>", "std::shared_ptr<ngraph::Node>").annotations("@SharedPtr").pointerTypes("Node"))
                   .put(new Info("std::shared_ptr<ngraph::op::Parameter>", "std::shared_ptr<op::Parameter>").annotations("@SharedPtr").pointerTypes("Parameter"))
 		  .put(new Info("std::shared_ptr<ngraph::Function>", "std::shared_ptr<Function>").annotations("@SharedPtr").pointerTypes("Function"))

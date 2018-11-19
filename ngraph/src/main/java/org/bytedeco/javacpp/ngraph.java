@@ -348,6 +348,126 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
+// Parsed from ngraph/backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>  // std::shared_ptr
+// #include <string>  // std::string
+// #include <utility> // std::move
+// #include <vector>  // std::vector
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/runtime/tensor.hpp"
+        /** \brief ONNXIFI extensions to nGraph backend */
+        @Namespace("ngraph::onnxifi") public static class Backend extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Backend(Pointer p) { super(p); }
+        
+//            Backend(const Backend&) = delete;
+//            Backend& operator=(const Backend&) = delete;
+
+//            Backend(Backend&&) = default;
+//            Backend& operator=(Backend&&) = default;
+
+//            Backend() = delete;
+
+           
+          
+         
+        
+
+            public native @StdString BytePointer get_type();
+            public native @Cast("bool") boolean compile(@Const @SharedPtr @ByRef Function function);
+
+            public native @Cast("bool") boolean call(@Const @SharedPtr @ByRef Function function,
+                                  @SharedPtr @StdVector RuntimeTensor outputs,
+                                  @SharedPtr @StdVector RuntimeTensor inputs);
+
+            public native @Cast("bool") boolean call_with_validate(
+                            @Const @SharedPtr @ByRef Function function,
+                            @SharedPtr @StdVector RuntimeTensor outputs,
+                            @SharedPtr @StdVector RuntimeTensor inputs);
+        }
+
+     // namespace onnxifi
+
+ // namespace ngraph
+
+
+// Parsed from ngraph/backend_manager.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef> // std::size_t, std::uintptr_t
+// #include <map>     // std::map
+// #include <mutex>   // std::mutex
+
+// #include "onnxifi.h"
+
+// #include "ngraph/runtime/backend.hpp"
+
+// #include "backend.hpp"
+        /** \brief ONNXIFI backend manager */
+        @Namespace("ngraph::onnxifi") @NoOffset public static class BackendManager extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public BackendManager(Pointer p) { super(p); }
+        
+            
+            
+
+            
+            
+
+            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongPointer count);
+            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongBuffer count);
+            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") long[] count);
+
+            public static native void unregister(@ByVal onnxBackendID backend_id);
+
+            public static native @Const @ByRef Backend get(@ByVal onnxBackendID backend_id);
+        }
+
+     // namespace onnxifi
+
+ // namespace ngraph
+
+
 // Parsed from ngraph/descriptor/tensor.hpp
 
 //*****************************************************************************
@@ -444,6 +564,66 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public Value(Pointer p) { super(p); }
         }
     
+        @Name("ngraph::runtime::Tensor") @NoOffset public static class RuntimeTensor extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public RuntimeTensor(Pointer p) { super(p); }
+        
+            public native @ByRef @Name("operator =") RuntimeTensor put(@Const @ByRef RuntimeTensor arg0);
+
+            /** \brief Get tensor shape
+             *  @return const reference to a Shape */
+            public native @Const @ByRef Shape get_shape();
+
+            /** \brief Get tensor strides
+             *  @return Strides */
+            public native @ByVal Strides get_strides();
+
+            /** \brief Get tensor element type
+             *  @return element::Type */
+            public native @Const @ByRef Type get_element_type();
+
+            /** \brief Get number of elements in the tensor
+             *  @return number of elements in the tensor */
+            public native @Cast("size_t") long get_element_count();
+
+            /** \brief Get the size in bytes of the tensor
+             *  @return number of bytes in tensor's allocation */
+            public native @Cast("size_t") long get_size_in_bytes();
+
+            /** \brief Get tensor's unique name
+             *  @return tensor's name */
+            public native @StdString BytePointer get_name();
+
+            /** \brief Get tensor layout
+             *  @return tensor layout */
+            public native @SharedPtr TensorLayout get_tensor_layout();
+
+            /** \brief Set tensor layout
+             *  @param layout Layout to set */
+            public native void set_tensor_layout(@SharedPtr TensorLayout layout);
+
+            /** \brief Get the stale value of the tensor. A tensor is stale if its data is
+             *  changed.
+             *  @return true if there is new data in this tensor */
+            public native @Cast("bool") boolean get_stale();
+
+            /** \brief Set the stale value of the tensor. A tensor is stale if its data is
+             *  changed. */
+            public native void set_stale(@Cast("bool") boolean val);
+
+            /** \brief Write bytes directly into the tensor
+             *  @param p Pointer to source of data
+             *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
+             *  @param n Number of bytes to write, must be integral number of elements. */
+            public native void write(@Const Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+
+            /** \brief Read bytes directly from the tensor
+             *  @param p Pointer to destination for data
+             *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
+             *  @param n Number of bytes to read, must be integral number of elements. */
+            public native void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+        }
     
 
 
@@ -1551,12 +1731,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include "ngraph/coordinate.hpp"
 // #include "ngraph/node_vector.hpp"
 // #include "ngraph/strides.hpp"
-        @Namespace("ngraph::runtime") @Opaque public static class Backend extends Pointer {
-            /** Empty constructor. Calls {@code super((Pointer)null)}. */
-            public Backend() { super((Pointer)null); }
-            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public Backend(Pointer p) { super(p); }
-        }
         @Namespace("ngraph::runtime") @Opaque public static class Manager extends Pointer {
             /** Empty constructor. Calls {@code super((Pointer)null)}. */
             public Manager() { super((Pointer)null); }
