@@ -39,7 +39,7 @@ import java.lang.annotation.Target;
     define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
     include = {
-//        "ngraph/backend.hpp",
+        "ngraph/backend.hpp",
 //	"ngraph/backend_manager.hpp",
 	"ngraph/descriptor/tensor.hpp",
 	"ngraph/runtime/tensor.hpp",
@@ -79,7 +79,7 @@ import java.lang.annotation.Target;
 		  .put(new Info("ngraph::descriptor::Tensor").purify(true).pointerTypes("DescriptorTensor"))
 		  .put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("DescriptorTensor"))
 		  .put(new Info("ngraph::runtime::Tensor").purify(true)) //.purify(false).virtualize())
-                  .put(new Info("ngraph::onnxifi::Backend").purify(true))
+                  .put(new Info("ngraph::onnxifi::Backend").purify(true).pointerTypes("NgraphONNXIFIBackend"))
 		  .put(new Info("ngraph::op::Parameter").purify(true))
                   .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
                   .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))

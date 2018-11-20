@@ -531,6 +531,71 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
+// Parsed from ngraph/backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>  // std::shared_ptr
+// #include <string>  // std::string
+// #include <utility> // std::move
+// #include <vector>  // std::vector
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/runtime/tensor.hpp"
+        /** \brief ONNXIFI extensions to nGraph backend */
+        @Name("ngraph::onnxifi::Backend") public static class NgraphONNXIFIBackend extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public NgraphONNXIFIBackend(Pointer p) { super(p); }
+        
+//            Backend(const Backend&) = delete;
+//            Backend& operator=(const Backend&) = delete;
+
+//            Backend(Backend&&) = default;
+//            Backend& operator=(Backend&&) = default;
+
+//            Backend() = delete;
+
+           
+          
+         
+        
+
+            public native @StdString BytePointer get_type();
+            public native @Cast("bool") boolean compile(@Const @SharedPtr @ByRef Function function);
+
+            public native @Cast("bool") boolean call(@Const @SharedPtr @ByRef Function function,
+                                  @Const @ByRef NgraphTensorVector outputs,
+                                  @Const @ByRef NgraphTensorVector inputs);
+
+            public native @Cast("bool") boolean call_with_validate(
+                            @Const @SharedPtr @ByRef Function function,
+                            @Const @ByRef NgraphTensorVector outputs,
+                            @Const @ByRef NgraphTensorVector inputs);
+        }
+
+     // namespace onnxifi
+
+ // namespace ngraph
+
+
 // Parsed from ngraph/descriptor/tensor.hpp
 
 //*****************************************************************************
