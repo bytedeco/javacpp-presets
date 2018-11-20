@@ -121,6 +121,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
 
                .put(new Info("CV_DEPRECATED").cppText("#define CV_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CV_DEPRECATED_EXTERNAL").cppText("#define CV_DEPRECATED_EXTERNAL deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("CV_OVERRIDE").cppText("#define CV_OVERRIDE override").cppTypes())

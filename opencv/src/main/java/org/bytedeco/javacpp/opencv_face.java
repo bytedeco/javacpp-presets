@@ -300,7 +300,7 @@ If you've set the threshold to 0.0 as we did above, then:
 <p>
 <pre>{@code
 //
-Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
 // Get a prediction from the model. Note: We've set a threshold of 0.0 above,
 // since the distance is almost always larger than 0.0, you'll get -1 as
 // label, which indicates, this face is unknown
@@ -347,13 +347,13 @@ String name = model->name();
     vector<Mat> images;
     vector<int> labels;
     // images for first person
-    images.push_back(imread("person0/0.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
-    images.push_back(imread("person0/1.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
-    images.push_back(imread("person0/2.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/0.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/1.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/2.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
     // images for second person
-    images.push_back(imread("person1/0.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
-    images.push_back(imread("person1/1.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
-    images.push_back(imread("person1/2.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/0.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/1.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/2.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
     }</pre>
     <p>
     Now that you have read some images, we can create a new FaceRecognizer. In this example I'll create
@@ -464,7 +464,7 @@ String name = model->name();
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
     // Read in a sample image:
-    Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
     // And get a prediction from the cv::FaceRecognizer:
     int predicted = model->predict(img);
     }</pre>
@@ -475,7 +475,7 @@ String name = model->name();
     using namespace cv;
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
-    Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
     // Some variables for the predicted label and associated confidence (e.g. distance):
     int predicted_label = -1;
     double predicted_confidence = 0.0;

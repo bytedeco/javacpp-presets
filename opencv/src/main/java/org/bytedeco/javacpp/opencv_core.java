@@ -2452,6 +2452,15 @@ public static final int OPENCV_ABI_COMPATIBILITY = 400;
 // #  endif
 // #endif
 
+// #ifndef CV_DEPRECATED_EXTERNAL
+// #  if defined(__OPENCV_BUILD)
+// #    define CV_DEPRECATED_EXTERNAL /* nothing */
+// #  else
+// #    define CV_DEPRECATED_EXTERNAL CV_DEPRECATED
+// #  endif
+// #endif
+
+
 // #ifndef CV_EXTERN_C
 // #  ifdef __cplusplus
 // #    define CV_EXTERN_C extern "C"
@@ -3711,7 +3720,7 @@ public static native int cvIsInf( float value );
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    0;
 public static final int CV_VERSION_REVISION = 0;
-public static final String CV_VERSION_STATUS =   "-rc";
+public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
 // #define CVAUX_STR(__A)      CVAUX_STR_EXP(__A)
@@ -5150,6 +5159,70 @@ public static final int
 @Namespace("cv::instr") public static native void setFlags(@Cast("cv::instr::FLAGS") int modeFlags);
 @Namespace("cv::instr") public static native @Cast("cv::instr::FLAGS") int getFlags();
 
+ // namespace instr
+
+/** \addtogroup core_utils_samples */
+// This section describes utility functions for OpenCV samples.
+//
+// @note Implementation of these utilities is not thread-safe.
+//
+/** \{
+<p>
+/** \brief Try to find requested data file
+<p>
+Search directories:
+<p>
+1. Directories passed via {@code addSamplesDataSearchPath()}
+2. OPENCV_SAMPLES_DATA_PATH_HINT environment variable
+3. OPENCV_SAMPLES_DATA_PATH environment variable
+   If parameter value is not empty and nothing is found then stop searching.
+4. Detects build/install path based on:
+   a. current working directory (CWD)
+   b. and/or binary module location (opencv_core/opencv_world, doesn't work with static linkage)
+5. Scan {@code <source>/{,data,samples/data}} directories if build directory is detected or the current directory is in source tree.
+6. Scan {@code <install>/share/OpenCV} directory if install directory is detected.
+<p>
+@see cv::utils::findDataFile
+<p>
+@param relative_path Relative path to data file
+@param required Specify "file not found" handling.
+       If true, function prints information message and raises cv::Exception.
+       If false, function returns empty result
+@param silentMode Disables messages
+@return Returns path (absolute or relative to the current directory) or empty string if file is not found
+*/
+@Namespace("cv::samples") public static native @Str BytePointer findFile(@Str BytePointer relative_path, @Cast("bool") boolean required/*=true*/, @Cast("bool") boolean silentMode/*=false*/);
+@Namespace("cv::samples") public static native @Str BytePointer findFile(@Str BytePointer relative_path);
+@Namespace("cv::samples") public static native @Str String findFile(@Str String relative_path, @Cast("bool") boolean required/*=true*/, @Cast("bool") boolean silentMode/*=false*/);
+@Namespace("cv::samples") public static native @Str String findFile(@Str String relative_path);
+
+@Namespace("cv::samples") public static native @Str BytePointer findFileOrKeep(@Str BytePointer relative_path, @Cast("bool") boolean silentMode/*=false*/);
+@Namespace("cv::samples") public static native @Str BytePointer findFileOrKeep(@Str BytePointer relative_path);
+@Namespace("cv::samples") public static native @Str String findFileOrKeep(@Str String relative_path, @Cast("bool") boolean silentMode/*=false*/);
+@Namespace("cv::samples") public static native @Str String findFileOrKeep(@Str String relative_path);
+
+/** \brief Override search data path by adding new search location
+<p>
+Use this only to override default behavior
+Passed paths are used in LIFO order.
+<p>
+@param path Path to used samples data
+*/
+@Namespace("cv::samples") public static native void addSamplesDataSearchPath(@Str BytePointer path);
+@Namespace("cv::samples") public static native void addSamplesDataSearchPath(@Str String path);
+
+/** \brief Append samples search data sub directory
+<p>
+General usage is to add OpenCV modules name ({@code <opencv_contrib>/modules/<name>/samples/data} -> {@code <name>/samples/data} + {@code modules/<name>/samples/data}).
+Passed subdirectories are used in LIFO order.
+<p>
+@param subdir samples data sub directory
+*/
+@Namespace("cv::samples") public static native void addSamplesDataSearchSubDirectory(@Str BytePointer subdir);
+@Namespace("cv::samples") public static native void addSamplesDataSearchSubDirectory(@Str String subdir);
+
+/** \} */
+ // namespace samples
 
 @Namespace("cv::utils") public static native int getThreadID();
 
@@ -11577,6 +11650,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
         \defgroup core_utils_sse SSE utilities
         \defgroup core_utils_neon NEON utilities
         \defgroup core_utils_softfloat Softfloat support
+        \defgroup core_utils_samples Utility functions for OpenCV samples
     \}
     \defgroup core_opengl OpenGL interoperability
     \defgroup core_ipp Intel IPP Asynchronous C/C++ Converters
@@ -21814,8 +21888,6 @@ storage is opened for writing, no data is stored in memory after it is written.
 
     /** returns the currently observed element */
     public native @ByVal @Name("operator *") FileNode multiply();
-    /** accesses the currently observed element methods */
-    public native @ByVal @Name("operator ->") FileNode access();
 
     /** moves iterator to the next node */
     public native @ByRef @Name("operator ++") FileNodeIterator increment();

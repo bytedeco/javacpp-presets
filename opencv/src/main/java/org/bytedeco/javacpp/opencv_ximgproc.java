@@ -671,7 +671,7 @@ proportional to sigmaSpace .
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-/** \brief Interface for implementations of The Fast Bilateral Solver.
+/** \brief Interface for implementations of Fast Bilateral Solver.
 <p>
 For more details about this solver see \cite BarronPoole2016 .
 */
@@ -687,6 +687,8 @@ For more details about this solver see \cite BarronPoole2016 .
     @param confidence confidence image with unsigned 8-bit or floating-point 32-bit confidence and 1 channel.
     <p>
     @param dst destination image.
+    <p>
+    \note Confidence images with CV_8U depth are expected to in [0, 255] and CV_32F in [0, 1] range.
     */
     public native void filter(@ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst);
     public native void filter(@ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst);
@@ -697,25 +699,28 @@ For more details about this solver see \cite BarronPoole2016 .
 <p>
 @param guide image serving as guide for filtering. It should have 8-bit depth and either 1 or 3 channels.
 <p>
-@param sigma_spatial parameter, that is similar to spatial space sigma in bilateralFilter.
+@param sigma_spatial parameter, that is similar to spatial space sigma (bandwidth) in bilateralFilter.
 <p>
-@param sigma_luma parameter, that is similar to luma space sigma in bilateralFilter.
+@param sigma_luma parameter, that is similar to luma space sigma (bandwidth) in bilateralFilter.
 <p>
-@param sigma_chroma parameter, that is similar to chroma space sigma in bilateralFilter.
+@param sigma_chroma parameter, that is similar to chroma space sigma (bandwidth) in bilateralFilter.
 <p>
-@param num_iter number of iterations used for solving, 25 is usually enough.
+@param lambda smoothness strength parameter for solver.
 <p>
-@param max_tol solving tolerance used for solving.
+@param num_iter number of iterations used for solver, 25 is usually enough.
+<p>
+@param max_tol convergence tolerance used for solver.
 <p>
 For more details about the Fast Bilateral Solver parameters, see the original paper \cite BarronPoole2016.
 <p>
 */
-@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
-@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal UMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal UMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal UMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
-@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal GpuMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal GpuMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal GpuMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
+
 
 
 /** \brief Simple one-line Fast Bilateral Solver filter call. If you have multiple images to filter with the same
@@ -729,25 +734,31 @@ guide then use FastBilateralSolverFilter interface to avoid extra computations.
 <p>
 @param dst destination image.
 <p>
-@param sigma_spatial parameter, that is similar to spatial space sigma in bilateralFilter.
+@param sigma_spatial parameter, that is similar to spatial space sigma (bandwidth) in bilateralFilter.
 <p>
-@param sigma_luma parameter, that is similar to luma space sigma in bilateralFilter.
+@param sigma_luma parameter, that is similar to luma space sigma (bandwidth) in bilateralFilter.
 <p>
-@param sigma_chroma parameter, that is similar to chroma space sigma in bilateralFilter.
+@param sigma_chroma parameter, that is similar to chroma space sigma (bandwidth) in bilateralFilter.
 <p>
-@param num_iter number of iterations used for solving, 25 is usually enough.
+@param lambda smoothness strength parameter for solver.
 <p>
-@param max_tol solving tolerance used for solving.
+@param num_iter number of iterations used for solver, 25 is usually enough.
+<p>
+@param max_tol convergence tolerance used for solver.
+<p>
+For more details about the Fast Bilateral Solver parameters, see the original paper \cite BarronPoole2016.
 <p>
 \note Confidence images with CV_8U depth are expected to in [0, 255] and CV_32F in [0, 1] range.
 */
-@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst);
-@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst);
-@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
 @Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst);
 
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 /** \brief Interface for implementations of Fast Global Smoother filter.
 <p>

@@ -433,6 +433,9 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
     public DictValue(@Const @ByRef DictValue r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef DictValue r);
     /** Constructs integer scalar */
+    public DictValue(@Cast("bool") boolean i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Cast("bool") boolean i);
+    /** Constructs integer scalar */
     public DictValue(@Cast("int64") long i/*=0*/) { super((Pointer)null); allocate(i); }
     private native void allocate(@Cast("int64") long i/*=0*/);
     public DictValue() { super((Pointer)null); allocate(); }
