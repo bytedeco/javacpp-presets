@@ -40,7 +40,7 @@ import java.lang.annotation.Target;
     compiler = "cpp11",
     include = {
         "ngraph/backend.hpp",
-//	"ngraph/backend_manager.hpp",
+	"ngraph/backend_manager.hpp",
 	"ngraph/descriptor/tensor.hpp",
 	"ngraph/runtime/tensor.hpp",
 	"ngraph/runtime/backend.hpp",
