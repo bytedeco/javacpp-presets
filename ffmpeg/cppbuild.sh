@@ -103,6 +103,7 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export LDFLAGS="-Wl,--no-undefined -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -111,10 +112,20 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         cd libspeex
@@ -148,9 +159,37 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
@@ -180,6 +219,7 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -188,10 +228,20 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         cd libspeex
@@ -224,9 +274,37 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         CFLAGS="$CFLAGS -D__uint128_t=__u64" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
@@ -258,6 +336,7 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -266,10 +345,20 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         cd libspeex
@@ -364,6 +453,7 @@ EOF
         export CXXFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -372,10 +462,20 @@ EOF
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         cd libspeex
@@ -457,6 +557,7 @@ EOF
 
     linux-x86)
         export AS="nasm"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -465,10 +566,20 @@ EOF
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ V=0
@@ -554,6 +665,7 @@ EOF
 
     linux-x86_64)
         export AS="nasm"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -562,10 +674,20 @@ EOF
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
@@ -665,6 +787,7 @@ EOF
           echo "Detected non arm arch so cross compiling";
         fi
 
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -673,10 +796,20 @@ EOF
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
@@ -759,6 +892,7 @@ EOF
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         HOST_ARCH="$(uname -m)"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -767,10 +901,20 @@ EOF
         CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
@@ -822,6 +966,7 @@ EOF
 
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -834,6 +979,11 @@ EOF
         fi
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
@@ -842,6 +992,11 @@ EOF
         fi
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
@@ -933,6 +1088,7 @@ EOF
 
     macosx-*)
         export AS="nasm"
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
@@ -941,10 +1097,20 @@ EOF
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
@@ -1014,16 +1180,27 @@ EOF
         ;;
 
     windows-x86)
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ V=0
@@ -1103,16 +1280,27 @@ EOF
         ;;
 
     windows-x86_64)
+        echo ""
         echo "--------------------"
         echo "Building zlib"
         echo "--------------------"
         echo ""
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
