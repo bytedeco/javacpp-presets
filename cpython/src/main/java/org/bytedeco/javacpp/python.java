@@ -152,6 +152,153 @@ public class python extends org.bytedeco.javacpp.presets.python {
 // #endif /* !Py_PYTHON_H */
 
 
+// Parsed from patchlevel.h
+
+
+/* Python version identification scheme.
+
+   When the major or minor version changes, the VERSION variable in
+   configure.ac must also be changed.
+
+   There is also (independent) API version information in modsupport.h.
+*/
+
+/* Values for PY_RELEASE_LEVEL */
+public static final int PY_RELEASE_LEVEL_ALPHA =	0xA;
+public static final int PY_RELEASE_LEVEL_BETA =	0xB;
+public static final int PY_RELEASE_LEVEL_GAMMA =	0xC;     /* For release candidates */
+public static final int PY_RELEASE_LEVEL_FINAL =	0xF;	/* Serial should be 0 here */
+					/* Higher for patch releases */
+
+/* Version parsed out into numeric values */
+/*--start constants--*/
+public static final int PY_MAJOR_VERSION =	3;
+public static final int PY_MINOR_VERSION =	6;
+public static final int PY_MICRO_VERSION =	5;
+public static final int PY_RELEASE_LEVEL =	PY_RELEASE_LEVEL_FINAL;
+public static final int PY_RELEASE_SERIAL =	0;
+
+/* Version as a string */
+public static final String PY_VERSION =      	"3.6.5";
+/*--end constants--*/
+
+/* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
+   Use this for numeric comparisons, e.g. #if PY_VERSION_HEX >= ... */
+public static final int PY_VERSION_HEX = ((PY_MAJOR_VERSION << 24) | 
+			(PY_MINOR_VERSION << 16) | 
+			(PY_MICRO_VERSION <<  8) | 
+			(PY_RELEASE_LEVEL <<  4) | 
+			(PY_RELEASE_SERIAL << 0));
+
+
+// Parsed from pyconfig.h
+
+// #include <bits/wordsize.h>
+
+// #if __WORDSIZE == 32
+// #include "pyconfig-32.h"
+// #elif __WORDSIZE == 64
+// #include "pyconfig-64.h"
+// #else
+// #error "Unknown word size"
+// #endif
+
+
+// Parsed from pymacconfig.h
+
+// #ifndef PYMACCONFIG_H
+// #define PYMACCONFIG_H
+     /*
+      * This file moves some of the autoconf magic to compile-time
+      * when building on MacOSX. This is needed for building 4-way
+      * universal binaries and for 64-bit universal binaries because
+      * the values redefined below aren't configure-time constant but
+      * only compile-time constant in these scenarios.
+      */
+
+// #if defined(__APPLE__)
+
+// # undef SIZEOF_LONG
+// # undef SIZEOF_PTHREAD_T
+// # undef SIZEOF_SIZE_T
+// # undef SIZEOF_TIME_T
+// # undef SIZEOF_VOID_P
+// # undef SIZEOF__BOOL
+// # undef SIZEOF_UINTPTR_T
+// # undef SIZEOF_PTHREAD_T
+// # undef WORDS_BIGENDIAN
+// # undef DOUBLE_IS_ARM_MIXED_ENDIAN_IEEE754
+// # undef DOUBLE_IS_BIG_ENDIAN_IEEE754
+// # undef DOUBLE_IS_LITTLE_ENDIAN_IEEE754
+// # undef HAVE_GCC_ASM_FOR_X87
+
+// #    undef VA_LIST_IS_ARRAY
+// #    if defined(__LP64__) && defined(__x86_64__)
+public static final int VA_LIST_IS_ARRAY = 1;
+// #    endif
+
+// #    undef HAVE_LARGEFILE_SUPPORT
+// #    ifndef __LP64__
+public static final int HAVE_LARGEFILE_SUPPORT = 1;
+// #    endif
+
+// #    undef SIZEOF_LONG
+// #    ifdef __LP64__
+public static final int SIZEOF__BOOL =            1;
+public static final int SIZEOF_LONG =             8;
+public static final int SIZEOF_PTHREAD_T =        8;
+public static final int SIZEOF_SIZE_T =           8;
+public static final int SIZEOF_TIME_T =           8;
+public static final int SIZEOF_VOID_P =           8;
+public static final int SIZEOF_UINTPTR_T =        8;
+// #    else
+// #        ifdef __ppc__
+// #        else
+// #        endif
+// #    endif
+
+// #    if defined(__LP64__)
+     /* MacOSX 10.4 (the first release to support 64-bit code
+      * at all) only supports 64-bit in the UNIX layer.
+      * Therefore suppress the toolbox-glue in 64-bit mode.
+      */
+
+    /* In 64-bit mode setpgrp always has no arguments, in 32-bit
+     * mode that depends on the compilation environment
+     */
+// #       undef SETPGRP_HAVE_ARG
+
+// #    endif
+
+// #ifdef __BIG_ENDIAN__
+public static final int WORDS_BIGENDIAN = 1;
+// #define DOUBLE_IS_BIG_ENDIAN_IEEE754
+// #else
+// #define DOUBLE_IS_LITTLE_ENDIAN_IEEE754
+// #endif /* __BIG_ENDIAN */
+
+// #ifdef __i386__
+// # define HAVE_GCC_ASM_FOR_X87
+// #endif
+
+    /*
+     * The definition in pyconfig.h is only valid on the OS release
+     * where configure ran on and not necessarily for all systems where
+     * the executable can be used on.
+     *
+     * Specifically: OSX 10.4 has limited supported for '%zd', while
+     * 10.5 has full support for '%zd'. A binary built on 10.5 won't
+     * work properly on 10.4 unless we suppress the definition
+     * of PY_FORMAT_SIZE_T
+     */
+// #undef  PY_FORMAT_SIZE_T
+
+
+// #endif /* defined(_APPLE__) */
+
+// #endif /* PYMACCONFIG_H */
+
+
 // Parsed from pyport.h
 
 // #ifndef Py_PYPORT_H
@@ -452,8 +599,6 @@ public static final int S_IFLNK = 0120000;
  *    VALUE may be evaluated more than once.
  */
 // #ifdef Py_DEBUG
-// #define Py_SAFE_DOWNCAST(VALUE, WIDE, NARROW)
-//     (assert((WIDE)(NARROW)(VALUE) == (VALUE)), (NARROW)(VALUE))
 // #else
 // #define Py_SAFE_DOWNCAST(VALUE, WIDE, NARROW) (NARROW)(VALUE)
 // #endif
@@ -829,6 +974,576 @@ public static final int PY_LITTLE_ENDIAN = 0;
 // #endif /* Py_PYPORT_H */
 
 
+// Parsed from pymacro.h
+
+// #ifndef Py_PYMACRO_H
+// #define Py_PYMACRO_H
+
+/* Minimum value between x and y */
+// #define Py_MIN(x, y) (((x) > (y)) ? (y) : (x))
+
+/* Maximum value between x and y */
+// #define Py_MAX(x, y) (((x) > (y)) ? (x) : (y))
+
+/* Absolute value of the number x */
+// #define Py_ABS(x) ((x) < 0 ? -(x) : (x))
+
+// #define _Py_XSTRINGIFY(x) #x
+
+/* Convert the argument to a string. For example, Py_STRINGIFY(123) is replaced
+   with "123" by the preprocessor. Defines are also replaced by their value.
+   For example Py_STRINGIFY(__LINE__) is replaced by the line number, not
+   by "__LINE__". */
+// #define Py_STRINGIFY(x) _Py_XSTRINGIFY(x)
+
+/* Get the size of a structure member in bytes */
+// #define Py_MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
+
+/* Argument must be a char or an int in [-128, 127] or [0, 255]. */
+// #define Py_CHARMASK(c) ((unsigned char)((c) & 0xff))
+
+/* Assert a build-time dependency, as an expression.
+
+   Your compile will fail if the condition isn't true, or can't be evaluated
+   by the compiler. This can be used in an expression: its value is 0.
+
+   Example:
+
+   #define foo_to_char(foo)  \
+       ((char *)(foo)        \
+        + Py_BUILD_ASSERT_EXPR(offsetof(struct foo, string) == 0))
+
+   Written by Rusty Russell, public domain, http://ccodearchive.net/ */
+// #define Py_BUILD_ASSERT_EXPR(cond)
+//     (sizeof(char [1 - 2*!(cond)]) - 1)
+
+// #define Py_BUILD_ASSERT(cond)  do {
+//         (void)Py_BUILD_ASSERT_EXPR(cond);
+//     } while(0)
+
+/* Get the number of elements in a visible array
+
+   This does not work on pointers, or arrays declared as [], or function
+   parameters. With correct compiler support, such usage will cause a build
+   error (see Py_BUILD_ASSERT_EXPR).
+
+   Written by Rusty Russell, public domain, http://ccodearchive.net/
+
+   Requires at GCC 3.1+ */
+// #if (defined(__GNUC__) && !defined(__STRICT_ANSI__) &&
+//     (((__GNUC__ == 3) && (__GNU_MINOR__ >= 1)) || (__GNUC__ >= 4)))
+/* Two gcc extensions.
+   &a[0] degrades to a pointer: a different type from an array */
+// #define Py_ARRAY_LENGTH(array)
+//     (sizeof(array) / sizeof((array)[0])
+//      + Py_BUILD_ASSERT_EXPR(!__builtin_types_compatible_p(typeof(array),
+//                                                           typeof(&(array)[0]))))
+// #else
+// #define Py_ARRAY_LENGTH(array)
+//     (sizeof(array) / sizeof((array)[0]))
+// #endif
+
+
+/* Define macros for inline documentation. */
+// #define PyDoc_VAR(name) static char name[]
+// #define PyDoc_STRVAR(name,str) PyDoc_VAR(name) = PyDoc_STR(str)
+// #ifdef WITH_DOC_STRINGS
+// #define PyDoc_STR(str) str
+// #else
+// #define PyDoc_STR(str) ""
+// #endif
+
+/* Below "a" is a power of 2. */
+/* Round down size "n" to be a multiple of "a". */
+// #define _Py_SIZE_ROUND_DOWN(n, a) ((size_t)(n) & ~(size_t)((a) - 1))
+/* Round up size "n" to be a multiple of "a". */
+// #define _Py_SIZE_ROUND_UP(n, a) (((size_t)(n) +
+//         (size_t)((a) - 1)) & ~(size_t)((a) - 1))
+/* Round pointer "p" down to the closest "a"-aligned address <= "p". */
+// #define _Py_ALIGN_DOWN(p, a) ((void *)((uintptr_t)(p) & ~(uintptr_t)((a) - 1)))
+/* Round pointer "p" up to the closest "a"-aligned address >= "p". */
+// #define _Py_ALIGN_UP(p, a) ((void *)(((uintptr_t)(p) +
+//         (uintptr_t)((a) - 1)) & ~(uintptr_t)((a) - 1)))
+/* Check if pointer "p" is aligned to "a"-bytes boundary. */
+// #define _Py_IS_ALIGNED(p, a) (!((uintptr_t)(p) & (uintptr_t)((a) - 1)))
+
+// #ifdef __GNUC__
+// #define Py_UNUSED(name) _unused_ ## name __attribute__((unused))
+// #else
+// #define Py_UNUSED(name) _unused_ ## name
+// #endif
+
+// #endif /* Py_PYMACRO_H */
+
+
+// Parsed from pymath.h
+
+// #ifndef Py_PYMATH_H
+// #define Py_PYMATH_H
+
+// #include "pyconfig.h" /* include for defines */
+
+/**************************************************************************
+Symbols and macros to supply platform-independent interfaces to mathematical
+functions and constants
+**************************************************************************/
+
+/* Python provides implementations for copysign, round and hypot in
+ * Python/pymath.c just in case your math library doesn't provide the
+ * functions.
+ *
+ *Note: PC/pyconfig.h defines copysign as _copysign
+ */
+// #ifndef HAVE_COPYSIGN
+// #endif
+
+// #ifndef HAVE_ROUND
+@NoException public static native double round(double arg0);
+// #endif
+
+// #ifndef HAVE_HYPOT
+// #endif
+
+/* extra declarations */
+// #ifndef _MSC_VER
+// #ifndef __STDC__
+@NoException public static native double fmod(double arg0, double arg1);
+@NoException public static native double frexp(double arg0, IntPointer arg1);
+@NoException public static native double frexp(double arg0, IntBuffer arg1);
+@NoException public static native double frexp(double arg0, int[] arg1);
+@NoException public static native double ldexp(double arg0, int arg1);
+@NoException public static native double modf(double arg0, DoublePointer arg1);
+@NoException public static native double modf(double arg0, DoubleBuffer arg1);
+@NoException public static native double modf(double arg0, double[] arg1);
+@NoException public static native double pow(double arg0, double arg1);
+// #endif /* __STDC__ */
+// #endif /* _MSC_VER */
+
+/* High precision definition of pi and e (Euler)
+ * The values are taken from libc6's math.h.
+ */
+// #ifndef Py_MATH_PIl
+public static final double Py_MATH_PIl = 3.1415926535897932384626433832795029;
+// #endif
+// #ifndef Py_MATH_PI
+public static final double Py_MATH_PI = 3.14159265358979323846;
+// #endif
+
+// #ifndef Py_MATH_El
+public static final double Py_MATH_El = 2.7182818284590452353602874713526625;
+// #endif
+
+// #ifndef Py_MATH_E
+public static final double Py_MATH_E = 2.7182818284590452354;
+// #endif
+
+/* Tau (2pi) to 40 digits, taken from tauday.com/tau-digits. */
+// #ifndef Py_MATH_TAU
+public static final double Py_MATH_TAU = 6.2831853071795864769252867665590057683943;
+// #endif
+
+
+/* On x86, Py_FORCE_DOUBLE forces a floating-point number out of an x87 FPU
+   register and into a 64-bit memory location, rounding from extended
+   precision to double precision in the process.  On other platforms it does
+   nothing. */
+
+/* we take double rounding as evidence of x87 usage */
+// #ifndef Py_LIMITED_API
+// #ifndef Py_FORCE_DOUBLE
+// #  ifdef X87_DOUBLE_ROUNDING
+// #  else
+// #    define Py_FORCE_DOUBLE(X) (X)
+// #  endif
+// #endif
+// #endif
+
+// #ifndef Py_LIMITED_API
+// #ifdef HAVE_GCC_ASM_FOR_X87
+// #endif
+// #endif
+
+/* Py_IS_NAN(X)
+ * Return 1 if float or double arg is a NaN, else 0.
+ * Caution:
+ *     X is evaluated more than once.
+ *     This may not work on all platforms.  Each platform has *some*
+ *     way to spell this, though -- override in pyconfig.h if you have
+ *     a platform where it doesn't work.
+ * Note: PC/pyconfig.h defines Py_IS_NAN as _isnan
+ */
+// #ifndef Py_IS_NAN
+// #if defined HAVE_DECL_ISNAN && HAVE_DECL_ISNAN == 1
+// #define Py_IS_NAN(X) isnan(X)
+// #else
+// #define Py_IS_NAN(X) ((X) != (X))
+// #endif
+// #endif
+
+/* Py_IS_INFINITY(X)
+ * Return 1 if float or double arg is an infinity, else 0.
+ * Caution:
+ *    X is evaluated more than once.
+ *    This implementation may set the underflow flag if |X| is very small;
+ *    it really can't be implemented correctly (& easily) before C99.
+ *    Override in pyconfig.h if you have a better spelling on your platform.
+ *  Py_FORCE_DOUBLE is used to avoid getting false negatives from a
+ *    non-infinite value v sitting in an 80-bit x87 register such that
+ *    v becomes infinite when spilled from the register to 64-bit memory.
+ * Note: PC/pyconfig.h defines Py_IS_INFINITY as _isinf
+ */
+// #ifndef Py_IS_INFINITY
+// #  if defined HAVE_DECL_ISINF && HAVE_DECL_ISINF == 1
+// #    define Py_IS_INFINITY(X) isinf(X)
+// #  else
+// #    define Py_IS_INFINITY(X) ((X) &&
+//                                (Py_FORCE_DOUBLE(X)*0.5 == Py_FORCE_DOUBLE(X)))
+// #  endif
+// #endif
+
+/* Py_IS_FINITE(X)
+ * Return 1 if float or double arg is neither infinite nor NAN, else 0.
+ * Some compilers (e.g. VisualStudio) have intrisics for this, so a special
+ * macro for this particular test is useful
+ * Note: PC/pyconfig.h defines Py_IS_FINITE as _finite
+ */
+// #ifndef Py_IS_FINITE
+// #if defined HAVE_DECL_ISFINITE && HAVE_DECL_ISFINITE == 1
+// #define Py_IS_FINITE(X) isfinite(X)
+// #elif defined HAVE_FINITE
+// #define Py_IS_FINITE(X) finite(X)
+// #else
+// #define Py_IS_FINITE(X) (!Py_IS_INFINITY(X) && !Py_IS_NAN(X))
+// #endif
+// #endif
+
+/* HUGE_VAL is supposed to expand to a positive double infinity.  Python
+ * uses Py_HUGE_VAL instead because some platforms are broken in this
+ * respect.  We used to embed code in pyport.h to try to worm around that,
+ * but different platforms are broken in conflicting ways.  If you're on
+ * a platform where HUGE_VAL is defined incorrectly, fiddle your Python
+ * config to #define Py_HUGE_VAL to something that works on your platform.
+ */
+// #ifndef Py_HUGE_VAL
+// #define Py_HUGE_VAL HUGE_VAL
+// #endif
+
+/* Py_NAN
+ * A value that evaluates to a NaN. On IEEE 754 platforms INF*0 or
+ * INF/INF works. Define Py_NO_NAN in pyconfig.h if your platform
+ * doesn't support NaNs.
+ */
+// #if !defined(Py_NAN) && !defined(Py_NO_NAN)
+// #if !defined(__INTEL_COMPILER)
+//     #define Py_NAN (Py_HUGE_VAL * 0.)
+// #else /* __INTEL_COMPILER */
+// #endif /* __INTEL_COMPILER */
+// #endif
+
+/* Py_OVERFLOWED(X)
+ * Return 1 iff a libm function overflowed.  Set errno to 0 before calling
+ * a libm function, and invoke this macro after, passing the function
+ * result.
+ * Caution:
+ *    This isn't reliable.  C99 no longer requires libm to set errno under
+ *        any exceptional condition, but does require +- HUGE_VAL return
+ *        values on overflow.  A 754 box *probably* maps HUGE_VAL to a
+ *        double infinity, and we're cool if that's so, unless the input
+ *        was an infinity and an infinity is the expected result.  A C89
+ *        system sets errno to ERANGE, so we check for that too.  We're
+ *        out of luck if a C99 754 box doesn't map HUGE_VAL to +Inf, or
+ *        if the returned result is a NaN, or if a C89 box returns HUGE_VAL
+ *        in non-overflow cases.
+ *    X is evaluated more than once.
+ * Some platforms have better way to spell this, so expect some #ifdef'ery.
+ *
+ * OpenBSD uses 'isinf()' because a compiler bug on that platform causes
+ * the longer macro version to be mis-compiled. This isn't optimal, and
+ * should be removed once a newer compiler is available on that platform.
+ * The system that had the failure was running OpenBSD 3.2 on Intel, with
+ * gcc 2.95.3.
+ *
+ * According to Tim's checkin, the FreeBSD systems use isinf() to work
+ * around a FPE bug on that platform.
+ */
+// #if defined(__FreeBSD__) || defined(__OpenBSD__)
+// #define Py_OVERFLOWED(X) isinf(X)
+// #else
+// #define Py_OVERFLOWED(X) ((X) != 0.0 && (errno == ERANGE ||
+//                                          (X) == Py_HUGE_VAL ||
+//                                          (X) == -Py_HUGE_VAL))
+// #endif
+
+/* Return whether integral type *type* is signed or not. */
+// #define _Py_IntegralTypeSigned(type) ((type)(-1) < 0)
+/* Return the maximum value of integral type *type*. */
+// #define _Py_IntegralTypeMax(type) ((_Py_IntegralTypeSigned(type)) ? (((((type)1 << (sizeof(type)*CHAR_BIT - 2)) - 1) << 1) + 1) : ~(type)0)
+/* Return the minimum value of integral type *type*. */
+// #define _Py_IntegralTypeMin(type) ((_Py_IntegralTypeSigned(type)) ? -_Py_IntegralTypeMax(type) - 1 : 0)
+/* Check whether *v* is in the range of integral type *type*. This is most
+ * useful if *v* is floating-point, since demoting a floating-point *v* to an
+ * integral type that cannot represent *v*'s integral part is undefined
+ * behavior. */
+// #define _Py_InIntegralTypeRange(type, v) (_Py_IntegralTypeMin(type) <= v && v <= _Py_IntegralTypeMax(type))
+
+// #endif /* Py_PYMATH_H */
+
+
+// Parsed from pytime.h
+
+// #ifndef Py_LIMITED_API
+// #ifndef Py_PYTIME_H
+// #define Py_PYTIME_H
+
+// #include "pyconfig.h" /* include for defines */
+// #include "object.h"
+
+/**************************************************************************
+Symbols and macros to supply platform-independent interfaces to time related
+functions and constants
+**************************************************************************/
+// #ifdef __cplusplus
+// #endif
+
+/* _PyTime_t: Python timestamp with subsecond precision. It can be used to
+   store a duration, and so indirectly a date (related to another date, like
+   UNIX epoch). */
+public static final int _PyTime_MIN = PY_LLONG_MIN;
+public static final int _PyTime_MAX = PY_LLONG_MAX;
+
+/** enum _PyTime_round_t */
+public static final int
+    /* Round towards minus infinity (-inf).
+       For example, used to read a clock. */
+    _PyTime_ROUND_FLOOR = 0,
+    /* Round towards infinity (+inf).
+       For example, used for timeout to wait "at least" N seconds. */
+    _PyTime_ROUND_CEILING = 1,
+    /* Round to nearest with ties going to nearest even integer.
+       For example, used to round from a Python float. */
+    _PyTime_ROUND_HALF_EVEN = 2,
+    /* Round away from zero
+       For example, used for timeout. _PyTime_ROUND_CEILING rounds
+       -1e-9 to 0 milliseconds which causes bpo-31786 issue.
+       _PyTime_ROUND_UP rounds -1e-9 to -1 millisecond which keeps
+       the timeout sign as expected. select.poll(timeout) must block
+       for negative values." */
+    _PyTime_ROUND_UP = 3,
+    /* _PyTime_ROUND_TIMEOUT (an alias for _PyTime_ROUND_UP) should be
+       used for timeouts. */
+    _PyTime_ROUND_TIMEOUT = _PyTime_ROUND_UP;
+
+
+/* Convert a time_t to a PyLong. */
+@NoException public static native PyObject _PyLong_FromTime_t(
+    @ByVal @Cast("time_t*") Pointer sec);
+
+/* Convert a PyLong to a time_t. */
+@NoException public static native @ByVal @Cast("time_t*") Pointer _PyLong_AsTime_t(
+    PyObject obj);
+
+/* Convert a number of seconds, int or float, to time_t. */
+@NoException public static native int _PyTime_ObjectToTime_t(
+    PyObject obj,
+    @Cast("time_t*") Pointer sec,
+    @Cast("_PyTime_round_t") int arg2);
+
+/* Convert a number of seconds, int or float, to a timeval structure.
+   usec is in the range [0; 999999] and rounded towards zero.
+   For example, -1.2 is converted to (-2, 800000). */
+@NoException public static native int _PyTime_ObjectToTimeval(
+    PyObject obj,
+    @Cast("time_t*") Pointer sec,
+    CLongPointer usec,
+    @Cast("_PyTime_round_t") int arg3);
+
+/* Convert a number of seconds, int or float, to a timespec structure.
+   nsec is in the range [0; 999999999] and rounded towards zero.
+   For example, -1.2 is converted to (-2, 800000000). */
+@NoException public static native int _PyTime_ObjectToTimespec(
+    PyObject obj,
+    @Cast("time_t*") Pointer sec,
+    CLongPointer nsec,
+    @Cast("_PyTime_round_t") int arg3);
+
+
+/* Create a timestamp from a number of seconds. */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_FromSeconds(int seconds);
+
+/* Macro to create a timestamp from a number of seconds, no integer overflow.
+   Only use the macro for small values, prefer _PyTime_FromSeconds(). */
+// #define _PYTIME_FROMSECONDS(seconds)
+//             ((_PyTime_t)(seconds) * (1000 * 1000 * 1000))
+
+/* Create a timestamp from a number of nanoseconds. */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_FromNanoseconds(long ns);
+
+/* Convert a number of seconds (Python float or int) to a timetamp.
+   Raise an exception and return -1 on error, return 0 on success. */
+@NoException public static native int _PyTime_FromSecondsObject(@Cast("_PyTime_t*") LongPointer t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_FromSecondsObject(@Cast("_PyTime_t*") LongBuffer t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_FromSecondsObject(@Cast("_PyTime_t*") long[] t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+
+/* Convert a number of milliseconds (Python float or int, 10^-3) to a timetamp.
+   Raise an exception and return -1 on error, return 0 on success. */
+@NoException public static native int _PyTime_FromMillisecondsObject(@Cast("_PyTime_t*") LongPointer t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_FromMillisecondsObject(@Cast("_PyTime_t*") LongBuffer t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_FromMillisecondsObject(@Cast("_PyTime_t*") long[] t,
+    PyObject obj,
+    @Cast("_PyTime_round_t") int round);
+
+/* Convert a timestamp to a number of seconds as a C double. */
+@NoException public static native double _PyTime_AsSecondsDouble(@Cast("_PyTime_t") long t);
+
+/* Convert timestamp to a number of milliseconds (10^-3 seconds). */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_AsMilliseconds(@Cast("_PyTime_t") long t,
+    @Cast("_PyTime_round_t") int round);
+
+/* Convert timestamp to a number of microseconds (10^-6 seconds). */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_AsMicroseconds(@Cast("_PyTime_t") long t,
+    @Cast("_PyTime_round_t") int round);
+
+/* Convert timestamp to a number of nanoseconds (10^-9 seconds) as a Python int
+   object. */
+@NoException public static native PyObject _PyTime_AsNanosecondsObject(@Cast("_PyTime_t") long t);
+
+/* Convert a timestamp to a timeval structure (microsecond resolution).
+   tv_usec is always positive.
+   Raise an exception and return -1 if the conversion overflowed,
+   return 0 on success. */
+@NoException public static native int _PyTime_AsTimeval(@Cast("_PyTime_t") long t,
+    @Cast("timeval*") Pointer tv,
+    @Cast("_PyTime_round_t") int round);
+
+/* Similar to _PyTime_AsTimeval(), but don't raise an exception on error. */
+@NoException public static native int _PyTime_AsTimeval_noraise(@Cast("_PyTime_t") long t,
+    @Cast("timeval*") Pointer tv,
+    @Cast("_PyTime_round_t") int round);
+
+/* Convert a timestamp to a number of seconds (secs) and microseconds (us).
+   us is always positive. This function is similar to _PyTime_AsTimeval()
+   except that secs is always a time_t type, whereas the timeval structure
+   uses a C long for tv_sec on Windows.
+   Raise an exception and return -1 if the conversion overflowed,
+   return 0 on success. */
+@NoException public static native int _PyTime_AsTimevalTime_t(
+    @Cast("_PyTime_t") long t,
+    @Cast("time_t*") Pointer secs,
+    IntPointer us,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_AsTimevalTime_t(
+    @Cast("_PyTime_t") long t,
+    @Cast("time_t*") Pointer secs,
+    IntBuffer us,
+    @Cast("_PyTime_round_t") int round);
+@NoException public static native int _PyTime_AsTimevalTime_t(
+    @Cast("_PyTime_t") long t,
+    @Cast("time_t*") Pointer secs,
+    int[] us,
+    @Cast("_PyTime_round_t") int round);
+
+// #if defined(HAVE_CLOCK_GETTIME) || defined(HAVE_KQUEUE)
+// #endif
+
+/* Get the current time from the system clock.
+
+   The function cannot fail. _PyTime_Init() ensures that the system clock
+   works. */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_GetSystemClock();
+
+/* Get the time of a monotonic clock, i.e. a clock that cannot go backwards.
+   The clock is not affected by system clock updates. The reference point of
+   the returned value is undefined, so that only the difference between the
+   results of consecutive calls is valid.
+
+   The function cannot fail. _PyTime_Init() ensures that a monotonic clock
+   is available and works. */
+@NoException public static native @Cast("_PyTime_t") long _PyTime_GetMonotonicClock();
+
+
+/* Structure used by time.get_clock_info() */
+public static class _Py_clock_info_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _Py_clock_info_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _Py_clock_info_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _Py_clock_info_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _Py_clock_info_t position(long position) {
+        return (_Py_clock_info_t)super.position(position);
+    }
+
+    @MemberGetter public native @Cast("const char*") BytePointer implementation();
+    public native int monotonic(); public native _Py_clock_info_t monotonic(int monotonic);
+    public native int adjustable(); public native _Py_clock_info_t adjustable(int adjustable);
+    public native double resolution(); public native _Py_clock_info_t resolution(double resolution);
+}
+
+/* Get the current time from the system clock.
+ * Fill clock information if info is not NULL.
+ * Raise an exception and return -1 on error, return 0 on success.
+ */
+@NoException public static native int _PyTime_GetSystemClockWithInfo(
+    @Cast("_PyTime_t*") LongPointer t,
+    _Py_clock_info_t info);
+@NoException public static native int _PyTime_GetSystemClockWithInfo(
+    @Cast("_PyTime_t*") LongBuffer t,
+    _Py_clock_info_t info);
+@NoException public static native int _PyTime_GetSystemClockWithInfo(
+    @Cast("_PyTime_t*") long[] t,
+    _Py_clock_info_t info);
+
+/* Get the time of a monotonic clock, i.e. a clock that cannot go backwards.
+   The clock is not affected by system clock updates. The reference point of
+   the returned value is undefined, so that only the difference between the
+   results of consecutive calls is valid.
+
+   Fill info (if set) with information of the function used to get the time.
+
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyTime_GetMonotonicClockWithInfo(
+    @Cast("_PyTime_t*") LongPointer t,
+    _Py_clock_info_t info);
+@NoException public static native int _PyTime_GetMonotonicClockWithInfo(
+    @Cast("_PyTime_t*") LongBuffer t,
+    _Py_clock_info_t info);
+@NoException public static native int _PyTime_GetMonotonicClockWithInfo(
+    @Cast("_PyTime_t*") long[] t,
+    _Py_clock_info_t info);
+
+
+/* Initialize time.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyTime_Init();
+
+/* Converts a timestamp to the Gregorian time, using the local time zone.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyTime_localtime(@ByVal @Cast("time_t*") Pointer t, @Cast("tm*") Pointer tm);
+
+/* Converts a timestamp to the Gregorian time, assuming UTC.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyTime_gmtime(@ByVal @Cast("time_t*") Pointer t, @Cast("tm*") Pointer tm);
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif /* Py_PYTIME_H */
+// #endif /* Py_LIMITED_API */
+
+
 // Parsed from pymem.h
 
 /* The PyMem_ family:  low-level memory allocation interfaces.
@@ -1109,546 +1824,6 @@ public static class PyMemAllocatorEx extends Pointer {
 // #endif
 
 // #endif /* !Py_PYMEM_H */
-
-
-// Parsed from descrobject.h
-
-/* Descriptors */
-// #ifndef Py_DESCROBJECT_H
-// #define Py_DESCROBJECT_H
-// #ifdef __cplusplus
-// #endif
-
-public static class getter extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    getter(Pointer p) { super(p); }
-    protected getter() { allocate(); }
-    private native void allocate();
-    public native PyObject call(PyObject arg0, Pointer arg1);
-}
-public static class setter extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    setter(Pointer p) { super(p); }
-    protected setter() { allocate(); }
-    private native void allocate();
-    public native int call(PyObject arg0, PyObject arg1, Pointer arg2);
-}
-
-public static class PyGetSetDef extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyGetSetDef() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyGetSetDef(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyGetSetDef(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyGetSetDef position(long position) {
-        return (PyGetSetDef)super.position(position);
-    }
-
-    public native @Cast("char*") BytePointer name(); public native PyGetSetDef name(BytePointer name);
-    public native getter get(); public native PyGetSetDef get(getter get);
-    public native setter set(); public native PyGetSetDef set(setter set);
-    public native @Cast("char*") BytePointer doc(); public native PyGetSetDef doc(BytePointer doc);
-    public native Pointer closure(); public native PyGetSetDef closure(Pointer closure);
-}
-
-// #ifndef Py_LIMITED_API
-public static class wrapperfunc extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    wrapperfunc(Pointer p) { super(p); }
-    protected wrapperfunc() { allocate(); }
-    private native void allocate();
-    public native PyObject call(PyObject self, PyObject args,
-                                 Pointer wrapped);
-}
-
-public static class wrapperfunc_kwds extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    wrapperfunc_kwds(Pointer p) { super(p); }
-    protected wrapperfunc_kwds() { allocate(); }
-    private native void allocate();
-    public native PyObject call(PyObject self, PyObject args,
-                                      Pointer wrapped, PyObject kwds);
-}
-
-public static class wrapperbase extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public wrapperbase() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public wrapperbase(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public wrapperbase(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public wrapperbase position(long position) {
-        return (wrapperbase)super.position(position);
-    }
-
-    public native @Cast("char*") BytePointer name(); public native wrapperbase name(BytePointer name);
-    public native int offset(); public native wrapperbase offset(int offset);
-    public native Pointer function(); public native wrapperbase function(Pointer function);
-    public native wrapperfunc wrapper(); public native wrapperbase wrapper(wrapperfunc wrapper);
-    public native @Cast("char*") BytePointer doc(); public native wrapperbase doc(BytePointer doc);
-    public native int flags(); public native wrapperbase flags(int flags);
-    public native PyObject name_strobj(); public native wrapperbase name_strobj(PyObject name_strobj);
-}
-
-/* Flags for above struct */
-public static final int PyWrapperFlag_KEYWORDS = 1; /* wrapper function takes keyword args */
-
-/* Various kinds of descriptor objects */
-
-public static class PyDescrObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyDescrObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyDescrObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyDescrObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyDescrObject position(long position) {
-        return (PyDescrObject)super.position(position);
-    }
-
-    public native PyTypeObject d_type(); public native PyDescrObject d_type(PyTypeObject d_type);
-    public native PyObject d_name(); public native PyDescrObject d_name(PyObject d_name);
-    public native PyObject d_qualname(); public native PyDescrObject d_qualname(PyObject d_qualname);
-}
-
-// #define PyDescr_COMMON PyDescrObject d_common
-
-// #define PyDescr_TYPE(x) (((PyDescrObject *)(x))->d_type)
-// #define PyDescr_NAME(x) (((PyDescrObject *)(x))->d_name)
-
-public static class PyMethodDescrObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyMethodDescrObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyMethodDescrObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyMethodDescrObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyMethodDescrObject position(long position) {
-        return (PyMethodDescrObject)super.position(position);
-    }
-
-    public native @ByRef PyDescrObject d_common(); public native PyMethodDescrObject d_common(PyDescrObject d_common);
-    public native PyMethodDef d_method(); public native PyMethodDescrObject d_method(PyMethodDef d_method);
-}
-
-public static class PyMemberDescrObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyMemberDescrObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyMemberDescrObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyMemberDescrObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyMemberDescrObject position(long position) {
-        return (PyMemberDescrObject)super.position(position);
-    }
-
-    public native @ByRef PyDescrObject d_common(); public native PyMemberDescrObject d_common(PyDescrObject d_common);
-    public native PyMemberDef d_member(); public native PyMemberDescrObject d_member(PyMemberDef d_member);
-}
-
-public static class PyGetSetDescrObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyGetSetDescrObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyGetSetDescrObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyGetSetDescrObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyGetSetDescrObject position(long position) {
-        return (PyGetSetDescrObject)super.position(position);
-    }
-
-    public native @ByRef PyDescrObject d_common(); public native PyGetSetDescrObject d_common(PyDescrObject d_common);
-    public native PyGetSetDef d_getset(); public native PyGetSetDescrObject d_getset(PyGetSetDef d_getset);
-}
-
-public static class PyWrapperDescrObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyWrapperDescrObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyWrapperDescrObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyWrapperDescrObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyWrapperDescrObject position(long position) {
-        return (PyWrapperDescrObject)super.position(position);
-    }
-
-    public native @ByRef PyDescrObject d_common(); public native PyWrapperDescrObject d_common(PyDescrObject d_common);
-    public native wrapperbase d_base(); public native PyWrapperDescrObject d_base(wrapperbase d_base);
-    public native Pointer d_wrapped(); public native PyWrapperDescrObject d_wrapped(Pointer d_wrapped); /* This can be any function pointer */
-}
-// #endif /* Py_LIMITED_API */
-
-public static native @ByRef PyTypeObject PyClassMethodDescr_Type(); public static native void PyClassMethodDescr_Type(PyTypeObject PyClassMethodDescr_Type);
-public static native @ByRef PyTypeObject PyGetSetDescr_Type(); public static native void PyGetSetDescr_Type(PyTypeObject PyGetSetDescr_Type);
-public static native @ByRef PyTypeObject PyMemberDescr_Type(); public static native void PyMemberDescr_Type(PyTypeObject PyMemberDescr_Type);
-public static native @ByRef PyTypeObject PyMethodDescr_Type(); public static native void PyMethodDescr_Type(PyTypeObject PyMethodDescr_Type);
-public static native @ByRef PyTypeObject PyWrapperDescr_Type(); public static native void PyWrapperDescr_Type(PyTypeObject PyWrapperDescr_Type);
-public static native @ByRef PyTypeObject PyDictProxy_Type(); public static native void PyDictProxy_Type(PyTypeObject PyDictProxy_Type);
-// #ifndef Py_LIMITED_API
-public static native @ByRef PyTypeObject _PyMethodWrapper_Type(); public static native void _PyMethodWrapper_Type(PyTypeObject _PyMethodWrapper_Type);
-// #endif /* Py_LIMITED_API */
-
-@NoException public static native PyObject PyDescr_NewMethod(PyTypeObject arg0, PyMethodDef arg1);
-@NoException public static native PyObject PyDescr_NewClassMethod(PyTypeObject arg0, PyMethodDef arg1); /* forward declaration for following prototype */
-@NoException public static native PyObject PyDescr_NewMember(PyTypeObject arg0,
-                                               PyMemberDef arg1);
-@NoException public static native PyObject PyDescr_NewGetSet(PyTypeObject arg0,
-                                               PyGetSetDef arg1);
-// #ifndef Py_LIMITED_API
-@NoException public static native PyObject PyDescr_NewWrapper(PyTypeObject arg0,
-                                                wrapperbase arg1, Pointer arg2);
-// #define PyDescr_IsData(d) (Py_TYPE(d)->tp_descr_set != NULL)
-// #endif
-
-@NoException public static native PyObject PyDictProxy_New(PyObject arg0);
-@NoException public static native PyObject PyWrapper_New(PyObject arg0, PyObject arg1);
-
-
-public static native @ByRef PyTypeObject PyProperty_Type(); public static native void PyProperty_Type(PyTypeObject PyProperty_Type);
-// #ifdef __cplusplus
-// #endif
-// #endif /* !Py_DESCROBJECT_H */
-
-
-
-// Parsed from dictobject.h
-
-// #ifndef Py_DICTOBJECT_H
-// #define Py_DICTOBJECT_H
-// #ifdef __cplusplus
-// #endif
-
-
-/* Dictionary object type -- mapping from hashable object to object */
-
-/* The distribution includes a separate file, Objects/dictnotes.txt,
-   describing explorations into dictionary design and optimization.
-   It covers typical dictionary use patterns, the parameters for
-   tuning dictionaries, and several ideas for possible optimizations.
-*/
-
-// #ifndef Py_LIMITED_API
-
-@Opaque public static class PyDictKeysObject extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public PyDictKeysObject() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyDictKeysObject(Pointer p) { super(p); }
-}
-
-/* The ma_values pointer is NULL for a combined table
- * or points to an array of PyObject* for a split table
- */
-public static class PyDictObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyDictObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyDictObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyDictObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyDictObject position(long position) {
-        return (PyDictObject)super.position(position);
-    }
-
-    public native @Cast("Py_ssize_t") long ma_used(); public native PyDictObject ma_used(long ma_used);
-
-    /* Dictionary version: globally unique, value change each time
-       the dictionary is modified */
-    public native @Cast("uint64_t") long ma_version_tag(); public native PyDictObject ma_version_tag(long ma_version_tag);
-
-    public native PyDictKeysObject ma_keys(); public native PyDictObject ma_keys(PyDictKeysObject ma_keys);
-
-    /* If ma_values is NULL, the table is "combined": keys and values
-       are stored in ma_keys.
-
-       If ma_values is not NULL, the table is splitted:
-       keys are stored in ma_keys and values are stored in ma_values */
-    public native PyObject ma_values(int i); public native PyDictObject ma_values(int i, PyObject ma_values);
-    public native @Cast("PyObject**") PointerPointer ma_values(); public native PyDictObject ma_values(PointerPointer ma_values);
-}
-
-public static class _PyDictViewObject extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public _PyDictViewObject() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public _PyDictViewObject(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public _PyDictViewObject(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public _PyDictViewObject position(long position) {
-        return (_PyDictViewObject)super.position(position);
-    }
-
-    public native PyDictObject dv_dict(); public native _PyDictViewObject dv_dict(PyDictObject dv_dict);
-}
-
-// #endif /* Py_LIMITED_API */
-
-public static native @ByRef PyTypeObject PyDict_Type(); public static native void PyDict_Type(PyTypeObject PyDict_Type);
-public static native @ByRef PyTypeObject PyDictIterKey_Type(); public static native void PyDictIterKey_Type(PyTypeObject PyDictIterKey_Type);
-public static native @ByRef PyTypeObject PyDictIterValue_Type(); public static native void PyDictIterValue_Type(PyTypeObject PyDictIterValue_Type);
-public static native @ByRef PyTypeObject PyDictIterItem_Type(); public static native void PyDictIterItem_Type(PyTypeObject PyDictIterItem_Type);
-public static native @ByRef PyTypeObject PyDictKeys_Type(); public static native void PyDictKeys_Type(PyTypeObject PyDictKeys_Type);
-public static native @ByRef PyTypeObject PyDictItems_Type(); public static native void PyDictItems_Type(PyTypeObject PyDictItems_Type);
-public static native @ByRef PyTypeObject PyDictValues_Type(); public static native void PyDictValues_Type(PyTypeObject PyDictValues_Type);
-
-// #define PyDict_Check(op)
-//                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_DICT_SUBCLASS)
-// #define PyDict_CheckExact(op) (Py_TYPE(op) == &PyDict_Type)
-// #define PyDictKeys_Check(op) PyObject_TypeCheck(op, &PyDictKeys_Type)
-// #define PyDictItems_Check(op) PyObject_TypeCheck(op, &PyDictItems_Type)
-// #define PyDictValues_Check(op) PyObject_TypeCheck(op, &PyDictValues_Type)
-/* This excludes Values, since they are not sets. */
-// # define PyDictViewSet_Check(op)
-//     (PyDictKeys_Check(op) || PyDictItems_Check(op))
-
-
-@NoException public static native PyObject PyDict_New();
-@NoException public static native PyObject PyDict_GetItem(PyObject mp, PyObject key);
-// #ifndef Py_LIMITED_API
-@NoException public static native PyObject _PyDict_GetItem_KnownHash(PyObject mp, PyObject key,
-                                       @Cast("Py_hash_t") long hash);
-// #endif
-@NoException public static native PyObject PyDict_GetItemWithError(PyObject mp, PyObject key);
-// #ifndef Py_LIMITED_API
-@NoException public static native PyObject _PyDict_GetItemIdWithError(PyObject dp,
-                                                  _Py_Identifier key);
-@NoException public static native PyObject PyDict_SetDefault(
-    PyObject mp, PyObject key, PyObject defaultobj);
-// #endif
-@NoException public static native int PyDict_SetItem(PyObject mp, PyObject key, PyObject item);
-// #ifndef Py_LIMITED_API
-@NoException public static native int _PyDict_SetItem_KnownHash(PyObject mp, PyObject key,
-                                          PyObject item, @Cast("Py_hash_t") long hash);
-// #endif
-@NoException public static native int PyDict_DelItem(PyObject mp, PyObject key);
-// #ifndef Py_LIMITED_API
-@NoException public static native int _PyDict_DelItem_KnownHash(PyObject mp, PyObject key,
-                                          @Cast("Py_hash_t") long hash);
-public static class Predicate_PyObject extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    Predicate_PyObject(Pointer p) { super(p); }
-    protected Predicate_PyObject() { allocate(); }
-    private native void allocate();
-    public native int call(PyObject value);
-}
-@NoException public static native int _PyDict_DelItemIf(PyObject mp, PyObject key,
-                                  Predicate_PyObject predicate);
-// #endif
-@NoException public static native void PyDict_Clear(PyObject mp);
-@NoException public static native int PyDict_Next(
-    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @Cast("PyObject**") PointerPointer key, @Cast("PyObject**") PointerPointer value);
-@NoException public static native int PyDict_Next(
-    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @ByPtrPtr PyObject key, @ByPtrPtr PyObject value);
-// #ifndef Py_LIMITED_API
-
-@NoException public static native PyObject PyObject_GenericGetDict(PyObject arg0, Pointer arg1);
-@NoException public static native int _PyDict_Next(
-    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @Cast("PyObject**") PointerPointer key, @Cast("PyObject**") PointerPointer value, @Cast("Py_hash_t*") SizeTPointer hash);
-@NoException public static native int _PyDict_Next(
-    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @ByPtrPtr PyObject key, @ByPtrPtr PyObject value, @Cast("Py_hash_t*") SizeTPointer hash);
-
-// #endif
-@NoException public static native PyObject PyDict_Keys(PyObject mp);
-@NoException public static native PyObject PyDict_Values(PyObject mp);
-@NoException public static native PyObject PyDict_Items(PyObject mp);
-@NoException public static native @Cast("Py_ssize_t") long PyDict_Size(PyObject mp);
-@NoException public static native PyObject PyDict_Copy(PyObject mp);
-@NoException public static native int PyDict_Contains(PyObject mp, PyObject key);
-// #ifndef Py_LIMITED_API
-@NoException public static native int _PyDict_Contains(PyObject mp, PyObject key, @Cast("Py_hash_t") long hash);
-@NoException public static native PyObject _PyDict_NewPresized(@Cast("Py_ssize_t") long minused);
-@NoException public static native void _PyDict_MaybeUntrack(PyObject mp);
-@NoException public static native int _PyDict_HasOnlyStringKeys(PyObject mp);
-
-
-@NoException public static native PyObject _PyDict_Pop(PyObject arg0, PyObject arg1, PyObject arg2);
-
-
-// #define _PyDict_HasSplitTable(d) ((d)->ma_values != NULL)
-
-@NoException public static native int PyDict_ClearFreeList();
-// #endif
-
-/* PyDict_Update(mp, other) is equivalent to PyDict_Merge(mp, other, 1). */
-@NoException public static native int PyDict_Update(PyObject mp, PyObject other);
-
-/* PyDict_Merge updates/merges from a mapping object (an object that
-   supports PyMapping_Keys() and PyObject_GetItem()).  If override is true,
-   the last occurrence of a key wins, else the first.  The Python
-   dict.update(other) is equivalent to PyDict_Merge(dict, other, 1).
-*/
-@NoException public static native int PyDict_Merge(PyObject mp,
-                                   PyObject other,
-                                   int override);
-
-// #ifndef Py_LIMITED_API
-/* Like PyDict_Merge, but override can be 0, 1 or 2.  If override is 0,
-   the first occurrence of a key wins, if override is 1, the last occurrence
-   of a key wins, if override is 2, a KeyError with conflicting key as
-   argument is raised.
-*/
-@NoException public static native int _PyDict_MergeEx(PyObject mp, PyObject other, int override);
-@NoException public static native PyObject _PyDictView_Intersect(PyObject self, PyObject other);
-// #endif
-
-/* PyDict_MergeFromSeq2 updates/merges from an iterable object producing
-   iterable objects of length 2.  If override is true, the last occurrence
-   of a key wins, else the first.  The Python dict constructor dict(seq2)
-   is equivalent to dict={}; PyDict_MergeFromSeq(dict, seq2, 1).
-*/
-@NoException public static native int PyDict_MergeFromSeq2(PyObject d,
-                                           PyObject seq2,
-                                           int override);
-
-@NoException public static native PyObject PyDict_GetItemString(PyObject dp, @Cast("const char*") BytePointer key);
-@NoException public static native PyObject PyDict_GetItemString(PyObject dp, String key);
-// #ifndef Py_LIMITED_API
-@NoException public static native PyObject _PyDict_GetItemId(PyObject dp, _Py_Identifier key);
-// #endif /* !Py_LIMITED_API */
-@NoException public static native int PyDict_SetItemString(PyObject dp, @Cast("const char*") BytePointer key, PyObject item);
-@NoException public static native int PyDict_SetItemString(PyObject dp, String key, PyObject item);
-// #ifndef Py_LIMITED_API
-@NoException public static native int _PyDict_SetItemId(PyObject dp, _Py_Identifier key, PyObject item);
-// #endif /* !Py_LIMITED_API */
-@NoException public static native int PyDict_DelItemString(PyObject dp, @Cast("const char*") BytePointer key);
-@NoException public static native int PyDict_DelItemString(PyObject dp, String key);
-
-// #ifndef Py_LIMITED_API
-@NoException public static native int _PyDict_DelItemId(PyObject mp, _Py_Identifier key);
-@NoException public static native void _PyDict_DebugMallocStats(@Cast("FILE*") Pointer out);
-
-
-
-// #endif
-
-// #ifdef __cplusplus
-// #endif
-// #endif /* !Py_DICTOBJECT_H */
-
-
-// Parsed from structmember.h
-
-// #ifndef Py_STRUCTMEMBER_H
-// #define Py_STRUCTMEMBER_H
-// #ifdef __cplusplus
-// #endif
-
-
-/* Interface to map C struct members to Python object attributes */
-
-// #include <stddef.h> /* For offsetof */
-
-/* An array of PyMemberDef structures defines the name, type and offset
-   of selected members of a C structure.  These can be read by
-   PyMember_GetOne() and set by PyMember_SetOne() (except if their READONLY
-   flag is set).  The array must be terminated with an entry whose name
-   pointer is NULL. */
-
-public static class PyMemberDef extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public PyMemberDef() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public PyMemberDef(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public PyMemberDef(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public PyMemberDef position(long position) {
-        return (PyMemberDef)super.position(position);
-    }
-
-    public native @Cast("char*") BytePointer name(); public native PyMemberDef name(BytePointer name);
-    public native int type(); public native PyMemberDef type(int type);
-    public native @Cast("Py_ssize_t") long offset(); public native PyMemberDef offset(long offset);
-    public native int flags(); public native PyMemberDef flags(int flags);
-    public native @Cast("char*") BytePointer doc(); public native PyMemberDef doc(BytePointer doc);
-}
-
-/* Types */
-public static final int T_SHORT =     0;
-public static final int T_INT =       1;
-public static final int T_LONG =      2;
-public static final int T_FLOAT =     3;
-public static final int T_DOUBLE =    4;
-public static final int T_STRING =    5;
-public static final int T_OBJECT =    6;
-/* XXX the ordering here is weird for binary compatibility */
-public static final int T_CHAR =      7;   /* 1-character string */
-public static final int T_BYTE =      8;   /* 8-bit signed int */
-/* unsigned variants: */
-public static final int T_UBYTE =     9;
-public static final int T_USHORT =    10;
-public static final int T_UINT =      11;
-public static final int T_ULONG =     12;
-
-/* Added by Jack: strings contained in the structure */
-public static final int T_STRING_INPLACE =    13;
-
-/* Added by Lillo: bools contained in the structure (assumed char) */
-public static final int T_BOOL =      14;
-
-public static final int T_OBJECT_EX = 16;  /* Like T_OBJECT, but raises AttributeError
-                           when the value is NULL, instead of
-                           converting to None. */
-public static final int T_LONGLONG =      17;
-public static final int T_ULONGLONG =     18;
-
-public static final int T_PYSSIZET =      19;      /* Py_ssize_t */
-public static final int T_NONE =          20;      /* Value is always None */
-
-
-/* Flags */
-public static final int READONLY =            1;
-public static final int READ_RESTRICTED =     2;
-public static final int PY_WRITE_RESTRICTED = 4;
-public static final int RESTRICTED =          (READ_RESTRICTED | PY_WRITE_RESTRICTED);
-
-
-/* Current API, use this */
-@NoException public static native PyObject PyMember_GetOne(@Cast("const char*") BytePointer arg0, PyMemberDef arg1);
-@NoException public static native PyObject PyMember_GetOne(String arg0, PyMemberDef arg1);
-@NoException public static native int PyMember_SetOne(@Cast("char*") BytePointer arg0, PyMemberDef arg1, PyObject arg2);
-@NoException public static native int PyMember_SetOne(@Cast("char*") ByteBuffer arg0, PyMemberDef arg1, PyObject arg2);
-@NoException public static native int PyMember_SetOne(@Cast("char*") byte[] arg0, PyMemberDef arg1, PyObject arg2);
-
-
-// #ifdef __cplusplus
-// #endif
-// #endif /* !Py_STRUCTMEMBER_H */
 
 
 // Parsed from object.h
@@ -3130,6 +3305,5620 @@ public static final int PyTrash_UNWIND_LEVEL = 50;
 // #endif /* !Py_OBJECT_H */
 
 
+// Parsed from objimpl.h
+
+/* The PyObject_ memory family:  high-level object memory interfaces.
+   See pymem.h for the low-level PyMem_ family.
+*/
+
+// #ifndef Py_OBJIMPL_H
+// #define Py_OBJIMPL_H
+
+// #include "pymem.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/* BEWARE:
+
+   Each interface exports both functions and macros.  Extension modules should
+   use the functions, to ensure binary compatibility across Python versions.
+   Because the Python implementation is free to change internal details, and
+   the macros may (or may not) expose details for speed, if you do use the
+   macros you must recompile your extensions with each Python release.
+
+   Never mix calls to PyObject_ memory functions with calls to the platform
+   malloc/realloc/ calloc/free, or with calls to PyMem_.
+*/
+
+/*
+Functions and macros for modules that implement new object types.
+
+ - PyObject_New(type, typeobj) allocates memory for a new object of the given
+   type, and initializes part of it.  'type' must be the C structure type used
+   to represent the object, and 'typeobj' the address of the corresponding
+   type object.  Reference count and type pointer are filled in; the rest of
+   the bytes of the object are *undefined*!  The resulting expression type is
+   'type *'.  The size of the object is determined by the tp_basicsize field
+   of the type object.
+
+ - PyObject_NewVar(type, typeobj, n) is similar but allocates a variable-size
+   object with room for n items.  In addition to the refcount and type pointer
+   fields, this also fills in the ob_size field.
+
+ - PyObject_Del(op) releases the memory allocated for an object.  It does not
+   run a destructor -- it only frees the memory.  PyObject_Free is identical.
+
+ - PyObject_Init(op, typeobj) and PyObject_InitVar(op, typeobj, n) don't
+   allocate memory.  Instead of a 'type' parameter, they take a pointer to a
+   new object (allocated by an arbitrary allocator), and initialize its object
+   header fields.
+
+Note that objects created with PyObject_{New, NewVar} are allocated using the
+specialized Python allocator (implemented in obmalloc.c), if WITH_PYMALLOC is
+enabled.  In addition, a special debugging allocator is used if PYMALLOC_DEBUG
+is also #defined.
+
+In case a specific form of memory management is needed (for example, if you
+must use the platform malloc heap(s), or shared memory, or C++ local storage or
+operator new), you must first allocate the object with your custom allocator,
+then pass its pointer to PyObject_{Init, InitVar} for filling in its Python-
+specific fields:  reference count, type pointer, possibly others.  You should
+be aware that Python has no control over these objects because they don't
+cooperate with the Python memory manager.  Such objects may not be eligible
+for automatic garbage collection and you have to make sure that they are
+released accordingly whenever their destructor gets called (cf. the specific
+form of memory management you're using).
+
+Unless you have specific memory management requirements, use
+PyObject_{New, NewVar, Del}.
+*/
+
+/*
+ * Raw object memory interface
+ * ===========================
+ */
+
+/* Functions to call the same malloc/realloc/free as used by Python's
+   object allocator.  If WITH_PYMALLOC is enabled, these may differ from
+   the platform malloc/realloc/free.  The Python object allocator is
+   designed for fast, cache-conscious allocation of many "small" objects,
+   and with low hidden memory overhead.
+
+   PyObject_Malloc(0) returns a unique non-NULL pointer if possible.
+
+   PyObject_Realloc(NULL, n) acts like PyObject_Malloc(n).
+   PyObject_Realloc(p != NULL, 0) does not return  NULL, or free the memory
+   at p.
+
+   Returned pointers must be checked for NULL explicitly; no action is
+   performed on failure other than to return NULL (no warning it printed, no
+   exception is set, etc).
+
+   For allocating objects, use PyObject_{New, NewVar} instead whenever
+   possible.  The PyObject_{Malloc, Realloc, Free} family is exposed
+   so that you can exploit Python's small-block allocator for non-object
+   uses.  If you must use these routines to allocate object memory, make sure
+   the object gets initialized via PyObject_{Init, InitVar} after obtaining
+   the raw memory.
+*/
+@NoException public static native Pointer PyObject_Malloc(@Cast("size_t") long size);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+@NoException public static native Pointer PyObject_Calloc(@Cast("size_t") long nelem, @Cast("size_t") long elsize);
+// #endif
+@NoException public static native Pointer PyObject_Realloc(Pointer ptr, @Cast("size_t") long new_size);
+@NoException public static native void PyObject_Free(Pointer ptr);
+
+// #ifndef Py_LIMITED_API
+/* This function returns the number of allocated memory blocks, regardless of size */
+@NoException public static native @Cast("Py_ssize_t") long _Py_GetAllocatedBlocks();
+// #endif /* !Py_LIMITED_API */
+
+/* Macros */
+// #ifdef WITH_PYMALLOC
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyObject_DebugMallocStats(@Cast("FILE*") Pointer out);
+// #endif /* #ifndef Py_LIMITED_API */
+// #endif
+
+/* Macros */
+// #define PyObject_MALLOC         PyObject_Malloc
+// #define PyObject_REALLOC        PyObject_Realloc
+// #define PyObject_FREE           PyObject_Free
+// #define PyObject_Del            PyObject_Free
+// #define PyObject_DEL            PyObject_Free
+
+
+/*
+ * Generic object allocator interface
+ * ==================================
+ */
+
+/* Functions */
+@NoException public static native PyObject PyObject_Init(PyObject arg0, PyTypeObject arg1);
+@NoException public static native PyVarObject PyObject_InitVar(PyVarObject arg0,
+                                                 PyTypeObject arg1, @Cast("Py_ssize_t") long arg2);
+@NoException public static native PyObject _PyObject_New(PyTypeObject arg0);
+@NoException public static native PyVarObject _PyObject_NewVar(PyTypeObject arg0, @Cast("Py_ssize_t") long arg1);
+
+// #define PyObject_New(type, typeobj)
+//                 ( (type *) _PyObject_New(typeobj) )
+// #define PyObject_NewVar(type, typeobj, n)
+//                 ( (type *) _PyObject_NewVar((typeobj), (n)) )
+
+/* Macros trading binary compatibility for speed. See also pymem.h.
+   Note that these macros expect non-NULL object pointers.*/
+// #define PyObject_INIT(op, typeobj)
+//     ( Py_TYPE(op) = (typeobj), _Py_NewReference((PyObject *)(op)), (op) )
+// #define PyObject_INIT_VAR(op, typeobj, size)
+//     ( Py_SIZE(op) = (size), PyObject_INIT((op), (typeobj)) )
+
+// #define _PyObject_SIZE(typeobj) ( (typeobj)->tp_basicsize )
+
+/* _PyObject_VAR_SIZE returns the number of bytes (as size_t) allocated for a
+   vrbl-size object with nitems items, exclusive of gc overhead (if any).  The
+   value is rounded up to the closest multiple of sizeof(void *), in order to
+   ensure that pointer fields at the end of the object are correctly aligned
+   for the platform (this is of special importance for subclasses of, e.g.,
+   str or int, so that pointers can be stored after the embedded data).
+
+   Note that there's no memory wastage in doing this, as malloc has to
+   return (at worst) pointer-aligned memory anyway.
+*/
+// #if ((SIZEOF_VOID_P - 1) & SIZEOF_VOID_P) != 0
+// #   error "_PyObject_VAR_SIZE requires SIZEOF_VOID_P be a power of 2"
+// #endif
+
+// #define _PyObject_VAR_SIZE(typeobj, nitems)
+//     _Py_SIZE_ROUND_UP((typeobj)->tp_basicsize +
+//         (nitems)*(typeobj)->tp_itemsize,
+//         SIZEOF_VOID_P)
+
+// #define PyObject_NEW(type, typeobj)
+// ( (type *) PyObject_Init(
+//     (PyObject *) PyObject_MALLOC( _PyObject_SIZE(typeobj) ), (typeobj)) )
+
+// #define PyObject_NEW_VAR(type, typeobj, n)
+// ( (type *) PyObject_InitVar(
+//       (PyVarObject *) PyObject_MALLOC(_PyObject_VAR_SIZE((typeobj),(n)) ),
+//       (typeobj), (n)) )
+
+/* This example code implements an object constructor with a custom
+   allocator, where PyObject_New is inlined, and shows the important
+   distinction between two steps (at least):
+       1) the actual allocation of the object storage;
+       2) the initialization of the Python specific fields
+      in this storage with PyObject_{Init, InitVar}.
+
+   PyObject *
+   YourObject_New(...)
+   {
+       PyObject *op;
+
+       op = (PyObject *) Your_Allocator(_PyObject_SIZE(YourTypeStruct));
+       if (op == NULL)
+       return PyErr_NoMemory();
+
+       PyObject_Init(op, &YourTypeStruct);
+
+       op->ob_field = value;
+       ...
+       return op;
+   }
+
+   Note that in C++, the use of the new operator usually implies that
+   the 1st step is performed automatically for you, so in a C++ class
+   constructor you would start directly with PyObject_Init/InitVar
+*/
+
+// #ifndef Py_LIMITED_API
+public static class PyObjectArenaAllocator extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyObjectArenaAllocator() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyObjectArenaAllocator(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyObjectArenaAllocator(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyObjectArenaAllocator position(long position) {
+        return (PyObjectArenaAllocator)super.position(position);
+    }
+
+    /* user context passed as the first argument to the 2 functions */
+    public native Pointer ctx(); public native PyObjectArenaAllocator ctx(Pointer ctx);
+
+    /* allocate an arena of size bytes */
+    public static class Alloc_Pointer_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Alloc_Pointer_long(Pointer p) { super(p); }
+        protected Alloc_Pointer_long() { allocate(); }
+        private native void allocate();
+        public native Pointer call(Pointer ctx, @Cast("size_t") long size);
+    }
+    public native Alloc_Pointer_long alloc(); public native PyObjectArenaAllocator alloc(Alloc_Pointer_long alloc);
+
+    /* free an arena */
+    public static class Free_Pointer_Pointer_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Free_Pointer_Pointer_long(Pointer p) { super(p); }
+        protected Free_Pointer_Pointer_long() { allocate(); }
+        private native void allocate();
+        public native void call(Pointer ctx, Pointer ptr, @Cast("size_t") long size);
+    }
+    public native Free_Pointer_Pointer_long free(); public native PyObjectArenaAllocator free(Free_Pointer_Pointer_long free);
+}
+
+/* Get the arena allocator. */
+@NoException public static native void PyObject_GetArenaAllocator(PyObjectArenaAllocator allocator);
+
+/* Set the arena allocator. */
+@NoException public static native void PyObject_SetArenaAllocator(PyObjectArenaAllocator allocator);
+// #endif
+
+
+/*
+ * Garbage Collection Support
+ * ==========================
+ */
+
+/* C equivalent of gc.collect() which ignores the state of gc.enabled. */
+@NoException public static native @Cast("Py_ssize_t") long PyGC_Collect();
+
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("Py_ssize_t") long _PyGC_CollectNoFail();
+@NoException public static native @Cast("Py_ssize_t") long _PyGC_CollectIfEnabled();
+// #endif
+
+/* Test if a type has a GC head */
+// #define PyType_IS_GC(t) PyType_HasFeature((t), Py_TPFLAGS_HAVE_GC)
+
+/* Test if an object has a GC head */
+// #define PyObject_IS_GC(o) (PyType_IS_GC(Py_TYPE(o)) &&
+//     (Py_TYPE(o)->tp_is_gc == NULL || Py_TYPE(o)->tp_is_gc(o)))
+
+@NoException public static native PyVarObject _PyObject_GC_Resize(PyVarObject arg0, @Cast("Py_ssize_t") long arg1);
+// #define PyObject_GC_Resize(type, op, n)
+//                 ( (type *) _PyObject_GC_Resize((PyVarObject *)(op), (n)) )
+
+/* GC information is stored BEFORE the object structure. */
+// #ifndef Py_LIMITED_API
+public static class PyGC_Head extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyGC_Head() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyGC_Head(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyGC_Head(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyGC_Head position(long position) {
+        return (PyGC_Head)super.position(position);
+    }
+
+        @Name("gc.gc_next") public native @Cast("_gc_head*") PyGC_Head gc_gc_next(); public native PyGC_Head gc_gc_next(PyGC_Head gc_gc_next);
+        @Name("gc.gc_prev") public native @Cast("_gc_head*") PyGC_Head gc_gc_prev(); public native PyGC_Head gc_gc_prev(PyGC_Head gc_gc_prev);
+        @Name("gc.gc_refs") public native @Cast("Py_ssize_t") long gc_gc_refs(); public native PyGC_Head gc_gc_refs(long gc_gc_refs);
+    public native double dummy(); public native PyGC_Head dummy(double dummy);  /* force worst-case alignment */
+}
+
+
+
+// #define _Py_AS_GC(o) ((PyGC_Head *)(o)-1)
+
+/* Bit 0 is set when tp_finalize is called */
+public static final int _PyGC_REFS_MASK_FINALIZED =  (1 << 0);
+/* The (N-1) most significant bits contain the gc state / refcount */
+public static final int _PyGC_REFS_SHIFT =           (1);
+public static final long _PyGC_REFS_MASK =            (((long) -1) << _PyGC_REFS_SHIFT);
+
+// #define _PyGCHead_REFS(g) ((g)->gc.gc_refs >> _PyGC_REFS_SHIFT)
+// #define _PyGCHead_SET_REFS(g, v) do {
+//     (g)->gc.gc_refs = ((g)->gc.gc_refs & ~_PyGC_REFS_MASK)
+//         | (((size_t)(v)) << _PyGC_REFS_SHIFT);
+//     } while (0)
+// #define _PyGCHead_DECREF(g) ((g)->gc.gc_refs -= 1 << _PyGC_REFS_SHIFT)
+
+// #define _PyGCHead_FINALIZED(g) (((g)->gc.gc_refs & _PyGC_REFS_MASK_FINALIZED) != 0)
+// #define _PyGCHead_SET_FINALIZED(g, v) do {
+//     (g)->gc.gc_refs = ((g)->gc.gc_refs & ~_PyGC_REFS_MASK_FINALIZED)
+//         | (v != 0);
+//     } while (0)
+
+// #define _PyGC_FINALIZED(o) _PyGCHead_FINALIZED(_Py_AS_GC(o))
+// #define _PyGC_SET_FINALIZED(o, v) _PyGCHead_SET_FINALIZED(_Py_AS_GC(o), v)
+
+// #define _PyGC_REFS(o) _PyGCHead_REFS(_Py_AS_GC(o))
+
+public static final int _PyGC_REFS_UNTRACKED =                    (-2);
+public static final int _PyGC_REFS_REACHABLE =                    (-3);
+public static final int _PyGC_REFS_TENTATIVELY_UNREACHABLE =      (-4);
+
+/* Tell the GC to track this object.  NB: While the object is tracked the
+ * collector it must be safe to call the ob_traverse method. */
+// #define _PyObject_GC_TRACK(o) do {
+//     PyGC_Head *g = _Py_AS_GC(o);
+//     if (_PyGCHead_REFS(g) != _PyGC_REFS_UNTRACKED)
+//         Py_FatalError("GC object already tracked");
+//     _PyGCHead_SET_REFS(g, _PyGC_REFS_REACHABLE);
+//     g->gc.gc_next = _PyGC_generation0;
+//     g->gc.gc_prev = _PyGC_generation0->gc.gc_prev;
+//     g->gc.gc_prev->gc.gc_next = g;
+//     _PyGC_generation0->gc.gc_prev = g;
+//     } while (0);
+
+/* Tell the GC to stop tracking this object.
+ * gc_next doesn't need to be set to NULL, but doing so is a good
+ * way to provoke memory errors if calling code is confused.
+ */
+// #define _PyObject_GC_UNTRACK(o) do {
+//     PyGC_Head *g = _Py_AS_GC(o);
+//     assert(_PyGCHead_REFS(g) != _PyGC_REFS_UNTRACKED);
+//     _PyGCHead_SET_REFS(g, _PyGC_REFS_UNTRACKED);
+//     g->gc.gc_prev->gc.gc_next = g->gc.gc_next;
+//     g->gc.gc_next->gc.gc_prev = g->gc.gc_prev;
+//     g->gc.gc_next = NULL;
+//     } while (0);
+
+/* True if the object is currently tracked by the GC. */
+// #define _PyObject_GC_IS_TRACKED(o)
+//     (_PyGC_REFS(o) != _PyGC_REFS_UNTRACKED)
+
+/* True if the object may be tracked by the GC in the future, or already is.
+   This can be useful to implement some optimizations. */
+// #define _PyObject_GC_MAY_BE_TRACKED(obj)
+//     (PyObject_IS_GC(obj) &&
+//         (!PyTuple_CheckExact(obj) || _PyObject_GC_IS_TRACKED(obj)))
+// #endif /* Py_LIMITED_API */
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyObject_GC_Malloc(@Cast("size_t") long size);
+@NoException public static native PyObject _PyObject_GC_Calloc(@Cast("size_t") long size);
+// #endif /* !Py_LIMITED_API */
+@NoException public static native PyObject _PyObject_GC_New(PyTypeObject arg0);
+@NoException public static native PyVarObject _PyObject_GC_NewVar(PyTypeObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native void PyObject_GC_Track(Pointer arg0);
+@NoException public static native void PyObject_GC_UnTrack(Pointer arg0);
+@NoException public static native void PyObject_GC_Del(Pointer arg0);
+
+// #define PyObject_GC_New(type, typeobj)
+//                 ( (type *) _PyObject_GC_New(typeobj) )
+// #define PyObject_GC_NewVar(type, typeobj, n)
+//                 ( (type *) _PyObject_GC_NewVar((typeobj), (n)) )
+
+
+/* Utility macro to help write tp_traverse functions.
+ * To use this macro, the tp_traverse function must name its arguments
+ * "visit" and "arg".  This is intended to keep tp_traverse functions
+ * looking as much alike as possible.
+ */
+// #define Py_VISIT(op)
+//     do {
+//         if (op) {
+//             int vret = visit((PyObject *)(op), arg);
+//             if (vret)
+//                 return vret;
+//         }
+//     } while (0)
+
+
+/* Test if a type supports weak references */
+// #define PyType_SUPPORTS_WEAKREFS(t) ((t)->tp_weaklistoffset > 0)
+
+// #define PyObject_GET_WEAKREFS_LISTPTR(o)
+//     ((PyObject **) (((char *) (o)) + Py_TYPE(o)->tp_weaklistoffset))
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_OBJIMPL_H */
+
+
+// Parsed from typeslots.h
+
+/* Do not renumber the file; these numbers are part of the stable ABI. */
+/* Disabled, see #10181 */
+// #undef Py_bf_getbuffer
+// #undef Py_bf_releasebuffer
+public static final int Py_mp_ass_subscript = 3;
+public static final int Py_mp_length = 4;
+public static final int Py_mp_subscript = 5;
+public static final int Py_nb_absolute = 6;
+public static final int Py_nb_add = 7;
+public static final int Py_nb_and = 8;
+public static final int Py_nb_bool = 9;
+public static final int Py_nb_divmod = 10;
+public static final int Py_nb_float = 11;
+public static final int Py_nb_floor_divide = 12;
+public static final int Py_nb_index = 13;
+public static final int Py_nb_inplace_add = 14;
+public static final int Py_nb_inplace_and = 15;
+public static final int Py_nb_inplace_floor_divide = 16;
+public static final int Py_nb_inplace_lshift = 17;
+public static final int Py_nb_inplace_multiply = 18;
+public static final int Py_nb_inplace_or = 19;
+public static final int Py_nb_inplace_power = 20;
+public static final int Py_nb_inplace_remainder = 21;
+public static final int Py_nb_inplace_rshift = 22;
+public static final int Py_nb_inplace_subtract = 23;
+public static final int Py_nb_inplace_true_divide = 24;
+public static final int Py_nb_inplace_xor = 25;
+public static final int Py_nb_int = 26;
+public static final int Py_nb_invert = 27;
+public static final int Py_nb_lshift = 28;
+public static final int Py_nb_multiply = 29;
+public static final int Py_nb_negative = 30;
+public static final int Py_nb_or = 31;
+public static final int Py_nb_positive = 32;
+public static final int Py_nb_power = 33;
+public static final int Py_nb_remainder = 34;
+public static final int Py_nb_rshift = 35;
+public static final int Py_nb_subtract = 36;
+public static final int Py_nb_true_divide = 37;
+public static final int Py_nb_xor = 38;
+public static final int Py_sq_ass_item = 39;
+public static final int Py_sq_concat = 40;
+public static final int Py_sq_contains = 41;
+public static final int Py_sq_inplace_concat = 42;
+public static final int Py_sq_inplace_repeat = 43;
+public static final int Py_sq_item = 44;
+public static final int Py_sq_length = 45;
+public static final int Py_sq_repeat = 46;
+public static final int Py_tp_alloc = 47;
+public static final int Py_tp_base = 48;
+public static final int Py_tp_bases = 49;
+public static final int Py_tp_call = 50;
+public static final int Py_tp_clear = 51;
+public static final int Py_tp_dealloc = 52;
+public static final int Py_tp_del = 53;
+public static final int Py_tp_descr_get = 54;
+public static final int Py_tp_descr_set = 55;
+public static final int Py_tp_doc = 56;
+public static final int Py_tp_getattr = 57;
+public static final int Py_tp_getattro = 58;
+public static final int Py_tp_hash = 59;
+public static final int Py_tp_init = 60;
+public static final int Py_tp_is_gc = 61;
+public static final int Py_tp_iter = 62;
+public static final int Py_tp_iternext = 63;
+public static final int Py_tp_methods = 64;
+public static final int Py_tp_new = 65;
+public static final int Py_tp_repr = 66;
+public static final int Py_tp_richcompare = 67;
+public static final int Py_tp_setattr = 68;
+public static final int Py_tp_setattro = 69;
+public static final int Py_tp_str = 70;
+public static final int Py_tp_traverse = 71;
+public static final int Py_tp_members = 72;
+public static final int Py_tp_getset = 73;
+public static final int Py_tp_free = 74;
+public static final int Py_nb_matrix_multiply = 75;
+public static final int Py_nb_inplace_matrix_multiply = 76;
+public static final int Py_am_await = 77;
+public static final int Py_am_aiter = 78;
+public static final int Py_am_anext = 79;
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+/* New in 3.5 */
+public static final int Py_tp_finalize = 80;
+// #endif
+
+
+// Parsed from pyhash.h
+
+// #ifndef Py_HASH_H
+
+// #define Py_HASH_H
+// #ifdef __cplusplus
+// #endif
+
+/* Helpers for hash functions */
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("Py_hash_t") long _Py_HashDouble(double arg0);
+@NoException public static native @Cast("Py_hash_t") long _Py_HashPointer(Pointer arg0);
+@NoException public static native @Cast("Py_hash_t") long _Py_HashBytes(@Const Pointer arg0, @Cast("Py_ssize_t") long arg1);
+// #endif
+
+/* Prime multiplier used in string and various other hashes. */
+public static final long _PyHASH_MULTIPLIER = 1000003L;  /* 0xf4243 */
+
+/* Parameters used for the numeric hash implementation.  See notes for
+   _Py_HashDouble in Python/pyhash.c.  Numeric hashes are based on
+   reduction modulo the prime 2**_PyHASH_BITS - 1. */
+
+// #if SIZEOF_VOID_P >= 8
+public static final int _PyHASH_BITS = 61;
+// #else
+// #endif
+
+public static final long _PyHASH_MODULUS = (((long)1 << _PyHASH_BITS) - 1);
+public static final int _PyHASH_INF = 314159;
+public static final int _PyHASH_NAN = 0;
+public static final long _PyHASH_IMAG = _PyHASH_MULTIPLIER;
+
+
+/* hash secret
+ *
+ * memory layout on 64 bit systems
+ *   cccccccc cccccccc cccccccc  uc -- unsigned char[24]
+ *   pppppppp ssssssss ........  fnv -- two Py_hash_t
+ *   k0k0k0k0 k1k1k1k1 ........  siphash -- two uint64_t
+ *   ........ ........ ssssssss  djbx33a -- 16 bytes padding + one Py_hash_t
+ *   ........ ........ eeeeeeee  pyexpat XML hash salt
+ *
+ * memory layout on 32 bit systems
+ *   cccccccc cccccccc cccccccc  uc
+ *   ppppssss ........ ........  fnv -- two Py_hash_t
+ *   k0k0k0k0 k1k1k1k1 ........  siphash -- two uint64_t (*)
+ *   ........ ........ ssss....  djbx33a -- 16 bytes padding + one Py_hash_t
+ *   ........ ........ eeee....  pyexpat XML hash salt
+ *
+ * (*) The siphash member may not be available on 32 bit platforms without
+ *     an unsigned int64 data type.
+ */
+// #ifndef Py_LIMITED_API
+public static class _Py_HashSecret_t extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _Py_HashSecret_t() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _Py_HashSecret_t(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _Py_HashSecret_t(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _Py_HashSecret_t position(long position) {
+        return (_Py_HashSecret_t)super.position(position);
+    }
+
+    /* ensure 24 bytes */
+    public native @Cast("unsigned char") byte uc(int i); public native _Py_HashSecret_t uc(int i, byte uc);
+    @MemberGetter public native @Cast("unsigned char*") BytePointer uc();
+    /* two Py_hash_t for FNV */
+        @Name("fnv.prefix") public native @Cast("Py_hash_t") long fnv_prefix(); public native _Py_HashSecret_t fnv_prefix(long fnv_prefix);
+        @Name("fnv.suffix") public native @Cast("Py_hash_t") long fnv_suffix(); public native _Py_HashSecret_t fnv_suffix(long fnv_suffix);
+    /* two uint64 for SipHash24 */
+        @Name("siphash.k0") public native @Cast("uint64_t") long siphash_k0(); public native _Py_HashSecret_t siphash_k0(long siphash_k0);
+        @Name("siphash.k1") public native @Cast("uint64_t") long siphash_k1(); public native _Py_HashSecret_t siphash_k1(long siphash_k1);
+    /* a different (!) Py_hash_t for small string optimization */
+        @Name("djbx33a.padding") public native @Cast("unsigned char") byte djbx33a_padding(int i); public native _Py_HashSecret_t djbx33a_padding(int i, byte djbx33a_padding);
+        @Name("djbx33a.padding") @MemberGetter public native @Cast("unsigned char*") BytePointer djbx33a_padding();
+        @Name("djbx33a.suffix") public native @Cast("Py_hash_t") long djbx33a_suffix(); public native _Py_HashSecret_t djbx33a_suffix(long djbx33a_suffix);
+        @Name("expat.padding") public native @Cast("unsigned char") byte expat_padding(int i); public native _Py_HashSecret_t expat_padding(int i, byte expat_padding);
+        @Name("expat.padding") @MemberGetter public native @Cast("unsigned char*") BytePointer expat_padding();
+        @Name("expat.hashsalt") public native @Cast("Py_hash_t") long expat_hashsalt(); public native _Py_HashSecret_t expat_hashsalt(long expat_hashsalt);
+}
+public static native @ByRef _Py_HashSecret_t _Py_HashSecret(); public static native void _Py_HashSecret(_Py_HashSecret_t _Py_HashSecret);
+// #endif
+
+// #ifdef Py_DEBUG
+// #endif
+
+
+/* hash function definition */
+// #ifndef Py_LIMITED_API
+public static class PyHash_FuncDef extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyHash_FuncDef(Pointer p) { super(p); }
+
+    public static class Hash_Pointer_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Hash_Pointer_long(Pointer p) { super(p); }
+        protected Hash_Pointer_long() { allocate(); }
+        private native void allocate();
+        public native @Cast("Py_hash_t") long call(@Const Pointer arg0, @Cast("Py_ssize_t") long arg1);
+    }
+    @MemberGetter public native @Const Hash_Pointer_long hash();
+    @MemberGetter public native @Cast("const char*") BytePointer name();
+    @MemberGetter public native int hash_bits();
+    @MemberGetter public native int seed_bits();
+}
+
+@NoException public static native PyHash_FuncDef PyHash_GetFuncDef();
+// #endif
+
+
+/* cutoff for small string DJBX33A optimization in range [1, cutoff).
+ *
+ * About 50% of the strings in a typical Python application are smaller than
+ * 6 to 7 chars. However DJBX33A is vulnerable to hash collision attacks.
+ * NEVER use DJBX33A for long strings!
+ *
+ * A Py_HASH_CUTOFF of 0 disables small string optimization. 32 bit platforms
+ * should use a smaller cutoff because it is easier to create colliding
+ * strings. A cutoff of 7 on 64bit platforms and 5 on 32bit platforms should
+ * provide a decent safety margin.
+ */
+// #ifndef Py_HASH_CUTOFF
+public static final int Py_HASH_CUTOFF = 0;
+// #elif (Py_HASH_CUTOFF > 7 || Py_HASH_CUTOFF < 0)
+// #  error Py_HASH_CUTOFF must in range 0...7.
+// #endif /* Py_HASH_CUTOFF */
+
+
+/* hash algorithm selection
+ *
+ * The values for Py_HASH_SIPHASH24 and Py_HASH_FNV are hard-coded in the
+ * configure script.
+ *
+ * - FNV is available on all platforms and architectures.
+ * - SIPHASH24 only works on plaforms that don't require aligned memory for integers.
+ * - With EXTERNAL embedders can provide an alternative implementation with::
+ *
+ *     PyHash_FuncDef PyHash_Func = {...};
+ *
+ * XXX: Figure out __declspec() for extern PyHash_FuncDef.
+ */
+public static final int Py_HASH_EXTERNAL = 0;
+public static final int Py_HASH_SIPHASH24 = 1;
+public static final int Py_HASH_FNV = 2;
+
+// #ifndef Py_HASH_ALGORITHM
+// #  ifndef HAVE_ALIGNED_REQUIRED
+public static final int Py_HASH_ALGORITHM = Py_HASH_SIPHASH24;
+// #  else
+// #  endif /* uint64_t && uint32_t && aligned */
+// #endif /* Py_HASH_ALGORITHM */
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif /* !Py_HASH_H */
+
+
+// Parsed from pydebug.h
+
+// #ifndef Py_LIMITED_API
+// #ifndef Py_PYDEBUG_H
+// #define Py_PYDEBUG_H
+// #ifdef __cplusplus
+// #endif
+
+/* These global variable are defined in pylifecycle.c */
+/* XXX (ncoghlan): move these declarations to pylifecycle.h? */
+public static native int Py_DebugFlag(); public static native void Py_DebugFlag(int Py_DebugFlag);
+public static native int Py_VerboseFlag(); public static native void Py_VerboseFlag(int Py_VerboseFlag);
+public static native int Py_QuietFlag(); public static native void Py_QuietFlag(int Py_QuietFlag);
+public static native int Py_InteractiveFlag(); public static native void Py_InteractiveFlag(int Py_InteractiveFlag);
+public static native int Py_InspectFlag(); public static native void Py_InspectFlag(int Py_InspectFlag);
+public static native int Py_OptimizeFlag(); public static native void Py_OptimizeFlag(int Py_OptimizeFlag);
+public static native int Py_NoSiteFlag(); public static native void Py_NoSiteFlag(int Py_NoSiteFlag);
+public static native int Py_BytesWarningFlag(); public static native void Py_BytesWarningFlag(int Py_BytesWarningFlag);
+public static native int Py_UseClassExceptionsFlag(); public static native void Py_UseClassExceptionsFlag(int Py_UseClassExceptionsFlag);
+public static native int Py_FrozenFlag(); public static native void Py_FrozenFlag(int Py_FrozenFlag);
+public static native int Py_IgnoreEnvironmentFlag(); public static native void Py_IgnoreEnvironmentFlag(int Py_IgnoreEnvironmentFlag);
+public static native int Py_DontWriteBytecodeFlag(); public static native void Py_DontWriteBytecodeFlag(int Py_DontWriteBytecodeFlag);
+public static native int Py_NoUserSiteDirectory(); public static native void Py_NoUserSiteDirectory(int Py_NoUserSiteDirectory);
+public static native int Py_UnbufferedStdioFlag(); public static native void Py_UnbufferedStdioFlag(int Py_UnbufferedStdioFlag);
+public static native int Py_HashRandomizationFlag(); public static native void Py_HashRandomizationFlag(int Py_HashRandomizationFlag);
+public static native int Py_IsolatedFlag(); public static native void Py_IsolatedFlag(int Py_IsolatedFlag);
+
+// #ifdef MS_WINDOWS
+// #endif
+
+/* this is a wrapper around getenv() that pays attention to
+   Py_IgnoreEnvironmentFlag.  It should be used for getting variables like
+   PYTHONPATH and PYTHONHOME from the environment */
+// #define Py_GETENV(s) (Py_IgnoreEnvironmentFlag ? NULL : getenv(s))
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_PYDEBUG_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from descrobject.h
+
+/* Descriptors */
+// #ifndef Py_DESCROBJECT_H
+// #define Py_DESCROBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+public static class getter extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    getter(Pointer p) { super(p); }
+    protected getter() { allocate(); }
+    private native void allocate();
+    public native PyObject call(PyObject arg0, Pointer arg1);
+}
+public static class setter extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    setter(Pointer p) { super(p); }
+    protected setter() { allocate(); }
+    private native void allocate();
+    public native int call(PyObject arg0, PyObject arg1, Pointer arg2);
+}
+
+public static class PyGetSetDef extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyGetSetDef() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyGetSetDef(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyGetSetDef(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyGetSetDef position(long position) {
+        return (PyGetSetDef)super.position(position);
+    }
+
+    public native @Cast("char*") BytePointer name(); public native PyGetSetDef name(BytePointer name);
+    public native getter get(); public native PyGetSetDef get(getter get);
+    public native setter set(); public native PyGetSetDef set(setter set);
+    public native @Cast("char*") BytePointer doc(); public native PyGetSetDef doc(BytePointer doc);
+    public native Pointer closure(); public native PyGetSetDef closure(Pointer closure);
+}
+
+// #ifndef Py_LIMITED_API
+public static class wrapperfunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    wrapperfunc(Pointer p) { super(p); }
+    protected wrapperfunc() { allocate(); }
+    private native void allocate();
+    public native PyObject call(PyObject self, PyObject args,
+                                 Pointer wrapped);
+}
+
+public static class wrapperfunc_kwds extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    wrapperfunc_kwds(Pointer p) { super(p); }
+    protected wrapperfunc_kwds() { allocate(); }
+    private native void allocate();
+    public native PyObject call(PyObject self, PyObject args,
+                                      Pointer wrapped, PyObject kwds);
+}
+
+public static class wrapperbase extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public wrapperbase() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public wrapperbase(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public wrapperbase(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public wrapperbase position(long position) {
+        return (wrapperbase)super.position(position);
+    }
+
+    public native @Cast("char*") BytePointer name(); public native wrapperbase name(BytePointer name);
+    public native int offset(); public native wrapperbase offset(int offset);
+    public native Pointer function(); public native wrapperbase function(Pointer function);
+    public native wrapperfunc wrapper(); public native wrapperbase wrapper(wrapperfunc wrapper);
+    public native @Cast("char*") BytePointer doc(); public native wrapperbase doc(BytePointer doc);
+    public native int flags(); public native wrapperbase flags(int flags);
+    public native PyObject name_strobj(); public native wrapperbase name_strobj(PyObject name_strobj);
+}
+
+/* Flags for above struct */
+public static final int PyWrapperFlag_KEYWORDS = 1; /* wrapper function takes keyword args */
+
+/* Various kinds of descriptor objects */
+
+public static class PyDescrObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyDescrObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyDescrObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyDescrObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyDescrObject position(long position) {
+        return (PyDescrObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyDescrObject ob_base(PyObject ob_base);
+    public native PyTypeObject d_type(); public native PyDescrObject d_type(PyTypeObject d_type);
+    public native PyObject d_name(); public native PyDescrObject d_name(PyObject d_name);
+    public native PyObject d_qualname(); public native PyDescrObject d_qualname(PyObject d_qualname);
+}
+
+// #define PyDescr_COMMON PyDescrObject d_common
+
+// #define PyDescr_TYPE(x) (((PyDescrObject *)(x))->d_type)
+// #define PyDescr_NAME(x) (((PyDescrObject *)(x))->d_name)
+
+public static class PyMethodDescrObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyMethodDescrObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyMethodDescrObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyMethodDescrObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyMethodDescrObject position(long position) {
+        return (PyMethodDescrObject)super.position(position);
+    }
+
+    public native @ByRef PyDescrObject d_common(); public native PyMethodDescrObject d_common(PyDescrObject d_common);
+    public native PyMethodDef d_method(); public native PyMethodDescrObject d_method(PyMethodDef d_method);
+}
+
+public static class PyMemberDescrObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyMemberDescrObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyMemberDescrObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyMemberDescrObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyMemberDescrObject position(long position) {
+        return (PyMemberDescrObject)super.position(position);
+    }
+
+    public native @ByRef PyDescrObject d_common(); public native PyMemberDescrObject d_common(PyDescrObject d_common);
+    public native PyMemberDef d_member(); public native PyMemberDescrObject d_member(PyMemberDef d_member);
+}
+
+public static class PyGetSetDescrObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyGetSetDescrObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyGetSetDescrObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyGetSetDescrObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyGetSetDescrObject position(long position) {
+        return (PyGetSetDescrObject)super.position(position);
+    }
+
+    public native @ByRef PyDescrObject d_common(); public native PyGetSetDescrObject d_common(PyDescrObject d_common);
+    public native PyGetSetDef d_getset(); public native PyGetSetDescrObject d_getset(PyGetSetDef d_getset);
+}
+
+public static class PyWrapperDescrObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyWrapperDescrObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyWrapperDescrObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyWrapperDescrObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyWrapperDescrObject position(long position) {
+        return (PyWrapperDescrObject)super.position(position);
+    }
+
+    public native @ByRef PyDescrObject d_common(); public native PyWrapperDescrObject d_common(PyDescrObject d_common);
+    public native wrapperbase d_base(); public native PyWrapperDescrObject d_base(wrapperbase d_base);
+    public native Pointer d_wrapped(); public native PyWrapperDescrObject d_wrapped(Pointer d_wrapped); /* This can be any function pointer */
+}
+// #endif /* Py_LIMITED_API */
+
+public static native @ByRef PyTypeObject PyClassMethodDescr_Type(); public static native void PyClassMethodDescr_Type(PyTypeObject PyClassMethodDescr_Type);
+public static native @ByRef PyTypeObject PyGetSetDescr_Type(); public static native void PyGetSetDescr_Type(PyTypeObject PyGetSetDescr_Type);
+public static native @ByRef PyTypeObject PyMemberDescr_Type(); public static native void PyMemberDescr_Type(PyTypeObject PyMemberDescr_Type);
+public static native @ByRef PyTypeObject PyMethodDescr_Type(); public static native void PyMethodDescr_Type(PyTypeObject PyMethodDescr_Type);
+public static native @ByRef PyTypeObject PyWrapperDescr_Type(); public static native void PyWrapperDescr_Type(PyTypeObject PyWrapperDescr_Type);
+public static native @ByRef PyTypeObject PyDictProxy_Type(); public static native void PyDictProxy_Type(PyTypeObject PyDictProxy_Type);
+// #ifndef Py_LIMITED_API
+public static native @ByRef PyTypeObject _PyMethodWrapper_Type(); public static native void _PyMethodWrapper_Type(PyTypeObject _PyMethodWrapper_Type);
+// #endif /* Py_LIMITED_API */
+
+@NoException public static native PyObject PyDescr_NewMethod(PyTypeObject arg0, PyMethodDef arg1);
+@NoException public static native PyObject PyDescr_NewClassMethod(PyTypeObject arg0, PyMethodDef arg1); /* forward declaration for following prototype */
+@NoException public static native PyObject PyDescr_NewMember(PyTypeObject arg0,
+                                               PyMemberDef arg1);
+@NoException public static native PyObject PyDescr_NewGetSet(PyTypeObject arg0,
+                                               PyGetSetDef arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyDescr_NewWrapper(PyTypeObject arg0,
+                                                wrapperbase arg1, Pointer arg2);
+// #define PyDescr_IsData(d) (Py_TYPE(d)->tp_descr_set != NULL)
+// #endif
+
+@NoException public static native PyObject PyDictProxy_New(PyObject arg0);
+@NoException public static native PyObject PyWrapper_New(PyObject arg0, PyObject arg1);
+
+
+public static native @ByRef PyTypeObject PyProperty_Type(); public static native void PyProperty_Type(PyTypeObject PyProperty_Type);
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_DESCROBJECT_H */
+
+
+
+// Parsed from bytearrayobject.h
+
+/* ByteArray object interface */
+
+// #ifndef Py_BYTEARRAYOBJECT_H
+// #define Py_BYTEARRAYOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #include <stdarg.h>
+
+/* Type PyByteArrayObject represents a mutable array of bytes.
+ * The Python API is that of a sequence;
+ * the bytes are mapped to ints in [0, 256).
+ * Bytes are not characters; they may be used to encode characters.
+ * The only way to go between bytes and str/unicode is via encoding
+ * and decoding.
+ * For the convenience of C programmers, the bytes type is considered
+ * to contain a char pointer, not an unsigned char pointer.
+ */
+
+/* Object layout */
+// #ifndef Py_LIMITED_API
+public static class PyByteArrayObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyByteArrayObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyByteArrayObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyByteArrayObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyByteArrayObject position(long position) {
+        return (PyByteArrayObject)super.position(position);
+    }
+
+    public native @ByRef PyVarObject ob_base(); public native PyByteArrayObject ob_base(PyVarObject ob_base);
+    public native @Cast("Py_ssize_t") long ob_alloc(); public native PyByteArrayObject ob_alloc(long ob_alloc); /* How many bytes allocated in ob_bytes */
+    public native @Cast("char*") BytePointer ob_bytes(); public native PyByteArrayObject ob_bytes(BytePointer ob_bytes);      /* Physical backing buffer */
+    public native @Cast("char*") BytePointer ob_start(); public native PyByteArrayObject ob_start(BytePointer ob_start);      /* Logical start inside ob_bytes */
+    /* XXX(nnorwitz): should ob_exports be Py_ssize_t? */
+    public native int ob_exports(); public native PyByteArrayObject ob_exports(int ob_exports);      /* How many buffer exports */
+}
+// #endif
+
+/* Type object */
+public static native @ByRef PyTypeObject PyByteArray_Type(); public static native void PyByteArray_Type(PyTypeObject PyByteArray_Type);
+public static native @ByRef PyTypeObject PyByteArrayIter_Type(); public static native void PyByteArrayIter_Type(PyTypeObject PyByteArrayIter_Type);
+
+/* Type check macros */
+// #define PyByteArray_Check(self) PyObject_TypeCheck(self, &PyByteArray_Type)
+// #define PyByteArray_CheckExact(self) (Py_TYPE(self) == &PyByteArray_Type)
+
+/* Direct API functions */
+@NoException public static native PyObject PyByteArray_FromObject(PyObject arg0);
+@NoException public static native PyObject PyByteArray_Concat(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyByteArray_FromStringAndSize(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native PyObject PyByteArray_FromStringAndSize(String arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native @Cast("Py_ssize_t") long PyByteArray_Size(PyObject arg0);
+@NoException public static native @Cast("char*") BytePointer PyByteArray_AsString(PyObject arg0);
+@NoException public static native int PyByteArray_Resize(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+
+/* Macros, trading safety for speed */
+// #ifndef Py_LIMITED_API
+// #define PyByteArray_AS_STRING(self)
+//     (assert(PyByteArray_Check(self)),
+//      Py_SIZE(self) ? ((PyByteArrayObject *)(self))->ob_start : _PyByteArray_empty_string)
+// #define PyByteArray_GET_SIZE(self) (assert(PyByteArray_Check(self)), Py_SIZE(self))
+
+public static native @Cast("char") byte _PyByteArray_empty_string(int i); public static native void _PyByteArray_empty_string(int i, byte _PyByteArray_empty_string);
+@MemberGetter public static native @Cast("char*") BytePointer _PyByteArray_empty_string();
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_BYTEARRAYOBJECT_H */
+
+
+// Parsed from bytesobject.h
+
+
+/* Bytes (String) object interface */
+
+// #ifndef Py_BYTESOBJECT_H
+// #define Py_BYTESOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #include <stdarg.h>
+
+/*
+Type PyBytesObject represents a character string.  An extra zero byte is
+reserved at the end to ensure it is zero-terminated, but a size is
+present so strings with null bytes in them can be represented.  This
+is an immutable object type.
+
+There are functions to create new string objects, to test
+an object for string-ness, and to get the
+string value.  The latter function returns a null pointer
+if the object is not of the proper type.
+There is a variant that takes an explicit size as well as a
+variant that assumes a zero-terminated string.  Note that none of the
+functions should be applied to nil objects.
+*/
+
+/* Caching the hash (ob_shash) saves recalculation of a string's hash value.
+   This significantly speeds up dict lookups. */
+
+// #ifndef Py_LIMITED_API
+public static class PyBytesObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyBytesObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyBytesObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyBytesObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyBytesObject position(long position) {
+        return (PyBytesObject)super.position(position);
+    }
+
+    public native @ByRef PyVarObject ob_base(); public native PyBytesObject ob_base(PyVarObject ob_base);
+    public native @Cast("Py_hash_t") long ob_shash(); public native PyBytesObject ob_shash(long ob_shash);
+    public native @Cast("char") byte ob_sval(int i); public native PyBytesObject ob_sval(int i, byte ob_sval);
+    @MemberGetter public native @Cast("char*") BytePointer ob_sval();
+
+    /* Invariants:
+     *     ob_sval contains space for 'ob_size+1' elements.
+     *     ob_sval[ob_size] == 0.
+     *     ob_shash is the hash of the string or -1 if not computed yet.
+     */
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyBytes_Type(); public static native void PyBytes_Type(PyTypeObject PyBytes_Type);
+public static native @ByRef PyTypeObject PyBytesIter_Type(); public static native void PyBytesIter_Type(PyTypeObject PyBytesIter_Type);
+
+// #define PyBytes_Check(op)
+//                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_BYTES_SUBCLASS)
+// #define PyBytes_CheckExact(op) (Py_TYPE(op) == &PyBytes_Type)
+
+@NoException public static native PyObject PyBytes_FromStringAndSize(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native PyObject PyBytes_FromStringAndSize(String arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native PyObject PyBytes_FromString(@Cast("const char*") BytePointer arg0);
+@NoException public static native PyObject PyBytes_FromString(String arg0);
+@NoException public static native PyObject PyBytes_FromObject(PyObject arg0);
+@NoException public static native PyObject PyBytes_FromFormatV(@Cast("const char*") BytePointer arg0, @ByVal @Cast("va_list*") Pointer arg1);
+@NoException public static native PyObject PyBytes_FromFormatV(String arg0, @ByVal @Cast("va_list*") Pointer arg1);
+@NoException public static native PyObject PyBytes_FromFormat(@Cast("const char*") BytePointer arg0);
+@NoException public static native PyObject PyBytes_FromFormat(String arg0);
+@NoException public static native @Cast("Py_ssize_t") long PyBytes_Size(PyObject arg0);
+@NoException public static native @Cast("char*") BytePointer PyBytes_AsString(PyObject arg0);
+@NoException public static native PyObject PyBytes_Repr(PyObject arg0, int arg1);
+@NoException public static native void PyBytes_Concat(@Cast("PyObject**") PointerPointer arg0, PyObject arg1);
+@NoException public static native void PyBytes_Concat(@ByPtrPtr PyObject arg0, PyObject arg1);
+@NoException public static native void PyBytes_ConcatAndDel(@Cast("PyObject**") PointerPointer arg0, PyObject arg1);
+@NoException public static native void PyBytes_ConcatAndDel(@ByPtrPtr PyObject arg0, PyObject arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyBytes_Resize(@Cast("PyObject**") PointerPointer arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int _PyBytes_Resize(@ByPtrPtr PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native PyObject _PyBytes_FormatEx(
+    @Cast("const char*") BytePointer format,
+    @Cast("Py_ssize_t") long format_len,
+    PyObject args,
+    int use_bytearray);
+@NoException public static native PyObject _PyBytes_FormatEx(
+    String format,
+    @Cast("Py_ssize_t") long format_len,
+    PyObject args,
+    int use_bytearray);
+@NoException public static native PyObject _PyBytes_FromHex(
+    PyObject string,
+    int use_bytearray);
+// #endif
+@NoException public static native PyObject PyBytes_DecodeEscape(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1,
+						   @Cast("const char*") BytePointer arg2, @Cast("Py_ssize_t") long arg3,
+						   @Cast("const char*") BytePointer arg4);
+@NoException public static native PyObject PyBytes_DecodeEscape(String arg0, @Cast("Py_ssize_t") long arg1,
+						   String arg2, @Cast("Py_ssize_t") long arg3,
+						   String arg4);
+// #ifndef Py_LIMITED_API
+/* Helper for PyBytes_DecodeEscape that detects invalid escape chars. */
+@NoException public static native PyObject _PyBytes_DecodeEscape(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1,
+                                             @Cast("const char*") BytePointer arg2, @Cast("Py_ssize_t") long arg3,
+                                             @Cast("const char*") BytePointer arg4,
+                                             @Cast("const char**") PointerPointer arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1,
+                                             @Cast("const char*") BytePointer arg2, @Cast("Py_ssize_t") long arg3,
+                                             @Cast("const char*") BytePointer arg4,
+                                             @Cast("const char**") @ByPtrPtr BytePointer arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(String arg0, @Cast("Py_ssize_t") long arg1,
+                                             String arg2, @Cast("Py_ssize_t") long arg3,
+                                             String arg4,
+                                             @Cast("const char**") @ByPtrPtr ByteBuffer arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1,
+                                             @Cast("const char*") BytePointer arg2, @Cast("Py_ssize_t") long arg3,
+                                             @Cast("const char*") BytePointer arg4,
+                                             @Cast("const char**") @ByPtrPtr byte[] arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(String arg0, @Cast("Py_ssize_t") long arg1,
+                                             String arg2, @Cast("Py_ssize_t") long arg3,
+                                             String arg4,
+                                             @Cast("const char**") @ByPtrPtr BytePointer arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1,
+                                             @Cast("const char*") BytePointer arg2, @Cast("Py_ssize_t") long arg3,
+                                             @Cast("const char*") BytePointer arg4,
+                                             @Cast("const char**") @ByPtrPtr ByteBuffer arg5);
+@NoException public static native PyObject _PyBytes_DecodeEscape(String arg0, @Cast("Py_ssize_t") long arg1,
+                                             String arg2, @Cast("Py_ssize_t") long arg3,
+                                             String arg4,
+                                             @Cast("const char**") @ByPtrPtr byte[] arg5);
+// #endif
+
+/* Macro, trading safety for speed */
+// #ifndef Py_LIMITED_API
+// #define PyBytes_AS_STRING(op) (assert(PyBytes_Check(op)),
+//                                 (((PyBytesObject *)(op))->ob_sval))
+// #define PyBytes_GET_SIZE(op)  (assert(PyBytes_Check(op)),Py_SIZE(op))
+// #endif
+
+/* _PyBytes_Join(sep, x) is like sep.join(x).  sep must be PyBytesObject*,
+   x must be an iterable object. */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyBytes_Join(PyObject sep, PyObject x);
+// #endif
+
+/* Provides access to the internal data buffer and size of a string
+   object or the default encoded version of a Unicode object. Passing
+   NULL as *len parameter will force the string buffer to be
+   0-terminated (passing a string with embedded NULL characters will
+   cause an exception).  */
+@NoException public static native int PyBytes_AsStringAndSize(
+    PyObject obj,
+    @Cast("char**") PointerPointer s,
+    @Cast("Py_ssize_t*") SizeTPointer len
+    );
+@NoException public static native int PyBytes_AsStringAndSize(
+    PyObject obj,
+    @Cast("char**") @ByPtrPtr BytePointer s,
+    @Cast("Py_ssize_t*") SizeTPointer len
+    );
+@NoException public static native int PyBytes_AsStringAndSize(
+    PyObject obj,
+    @Cast("char**") @ByPtrPtr ByteBuffer s,
+    @Cast("Py_ssize_t*") SizeTPointer len
+    );
+@NoException public static native int PyBytes_AsStringAndSize(
+    PyObject obj,
+    @Cast("char**") @ByPtrPtr byte[] s,
+    @Cast("Py_ssize_t*") SizeTPointer len
+    );
+
+/* Using the current locale, insert the thousands grouping
+   into the string pointed to by buffer.  For the argument descriptions,
+   see Objects/stringlib/localeutil.h */
+// #ifndef Py_LIMITED_API
+
+
+/* Using explicit passed-in values, insert the thousands grouping
+   into the string pointed to by buffer.  For the argument descriptions,
+   see Objects/stringlib/localeutil.h */
+
+// #endif
+
+/* Flags used by string formatting */
+public static final int F_LJUST = (1<<0);
+public static final int F_SIGN =	(1<<1);
+public static final int F_BLANK = (1<<2);
+public static final int F_ALT =	(1<<3);
+public static final int F_ZERO =	(1<<4);
+
+// #ifndef Py_LIMITED_API
+/* The _PyBytesWriter structure is big: it contains an embedded "stack buffer".
+   A _PyBytesWriter variable must be declared at the end of variables in a
+   function to optimize the memory allocation on the stack. */
+public static class _PyBytesWriter extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyBytesWriter() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyBytesWriter(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyBytesWriter(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyBytesWriter position(long position) {
+        return (_PyBytesWriter)super.position(position);
+    }
+
+    /* bytes, bytearray or NULL (when the small buffer is used) */
+    public native PyObject buffer(); public native _PyBytesWriter buffer(PyObject buffer);
+
+    /* Number of allocated size. */
+    public native @Cast("Py_ssize_t") long allocated(); public native _PyBytesWriter allocated(long allocated);
+
+    /* Minimum number of allocated bytes,
+       incremented by _PyBytesWriter_Prepare() */
+    public native @Cast("Py_ssize_t") long min_size(); public native _PyBytesWriter min_size(long min_size);
+
+    /* If non-zero, use a bytearray instead of a bytes object for buffer. */
+    public native int use_bytearray(); public native _PyBytesWriter use_bytearray(int use_bytearray);
+
+    /* If non-zero, overallocate the buffer (default: 0).
+       This flag must be zero if use_bytearray is non-zero. */
+    public native int overallocate(); public native _PyBytesWriter overallocate(int overallocate);
+
+    /* Stack buffer */
+    public native int use_small_buffer(); public native _PyBytesWriter use_small_buffer(int use_small_buffer);
+    public native @Cast("char") byte small_buffer(int i); public native _PyBytesWriter small_buffer(int i, byte small_buffer);
+    @MemberGetter public native @Cast("char*") BytePointer small_buffer();
+}
+
+/* Initialize a bytes writer
+
+   By default, the overallocation is disabled. Set the overallocate attribute
+   to control the allocation of the buffer. */
+@NoException public static native void _PyBytesWriter_Init(_PyBytesWriter writer);
+
+/* Get the buffer content and reset the writer.
+   Return a bytes object, or a bytearray object if use_bytearray is non-zero.
+   Raise an exception and return NULL on error. */
+@NoException public static native PyObject _PyBytesWriter_Finish(_PyBytesWriter writer,
+    Pointer str);
+
+/* Deallocate memory of a writer (clear its internal buffer). */
+@NoException public static native void _PyBytesWriter_Dealloc(_PyBytesWriter writer);
+
+/* Allocate the buffer to write size bytes.
+   Return the pointer to the beginning of buffer data.
+   Raise an exception and return NULL on error. */
+@NoException public static native Pointer _PyBytesWriter_Alloc(_PyBytesWriter writer,
+    @Cast("Py_ssize_t") long size);
+
+/* Ensure that the buffer is large enough to write *size* bytes.
+   Add size to the writer minimum size (min_size attribute).
+
+   str is the current pointer inside the buffer.
+   Return the updated current pointer inside the buffer.
+   Raise an exception and return NULL on error. */
+@NoException public static native Pointer _PyBytesWriter_Prepare(_PyBytesWriter writer,
+    Pointer str,
+    @Cast("Py_ssize_t") long size);
+
+/* Resize the buffer to make it larger.
+   The new buffer may be larger than size bytes because of overallocation.
+   Return the updated current pointer inside the buffer.
+   Raise an exception and return NULL on error.
+
+   Note: size must be greater than the number of allocated bytes in the writer.
+
+   This function doesn't use the writer minimum size (min_size attribute).
+
+   See also _PyBytesWriter_Prepare().
+   */
+@NoException public static native Pointer _PyBytesWriter_Resize(_PyBytesWriter writer,
+    Pointer str,
+    @Cast("Py_ssize_t") long size);
+
+/* Write bytes.
+   Raise an exception and return NULL on error. */
+@NoException public static native Pointer _PyBytesWriter_WriteBytes(_PyBytesWriter writer,
+    Pointer str,
+    @Const Pointer bytes,
+    @Cast("Py_ssize_t") long size);
+// #endif   /* Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_BYTESOBJECT_H */
+
+
+// Parsed from unicodeobject.h
+
+// #ifndef Py_UNICODEOBJECT_H
+// #define Py_UNICODEOBJECT_H
+
+// #include <stdarg.h>
+
+/*
+
+Unicode implementation based on original code by Fredrik Lundh,
+modified by Marc-Andre Lemburg (mal@lemburg.com) according to the
+Unicode Integration Proposal. (See
+http://www.egenix.com/files/python/unicode-proposal.txt).
+
+Copyright (c) Corporation for National Research Initiatives.
+
+
+ Original header:
+ --------------------------------------------------------------------
+
+ * Yet another Unicode string type for Python.  This type supports the
+ * 16-bit Basic Multilingual Plane (BMP) only.
+ *
+ * Written by Fredrik Lundh, January 1999.
+ *
+ * Copyright (c) 1999 by Secret Labs AB.
+ * Copyright (c) 1999 by Fredrik Lundh.
+ *
+ * fredrik@pythonware.com
+ * http://www.pythonware.com
+ *
+ * --------------------------------------------------------------------
+ * This Unicode String Type is
+ *
+ * Copyright (c) 1999 by Secret Labs AB
+ * Copyright (c) 1999 by Fredrik Lundh
+ *
+ * By obtaining, using, and/or copying this software and/or its
+ * associated documentation, you agree that you have read, understood,
+ * and will comply with the following terms and conditions:
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * associated documentation for any purpose and without fee is hereby
+ * granted, provided that the above copyright notice appears in all
+ * copies, and that both that copyright notice and this permission notice
+ * appear in supporting documentation, and that the name of Secret Labs
+ * AB or the author not be used in advertising or publicity pertaining to
+ * distribution of the software without specific, written prior
+ * permission.
+ *
+ * SECRET LABS AB AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
+ * THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS.  IN NO EVENT SHALL SECRET LABS AB OR THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+ * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * -------------------------------------------------------------------- */
+
+// #include <ctype.h>
+
+/* === Internal API ======================================================= */
+
+/* --- Internal Unicode Format -------------------------------------------- */
+
+/* Python 3.x requires unicode */
+// #define Py_USING_UNICODE
+
+// #ifndef SIZEOF_WCHAR_T
+// #error Must define SIZEOF_WCHAR_T
+// #endif
+
+public static native @MemberGetter int Py_UNICODE_SIZE();
+public static final int Py_UNICODE_SIZE = Py_UNICODE_SIZE();
+
+/* If wchar_t can be used for UCS-4 storage, set Py_UNICODE_WIDE.
+   Otherwise, Unicode strings are stored as UCS-2 (with limited support
+   for UTF-16) */
+
+// #if Py_UNICODE_SIZE >= 4
+// #define Py_UNICODE_WIDE
+// #endif
+
+/* Set these flags if the platform has "wchar.h" and the
+   wchar_t type is a 16-bit unsigned type */
+/* #define HAVE_WCHAR_H */
+/* #define HAVE_USABLE_WCHAR_T */
+
+/* Py_UNICODE was the native Unicode storage format (code unit) used by
+   Python and represents a single Unicode element in the Unicode type.
+   With PEP 393, Py_UNICODE is deprecated and replaced with a
+   typedef to wchar_t. */
+
+// #ifndef Py_LIMITED_API
+// #define PY_UNICODE_TYPE wchar_t
+// #endif
+
+/* If the compiler provides a wchar_t type we try to support it
+   through the interface functions PyUnicode_FromWideChar(),
+   PyUnicode_AsWideChar() and PyUnicode_AsWideCharString(). */
+
+// #ifdef HAVE_USABLE_WCHAR_T
+// # ifndef HAVE_WCHAR_H
+// #  define HAVE_WCHAR_H
+// # endif
+// #endif
+
+// #ifdef HAVE_WCHAR_H
+// #endif
+
+/* Py_UCS4 and Py_UCS2 are typedefs for the respective
+   unicode representations. */
+
+/* --- Internal Unicode Operations ---------------------------------------- */
+
+/* Since splitting on whitespace is an important use case, and
+   whitespace in most situations is solely ASCII whitespace, we
+   optimize for the common case by using a quick look-up table
+   _Py_ascii_whitespace (see below) with an inlined check.
+
+ */
+// #ifndef Py_LIMITED_API
+// #define Py_UNICODE_ISSPACE(ch)
+//     ((ch) < 128L ? _Py_ascii_whitespace[(ch)] : _PyUnicode_IsWhitespace(ch))
+
+// #define Py_UNICODE_ISLOWER(ch) _PyUnicode_IsLowercase(ch)
+// #define Py_UNICODE_ISUPPER(ch) _PyUnicode_IsUppercase(ch)
+// #define Py_UNICODE_ISTITLE(ch) _PyUnicode_IsTitlecase(ch)
+// #define Py_UNICODE_ISLINEBREAK(ch) _PyUnicode_IsLinebreak(ch)
+
+// #define Py_UNICODE_TOLOWER(ch) _PyUnicode_ToLowercase(ch)
+// #define Py_UNICODE_TOUPPER(ch) _PyUnicode_ToUppercase(ch)
+// #define Py_UNICODE_TOTITLE(ch) _PyUnicode_ToTitlecase(ch)
+
+// #define Py_UNICODE_ISDECIMAL(ch) _PyUnicode_IsDecimalDigit(ch)
+// #define Py_UNICODE_ISDIGIT(ch) _PyUnicode_IsDigit(ch)
+// #define Py_UNICODE_ISNUMERIC(ch) _PyUnicode_IsNumeric(ch)
+// #define Py_UNICODE_ISPRINTABLE(ch) _PyUnicode_IsPrintable(ch)
+
+// #define Py_UNICODE_TODECIMAL(ch) _PyUnicode_ToDecimalDigit(ch)
+// #define Py_UNICODE_TODIGIT(ch) _PyUnicode_ToDigit(ch)
+// #define Py_UNICODE_TONUMERIC(ch) _PyUnicode_ToNumeric(ch)
+
+// #define Py_UNICODE_ISALPHA(ch) _PyUnicode_IsAlpha(ch)
+
+// #define Py_UNICODE_ISALNUM(ch)
+//        (Py_UNICODE_ISALPHA(ch) ||
+//     Py_UNICODE_ISDECIMAL(ch) ||
+//     Py_UNICODE_ISDIGIT(ch) ||
+//     Py_UNICODE_ISNUMERIC(ch))
+
+// #define Py_UNICODE_COPY(target, source, length)
+//     memcpy((target), (source), (length)*sizeof(Py_UNICODE))
+
+// #define Py_UNICODE_FILL(target, value, length)
+//     do {Py_ssize_t i_; Py_UNICODE *t_ = (target); Py_UNICODE v_ = (value);
+//         for (i_ = 0; i_ < (length); i_++) t_[i_] = v_;
+//     } while (0)
+
+/* macros to work with surrogates */
+// #define Py_UNICODE_IS_SURROGATE(ch) (0xD800 <= (ch) && (ch) <= 0xDFFF)
+// #define Py_UNICODE_IS_HIGH_SURROGATE(ch) (0xD800 <= (ch) && (ch) <= 0xDBFF)
+// #define Py_UNICODE_IS_LOW_SURROGATE(ch) (0xDC00 <= (ch) && (ch) <= 0xDFFF)
+/* Join two surrogate characters and return a single Py_UCS4 value. */
+// #define Py_UNICODE_JOIN_SURROGATES(high, low)
+//     (((((Py_UCS4)(high) & 0x03FF) << 10) |
+//       ((Py_UCS4)(low) & 0x03FF)) + 0x10000)
+/* high surrogate = top 10 bits added to D800 */
+// #define Py_UNICODE_HIGH_SURROGATE(ch) (0xD800 - (0x10000 >> 10) + ((ch) >> 10))
+/* low surrogate = bottom 10 bits added to DC00 */
+// #define Py_UNICODE_LOW_SURROGATE(ch) (0xDC00 + ((ch) & 0x3FF))
+
+/* Check if substring matches at given offset.  The offset must be
+   valid, and the substring must not be empty. */
+
+// #define Py_UNICODE_MATCH(string, offset, substring)
+//     ((*((string)->wstr + (offset)) == *((substring)->wstr)) &&
+//      ((*((string)->wstr + (offset) + (substring)->wstr_length-1) == *((substring)->wstr + (substring)->wstr_length-1))) &&
+//      !memcmp((string)->wstr + (offset), (substring)->wstr, (substring)->wstr_length*sizeof(Py_UNICODE)))
+
+// #endif /* Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+
+/* --- Unicode Type ------------------------------------------------------- */
+
+// #ifndef Py_LIMITED_API
+
+/* ASCII-only strings created through PyUnicode_New use the PyASCIIObject
+   structure. state.ascii and state.compact are set, and the data
+   immediately follow the structure. utf8_length and wstr_length can be found
+   in the length field; the utf8 pointer is equal to the data pointer. */
+public static class PyASCIIObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyASCIIObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyASCIIObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyASCIIObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyASCIIObject position(long position) {
+        return (PyASCIIObject)super.position(position);
+    }
+
+    /* There are 4 forms of Unicode strings:
+
+       - compact ascii:
+
+         * structure = PyASCIIObject
+         * test: PyUnicode_IS_COMPACT_ASCII(op)
+         * kind = PyUnicode_1BYTE_KIND
+         * compact = 1
+         * ascii = 1
+         * ready = 1
+         * (length is the length of the utf8 and wstr strings)
+         * (data starts just after the structure)
+         * (since ASCII is decoded from UTF-8, the utf8 string are the data)
+
+       - compact:
+
+         * structure = PyCompactUnicodeObject
+         * test: PyUnicode_IS_COMPACT(op) && !PyUnicode_IS_ASCII(op)
+         * kind = PyUnicode_1BYTE_KIND, PyUnicode_2BYTE_KIND or
+           PyUnicode_4BYTE_KIND
+         * compact = 1
+         * ready = 1
+         * ascii = 0
+         * utf8 is not shared with data
+         * utf8_length = 0 if utf8 is NULL
+         * wstr is shared with data and wstr_length=length
+           if kind=PyUnicode_2BYTE_KIND and sizeof(wchar_t)=2
+           or if kind=PyUnicode_4BYTE_KIND and sizeof(wchar_t)=4
+         * wstr_length = 0 if wstr is NULL
+         * (data starts just after the structure)
+
+       - legacy string, not ready:
+
+         * structure = PyUnicodeObject
+         * test: kind == PyUnicode_WCHAR_KIND
+         * length = 0 (use wstr_length)
+         * hash = -1
+         * kind = PyUnicode_WCHAR_KIND
+         * compact = 0
+         * ascii = 0
+         * ready = 0
+         * interned = SSTATE_NOT_INTERNED
+         * wstr is not NULL
+         * data.any is NULL
+         * utf8 is NULL
+         * utf8_length = 0
+
+       - legacy string, ready:
+
+         * structure = PyUnicodeObject structure
+         * test: !PyUnicode_IS_COMPACT(op) && kind != PyUnicode_WCHAR_KIND
+         * kind = PyUnicode_1BYTE_KIND, PyUnicode_2BYTE_KIND or
+           PyUnicode_4BYTE_KIND
+         * compact = 0
+         * ready = 1
+         * data.any is not NULL
+         * utf8 is shared and utf8_length = length with data.any if ascii = 1
+         * utf8_length = 0 if utf8 is NULL
+         * wstr is shared with data.any and wstr_length = length
+           if kind=PyUnicode_2BYTE_KIND and sizeof(wchar_t)=2
+           or if kind=PyUnicode_4BYTE_KIND and sizeof(wchar_4)=4
+         * wstr_length = 0 if wstr is NULL
+
+       Compact strings use only one memory block (structure + characters),
+       whereas legacy strings use one block for the structure and one block
+       for characters.
+
+       Legacy strings are created by PyUnicode_FromUnicode() and
+       PyUnicode_FromStringAndSize(NULL, size) functions. They become ready
+       when PyUnicode_READY() is called.
+
+       See also _PyUnicode_CheckConsistency().
+    */
+    public native @ByRef PyObject ob_base(); public native PyASCIIObject ob_base(PyObject ob_base);
+    public native @Cast("Py_ssize_t") long length(); public native PyASCIIObject length(long length);          /* Number of code points in the string */
+    public native @Cast("Py_hash_t") long hash(); public native PyASCIIObject hash(long hash);             /* Hash value; -1 if not set */
+        /*
+           SSTATE_NOT_INTERNED (0)
+           SSTATE_INTERNED_MORTAL (1)
+           SSTATE_INTERNED_IMMORTAL (2)
+
+           If interned != SSTATE_NOT_INTERNED, the two references from the
+           dictionary to this object are *not* counted in ob_refcnt.
+         */
+        @Name("state.interned") public native @Cast("unsigned int") @NoOffset int state_interned(); public native PyASCIIObject state_interned(int state_interned);
+        /* Character size:
+
+           - PyUnicode_WCHAR_KIND (0):
+
+             * character type = wchar_t (16 or 32 bits, depending on the
+               platform)
+
+           - PyUnicode_1BYTE_KIND (1):
+
+             * character type = Py_UCS1 (8 bits, unsigned)
+             * all characters are in the range U+0000-U+00FF (latin1)
+             * if ascii is set, all characters are in the range U+0000-U+007F
+               (ASCII), otherwise at least one character is in the range
+               U+0080-U+00FF
+
+           - PyUnicode_2BYTE_KIND (2):
+
+             * character type = Py_UCS2 (16 bits, unsigned)
+             * all characters are in the range U+0000-U+FFFF (BMP)
+             * at least one character is in the range U+0100-U+FFFF
+
+           - PyUnicode_4BYTE_KIND (4):
+
+             * character type = Py_UCS4 (32 bits, unsigned)
+             * all characters are in the range U+0000-U+10FFFF
+             * at least one character is in the range U+10000-U+10FFFF
+         */
+        @Name("state.kind") public native @Cast("unsigned int") @NoOffset int state_kind(); public native PyASCIIObject state_kind(int state_kind);
+        /* Compact is with respect to the allocation scheme. Compact unicode
+           objects only require one memory block while non-compact objects use
+           one block for the PyUnicodeObject struct and another for its data
+           buffer. */
+        @Name("state.compact") public native @Cast("unsigned int") @NoOffset int state_compact(); public native PyASCIIObject state_compact(int state_compact);
+        /* The string only contains characters in the range U+0000-U+007F (ASCII)
+           and the kind is PyUnicode_1BYTE_KIND. If ascii is set and compact is
+           set, use the PyASCIIObject structure. */
+        @Name("state.ascii") public native @Cast("unsigned int") @NoOffset int state_ascii(); public native PyASCIIObject state_ascii(int state_ascii);
+        /* The ready flag indicates whether the object layout is initialized
+           completely. This means that this is either a compact object, or
+           the data pointer is filled out. The bit is redundant, and helps
+           to minimize the test in PyUnicode_IS_READY(). */
+        @Name("state.ready") public native @Cast("unsigned int") @NoOffset int state_ready(); public native PyASCIIObject state_ready(int state_ready);
+        /* Padding to ensure that PyUnicode_DATA() is always aligned to
+           4 bytes (see issue #19537 on m68k). */
+        
+    public native @Cast("wchar_t*") Pointer wstr(); public native PyASCIIObject wstr(Pointer wstr);              /* wchar_t representation (null-terminated) */
+}
+
+/* Non-ASCII strings allocated through PyUnicode_New use the
+   PyCompactUnicodeObject structure. state.compact is set, and the data
+   immediately follow the structure. */
+public static class PyCompactUnicodeObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyCompactUnicodeObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyCompactUnicodeObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyCompactUnicodeObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyCompactUnicodeObject position(long position) {
+        return (PyCompactUnicodeObject)super.position(position);
+    }
+
+    public native @ByRef PyASCIIObject _base(); public native PyCompactUnicodeObject _base(PyASCIIObject _base);
+    public native @Cast("Py_ssize_t") long utf8_length(); public native PyCompactUnicodeObject utf8_length(long utf8_length);     /* Number of bytes in utf8, excluding the
+                                 * terminating \0. */
+    public native @Cast("char*") BytePointer utf8(); public native PyCompactUnicodeObject utf8(BytePointer utf8);                 /* UTF-8 representation (null-terminated) */
+    public native @Cast("Py_ssize_t") long wstr_length(); public native PyCompactUnicodeObject wstr_length(long wstr_length);     /* Number of code points in wstr, possible
+                                 * surrogates count as two code points. */
+}
+
+/* Strings allocated through PyUnicode_FromUnicode(NULL, len) use the
+   PyUnicodeObject structure. The actual string data is initially in the wstr
+   block, and copied into the data block using _PyUnicode_Ready. */
+public static class PyUnicodeObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyUnicodeObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyUnicodeObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyUnicodeObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyUnicodeObject position(long position) {
+        return (PyUnicodeObject)super.position(position);
+    }
+
+    public native @ByRef PyCompactUnicodeObject _base(); public native PyUnicodeObject _base(PyCompactUnicodeObject _base);
+        @Name("data.any") public native Pointer data_any(); public native PyUnicodeObject data_any(Pointer data_any);
+        @Name("data.latin1") public native @Cast("Py_UCS1*") BytePointer data_latin1(); public native PyUnicodeObject data_latin1(BytePointer data_latin1);
+        @Name("data.ucs2") public native @Cast("Py_UCS2*") ShortPointer data_ucs2(); public native PyUnicodeObject data_ucs2(ShortPointer data_ucs2);
+        @Name("data.ucs4") public native @Cast("Py_UCS4*") IntPointer data_ucs4(); public native PyUnicodeObject data_ucs4(IntPointer data_ucs4);                     /* Canonical, smallest-form Unicode buffer */
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyUnicode_Type(); public static native void PyUnicode_Type(PyTypeObject PyUnicode_Type);
+public static native @ByRef PyTypeObject PyUnicodeIter_Type(); public static native void PyUnicodeIter_Type(PyTypeObject PyUnicodeIter_Type);
+
+// #define PyUnicode_Check(op)
+//                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_UNICODE_SUBCLASS)
+// #define PyUnicode_CheckExact(op) (Py_TYPE(op) == &PyUnicode_Type)
+
+/* Fast access macros */
+// #ifndef Py_LIMITED_API
+
+// #define PyUnicode_WSTR_LENGTH(op)
+//     (PyUnicode_IS_COMPACT_ASCII(op) ?
+//      ((PyASCIIObject*)op)->length :
+//      ((PyCompactUnicodeObject*)op)->wstr_length)
+
+/* Returns the deprecated Py_UNICODE representation's size in code units
+   (this includes surrogate pairs as 2 units).
+   If the Py_UNICODE representation is not available, it will be computed
+   on request.  Use PyUnicode_GET_LENGTH() for the length in code points. */
+
+// #define PyUnicode_GET_SIZE(op)
+//     (assert(PyUnicode_Check(op)),
+//      (((PyASCIIObject *)(op))->wstr) ?
+//       PyUnicode_WSTR_LENGTH(op) :
+//       ((void)PyUnicode_AsUnicode((PyObject *)(op)),
+//        assert(((PyASCIIObject *)(op))->wstr),
+//        PyUnicode_WSTR_LENGTH(op)))
+
+// #define PyUnicode_GET_DATA_SIZE(op)
+//     (PyUnicode_GET_SIZE(op) * Py_UNICODE_SIZE)
+
+/* Alias for PyUnicode_AsUnicode().  This will create a wchar_t/Py_UNICODE
+   representation on demand.  Using this macro is very inefficient now,
+   try to port your code to use the new PyUnicode_*BYTE_DATA() macros or
+   use PyUnicode_WRITE() and PyUnicode_READ(). */
+
+// #define PyUnicode_AS_UNICODE(op)
+//     (assert(PyUnicode_Check(op)),
+//      (((PyASCIIObject *)(op))->wstr) ? (((PyASCIIObject *)(op))->wstr) :
+//       PyUnicode_AsUnicode((PyObject *)(op)))
+
+// #define PyUnicode_AS_DATA(op)
+//     ((const char *)(PyUnicode_AS_UNICODE(op)))
+
+
+/* --- Flexible String Representation Helper Macros (PEP 393) -------------- */
+
+/* Values for PyASCIIObject.state: */
+
+/* Interning state. */
+public static final int SSTATE_NOT_INTERNED = 0;
+public static final int SSTATE_INTERNED_MORTAL = 1;
+public static final int SSTATE_INTERNED_IMMORTAL = 2;
+
+/* Return true if the string contains only ASCII characters, or 0 if not. The
+   string may be compact (PyUnicode_IS_COMPACT_ASCII) or not, but must be
+   ready. */
+// #define PyUnicode_IS_ASCII(op)
+//     (assert(PyUnicode_Check(op)),
+//      assert(PyUnicode_IS_READY(op)),
+//      ((PyASCIIObject*)op)->state.ascii)
+
+/* Return true if the string is compact or 0 if not.
+   No type checks or Ready calls are performed. */
+// #define PyUnicode_IS_COMPACT(op)
+//     (((PyASCIIObject*)(op))->state.compact)
+
+/* Return true if the string is a compact ASCII string (use PyASCIIObject
+   structure), or 0 if not.  No type checks or Ready calls are performed. */
+// #define PyUnicode_IS_COMPACT_ASCII(op)
+//     (((PyASCIIObject*)op)->state.ascii && PyUnicode_IS_COMPACT(op))
+
+/** enum PyUnicode_Kind */
+public static final int
+/* String contains only wstr byte characters.  This is only possible
+   when the string was created with a legacy API and _PyUnicode_Ready()
+   has not been called yet.  */
+    PyUnicode_WCHAR_KIND = 0,
+/* Return values of the PyUnicode_KIND() macro: */
+    PyUnicode_1BYTE_KIND = 1,
+    PyUnicode_2BYTE_KIND = 2,
+    PyUnicode_4BYTE_KIND = 4;
+
+/* Return pointers to the canonical representation cast to unsigned char,
+   Py_UCS2, or Py_UCS4 for direct character access.
+   No checks are performed, use PyUnicode_KIND() before to ensure
+   these will work correctly. */
+
+// #define PyUnicode_1BYTE_DATA(op) ((Py_UCS1*)PyUnicode_DATA(op))
+// #define PyUnicode_2BYTE_DATA(op) ((Py_UCS2*)PyUnicode_DATA(op))
+// #define PyUnicode_4BYTE_DATA(op) ((Py_UCS4*)PyUnicode_DATA(op))
+
+/* Return one of the PyUnicode_*_KIND values defined above. */
+// #define PyUnicode_KIND(op)
+//     (assert(PyUnicode_Check(op)),
+//      assert(PyUnicode_IS_READY(op)),
+//      ((PyASCIIObject *)(op))->state.kind)
+
+/* Return a void pointer to the raw unicode buffer. */
+// #define _PyUnicode_COMPACT_DATA(op)
+//     (PyUnicode_IS_ASCII(op) ?
+//      ((void*)((PyASCIIObject*)(op) + 1)) :
+//      ((void*)((PyCompactUnicodeObject*)(op) + 1)))
+
+// #define _PyUnicode_NONCOMPACT_DATA(op)
+//     (assert(((PyUnicodeObject*)(op))->data.any),
+//      ((((PyUnicodeObject *)(op))->data.any)))
+
+// #define PyUnicode_DATA(op)
+//     (assert(PyUnicode_Check(op)),
+//      PyUnicode_IS_COMPACT(op) ? _PyUnicode_COMPACT_DATA(op) :
+//      _PyUnicode_NONCOMPACT_DATA(op))
+
+/* In the access macros below, "kind" may be evaluated more than once.
+   All other macro parameters are evaluated exactly once, so it is safe
+   to put side effects into them (such as increasing the index). */
+
+/* Write into the canonical representation, this macro does not do any sanity
+   checks and is intended for usage in loops.  The caller should cache the
+   kind and data pointers obtained from other macro calls.
+   index is the index in the string (starts at 0) and value is the new
+   code point value which should be written to that location. */
+// #define PyUnicode_WRITE(kind, data, index, value)
+//     do {
+//         switch ((kind)) {
+//         case PyUnicode_1BYTE_KIND: {
+//             ((Py_UCS1 *)(data))[(index)] = (Py_UCS1)(value);
+//             break;
+//         }
+//         case PyUnicode_2BYTE_KIND: {
+//             ((Py_UCS2 *)(data))[(index)] = (Py_UCS2)(value);
+//             break;
+//         }
+//         default: {
+//             assert((kind) == PyUnicode_4BYTE_KIND);
+//             ((Py_UCS4 *)(data))[(index)] = (Py_UCS4)(value);
+//         }
+//         }
+//     } while (0)
+
+/* Read a code point from the string's canonical representation.  No checks
+   or ready calls are performed. */
+// #define PyUnicode_READ(kind, data, index)
+//     ((Py_UCS4)
+//     ((kind) == PyUnicode_1BYTE_KIND ?
+//         ((const Py_UCS1 *)(data))[(index)] :
+//         ((kind) == PyUnicode_2BYTE_KIND ?
+//             ((const Py_UCS2 *)(data))[(index)] :
+//             ((const Py_UCS4 *)(data))[(index)]
+//         )
+//     ))
+
+/* PyUnicode_READ_CHAR() is less efficient than PyUnicode_READ() because it
+   calls PyUnicode_KIND() and might call it twice.  For single reads, use
+   PyUnicode_READ_CHAR, for multiple consecutive reads callers should
+   cache kind and use PyUnicode_READ instead. */
+// #define PyUnicode_READ_CHAR(unicode, index)
+//     (assert(PyUnicode_Check(unicode)),
+//      assert(PyUnicode_IS_READY(unicode)),
+//      (Py_UCS4)
+//         (PyUnicode_KIND((unicode)) == PyUnicode_1BYTE_KIND ?
+//             ((const Py_UCS1 *)(PyUnicode_DATA((unicode))))[(index)] :
+//             (PyUnicode_KIND((unicode)) == PyUnicode_2BYTE_KIND ?
+//                 ((const Py_UCS2 *)(PyUnicode_DATA((unicode))))[(index)] :
+//                 ((const Py_UCS4 *)(PyUnicode_DATA((unicode))))[(index)]
+//             )
+//         ))
+
+/* Returns the length of the unicode string. The caller has to make sure that
+   the string has it's canonical representation set before calling
+   this macro.  Call PyUnicode_(FAST_)Ready to ensure that. */
+// #define PyUnicode_GET_LENGTH(op)
+//     (assert(PyUnicode_Check(op)),
+//      assert(PyUnicode_IS_READY(op)),
+//      ((PyASCIIObject *)(op))->length)
+
+
+/* Fast check to determine whether an object is ready. Equivalent to
+   PyUnicode_IS_COMPACT(op) || ((PyUnicodeObject*)(op))->data.any) */
+
+// #define PyUnicode_IS_READY(op) (((PyASCIIObject*)op)->state.ready)
+
+/* PyUnicode_READY() does less work than _PyUnicode_Ready() in the best
+   case.  If the canonical representation is not yet set, it will still call
+   _PyUnicode_Ready().
+   Returns 0 on success and -1 on errors. */
+// #define PyUnicode_READY(op)
+//     (assert(PyUnicode_Check(op)),
+//      (PyUnicode_IS_READY(op) ?
+//       0 : _PyUnicode_Ready((PyObject *)(op))))
+
+/* Return a maximum character value which is suitable for creating another
+   string based on op.  This is always an approximation but more efficient
+   than iterating over the string. */
+// #define PyUnicode_MAX_CHAR_VALUE(op)
+//     (assert(PyUnicode_IS_READY(op)),
+//      (PyUnicode_IS_ASCII(op) ?
+//       (0x7f) :
+//       (PyUnicode_KIND(op) == PyUnicode_1BYTE_KIND ?
+//        (0xff) :
+//        (PyUnicode_KIND(op) == PyUnicode_2BYTE_KIND ?
+//         (0xffff) :
+//         (0x10ffff)))))
+
+// #endif
+
+/* --- Constants ---------------------------------------------------------- */
+
+/* This Unicode character will be used as replacement character during
+   decoding if the errors argument is set to "replace". Note: the
+   Unicode character U+FFFD is the official REPLACEMENT CHARACTER in
+   Unicode 3.0. */
+
+public static final int Py_UNICODE_REPLACEMENT_CHARACTER = ((int) 0xFFFD);
+
+/* === Public API ========================================================= */
+
+/* --- Plain Py_UNICODE --------------------------------------------------- */
+
+/* With PEP 393, this is the recommended way to allocate a new unicode object.
+   This function will allocate the object and its buffer in a single memory
+   block.  Objects created using this function are not resizable. */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_New(
+    @Cast("Py_ssize_t") long size,
+    @Cast("Py_UCS4") int maxchar
+    );
+// #endif
+
+/* Initializes the canonical string representation from the deprecated
+   wstr/Py_UNICODE representation. This function is used to convert Unicode
+   objects which were created using the old API to the new flexible format
+   introduced with PEP 393.
+
+   Don't call this function directly, use the public PyUnicode_READY() macro
+   instead. */
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyUnicode_Ready(
+    PyObject unicode
+    );
+// #endif
+
+/* Get a copy of a Unicode string. */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_Copy(
+    PyObject unicode
+    );
+// #endif
+
+/* Copy character from one unicode object into another, this function performs
+   character conversion when necessary and falls back to memcpy() if possible.
+
+   Fail if to is too small (smaller than *how_many* or smaller than
+   len(from)-from_start), or if kind(from[from_start:from_start+how_many]) >
+   kind(to), or if *to* has more than 1 reference.
+
+   Return the number of written character, or return -1 and raise an exception
+   on error.
+
+   Pseudo-code:
+
+       how_many = min(how_many, len(from) - from_start)
+       to[to_start:to_start+how_many] = from[from_start:from_start+how_many]
+       return how_many
+
+   Note: The function doesn't write a terminating null character.
+   */
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_CopyCharacters(
+    PyObject to,
+    @Cast("Py_ssize_t") long to_start,
+    PyObject from,
+    @Cast("Py_ssize_t") long from_start,
+    @Cast("Py_ssize_t") long how_many
+    );
+
+/* Unsafe version of PyUnicode_CopyCharacters(): don't check arguments and so
+   may crash if parameters are invalid (e.g. if the output string
+   is too short). */
+@NoException public static native void _PyUnicode_FastCopyCharacters(
+    PyObject to,
+    @Cast("Py_ssize_t") long to_start,
+    PyObject from,
+    @Cast("Py_ssize_t") long from_start,
+    @Cast("Py_ssize_t") long how_many
+    );
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Fill a string with a character: write fill_char into
+   unicode[start:start+length].
+
+   Fail if fill_char is bigger than the string maximum character, or if the
+   string has more than 1 reference.
+
+   Return the number of written character, or return -1 and raise an exception
+   on error. */
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_Fill(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_UCS4") int fill_char
+    );
+
+/* Unsafe version of PyUnicode_Fill(): don't check arguments and so may crash
+   if parameters are invalid (e.g. if length is longer than the string). */
+@NoException public static native void _PyUnicode_FastFill(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_UCS4") int fill_char
+    );
+// #endif
+
+/* Create a Unicode Object from the Py_UNICODE buffer u of the given
+   size.
+
+   u may be NULL which causes the contents to be undefined. It is the
+   user's responsibility to fill in the needed data afterwards. Note
+   that modifying the Unicode object contents after construction is
+   only allowed if u was set to NULL.
+
+   The buffer is copied into the new object. */
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_FromUnicode(
+    @Cast("const Py_UNICODE*") Pointer u,
+    @Cast("Py_ssize_t") long size
+    );
+// #endif
+
+/* Similar to PyUnicode_FromUnicode(), but u points to UTF-8 encoded bytes */
+@NoException public static native PyObject PyUnicode_FromStringAndSize(
+    @Cast("const char*") BytePointer u,
+    @Cast("Py_ssize_t") long size
+    );
+@NoException public static native PyObject PyUnicode_FromStringAndSize(
+    String u,
+    @Cast("Py_ssize_t") long size
+    );
+
+/* Similar to PyUnicode_FromUnicode(), but u points to null-terminated
+   UTF-8 encoded bytes.  The size is determined with strlen(). */
+@NoException public static native PyObject PyUnicode_FromString(
+    @Cast("const char*") BytePointer u
+    );
+@NoException public static native PyObject PyUnicode_FromString(
+    String u
+    );
+
+// #ifndef Py_LIMITED_API
+/* Create a new string from a buffer of Py_UCS1, Py_UCS2 or Py_UCS4 characters.
+   Scan the string to find the maximum character. */
+@NoException public static native PyObject PyUnicode_FromKindAndData(
+    int kind,
+    @Const Pointer buffer,
+    @Cast("Py_ssize_t") long size);
+
+/* Create a new string from a buffer of ASCII characters.
+   WARNING: Don't check if the string contains any non-ASCII character. */
+@NoException public static native PyObject _PyUnicode_FromASCII(
+    @Cast("const char*") BytePointer buffer,
+    @Cast("Py_ssize_t") long size);
+@NoException public static native PyObject _PyUnicode_FromASCII(
+    String buffer,
+    @Cast("Py_ssize_t") long size);
+// #endif
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native PyObject PyUnicode_Substring(
+    PyObject str,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Compute the maximum character of the substring unicode[start:end].
+   Return 127 for an empty string. */
+@NoException public static native @Cast("Py_UCS4") int _PyUnicode_FindMaxChar(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+/* Copy the string into a UCS4 buffer including the null character if copy_null
+   is set. Return NULL and raise an exception on error. Raise a SystemError if
+   the buffer is smaller than the string. Return buffer on success.
+
+   buflen is the length of the buffer in (Py_UCS4) characters. */
+@NoException public static native @Cast("Py_UCS4*") IntPointer PyUnicode_AsUCS4(
+    PyObject unicode,
+    @Cast("Py_UCS4*") IntPointer buffer,
+    @Cast("Py_ssize_t") long buflen,
+    int copy_null);
+@NoException public static native @Cast("Py_UCS4*") IntBuffer PyUnicode_AsUCS4(
+    PyObject unicode,
+    @Cast("Py_UCS4*") IntBuffer buffer,
+    @Cast("Py_ssize_t") long buflen,
+    int copy_null);
+@NoException public static native @Cast("Py_UCS4*") int[] PyUnicode_AsUCS4(
+    PyObject unicode,
+    @Cast("Py_UCS4*") int[] buffer,
+    @Cast("Py_ssize_t") long buflen,
+    int copy_null);
+
+/* Copy the string into a UCS4 buffer. A new buffer is allocated using
+ * PyMem_Malloc; if this fails, NULL is returned with a memory error
+   exception set. */
+@NoException public static native @Cast("Py_UCS4*") IntPointer PyUnicode_AsUCS4Copy(PyObject unicode);
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Return a read-only pointer to the Unicode object's internal
+   Py_UNICODE buffer.
+   If the wchar_t/Py_UNICODE representation is not yet available, this
+   function will calculate it. */
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer PyUnicode_AsUnicode(
+    PyObject unicode
+    );
+
+/* Similar to PyUnicode_AsUnicode(), but raises a ValueError if the string
+   contains null characters. */
+@NoException public static native @Cast("const Py_UNICODE*") Pointer _PyUnicode_AsUnicode(
+    PyObject unicode
+    );
+
+/* Return a read-only pointer to the Unicode object's internal
+   Py_UNICODE buffer and save the length at size.
+   If the wchar_t/Py_UNICODE representation is not yet available, this
+   function will calculate it. */
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer PyUnicode_AsUnicodeAndSize(
+    PyObject unicode,
+    @Cast("Py_ssize_t*") SizeTPointer size
+    );
+// #endif
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+/* Get the length of the Unicode object. */
+
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_GetLength(
+    PyObject unicode
+);
+// #endif
+
+/* Get the number of Py_UNICODE units in the
+   string representation. */
+
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_GetSize(
+    PyObject unicode
+    );
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+/* Read a character from the string. */
+
+@NoException public static native @Cast("Py_UCS4") int PyUnicode_ReadChar(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index
+    );
+
+/* Write a character to the string. The string must have been created through
+   PyUnicode_New, must not be shared, and must not have been hashed yet.
+
+   Return 0 on success, -1 on error. */
+
+@NoException public static native int PyUnicode_WriteChar(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_UCS4") int character
+    );
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Get the maximum ordinal for a Unicode character. */
+@NoException public static native @Cast("Py_UNICODE") char PyUnicode_GetMax();
+// #endif
+
+/* Resize a Unicode object. The length is the number of characters, except
+   if the kind of the string is PyUnicode_WCHAR_KIND: in this case, the length
+   is the number of Py_UNICODE characters.
+
+   *unicode is modified to point to the new (resized) object and 0
+   returned on success.
+
+   Try to resize the string in place (which is usually faster than allocating
+   a new string and copy characters), or create a new string.
+
+   Error handling is implemented as follows: an exception is set, -1
+   is returned and *unicode left untouched.
+
+   WARNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. */
+
+@NoException public static native int PyUnicode_Resize(
+    @Cast("PyObject**") PointerPointer unicode,
+    @Cast("Py_ssize_t") long length
+    );
+@NoException public static native int PyUnicode_Resize(
+    @ByPtrPtr PyObject unicode,
+    @Cast("Py_ssize_t") long length
+    );
+
+/* Decode obj to a Unicode object.
+
+   bytes, bytearray and other bytes-like objects are decoded according to the
+   given encoding and error handler. The encoding and error handler can be
+   NULL to have the interface use UTF-8 and "strict".
+
+   All other objects (including Unicode objects) raise an exception.
+
+   The API returns NULL in case of an error. The caller is responsible
+   for decref'ing the returned objects.
+
+*/
+
+@NoException public static native PyObject PyUnicode_FromEncodedObject(
+    PyObject obj,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_FromEncodedObject(
+    PyObject obj,
+    String encoding,
+    String errors
+    );
+
+/* Copy an instance of a Unicode subtype to a new true Unicode object if
+   necessary. If obj is already a true Unicode object (not a subtype), return
+   the reference with *incremented* refcount.
+
+   The API returns NULL in case of an error. The caller is responsible
+   for decref'ing the returned objects.
+
+*/
+
+@NoException public static native PyObject PyUnicode_FromObject(
+    PyObject obj
+    );
+
+@NoException public static native PyObject PyUnicode_FromFormatV(
+    @Cast("const char*") BytePointer format,
+    @ByVal @Cast("va_list*") Pointer vargs
+    );
+@NoException public static native PyObject PyUnicode_FromFormatV(
+    String format,
+    @ByVal @Cast("va_list*") Pointer vargs
+    );
+@NoException public static native PyObject PyUnicode_FromFormat(
+    @Cast("const char*") BytePointer format
+    );
+@NoException public static native PyObject PyUnicode_FromFormat(
+    String format
+    );
+
+// #ifndef Py_LIMITED_API
+ public static class _PyUnicodeWriter extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyUnicodeWriter() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyUnicodeWriter(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyUnicodeWriter(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyUnicodeWriter position(long position) {
+        return (_PyUnicodeWriter)super.position(position);
+    }
+
+    public native PyObject buffer(); public native _PyUnicodeWriter buffer(PyObject buffer);
+    public native Pointer data(); public native _PyUnicodeWriter data(Pointer data);
+    public native @Cast("PyUnicode_Kind") int kind(); public native _PyUnicodeWriter kind(int kind);
+    public native @Cast("Py_UCS4") int maxchar(); public native _PyUnicodeWriter maxchar(int maxchar);
+    public native @Cast("Py_ssize_t") long size(); public native _PyUnicodeWriter size(long size);
+    public native @Cast("Py_ssize_t") long pos(); public native _PyUnicodeWriter pos(long pos);
+
+    /* minimum number of allocated characters (default: 0) */
+    public native @Cast("Py_ssize_t") long min_length(); public native _PyUnicodeWriter min_length(long min_length);
+
+    /* minimum character (default: 127, ASCII) */
+    public native @Cast("Py_UCS4") int min_char(); public native _PyUnicodeWriter min_char(int min_char);
+
+    /* If non-zero, overallocate the buffer (default: 0). */
+    public native @Cast("unsigned char") byte overallocate(); public native _PyUnicodeWriter overallocate(byte overallocate);
+
+    /* If readonly is 1, buffer is a shared string (cannot be modified)
+       and size is set to 0. */
+    public native @Cast("unsigned char") byte readonly(); public native _PyUnicodeWriter readonly(byte readonly);
+} 
+
+/* Initialize a Unicode writer.
+ *
+ * By default, the minimum buffer size is 0 character and overallocation is
+ * disabled. Set min_length, min_char and overallocate attributes to control
+ * the allocation of the buffer. */
+@NoException public static native void _PyUnicodeWriter_Init(_PyUnicodeWriter writer);
+
+/* Prepare the buffer to write 'length' characters
+   with the specified maximum character.
+
+   Return 0 on success, raise an exception and return -1 on error. */
+// #define _PyUnicodeWriter_Prepare(WRITER, LENGTH, MAXCHAR)
+//     (((MAXCHAR) <= (WRITER)->maxchar
+//       && (LENGTH) <= (WRITER)->size - (WRITER)->pos)
+//      ? 0
+//      : (((LENGTH) == 0)
+//         ? 0
+//         : _PyUnicodeWriter_PrepareInternal((WRITER), (LENGTH), (MAXCHAR))))
+
+/* Don't call this function directly, use the _PyUnicodeWriter_Prepare() macro
+   instead. */
+@NoException public static native int _PyUnicodeWriter_PrepareInternal(_PyUnicodeWriter writer,
+                                 @Cast("Py_ssize_t") long length, @Cast("Py_UCS4") int maxchar);
+
+/* Prepare the buffer to have at least the kind KIND.
+   For example, kind=PyUnicode_2BYTE_KIND ensures that the writer will
+   support characters in range U+000-U+FFFF.
+
+   Return 0 on success, raise an exception and return -1 on error. */
+// #define _PyUnicodeWriter_PrepareKind(WRITER, KIND)
+//     (assert((KIND) != PyUnicode_WCHAR_KIND),
+//      (KIND) <= (WRITER)->kind
+//      ? 0
+//      : _PyUnicodeWriter_PrepareKindInternal((WRITER), (KIND)))
+
+/* Don't call this function directly, use the _PyUnicodeWriter_PrepareKind()
+   macro instead. */
+@NoException public static native int _PyUnicodeWriter_PrepareKindInternal(_PyUnicodeWriter writer,
+                                     @Cast("PyUnicode_Kind") int kind);
+
+/* Append a Unicode character.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyUnicodeWriter_WriteChar(_PyUnicodeWriter writer,
+    @Cast("Py_UCS4") int ch
+    );
+
+/* Append a Unicode string.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyUnicodeWriter_WriteStr(_PyUnicodeWriter writer,
+    PyObject str
+    );
+
+/* Append a substring of a Unicode string.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyUnicodeWriter_WriteSubstring(_PyUnicodeWriter writer,
+    PyObject str,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end
+    );
+
+/* Append an ASCII-encoded byte string.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyUnicodeWriter_WriteASCIIString(_PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer str,
+    @Cast("Py_ssize_t") long len
+    );
+@NoException public static native int _PyUnicodeWriter_WriteASCIIString(_PyUnicodeWriter writer,
+    String str,
+    @Cast("Py_ssize_t") long len
+    );
+
+/* Append a latin1-encoded byte string.
+   Return 0 on success, raise an exception and return -1 on error. */
+@NoException public static native int _PyUnicodeWriter_WriteLatin1String(_PyUnicodeWriter writer,
+    @Cast("const char*") BytePointer str,
+    @Cast("Py_ssize_t") long len
+    );
+@NoException public static native int _PyUnicodeWriter_WriteLatin1String(_PyUnicodeWriter writer,
+    String str,
+    @Cast("Py_ssize_t") long len
+    );
+
+/* Get the value of the writer as a Unicode string. Clear the
+   buffer of the writer. Raise an exception and return NULL
+   on error. */
+@NoException public static native PyObject _PyUnicodeWriter_Finish(_PyUnicodeWriter writer);
+
+/* Deallocate memory of a writer (clear its internal buffer). */
+@NoException public static native void _PyUnicodeWriter_Dealloc(_PyUnicodeWriter writer);
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Format the object based on the format_spec, as defined in PEP 3101
+   (Advanced String Formatting). */
+@NoException public static native int _PyUnicode_FormatAdvancedWriter(
+    _PyUnicodeWriter writer,
+    PyObject obj,
+    PyObject format_spec,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif
+
+@NoException public static native void PyUnicode_InternInPlace(@Cast("PyObject**") PointerPointer arg0);
+@NoException public static native void PyUnicode_InternInPlace(@ByPtrPtr PyObject arg0);
+@NoException public static native void PyUnicode_InternImmortal(@Cast("PyObject**") PointerPointer arg0);
+@NoException public static native void PyUnicode_InternImmortal(@ByPtrPtr PyObject arg0);
+@NoException public static native PyObject PyUnicode_InternFromString(
+    @Cast("const char*") BytePointer u
+    );
+@NoException public static native PyObject PyUnicode_InternFromString(
+    String u
+    );
+// #ifndef Py_LIMITED_API
+@NoException public static native void _Py_ReleaseInternedUnicodeStrings();
+// #endif
+
+/* Use only if you know it's a string */
+// #define PyUnicode_CHECK_INTERNED(op)
+//     (((PyASCIIObject *)(op))->state.interned)
+
+/* --- wchar_t support for platforms which support it --------------------- */
+
+// #ifdef HAVE_WCHAR_H
+
+// #endif
+
+/* --- Unicode ordinals --------------------------------------------------- */
+
+/* Create a Unicode Object from the given Unicode code point ordinal.
+
+   The ordinal must be in range(0x110000). A ValueError is
+   raised in case it is not.
+
+*/
+
+@NoException public static native PyObject PyUnicode_FromOrdinal(int ordinal);
+
+/* --- Free-list management ----------------------------------------------- */
+
+/* Clear the free list used by the Unicode implementation.
+
+   This can be used to release memory used for objects on the free
+   list back to the Python memory allocator.
+
+*/
+
+@NoException public static native int PyUnicode_ClearFreeList();
+
+/* === Builtin Codecs =====================================================
+
+   Many of these APIs take two arguments encoding and errors. These
+   parameters encoding and errors have the same semantics as the ones
+   of the builtin str() API.
+
+   Setting encoding to NULL causes the default encoding (UTF-8) to be used.
+
+   Error handling is set by errors which may also be set to NULL
+   meaning to use the default handling defined for the codec. Default
+   error handling for all builtin codecs is "strict" (ValueErrors are
+   raised).
+
+   The codecs all use a similar interface. Only deviation from the
+   generic ones are documented.
+
+*/
+
+/* --- Manage the default encoding ---------------------------------------- */
+
+/* Returns a pointer to the default encoding (UTF-8) of the
+   Unicode object unicode and the size of the encoded representation
+   in bytes stored in *size.
+
+   In case of an error, no *size is set.
+
+   This function caches the UTF-8 encoded string in the unicodeobject
+   and subsequent calls will return the same string.  The memory is released
+   when the unicodeobject is deallocated.
+
+   _PyUnicode_AsStringAndSize is a #define for PyUnicode_AsUTF8AndSize to
+   support the previous internal function with the same behaviour.
+
+   *** This API is for interpreter INTERNAL USE ONLY and will likely
+   *** be removed or changed in the future.
+
+   *** If you need to access the Unicode object as UTF-8 bytes string,
+   *** please use PyUnicode_AsUTF8String() instead.
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("char*") BytePointer PyUnicode_AsUTF8AndSize(
+    PyObject unicode,
+    @Cast("Py_ssize_t*") SizeTPointer size);
+// #define _PyUnicode_AsStringAndSize PyUnicode_AsUTF8AndSize
+// #endif
+
+/* Returns a pointer to the default encoding (UTF-8) of the
+   Unicode object unicode.
+
+   Like PyUnicode_AsUTF8AndSize(), this also caches the UTF-8 representation
+   in the unicodeobject.
+
+   _PyUnicode_AsString is a #define for PyUnicode_AsUTF8 to
+   support the previous internal function with the same behaviour.
+
+   Use of this API is DEPRECATED since no size information can be
+   extracted from the returned data.
+
+   *** This API is for interpreter INTERNAL USE ONLY and will likely
+   *** be removed or changed for Python 3.1.
+
+   *** If you need to access the Unicode object as UTF-8 bytes string,
+   *** please use PyUnicode_AsUTF8String() instead.
+
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("char*") BytePointer PyUnicode_AsUTF8(PyObject unicode);
+// #define _PyUnicode_AsString PyUnicode_AsUTF8
+// #endif
+
+/* Returns "utf-8".  */
+
+@NoException public static native @Cast("const char*") BytePointer PyUnicode_GetDefaultEncoding();
+
+/* --- Generic Codecs ----------------------------------------------------- */
+
+/* Create a Unicode object by decoding the encoded string s of the
+   given size. */
+
+@NoException public static native PyObject PyUnicode_Decode(
+    @Cast("const char*") BytePointer s,
+    @Cast("Py_ssize_t") long size,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_Decode(
+    String s,
+    @Cast("Py_ssize_t") long size,
+    String encoding,
+    String errors
+    );
+
+/* Decode a Unicode object unicode and return the result as Python
+   object.
+
+   This API is DEPRECATED. The only supported standard encoding is rot13.
+   Use PyCodec_Decode() to decode with rot13 and non-standard codecs
+   that decode from str. */
+
+@NoException public static native PyObject PyUnicode_AsDecodedObject(
+    PyObject unicode,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_AsDecodedObject(
+    PyObject unicode,
+    String encoding,
+    String errors
+    );
+
+/* Decode a Unicode object unicode and return the result as Unicode
+   object.
+
+   This API is DEPRECATED. The only supported standard encoding is rot13.
+   Use PyCodec_Decode() to decode with rot13 and non-standard codecs
+   that decode from str to str. */
+
+@NoException public static native PyObject PyUnicode_AsDecodedUnicode(
+    PyObject unicode,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_AsDecodedUnicode(
+    PyObject unicode,
+    String encoding,
+    String errors
+    );
+
+/* Encodes a Py_UNICODE buffer of the given size and returns a
+   Python string object. */
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_Encode(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long size,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_Encode(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long size,
+    String encoding,
+    String errors
+    );
+// #endif
+
+/* Encodes a Unicode object and returns the result as Python
+   object.
+
+   This API is DEPRECATED.  It is superceeded by PyUnicode_AsEncodedString()
+   since all standard encodings (except rot13) encode str to bytes.
+   Use PyCodec_Encode() for encoding with rot13 and non-standard codecs
+   that encode form str to non-bytes. */
+
+@NoException public static native PyObject PyUnicode_AsEncodedObject(
+    PyObject unicode,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_AsEncodedObject(
+    PyObject unicode,
+    String encoding,
+    String errors
+    );
+
+/* Encodes a Unicode object and returns the result as Python string
+   object. */
+
+@NoException public static native PyObject PyUnicode_AsEncodedString(
+    PyObject unicode,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_AsEncodedString(
+    PyObject unicode,
+    String encoding,
+    String errors
+    );
+
+/* Encodes a Unicode object and returns the result as Unicode
+   object.
+
+   This API is DEPRECATED.  The only supported standard encodings is rot13.
+   Use PyCodec_Encode() to encode with rot13 and non-standard codecs
+   that encode from str to str. */
+
+@NoException public static native PyObject PyUnicode_AsEncodedUnicode(
+    PyObject unicode,
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_AsEncodedUnicode(
+    PyObject unicode,
+    String encoding,
+    String errors
+    );
+
+/* Build an encoding map. */
+
+@NoException public static native PyObject PyUnicode_BuildEncodingMap(
+    PyObject string
+   );
+
+/* --- UTF-7 Codecs ------------------------------------------------------- */
+
+@NoException public static native PyObject PyUnicode_DecodeUTF7(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF7(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_DecodeUTF7Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF7Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeUTF7(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    int base64SetO,
+    int base64WhiteSpace,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeUTF7(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    int base64SetO,
+    int base64WhiteSpace,
+    String errors
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF7(
+    PyObject unicode,
+    int base64SetO,
+    int base64WhiteSpace,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF7(
+    PyObject unicode,
+    int base64SetO,
+    int base64WhiteSpace,
+    String errors
+    );
+// #endif
+
+/* --- UTF-8 Codecs ------------------------------------------------------- */
+
+@NoException public static native PyObject PyUnicode_DecodeUTF8(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF8(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_DecodeUTF8Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF8Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+
+@NoException public static native PyObject PyUnicode_AsUTF8String(
+    PyObject unicode
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_AsUTF8String(
+    PyObject unicode,
+    @Cast("const char*") BytePointer errors);
+@NoException public static native PyObject _PyUnicode_AsUTF8String(
+    PyObject unicode,
+    String errors);
+
+@NoException public static native PyObject PyUnicode_EncodeUTF8(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeUTF8(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+// #endif
+
+/* --- UTF-32 Codecs ------------------------------------------------------ */
+
+/* Decodes length bytes from a UTF-32 encoded buffer string and returns
+   the corresponding Unicode object.
+
+   errors (if non-NULL) defines the error handling. It defaults
+   to "strict".
+
+   If byteorder is non-NULL, the decoder starts decoding using the
+   given byte order:
+
+    *byteorder == -1: little endian
+    *byteorder == 0:  native order
+    *byteorder == 1:  big endian
+
+   In native mode, the first four bytes of the stream are checked for a
+   BOM mark. If found, the BOM mark is analysed, the byte order
+   adjusted and the BOM skipped.  In the other modes, no BOM mark
+   interpretation is done. After completion, *byteorder is set to the
+   current byte order at the end of input data.
+
+   If byteorder is NULL, the codec starts in native order mode.
+
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntPointer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntBuffer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int[] byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntPointer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntBuffer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int[] byteorder
+    );
+
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntPointer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntBuffer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int[] byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntPointer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntBuffer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF32Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int[] byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+
+/* Returns a Python string using the UTF-32 encoding in native byte
+   order. The string always starts with a BOM mark.  */
+
+@NoException public static native PyObject PyUnicode_AsUTF32String(
+    PyObject unicode
+    );
+
+/* Returns a Python string object holding the UTF-32 encoded value of
+   the Unicode data.
+
+   If byteorder is not 0, output is written according to the following
+   byte order:
+
+   byteorder == -1: little endian
+   byteorder == 0:  native byte order (writes a BOM mark)
+   byteorder == 1:  big endian
+
+   If byteorder is 0, the output string will always start with the
+   Unicode BOM mark (U+FEFF). In the other two modes, no BOM mark is
+   prepended.
+
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeUTF32(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int byteorder
+    );
+@NoException public static native PyObject PyUnicode_EncodeUTF32(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int byteorder
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF32(
+    PyObject object,
+    @Cast("const char*") BytePointer errors,
+    int byteorder
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF32(
+    PyObject object,
+    String errors,
+    int byteorder
+    );
+// #endif
+
+/* --- UTF-16 Codecs ------------------------------------------------------ */
+
+/* Decodes length bytes from a UTF-16 encoded buffer string and returns
+   the corresponding Unicode object.
+
+   errors (if non-NULL) defines the error handling. It defaults
+   to "strict".
+
+   If byteorder is non-NULL, the decoder starts decoding using the
+   given byte order:
+
+    *byteorder == -1: little endian
+    *byteorder == 0:  native order
+    *byteorder == 1:  big endian
+
+   In native mode, the first two bytes of the stream are checked for a
+   BOM mark. If found, the BOM mark is analysed, the byte order
+   adjusted and the BOM skipped.  In the other modes, no BOM mark
+   interpretation is done. After completion, *byteorder is set to the
+   current byte order at the end of input data.
+
+   If byteorder is NULL, the codec starts in native order mode.
+
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntPointer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntBuffer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int[] byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntPointer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntBuffer byteorder
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int[] byteorder
+    );
+
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntPointer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntBuffer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int[] byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    IntPointer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    IntBuffer byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+@NoException public static native PyObject PyUnicode_DecodeUTF16Stateful(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int[] byteorder,
+    @Cast("Py_ssize_t*") SizeTPointer consumed
+    );
+
+/* Returns a Python string using the UTF-16 encoding in native byte
+   order. The string always starts with a BOM mark.  */
+
+@NoException public static native PyObject PyUnicode_AsUTF16String(
+    PyObject unicode
+    );
+
+/* Returns a Python string object holding the UTF-16 encoded value of
+   the Unicode data.
+
+   If byteorder is not 0, output is written according to the following
+   byte order:
+
+   byteorder == -1: little endian
+   byteorder == 0:  native byte order (writes a BOM mark)
+   byteorder == 1:  big endian
+
+   If byteorder is 0, the output string will always start with the
+   Unicode BOM mark (U+FEFF). In the other two modes, no BOM mark is
+   prepended.
+
+   Note that Py_UNICODE data is being interpreted as UTF-16 reduced to
+   UCS-2. This trick makes it possible to add full UTF-16 capabilities
+   at a later point without compromising the APIs.
+
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeUTF16(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors,
+    int byteorder
+    );
+@NoException public static native PyObject PyUnicode_EncodeUTF16(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    String errors,
+    int byteorder
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF16(
+    PyObject unicode,
+    @Cast("const char*") BytePointer errors,
+    int byteorder
+    );
+@NoException public static native PyObject _PyUnicode_EncodeUTF16(
+    PyObject unicode,
+    String errors,
+    int byteorder
+    );
+// #endif
+
+/* --- Unicode-Escape Codecs ---------------------------------------------- */
+
+@NoException public static native PyObject PyUnicode_DecodeUnicodeEscape(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeUnicodeEscape(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+// #ifndef Py_LIMITED_API
+/* Helper for PyUnicode_DecodeUnicodeEscape that detects invalid escape
+   chars. */
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("const char**") PointerPointer first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("const char**") @ByPtrPtr BytePointer first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        String string,
+        @Cast("Py_ssize_t") long length,
+        String errors,
+        @Cast("const char**") @ByPtrPtr ByteBuffer first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("const char**") @ByPtrPtr byte[] first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        String string,
+        @Cast("Py_ssize_t") long length,
+        String errors,
+        @Cast("const char**") @ByPtrPtr BytePointer first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        @Cast("const char*") BytePointer string,
+        @Cast("Py_ssize_t") long length,
+        @Cast("const char*") BytePointer errors,
+        @Cast("const char**") @ByPtrPtr ByteBuffer first_invalid_escape
+);
+@NoException public static native PyObject _PyUnicode_DecodeUnicodeEscape(
+        String string,
+        @Cast("Py_ssize_t") long length,
+        String errors,
+        @Cast("const char**") @ByPtrPtr byte[] first_invalid_escape
+);
+// #endif
+
+@NoException public static native PyObject PyUnicode_AsUnicodeEscapeString(
+    PyObject unicode
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeUnicodeEscape(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length
+    );
+// #endif
+
+/* --- Raw-Unicode-Escape Codecs ------------------------------------------ */
+
+@NoException public static native PyObject PyUnicode_DecodeRawUnicodeEscape(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeRawUnicodeEscape(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_AsRawUnicodeEscapeString(
+    PyObject unicode
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeRawUnicodeEscape(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length
+    );
+// #endif
+
+/* --- Unicode Internal Codec ---------------------------------------------
+
+    Only for internal use in _codecsmodule.c */
+
+// #ifndef Py_LIMITED_API
+
+// #endif
+
+/* --- Latin-1 Codecs -----------------------------------------------------
+
+   Note: Latin-1 corresponds to the first 256 Unicode ordinals.
+
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeLatin1(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeLatin1(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_AsLatin1String(
+    PyObject unicode
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_AsLatin1String(
+    PyObject unicode,
+    @Cast("const char*") BytePointer errors);
+@NoException public static native PyObject _PyUnicode_AsLatin1String(
+    PyObject unicode,
+    String errors);
+
+@NoException public static native PyObject PyUnicode_EncodeLatin1(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeLatin1(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+// #endif
+
+/* --- ASCII Codecs -------------------------------------------------------
+
+   Only 7-bit ASCII data is excepted. All other codes generate errors.
+
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeASCII(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeASCII(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_AsASCIIString(
+    PyObject unicode
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_AsASCIIString(
+    PyObject unicode,
+    @Cast("const char*") BytePointer errors);
+@NoException public static native PyObject _PyUnicode_AsASCIIString(
+    PyObject unicode,
+    String errors);
+
+@NoException public static native PyObject PyUnicode_EncodeASCII(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeASCII(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    String errors
+    );
+// #endif
+
+/* --- Character Map Codecs -----------------------------------------------
+
+   This codec uses mappings to encode and decode characters.
+
+   Decoding mappings must map byte ordinals (integers in the range from 0 to
+   255) to Unicode strings, integers (which are then interpreted as Unicode
+   ordinals) or None.  Unmapped data bytes (ones which cause a LookupError)
+   as well as mapped to None, 0xFFFE or '\u005Cufffe' are treated as "undefined
+   mapping" and cause an error.
+
+   Encoding mappings must map Unicode ordinal integers to bytes objects,
+   integers in the range from 0 to 255 or None.  Unmapped character
+   ordinals (ones which cause a LookupError) as well as mapped to
+   None are treated as "undefined mapping" and cause an error.
+
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeCharmap(
+    @Cast("const char*") BytePointer string,
+    @Cast("Py_ssize_t") long length,
+    PyObject mapping,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_DecodeCharmap(
+    String string,
+    @Cast("Py_ssize_t") long length,
+    PyObject mapping,
+    String errors
+    );
+
+@NoException public static native PyObject PyUnicode_AsCharmapString(
+    PyObject unicode,
+    PyObject mapping
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_EncodeCharmap(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    PyObject mapping,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeCharmap(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    PyObject mapping,
+    String errors
+    );
+@NoException public static native PyObject _PyUnicode_EncodeCharmap(
+    PyObject unicode,
+    PyObject mapping,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject _PyUnicode_EncodeCharmap(
+    PyObject unicode,
+    PyObject mapping,
+    String errors
+    );
+// #endif
+
+/* Translate a Py_UNICODE buffer of the given length by applying a
+   character mapping table to it and return the resulting Unicode
+   object.
+
+   The mapping table must map Unicode ordinal integers to Unicode strings,
+   Unicode ordinal integers or None (causing deletion of the character).
+
+   Mapping tables may be dictionaries or sequences. Unmapped character
+   ordinals (ones which cause a LookupError) are left untouched and
+   are copied as-is.
+
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_TranslateCharmap(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    PyObject table,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_TranslateCharmap(
+    @Cast("const Py_UNICODE*") Pointer data,
+    @Cast("Py_ssize_t") long length,
+    PyObject table,
+    String errors
+    );
+// #endif
+
+// #ifdef MS_WINDOWS
+
+// #endif /* MS_WINDOWS */
+
+/* --- Decimal Encoder ---------------------------------------------------- */
+
+/* Takes a Unicode string holding a decimal value and writes it into
+   an output buffer using standard ASCII digit codes.
+
+   The output buffer has to provide at least length+1 bytes of storage
+   area. The output string is 0-terminated.
+
+   The encoder converts whitespace to ' ', decimal characters to their
+   corresponding ASCII digit and all other Latin-1 characters except
+   \0 as-is. Characters outside this range (Unicode ordinals 1-256)
+   are treated as errors. This includes embedded NULL bytes.
+
+   Error handling is defined by the errors argument:
+
+      NULL or "strict": raise a ValueError
+      "ignore": ignore the wrong characters (these are not copied to the
+                output buffer)
+      "replace": replaces illegal characters with '?'
+
+   Returns 0 on success, -1 on failure.
+
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") BytePointer output,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") ByteBuffer output,
+    String errors
+    );
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") byte[] output,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") BytePointer output,
+    String errors
+    );
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") ByteBuffer output,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native int PyUnicode_EncodeDecimal(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length,
+    @Cast("char*") byte[] output,
+    String errors
+    );
+// #endif
+
+/* Transforms code points that have decimal digit property to the
+   corresponding ASCII digit code points.
+
+   Returns a new Unicode string on success, NULL on failure.
+*/
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicode_TransformDecimalToASCII(
+    @Cast("Py_UNICODE*") Pointer s,
+    @Cast("Py_ssize_t") long length
+    );
+// #endif
+
+/* Similar to PyUnicode_TransformDecimalToASCII(), but takes a PyObject
+   as argument instead of a raw buffer and length.  This function additionally
+   transforms spaces to ASCII because this is what the callers in longobject,
+   floatobject, and complexobject did anyways. */
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_TransformDecimalAndSpaceToASCII(
+    PyObject unicode
+    );
+// #endif
+
+/* --- Locale encoding --------------------------------------------------- */
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+/* Decode a string from the current locale encoding. The decoder is strict if
+   *surrogateescape* is equal to zero, otherwise it uses the 'surrogateescape'
+   error handler (PEP 383) to escape undecodable bytes. If a byte sequence can
+   be decoded as a surrogate character and *surrogateescape* is not equal to
+   zero, the byte sequence is escaped using the 'surrogateescape' error handler
+   instead of being decoded. *str* must end with a null character but cannot
+   contain embedded null characters. */
+
+@NoException public static native PyObject PyUnicode_DecodeLocaleAndSize(
+    @Cast("const char*") BytePointer str,
+    @Cast("Py_ssize_t") long len,
+    @Cast("const char*") BytePointer errors);
+@NoException public static native PyObject PyUnicode_DecodeLocaleAndSize(
+    String str,
+    @Cast("Py_ssize_t") long len,
+    String errors);
+
+/* Similar to PyUnicode_DecodeLocaleAndSize(), but compute the string
+   length using strlen(). */
+
+@NoException public static native PyObject PyUnicode_DecodeLocale(
+    @Cast("const char*") BytePointer str,
+    @Cast("const char*") BytePointer errors);
+@NoException public static native PyObject PyUnicode_DecodeLocale(
+    String str,
+    String errors);
+
+/* Encode a Unicode object to the current locale encoding. The encoder is
+   strict is *surrogateescape* is equal to zero, otherwise the
+   "surrogateescape" error handler is used. Return a bytes object. The string
+   cannot contain embedded null characters. */
+
+@NoException public static native PyObject PyUnicode_EncodeLocale(
+    PyObject unicode,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_EncodeLocale(
+    PyObject unicode,
+    String errors
+    );
+// #endif
+
+/* --- File system encoding ---------------------------------------------- */
+
+/* ParseTuple converter: encode str objects to bytes using
+   PyUnicode_EncodeFSDefault(); bytes objects are output as-is. */
+
+@NoException public static native int PyUnicode_FSConverter(PyObject arg0, Pointer arg1);
+
+/* ParseTuple converter: decode bytes objects to unicode using
+   PyUnicode_DecodeFSDefaultAndSize(); str objects are output as-is. */
+
+@NoException public static native int PyUnicode_FSDecoder(PyObject arg0, Pointer arg1);
+
+/* Decode a null-terminated string using Py_FileSystemDefaultEncoding
+   and the "surrogateescape" error handler.
+
+   If Py_FileSystemDefaultEncoding is not set, fall back to the locale
+   encoding.
+
+   Use PyUnicode_DecodeFSDefaultAndSize() if the string length is known.
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeFSDefault(
+    @Cast("const char*") BytePointer s
+    );
+@NoException public static native PyObject PyUnicode_DecodeFSDefault(
+    String s
+    );
+
+/* Decode a string using Py_FileSystemDefaultEncoding
+   and the "surrogateescape" error handler.
+
+   If Py_FileSystemDefaultEncoding is not set, fall back to the locale
+   encoding.
+*/
+
+@NoException public static native PyObject PyUnicode_DecodeFSDefaultAndSize(
+    @Cast("const char*") BytePointer s,
+    @Cast("Py_ssize_t") long size
+    );
+@NoException public static native PyObject PyUnicode_DecodeFSDefaultAndSize(
+    String s,
+    @Cast("Py_ssize_t") long size
+    );
+
+/* Encode a Unicode object to Py_FileSystemDefaultEncoding with the
+   "surrogateescape" error handler, and return bytes.
+
+   If Py_FileSystemDefaultEncoding is not set, fall back to the locale
+   encoding.
+*/
+
+@NoException public static native PyObject PyUnicode_EncodeFSDefault(
+    PyObject unicode
+    );
+
+/* --- Methods & Slots ----------------------------------------------------
+
+   These are capable of handling Unicode objects and strings on input
+   (we refer to them as strings in the descriptions) and return
+   Unicode objects or integers as appropriate. */
+
+/* Concat two strings giving a new Unicode string. */
+
+@NoException public static native PyObject PyUnicode_Concat(
+    PyObject left,
+    PyObject right
+    );
+
+/* Concat two strings and put the result in *pleft
+   (sets *pleft to NULL on error) */
+
+@NoException public static native void PyUnicode_Append(
+    @Cast("PyObject**") PointerPointer pleft,
+    PyObject right
+    );
+@NoException public static native void PyUnicode_Append(
+    @ByPtrPtr PyObject pleft,
+    PyObject right
+    );
+
+/* Concat two strings, put the result in *pleft and drop the right object
+   (sets *pleft to NULL on error) */
+
+@NoException public static native void PyUnicode_AppendAndDel(
+    @Cast("PyObject**") PointerPointer pleft,
+    PyObject right
+    );
+@NoException public static native void PyUnicode_AppendAndDel(
+    @ByPtrPtr PyObject pleft,
+    PyObject right
+    );
+
+/* Split a string giving a list of Unicode strings.
+
+   If sep is NULL, splitting will be done at all whitespace
+   substrings. Otherwise, splits occur at the given separator.
+
+   At most maxsplit splits will be done. If negative, no limit is set.
+
+   Separators are not included in the resulting list.
+
+*/
+
+@NoException public static native PyObject PyUnicode_Split(
+    PyObject s,
+    PyObject sep,
+    @Cast("Py_ssize_t") long maxsplit
+    );
+
+/* Dito, but split at line breaks.
+
+   CRLF is considered to be one line break. Line breaks are not
+   included in the resulting list. */
+
+@NoException public static native PyObject PyUnicode_Splitlines(
+    PyObject s,
+    int keepends
+    );
+
+/* Partition a string using a given separator. */
+
+@NoException public static native PyObject PyUnicode_Partition(
+    PyObject s,
+    PyObject sep
+    );
+
+/* Partition a string using a given separator, searching from the end of the
+   string. */
+
+@NoException public static native PyObject PyUnicode_RPartition(
+    PyObject s,
+    PyObject sep
+    );
+
+/* Split a string giving a list of Unicode strings.
+
+   If sep is NULL, splitting will be done at all whitespace
+   substrings. Otherwise, splits occur at the given separator.
+
+   At most maxsplit splits will be done. But unlike PyUnicode_Split
+   PyUnicode_RSplit splits from the end of the string. If negative,
+   no limit is set.
+
+   Separators are not included in the resulting list.
+
+*/
+
+@NoException public static native PyObject PyUnicode_RSplit(
+    PyObject s,
+    PyObject sep,
+    @Cast("Py_ssize_t") long maxsplit
+    );
+
+/* Translate a string by applying a character mapping table to it and
+   return the resulting Unicode object.
+
+   The mapping table must map Unicode ordinal integers to Unicode strings,
+   Unicode ordinal integers or None (causing deletion of the character).
+
+   Mapping tables may be dictionaries or sequences. Unmapped character
+   ordinals (ones which cause a LookupError) are left untouched and
+   are copied as-is.
+
+*/
+
+@NoException public static native PyObject PyUnicode_Translate(
+    PyObject str,
+    PyObject table,
+    @Cast("const char*") BytePointer errors
+    );
+@NoException public static native PyObject PyUnicode_Translate(
+    PyObject str,
+    PyObject table,
+    String errors
+    );
+
+/* Join a sequence of strings using the given separator and return
+   the resulting Unicode string. */
+
+@NoException public static native PyObject PyUnicode_Join(
+    PyObject separator,
+    PyObject seq
+    );
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyUnicode_JoinArray(
+    PyObject separator,
+    @Cast("PyObject**") PointerPointer items,
+    @Cast("Py_ssize_t") long seqlen
+    );
+@NoException public static native PyObject _PyUnicode_JoinArray(
+    PyObject separator,
+    @ByPtrPtr PyObject items,
+    @Cast("Py_ssize_t") long seqlen
+    );
+// #endif /* Py_LIMITED_API */
+
+/* Return 1 if substr matches str[start:end] at the given tail end, 0
+   otherwise. */
+
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_Tailmatch(
+    PyObject str,
+    PyObject substr,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    int direction
+    );
+
+/* Return the first position of substr in str[start:end] using the
+   given search direction or -1 if not found. -2 is returned in case
+   an error occurred and an exception is set. */
+
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_Find(
+    PyObject str,
+    PyObject substr,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    int direction
+    );
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+/* Like PyUnicode_Find, but search for single character only. */
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_FindChar(
+    PyObject str,
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    int direction
+    );
+// #endif
+
+/* Count the number of occurrences of substr in str[start:end]. */
+
+@NoException public static native @Cast("Py_ssize_t") long PyUnicode_Count(
+    PyObject str,
+    PyObject substr,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end
+    );
+
+/* Replace at most maxcount occurrences of substr in str with replstr
+   and return the resulting Unicode object. */
+
+@NoException public static native PyObject PyUnicode_Replace(
+    PyObject str,
+    PyObject substr,
+    PyObject replstr,
+    @Cast("Py_ssize_t") long maxcount
+    );
+
+/* Compare two strings and return -1, 0, 1 for less than, equal,
+   greater than resp.
+   Raise an exception and return -1 on error. */
+
+@NoException public static native int PyUnicode_Compare(
+    PyObject left,
+    PyObject right
+    );
+
+// #ifndef Py_LIMITED_API
+/* Test whether a unicode is equal to ASCII identifier.  Return 1 if true,
+   0 otherwise.  The right argument must be ASCII identifier.
+   Any error occurs inside will be cleared before return. */
+
+@NoException public static native int _PyUnicode_EqualToASCIIId(
+    PyObject left,
+    _Py_Identifier right
+    );
+// #endif
+
+/* Compare a Unicode object with C string and return -1, 0, 1 for less than,
+   equal, and greater than, respectively.  It is best to pass only
+   ASCII-encoded strings, but the function interprets the input string as
+   ISO-8859-1 if it contains non-ASCII characters.
+   This function does not raise exceptions. */
+
+@NoException public static native int PyUnicode_CompareWithASCIIString(
+    PyObject left,
+    @Cast("const char*") BytePointer right
+    );
+@NoException public static native int PyUnicode_CompareWithASCIIString(
+    PyObject left,
+    String right
+    );
+
+// #ifndef Py_LIMITED_API
+/* Test whether a unicode is equal to ASCII string.  Return 1 if true,
+   0 otherwise.  The right argument must be ASCII-encoded string.
+   Any error occurs inside will be cleared before return. */
+
+@NoException public static native int _PyUnicode_EqualToASCIIString(
+    PyObject left,
+    @Cast("const char*") BytePointer right
+    );
+@NoException public static native int _PyUnicode_EqualToASCIIString(
+    PyObject left,
+    String right
+    );
+// #endif
+
+/* Rich compare two strings and return one of the following:
+
+   - NULL in case an exception was raised
+   - Py_True or Py_False for successful comparisons
+   - Py_NotImplemented in case the type combination is unknown
+
+   Possible values for op:
+
+     Py_GT, Py_GE, Py_EQ, Py_NE, Py_LT, Py_LE
+
+*/
+
+@NoException public static native PyObject PyUnicode_RichCompare(
+    PyObject left,
+    PyObject right,
+    int op
+    );
+
+/* Apply an argument tuple or dictionary to a format string and return
+   the resulting Unicode string. */
+
+@NoException public static native PyObject PyUnicode_Format(
+    PyObject format,
+    PyObject args
+    );
+
+/* Checks whether element is contained in container and return 1/0
+   accordingly.
+
+   element has to coerce to a one element Unicode string. -1 is
+   returned in case of an error. */
+
+@NoException public static native int PyUnicode_Contains(
+    PyObject container,
+    PyObject element
+    );
+
+/* Checks whether argument is a valid identifier. */
+
+@NoException public static native int PyUnicode_IsIdentifier(PyObject s);
+
+// #ifndef Py_LIMITED_API
+/* Externally visible for str.strip(unicode) */
+@NoException public static native PyObject _PyUnicode_XStrip(
+    PyObject self,
+    int striptype,
+    PyObject sepobj
+    );
+// #endif
+
+/* Using explicit passed-in values, insert the thousands grouping
+   into the string pointed to by buffer.  For the argument descriptions,
+   see Objects/stringlib/localeutil.h */
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    @Cast("const char*") BytePointer grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") IntPointer maxchar);
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    String grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") IntBuffer maxchar);
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    @Cast("const char*") BytePointer grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") int[] maxchar);
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    String grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") IntPointer maxchar);
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    @Cast("const char*") BytePointer grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") IntBuffer maxchar);
+@NoException public static native @Cast("Py_ssize_t") long _PyUnicode_InsertThousandsGrouping(
+    PyObject unicode,
+    @Cast("Py_ssize_t") long index,
+    @Cast("Py_ssize_t") long n_buffer,
+    Pointer digits,
+    @Cast("Py_ssize_t") long n_digits,
+    @Cast("Py_ssize_t") long min_width,
+    String grouping,
+    PyObject thousands_sep,
+    @Cast("Py_UCS4*") int[] maxchar);
+// #endif
+/* === Characters Type APIs =============================================== */
+
+/* Helper array used by Py_UNICODE_ISSPACE(). */
+
+// #ifndef Py_LIMITED_API
+@MemberGetter public static native @Cast("const unsigned char") byte _Py_ascii_whitespace(int i);
+@MemberGetter public static native @Cast("const unsigned char*") BytePointer _Py_ascii_whitespace();
+
+/* These should not be used directly. Use the Py_UNICODE_IS* and
+   Py_UNICODE_TO* macros instead.
+
+   These APIs are implemented in Objects/unicodectype.c.
+
+*/
+
+@NoException public static native int _PyUnicode_IsLowercase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsUppercase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsTitlecase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsXidStart(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsXidContinue(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsWhitespace(
+    @Cast("const Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsLinebreak(
+    @Cast("const Py_UCS4") int ch
+    );
+
+@NoException public static native @Cast("Py_UCS4") int _PyUnicode_ToLowercase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native @Cast("Py_UCS4") int _PyUnicode_ToUppercase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native @Cast("Py_UCS4") int _PyUnicode_ToTitlecase(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_ToLowerFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntPointer res
+    );
+@NoException public static native int _PyUnicode_ToLowerFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntBuffer res
+    );
+@NoException public static native int _PyUnicode_ToLowerFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") int[] res
+    );
+
+@NoException public static native int _PyUnicode_ToTitleFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntPointer res
+    );
+@NoException public static native int _PyUnicode_ToTitleFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntBuffer res
+    );
+@NoException public static native int _PyUnicode_ToTitleFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") int[] res
+    );
+
+@NoException public static native int _PyUnicode_ToUpperFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntPointer res
+    );
+@NoException public static native int _PyUnicode_ToUpperFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntBuffer res
+    );
+@NoException public static native int _PyUnicode_ToUpperFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") int[] res
+    );
+
+@NoException public static native int _PyUnicode_ToFoldedFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntPointer res
+    );
+@NoException public static native int _PyUnicode_ToFoldedFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") IntBuffer res
+    );
+@NoException public static native int _PyUnicode_ToFoldedFull(
+    @Cast("Py_UCS4") int ch,
+    @Cast("Py_UCS4*") int[] res
+    );
+
+@NoException public static native int _PyUnicode_IsCaseIgnorable(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsCased(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_ToDecimalDigit(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_ToDigit(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native double _PyUnicode_ToNumeric(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsDecimalDigit(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsDigit(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsNumeric(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsPrintable(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native int _PyUnicode_IsAlpha(
+    @Cast("Py_UCS4") int ch
+    );
+
+@NoException public static native @Cast("size_t") long Py_UNICODE_strlen(
+    @Cast("const Py_UNICODE*") Pointer u
+    );
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strcpy(
+    @Cast("Py_UNICODE*") Pointer s1,
+    @Cast("const Py_UNICODE*") Pointer s2);
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strcat(
+    @Cast("Py_UNICODE*") Pointer s1, @Cast("const Py_UNICODE*") Pointer s2);
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strncpy(
+    @Cast("Py_UNICODE*") Pointer s1,
+    @Cast("const Py_UNICODE*") Pointer s2,
+    @Cast("size_t") long n);
+
+@NoException public static native int Py_UNICODE_strcmp(
+    @Cast("const Py_UNICODE*") Pointer s1,
+    @Cast("const Py_UNICODE*") Pointer s2
+    );
+
+@NoException public static native int Py_UNICODE_strncmp(
+    @Cast("const Py_UNICODE*") Pointer s1,
+    @Cast("const Py_UNICODE*") Pointer s2,
+    @Cast("size_t") long n
+    );
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strchr(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_UNICODE") char c
+    );
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strchr(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_UNICODE") int c
+    );
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strrchr(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_UNICODE") char c
+    );
+@NoException public static native @Cast("Py_UNICODE*") Pointer Py_UNICODE_strrchr(
+    @Cast("const Py_UNICODE*") Pointer s,
+    @Cast("Py_UNICODE") int c
+    );
+
+@NoException public static native PyObject _PyUnicode_FormatLong(PyObject arg0, int arg1, int arg2, int arg3);
+
+/* Create a copy of a unicode string ending with a nul character. Return NULL
+   and raise a MemoryError exception on memory allocation failure, otherwise
+   return a new allocated buffer (use PyMem_Free() to free the buffer). */
+
+@NoException public static native @Cast("Py_UNICODE*") Pointer PyUnicode_AsUnicodeCopy(
+    PyObject unicode
+    );
+// #endif /* Py_LIMITED_API */
+
+// #if defined(Py_DEBUG) && !defined(Py_LIMITED_API)
+@NoException public static native int _PyUnicode_CheckConsistency(
+    PyObject op,
+    int check_content);
+// #elif !defined(NDEBUG)
+/* For asserts that call _PyUnicode_CheckConsistency(), which would
+ * otherwise be a problem when building with asserts but without Py_DEBUG. */
+// #define _PyUnicode_CheckConsistency(op, check_content) PyUnicode_Check(op)
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Return an interned Unicode object for an Identifier; may fail if there is no memory.*/
+@NoException public static native PyObject _PyUnicode_FromId(_Py_Identifier arg0);
+/* Clear all static strings. */
+@NoException public static native void _PyUnicode_ClearStaticStrings();
+
+/* Fast equality check when the inputs are known to be exact unicode types
+   and where the hash values are equal (i.e. a very probable match) */
+@NoException public static native int _PyUnicode_EQ(PyObject arg0, PyObject arg1);
+// #endif /* !Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_UNICODEOBJECT_H */
+
+
+// Parsed from longobject.h
+
+// #ifndef Py_LONGOBJECT_H
+// #define Py_LONGOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+
+/* Long (arbitrary precision) integer object interface */
+
+@Opaque public static class PyLongObject extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyLongObject() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyLongObject(Pointer p) { super(p); }
+} /* Revealed in longintrepr.h */
+
+public static native @ByRef PyTypeObject PyLong_Type(); public static native void PyLong_Type(PyTypeObject PyLong_Type);
+
+// #define PyLong_Check(op)
+//         PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LONG_SUBCLASS)
+// #define PyLong_CheckExact(op) (Py_TYPE(op) == &PyLong_Type)
+
+@NoException public static native PyObject PyLong_FromLong(long arg0);
+@NoException public static native PyObject PyLong_FromUnsignedLong(@Cast("unsigned long") long arg0);
+@NoException public static native PyObject PyLong_FromSize_t(@Cast("size_t") long arg0);
+@NoException public static native PyObject PyLong_FromSsize_t(@Cast("Py_ssize_t") long arg0);
+@NoException public static native PyObject PyLong_FromDouble(double arg0);
+@NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, IntPointer arg1);
+@NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, IntBuffer arg1);
+@NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, int[] arg1);
+@NoException public static native @Cast("Py_ssize_t") long PyLong_AsSsize_t(PyObject arg0);
+@NoException public static native @Cast("size_t") long PyLong_AsSize_t(PyObject arg0);
+@NoException public static native @Cast("unsigned long") long PyLong_AsUnsignedLong(PyObject arg0);
+@NoException public static native @Cast("unsigned long") long PyLong_AsUnsignedLongMask(PyObject arg0);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyLong_AsInt(PyObject arg0);
+// #endif
+@NoException public static native PyObject PyLong_GetInfo();
+
+/* It may be useful in the future. I've added it in the PyInt -> PyLong
+   cleanup to keep the extra information. [CH] */
+// #define PyLong_AS_LONG(op) PyLong_AsLong(op)
+
+/* Issue #1983: pid_t can be longer than a C long on some systems */
+// #if !defined(SIZEOF_PID_T) || SIZEOF_PID_T == SIZEOF_INT
+public static final String _Py_PARSE_PID = "i";
+// #define PyLong_FromPid PyLong_FromLong
+// #define PyLong_AsPid PyLong_AsLong
+// #elif SIZEOF_PID_T == SIZEOF_LONG
+// #define PyLong_FromPid PyLong_FromLong
+// #define PyLong_AsPid PyLong_AsLong
+// #elif defined(SIZEOF_LONG_LONG) && SIZEOF_PID_T == SIZEOF_LONG_LONG
+// #define PyLong_FromPid PyLong_FromLongLong
+// #define PyLong_AsPid PyLong_AsLongLong
+// #else
+// #error "sizeof(pid_t) is neither sizeof(int), sizeof(long) or sizeof(long long)"
+// #endif /* SIZEOF_PID_T */
+
+// #if SIZEOF_VOID_P == SIZEOF_INT
+public static final String _Py_PARSE_INTPTR = "i";
+public static final String _Py_PARSE_UINTPTR = "I";
+// #elif SIZEOF_VOID_P == SIZEOF_LONG
+// #elif defined(SIZEOF_LONG_LONG) && SIZEOF_VOID_P == SIZEOF_LONG_LONG
+// #else
+// #  error "void* different in size from int, long and long long"
+// #endif /* SIZEOF_VOID_P */
+
+/* Used by Python/mystrtoul.c, _PyBytes_FromHex(),
+   _PyBytes_DecodeEscapeRecode(), etc. */
+// #ifndef Py_LIMITED_API
+public static native @Cast("unsigned char") byte _PyLong_DigitValue(int i); public static native void _PyLong_DigitValue(int i, byte _PyLong_DigitValue);
+@MemberGetter public static native @Cast("unsigned char*") BytePointer _PyLong_DigitValue();
+// #endif
+
+/* _PyLong_Frexp returns a double x and an exponent e such that the
+   true value is approximately equal to x * 2**e.  e is >= 0.  x is
+   0.0 if and only if the input is 0 (in which case, e and x are both
+   zeroes); otherwise, 0.5 <= abs(x) < 1.0.  On overflow, which is
+   possible if the number of bits doesn't fit into a Py_ssize_t, sets
+   OverflowError and returns -1.0 for x, 0 for e. */
+// #ifndef Py_LIMITED_API
+@NoException public static native double _PyLong_Frexp(PyLongObject a, @Cast("Py_ssize_t*") SizeTPointer e);
+// #endif
+
+@NoException public static native double PyLong_AsDouble(PyObject arg0);
+@NoException public static native PyObject PyLong_FromVoidPtr(Pointer arg0);
+@NoException public static native Pointer PyLong_AsVoidPtr(PyObject arg0);
+
+@NoException public static native PyObject PyLong_FromLongLong(long arg0);
+@NoException public static native PyObject PyLong_FromUnsignedLongLong(@Cast("unsigned long long") long arg0);
+@NoException public static native long PyLong_AsLongLong(PyObject arg0);
+@NoException public static native @Cast("unsigned long long") long PyLong_AsUnsignedLongLong(PyObject arg0);
+@NoException public static native @Cast("unsigned long long") long PyLong_AsUnsignedLongLongMask(PyObject arg0);
+@NoException public static native long PyLong_AsLongLongAndOverflow(PyObject arg0, IntPointer arg1);
+@NoException public static native long PyLong_AsLongLongAndOverflow(PyObject arg0, IntBuffer arg1);
+@NoException public static native long PyLong_AsLongLongAndOverflow(PyObject arg0, int[] arg1);
+
+@NoException public static native PyObject PyLong_FromString(@Cast("const char*") BytePointer arg0, @Cast("char**") PointerPointer arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(String arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(String arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native PyObject PyLong_FromString(String arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyLong_FromUnicode(@Cast("Py_UNICODE*") Pointer arg0, @Cast("Py_ssize_t") long arg1, int arg2);
+@NoException public static native PyObject PyLong_FromUnicodeObject(PyObject u, int base);
+@NoException public static native PyObject _PyLong_FromBytes(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1, int arg2);
+@NoException public static native PyObject _PyLong_FromBytes(String arg0, @Cast("Py_ssize_t") long arg1, int arg2);
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* _PyLong_Sign.  Return 0 if v is 0, -1 if v < 0, +1 if v > 0.
+   v must not be NULL, and must be a normalized long.
+   There are no error cases.
+*/
+@NoException public static native int _PyLong_Sign(PyObject v);
+
+
+/* _PyLong_NumBits.  Return the number of bits needed to represent the
+   absolute value of a long.  For example, this returns 1 for 1 and -1, 2
+   for 2 and -2, and 2 for 3 and -3.  It returns 0 for 0.
+   v must not be NULL, and must be a normalized long.
+   (size_t)-1 is returned and OverflowError set if the true result doesn't
+   fit in a size_t.
+*/
+@NoException public static native @Cast("size_t") long _PyLong_NumBits(PyObject v);
+
+/* _PyLong_DivmodNear.  Given integers a and b, compute the nearest
+   integer q to the exact quotient a / b, rounding to the nearest even integer
+   in the case of a tie.  Return (q, r), where r = a - q*b.  The remainder r
+   will satisfy abs(r) <= abs(b)/2, with equality possible only if q is
+   even.
+*/
+@NoException public static native PyObject _PyLong_DivmodNear(PyObject arg0, PyObject arg1);
+
+/* _PyLong_FromByteArray:  View the n unsigned bytes as a binary integer in
+   base 256, and return a Python int with the same numeric value.
+   If n is 0, the integer is 0.  Else:
+   If little_endian is 1/true, bytes[n-1] is the MSB and bytes[0] the LSB;
+   else (little_endian is 0/false) bytes[0] is the MSB and bytes[n-1] the
+   LSB.
+   If is_signed is 0/false, view the bytes as a non-negative integer.
+   If is_signed is 1/true, view the bytes as a 2's-complement integer,
+   non-negative if bit 0x80 of the MSB is clear, negative if set.
+   Error returns:
+   + Return NULL with the appropriate exception set if there's not
+     enough memory to create the Python int.
+*/
+@NoException public static native PyObject _PyLong_FromByteArray(
+    @Cast("const unsigned char*") BytePointer bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+@NoException public static native PyObject _PyLong_FromByteArray(
+    @Cast("const unsigned char*") ByteBuffer bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+@NoException public static native PyObject _PyLong_FromByteArray(
+    @Cast("const unsigned char*") byte[] bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+
+/* _PyLong_AsByteArray: Convert the least-significant 8*n bits of long
+   v to a base-256 integer, stored in array bytes.  Normally return 0,
+   return -1 on error.
+   If little_endian is 1/true, store the MSB at bytes[n-1] and the LSB at
+   bytes[0]; else (little_endian is 0/false) store the MSB at bytes[0] and
+   the LSB at bytes[n-1].
+   If is_signed is 0/false, it's an error if v < 0; else (v >= 0) n bytes
+   are filled and there's nothing special about bit 0x80 of the MSB.
+   If is_signed is 1/true, bytes is filled with the 2's-complement
+   representation of v's value.  Bit 0x80 of the MSB is the sign bit.
+   Error returns (-1):
+   + is_signed is 0 and v < 0.  TypeError is set in this case, and bytes
+     isn't altered.
+   + n isn't big enough to hold the full mathematical value of v.  For
+     example, if is_signed is 0 and there are more digits in the v than
+     fit in n; or if is_signed is 1, v < 0, and n is just 1 bit shy of
+     being large enough to hold a sign bit.  OverflowError is set in this
+     case, but bytes holds the least-significant n bytes of the true value.
+*/
+@NoException public static native int _PyLong_AsByteArray(PyLongObject v,
+    @Cast("unsigned char*") BytePointer bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+@NoException public static native int _PyLong_AsByteArray(PyLongObject v,
+    @Cast("unsigned char*") ByteBuffer bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+@NoException public static native int _PyLong_AsByteArray(PyLongObject v,
+    @Cast("unsigned char*") byte[] bytes, @Cast("size_t") long n,
+    int little_endian, int is_signed);
+
+/* _PyLong_FromNbInt: Convert the given object to a PyLongObject
+   using the nb_int slot, if available.  Raise TypeError if either the
+   nb_int slot is not available or the result of the call to nb_int
+   returns something not of type int.
+*/
+@NoException public static native PyLongObject _PyLong_FromNbInt(PyObject arg0);
+
+/* _PyLong_Format: Convert the long to a string object with given base,
+   appending a base prefix of 0[box] if base is 2, 8 or 16. */
+@NoException public static native PyObject _PyLong_Format(PyObject obj, int base);
+
+@NoException public static native int _PyLong_FormatWriter(
+    _PyUnicodeWriter writer,
+    PyObject obj,
+    int base,
+    int alternate);
+
+@NoException public static native @Cast("char*") BytePointer _PyLong_FormatBytesWriter(
+    _PyBytesWriter writer,
+    @Cast("char*") BytePointer str,
+    PyObject obj,
+    int base,
+    int alternate);
+@NoException public static native @Cast("char*") ByteBuffer _PyLong_FormatBytesWriter(
+    _PyBytesWriter writer,
+    @Cast("char*") ByteBuffer str,
+    PyObject obj,
+    int base,
+    int alternate);
+@NoException public static native @Cast("char*") byte[] _PyLong_FormatBytesWriter(
+    _PyBytesWriter writer,
+    @Cast("char*") byte[] str,
+    PyObject obj,
+    int base,
+    int alternate);
+
+/* Format the object based on the format_spec, as defined in PEP 3101
+   (Advanced String Formatting). */
+@NoException public static native int _PyLong_FormatAdvancedWriter(
+    _PyUnicodeWriter writer,
+    PyObject obj,
+    PyObject format_spec,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif /* Py_LIMITED_API */
+
+/* These aren't really part of the int object, but they're handy. The
+   functions are in Python/mystrtoul.c.
+ */
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(@Cast("const char*") BytePointer arg0, @Cast("char**") PointerPointer arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(String arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(String arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native @Cast("unsigned long") long PyOS_strtoul(String arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+@NoException public static native long PyOS_strtol(@Cast("const char*") BytePointer arg0, @Cast("char**") PointerPointer arg1, int arg2);
+@NoException public static native long PyOS_strtol(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native long PyOS_strtol(String arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native long PyOS_strtol(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+@NoException public static native long PyOS_strtol(String arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, int arg2);
+@NoException public static native long PyOS_strtol(@Cast("const char*") BytePointer arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, int arg2);
+@NoException public static native long PyOS_strtol(String arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int arg2);
+
+// #ifndef Py_LIMITED_API
+/* For use by the gcd function in mathmodule.c */
+@NoException public static native PyObject _PyLong_GCD(PyObject arg0, PyObject arg1);
+// #endif /* !Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_LONGOBJECT_H */
+
+
+// Parsed from longintrepr.h
+
+// #ifndef Py_LIMITED_API
+// #ifndef Py_LONGINTREPR_H
+// #define Py_LONGINTREPR_H
+// #ifdef __cplusplus
+// #endif
+
+
+/* This is published for the benefit of "friends" marshal.c and _decimal.c. */
+
+/* Parameters of the integer representation.  There are two different
+   sets of parameters: one set for 30-bit digits, stored in an unsigned 32-bit
+   integer type, and one set for 15-bit digits with each digit stored in an
+   unsigned short.  The value of PYLONG_BITS_IN_DIGIT, defined either at
+   configure time or in pyport.h, is used to decide which digit size to use.
+
+   Type 'digit' should be able to hold 2*PyLong_BASE-1, and type 'twodigits'
+   should be an unsigned integer type able to hold all integers up to
+   PyLong_BASE*PyLong_BASE-1.  x_sub assumes that 'digit' is an unsigned type,
+   and that overflow is handled by taking the result modulo 2**N for some N >
+   PyLong_SHIFT.  The majority of the code doesn't care about the precise
+   value of PyLong_SHIFT, but there are some notable exceptions:
+
+   - long_pow() requires that PyLong_SHIFT be divisible by 5
+
+   - PyLong_{As,From}ByteArray require that PyLong_SHIFT be at least 8
+
+   - long_hash() requires that PyLong_SHIFT is *strictly* less than the number
+     of bits in an unsigned long, as do the PyLong <-> long (or unsigned long)
+     conversion functions
+
+   - the Python int <-> size_t/Py_ssize_t conversion functions expect that
+     PyLong_SHIFT is strictly less than the number of bits in a size_t
+
+   - the marshal code currently expects that PyLong_SHIFT is a multiple of 15
+
+   - NSMALLNEGINTS and NSMALLPOSINTS should be small enough to fit in a single
+     digit; with the current values this forces PyLong_SHIFT >= 9
+
+  The values 15 and 30 should fit all of the above requirements, on any
+  platform.
+*/
+
+// #if PYLONG_BITS_IN_DIGIT == 30 /* signed variant of digit */ /* signed variant of twodigits */
+public static final int PyLong_SHIFT =	30;
+public static final int _PyLong_DECIMAL_SHIFT =	9; /* max(e such that 10**e fits in a digit) */
+public static final int _PyLong_DECIMAL_BASE =	((int)1000000000); /* 10 ** DECIMAL_SHIFT */
+// #elif PYLONG_BITS_IN_DIGIT == 15 /* signed variant of digit */ /* signed variant of twodigits */ /* max(e such that 10**e fits in a digit) */ /* 10 ** DECIMAL_SHIFT */
+// #else
+// #error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
+// #endif
+public static native @MemberGetter int PyLong_BASE();
+public static final int PyLong_BASE = PyLong_BASE();
+public static native @MemberGetter int PyLong_MASK();
+public static final int PyLong_MASK = PyLong_MASK();
+
+// #if PyLong_SHIFT % 5 != 0
+// #error "longobject.c requires that PyLong_SHIFT be divisible by 5"
+// #endif
+
+/* Long integer representation.
+   The absolute value of a number is equal to
+   	SUM(for i=0 through abs(ob_size)-1) ob_digit[i] * 2**(SHIFT*i)
+   Negative numbers are represented with ob_size < 0;
+   zero is represented by ob_size == 0.
+   In a normalized number, ob_digit[abs(ob_size)-1] (the most significant
+   digit) is never zero.  Also, in all cases, for all valid i,
+   	0 <= ob_digit[i] <= MASK.
+   The allocation function takes care of allocating extra memory
+   so that ob_digit[0] ... ob_digit[abs(ob_size)-1] are actually available.
+
+   CAUTION:  Generic code manipulating subtypes of PyVarObject has to
+   aware that ints abuse  ob_size's sign bit.
+*/
+
+public static class _longobject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _longobject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _longobject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _longobject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _longobject position(long position) {
+        return (_longobject)super.position(position);
+    }
+
+	public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject ob_base);
+	public native @Cast("digit") int ob_digit(int i); public native _longobject ob_digit(int i, int ob_digit);
+	@MemberGetter public native @Cast("digit*") IntPointer ob_digit();
+}
+
+@NoException public static native PyLongObject _PyLong_New(@Cast("Py_ssize_t") long arg0);
+
+/* Return a copy of src. */
+@NoException public static native PyObject _PyLong_Copy(PyLongObject src);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_LONGINTREPR_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from boolobject.h
+
+/* Boolean object interface */
+
+// #ifndef Py_BOOLOBJECT_H
+// #define Py_BOOLOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+
+public static native @ByRef PyTypeObject PyBool_Type(); public static native void PyBool_Type(PyTypeObject PyBool_Type);
+
+// #define PyBool_Check(x) (Py_TYPE(x) == &PyBool_Type)
+
+/* Py_False and Py_True are the only two bools in existence.
+Don't forget to apply Py_INCREF() when returning either!!! */
+
+/* Don't use these directly */
+public static native @ByRef _longobject _Py_FalseStruct(); public static native void _Py_FalseStruct(_longobject _Py_FalseStruct);
+public static native @ByRef _longobject _Py_TrueStruct(); public static native void _Py_TrueStruct(_longobject _Py_TrueStruct);
+
+/* Use these macros */
+// #define Py_False ((PyObject *) &_Py_FalseStruct)
+// #define Py_True ((PyObject *) &_Py_TrueStruct)
+
+/* Macros for returning Py_True or Py_False, respectively */
+// #define Py_RETURN_TRUE return Py_INCREF(Py_True), Py_True
+// #define Py_RETURN_FALSE return Py_INCREF(Py_False), Py_False
+
+/* Function to return a bool from a C long */
+@NoException public static native PyObject PyBool_FromLong(long arg0);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_BOOLOBJECT_H */
+
+
+// Parsed from floatobject.h
+
+
+/* Float object interface */
+
+/*
+PyFloatObject represents a (double precision) floating point number.
+*/
+
+// #ifndef Py_FLOATOBJECT_H
+// #define Py_FLOATOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+public static class PyFloatObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyFloatObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyFloatObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyFloatObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyFloatObject position(long position) {
+        return (PyFloatObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyFloatObject ob_base(PyObject ob_base);
+    public native double ob_fval(); public native PyFloatObject ob_fval(double ob_fval);
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyFloat_Type(); public static native void PyFloat_Type(PyTypeObject PyFloat_Type);
+
+// #define PyFloat_Check(op) PyObject_TypeCheck(op, &PyFloat_Type)
+// #define PyFloat_CheckExact(op) (Py_TYPE(op) == &PyFloat_Type)
+
+// #ifdef Py_NAN
+// #endif
+
+// #define Py_RETURN_INF(sign) do
+//     if (copysign(1., sign) == 1.) {
+//         return PyFloat_FromDouble(Py_HUGE_VAL);
+//     } else {
+//         return PyFloat_FromDouble(-Py_HUGE_VAL);
+//     } while(0)
+
+@NoException public static native double PyFloat_GetMax();
+@NoException public static native double PyFloat_GetMin();
+@NoException public static native PyObject PyFloat_GetInfo();
+
+/* Return Python float from string PyObject. */
+@NoException public static native PyObject PyFloat_FromString(PyObject arg0);
+
+/* Return Python float from C double. */
+@NoException public static native PyObject PyFloat_FromDouble(double arg0);
+
+/* Extract C double from Python float.  The macro version trades safety for
+   speed. */
+@NoException public static native double PyFloat_AsDouble(PyObject arg0);
+// #ifndef Py_LIMITED_API
+// #define PyFloat_AS_DOUBLE(op) (((PyFloatObject *)(op))->ob_fval)
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* _PyFloat_{Pack,Unpack}{4,8}
+ *
+ * The struct and pickle (at least) modules need an efficient platform-
+ * independent way to store floating-point values as byte strings.
+ * The Pack routines produce a string from a C double, and the Unpack
+ * routines produce a C double from such a string.  The suffix (4 or 8)
+ * specifies the number of bytes in the string.
+ *
+ * On platforms that appear to use (see _PyFloat_Init()) IEEE-754 formats
+ * these functions work by copying bits.  On other platforms, the formats the
+ * 4- byte format is identical to the IEEE-754 single precision format, and
+ * the 8-byte format to the IEEE-754 double precision format, although the
+ * packing of INFs and NaNs (if such things exist on the platform) isn't
+ * handled correctly, and attempting to unpack a string containing an IEEE
+ * INF or NaN will raise an exception.
+ *
+ * On non-IEEE platforms with more precision, or larger dynamic range, than
+ * 754 supports, not all values can be packed; on non-IEEE platforms with less
+ * precision, or smaller dynamic range, not all values can be unpacked.  What
+ * happens in such cases is partly accidental (alas).
+ */
+
+/* The pack routines write 2, 4 or 8 bytes, starting at p.  le is a bool
+ * argument, true if you want the string in little-endian format (exponent
+ * last, at p+1, p+3 or p+7), false if you want big-endian format (exponent
+ * first, at p).
+ * Return value:  0 if all is OK, -1 if error (and an exception is
+ * set, most likely OverflowError).
+ * There are two problems on non-IEEE platforms:
+ * 1):  What this does is undefined if x is a NaN or infinity.
+ * 2):  -0.0 and +0.0 produce the same string.
+ */
+@NoException public static native int _PyFloat_Pack2(double x, @Cast("unsigned char*") BytePointer p, int le);
+@NoException public static native int _PyFloat_Pack2(double x, @Cast("unsigned char*") ByteBuffer p, int le);
+@NoException public static native int _PyFloat_Pack2(double x, @Cast("unsigned char*") byte[] p, int le);
+@NoException public static native int _PyFloat_Pack4(double x, @Cast("unsigned char*") BytePointer p, int le);
+@NoException public static native int _PyFloat_Pack4(double x, @Cast("unsigned char*") ByteBuffer p, int le);
+@NoException public static native int _PyFloat_Pack4(double x, @Cast("unsigned char*") byte[] p, int le);
+@NoException public static native int _PyFloat_Pack8(double x, @Cast("unsigned char*") BytePointer p, int le);
+@NoException public static native int _PyFloat_Pack8(double x, @Cast("unsigned char*") ByteBuffer p, int le);
+@NoException public static native int _PyFloat_Pack8(double x, @Cast("unsigned char*") byte[] p, int le);
+
+/* Needed for the old way for marshal to store a floating point number.
+   Returns the string length copied into p, -1 on error.
+ */
+
+
+/* Used to get the important decimal digits of a double */
+
+
+
+/* The unpack routines read 2, 4 or 8 bytes, starting at p.  le is a bool
+ * argument, true if the string is in little-endian format (exponent
+ * last, at p+1, p+3 or p+7), false if big-endian (exponent first, at p).
+ * Return value:  The unpacked double.  On error, this is -1.0 and
+ * PyErr_Occurred() is true (and an exception is set, most likely
+ * OverflowError).  Note that on a non-IEEE platform this will refuse
+ * to unpack a string that represents a NaN or infinity.
+ */
+@NoException public static native double _PyFloat_Unpack2(@Cast("const unsigned char*") BytePointer p, int le);
+@NoException public static native double _PyFloat_Unpack2(@Cast("const unsigned char*") ByteBuffer p, int le);
+@NoException public static native double _PyFloat_Unpack2(@Cast("const unsigned char*") byte[] p, int le);
+@NoException public static native double _PyFloat_Unpack4(@Cast("const unsigned char*") BytePointer p, int le);
+@NoException public static native double _PyFloat_Unpack4(@Cast("const unsigned char*") ByteBuffer p, int le);
+@NoException public static native double _PyFloat_Unpack4(@Cast("const unsigned char*") byte[] p, int le);
+@NoException public static native double _PyFloat_Unpack8(@Cast("const unsigned char*") BytePointer p, int le);
+@NoException public static native double _PyFloat_Unpack8(@Cast("const unsigned char*") ByteBuffer p, int le);
+@NoException public static native double _PyFloat_Unpack8(@Cast("const unsigned char*") byte[] p, int le);
+
+/* free list api */
+@NoException public static native int PyFloat_ClearFreeList();
+
+@NoException public static native void _PyFloat_DebugMallocStats(@Cast("FILE*") Pointer out);
+
+/* Format the object based on the format_spec, as defined in PEP 3101
+   (Advanced String Formatting). */
+@NoException public static native int _PyFloat_FormatAdvancedWriter(
+    _PyUnicodeWriter writer,
+    PyObject obj,
+    PyObject format_spec,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif /* Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_FLOATOBJECT_H */
+
+
+// Parsed from complexobject.h
+
+/* Complex number structure */
+
+// #ifndef Py_COMPLEXOBJECT_H
+// #define Py_COMPLEXOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+public static class Py_complex extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public Py_complex() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Py_complex(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Py_complex(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public Py_complex position(long position) {
+        return (Py_complex)super.position(position);
+    }
+
+    public native double real(); public native Py_complex real(double real);
+    public native double imag(); public native Py_complex imag(double imag);
+}
+
+/* Operations on complex numbers from complexmodule.c */
+
+@NoException public static native @ByVal Py_complex _Py_c_sum(@ByVal Py_complex arg0, @ByVal Py_complex arg1);
+@NoException public static native @ByVal Py_complex _Py_c_diff(@ByVal Py_complex arg0, @ByVal Py_complex arg1);
+@NoException public static native @ByVal Py_complex _Py_c_neg(@ByVal Py_complex arg0);
+@NoException public static native @ByVal Py_complex _Py_c_prod(@ByVal Py_complex arg0, @ByVal Py_complex arg1);
+@NoException public static native @ByVal Py_complex _Py_c_quot(@ByVal Py_complex arg0, @ByVal Py_complex arg1);
+@NoException public static native @ByVal Py_complex _Py_c_pow(@ByVal Py_complex arg0, @ByVal Py_complex arg1);
+@NoException public static native double _Py_c_abs(@ByVal Py_complex arg0);
+// #endif
+
+/* Complex object interface */
+
+/*
+PyComplexObject represents a complex number with double-precision
+real and imaginary parts.
+*/
+// #ifndef Py_LIMITED_API
+public static class PyComplexObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyComplexObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyComplexObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyComplexObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyComplexObject position(long position) {
+        return (PyComplexObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyComplexObject ob_base(PyObject ob_base);
+    public native @ByRef Py_complex cval(); public native PyComplexObject cval(Py_complex cval);
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyComplex_Type(); public static native void PyComplex_Type(PyTypeObject PyComplex_Type);
+
+// #define PyComplex_Check(op) PyObject_TypeCheck(op, &PyComplex_Type)
+// #define PyComplex_CheckExact(op) (Py_TYPE(op) == &PyComplex_Type)
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyComplex_FromCComplex(@ByVal Py_complex arg0);
+// #endif
+@NoException public static native PyObject PyComplex_FromDoubles(double real, double imag);
+
+@NoException public static native double PyComplex_RealAsDouble(PyObject op);
+@NoException public static native double PyComplex_ImagAsDouble(PyObject op);
+// #ifndef Py_LIMITED_API
+@NoException public static native @ByVal Py_complex PyComplex_AsCComplex(PyObject op);
+// #endif
+
+/* Format the object based on the format_spec, as defined in PEP 3101
+   (Advanced String Formatting). */
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyComplex_FormatAdvancedWriter(
+    _PyUnicodeWriter writer,
+    PyObject obj,
+    PyObject format_spec,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_COMPLEXOBJECT_H */
+
+
+// Parsed from rangeobject.h
+
+
+/* Range object interface */
+
+// #ifndef Py_RANGEOBJECT_H
+// #define Py_RANGEOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+/*
+A range object represents an integer range.  This is an immutable object;
+a range cannot change its value after creation.
+
+Range objects behave like the corresponding tuple objects except that
+they are represented by a start, stop, and step datamembers.
+*/
+
+public static native @ByRef PyTypeObject PyRange_Type(); public static native void PyRange_Type(PyTypeObject PyRange_Type);
+public static native @ByRef PyTypeObject PyRangeIter_Type(); public static native void PyRangeIter_Type(PyTypeObject PyRangeIter_Type);
+public static native @ByRef PyTypeObject PyLongRangeIter_Type(); public static native void PyLongRangeIter_Type(PyTypeObject PyLongRangeIter_Type);
+
+// #define PyRange_Check(op) (Py_TYPE(op) == &PyRange_Type)
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_RANGEOBJECT_H */
+
+
+// Parsed from memoryobject.h
+
+/* Memory view object. In Python this is available as "memoryview". */
+
+// #ifndef Py_MEMORYOBJECT_H
+// #define Py_MEMORYOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+public static native @ByRef PyTypeObject _PyManagedBuffer_Type(); public static native void _PyManagedBuffer_Type(PyTypeObject _PyManagedBuffer_Type);
+// #endif
+public static native @ByRef PyTypeObject PyMemoryView_Type(); public static native void PyMemoryView_Type(PyTypeObject PyMemoryView_Type);
+
+// #define PyMemoryView_Check(op) (Py_TYPE(op) == &PyMemoryView_Type)
+
+// #ifndef Py_LIMITED_API
+/* Get a pointer to the memoryview's private copy of the exporter's buffer. */
+// #define PyMemoryView_GET_BUFFER(op) (&((PyMemoryViewObject *)(op))->view)
+/* Get a pointer to the exporting object (this may be NULL!). */
+// #define PyMemoryView_GET_BASE(op) (((PyMemoryViewObject *)(op))->view.obj)
+// #endif
+
+@NoException public static native PyObject PyMemoryView_FromObject(PyObject base);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native PyObject PyMemoryView_FromMemory(@Cast("char*") BytePointer mem, @Cast("Py_ssize_t") long size,
+                                               int flags);
+@NoException public static native PyObject PyMemoryView_FromMemory(@Cast("char*") ByteBuffer mem, @Cast("Py_ssize_t") long size,
+                                               int flags);
+@NoException public static native PyObject PyMemoryView_FromMemory(@Cast("char*") byte[] mem, @Cast("Py_ssize_t") long size,
+                                               int flags);
+// #endif
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyMemoryView_FromBuffer(Py_buffer info);
+// #endif
+@NoException public static native PyObject PyMemoryView_GetContiguous(PyObject base,
+                                                  int buffertype,
+                                                  @Cast("char") byte order);
+
+
+/* The structs are declared here so that macros can work, but they shouldn't
+   be considered public. Don't access their fields directly, use the macros
+   and functions instead! */
+// #ifndef Py_LIMITED_API
+public static final int _Py_MANAGED_BUFFER_RELEASED =    0x001;  /* access to exporter blocked */
+public static final int _Py_MANAGED_BUFFER_FREE_FORMAT = 0x002;  /* free format */
+public static class _PyManagedBufferObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyManagedBufferObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyManagedBufferObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyManagedBufferObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyManagedBufferObject position(long position) {
+        return (_PyManagedBufferObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native _PyManagedBufferObject ob_base(PyObject ob_base);
+    public native int flags(); public native _PyManagedBufferObject flags(int flags);          /* state flags */
+    public native @Cast("Py_ssize_t") long exports(); public native _PyManagedBufferObject exports(long exports); /* number of direct memoryview exports */
+    public native @ByRef Py_buffer master(); public native _PyManagedBufferObject master(Py_buffer master); /* snapshot buffer obtained from the original exporter */
+}
+
+
+/* memoryview state flags */
+public static final int _Py_MEMORYVIEW_RELEASED =    0x001;  /* access to master buffer blocked */
+public static final int _Py_MEMORYVIEW_C =           0x002;  /* C-contiguous layout */
+public static final int _Py_MEMORYVIEW_FORTRAN =     0x004;  /* Fortran contiguous layout */
+public static final int _Py_MEMORYVIEW_SCALAR =      0x008;  /* scalar: ndim = 0 */
+public static final int _Py_MEMORYVIEW_PIL =         0x010;  /* PIL-style layout */
+
+public static class PyMemoryViewObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyMemoryViewObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyMemoryViewObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyMemoryViewObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyMemoryViewObject position(long position) {
+        return (PyMemoryViewObject)super.position(position);
+    }
+
+    public native @ByRef PyVarObject ob_base(); public native PyMemoryViewObject ob_base(PyVarObject ob_base);
+    public native _PyManagedBufferObject mbuf(); public native PyMemoryViewObject mbuf(_PyManagedBufferObject mbuf); /* managed buffer */
+    public native @Cast("Py_hash_t") long hash(); public native PyMemoryViewObject hash(long hash);               /* hash value for read-only views */
+    public native int flags(); public native PyMemoryViewObject flags(int flags);                    /* state flags */
+    public native @Cast("Py_ssize_t") long exports(); public native PyMemoryViewObject exports(long exports);           /* number of buffer re-exports */
+    public native @ByRef Py_buffer view(); public native PyMemoryViewObject view(Py_buffer view);               /* private copy of the exporter's view */
+    public native PyObject weakreflist(); public native PyMemoryViewObject weakreflist(PyObject weakreflist);
+    public native @Cast("Py_ssize_t") long ob_array(int i); public native PyMemoryViewObject ob_array(int i, long ob_array);
+    @MemberGetter public native @Cast("Py_ssize_t*") SizeTPointer ob_array();       /* shape, strides, suboffsets */
+}
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_MEMORYOBJECT_H */
+
+
+// Parsed from tupleobject.h
+
+
+/* Tuple object interface */
+
+// #ifndef Py_TUPLEOBJECT_H
+// #define Py_TUPLEOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+/*
+Another generally useful object type is a tuple of object pointers.
+For Python, this is an immutable type.  C code can change the tuple items
+(but not their number), and even use tuples are general-purpose arrays of
+object references, but in general only brand new tuples should be mutated,
+not ones that might already have been exposed to Python code.
+
+*** WARNING *** PyTuple_SetItem does not increment the new item's reference
+count, but does decrement the reference count of the item it replaces,
+if not nil.  It does *decrement* the reference count if it is *not*
+inserted in the tuple.  Similarly, PyTuple_GetItem does not increment the
+returned item's reference count.
+*/
+
+// #ifndef Py_LIMITED_API
+public static class PyTupleObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyTupleObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyTupleObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyTupleObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyTupleObject position(long position) {
+        return (PyTupleObject)super.position(position);
+    }
+
+    public native @ByRef PyVarObject ob_base(); public native PyTupleObject ob_base(PyVarObject ob_base);
+    public native PyObject ob_item(int i); public native PyTupleObject ob_item(int i, PyObject ob_item);
+    @MemberGetter public native @Cast("PyObject**") PointerPointer ob_item();
+
+    /* ob_item contains space for 'ob_size' elements.
+     * Items must normally not be NULL, except during construction when
+     * the tuple is not yet visible outside the function that builds it.
+     */
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyTuple_Type(); public static native void PyTuple_Type(PyTypeObject PyTuple_Type);
+public static native @ByRef PyTypeObject PyTupleIter_Type(); public static native void PyTupleIter_Type(PyTypeObject PyTupleIter_Type);
+
+// #define PyTuple_Check(op)
+//                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_TUPLE_SUBCLASS)
+// #define PyTuple_CheckExact(op) (Py_TYPE(op) == &PyTuple_Type)
+
+@NoException public static native PyObject PyTuple_New(@Cast("Py_ssize_t") long size);
+@NoException public static native @Cast("Py_ssize_t") long PyTuple_Size(PyObject arg0);
+@NoException public static native PyObject PyTuple_GetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyTuple_SetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1, PyObject arg2);
+@NoException public static native PyObject PyTuple_GetSlice(PyObject arg0, @Cast("Py_ssize_t") long arg1, @Cast("Py_ssize_t") long arg2);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyTuple_Resize(@Cast("PyObject**") PointerPointer arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int _PyTuple_Resize(@ByPtrPtr PyObject arg0, @Cast("Py_ssize_t") long arg1);
+// #endif
+@NoException public static native PyObject PyTuple_Pack(@Cast("Py_ssize_t") long arg0);
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyTuple_MaybeUntrack(PyObject arg0);
+// #endif
+
+/* Macro, trading safety for speed */
+// #ifndef Py_LIMITED_API
+// #define PyTuple_GET_ITEM(op, i) (((PyTupleObject *)(op))->ob_item[i])
+// #define PyTuple_GET_SIZE(op)    Py_SIZE(op)
+
+/* Macro, *only* to be used to fill in brand new tuples */
+// #define PyTuple_SET_ITEM(op, i, v) (((PyTupleObject *)(op))->ob_item[i] = v)
+// #endif
+
+@NoException public static native int PyTuple_ClearFreeList();
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyTuple_DebugMallocStats(@Cast("FILE*") Pointer out);
+// #endif /* Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_TUPLEOBJECT_H */
+
+
+// Parsed from listobject.h
+
+
+/* List object interface */
+
+/*
+Another generally useful object type is a list of object pointers.
+This is a mutable type: the list items can be changed, and items can be
+added or removed.  Out-of-range indices or non-list objects are ignored.
+
+*** WARNING *** PyList_SetItem does not increment the new item's reference
+count, but does decrement the reference count of the item it replaces,
+if not nil.  It does *decrement* the reference count if it is *not*
+inserted in the list.  Similarly, PyList_GetItem does not increment the
+returned item's reference count.
+*/
+
+// #ifndef Py_LISTOBJECT_H
+// #define Py_LISTOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+public static class PyListObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyListObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyListObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyListObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyListObject position(long position) {
+        return (PyListObject)super.position(position);
+    }
+
+    public native @ByRef PyVarObject ob_base(); public native PyListObject ob_base(PyVarObject ob_base);
+    /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
+    public native PyObject ob_item(int i); public native PyListObject ob_item(int i, PyObject ob_item);
+    public native @Cast("PyObject**") PointerPointer ob_item(); public native PyListObject ob_item(PointerPointer ob_item);
+
+    /* ob_item contains space for 'allocated' elements.  The number
+     * currently in use is ob_size.
+     * Invariants:
+     *     0 <= ob_size <= allocated
+     *     len(list) == ob_size
+     *     ob_item == NULL implies ob_size == allocated == 0
+     * list.sort() temporarily sets allocated to -1 to detect mutations.
+     *
+     * Items must normally not be NULL, except during construction when
+     * the list is not yet visible outside the function that builds it.
+     */
+    public native @Cast("Py_ssize_t") long allocated(); public native PyListObject allocated(long allocated);
+}
+// #endif
+
+public static native @ByRef PyTypeObject PyList_Type(); public static native void PyList_Type(PyTypeObject PyList_Type);
+public static native @ByRef PyTypeObject PyListIter_Type(); public static native void PyListIter_Type(PyTypeObject PyListIter_Type);
+public static native @ByRef PyTypeObject PyListRevIter_Type(); public static native void PyListRevIter_Type(PyTypeObject PyListRevIter_Type);
+
+
+// #define PyList_Check(op)
+//     PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LIST_SUBCLASS)
+// #define PyList_CheckExact(op) (Py_TYPE(op) == &PyList_Type)
+
+@NoException public static native PyObject PyList_New(@Cast("Py_ssize_t") long size);
+@NoException public static native @Cast("Py_ssize_t") long PyList_Size(PyObject arg0);
+@NoException public static native PyObject PyList_GetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyList_SetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1, PyObject arg2);
+@NoException public static native int PyList_Insert(PyObject arg0, @Cast("Py_ssize_t") long arg1, PyObject arg2);
+@NoException public static native int PyList_Append(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyList_GetSlice(PyObject arg0, @Cast("Py_ssize_t") long arg1, @Cast("Py_ssize_t") long arg2);
+@NoException public static native int PyList_SetSlice(PyObject arg0, @Cast("Py_ssize_t") long arg1, @Cast("Py_ssize_t") long arg2, PyObject arg3);
+@NoException public static native int PyList_Sort(PyObject arg0);
+@NoException public static native int PyList_Reverse(PyObject arg0);
+@NoException public static native PyObject PyList_AsTuple(PyObject arg0);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyList_Extend(PyListObject arg0, PyObject arg1);
+
+@NoException public static native int PyList_ClearFreeList();
+@NoException public static native void _PyList_DebugMallocStats(@Cast("FILE*") Pointer out);
+// #endif
+
+/* Macro, trading safety for speed */
+// #ifndef Py_LIMITED_API
+// #define PyList_GET_ITEM(op, i) (((PyListObject *)(op))->ob_item[i])
+// #define PyList_SET_ITEM(op, i, v) (((PyListObject *)(op))->ob_item[i] = (v))
+// #define PyList_GET_SIZE(op)    Py_SIZE(op)
+// #define _PyList_ITEMS(op)      (((PyListObject *)(op))->ob_item)
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_LISTOBJECT_H */
+
+
+// Parsed from dictobject.h
+
+// #ifndef Py_DICTOBJECT_H
+// #define Py_DICTOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+
+/* Dictionary object type -- mapping from hashable object to object */
+
+/* The distribution includes a separate file, Objects/dictnotes.txt,
+   describing explorations into dictionary design and optimization.
+   It covers typical dictionary use patterns, the parameters for
+   tuning dictionaries, and several ideas for possible optimizations.
+*/
+
+// #ifndef Py_LIMITED_API
+
+@Opaque public static class PyDictKeysObject extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyDictKeysObject() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyDictKeysObject(Pointer p) { super(p); }
+}
+
+/* The ma_values pointer is NULL for a combined table
+ * or points to an array of PyObject* for a split table
+ */
+public static class PyDictObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyDictObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyDictObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyDictObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyDictObject position(long position) {
+        return (PyDictObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyDictObject ob_base(PyObject ob_base);
+
+    /* Number of items in the dictionary */
+    public native @Cast("Py_ssize_t") long ma_used(); public native PyDictObject ma_used(long ma_used);
+
+    /* Dictionary version: globally unique, value change each time
+       the dictionary is modified */
+    public native @Cast("uint64_t") long ma_version_tag(); public native PyDictObject ma_version_tag(long ma_version_tag);
+
+    public native PyDictKeysObject ma_keys(); public native PyDictObject ma_keys(PyDictKeysObject ma_keys);
+
+    /* If ma_values is NULL, the table is "combined": keys and values
+       are stored in ma_keys.
+
+       If ma_values is not NULL, the table is splitted:
+       keys are stored in ma_keys and values are stored in ma_values */
+    public native PyObject ma_values(int i); public native PyDictObject ma_values(int i, PyObject ma_values);
+    public native @Cast("PyObject**") PointerPointer ma_values(); public native PyDictObject ma_values(PointerPointer ma_values);
+}
+
+public static class _PyDictViewObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyDictViewObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyDictViewObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyDictViewObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyDictViewObject position(long position) {
+        return (_PyDictViewObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native _PyDictViewObject ob_base(PyObject ob_base);
+    public native PyDictObject dv_dict(); public native _PyDictViewObject dv_dict(PyDictObject dv_dict);
+}
+
+// #endif /* Py_LIMITED_API */
+
+public static native @ByRef PyTypeObject PyDict_Type(); public static native void PyDict_Type(PyTypeObject PyDict_Type);
+public static native @ByRef PyTypeObject PyDictIterKey_Type(); public static native void PyDictIterKey_Type(PyTypeObject PyDictIterKey_Type);
+public static native @ByRef PyTypeObject PyDictIterValue_Type(); public static native void PyDictIterValue_Type(PyTypeObject PyDictIterValue_Type);
+public static native @ByRef PyTypeObject PyDictIterItem_Type(); public static native void PyDictIterItem_Type(PyTypeObject PyDictIterItem_Type);
+public static native @ByRef PyTypeObject PyDictKeys_Type(); public static native void PyDictKeys_Type(PyTypeObject PyDictKeys_Type);
+public static native @ByRef PyTypeObject PyDictItems_Type(); public static native void PyDictItems_Type(PyTypeObject PyDictItems_Type);
+public static native @ByRef PyTypeObject PyDictValues_Type(); public static native void PyDictValues_Type(PyTypeObject PyDictValues_Type);
+
+// #define PyDict_Check(op)
+//                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_DICT_SUBCLASS)
+// #define PyDict_CheckExact(op) (Py_TYPE(op) == &PyDict_Type)
+// #define PyDictKeys_Check(op) PyObject_TypeCheck(op, &PyDictKeys_Type)
+// #define PyDictItems_Check(op) PyObject_TypeCheck(op, &PyDictItems_Type)
+// #define PyDictValues_Check(op) PyObject_TypeCheck(op, &PyDictValues_Type)
+/* This excludes Values, since they are not sets. */
+// # define PyDictViewSet_Check(op)
+//     (PyDictKeys_Check(op) || PyDictItems_Check(op))
+
+
+@NoException public static native PyObject PyDict_New();
+@NoException public static native PyObject PyDict_GetItem(PyObject mp, PyObject key);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyDict_GetItem_KnownHash(PyObject mp, PyObject key,
+                                       @Cast("Py_hash_t") long hash);
+// #endif
+@NoException public static native PyObject PyDict_GetItemWithError(PyObject mp, PyObject key);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyDict_GetItemIdWithError(PyObject dp,
+                                                  _Py_Identifier key);
+@NoException public static native PyObject PyDict_SetDefault(
+    PyObject mp, PyObject key, PyObject defaultobj);
+// #endif
+@NoException public static native int PyDict_SetItem(PyObject mp, PyObject key, PyObject item);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyDict_SetItem_KnownHash(PyObject mp, PyObject key,
+                                          PyObject item, @Cast("Py_hash_t") long hash);
+// #endif
+@NoException public static native int PyDict_DelItem(PyObject mp, PyObject key);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyDict_DelItem_KnownHash(PyObject mp, PyObject key,
+                                          @Cast("Py_hash_t") long hash);
+public static class Predicate_PyObject extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Predicate_PyObject(Pointer p) { super(p); }
+    protected Predicate_PyObject() { allocate(); }
+    private native void allocate();
+    public native int call(PyObject value);
+}
+@NoException public static native int _PyDict_DelItemIf(PyObject mp, PyObject key,
+                                  Predicate_PyObject predicate);
+// #endif
+@NoException public static native void PyDict_Clear(PyObject mp);
+@NoException public static native int PyDict_Next(
+    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @Cast("PyObject**") PointerPointer key, @Cast("PyObject**") PointerPointer value);
+@NoException public static native int PyDict_Next(
+    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @ByPtrPtr PyObject key, @ByPtrPtr PyObject value);
+// #ifndef Py_LIMITED_API
+
+@NoException public static native PyObject PyObject_GenericGetDict(PyObject arg0, Pointer arg1);
+@NoException public static native int _PyDict_Next(
+    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @Cast("PyObject**") PointerPointer key, @Cast("PyObject**") PointerPointer value, @Cast("Py_hash_t*") SizeTPointer hash);
+@NoException public static native int _PyDict_Next(
+    PyObject mp, @Cast("Py_ssize_t*") SizeTPointer pos, @ByPtrPtr PyObject key, @ByPtrPtr PyObject value, @Cast("Py_hash_t*") SizeTPointer hash);
+
+// #endif
+@NoException public static native PyObject PyDict_Keys(PyObject mp);
+@NoException public static native PyObject PyDict_Values(PyObject mp);
+@NoException public static native PyObject PyDict_Items(PyObject mp);
+@NoException public static native @Cast("Py_ssize_t") long PyDict_Size(PyObject mp);
+@NoException public static native PyObject PyDict_Copy(PyObject mp);
+@NoException public static native int PyDict_Contains(PyObject mp, PyObject key);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyDict_Contains(PyObject mp, PyObject key, @Cast("Py_hash_t") long hash);
+@NoException public static native PyObject _PyDict_NewPresized(@Cast("Py_ssize_t") long minused);
+@NoException public static native void _PyDict_MaybeUntrack(PyObject mp);
+@NoException public static native int _PyDict_HasOnlyStringKeys(PyObject mp);
+
+
+@NoException public static native PyObject _PyDict_Pop(PyObject arg0, PyObject arg1, PyObject arg2);
+
+
+// #define _PyDict_HasSplitTable(d) ((d)->ma_values != NULL)
+
+@NoException public static native int PyDict_ClearFreeList();
+// #endif
+
+/* PyDict_Update(mp, other) is equivalent to PyDict_Merge(mp, other, 1). */
+@NoException public static native int PyDict_Update(PyObject mp, PyObject other);
+
+/* PyDict_Merge updates/merges from a mapping object (an object that
+   supports PyMapping_Keys() and PyObject_GetItem()).  If override is true,
+   the last occurrence of a key wins, else the first.  The Python
+   dict.update(other) is equivalent to PyDict_Merge(dict, other, 1).
+*/
+@NoException public static native int PyDict_Merge(PyObject mp,
+                                   PyObject other,
+                                   int override);
+
+// #ifndef Py_LIMITED_API
+/* Like PyDict_Merge, but override can be 0, 1 or 2.  If override is 0,
+   the first occurrence of a key wins, if override is 1, the last occurrence
+   of a key wins, if override is 2, a KeyError with conflicting key as
+   argument is raised.
+*/
+@NoException public static native int _PyDict_MergeEx(PyObject mp, PyObject other, int override);
+@NoException public static native PyObject _PyDictView_Intersect(PyObject self, PyObject other);
+// #endif
+
+/* PyDict_MergeFromSeq2 updates/merges from an iterable object producing
+   iterable objects of length 2.  If override is true, the last occurrence
+   of a key wins, else the first.  The Python dict constructor dict(seq2)
+   is equivalent to dict={}; PyDict_MergeFromSeq(dict, seq2, 1).
+*/
+@NoException public static native int PyDict_MergeFromSeq2(PyObject d,
+                                           PyObject seq2,
+                                           int override);
+
+@NoException public static native PyObject PyDict_GetItemString(PyObject dp, @Cast("const char*") BytePointer key);
+@NoException public static native PyObject PyDict_GetItemString(PyObject dp, String key);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyDict_GetItemId(PyObject dp, _Py_Identifier key);
+// #endif /* !Py_LIMITED_API */
+@NoException public static native int PyDict_SetItemString(PyObject dp, @Cast("const char*") BytePointer key, PyObject item);
+@NoException public static native int PyDict_SetItemString(PyObject dp, String key, PyObject item);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyDict_SetItemId(PyObject dp, _Py_Identifier key, PyObject item);
+// #endif /* !Py_LIMITED_API */
+@NoException public static native int PyDict_DelItemString(PyObject dp, @Cast("const char*") BytePointer key);
+@NoException public static native int PyDict_DelItemString(PyObject dp, String key);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyDict_DelItemId(PyObject mp, _Py_Identifier key);
+@NoException public static native void _PyDict_DebugMallocStats(@Cast("FILE*") Pointer out);
+
+
+
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_DICTOBJECT_H */
+
+
+// Parsed from structmember.h
+
+// #ifndef Py_STRUCTMEMBER_H
+// #define Py_STRUCTMEMBER_H
+// #ifdef __cplusplus
+// #endif
+
+
+/* Interface to map C struct members to Python object attributes */
+
+// #include <stddef.h> /* For offsetof */
+
+/* An array of PyMemberDef structures defines the name, type and offset
+   of selected members of a C structure.  These can be read by
+   PyMember_GetOne() and set by PyMember_SetOne() (except if their READONLY
+   flag is set).  The array must be terminated with an entry whose name
+   pointer is NULL. */
+
+public static class PyMemberDef extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyMemberDef() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyMemberDef(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyMemberDef(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyMemberDef position(long position) {
+        return (PyMemberDef)super.position(position);
+    }
+
+    public native @Cast("char*") BytePointer name(); public native PyMemberDef name(BytePointer name);
+    public native int type(); public native PyMemberDef type(int type);
+    public native @Cast("Py_ssize_t") long offset(); public native PyMemberDef offset(long offset);
+    public native int flags(); public native PyMemberDef flags(int flags);
+    public native @Cast("char*") BytePointer doc(); public native PyMemberDef doc(BytePointer doc);
+}
+
+/* Types */
+public static final int T_SHORT =     0;
+public static final int T_INT =       1;
+public static final int T_LONG =      2;
+public static final int T_FLOAT =     3;
+public static final int T_DOUBLE =    4;
+public static final int T_STRING =    5;
+public static final int T_OBJECT =    6;
+/* XXX the ordering here is weird for binary compatibility */
+public static final int T_CHAR =      7;   /* 1-character string */
+public static final int T_BYTE =      8;   /* 8-bit signed int */
+/* unsigned variants: */
+public static final int T_UBYTE =     9;
+public static final int T_USHORT =    10;
+public static final int T_UINT =      11;
+public static final int T_ULONG =     12;
+
+/* Added by Jack: strings contained in the structure */
+public static final int T_STRING_INPLACE =    13;
+
+/* Added by Lillo: bools contained in the structure (assumed char) */
+public static final int T_BOOL =      14;
+
+public static final int T_OBJECT_EX = 16;  /* Like T_OBJECT, but raises AttributeError
+                           when the value is NULL, instead of
+                           converting to None. */
+public static final int T_LONGLONG =      17;
+public static final int T_ULONGLONG =     18;
+
+public static final int T_PYSSIZET =      19;      /* Py_ssize_t */
+public static final int T_NONE =          20;      /* Value is always None */
+
+
+/* Flags */
+public static final int READONLY =            1;
+public static final int READ_RESTRICTED =     2;
+public static final int PY_WRITE_RESTRICTED = 4;
+public static final int RESTRICTED =          (READ_RESTRICTED | PY_WRITE_RESTRICTED);
+
+
+/* Current API, use this */
+@NoException public static native PyObject PyMember_GetOne(@Cast("const char*") BytePointer arg0, PyMemberDef arg1);
+@NoException public static native PyObject PyMember_GetOne(String arg0, PyMemberDef arg1);
+@NoException public static native int PyMember_SetOne(@Cast("char*") BytePointer arg0, PyMemberDef arg1, PyObject arg2);
+@NoException public static native int PyMember_SetOne(@Cast("char*") ByteBuffer arg0, PyMemberDef arg1, PyObject arg2);
+@NoException public static native int PyMember_SetOne(@Cast("char*") byte[] arg0, PyMemberDef arg1, PyObject arg2);
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_STRUCTMEMBER_H */
+
+
+// Parsed from odictobject.h
+
+// #ifndef Py_ODICTOBJECT_H
+// #define Py_ODICTOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+
+/* OrderedDict */
+/* This API is optional and mostly redundant. */
+
+// #ifndef Py_LIMITED_API
+
+@Opaque public static class PyODictObject extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyODictObject() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyODictObject(Pointer p) { super(p); }
+}
+
+public static native @ByRef PyTypeObject PyODict_Type(); public static native void PyODict_Type(PyTypeObject PyODict_Type);
+public static native @ByRef PyTypeObject PyODictIter_Type(); public static native void PyODictIter_Type(PyTypeObject PyODictIter_Type);
+public static native @ByRef PyTypeObject PyODictKeys_Type(); public static native void PyODictKeys_Type(PyTypeObject PyODictKeys_Type);
+public static native @ByRef PyTypeObject PyODictItems_Type(); public static native void PyODictItems_Type(PyTypeObject PyODictItems_Type);
+public static native @ByRef PyTypeObject PyODictValues_Type(); public static native void PyODictValues_Type(PyTypeObject PyODictValues_Type);
+
+// #define PyODict_Check(op) PyObject_TypeCheck(op, &PyODict_Type)
+// #define PyODict_CheckExact(op) (Py_TYPE(op) == &PyODict_Type)
+// #define PyODict_SIZE(op) ((PyDictObject *)op)->ma_used
+
+@NoException public static native PyObject PyODict_New();
+@NoException public static native int PyODict_SetItem(PyObject od, PyObject key, PyObject item);
+@NoException public static native int PyODict_DelItem(PyObject od, PyObject key);
+
+/* wrappers around PyDict* functions */
+// #define PyODict_GetItem(od, key) PyDict_GetItem((PyObject *)od, key)
+// #define PyODict_GetItemWithError(od, key)
+//     PyDict_GetItemWithError((PyObject *)od, key)
+// #define PyODict_Contains(od, key) PyDict_Contains((PyObject *)od, key)
+// #define PyODict_Size(od) PyDict_Size((PyObject *)od)
+// #define PyODict_GetItemString(od, key)
+//     PyDict_GetItemString((PyObject *)od, key)
+
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_ODICTOBJECT_H */
+
+
+// Parsed from enumobject.h
+
+// #ifndef Py_ENUMOBJECT_H
+// #define Py_ENUMOBJECT_H
+
+/* Enumerate Object */
+
+// #ifdef __cplusplus
+// #endif
+
+public static native @ByRef PyTypeObject PyEnum_Type(); public static native void PyEnum_Type(PyTypeObject PyEnum_Type);
+public static native @ByRef PyTypeObject PyReversed_Type(); public static native void PyReversed_Type(PyTypeObject PyReversed_Type);
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif /* !Py_ENUMOBJECT_H */
+
+
+// Parsed from setobject.h
+
+/* Set object interface */
+
+// #ifndef Py_SETOBJECT_H
+// #define Py_SETOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+
+/* There are three kinds of entries in the table:
+
+1. Unused:  key == NULL and hash == 0
+2. Dummy:   key == dummy and hash == -1
+3. Active:  key != NULL and key != dummy and hash != -1
+
+The hash field of Unused slots is always zero.
+
+The hash field of Dummy slots are set to -1
+meaning that dummy entries can be detected by
+either entry->key==dummy or by entry->hash==-1.
+*/
+
+public static final int PySet_MINSIZE = 8;
+
+public static class setentry extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public setentry() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public setentry(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public setentry(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public setentry position(long position) {
+        return (setentry)super.position(position);
+    }
+
+    public native PyObject key(); public native setentry key(PyObject key);
+    public native @Cast("Py_hash_t") long hash(); public native setentry hash(long hash);             /* Cached hash code of the key */
+}
+
+/* The SetObject data structure is shared by set and frozenset objects.
+
+Invariant for sets:
+ - hash is -1
+
+Invariants for frozensets:
+ - data is immutable.
+ - hash is the hash of the frozenset or -1 if not computed yet.
+
+*/
+
+public static class PySetObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PySetObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PySetObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PySetObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PySetObject position(long position) {
+        return (PySetObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PySetObject ob_base(PyObject ob_base);
+
+    public native @Cast("Py_ssize_t") @Name("fill") long _fill(); public native PySetObject _fill(long _fill);            /* Number active and dummy entries*/
+    public native @Cast("Py_ssize_t") long used(); public native PySetObject used(long used);            /* Number active entries */
+
+    /* The table contains mask + 1 slots, and that's a power of 2.
+     * We store the mask instead of the size because the mask is more
+     * frequently needed.
+     */
+    public native @Cast("Py_ssize_t") long mask(); public native PySetObject mask(long mask);
+
+    /* The table points to a fixed-size smalltable for small tables
+     * or to additional malloc'ed memory for bigger tables.
+     * The table pointer is never NULL which saves us from repeated
+     * runtime null-tests.
+     */
+    public native setentry table(); public native PySetObject table(setentry table);
+    public native @Cast("Py_hash_t") long hash(); public native PySetObject hash(long hash);             /* Only used by frozenset objects */
+    public native @Cast("Py_ssize_t") long finger(); public native PySetObject finger(long finger);          /* Search finger for pop() */
+
+    public native @ByRef setentry smalltable(int i); public native PySetObject smalltable(int i, setentry smalltable);
+    @MemberGetter public native setentry smalltable();
+    public native PyObject weakreflist(); public native PySetObject weakreflist(PyObject weakreflist);      /* List of weak references */
+}
+
+// #define PySet_GET_SIZE(so) (((PySetObject *)(so))->used)
+
+public static native PyObject _PySet_Dummy(); public static native void _PySet_Dummy(PyObject _PySet_Dummy);
+
+@NoException public static native int _PySet_NextEntry(PyObject set, @Cast("Py_ssize_t*") SizeTPointer pos, @Cast("PyObject**") PointerPointer key, @Cast("Py_hash_t*") SizeTPointer hash);
+@NoException public static native int _PySet_NextEntry(PyObject set, @Cast("Py_ssize_t*") SizeTPointer pos, @ByPtrPtr PyObject key, @Cast("Py_hash_t*") SizeTPointer hash);
+@NoException public static native int _PySet_Update(PyObject set, PyObject iterable);
+@NoException public static native int PySet_ClearFreeList();
+
+// #endif /* Section excluded by Py_LIMITED_API */
+
+public static native @ByRef PyTypeObject PySet_Type(); public static native void PySet_Type(PyTypeObject PySet_Type);
+public static native @ByRef PyTypeObject PyFrozenSet_Type(); public static native void PyFrozenSet_Type(PyTypeObject PyFrozenSet_Type);
+public static native @ByRef PyTypeObject PySetIter_Type(); public static native void PySetIter_Type(PyTypeObject PySetIter_Type);
+
+@NoException public static native PyObject PySet_New(PyObject arg0);
+@NoException public static native PyObject PyFrozenSet_New(PyObject arg0);
+
+@NoException public static native int PySet_Add(PyObject set, PyObject key);
+@NoException public static native int PySet_Clear(PyObject set);
+@NoException public static native int PySet_Contains(PyObject anyset, PyObject key);
+@NoException public static native int PySet_Discard(PyObject set, PyObject key);
+@NoException public static native PyObject PySet_Pop(PyObject set);
+@NoException public static native @Cast("Py_ssize_t") long PySet_Size(PyObject anyset);
+
+// #define PyFrozenSet_CheckExact(ob) (Py_TYPE(ob) == &PyFrozenSet_Type)
+// #define PyAnySet_CheckExact(ob)
+//     (Py_TYPE(ob) == &PySet_Type || Py_TYPE(ob) == &PyFrozenSet_Type)
+// #define PyAnySet_Check(ob)
+//     (Py_TYPE(ob) == &PySet_Type || Py_TYPE(ob) == &PyFrozenSet_Type ||
+//       PyType_IsSubtype(Py_TYPE(ob), &PySet_Type) ||
+//       PyType_IsSubtype(Py_TYPE(ob), &PyFrozenSet_Type))
+// #define PySet_Check(ob)
+//     (Py_TYPE(ob) == &PySet_Type ||
+//     PyType_IsSubtype(Py_TYPE(ob), &PySet_Type))
+// #define   PyFrozenSet_Check(ob)
+//     (Py_TYPE(ob) == &PyFrozenSet_Type ||
+//       PyType_IsSubtype(Py_TYPE(ob), &PyFrozenSet_Type))
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_SETOBJECT_H */
+
+
 // Parsed from methodobject.h
 
 
@@ -3442,6 +9231,2101 @@ public static class PyModuleDef extends Pointer {
 // #endif /* !Py_MODULEOBJECT_H */
 
 
+// Parsed from funcobject.h
+
+
+/* Function object interface */
+// #ifndef Py_LIMITED_API
+// #ifndef Py_FUNCOBJECT_H
+// #define Py_FUNCOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+/* Function objects and code objects should not be confused with each other:
+ *
+ * Function objects are created by the execution of the 'def' statement.
+ * They reference a code object in their __code__ attribute, which is a
+ * purely syntactic object, i.e. nothing more than a compiled version of some
+ * source code lines.  There is one code object per source code "fragment",
+ * but each code object can be referenced by zero or many function objects
+ * depending only on how many times the 'def' statement in the source was
+ * executed so far.
+ */
+
+public static class PyFunctionObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyFunctionObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyFunctionObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyFunctionObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyFunctionObject position(long position) {
+        return (PyFunctionObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyFunctionObject ob_base(PyObject ob_base);
+    public native PyObject func_code(); public native PyFunctionObject func_code(PyObject func_code);	/* A code object, the __code__ attribute */
+    public native PyObject func_globals(); public native PyFunctionObject func_globals(PyObject func_globals);	/* A dictionary (other mappings won't do) */
+    public native PyObject func_defaults(); public native PyFunctionObject func_defaults(PyObject func_defaults);	/* NULL or a tuple */
+    public native PyObject func_kwdefaults(); public native PyFunctionObject func_kwdefaults(PyObject func_kwdefaults);	/* NULL or a dict */
+    public native PyObject func_closure(); public native PyFunctionObject func_closure(PyObject func_closure);	/* NULL or a tuple of cell objects */
+    public native PyObject func_doc(); public native PyFunctionObject func_doc(PyObject func_doc);		/* The __doc__ attribute, can be anything */
+    public native PyObject func_name(); public native PyFunctionObject func_name(PyObject func_name);	/* The __name__ attribute, a string object */
+    public native PyObject func_dict(); public native PyFunctionObject func_dict(PyObject func_dict);	/* The __dict__ attribute, a dict or NULL */
+    public native PyObject func_weakreflist(); public native PyFunctionObject func_weakreflist(PyObject func_weakreflist);	/* List of weak references */
+    public native PyObject func_module(); public native PyFunctionObject func_module(PyObject func_module);	/* The __module__ attribute, can be anything */
+    public native PyObject func_annotations(); public native PyFunctionObject func_annotations(PyObject func_annotations);	/* Annotations, a dict or NULL */
+    public native PyObject func_qualname(); public native PyFunctionObject func_qualname(PyObject func_qualname);    /* The qualified name */
+
+    /* Invariant:
+     *     func_closure contains the bindings for func_code->co_freevars, so
+     *     PyTuple_Size(func_closure) == PyCode_GetNumFree(func_code)
+     *     (func_closure may be NULL if PyCode_GetNumFree(func_code) == 0).
+     */
+}
+
+public static native @ByRef PyTypeObject PyFunction_Type(); public static native void PyFunction_Type(PyTypeObject PyFunction_Type);
+
+// #define PyFunction_Check(op) (Py_TYPE(op) == &PyFunction_Type)
+
+@NoException public static native PyObject PyFunction_New(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyFunction_NewWithQualName(PyObject arg0, PyObject arg1, PyObject arg2);
+@NoException public static native PyObject PyFunction_GetCode(PyObject arg0);
+@NoException public static native PyObject PyFunction_GetGlobals(PyObject arg0);
+@NoException public static native PyObject PyFunction_GetModule(PyObject arg0);
+@NoException public static native PyObject PyFunction_GetDefaults(PyObject arg0);
+@NoException public static native int PyFunction_SetDefaults(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyFunction_GetKwDefaults(PyObject arg0);
+@NoException public static native int PyFunction_SetKwDefaults(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyFunction_GetClosure(PyObject arg0);
+@NoException public static native int PyFunction_SetClosure(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyFunction_GetAnnotations(PyObject arg0);
+@NoException public static native int PyFunction_SetAnnotations(PyObject arg0, PyObject arg1);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyFunction_FastCallDict(
+    PyObject func,
+    @Cast("PyObject**") PointerPointer args,
+    @Cast("Py_ssize_t") long nargs,
+    PyObject kwargs);
+@NoException public static native PyObject _PyFunction_FastCallDict(
+    PyObject func,
+    @ByPtrPtr PyObject args,
+    @Cast("Py_ssize_t") long nargs,
+    PyObject kwargs);
+
+@NoException public static native PyObject _PyFunction_FastCallKeywords(
+    PyObject func,
+    @Cast("PyObject**") PointerPointer stack,
+    @Cast("Py_ssize_t") long nargs,
+    PyObject kwnames);
+@NoException public static native PyObject _PyFunction_FastCallKeywords(
+    PyObject func,
+    @ByPtrPtr PyObject stack,
+    @Cast("Py_ssize_t") long nargs,
+    PyObject kwnames);
+// #endif
+
+/* Macros for direct access to these values. Type checks are *not*
+   done, so use with care. */
+// #define PyFunction_GET_CODE(func)
+//         (((PyFunctionObject *)func) -> func_code)
+// #define PyFunction_GET_GLOBALS(func)
+// 	(((PyFunctionObject *)func) -> func_globals)
+// #define PyFunction_GET_MODULE(func)
+// 	(((PyFunctionObject *)func) -> func_module)
+// #define PyFunction_GET_DEFAULTS(func)
+// 	(((PyFunctionObject *)func) -> func_defaults)
+// #define PyFunction_GET_KW_DEFAULTS(func)
+// 	(((PyFunctionObject *)func) -> func_kwdefaults)
+// #define PyFunction_GET_CLOSURE(func)
+// 	(((PyFunctionObject *)func) -> func_closure)
+// #define PyFunction_GET_ANNOTATIONS(func)
+// 	(((PyFunctionObject *)func) -> func_annotations)
+
+/* The classmethod and staticmethod types lives here, too */
+public static native @ByRef PyTypeObject PyClassMethod_Type(); public static native void PyClassMethod_Type(PyTypeObject PyClassMethod_Type);
+public static native @ByRef PyTypeObject PyStaticMethod_Type(); public static native void PyStaticMethod_Type(PyTypeObject PyStaticMethod_Type);
+
+@NoException public static native PyObject PyClassMethod_New(PyObject arg0);
+@NoException public static native PyObject PyStaticMethod_New(PyObject arg0);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_FUNCOBJECT_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from classobject.h
+
+/* Former class object interface -- now only bound methods are here  */
+
+/* Revealing some structures (not for general use) */
+
+// #ifndef Py_LIMITED_API
+// #ifndef Py_CLASSOBJECT_H
+// #define Py_CLASSOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+public static class PyMethodObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyMethodObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyMethodObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyMethodObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyMethodObject position(long position) {
+        return (PyMethodObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyMethodObject ob_base(PyObject ob_base);
+    public native PyObject im_func(); public native PyMethodObject im_func(PyObject im_func);   /* The callable object implementing the method */
+    public native PyObject im_self(); public native PyMethodObject im_self(PyObject im_self);   /* The instance it is bound to */
+    public native PyObject im_weakreflist(); public native PyMethodObject im_weakreflist(PyObject im_weakreflist); /* List of weak references */
+}
+
+public static native @ByRef PyTypeObject PyMethod_Type(); public static native void PyMethod_Type(PyTypeObject PyMethod_Type);
+
+// #define PyMethod_Check(op) ((op)->ob_type == &PyMethod_Type)
+
+@NoException public static native PyObject PyMethod_New(PyObject arg0, PyObject arg1);
+
+@NoException public static native PyObject PyMethod_Function(PyObject arg0);
+@NoException public static native PyObject PyMethod_Self(PyObject arg0);
+
+/* Macros for direct access to these values. Type checks are *not*
+   done, so use with care. */
+// #define PyMethod_GET_FUNCTION(meth)
+//         (((PyMethodObject *)meth) -> im_func)
+// #define PyMethod_GET_SELF(meth)
+// 	(((PyMethodObject *)meth) -> im_self)
+
+@NoException public static native int PyMethod_ClearFreeList();
+
+public static class PyInstanceMethodObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyInstanceMethodObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyInstanceMethodObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyInstanceMethodObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyInstanceMethodObject position(long position) {
+        return (PyInstanceMethodObject)super.position(position);
+    }
+
+	public native @ByRef PyObject ob_base(); public native PyInstanceMethodObject ob_base(PyObject ob_base);
+	public native PyObject func(); public native PyInstanceMethodObject func(PyObject func);
+}
+
+public static native @ByRef PyTypeObject PyInstanceMethod_Type(); public static native void PyInstanceMethod_Type(PyTypeObject PyInstanceMethod_Type);
+
+// #define PyInstanceMethod_Check(op) ((op)->ob_type == &PyInstanceMethod_Type)
+
+@NoException public static native PyObject PyInstanceMethod_New(PyObject arg0);
+@NoException public static native PyObject PyInstanceMethod_Function(PyObject arg0);
+
+/* Macros for direct access to these values. Type checks are *not*
+   done, so use with care. */
+// #define PyInstanceMethod_GET_FUNCTION(meth)
+//         (((PyInstanceMethodObject *)meth) -> func)
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_CLASSOBJECT_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from fileobject.h
+
+/* File object interface (what's left of it -- see io.py) */
+
+// #ifndef Py_FILEOBJECT_H
+// #define Py_FILEOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+public static final String PY_STDIOTEXTMODE = "b";
+
+@NoException public static native PyObject PyFile_FromFd(int arg0, @Cast("const char*") BytePointer arg1, @Cast("const char*") BytePointer arg2, int arg3,
+                                     @Cast("const char*") BytePointer arg4, @Cast("const char*") BytePointer arg5,
+                                     @Cast("const char*") BytePointer arg6, int arg7);
+@NoException public static native PyObject PyFile_FromFd(int arg0, String arg1, String arg2, int arg3,
+                                     String arg4, String arg5,
+                                     String arg6, int arg7);
+@NoException public static native PyObject PyFile_GetLine(PyObject arg0, int arg1);
+@NoException public static native int PyFile_WriteObject(PyObject arg0, PyObject arg1, int arg2);
+@NoException public static native int PyFile_WriteString(@Cast("const char*") BytePointer arg0, PyObject arg1);
+@NoException public static native int PyFile_WriteString(String arg0, PyObject arg1);
+@NoException public static native int PyObject_AsFileDescriptor(PyObject arg0);
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("char*") BytePointer Py_UniversalNewlineFgets(@Cast("char*") BytePointer arg0, int arg1, @Cast("FILE*") Pointer arg2, PyObject arg3);
+@NoException public static native @Cast("char*") ByteBuffer Py_UniversalNewlineFgets(@Cast("char*") ByteBuffer arg0, int arg1, @Cast("FILE*") Pointer arg2, PyObject arg3);
+@NoException public static native @Cast("char*") byte[] Py_UniversalNewlineFgets(@Cast("char*") byte[] arg0, int arg1, @Cast("FILE*") Pointer arg2, PyObject arg3);
+// #endif
+
+/* The default encoding used by the platform file system APIs
+   If non-NULL, this is different than the default encoding for strings
+*/
+@MemberGetter public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncoding();
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+@MemberGetter public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncodeErrors();
+// #endif
+public static native int Py_HasFileSystemDefaultEncoding(); public static native void Py_HasFileSystemDefaultEncoding(int Py_HasFileSystemDefaultEncoding);
+
+/* Internal API
+
+   The std printer acts as a preliminary sys.stderr until the new io
+   infrastructure is in place. */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyFile_NewStdPrinter(int arg0);
+public static native @ByRef PyTypeObject PyStdPrinter_Type(); public static native void PyStdPrinter_Type(PyTypeObject PyStdPrinter_Type);
+// #endif /* Py_LIMITED_API */
+
+/* A routine to check if a file descriptor can be select()-ed. */
+// #ifdef HAVE_SELECT
+//  #define _PyIsSelectable_fd(FD) ((unsigned int)(FD) < (unsigned int)FD_SETSIZE)
+// #else
+//  #define _PyIsSelectable_fd(FD) (1)
+// #endif /* HAVE_SELECT */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_FILEOBJECT_H */
+
+
+// Parsed from pycapsule.h
+
+
+/* Capsule objects let you wrap a C "void *" pointer in a Python
+   object.  They're a way of passing data through the Python interpreter
+   without creating your own custom type.
+
+   Capsules are used for communication between extension modules.
+   They provide a way for an extension module to export a C interface
+   to other extension modules, so that extension modules can use the
+   Python import mechanism to link to one another.
+
+   For more information, please see "c-api/capsule.html" in the
+   documentation.
+*/
+
+// #ifndef Py_CAPSULE_H
+// #define Py_CAPSULE_H
+// #ifdef __cplusplus
+// #endif
+
+public static native @ByRef PyTypeObject PyCapsule_Type(); public static native void PyCapsule_Type(PyTypeObject PyCapsule_Type);
+
+public static class PyCapsule_Destructor extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    PyCapsule_Destructor(Pointer p) { super(p); }
+    protected PyCapsule_Destructor() { allocate(); }
+    private native void allocate();
+    public native void call(PyObject arg0);
+}
+
+// #define PyCapsule_CheckExact(op) (Py_TYPE(op) == &PyCapsule_Type)
+
+
+@NoException public static native PyObject PyCapsule_New(
+    Pointer pointer,
+    @Cast("const char*") BytePointer name,
+    PyCapsule_Destructor destructor);
+@NoException public static native PyObject PyCapsule_New(
+    Pointer pointer,
+    String name,
+    PyCapsule_Destructor destructor);
+
+@NoException public static native Pointer PyCapsule_GetPointer(PyObject capsule, @Cast("const char*") BytePointer name);
+@NoException public static native Pointer PyCapsule_GetPointer(PyObject capsule, String name);
+
+@NoException public static native PyCapsule_Destructor PyCapsule_GetDestructor(PyObject capsule);
+
+@NoException public static native @Cast("const char*") BytePointer PyCapsule_GetName(PyObject capsule);
+
+@NoException public static native Pointer PyCapsule_GetContext(PyObject capsule);
+
+@NoException public static native int PyCapsule_IsValid(PyObject capsule, @Cast("const char*") BytePointer name);
+@NoException public static native int PyCapsule_IsValid(PyObject capsule, String name);
+
+@NoException public static native int PyCapsule_SetPointer(PyObject capsule, Pointer pointer);
+
+@NoException public static native int PyCapsule_SetDestructor(PyObject capsule, PyCapsule_Destructor destructor);
+
+@NoException public static native int PyCapsule_SetName(PyObject capsule, @Cast("const char*") BytePointer name);
+@NoException public static native int PyCapsule_SetName(PyObject capsule, String name);
+
+@NoException public static native int PyCapsule_SetContext(PyObject capsule, Pointer context);
+
+@NoException public static native Pointer PyCapsule_Import(
+    @Cast("const char*") BytePointer name,
+    int no_block);
+@NoException public static native Pointer PyCapsule_Import(
+    String name,
+    int no_block);
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_CAPSULE_H */
+
+
+// Parsed from traceback.h
+
+
+// #ifndef Py_TRACEBACK_H
+// #define Py_TRACEBACK_H
+// #ifdef __cplusplus
+// #endif
+
+// #include "pystate.h"
+
+@Opaque public static class _frame extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public _frame() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _frame(Pointer p) { super(p); }
+}
+
+/* Traceback interface */
+// #ifndef Py_LIMITED_API
+public static class PyTracebackObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyTracebackObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyTracebackObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyTracebackObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyTracebackObject position(long position) {
+        return (PyTracebackObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyTracebackObject ob_base(PyObject ob_base);
+    public native @Cast("_traceback*") PyTracebackObject tb_next(); public native PyTracebackObject tb_next(PyTracebackObject tb_next);
+    public native _frame tb_frame(); public native PyTracebackObject tb_frame(_frame tb_frame);
+    public native int tb_lasti(); public native PyTracebackObject tb_lasti(int tb_lasti);
+    public native int tb_lineno(); public native PyTracebackObject tb_lineno(int tb_lineno);
+}
+// #endif
+
+@NoException public static native int PyTraceBack_Here(_frame arg0);
+@NoException public static native int PyTraceBack_Print(PyObject arg0, PyObject arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native int _Py_DisplaySourceLine(PyObject arg0, PyObject arg1, int arg2, int arg3);
+@NoException public static native void _PyTraceback_Add(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1, int arg2);
+@NoException public static native void _PyTraceback_Add(String arg0, String arg1, int arg2);
+// #endif
+
+/* Reveal traceback type so we can typecheck traceback objects */
+public static native @ByRef PyTypeObject PyTraceBack_Type(); public static native void PyTraceBack_Type(PyTypeObject PyTraceBack_Type);
+// #define PyTraceBack_Check(v) (Py_TYPE(v) == &PyTraceBack_Type)
+
+// #ifndef Py_LIMITED_API
+/* Write the Python traceback into the file 'fd'. For example:
+
+       Traceback (most recent call first):
+         File "xxx", line xxx in <xxx>
+         File "xxx", line xxx in <xxx>
+         ...
+         File "xxx", line xxx in <xxx>
+
+   This function is written for debug purpose only, to dump the traceback in
+   the worst case: after a segmentation fault, at fatal error, etc. That's why,
+   it is very limited. Strings are truncated to 100 characters and encoded to
+   ASCII with backslashreplace. It doesn't write the source code, only the
+   function name, filename and line number of each frame. Write only the first
+   100 frames: if the traceback is truncated, write the line " ...".
+
+   This function is signal safe. */
+
+@NoException public static native void _Py_DumpTraceback(
+    int fd,
+    PyThreadState tstate);
+
+/* Write the traceback of all threads into the file 'fd'. current_thread can be
+   NULL.
+
+   Return NULL on success, or an error message on error.
+
+   This function is written for debug purpose only. It calls
+   _Py_DumpTraceback() for each thread, and so has the same limitations. It
+   only write the traceback of the first 100 threads: write "..." if there are
+   more threads.
+
+   If current_tstate is NULL, the function tries to get the Python thread state
+   of the current thread. It is not an error if the function is unable to get
+   the current Python thread state.
+
+   If interp is NULL, the function tries to get the interpreter state from
+   the current Python thread state, or from
+   _PyGILState_GetInterpreterStateUnsafe() in last resort.
+
+   It is better to pass NULL to interp and current_tstate, the function tries
+   different options to retrieve these informations.
+
+   This function is signal safe. */
+
+@NoException public static native @Cast("const char*") BytePointer _Py_DumpTracebackThreads(
+    int fd,
+    PyInterpreterState interp,
+    PyThreadState current_tstate);
+// #endif /* !Py_LIMITED_API */
+
+// #ifndef Py_LIMITED_API
+
+/* Write a Unicode object into the file descriptor fd. Encode the string to
+   ASCII using the backslashreplace error handler.
+
+   Do nothing if text is not a Unicode object. The function accepts Unicode
+   string which is not ready (PyUnicode_WCHAR_KIND).
+
+   This function is signal safe. */
+@NoException public static native void _Py_DumpASCII(int fd, PyObject text);
+
+/* Format an integer as decimal into the file descriptor fd.
+
+   This function is signal safe. */
+@NoException public static native void _Py_DumpDecimal(
+    int fd,
+    @Cast("unsigned long") long value);
+
+/* Format an integer as hexadecimal into the file descriptor fd with at least
+   width digits.
+
+   The maximum width is sizeof(unsigned long)*2 digits.
+
+   This function is signal safe. */
+@NoException public static native void _Py_DumpHexadecimal(
+    int fd,
+    @Cast("unsigned long") long value,
+    @Cast("Py_ssize_t") long width);
+
+// #endif   /* !Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_TRACEBACK_H */
+
+
+// Parsed from sliceobject.h
+
+// #ifndef Py_SLICEOBJECT_H
+// #define Py_SLICEOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+/* The unique ellipsis object "..." */
+
+public static native @ByRef PyObject _Py_EllipsisObject(); public static native void _Py_EllipsisObject(PyObject _Py_EllipsisObject); /* Don't use this directly */
+
+// #define Py_Ellipsis (&_Py_EllipsisObject)
+
+/* Slice object interface */
+
+/*
+
+A slice object containing start, stop, and step data members (the
+names are from range).  After much talk with Guido, it was decided to
+let these be any arbitrary python type.  Py_None stands for omitted values.
+*/
+// #ifndef Py_LIMITED_API
+public static class PySliceObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PySliceObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PySliceObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PySliceObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PySliceObject position(long position) {
+        return (PySliceObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PySliceObject ob_base(PyObject ob_base);
+    public native PyObject start(); public native PySliceObject start(PyObject start);
+    public native PyObject stop(); public native PySliceObject stop(PyObject stop);
+    public native PyObject step(); public native PySliceObject step(PyObject step);	/* not NULL */
+}
+// #endif
+
+public static native @ByRef PyTypeObject PySlice_Type(); public static native void PySlice_Type(PyTypeObject PySlice_Type);
+public static native @ByRef PyTypeObject PyEllipsis_Type(); public static native void PyEllipsis_Type(PyTypeObject PyEllipsis_Type);
+
+// #define PySlice_Check(op) (Py_TYPE(op) == &PySlice_Type)
+
+@NoException public static native PyObject PySlice_New(PyObject start, PyObject stop,
+                                  PyObject step);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PySlice_FromIndices(@Cast("Py_ssize_t") long start, @Cast("Py_ssize_t") long stop);
+@NoException public static native int _PySlice_GetLongIndices(PySliceObject self, PyObject length,
+                                 @Cast("PyObject**") PointerPointer start_ptr, @Cast("PyObject**") PointerPointer stop_ptr,
+                                 @Cast("PyObject**") PointerPointer step_ptr);
+@NoException public static native int _PySlice_GetLongIndices(PySliceObject self, PyObject length,
+                                 @ByPtrPtr PyObject start_ptr, @ByPtrPtr PyObject stop_ptr,
+                                 @ByPtrPtr PyObject step_ptr);
+// #endif
+@NoException public static native int PySlice_GetIndices(PyObject r, @Cast("Py_ssize_t") long length,
+                                  @Cast("Py_ssize_t*") SizeTPointer start, @Cast("Py_ssize_t*") SizeTPointer stop, @Cast("Py_ssize_t*") SizeTPointer step);
+@NoException public static native int PySlice_GetIndicesEx(PyObject r, @Cast("Py_ssize_t") long length,
+                                     @Cast("Py_ssize_t*") SizeTPointer start, @Cast("Py_ssize_t*") SizeTPointer stop,
+                                     @Cast("Py_ssize_t*") SizeTPointer step, @Cast("Py_ssize_t*") SizeTPointer slicelength);
+
+// #if !defined(Py_LIMITED_API) || (Py_LIMITED_API+0 >= 0x03050400 && Py_LIMITED_API+0 < 0x03060000) || Py_LIMITED_API+0 >= 0x03060100
+// #ifdef Py_LIMITED_API
+// #define PySlice_GetIndicesEx(slice, length, start, stop, step, slicelen) (
+//     PySlice_Unpack((slice), (start), (stop), (step)) < 0 ?
+//     ((*(slicelen) = 0), -1) :
+//     ((*(slicelen) = PySlice_AdjustIndices((length), (start), (stop), *(step))),
+//      0))
+// #endif
+@NoException public static native int PySlice_Unpack(PyObject slice,
+                               @Cast("Py_ssize_t*") SizeTPointer start, @Cast("Py_ssize_t*") SizeTPointer stop, @Cast("Py_ssize_t*") SizeTPointer step);
+@NoException public static native @Cast("Py_ssize_t") long PySlice_AdjustIndices(@Cast("Py_ssize_t") long length,
+                                             @Cast("Py_ssize_t*") SizeTPointer start, @Cast("Py_ssize_t*") SizeTPointer stop,
+                                             @Cast("Py_ssize_t") long step);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_SLICEOBJECT_H */
+
+
+// Parsed from cellobject.h
+
+/* Cell object interface */
+// #ifndef Py_LIMITED_API
+// #ifndef Py_CELLOBJECT_H
+// #define Py_CELLOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+public static class PyCellObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyCellObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyCellObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyCellObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyCellObject position(long position) {
+        return (PyCellObject)super.position(position);
+    }
+
+	public native @ByRef PyObject ob_base(); public native PyCellObject ob_base(PyObject ob_base);
+	public native PyObject ob_ref(); public native PyCellObject ob_ref(PyObject ob_ref);	/* Content of the cell or NULL when empty */
+}
+
+public static native @ByRef PyTypeObject PyCell_Type(); public static native void PyCell_Type(PyTypeObject PyCell_Type);
+
+// #define PyCell_Check(op) (Py_TYPE(op) == &PyCell_Type)
+
+@NoException public static native PyObject PyCell_New(PyObject arg0);
+@NoException public static native PyObject PyCell_Get(PyObject arg0);
+@NoException public static native int PyCell_Set(PyObject arg0, PyObject arg1);
+
+// #define PyCell_GET(op) (((PyCellObject *)(op))->ob_ref)
+// #define PyCell_SET(op, v) (((PyCellObject *)(op))->ob_ref = v)
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_TUPLEOBJECT_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from iterobject.h
+
+// #ifndef Py_ITEROBJECT_H
+// #define Py_ITEROBJECT_H
+/* Iterators (the basic kind, over a sequence) */
+// #ifdef __cplusplus
+// #endif
+
+public static native @ByRef PyTypeObject PySeqIter_Type(); public static native void PySeqIter_Type(PyTypeObject PySeqIter_Type);
+public static native @ByRef PyTypeObject PyCallIter_Type(); public static native void PyCallIter_Type(PyTypeObject PyCallIter_Type);
+
+
+// #define PySeqIter_Check(op) (Py_TYPE(op) == &PySeqIter_Type)
+
+@NoException public static native PyObject PySeqIter_New(PyObject arg0);
+
+
+// #define PyCallIter_Check(op) (Py_TYPE(op) == &PyCallIter_Type)
+
+@NoException public static native PyObject PyCallIter_New(PyObject arg0, PyObject arg1);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_ITEROBJECT_H */
+
+
+
+// Parsed from genobject.h
+
+
+/* Generator object interface */
+
+// #ifndef Py_LIMITED_API
+// #ifndef Py_GENOBJECT_H
+// #define Py_GENOBJECT_H
+// #ifdef __cplusplus
+// #endif /* Avoid including frameobject.h */
+
+/* _PyGenObject_HEAD defines the initial segment of generator
+   and coroutine objects. */
+// #define _PyGenObject_HEAD(prefix)
+//     PyObject_HEAD
+//     /* Note: gi_frame can be NULL if the generator is "finished" */
+//     struct _frame *prefix##_frame;
+//     /* True if generator is being executed. */
+//     char prefix##_running;
+//     /* The code object backing the generator */
+//     PyObject *prefix##_code;
+//     /* List of weak reference. */
+//     PyObject *prefix##_weakreflist;
+//     /* Name of the generator. */
+//     PyObject *prefix##_name;
+//     /* Qualified name of the generator. */
+//     PyObject *prefix##_qualname;
+
+public static class PyGenObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyGenObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyGenObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyGenObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyGenObject position(long position) {
+        return (PyGenObject)super.position(position);
+    }
+
+    /* The gi_ prefix is intended to remind of generator-iterator. */
+    public native @ByRef PyObject ob_base(); public native PyGenObject ob_base(PyObject ob_base);
+    /* Note: gi_frame can be NULL if the generator is "finished" */
+    public native _frame gi_frame(); public native PyGenObject gi_frame(_frame gi_frame);
+    /* True if generator is being executed. */
+    public native @Cast("char") byte gi_running(); public native PyGenObject gi_running(byte gi_running);
+    /* The code object backing the generator */
+    public native PyObject gi_code(); public native PyGenObject gi_code(PyObject gi_code);
+    /* List of weak reference. */
+    public native PyObject gi_weakreflist(); public native PyGenObject gi_weakreflist(PyObject gi_weakreflist);
+    /* Name of the generator. */
+    public native PyObject gi_name(); public native PyGenObject gi_name(PyObject gi_name);
+    /* Qualified name of the generator. */
+    public native PyObject gi_qualname(); public native PyGenObject gi_qualname(PyObject gi_qualname);
+}
+
+public static native @ByRef PyTypeObject PyGen_Type(); public static native void PyGen_Type(PyTypeObject PyGen_Type);
+
+// #define PyGen_Check(op) PyObject_TypeCheck(op, &PyGen_Type)
+// #define PyGen_CheckExact(op) (Py_TYPE(op) == &PyGen_Type)
+
+@NoException public static native PyObject PyGen_New(_frame arg0);
+@NoException public static native PyObject PyGen_NewWithQualName(_frame arg0,
+    PyObject name, PyObject qualname);
+@NoException public static native int PyGen_NeedsFinalizing(PyGenObject arg0);
+@NoException public static native int _PyGen_SetStopIterationValue(PyObject arg0);
+@NoException public static native int _PyGen_FetchStopIterationValue(@Cast("PyObject**") PointerPointer arg0);
+@NoException public static native int _PyGen_FetchStopIterationValue(@ByPtrPtr PyObject arg0);
+@NoException public static native PyObject _PyGen_Send(PyGenObject arg0, PyObject arg1);
+
+@NoException public static native void _PyGen_Finalize(PyObject self);
+
+// #ifndef Py_LIMITED_API
+public static class PyCoroObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyCoroObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyCoroObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyCoroObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyCoroObject position(long position) {
+        return (PyCoroObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyCoroObject ob_base(PyObject ob_base);
+    /* Note: gi_frame can be NULL if the generator is "finished" */
+    public native _frame cr_frame(); public native PyCoroObject cr_frame(_frame cr_frame);
+    /* True if generator is being executed. */
+    public native @Cast("char") byte cr_running(); public native PyCoroObject cr_running(byte cr_running);
+    /* The code object backing the generator */
+    public native PyObject cr_code(); public native PyCoroObject cr_code(PyObject cr_code);
+    /* List of weak reference. */
+    public native PyObject cr_weakreflist(); public native PyCoroObject cr_weakreflist(PyObject cr_weakreflist);
+    /* Name of the generator. */
+    public native PyObject cr_name(); public native PyCoroObject cr_name(PyObject cr_name);
+    /* Qualified name of the generator. */
+    public native PyObject cr_qualname(); public native PyCoroObject cr_qualname(PyObject cr_qualname);
+}
+
+public static native @ByRef PyTypeObject PyCoro_Type(); public static native void PyCoro_Type(PyTypeObject PyCoro_Type);
+public static native @ByRef PyTypeObject _PyCoroWrapper_Type(); public static native void _PyCoroWrapper_Type(PyTypeObject _PyCoroWrapper_Type);
+
+public static native @ByRef PyTypeObject _PyAIterWrapper_Type(); public static native void _PyAIterWrapper_Type(PyTypeObject _PyAIterWrapper_Type);
+
+
+// #define PyCoro_CheckExact(op) (Py_TYPE(op) == &PyCoro_Type)
+
+@NoException public static native PyObject PyCoro_New(_frame arg0,
+    PyObject name, PyObject qualname);
+
+/* Asynchronous Generators */
+
+public static class PyAsyncGenObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyAsyncGenObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyAsyncGenObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyAsyncGenObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyAsyncGenObject position(long position) {
+        return (PyAsyncGenObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyAsyncGenObject ob_base(PyObject ob_base);
+    /* Note: gi_frame can be NULL if the generator is "finished" */
+    public native _frame ag_frame(); public native PyAsyncGenObject ag_frame(_frame ag_frame);
+    /* True if generator is being executed. */
+    public native @Cast("char") byte ag_running(); public native PyAsyncGenObject ag_running(byte ag_running);
+    /* The code object backing the generator */
+    public native PyObject ag_code(); public native PyAsyncGenObject ag_code(PyObject ag_code);
+    /* List of weak reference. */
+    public native PyObject ag_weakreflist(); public native PyAsyncGenObject ag_weakreflist(PyObject ag_weakreflist);
+    /* Name of the generator. */
+    public native PyObject ag_name(); public native PyAsyncGenObject ag_name(PyObject ag_name);
+    /* Qualified name of the generator. */
+    public native PyObject ag_qualname(); public native PyAsyncGenObject ag_qualname(PyObject ag_qualname);
+    public native PyObject ag_finalizer(); public native PyAsyncGenObject ag_finalizer(PyObject ag_finalizer);
+
+    /* Flag is set to 1 when hooks set up by sys.set_asyncgen_hooks
+       were called on the generator, to avoid calling them more
+       than once. */
+    public native int ag_hooks_inited(); public native PyAsyncGenObject ag_hooks_inited(int ag_hooks_inited);
+
+    /* Flag is set to 1 when aclose() is called for the first time, or
+       when a StopAsyncIteration exception is raised. */
+    public native int ag_closed(); public native PyAsyncGenObject ag_closed(int ag_closed);
+}
+
+public static native @ByRef PyTypeObject PyAsyncGen_Type(); public static native void PyAsyncGen_Type(PyTypeObject PyAsyncGen_Type);
+public static native @ByRef PyTypeObject _PyAsyncGenASend_Type(); public static native void _PyAsyncGenASend_Type(PyTypeObject _PyAsyncGenASend_Type);
+public static native @ByRef PyTypeObject _PyAsyncGenWrappedValue_Type(); public static native void _PyAsyncGenWrappedValue_Type(PyTypeObject _PyAsyncGenWrappedValue_Type);
+public static native @ByRef PyTypeObject _PyAsyncGenAThrow_Type(); public static native void _PyAsyncGenAThrow_Type(PyTypeObject _PyAsyncGenAThrow_Type);
+
+@NoException public static native PyObject PyAsyncGen_New(_frame arg0,
+    PyObject name, PyObject qualname);
+
+// #define PyAsyncGen_CheckExact(op) (Py_TYPE(op) == &PyAsyncGen_Type)
+
+
+
+
+
+// #endif
+
+// #undef _PyGenObject_HEAD
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_GENOBJECT_H */
+// #endif /* Py_LIMITED_API */
+
+
+// Parsed from warnings.h
+
+// #ifndef Py_WARNINGS_H
+// #define Py_WARNINGS_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyWarnings_Init();
+// #endif
+
+@NoException public static native int PyErr_WarnEx(
+    PyObject category,
+    @Cast("const char*") BytePointer message,
+    @Cast("Py_ssize_t") long stack_level);
+@NoException public static native int PyErr_WarnEx(
+    PyObject category,
+    String message,
+    @Cast("Py_ssize_t") long stack_level);
+@NoException public static native int PyErr_WarnFormat(
+    PyObject category,
+    @Cast("Py_ssize_t") long stack_level,
+    @Cast("const char*") BytePointer format);
+@NoException public static native int PyErr_WarnFormat(
+    PyObject category,
+    @Cast("Py_ssize_t") long stack_level,
+    String format);
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+/* Emit a ResourceWarning warning */
+@NoException public static native int PyErr_ResourceWarning(
+    PyObject source,
+    @Cast("Py_ssize_t") long stack_level,
+    @Cast("const char*") BytePointer format);
+@NoException public static native int PyErr_ResourceWarning(
+    PyObject source,
+    @Cast("Py_ssize_t") long stack_level,
+    String format);
+// #endif
+// #ifndef Py_LIMITED_API
+@NoException public static native int PyErr_WarnExplicitObject(
+    PyObject category,
+    PyObject message,
+    PyObject filename,
+    int lineno,
+    PyObject module,
+    PyObject registry);
+// #endif
+@NoException public static native int PyErr_WarnExplicit(
+    PyObject category,
+    @Cast("const char*") BytePointer message,
+    @Cast("const char*") BytePointer filename,
+    int lineno,
+    @Cast("const char*") BytePointer module,
+    PyObject registry);
+@NoException public static native int PyErr_WarnExplicit(
+    PyObject category,
+    String message,
+    String filename,
+    int lineno,
+    String module,
+    PyObject registry);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int PyErr_WarnExplicitFormat(PyObject category,
+                         @Cast("const char*") BytePointer filename, int lineno,
+                         @Cast("const char*") BytePointer module, PyObject registry,
+                         @Cast("const char*") BytePointer format);
+@NoException public static native int PyErr_WarnExplicitFormat(PyObject category,
+                         String filename, int lineno,
+                         String module, PyObject registry,
+                         String format);
+// #endif
+
+/* DEPRECATED: Use PyErr_WarnEx() instead. */
+// #ifndef Py_LIMITED_API
+// #define PyErr_Warn(category, msg) PyErr_WarnEx(category, msg, 1)
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_WARNINGS_H */
+
+
+
+// Parsed from weakrefobject.h
+
+/* Weak references objects for Python. */
+
+// #ifndef Py_WEAKREFOBJECT_H
+// #define Py_WEAKREFOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+
+@Opaque public static class PyWeakReference extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PyWeakReference() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyWeakReference(Pointer p) { super(p); }
+}
+
+/* PyWeakReference is the base struct for the Python ReferenceType, ProxyType,
+ * and CallableProxyType.
+ */
+// #ifndef Py_LIMITED_API
+public static class _PyWeakReference extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyWeakReference() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyWeakReference(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyWeakReference(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyWeakReference position(long position) {
+        return (_PyWeakReference)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native _PyWeakReference ob_base(PyObject ob_base);
+
+    /* The object to which this is a weak reference, or Py_None if none.
+     * Note that this is a stealth reference:  wr_object's refcount is
+     * not incremented to reflect this pointer.
+     */
+    public native PyObject wr_object(); public native _PyWeakReference wr_object(PyObject wr_object);
+
+    /* A callable to invoke when wr_object dies, or NULL if none. */
+    public native PyObject wr_callback(); public native _PyWeakReference wr_callback(PyObject wr_callback);
+
+    /* A cache for wr_object's hash code.  As usual for hashes, this is -1
+     * if the hash code isn't known yet.
+     */
+    public native @Cast("Py_hash_t") long hash(); public native _PyWeakReference hash(long hash);
+
+    /* If wr_object is weakly referenced, wr_object has a doubly-linked NULL-
+     * terminated list of weak references to it.  These are the list pointers.
+     * If wr_object goes away, wr_object is set to Py_None, and these pointers
+     * have no meaning then.
+     */
+    public native PyWeakReference wr_prev(); public native _PyWeakReference wr_prev(PyWeakReference wr_prev);
+    public native PyWeakReference wr_next(); public native _PyWeakReference wr_next(PyWeakReference wr_next);
+}
+// #endif
+
+public static native @ByRef PyTypeObject _PyWeakref_RefType(); public static native void _PyWeakref_RefType(PyTypeObject _PyWeakref_RefType);
+public static native @ByRef PyTypeObject _PyWeakref_ProxyType(); public static native void _PyWeakref_ProxyType(PyTypeObject _PyWeakref_ProxyType);
+public static native @ByRef PyTypeObject _PyWeakref_CallableProxyType(); public static native void _PyWeakref_CallableProxyType(PyTypeObject _PyWeakref_CallableProxyType);
+
+// #define PyWeakref_CheckRef(op) PyObject_TypeCheck(op, &_PyWeakref_RefType)
+// #define PyWeakref_CheckRefExact(op)
+//         (Py_TYPE(op) == &_PyWeakref_RefType)
+// #define PyWeakref_CheckProxy(op)
+//         ((Py_TYPE(op) == &_PyWeakref_ProxyType) ||
+//          (Py_TYPE(op) == &_PyWeakref_CallableProxyType))
+
+// #define PyWeakref_Check(op)
+//         (PyWeakref_CheckRef(op) || PyWeakref_CheckProxy(op))
+
+
+@NoException public static native PyObject PyWeakref_NewRef(PyObject ob,
+                                              PyObject callback);
+@NoException public static native PyObject PyWeakref_NewProxy(PyObject ob,
+                                                PyObject callback);
+@NoException public static native PyObject PyWeakref_GetObject(PyObject ref);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("Py_ssize_t") long _PyWeakref_GetWeakrefCount(PyWeakReference head);
+
+@NoException public static native void _PyWeakref_ClearRef(PyWeakReference self);
+// #endif
+
+/* Explanation for the Py_REFCNT() check: when a weakref's target is part
+   of a long chain of deallocations which triggers the trashcan mechanism,
+   clearing the weakrefs can be delayed long after the target's refcount
+   has dropped to zero.  In the meantime, code accessing the weakref will
+   be able to "see" the target object even though it is supposed to be
+   unreachable.  See issue #16602. */
+
+// #define PyWeakref_GET_OBJECT(ref)
+//     (Py_REFCNT(((PyWeakReference *)(ref))->wr_object) > 0
+//      ? ((PyWeakReference *)(ref))->wr_object
+//      : Py_None)
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_WEAKREFOBJECT_H */
+
+
+// Parsed from structseq.h
+
+
+/* Named tuple object interface */
+
+// #ifndef Py_STRUCTSEQ_H
+// #define Py_STRUCTSEQ_H
+// #ifdef __cplusplus
+// #endif
+
+public static class PyStructSequence_Field extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyStructSequence_Field() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyStructSequence_Field(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyStructSequence_Field(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyStructSequence_Field position(long position) {
+        return (PyStructSequence_Field)super.position(position);
+    }
+
+    public native @Cast("char*") BytePointer name(); public native PyStructSequence_Field name(BytePointer name);
+    public native @Cast("char*") BytePointer doc(); public native PyStructSequence_Field doc(BytePointer doc);
+}
+
+public static class PyStructSequence_Desc extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyStructSequence_Desc() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyStructSequence_Desc(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyStructSequence_Desc(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyStructSequence_Desc position(long position) {
+        return (PyStructSequence_Desc)super.position(position);
+    }
+
+    public native @Cast("char*") BytePointer name(); public native PyStructSequence_Desc name(BytePointer name);
+    public native @Cast("char*") BytePointer doc(); public native PyStructSequence_Desc doc(BytePointer doc);
+    public native PyStructSequence_Field fields(); public native PyStructSequence_Desc fields(PyStructSequence_Field fields);
+    public native int n_in_sequence(); public native PyStructSequence_Desc n_in_sequence(int n_in_sequence);
+}
+
+
+
+// #ifndef Py_LIMITED_API
+@NoException public static native void PyStructSequence_InitType(PyTypeObject type,
+                                           PyStructSequence_Desc desc);
+@NoException public static native int PyStructSequence_InitType2(PyTypeObject type,
+                                           PyStructSequence_Desc desc);
+// #endif
+@NoException public static native PyTypeObject PyStructSequence_NewType(PyStructSequence_Desc desc);
+
+@NoException public static native PyObject PyStructSequence_New(PyTypeObject type);
+
+// #ifndef Py_LIMITED_API
+
+/* Macro, *only* to be used to fill in brand new objects */
+// #define PyStructSequence_SET_ITEM(op, i, v) PyTuple_SET_ITEM(op, i, v)
+
+// #define PyStructSequence_GET_ITEM(op, i) PyTuple_GET_ITEM(op, i)
+// #endif
+
+@NoException public static native void PyStructSequence_SetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1, PyObject arg2);
+@NoException public static native PyObject PyStructSequence_GetItem(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_STRUCTSEQ_H */
+
+
+// Parsed from namespaceobject.h
+
+
+/* simple namespace object interface */
+
+// #ifndef NAMESPACEOBJECT_H
+// #define NAMESPACEOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+public static native @ByRef PyTypeObject _PyNamespace_Type(); public static native void _PyNamespace_Type(PyTypeObject _PyNamespace_Type);
+
+@NoException public static native PyObject _PyNamespace_New(PyObject kwds);
+// #endif /* !Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !NAMESPACEOBJECT_H */
+
+
+// Parsed from codecs.h
+
+// #ifndef Py_CODECREGISTRY_H
+// #define Py_CODECREGISTRY_H
+// #ifdef __cplusplus
+// #endif
+
+/* ------------------------------------------------------------------------
+
+   Python Codec Registry and support functions
+
+
+Written by Marc-Andre Lemburg (mal@lemburg.com).
+
+Copyright (c) Corporation for National Research Initiatives.
+
+   ------------------------------------------------------------------------ */
+
+/* Register a new codec search function.
+
+   As side effect, this tries to load the encodings package, if not
+   yet done, to make sure that it is always first in the list of
+   search functions.
+
+   The search_function's refcount is incremented by this function. */
+
+@NoException public static native int PyCodec_Register(
+       PyObject search_function
+       );
+
+/* Codec registry lookup API.
+
+   Looks up the given encoding and returns a CodecInfo object with
+   function attributes which implement the different aspects of
+   processing the encoding.
+
+   The encoding string is looked up converted to all lower-case
+   characters. This makes encodings looked up through this mechanism
+   effectively case-insensitive.
+
+   If no codec is found, a KeyError is set and NULL returned.
+
+   As side effect, this tries to load the encodings package, if not
+   yet done. This is part of the lazy load strategy for the encodings
+   package.
+
+ */
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyCodec_Lookup(
+       @Cast("const char*") BytePointer encoding
+       );
+@NoException public static native PyObject _PyCodec_Lookup(
+       String encoding
+       );
+
+@NoException public static native int _PyCodec_Forget(
+       @Cast("const char*") BytePointer encoding
+       );
+@NoException public static native int _PyCodec_Forget(
+       String encoding
+       );
+// #endif
+
+/* Codec registry encoding check API.
+
+   Returns 1/0 depending on whether there is a registered codec for
+   the given encoding.
+
+*/
+
+@NoException public static native int PyCodec_KnownEncoding(
+       @Cast("const char*") BytePointer encoding
+       );
+@NoException public static native int PyCodec_KnownEncoding(
+       String encoding
+       );
+
+/* Generic codec based encoding API.
+
+   object is passed through the encoder function found for the given
+   encoding using the error handling method defined by errors. errors
+   may be NULL to use the default method defined for the codec.
+
+   Raises a LookupError in case no encoder can be found.
+
+ */
+
+@NoException public static native PyObject PyCodec_Encode(
+       PyObject object,
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_Encode(
+       PyObject object,
+       String encoding,
+       String errors
+       );
+
+/* Generic codec based decoding API.
+
+   object is passed through the decoder function found for the given
+   encoding using the error handling method defined by errors. errors
+   may be NULL to use the default method defined for the codec.
+
+   Raises a LookupError in case no encoder can be found.
+
+ */
+
+@NoException public static native PyObject PyCodec_Decode(
+       PyObject object,
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_Decode(
+       PyObject object,
+       String encoding,
+       String errors
+       );
+
+// #ifndef Py_LIMITED_API
+/* Text codec specific encoding and decoding API.
+
+   Checks the encoding against a list of codecs which do not
+   implement a str<->bytes encoding before attempting the
+   operation.
+
+   Please note that these APIs are internal and should not
+   be used in Python C extensions.
+
+   XXX (ncoghlan): should we make these, or something like them, public
+   in Python 3.5+?
+
+ */
+@NoException public static native PyObject _PyCodec_LookupTextEncoding(
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer alternate_command
+       );
+@NoException public static native PyObject _PyCodec_LookupTextEncoding(
+       String encoding,
+       String alternate_command
+       );
+
+@NoException public static native PyObject _PyCodec_EncodeText(
+       PyObject object,
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject _PyCodec_EncodeText(
+       PyObject object,
+       String encoding,
+       String errors
+       );
+
+@NoException public static native PyObject _PyCodec_DecodeText(
+       PyObject object,
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject _PyCodec_DecodeText(
+       PyObject object,
+       String encoding,
+       String errors
+       );
+
+/* These two aren't actually text encoding specific, but _io.TextIOWrapper
+ * is the only current API consumer.
+ */
+@NoException public static native PyObject _PyCodecInfo_GetIncrementalDecoder(
+       PyObject codec_info,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject _PyCodecInfo_GetIncrementalDecoder(
+       PyObject codec_info,
+       String errors
+       );
+
+@NoException public static native PyObject _PyCodecInfo_GetIncrementalEncoder(
+       PyObject codec_info,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject _PyCodecInfo_GetIncrementalEncoder(
+       PyObject codec_info,
+       String errors
+       );
+// #endif
+
+
+
+/* --- Codec Lookup APIs --------------------------------------------------
+
+   All APIs return a codec object with incremented refcount and are
+   based on _PyCodec_Lookup().  The same comments w/r to the encoding
+   name also apply to these APIs.
+
+*/
+
+/* Get an encoder function for the given encoding. */
+
+@NoException public static native PyObject PyCodec_Encoder(
+       @Cast("const char*") BytePointer encoding
+       );
+@NoException public static native PyObject PyCodec_Encoder(
+       String encoding
+       );
+
+/* Get a decoder function for the given encoding. */
+
+@NoException public static native PyObject PyCodec_Decoder(
+       @Cast("const char*") BytePointer encoding
+       );
+@NoException public static native PyObject PyCodec_Decoder(
+       String encoding
+       );
+
+/* Get an IncrementalEncoder object for the given encoding. */
+
+@NoException public static native PyObject PyCodec_IncrementalEncoder(
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_IncrementalEncoder(
+       String encoding,
+       String errors
+       );
+
+/* Get an IncrementalDecoder object function for the given encoding. */
+
+@NoException public static native PyObject PyCodec_IncrementalDecoder(
+       @Cast("const char*") BytePointer encoding,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_IncrementalDecoder(
+       String encoding,
+       String errors
+       );
+
+/* Get a StreamReader factory function for the given encoding. */
+
+@NoException public static native PyObject PyCodec_StreamReader(
+       @Cast("const char*") BytePointer encoding,
+       PyObject stream,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_StreamReader(
+       String encoding,
+       PyObject stream,
+       String errors
+       );
+
+/* Get a StreamWriter factory function for the given encoding. */
+
+@NoException public static native PyObject PyCodec_StreamWriter(
+       @Cast("const char*") BytePointer encoding,
+       PyObject stream,
+       @Cast("const char*") BytePointer errors
+       );
+@NoException public static native PyObject PyCodec_StreamWriter(
+       String encoding,
+       PyObject stream,
+       String errors
+       );
+
+/* Unicode encoding error handling callback registry API */
+
+/* Register the error handling callback function error under the given
+   name. This function will be called by the codec when it encounters
+   unencodable characters/undecodable bytes and doesn't know the
+   callback name, when name is specified as the error parameter
+   in the call to the encode/decode function.
+   Return 0 on success, -1 on error */
+@NoException public static native int PyCodec_RegisterError(@Cast("const char*") BytePointer name, PyObject error);
+@NoException public static native int PyCodec_RegisterError(String name, PyObject error);
+
+/* Lookup the error handling callback function registered under the given
+   name. As a special case NULL can be passed, in which case
+   the error handling callback for "strict" will be returned. */
+@NoException public static native PyObject PyCodec_LookupError(@Cast("const char*") BytePointer name);
+@NoException public static native PyObject PyCodec_LookupError(String name);
+
+/* raise exc as an exception */
+@NoException public static native PyObject PyCodec_StrictErrors(PyObject exc);
+
+/* ignore the unicode error, skipping the faulty input */
+@NoException public static native PyObject PyCodec_IgnoreErrors(PyObject exc);
+
+/* replace the unicode encode error with ? or U+FFFD */
+@NoException public static native PyObject PyCodec_ReplaceErrors(PyObject exc);
+
+/* replace the unicode encode error with XML character references */
+@NoException public static native PyObject PyCodec_XMLCharRefReplaceErrors(PyObject exc);
+
+/* replace the unicode encode error with backslash escapes (\x, \u005Cu and \U) */
+@NoException public static native PyObject PyCodec_BackslashReplaceErrors(PyObject exc);
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+/* replace the unicode encode error with backslash escapes (\N, \x, \u005Cu and \U) */
+@NoException public static native PyObject PyCodec_NameReplaceErrors(PyObject exc);
+// #endif
+
+// #ifndef Py_LIMITED_API
+@MemberGetter public static native @Cast("const char*") BytePointer Py_hexdigits();
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_CODECREGISTRY_H */
+
+
+// Parsed from pyerrors.h
+
+// #ifndef Py_ERRORS_H
+// #define Py_ERRORS_H
+// #ifdef __cplusplus
+// #endif
+
+/* Error objects */
+
+// #ifndef Py_LIMITED_API
+/* PyException_HEAD defines the initial segment of every exception class. */
+// #define PyException_HEAD PyObject_HEAD PyObject *dict;
+//              PyObject *args; PyObject *traceback;
+//              PyObject *context; PyObject *cause;
+//              char suppress_context;
+
+public static class PyBaseExceptionObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyBaseExceptionObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyBaseExceptionObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyBaseExceptionObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyBaseExceptionObject position(long position) {
+        return (PyBaseExceptionObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyBaseExceptionObject ob_base(PyObject ob_base); public native PyObject dict(); public native PyBaseExceptionObject dict(PyObject dict);
+             public native PyObject args(); public native PyBaseExceptionObject args(PyObject args); public native PyObject traceback(); public native PyBaseExceptionObject traceback(PyObject traceback);
+             public native PyObject context(); public native PyBaseExceptionObject context(PyObject context); public native PyObject cause(); public native PyBaseExceptionObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PyBaseExceptionObject suppress_context(byte suppress_context);
+}
+
+public static class PySyntaxErrorObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PySyntaxErrorObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PySyntaxErrorObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PySyntaxErrorObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PySyntaxErrorObject position(long position) {
+        return (PySyntaxErrorObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PySyntaxErrorObject ob_base(PyObject ob_base); public native PyObject dict(); public native PySyntaxErrorObject dict(PyObject dict);
+             public native PyObject args(); public native PySyntaxErrorObject args(PyObject args); public native PyObject traceback(); public native PySyntaxErrorObject traceback(PyObject traceback);
+             public native PyObject context(); public native PySyntaxErrorObject context(PyObject context); public native PyObject cause(); public native PySyntaxErrorObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PySyntaxErrorObject suppress_context(byte suppress_context);
+    public native PyObject msg(); public native PySyntaxErrorObject msg(PyObject msg);
+    public native PyObject filename(); public native PySyntaxErrorObject filename(PyObject filename);
+    public native PyObject lineno(); public native PySyntaxErrorObject lineno(PyObject lineno);
+    public native PyObject offset(); public native PySyntaxErrorObject offset(PyObject offset);
+    public native PyObject text(); public native PySyntaxErrorObject text(PyObject text);
+    public native PyObject print_file_and_line(); public native PySyntaxErrorObject print_file_and_line(PyObject print_file_and_line);
+}
+
+public static class PyImportErrorObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyImportErrorObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyImportErrorObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyImportErrorObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyImportErrorObject position(long position) {
+        return (PyImportErrorObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyImportErrorObject ob_base(PyObject ob_base); public native PyObject dict(); public native PyImportErrorObject dict(PyObject dict);
+             public native PyObject args(); public native PyImportErrorObject args(PyObject args); public native PyObject traceback(); public native PyImportErrorObject traceback(PyObject traceback);
+             public native PyObject context(); public native PyImportErrorObject context(PyObject context); public native PyObject cause(); public native PyImportErrorObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PyImportErrorObject suppress_context(byte suppress_context);
+    public native PyObject msg(); public native PyImportErrorObject msg(PyObject msg);
+    public native PyObject name(); public native PyImportErrorObject name(PyObject name);
+    public native PyObject path(); public native PyImportErrorObject path(PyObject path);
+}
+
+public static class PyUnicodeErrorObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyUnicodeErrorObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyUnicodeErrorObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyUnicodeErrorObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyUnicodeErrorObject position(long position) {
+        return (PyUnicodeErrorObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyUnicodeErrorObject ob_base(PyObject ob_base); public native PyObject dict(); public native PyUnicodeErrorObject dict(PyObject dict);
+             public native PyObject args(); public native PyUnicodeErrorObject args(PyObject args); public native PyObject traceback(); public native PyUnicodeErrorObject traceback(PyObject traceback);
+             public native PyObject context(); public native PyUnicodeErrorObject context(PyObject context); public native PyObject cause(); public native PyUnicodeErrorObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PyUnicodeErrorObject suppress_context(byte suppress_context);
+    public native PyObject encoding(); public native PyUnicodeErrorObject encoding(PyObject encoding);
+    public native PyObject object(); public native PyUnicodeErrorObject object(PyObject object);
+    public native @Cast("Py_ssize_t") long start(); public native PyUnicodeErrorObject start(long start);
+    public native @Cast("Py_ssize_t") long end(); public native PyUnicodeErrorObject end(long end);
+    public native PyObject reason(); public native PyUnicodeErrorObject reason(PyObject reason);
+}
+
+public static class PySystemExitObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PySystemExitObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PySystemExitObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PySystemExitObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PySystemExitObject position(long position) {
+        return (PySystemExitObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PySystemExitObject ob_base(PyObject ob_base); public native PyObject dict(); public native PySystemExitObject dict(PyObject dict);
+             public native PyObject args(); public native PySystemExitObject args(PyObject args); public native PyObject traceback(); public native PySystemExitObject traceback(PyObject traceback);
+             public native PyObject context(); public native PySystemExitObject context(PyObject context); public native PyObject cause(); public native PySystemExitObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PySystemExitObject suppress_context(byte suppress_context);
+    public native PyObject code(); public native PySystemExitObject code(PyObject code);
+}
+
+public static class PyOSErrorObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyOSErrorObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyOSErrorObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyOSErrorObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyOSErrorObject position(long position) {
+        return (PyOSErrorObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyOSErrorObject ob_base(PyObject ob_base); public native PyObject dict(); public native PyOSErrorObject dict(PyObject dict);
+             public native PyObject args(); public native PyOSErrorObject args(PyObject args); public native PyObject traceback(); public native PyOSErrorObject traceback(PyObject traceback);
+             public native PyObject context(); public native PyOSErrorObject context(PyObject context); public native PyObject cause(); public native PyOSErrorObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PyOSErrorObject suppress_context(byte suppress_context);
+    public native PyObject myerrno(); public native PyOSErrorObject myerrno(PyObject myerrno);
+    public native PyObject strerror(); public native PyOSErrorObject strerror(PyObject strerror);
+    public native PyObject filename(); public native PyOSErrorObject filename(PyObject filename);
+    public native PyObject filename2(); public native PyOSErrorObject filename2(PyObject filename2);
+// #ifdef MS_WINDOWS
+// #endif
+    public native @Cast("Py_ssize_t") long written(); public native PyOSErrorObject written(long written);   /* only for BlockingIOError, -1 otherwise */
+}
+
+public static class PyStopIterationObject extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PyStopIterationObject() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyStopIterationObject(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PyStopIterationObject(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PyStopIterationObject position(long position) {
+        return (PyStopIterationObject)super.position(position);
+    }
+
+    public native @ByRef PyObject ob_base(); public native PyStopIterationObject ob_base(PyObject ob_base); public native PyObject dict(); public native PyStopIterationObject dict(PyObject dict);
+             public native PyObject args(); public native PyStopIterationObject args(PyObject args); public native PyObject traceback(); public native PyStopIterationObject traceback(PyObject traceback);
+             public native PyObject context(); public native PyStopIterationObject context(PyObject context); public native PyObject cause(); public native PyStopIterationObject cause(PyObject cause);
+             public native @Cast("char") byte suppress_context(); public native PyStopIterationObject suppress_context(byte suppress_context);
+    public native PyObject value(); public native PyStopIterationObject value(PyObject value);
+}
+
+/* Compatibility typedefs */
+// #ifdef MS_WINDOWS
+// #endif
+// #endif /* !Py_LIMITED_API */
+
+/* Error handling definitions */
+
+@NoException public static native void PyErr_SetNone(PyObject arg0);
+@NoException public static native void PyErr_SetObject(PyObject arg0, PyObject arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyErr_SetKeyError(PyObject arg0);
+// #endif
+@NoException public static native void PyErr_SetString(
+    PyObject exception,
+    @Cast("const char*") BytePointer string
+    );
+@NoException public static native void PyErr_SetString(
+    PyObject exception,
+    String string
+    );
+@NoException public static native PyObject PyErr_Occurred();
+@NoException public static native void PyErr_Clear();
+@NoException public static native void PyErr_Fetch(@Cast("PyObject**") PointerPointer arg0, @Cast("PyObject**") PointerPointer arg1, @Cast("PyObject**") PointerPointer arg2);
+@NoException public static native void PyErr_Fetch(@ByPtrPtr PyObject arg0, @ByPtrPtr PyObject arg1, @ByPtrPtr PyObject arg2);
+@NoException public static native void PyErr_Restore(PyObject arg0, PyObject arg1, PyObject arg2);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native void PyErr_GetExcInfo(@Cast("PyObject**") PointerPointer arg0, @Cast("PyObject**") PointerPointer arg1, @Cast("PyObject**") PointerPointer arg2);
+@NoException public static native void PyErr_GetExcInfo(@ByPtrPtr PyObject arg0, @ByPtrPtr PyObject arg1, @ByPtrPtr PyObject arg2);
+@NoException public static native void PyErr_SetExcInfo(PyObject arg0, PyObject arg1, PyObject arg2);
+// #endif
+
+// #if defined(__clang__) ||
+//     (defined(__GNUC_MAJOR__) &&
+//      ((__GNUC_MAJOR__ >= 3) ||
+//       (__GNUC_MAJOR__ == 2) && (__GNUC_MINOR__ >= 5)))
+// #define _Py_NO_RETURN __attribute__((__noreturn__))
+// #else
+// #define _Py_NO_RETURN
+// #endif
+
+/* Defined in Python/pylifecycle.c */
+@NoException public static native void Py_FatalError(@Cast("const char*") BytePointer message);
+@NoException public static native void Py_FatalError(String message);
+
+// #if defined(Py_DEBUG) || defined(Py_LIMITED_API)
+// #define _PyErr_OCCURRED() PyErr_Occurred()
+// #else
+// #define _PyErr_OCCURRED() (PyThreadState_GET()->curexc_type)
+// #endif
+
+/* Error testing and normalization */
+@NoException public static native int PyErr_GivenExceptionMatches(PyObject arg0, PyObject arg1);
+@NoException public static native int PyErr_ExceptionMatches(PyObject arg0);
+@NoException public static native void PyErr_NormalizeException(@Cast("PyObject**") PointerPointer arg0, @Cast("PyObject**") PointerPointer arg1, @Cast("PyObject**") PointerPointer arg2);
+@NoException public static native void PyErr_NormalizeException(@ByPtrPtr PyObject arg0, @ByPtrPtr PyObject arg1, @ByPtrPtr PyObject arg2);
+
+/* Traceback manipulation (PEP 3134) */
+@NoException public static native int PyException_SetTraceback(PyObject arg0, PyObject arg1);
+@NoException public static native PyObject PyException_GetTraceback(PyObject arg0);
+
+/* Cause manipulation (PEP 3134) */
+@NoException public static native PyObject PyException_GetCause(PyObject arg0);
+@NoException public static native void PyException_SetCause(PyObject arg0, PyObject arg1);
+
+/* Context manipulation (PEP 3134) */
+@NoException public static native PyObject PyException_GetContext(PyObject arg0);
+@NoException public static native void PyException_SetContext(PyObject arg0, PyObject arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyErr_ChainExceptions(PyObject arg0, PyObject arg1, PyObject arg2);
+// #endif
+
+/* */
+
+// #define PyExceptionClass_Check(x)
+//     (PyType_Check((x)) &&
+//      PyType_FastSubclass((PyTypeObject*)(x), Py_TPFLAGS_BASE_EXC_SUBCLASS))
+
+// #define PyExceptionInstance_Check(x)
+//     PyType_FastSubclass((x)->ob_type, Py_TPFLAGS_BASE_EXC_SUBCLASS)
+
+// #define PyExceptionClass_Name(x)
+//      ((char *)(((PyTypeObject*)(x))->tp_name))
+
+// #define PyExceptionInstance_Class(x) ((PyObject*)((x)->ob_type))
+
+
+/* Predefined exceptions */
+
+public static native PyObject PyExc_BaseException(); public static native void PyExc_BaseException(PyObject PyExc_BaseException);
+public static native PyObject PyExc_Exception(); public static native void PyExc_Exception(PyObject PyExc_Exception);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+public static native PyObject PyExc_StopAsyncIteration(); public static native void PyExc_StopAsyncIteration(PyObject PyExc_StopAsyncIteration);
+// #endif
+public static native PyObject PyExc_StopIteration(); public static native void PyExc_StopIteration(PyObject PyExc_StopIteration);
+public static native PyObject PyExc_GeneratorExit(); public static native void PyExc_GeneratorExit(PyObject PyExc_GeneratorExit);
+public static native PyObject PyExc_ArithmeticError(); public static native void PyExc_ArithmeticError(PyObject PyExc_ArithmeticError);
+public static native PyObject PyExc_LookupError(); public static native void PyExc_LookupError(PyObject PyExc_LookupError);
+
+public static native PyObject PyExc_AssertionError(); public static native void PyExc_AssertionError(PyObject PyExc_AssertionError);
+public static native PyObject PyExc_AttributeError(); public static native void PyExc_AttributeError(PyObject PyExc_AttributeError);
+public static native PyObject PyExc_BufferError(); public static native void PyExc_BufferError(PyObject PyExc_BufferError);
+public static native PyObject PyExc_EOFError(); public static native void PyExc_EOFError(PyObject PyExc_EOFError);
+public static native PyObject PyExc_FloatingPointError(); public static native void PyExc_FloatingPointError(PyObject PyExc_FloatingPointError);
+public static native PyObject PyExc_OSError(); public static native void PyExc_OSError(PyObject PyExc_OSError);
+public static native PyObject PyExc_ImportError(); public static native void PyExc_ImportError(PyObject PyExc_ImportError);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+public static native PyObject PyExc_ModuleNotFoundError(); public static native void PyExc_ModuleNotFoundError(PyObject PyExc_ModuleNotFoundError);
+// #endif
+public static native PyObject PyExc_IndexError(); public static native void PyExc_IndexError(PyObject PyExc_IndexError);
+public static native PyObject PyExc_KeyError(); public static native void PyExc_KeyError(PyObject PyExc_KeyError);
+public static native PyObject PyExc_KeyboardInterrupt(); public static native void PyExc_KeyboardInterrupt(PyObject PyExc_KeyboardInterrupt);
+public static native PyObject PyExc_MemoryError(); public static native void PyExc_MemoryError(PyObject PyExc_MemoryError);
+public static native PyObject PyExc_NameError(); public static native void PyExc_NameError(PyObject PyExc_NameError);
+public static native PyObject PyExc_OverflowError(); public static native void PyExc_OverflowError(PyObject PyExc_OverflowError);
+public static native PyObject PyExc_RuntimeError(); public static native void PyExc_RuntimeError(PyObject PyExc_RuntimeError);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+public static native PyObject PyExc_RecursionError(); public static native void PyExc_RecursionError(PyObject PyExc_RecursionError);
+// #endif
+public static native PyObject PyExc_NotImplementedError(); public static native void PyExc_NotImplementedError(PyObject PyExc_NotImplementedError);
+public static native PyObject PyExc_SyntaxError(); public static native void PyExc_SyntaxError(PyObject PyExc_SyntaxError);
+public static native PyObject PyExc_IndentationError(); public static native void PyExc_IndentationError(PyObject PyExc_IndentationError);
+public static native PyObject PyExc_TabError(); public static native void PyExc_TabError(PyObject PyExc_TabError);
+public static native PyObject PyExc_ReferenceError(); public static native void PyExc_ReferenceError(PyObject PyExc_ReferenceError);
+public static native PyObject PyExc_SystemError(); public static native void PyExc_SystemError(PyObject PyExc_SystemError);
+public static native PyObject PyExc_SystemExit(); public static native void PyExc_SystemExit(PyObject PyExc_SystemExit);
+public static native PyObject PyExc_TypeError(); public static native void PyExc_TypeError(PyObject PyExc_TypeError);
+public static native PyObject PyExc_UnboundLocalError(); public static native void PyExc_UnboundLocalError(PyObject PyExc_UnboundLocalError);
+public static native PyObject PyExc_UnicodeError(); public static native void PyExc_UnicodeError(PyObject PyExc_UnicodeError);
+public static native PyObject PyExc_UnicodeEncodeError(); public static native void PyExc_UnicodeEncodeError(PyObject PyExc_UnicodeEncodeError);
+public static native PyObject PyExc_UnicodeDecodeError(); public static native void PyExc_UnicodeDecodeError(PyObject PyExc_UnicodeDecodeError);
+public static native PyObject PyExc_UnicodeTranslateError(); public static native void PyExc_UnicodeTranslateError(PyObject PyExc_UnicodeTranslateError);
+public static native PyObject PyExc_ValueError(); public static native void PyExc_ValueError(PyObject PyExc_ValueError);
+public static native PyObject PyExc_ZeroDivisionError(); public static native void PyExc_ZeroDivisionError(PyObject PyExc_ZeroDivisionError);
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+public static native PyObject PyExc_BlockingIOError(); public static native void PyExc_BlockingIOError(PyObject PyExc_BlockingIOError);
+public static native PyObject PyExc_BrokenPipeError(); public static native void PyExc_BrokenPipeError(PyObject PyExc_BrokenPipeError);
+public static native PyObject PyExc_ChildProcessError(); public static native void PyExc_ChildProcessError(PyObject PyExc_ChildProcessError);
+public static native PyObject PyExc_ConnectionError(); public static native void PyExc_ConnectionError(PyObject PyExc_ConnectionError);
+public static native PyObject PyExc_ConnectionAbortedError(); public static native void PyExc_ConnectionAbortedError(PyObject PyExc_ConnectionAbortedError);
+public static native PyObject PyExc_ConnectionRefusedError(); public static native void PyExc_ConnectionRefusedError(PyObject PyExc_ConnectionRefusedError);
+public static native PyObject PyExc_ConnectionResetError(); public static native void PyExc_ConnectionResetError(PyObject PyExc_ConnectionResetError);
+public static native PyObject PyExc_FileExistsError(); public static native void PyExc_FileExistsError(PyObject PyExc_FileExistsError);
+public static native PyObject PyExc_FileNotFoundError(); public static native void PyExc_FileNotFoundError(PyObject PyExc_FileNotFoundError);
+public static native PyObject PyExc_InterruptedError(); public static native void PyExc_InterruptedError(PyObject PyExc_InterruptedError);
+public static native PyObject PyExc_IsADirectoryError(); public static native void PyExc_IsADirectoryError(PyObject PyExc_IsADirectoryError);
+public static native PyObject PyExc_NotADirectoryError(); public static native void PyExc_NotADirectoryError(PyObject PyExc_NotADirectoryError);
+public static native PyObject PyExc_PermissionError(); public static native void PyExc_PermissionError(PyObject PyExc_PermissionError);
+public static native PyObject PyExc_ProcessLookupError(); public static native void PyExc_ProcessLookupError(PyObject PyExc_ProcessLookupError);
+public static native PyObject PyExc_TimeoutError(); public static native void PyExc_TimeoutError(PyObject PyExc_TimeoutError);
+// #endif
+
+
+/* Compatibility aliases */
+public static native PyObject PyExc_EnvironmentError(); public static native void PyExc_EnvironmentError(PyObject PyExc_EnvironmentError);
+public static native PyObject PyExc_IOError(); public static native void PyExc_IOError(PyObject PyExc_IOError);
+// #ifdef MS_WINDOWS
+// #endif
+
+public static native PyObject PyExc_RecursionErrorInst(); public static native void PyExc_RecursionErrorInst(PyObject PyExc_RecursionErrorInst);
+
+/* Predefined warning categories */
+public static native PyObject PyExc_Warning(); public static native void PyExc_Warning(PyObject PyExc_Warning);
+public static native PyObject PyExc_UserWarning(); public static native void PyExc_UserWarning(PyObject PyExc_UserWarning);
+public static native PyObject PyExc_DeprecationWarning(); public static native void PyExc_DeprecationWarning(PyObject PyExc_DeprecationWarning);
+public static native PyObject PyExc_PendingDeprecationWarning(); public static native void PyExc_PendingDeprecationWarning(PyObject PyExc_PendingDeprecationWarning);
+public static native PyObject PyExc_SyntaxWarning(); public static native void PyExc_SyntaxWarning(PyObject PyExc_SyntaxWarning);
+public static native PyObject PyExc_RuntimeWarning(); public static native void PyExc_RuntimeWarning(PyObject PyExc_RuntimeWarning);
+public static native PyObject PyExc_FutureWarning(); public static native void PyExc_FutureWarning(PyObject PyExc_FutureWarning);
+public static native PyObject PyExc_ImportWarning(); public static native void PyExc_ImportWarning(PyObject PyExc_ImportWarning);
+public static native PyObject PyExc_UnicodeWarning(); public static native void PyExc_UnicodeWarning(PyObject PyExc_UnicodeWarning);
+public static native PyObject PyExc_BytesWarning(); public static native void PyExc_BytesWarning(PyObject PyExc_BytesWarning);
+public static native PyObject PyExc_ResourceWarning(); public static native void PyExc_ResourceWarning(PyObject PyExc_ResourceWarning);
+
+
+/* Convenience functions */
+
+@NoException public static native int PyErr_BadArgument();
+@NoException public static native PyObject PyErr_NoMemory();
+@NoException public static native PyObject PyErr_SetFromErrno(PyObject arg0);
+@NoException public static native PyObject PyErr_SetFromErrnoWithFilenameObject(
+    PyObject arg0, PyObject arg1);
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03040000
+@NoException public static native PyObject PyErr_SetFromErrnoWithFilenameObjects(
+    PyObject arg0, PyObject arg1, PyObject arg2);
+// #endif
+@NoException public static native PyObject PyErr_SetFromErrnoWithFilename(
+    PyObject exc,
+    @Cast("const char*") BytePointer filename
+    );
+@NoException public static native PyObject PyErr_SetFromErrnoWithFilename(
+    PyObject exc,
+    String filename
+    );
+// #if defined(MS_WINDOWS) && !defined(Py_LIMITED_API)
+// #endif /* MS_WINDOWS */
+
+@NoException public static native PyObject PyErr_Format(
+    PyObject exception,
+    @Cast("const char*") BytePointer format
+    );
+@NoException public static native PyObject PyErr_Format(
+    PyObject exception,
+    String format
+    );
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+@NoException public static native PyObject PyErr_FormatV(
+    PyObject exception,
+    @Cast("const char*") BytePointer format,
+    @ByVal @Cast("va_list*") Pointer vargs);
+@NoException public static native PyObject PyErr_FormatV(
+    PyObject exception,
+    String format,
+    @ByVal @Cast("va_list*") Pointer vargs);
+// #endif
+
+// #ifndef Py_LIMITED_API
+/* Like PyErr_Format(), but saves current exception as __context__ and
+   __cause__.
+ */
+@NoException public static native PyObject _PyErr_FormatFromCause(
+    PyObject exception,
+    @Cast("const char*") BytePointer format
+    );
+@NoException public static native PyObject _PyErr_FormatFromCause(
+    PyObject exception,
+    String format
+    );
+// #endif
+
+// #ifdef MS_WINDOWS
+// #endif /* MS_WINDOWS */
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+@NoException public static native PyObject PyErr_SetImportErrorSubclass(PyObject arg0, PyObject arg1,
+    PyObject arg2, PyObject arg3);
+// #endif
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native PyObject PyErr_SetImportError(PyObject arg0, PyObject arg1,
+    PyObject arg2);
+// #endif
+
+/* Export the old function so that the existing API remains available: */
+@NoException public static native void PyErr_BadInternalCall();
+@NoException public static native void _PyErr_BadInternalCall(@Cast("const char*") BytePointer filename, int lineno);
+@NoException public static native void _PyErr_BadInternalCall(String filename, int lineno);
+/* Mask the old API with a call to the new API for code compiled under
+   Python 2.0: */
+// #define PyErr_BadInternalCall() _PyErr_BadInternalCall(__FILE__, __LINE__)
+
+/* Function to create a new exception */
+@NoException public static native PyObject PyErr_NewException(
+    @Cast("const char*") BytePointer name, PyObject base, PyObject dict);
+@NoException public static native PyObject PyErr_NewException(
+    String name, PyObject base, PyObject dict);
+@NoException public static native PyObject PyErr_NewExceptionWithDoc(
+    @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer doc, PyObject base, PyObject dict);
+@NoException public static native PyObject PyErr_NewExceptionWithDoc(
+    String name, String doc, PyObject base, PyObject dict);
+@NoException public static native void PyErr_WriteUnraisable(PyObject arg0);
+
+/* In exceptions.c */
+// #ifndef Py_LIMITED_API
+/* Helper that attempts to replace the current exception with one of the
+ * same type but with a prefix added to the exception text. The resulting
+ * exception description looks like:
+ *
+ *     prefix (exc_type: original_exc_str)
+ *
+ * Only some exceptions can be safely replaced. If the function determines
+ * it isn't safe to perform the replacement, it will leave the original
+ * unmodified exception in place.
+ *
+ * Returns a borrowed reference to the new exception (if any), NULL if the
+ * existing exception was left in place.
+ */
+@NoException public static native PyObject _PyErr_TrySetFromCause(
+    @Cast("const char*") BytePointer prefix_format
+    );
+@NoException public static native PyObject _PyErr_TrySetFromCause(
+    String prefix_format
+    );
+// #endif
+
+
+/* In sigcheck.c or signalmodule.c */
+@NoException public static native int PyErr_CheckSignals();
+@NoException public static native void PyErr_SetInterrupt();
+
+/* In signalmodule.c */
+// #ifndef Py_LIMITED_API
+
+// #endif
+
+/* Support for adding program text to SyntaxErrors */
+@NoException public static native void PyErr_SyntaxLocation(
+    @Cast("const char*") BytePointer filename,
+    int lineno);
+@NoException public static native void PyErr_SyntaxLocation(
+    String filename,
+    int lineno);
+@NoException public static native void PyErr_SyntaxLocationEx(
+    @Cast("const char*") BytePointer filename,
+    int lineno,
+    int col_offset);
+@NoException public static native void PyErr_SyntaxLocationEx(
+    String filename,
+    int lineno,
+    int col_offset);
+// #ifndef Py_LIMITED_API
+@NoException public static native void PyErr_SyntaxLocationObject(
+    PyObject filename,
+    int lineno,
+    int col_offset);
+// #endif
+@NoException public static native PyObject PyErr_ProgramText(
+    @Cast("const char*") BytePointer filename,
+    int lineno);
+@NoException public static native PyObject PyErr_ProgramText(
+    String filename,
+    int lineno);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyErr_ProgramTextObject(
+    PyObject filename,
+    int lineno);
+// #endif
+
+/* The following functions are used to create and modify unicode
+   exceptions from C */
+
+/* create a UnicodeDecodeError object */
+@NoException public static native PyObject PyUnicodeDecodeError_Create(
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const char*") BytePointer object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native PyObject PyUnicodeDecodeError_Create(
+    String encoding,
+    String object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    String reason
+    );
+
+/* create a UnicodeEncodeError object */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicodeEncodeError_Create(
+    @Cast("const char*") BytePointer encoding,
+    @Cast("const Py_UNICODE*") Pointer object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native PyObject PyUnicodeEncodeError_Create(
+    String encoding,
+    @Cast("const Py_UNICODE*") Pointer object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    String reason
+    );
+// #endif
+
+/* create a UnicodeTranslateError object */
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject PyUnicodeTranslateError_Create(
+    @Cast("const Py_UNICODE*") Pointer object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native PyObject PyUnicodeTranslateError_Create(
+    @Cast("const Py_UNICODE*") Pointer object,
+    @Cast("Py_ssize_t") long length,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    String reason
+    );
+@NoException public static native PyObject _PyUnicodeTranslateError_Create(
+    PyObject object,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native PyObject _PyUnicodeTranslateError_Create(
+    PyObject object,
+    @Cast("Py_ssize_t") long start,
+    @Cast("Py_ssize_t") long end,
+    String reason
+    );
+// #endif
+
+/* get the encoding attribute */
+@NoException public static native PyObject PyUnicodeEncodeError_GetEncoding(PyObject arg0);
+@NoException public static native PyObject PyUnicodeDecodeError_GetEncoding(PyObject arg0);
+
+/* get the object attribute */
+@NoException public static native PyObject PyUnicodeEncodeError_GetObject(PyObject arg0);
+@NoException public static native PyObject PyUnicodeDecodeError_GetObject(PyObject arg0);
+@NoException public static native PyObject PyUnicodeTranslateError_GetObject(PyObject arg0);
+
+/* get the value of the start attribute (the int * may not be NULL)
+   return 0 on success, -1 on failure */
+@NoException public static native int PyUnicodeEncodeError_GetStart(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+@NoException public static native int PyUnicodeDecodeError_GetStart(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+@NoException public static native int PyUnicodeTranslateError_GetStart(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+
+/* assign a new value to the start attribute
+   return 0 on success, -1 on failure */
+@NoException public static native int PyUnicodeEncodeError_SetStart(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyUnicodeDecodeError_SetStart(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyUnicodeTranslateError_SetStart(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+
+/* get the value of the end attribute (the int *may not be NULL)
+ return 0 on success, -1 on failure */
+@NoException public static native int PyUnicodeEncodeError_GetEnd(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+@NoException public static native int PyUnicodeDecodeError_GetEnd(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+@NoException public static native int PyUnicodeTranslateError_GetEnd(PyObject arg0, @Cast("Py_ssize_t*") SizeTPointer arg1);
+
+/* assign a new value to the end attribute
+   return 0 on success, -1 on failure */
+@NoException public static native int PyUnicodeEncodeError_SetEnd(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyUnicodeDecodeError_SetEnd(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+@NoException public static native int PyUnicodeTranslateError_SetEnd(PyObject arg0, @Cast("Py_ssize_t") long arg1);
+
+/* get the value of the reason attribute */
+@NoException public static native PyObject PyUnicodeEncodeError_GetReason(PyObject arg0);
+@NoException public static native PyObject PyUnicodeDecodeError_GetReason(PyObject arg0);
+@NoException public static native PyObject PyUnicodeTranslateError_GetReason(PyObject arg0);
+
+/* assign a new value to the reason attribute
+   return 0 on success, -1 on failure */
+@NoException public static native int PyUnicodeEncodeError_SetReason(
+    PyObject exc,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native int PyUnicodeEncodeError_SetReason(
+    PyObject exc,
+    String reason
+    );
+@NoException public static native int PyUnicodeDecodeError_SetReason(
+    PyObject exc,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native int PyUnicodeDecodeError_SetReason(
+    PyObject exc,
+    String reason
+    );
+@NoException public static native int PyUnicodeTranslateError_SetReason(
+    PyObject exc,
+    @Cast("const char*") BytePointer reason
+    );
+@NoException public static native int PyUnicodeTranslateError_SetReason(
+    PyObject exc,
+    String reason
+    );
+
+/* These APIs aren't really part of the error implementation, but
+   often needed to format error messages; the native C lib APIs are
+   not available on all platforms, which is why we provide emulations
+   for those platforms in Python/mysnprintf.c,
+   WARNING:  The return value of snprintf varies across platforms; do
+   not rely on any particular behavior; eventually the C99 defn may
+   be reliable.
+*/
+// #if defined(MS_WIN32) && !defined(HAVE_SNPRINTF)
+// #endif
+
+// #include <stdarg.h>
+@NoException public static native int PyOS_snprintf(@Cast("char*") BytePointer str, @Cast("size_t") long size, @Cast("const char*") BytePointer format);
+@NoException public static native int PyOS_snprintf(@Cast("char*") ByteBuffer str, @Cast("size_t") long size, String format);
+@NoException public static native int PyOS_snprintf(@Cast("char*") byte[] str, @Cast("size_t") long size, @Cast("const char*") BytePointer format);
+@NoException public static native int PyOS_snprintf(@Cast("char*") BytePointer str, @Cast("size_t") long size, String format);
+@NoException public static native int PyOS_snprintf(@Cast("char*") ByteBuffer str, @Cast("size_t") long size, @Cast("const char*") BytePointer format);
+@NoException public static native int PyOS_snprintf(@Cast("char*") byte[] str, @Cast("size_t") long size, String format);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") BytePointer str, @Cast("size_t") long size, @Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer va);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") ByteBuffer str, @Cast("size_t") long size, String format, @ByVal @Cast("va_list*") Pointer va);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") byte[] str, @Cast("size_t") long size, @Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer va);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") BytePointer str, @Cast("size_t") long size, String format, @ByVal @Cast("va_list*") Pointer va);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") ByteBuffer str, @Cast("size_t") long size, @Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer va);
+@NoException public static native int PyOS_vsnprintf(@Cast("char*") byte[] str, @Cast("size_t") long size, String format, @ByVal @Cast("va_list*") Pointer va);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_ERRORS_H */
+
+
 // Parsed from pyarena.h
 
 /* An arena-like memory interface for the compiler.
@@ -3541,13 +11425,7 @@ public static final int MAX_CO_EXTRA_USERS = 255;
     public _is() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _is(Pointer p) { super(p); }
-} /* Forward */
-@Opaque public static class _frame extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public _frame() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public _frame(Pointer p) { super(p); }
-} /* Forward declaration for PyFrameObject. */
+} /* Forward */ /* Forward declaration for PyFrameObject. */
 
 // #ifdef Py_LIMITED_API
 // #else
@@ -3908,6 +11786,196 @@ public static native @ByRef @Cast("PyThreadFrameGetter*") Pointer _PyThreadState
 // #endif /* !Py_PYSTATE_H */
 
 
+// Parsed from modsupport.h
+
+
+// #ifndef Py_MODSUPPORT_H
+// #define Py_MODSUPPORT_H
+// #ifdef __cplusplus
+// #endif
+
+/* Module support interface */
+
+// #include <stdarg.h>
+
+/* If PY_SSIZE_T_CLEAN is defined, each functions treats #-specifier
+   to mean Py_ssize_t */
+// #ifdef PY_SSIZE_T_CLEAN
+// #else
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _Py_VaBuildValue_SizeT(@Cast("const char*") BytePointer arg0, @ByVal @Cast("va_list*") Pointer arg1);
+@NoException public static native PyObject _Py_VaBuildValue_SizeT(String arg0, @ByVal @Cast("va_list*") Pointer arg1);
+// #endif /* !Py_LIMITED_API */
+// #endif
+
+/* Due to a glitch in 3.2, the _SizeT versions weren't exported from the DLL. */
+// #if !defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+// #endif
+@NoException public static native int PyArg_ValidateKeywordArguments(PyObject arg0);
+@NoException public static native int PyArg_UnpackTuple(PyObject arg0, @Cast("const char*") BytePointer arg1, @Cast("Py_ssize_t") long arg2, @Cast("Py_ssize_t") long arg3);
+@NoException public static native int PyArg_UnpackTuple(PyObject arg0, String arg1, @Cast("Py_ssize_t") long arg2, @Cast("Py_ssize_t") long arg3);
+@NoException public static native PyObject Py_BuildValue(@Cast("const char*") BytePointer arg0);
+@NoException public static native PyObject Py_BuildValue(String arg0);
+@NoException public static native PyObject _Py_BuildValue_SizeT(@Cast("const char*") BytePointer arg0);
+@NoException public static native PyObject _Py_BuildValue_SizeT(String arg0);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyArg_NoKeywords(@Cast("const char*") BytePointer funcname, PyObject kw);
+@NoException public static native int _PyArg_NoKeywords(String funcname, PyObject kw);
+@NoException public static native int _PyArg_NoPositional(@Cast("const char*") BytePointer funcname, PyObject args);
+@NoException public static native int _PyArg_NoPositional(String funcname, PyObject args);
+// #endif
+@NoException public static native PyObject Py_VaBuildValue(@Cast("const char*") BytePointer arg0, @ByVal @Cast("va_list*") Pointer arg1);
+@NoException public static native PyObject Py_VaBuildValue(String arg0, @ByVal @Cast("va_list*") Pointer arg1);
+
+// #ifndef Py_LIMITED_API
+public static class _PyArg_Parser extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _PyArg_Parser() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _PyArg_Parser(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _PyArg_Parser(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _PyArg_Parser position(long position) {
+        return (_PyArg_Parser)super.position(position);
+    }
+
+    @MemberGetter public native @Cast("const char*") BytePointer format();
+    @MemberGetter public native @Cast("const char*") BytePointer keywords(int i);
+    @MemberGetter public native @Cast("const char*const*") PointerPointer keywords();
+    @MemberGetter public native @Cast("const char*") BytePointer fname();
+    @MemberGetter public native @Cast("const char*") BytePointer custom_msg();
+    public native int pos(); public native _PyArg_Parser pos(int pos);            /* number of positional-only arguments */
+    public native int min(); public native _PyArg_Parser min(int min);            /* minimal number of arguments */
+    public native int max(); public native _PyArg_Parser max(int max);            /* maximal number of positional arguments */
+    public native PyObject kwtuple(); public native _PyArg_Parser kwtuple(PyObject kwtuple);  /* tuple of keyword parameter names */
+    public native _PyArg_Parser next(); public native _PyArg_Parser next(_PyArg_Parser next);
+}
+// #ifdef PY_SSIZE_T_CLEAN
+// #endif
+@NoException public static native int _PyArg_ParseTupleAndKeywordsFast(PyObject arg0, PyObject arg1,
+                                                 _PyArg_Parser arg2);
+@NoException public static native int _PyArg_ParseStack(@Cast("PyObject**") PointerPointer args, @Cast("Py_ssize_t") long nargs, PyObject kwnames,
+                                  _PyArg_Parser arg3);
+@NoException public static native int _PyArg_ParseStack(@ByPtrPtr PyObject args, @Cast("Py_ssize_t") long nargs, PyObject kwnames,
+                                  _PyArg_Parser arg3);
+@NoException public static native int _PyArg_VaParseTupleAndKeywordsFast(PyObject arg0, PyObject arg1,
+                                                   _PyArg_Parser arg2, @ByVal @Cast("va_list*") Pointer arg3);
+
+// #endif
+
+@NoException public static native int PyModule_AddObject(PyObject arg0, @Cast("const char*") BytePointer arg1, PyObject arg2);
+@NoException public static native int PyModule_AddObject(PyObject arg0, String arg1, PyObject arg2);
+@NoException public static native int PyModule_AddIntConstant(PyObject arg0, @Cast("const char*") BytePointer arg1, long arg2);
+@NoException public static native int PyModule_AddIntConstant(PyObject arg0, String arg1, long arg2);
+@NoException public static native int PyModule_AddStringConstant(PyObject arg0, @Cast("const char*") BytePointer arg1, @Cast("const char*") BytePointer arg2);
+@NoException public static native int PyModule_AddStringConstant(PyObject arg0, String arg1, String arg2);
+// #define PyModule_AddIntMacro(m, c) PyModule_AddIntConstant(m, #c, c)
+// #define PyModule_AddStringMacro(m, c) PyModule_AddStringConstant(m, #c, c)
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+/* New in 3.5 */
+@NoException public static native int PyModule_SetDocString(PyObject arg0, @Cast("const char*") BytePointer arg1);
+@NoException public static native int PyModule_SetDocString(PyObject arg0, String arg1);
+@NoException public static native int PyModule_AddFunctions(PyObject arg0, PyMethodDef arg1);
+@NoException public static native int PyModule_ExecDef(PyObject module, PyModuleDef def);
+// #endif
+
+public static final int Py_CLEANUP_SUPPORTED = 0x20000;
+
+public static final int PYTHON_API_VERSION = 1013;
+public static final String PYTHON_API_STRING = "1013";
+/* The API version is maintained (independently from the Python version)
+   so we can detect mismatches between the interpreter and dynamically
+   loaded modules.  These are diagnosed by an error message but
+   the module is still loaded (because the mismatch can only be tested
+   after loading the module).  The error message is intended to
+   explain the core dump a few seconds later.
+
+   The symbol PYTHON_API_STRING defines the same value as a string
+   literal.  *** PLEASE MAKE SURE THE DEFINITIONS MATCH. ***
+
+   Please add a line or two to the top of this log for each API
+   version change:
+
+   22-Feb-2006  MvL     1013    PEP 353 - long indices for sequence lengths
+
+   19-Aug-2002  GvR     1012    Changes to string object struct for
+                                interning changes, saving 3 bytes.
+
+   17-Jul-2001  GvR     1011    Descr-branch, just to be on the safe side
+
+   25-Jan-2001  FLD     1010    Parameters added to PyCode_New() and
+                                PyFrame_New(); Python 2.1a2
+
+   14-Mar-2000  GvR     1009    Unicode API added
+
+   3-Jan-1999   GvR     1007    Decided to change back!  (Don't reuse 1008!)
+
+   3-Dec-1998   GvR     1008    Python 1.5.2b1
+
+   18-Jan-1997  GvR     1007    string interning and other speedups
+
+   11-Oct-1996  GvR     renamed Py_Ellipses to Py_Ellipsis :-(
+
+   30-Jul-1996  GvR     Slice and ellipses syntax added
+
+   23-Jul-1996  GvR     For 1.4 -- better safe than sorry this time :-)
+
+   7-Nov-1995   GvR     Keyword arguments (should've been done at 1.3 :-( )
+
+   10-Jan-1995  GvR     Renamed globals to new naming scheme
+
+   9-Jan-1995   GvR     Initial version (incompatible with older API)
+*/
+
+/* The PYTHON_ABI_VERSION is introduced in PEP 384. For the lifetime of
+   Python 3, it will stay at the value of 3; changes to the limited API
+   must be performed in a strictly backwards-compatible manner. */
+public static final int PYTHON_ABI_VERSION = 3;
+public static final String PYTHON_ABI_STRING = "3";
+
+// #ifdef Py_TRACE_REFS
+// #endif
+
+@NoException public static native PyObject PyModule_Create2(PyModuleDef arg0,
+                                     int apiver);
+
+// #ifdef Py_LIMITED_API
+// #define PyModule_Create(module)
+//         PyModule_Create2(module, PYTHON_ABI_VERSION)
+// #else
+// #define PyModule_Create(module)
+//         PyModule_Create2(module, PYTHON_API_VERSION)
+// #endif
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+/* New in 3.5 */
+@NoException public static native PyObject PyModule_FromDefAndSpec2(PyModuleDef def,
+                                                PyObject spec,
+                                                int module_api_version);
+
+// #ifdef Py_LIMITED_API
+// #define PyModule_FromDefAndSpec(module, spec)
+//     PyModule_FromDefAndSpec2(module, spec, PYTHON_ABI_VERSION)
+// #else
+// #define PyModule_FromDefAndSpec(module, spec)
+//     PyModule_FromDefAndSpec2(module, spec, PYTHON_API_VERSION)
+// #endif /* Py_LIMITED_API */
+// #endif /* New in 3.5 */
+
+// #ifndef Py_LIMITED_API
+public static native @Cast("char*") BytePointer _Py_PackageContext(); public static native void _Py_PackageContext(BytePointer _Py_PackageContext);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_MODSUPPORT_H */
+
+
 // Parsed from ceval.h
 
 // #ifndef Py_CEVAL_H
@@ -4158,6 +12226,1772 @@ public static final int FVS_HAVE_SPEC = 0x4;
 // #endif /* !Py_CEVAL_H */
 
 
+// Parsed from sysmodule.h
+
+
+/* System module interface */
+
+// #ifndef Py_SYSMODULE_H
+// #define Py_SYSMODULE_H
+// #ifdef __cplusplus
+// #endif
+
+@NoException public static native PyObject PySys_GetObject(@Cast("const char*") BytePointer arg0);
+@NoException public static native PyObject PySys_GetObject(String arg0);
+@NoException public static native int PySys_SetObject(@Cast("const char*") BytePointer arg0, PyObject arg1);
+@NoException public static native int PySys_SetObject(String arg0, PyObject arg1);
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PySys_GetObjectId(_Py_Identifier key);
+@NoException public static native int _PySys_SetObjectId(_Py_Identifier key, PyObject arg1);
+// #endif
+
+@NoException public static native void PySys_SetArgv(int arg0, @Cast("wchar_t**") PointerPointer arg1);
+@NoException public static native void PySys_SetArgv(int arg0, @Cast("wchar_t**") @ByPtrPtr Pointer arg1);
+@NoException public static native void PySys_SetArgvEx(int arg0, @Cast("wchar_t**") PointerPointer arg1, int arg2);
+@NoException public static native void PySys_SetArgvEx(int arg0, @Cast("wchar_t**") @ByPtrPtr Pointer arg1, int arg2);
+@NoException public static native void PySys_SetPath(@Cast("const wchar_t*") Pointer arg0);
+
+@NoException public static native void PySys_WriteStdout(@Cast("const char*") BytePointer format);
+@NoException public static native void PySys_WriteStdout(String format);
+@NoException public static native void PySys_WriteStderr(@Cast("const char*") BytePointer format);
+@NoException public static native void PySys_WriteStderr(String format);
+@NoException public static native void PySys_FormatStdout(@Cast("const char*") BytePointer format);
+@NoException public static native void PySys_FormatStdout(String format);
+@NoException public static native void PySys_FormatStderr(@Cast("const char*") BytePointer format);
+@NoException public static native void PySys_FormatStderr(String format);
+
+@NoException public static native void PySys_ResetWarnOptions();
+@NoException public static native void PySys_AddWarnOption(@Cast("const wchar_t*") Pointer arg0);
+@NoException public static native void PySys_AddWarnOptionUnicode(PyObject arg0);
+@NoException public static native int PySys_HasWarnOptions();
+
+@NoException public static native void PySys_AddXOption(@Cast("const wchar_t*") Pointer arg0);
+@NoException public static native PyObject PySys_GetXOptions();
+
+// #ifndef Py_LIMITED_API
+@NoException public static native @Cast("size_t") long _PySys_GetSizeOf(PyObject arg0);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_SYSMODULE_H */
+
+
+// Parsed from osmodule.h
+
+
+/* os module interface */
+
+// #ifndef Py_OSMODULE_H
+// #define Py_OSMODULE_H
+// #ifdef __cplusplus
+// #endif
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+@NoException public static native PyObject PyOS_FSPath(PyObject path);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_OSMODULE_H */
+
+
+// Parsed from intrcheck.h
+
+
+// #ifndef Py_INTRCHECK_H
+// #define Py_INTRCHECK_H
+// #ifdef __cplusplus
+// #endif
+
+@NoException public static native int PyOS_InterruptOccurred();
+@NoException public static native void PyOS_InitInterrupts();
+@NoException public static native void PyOS_AfterFork();
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyOS_IsMainThread();
+
+// #ifdef MS_WINDOWS
+// #endif
+// #endif /* !Py_LIMITED_API */
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_INTRCHECK_H */
+
+
+// Parsed from import.h
+
+
+/* Module definition and import interface */
+
+// #ifndef Py_IMPORT_H
+// #define Py_IMPORT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifndef Py_LIMITED_API
+@NoException public static native void _PyImportZip_Init();
+
+
+// #endif /* !Py_LIMITED_API */
+@NoException public static native long PyImport_GetMagicNumber();
+@NoException public static native @Cast("const char*") BytePointer PyImport_GetMagicTag();
+@NoException public static native PyObject PyImport_ExecCodeModule(
+    @Cast("const char*") BytePointer name,
+    PyObject co
+    );
+@NoException public static native PyObject PyImport_ExecCodeModule(
+    String name,
+    PyObject co
+    );
+@NoException public static native PyObject PyImport_ExecCodeModuleEx(
+    @Cast("const char*") BytePointer name,
+    PyObject co,
+    @Cast("const char*") BytePointer pathname
+    );
+@NoException public static native PyObject PyImport_ExecCodeModuleEx(
+    String name,
+    PyObject co,
+    String pathname
+    );
+@NoException public static native PyObject PyImport_ExecCodeModuleWithPathnames(
+    @Cast("const char*") BytePointer name,
+    PyObject co,
+    @Cast("const char*") BytePointer pathname,
+    @Cast("const char*") BytePointer cpathname
+    );
+@NoException public static native PyObject PyImport_ExecCodeModuleWithPathnames(
+    String name,
+    PyObject co,
+    String pathname,
+    String cpathname
+    );
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native PyObject PyImport_ExecCodeModuleObject(
+    PyObject name,
+    PyObject co,
+    PyObject pathname,
+    PyObject cpathname
+    );
+// #endif
+@NoException public static native PyObject PyImport_GetModuleDict();
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native PyObject PyImport_AddModuleObject(
+    PyObject name
+    );
+// #endif
+@NoException public static native PyObject PyImport_AddModule(
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native PyObject PyImport_AddModule(
+    String name
+    );
+@NoException public static native PyObject PyImport_ImportModule(
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native PyObject PyImport_ImportModule(
+    String name
+    );
+@NoException public static native PyObject PyImport_ImportModuleNoBlock(
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native PyObject PyImport_ImportModuleNoBlock(
+    String name
+    );
+@NoException public static native PyObject PyImport_ImportModuleLevel(
+    @Cast("const char*") BytePointer name,
+    PyObject globals,
+    PyObject locals,
+    PyObject fromlist,
+    int level
+    );
+@NoException public static native PyObject PyImport_ImportModuleLevel(
+    String name,
+    PyObject globals,
+    PyObject locals,
+    PyObject fromlist,
+    int level
+    );
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+@NoException public static native PyObject PyImport_ImportModuleLevelObject(
+    PyObject name,
+    PyObject globals,
+    PyObject locals,
+    PyObject fromlist,
+    int level
+    );
+// #endif
+
+// #define PyImport_ImportModuleEx(n, g, l, f)
+//     PyImport_ImportModuleLevel(n, g, l, f, 0)
+
+@NoException public static native PyObject PyImport_GetImporter(PyObject path);
+@NoException public static native PyObject PyImport_Import(PyObject name);
+@NoException public static native PyObject PyImport_ReloadModule(PyObject m);
+@NoException public static native void PyImport_Cleanup();
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+@NoException public static native int PyImport_ImportFrozenModuleObject(
+    PyObject name
+    );
+// #endif
+@NoException public static native int PyImport_ImportFrozenModule(
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native int PyImport_ImportFrozenModule(
+    String name
+    );
+
+// #ifndef Py_LIMITED_API
+// #ifdef WITH_THREAD
+@NoException public static native void _PyImport_AcquireLock();
+@NoException public static native int _PyImport_ReleaseLock();
+// #else
+// #define _PyImport_AcquireLock()
+// #define _PyImport_ReleaseLock() 1
+// #endif
+
+@NoException public static native void _PyImport_ReInitLock();
+
+@NoException public static native PyObject _PyImport_FindBuiltin(
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native PyObject _PyImport_FindBuiltin(
+    String name
+    );
+@NoException public static native PyObject _PyImport_FindExtensionObject(PyObject arg0, PyObject arg1);
+@NoException public static native int _PyImport_FixupBuiltin(
+    PyObject mod,
+    @Cast("const char*") BytePointer name
+    );
+@NoException public static native int _PyImport_FixupBuiltin(
+    PyObject mod,
+    String name
+    );
+@NoException public static native int _PyImport_FixupExtensionObject(PyObject arg0, PyObject arg1, PyObject arg2);
+
+public static class _inittab extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _inittab() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _inittab(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _inittab(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _inittab position(long position) {
+        return (_inittab)super.position(position);
+    }
+
+    @MemberGetter public native @Cast("const char*") BytePointer name();           /* ASCII encoded string */
+    public static class PyObject_Initfunc extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    PyObject_Initfunc(Pointer p) { super(p); }
+        protected PyObject_Initfunc() { allocate(); }
+        private native void allocate();
+        public native PyObject call();
+    }
+    public native PyObject_Initfunc initfunc(); public native _inittab initfunc(PyObject_Initfunc initfunc);
+}
+public static native _inittab PyImport_Inittab(); public static native void PyImport_Inittab(_inittab PyImport_Inittab);
+@NoException public static native int PyImport_ExtendInittab(_inittab newtab);
+// #endif /* Py_LIMITED_API */
+
+
+
+public static class PyObject_Initfunc extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    PyObject_Initfunc(Pointer p) { super(p); }
+    protected PyObject_Initfunc() { allocate(); }
+    private native void allocate();
+    public native PyObject call();
+}
+@NoException public static native int PyImport_AppendInittab(
+    @Cast("const char*") BytePointer name,
+    PyObject_Initfunc initfunc
+    );
+@NoException public static native int PyImport_AppendInittab(
+    String name,
+    PyObject_Initfunc initfunc
+    );
+
+// #ifndef Py_LIMITED_API
+public static class _frozen extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public _frozen() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _frozen(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _frozen(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public _frozen position(long position) {
+        return (_frozen)super.position(position);
+    }
+
+    @MemberGetter public native @Cast("const char*") BytePointer name();                 /* ASCII encoded string */
+    @MemberGetter public native @Cast("const unsigned char*") BytePointer code();
+    public native int size(); public native _frozen size(int size);
+}
+
+/* Embedding apps may change this pointer to point to their favorite
+   collection of frozen modules: */
+
+@MemberGetter public static native @Const _frozen PyImport_FrozenModules();
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_IMPORT_H */
+
+
+// Parsed from abstract.h
+
+// #ifndef Py_ABSTRACTOBJECT_H
+// #define Py_ABSTRACTOBJECT_H
+// #ifdef __cplusplus
+// #endif
+
+// #ifdef PY_SSIZE_T_CLEAN
+// #endif
+
+/* Abstract Object Interface (many thanks to Jim Fulton) */
+
+/*
+   PROPOSAL: A Generic Python Object Interface for Python C Modules
+
+Problem
+
+  Python modules written in C that must access Python objects must do
+  so through routines whose interfaces are described by a set of
+  include files.  Unfortunately, these routines vary according to the
+  object accessed.  To use these routines, the C programmer must check
+  the type of the object being used and must call a routine based on
+  the object type.  For example, to access an element of a sequence,
+  the programmer must determine whether the sequence is a list or a
+  tuple:
+
+    if(is_tupleobject(o))
+      e=gettupleitem(o,i)
+    else if(is_listitem(o))
+      e=getlistitem(o,i)
+
+  If the programmer wants to get an item from another type of object
+  that provides sequence behavior, there is no clear way to do it
+  correctly.
+
+  The persistent programmer may peruse object.h and find that the
+  _typeobject structure provides a means of invoking up to (currently
+  about) 41 special operators.  So, for example, a routine can get an
+  item from any object that provides sequence behavior. However, to
+  use this mechanism, the programmer must make their code dependent on
+  the current Python implementation.
+
+  Also, certain semantics, especially memory management semantics, may
+  differ by the type of object being used.  Unfortunately, these
+  semantics are not clearly described in the current include files.
+  An abstract interface providing more consistent semantics is needed.
+
+Proposal
+
+  I propose the creation of a standard interface (with an associated
+  library of routines and/or macros) for generically obtaining the
+  services of Python objects.  This proposal can be viewed as one
+  components of a Python C interface consisting of several components.
+
+  From the viewpoint of C access to Python services, we have (as
+  suggested by Guido in off-line discussions):
+
+  - "Very high level layer": two or three functions that let you exec or
+    eval arbitrary Python code given as a string in a module whose name is
+    given, passing C values in and getting C values out using
+    mkvalue/getargs style format strings.  This does not require the user
+    to declare any variables of type "PyObject *".  This should be enough
+    to write a simple application that gets Python code from the user,
+    execs it, and returns the output or errors.  (Error handling must also
+    be part of this API.)
+
+  - "Abstract objects layer": which is the subject of this proposal.
+    It has many functions operating on objects, and lest you do many
+    things from C that you can also write in Python, without going
+    through the Python parser.
+
+  - "Concrete objects layer": This is the public type-dependent
+    interface provided by the standard built-in types, such as floats,
+    strings, and lists.  This interface exists and is currently
+    documented by the collection of include files provided with the
+    Python distributions.
+
+  From the point of view of Python accessing services provided by C
+  modules:
+
+  - "Python module interface": this interface consist of the basic
+    routines used to define modules and their members.  Most of the
+    current extensions-writing guide deals with this interface.
+
+  - "Built-in object interface": this is the interface that a new
+    built-in type must provide and the mechanisms and rules that a
+    developer of a new built-in type must use and follow.
+
+  This proposal is a "first-cut" that is intended to spur
+  discussion. See especially the lists of notes.
+
+  The Python C object interface will provide four protocols: object,
+  numeric, sequence, and mapping.  Each protocol consists of a
+  collection of related operations.  If an operation that is not
+  provided by a particular type is invoked, then a standard exception,
+  NotImplementedError is raised with an operation name as an argument.
+  In addition, for convenience this interface defines a set of
+  constructors for building objects of built-in types.  This is needed
+  so new objects can be returned from C functions that otherwise treat
+  objects generically.
+
+Memory Management
+
+  For all of the functions described in this proposal, if a function
+  retains a reference to a Python object passed as an argument, then the
+  function will increase the reference count of the object.  It is
+  unnecessary for the caller to increase the reference count of an
+  argument in anticipation of the object's retention.
+
+  All Python objects returned from functions should be treated as new
+  objects.  Functions that return objects assume that the caller will
+  retain a reference and the reference count of the object has already
+  been incremented to account for this fact.  A caller that does not
+  retain a reference to an object that is returned from a function
+  must decrement the reference count of the object (using
+  DECREF(object)) to prevent memory leaks.
+
+  Note that the behavior mentioned here is different from the current
+  behavior for some objects (e.g. lists and tuples) when certain
+  type-specific routines are called directly (e.g. setlistitem).  The
+  proposed abstraction layer will provide a consistent memory
+  management interface, correcting for inconsistent behavior for some
+  built-in types.
+
+Protocols
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+
+/*  Object Protocol: */
+
+     /* Implemented elsewhere:
+
+     int PyObject_Print(PyObject *o, FILE *fp, int flags);
+
+     Print an object, o, on file, fp.  Returns -1 on
+     error.  The flags argument is used to enable certain printing
+     options. The only option currently supported is Py_Print_RAW.
+
+     (What should be said about Py_Print_RAW?)
+
+       */
+
+     /* Implemented elsewhere:
+
+     int PyObject_HasAttrString(PyObject *o, const char *attr_name);
+
+     Returns 1 if o has the attribute attr_name, and 0 otherwise.
+     This is equivalent to the Python expression:
+     hasattr(o,attr_name).
+
+     This function always succeeds.
+
+       */
+
+     /* Implemented elsewhere:
+
+     PyObject* PyObject_GetAttrString(PyObject *o, const char *attr_name);
+
+     Retrieve an attributed named attr_name form object o.
+     Returns the attribute value on success, or NULL on failure.
+     This is the equivalent of the Python expression: o.attr_name.
+
+       */
+
+     /* Implemented elsewhere:
+
+     int PyObject_HasAttr(PyObject *o, PyObject *attr_name);
+
+     Returns 1 if o has the attribute attr_name, and 0 otherwise.
+     This is equivalent to the Python expression:
+     hasattr(o,attr_name).
+
+     This function always succeeds.
+
+       */
+
+     /* Implemented elsewhere:
+
+     PyObject* PyObject_GetAttr(PyObject *o, PyObject *attr_name);
+
+     Retrieve an attributed named attr_name form object o.
+     Returns the attribute value on success, or NULL on failure.
+     This is the equivalent of the Python expression: o.attr_name.
+
+       */
+
+
+     /* Implemented elsewhere:
+
+     int PyObject_SetAttrString(PyObject *o, const char *attr_name, PyObject *v);
+
+     Set the value of the attribute named attr_name, for object o,
+     to the value v. Raise an exception and return -1 on failure; return 0 on
+     success.  This is the equivalent of the Python statement o.attr_name=v.
+
+       */
+
+     /* Implemented elsewhere:
+
+     int PyObject_SetAttr(PyObject *o, PyObject *attr_name, PyObject *v);
+
+     Set the value of the attribute named attr_name, for object o,
+     to the value v. Raise an exception and return -1 on failure; return 0 on
+     success.  This is the equivalent of the Python statement o.attr_name=v.
+
+       */
+
+     /* implemented as a macro:
+
+     int PyObject_DelAttrString(PyObject *o, const char *attr_name);
+
+     Delete attribute named attr_name, for object o. Returns
+     -1 on failure.  This is the equivalent of the Python
+     statement: del o.attr_name.
+
+       */
+// #define  PyObject_DelAttrString(O,A) PyObject_SetAttrString((O),(A),NULL)
+
+     /* implemented as a macro:
+
+     int PyObject_DelAttr(PyObject *o, PyObject *attr_name);
+
+     Delete attribute named attr_name, for object o. Returns -1
+     on failure.  This is the equivalent of the Python
+     statement: del o.attr_name.
+
+       */
+// #define  PyObject_DelAttr(O,A) PyObject_SetAttr((O),(A),NULL)
+
+     /* Implemented elsewhere:
+
+     PyObject *PyObject_Repr(PyObject *o);
+
+     Compute the string representation of object, o.  Returns the
+     string representation on success, NULL on failure.  This is
+     the equivalent of the Python expression: repr(o).
+
+     Called by the repr() built-in function.
+
+       */
+
+     /* Implemented elsewhere:
+
+     PyObject *PyObject_Str(PyObject *o);
+
+     Compute the string representation of object, o.  Returns the
+     string representation on success, NULL on failure.  This is
+     the equivalent of the Python expression: str(o).)
+
+     Called by the str() and print() built-in functions.
+
+       */
+
+       /* Declared elsewhere
+
+     PyAPI_FUNC(int) PyCallable_Check(PyObject *o);
+
+     Determine if the object, o, is callable.  Return 1 if the
+     object is callable and 0 otherwise.
+
+     This function always succeeds.
+       */
+
+     @NoException public static native PyObject PyObject_Call(PyObject callable_object,
+                                               PyObject args, PyObject kwargs);
+
+       /*
+     Call a callable Python object, callable_object, with
+     arguments and keywords arguments.  The 'args' argument can not be
+     NULL.
+       */
+
+// #ifndef Py_LIMITED_API
+    @NoException public static native PyObject _PyStack_AsTuple(
+            @Cast("PyObject**") PointerPointer stack,
+            @Cast("Py_ssize_t") long nargs);
+    @NoException public static native PyObject _PyStack_AsTuple(
+            @ByPtrPtr PyObject stack,
+            @Cast("Py_ssize_t") long nargs);
+
+    /* Convert keyword arguments from the (stack, kwnames) format to a Python
+       dictionary.
+
+       kwnames must only contains str strings, no subclass, and all keys must
+       be unique. kwnames is not checked, usually these checks are done before or later
+       calling _PyStack_AsDict(). For example, _PyArg_ParseStack() raises an
+       error if a key is not a string. */
+    @NoException public static native PyObject _PyStack_AsDict(
+            @Cast("PyObject**") PointerPointer values,
+            PyObject kwnames);
+    @NoException public static native PyObject _PyStack_AsDict(
+            @ByPtrPtr PyObject values,
+            PyObject kwnames);
+
+    /* Convert (args, nargs, kwargs: dict) into (stack, nargs, kwnames: tuple).
+
+       Return 0 on success, raise an exception and return -1 on error.
+
+       Write the new stack into *p_stack. If *p_stack is differen than args, it
+       must be released by PyMem_Free().
+
+       The stack uses borrowed references.
+
+       The type of keyword keys is not checked, these checks should be done
+       later (ex: _PyArg_ParseStackAndKeywords). */
+    @NoException public static native int _PyStack_UnpackDict(
+            @Cast("PyObject**") PointerPointer args,
+            @Cast("Py_ssize_t") long nargs,
+            PyObject kwargs,
+            @Cast("PyObject***") @ByPtrPtr PointerPointer p_stack,
+            @Cast("PyObject**") PointerPointer p_kwnames);
+    @NoException public static native int _PyStack_UnpackDict(
+            @ByPtrPtr PyObject args,
+            @Cast("Py_ssize_t") long nargs,
+            PyObject kwargs,
+            @Cast("PyObject***") @ByPtrPtr PointerPointer p_stack,
+            @ByPtrPtr PyObject p_kwnames);
+
+    /* Call the callable object func with the "fast call" calling convention:
+       args is a C array for positional arguments (nargs is the number of
+       positional arguments), kwargs is a dictionary for keyword arguments.
+
+       If nargs is equal to zero, args can be NULL. kwargs can be NULL.
+       nargs must be greater or equal to zero.
+
+       Return the result on success. Raise an exception on return NULL on
+       error. */
+    @NoException public static native PyObject _PyObject_FastCallDict(PyObject func,
+                                                      @Cast("PyObject**") PointerPointer args, @Cast("Py_ssize_t") long nargs,
+                                                      PyObject kwargs);
+    @NoException public static native PyObject _PyObject_FastCallDict(PyObject func,
+                                                      @ByPtrPtr PyObject args, @Cast("Py_ssize_t") long nargs,
+                                                      PyObject kwargs);
+
+    /* Call the callable object func with the "fast call" calling convention:
+       args is a C array for positional arguments followed by values of
+       keyword arguments. Keys of keyword arguments are stored as a tuple
+       of strings in kwnames. nargs is the number of positional parameters at
+       the beginning of stack. The size of kwnames gives the number of keyword
+       values in the stack after positional arguments.
+
+       kwnames must only contains str strings, no subclass, and all keys must
+       be unique.
+
+       If nargs is equal to zero and there is no keyword argument (kwnames is
+       NULL or its size is zero), args can be NULL.
+
+       Return the result on success. Raise an exception and return NULL on
+       error. */
+    @NoException public static native PyObject _PyObject_FastCallKeywords(PyObject func,
+            @Cast("PyObject**") PointerPointer args,
+            @Cast("Py_ssize_t") long nargs,
+            PyObject kwnames);
+    @NoException public static native PyObject _PyObject_FastCallKeywords(PyObject func,
+            @ByPtrPtr PyObject args,
+            @Cast("Py_ssize_t") long nargs,
+            PyObject kwnames);
+
+// #define _PyObject_FastCall(func, args, nargs)
+//     _PyObject_FastCallDict((func), (args), (nargs), NULL)
+
+// #define _PyObject_CallNoArg(func)
+//     _PyObject_FastCall((func), NULL, 0)
+
+// #define _PyObject_CallArg1(func, arg)
+//     _PyObject_FastCall((func), &(arg), 1)
+
+    @NoException public static native PyObject _PyObject_Call_Prepend(PyObject func,
+                                                      PyObject obj, PyObject args,
+                                                      PyObject kwargs);
+
+     @NoException public static native PyObject _Py_CheckFunctionResult(PyObject func,
+                                                         PyObject result,
+                                                         @Cast("const char*") BytePointer where);
+     @NoException public static native PyObject _Py_CheckFunctionResult(PyObject func,
+                                                         PyObject result,
+                                                         String where);
+// #endif   /* Py_LIMITED_API */
+
+     @NoException public static native PyObject PyObject_CallObject(PyObject callable_object,
+                                                     PyObject args);
+
+       /*
+     Call a callable Python object, callable_object, with
+     arguments given by the tuple, args.  If no arguments are
+     needed, then args may be NULL.  Returns the result of the
+     call on success, or NULL on failure.  This is the equivalent
+     of the Python expression: o(*args).
+       */
+
+     @NoException public static native PyObject PyObject_CallFunction(PyObject callable_object,
+                                                       @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject PyObject_CallFunction(PyObject callable_object,
+                                                       String format);
+
+       /*
+     Call a callable Python object, callable_object, with a
+     variable number of C arguments. The C arguments are described
+     using a mkvalue-style format string. The format may be NULL,
+     indicating that no arguments are provided.  Returns the
+     result of the call on success, or NULL on failure.  This is
+     the equivalent of the Python expression: o(*args).
+       */
+
+
+     @NoException public static native PyObject PyObject_CallMethod(PyObject o,
+                                                     @Cast("const char*") BytePointer method,
+                                                     @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject PyObject_CallMethod(PyObject o,
+                                                     String method,
+                                                     String format);
+
+       /*
+     Call the method named m of object o with a variable number of
+     C arguments.  The C arguments are described by a mkvalue
+     format string.  The format may be NULL, indicating that no
+     arguments are provided. Returns the result of the call on
+     success, or NULL on failure.  This is the equivalent of the
+     Python expression: o.method(args).
+       */
+
+// #ifndef Py_LIMITED_API
+     @NoException public static native PyObject _PyObject_CallMethodId(PyObject o,
+                                                        _Py_Identifier method,
+                                                        @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject _PyObject_CallMethodId(PyObject o,
+                                                        _Py_Identifier method,
+                                                        String format);
+
+       /*
+         Like PyObject_CallMethod, but expect a _Py_Identifier* as the
+         method name.
+       */
+// #endif /* !Py_LIMITED_API */
+
+     @NoException public static native PyObject _PyObject_CallFunction_SizeT(PyObject callable,
+                                                              @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject _PyObject_CallFunction_SizeT(PyObject callable,
+                                                              String format);
+     @NoException public static native PyObject _PyObject_CallMethod_SizeT(PyObject o,
+                                                            @Cast("const char*") BytePointer name,
+                                                            @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject _PyObject_CallMethod_SizeT(PyObject o,
+                                                            String name,
+                                                            String format);
+// #ifndef Py_LIMITED_API
+     @NoException public static native PyObject _PyObject_CallMethodId_SizeT(PyObject o,
+                                                            _Py_Identifier name,
+                                                            @Cast("const char*") BytePointer format);
+     @NoException public static native PyObject _PyObject_CallMethodId_SizeT(PyObject o,
+                                                            _Py_Identifier name,
+                                                            String format);
+// #endif /* !Py_LIMITED_API */
+
+     @NoException public static native PyObject PyObject_CallFunctionObjArgs(PyObject callable);
+
+       /*
+     Call a callable Python object, callable_object, with a
+     variable number of C arguments.  The C arguments are provided
+     as PyObject * values, terminated by a NULL.  Returns the
+     result of the call on success, or NULL on failure.  This is
+     the equivalent of the Python expression: o(*args).
+       */
+
+
+     @NoException public static native PyObject PyObject_CallMethodObjArgs(PyObject o,
+                                                            PyObject method);
+// #ifndef Py_LIMITED_API
+     @NoException public static native PyObject _PyObject_CallMethodIdObjArgs(PyObject o,
+                                                    _Py_Identifier method);
+// #endif /* !Py_LIMITED_API */
+
+       /*
+     Call the method named m of object o with a variable number of
+     C arguments.  The C arguments are provided as PyObject *
+     values, terminated by NULL.  Returns the result of the call
+     on success, or NULL on failure.  This is the equivalent of
+     the Python expression: o.method(args).
+       */
+
+
+     /* Implemented elsewhere:
+
+     long PyObject_Hash(PyObject *o);
+
+     Compute and return the hash, hash_value, of an object, o.  On
+     failure, return -1.  This is the equivalent of the Python
+     expression: hash(o).
+       */
+
+
+     /* Implemented elsewhere:
+
+     int PyObject_IsTrue(PyObject *o);
+
+     Returns 1 if the object, o, is considered to be true, 0 if o is
+     considered to be false and -1 on failure. This is equivalent to the
+     Python expression: not not o
+       */
+
+     /* Implemented elsewhere:
+
+     int PyObject_Not(PyObject *o);
+
+     Returns 0 if the object, o, is considered to be true, 1 if o is
+     considered to be false and -1 on failure. This is equivalent to the
+     Python expression: not o
+       */
+
+     @NoException public static native PyObject PyObject_Type(PyObject o);
+
+       /*
+     On success, returns a type object corresponding to the object
+     type of object o. On failure, returns NULL.  This is
+     equivalent to the Python expression: type(o).
+       */
+
+     @NoException public static native @Cast("Py_ssize_t") long PyObject_Size(PyObject o);
+
+       /*
+     Return the size of object o.  If the object, o, provides
+     both sequence and mapping protocols, the sequence size is
+     returned. On error, -1 is returned.  This is the equivalent
+     to the Python expression: len(o).
+       */
+
+       /* For DLL compatibility */
+// #undef PyObject_Length
+// #define PyObject_Length PyObject_Size
+
+// #ifndef Py_LIMITED_API
+     @NoException public static native int _PyObject_HasLen(PyObject o);
+     @NoException public static native @Cast("Py_ssize_t") long PyObject_LengthHint(PyObject o, @Cast("Py_ssize_t") long arg1);
+// #endif
+
+       /*
+     Guess the size of object o using len(o) or o.__length_hint__().
+     If neither of those return a non-negative value, then return the
+     default value.  If one of the calls fails, this function returns -1.
+       */
+
+     @NoException public static native PyObject PyObject_GetItem(PyObject o, PyObject key);
+
+       /*
+     Return element of o corresponding to the object, key, or NULL
+     on failure. This is the equivalent of the Python expression:
+     o[key].
+       */
+
+     @NoException public static native int PyObject_SetItem(PyObject o, PyObject key, PyObject v);
+
+       /*
+     Map the object key to the value v.  Raise an exception and return -1
+     on failure; return 0 on success.  This is the equivalent of the Python
+     statement o[key]=v.
+       */
+
+     @NoException public static native int PyObject_DelItemString(PyObject o, @Cast("const char*") BytePointer key);
+     @NoException public static native int PyObject_DelItemString(PyObject o, String key);
+
+       /*
+     Remove the mapping for object, key, from the object *o.
+     Returns -1 on failure.  This is equivalent to
+     the Python statement: del o[key].
+       */
+
+     @NoException public static native int PyObject_DelItem(PyObject o, PyObject key);
+
+       /*
+     Delete the mapping for key from *o.  Returns -1 on failure.
+     This is the equivalent of the Python statement: del o[key].
+       */
+
+    /* old buffer API
+       FIXME:  usage of these should all be replaced in Python itself
+       but for backwards compatibility we will implement them.
+       Their usage without a corresponding "unlock" mechanism
+       may create issues (but they would already be there). */
+
+     @NoException public static native int PyObject_AsCharBuffer(PyObject obj,
+                                                @Cast("const char**") PointerPointer buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+     @NoException public static native int PyObject_AsCharBuffer(PyObject obj,
+                                                @Cast("const char**") @ByPtrPtr BytePointer buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+     @NoException public static native int PyObject_AsCharBuffer(PyObject obj,
+                                                @Cast("const char**") @ByPtrPtr ByteBuffer buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+     @NoException public static native int PyObject_AsCharBuffer(PyObject obj,
+                                                @Cast("const char**") @ByPtrPtr byte[] buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+
+       /*
+      Takes an arbitrary object which must support the (character,
+      single segment) buffer interface and returns a pointer to a
+      read-only memory location useable as character based input
+      for subsequent processing.
+
+      0 is returned on success.  buffer and buffer_len are only
+      set in case no error occurs. Otherwise, -1 is returned and
+      an exception set.
+       */
+
+     @NoException public static native int PyObject_CheckReadBuffer(PyObject obj);
+
+      /*
+      Checks whether an arbitrary object supports the (character,
+      single segment) buffer interface.  Returns 1 on success, 0
+      on failure.
+      */
+
+     @NoException public static native int PyObject_AsReadBuffer(PyObject obj,
+                                                @Cast("const void**") PointerPointer buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+     @NoException public static native int PyObject_AsReadBuffer(PyObject obj,
+                                                @Cast("const void**") @ByPtrPtr Pointer buffer,
+                                                @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+
+       /*
+      Same as PyObject_AsCharBuffer() except that this API expects
+      (readable, single segment) buffer interface and returns a
+      pointer to a read-only memory location which can contain
+      arbitrary data.
+
+      0 is returned on success.  buffer and buffer_len are only
+      set in case no error occurs.  Otherwise, -1 is returned and
+      an exception set.
+       */
+
+     @NoException public static native int PyObject_AsWriteBuffer(PyObject obj,
+                                                 @Cast("void**") PointerPointer buffer,
+                                                 @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+     @NoException public static native int PyObject_AsWriteBuffer(PyObject obj,
+                                                 @Cast("void**") @ByPtrPtr Pointer buffer,
+                                                 @Cast("Py_ssize_t*") SizeTPointer buffer_len);
+
+       /*
+      Takes an arbitrary object which must support the (writable,
+      single segment) buffer interface and returns a pointer to a
+      writable memory location in buffer of size buffer_len.
+
+      0 is returned on success.  buffer and buffer_len are only
+      set in case no error occurs. Otherwise, -1 is returned and
+      an exception set.
+       */
+
+    /* new buffer API */
+
+// #ifndef Py_LIMITED_API
+// #define PyObject_CheckBuffer(obj)
+//     (((obj)->ob_type->tp_as_buffer != NULL) &&
+//      ((obj)->ob_type->tp_as_buffer->bf_getbuffer != NULL))
+
+    /* Return 1 if the getbuffer function is available, otherwise
+       return 0 */
+
+     @NoException public static native int PyObject_GetBuffer(PyObject obj, Py_buffer view,
+                                             int flags);
+
+    /* This is a C-API version of the getbuffer function call.  It checks
+       to make sure object has the required function pointer and issues the
+       call.  Returns -1 and raises an error on failure and returns 0 on
+       success
+    */
+
+
+     @NoException public static native Pointer PyBuffer_GetPointer(Py_buffer view, @Cast("Py_ssize_t*") SizeTPointer indices);
+
+    /* Get the memory area pointed to by the indices for the buffer given.
+       Note that view->ndim is the assumed size of indices
+    */
+
+     
+
+    /* Return the implied itemsize of the data-format area from a
+       struct-style description */
+
+
+
+     /* Implementation in memoryobject.c */
+     @NoException public static native int PyBuffer_ToContiguous(Pointer buf, Py_buffer view,
+                                                @Cast("Py_ssize_t") long len, @Cast("char") byte order);
+
+     @NoException public static native int PyBuffer_FromContiguous(Py_buffer view, Pointer buf,
+                                                  @Cast("Py_ssize_t") long len, @Cast("char") byte order);
+
+
+    /* Copy len bytes of data from the contiguous chunk of memory
+       pointed to by buf into the buffer exported by obj.  Return
+       0 on success and return -1 and raise a PyBuffer_Error on
+       error (i.e. the object does not have a buffer interface or
+       it is not working).
+
+       If fort is 'F', then if the object is multi-dimensional,
+       then the data will be copied into the array in
+       Fortran-style (first dimension varies the fastest).  If
+       fort is 'C', then the data will be copied into the array
+       in C-style (last dimension varies the fastest).  If fort
+       is 'A', then it does not matter and the copy will be made
+       in whatever way is more efficient.
+
+    */
+
+     @NoException public static native int PyObject_CopyData(PyObject dest, PyObject src);
+
+    /* Copy the data from the src buffer to the buffer of destination
+     */
+
+     @NoException public static native int PyBuffer_IsContiguous(@Const Py_buffer view, @Cast("char") byte fort);
+
+
+     @NoException public static native void PyBuffer_FillContiguousStrides(int ndims,
+                                                         @Cast("Py_ssize_t*") SizeTPointer shape,
+                                                         @Cast("Py_ssize_t*") SizeTPointer strides,
+                                                         int itemsize,
+                                                         @Cast("char") byte fort);
+
+    /*  Fill the strides array with byte-strides of a contiguous
+        (Fortran-style if fort is 'F' or C-style otherwise)
+        array of the given shape with the given number of bytes
+        per element.
+    */
+
+     @NoException public static native int PyBuffer_FillInfo(Py_buffer view, PyObject o, Pointer buf,
+                                            @Cast("Py_ssize_t") long len, int readonly,
+                                            int flags);
+
+    /* Fills in a buffer-info structure correctly for an exporter
+       that can only share a contiguous chunk of memory of
+       "unsigned bytes" of the given length. Returns 0 on success
+       and -1 (with raising an error) on error.
+     */
+
+     @NoException public static native void PyBuffer_Release(Py_buffer view);
+
+       /* Releases a Py_buffer obtained from getbuffer ParseTuple's s*.
+    */
+// #endif /* Py_LIMITED_API */
+
+     @NoException public static native PyObject PyObject_Format(PyObject obj,
+                                                 PyObject format_spec);
+       /*
+     Takes an arbitrary object and returns the result of
+     calling obj.__format__(format_spec).
+       */
+
+/* Iterators */
+
+     @NoException public static native PyObject PyObject_GetIter(PyObject arg0);
+     /* Takes an object and returns an iterator for it.
+    This is typically a new iterator but if the argument
+    is an iterator, this returns itself. */
+
+// #define PyIter_Check(obj)
+//     ((obj)->ob_type->tp_iternext != NULL &&
+//      (obj)->ob_type->tp_iternext != &_PyObject_NextNotImplemented)
+
+     @NoException public static native PyObject PyIter_Next(PyObject arg0);
+     /* Takes an iterator object and calls its tp_iternext slot,
+    returning the next value.  If the iterator is exhausted,
+    this returns NULL without setting an exception.
+    NULL with an exception means an error occurred. */
+
+/*  Number Protocol:*/
+
+     @NoException public static native int PyNumber_Check(PyObject o);
+
+       /*
+     Returns 1 if the object, o, provides numeric protocols, and
+     false otherwise.
+
+     This function always succeeds.
+       */
+
+     @NoException public static native PyObject PyNumber_Add(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of adding o1 and o2, or null on failure.
+     This is the equivalent of the Python expression: o1+o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Subtract(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of subtracting o2 from o1, or null on
+     failure.  This is the equivalent of the Python expression:
+     o1-o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Multiply(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of multiplying o1 and o2, or null on
+     failure.  This is the equivalent of the Python expression:
+     o1*o2.
+       */
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+     @NoException public static native PyObject PyNumber_MatrixMultiply(PyObject o1, PyObject o2);
+
+       /*
+     This is the equivalent of the Python expression: o1 @ o2.
+       */
+// #endif
+
+     @NoException public static native PyObject PyNumber_FloorDivide(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of dividing o1 by o2 giving an integral result,
+     or null on failure.
+     This is the equivalent of the Python expression: o1//o2.
+       */
+
+     @NoException public static native PyObject PyNumber_TrueDivide(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of dividing o1 by o2 giving a float result,
+     or null on failure.
+     This is the equivalent of the Python expression: o1/o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Remainder(PyObject o1, PyObject o2);
+
+       /*
+     Returns the remainder of dividing o1 by o2, or null on
+     failure.  This is the equivalent of the Python expression:
+     o1%o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Divmod(PyObject o1, PyObject o2);
+
+       /*
+     See the built-in function divmod.  Returns NULL on failure.
+     This is the equivalent of the Python expression:
+     divmod(o1,o2).
+       */
+
+     @NoException public static native PyObject PyNumber_Power(PyObject o1, PyObject o2,
+                                                PyObject o3);
+
+       /*
+     See the built-in function pow.  Returns NULL on failure.
+     This is the equivalent of the Python expression:
+     pow(o1,o2,o3), where o3 is optional.
+       */
+
+     @NoException public static native PyObject PyNumber_Negative(PyObject o);
+
+       /*
+     Returns the negation of o on success, or null on failure.
+     This is the equivalent of the Python expression: -o.
+       */
+
+     @NoException public static native PyObject PyNumber_Positive(PyObject o);
+
+       /*
+     Returns the (what?) of o on success, or NULL on failure.
+     This is the equivalent of the Python expression: +o.
+       */
+
+     @NoException public static native PyObject PyNumber_Absolute(PyObject o);
+
+       /*
+     Returns the absolute value of o, or null on failure.  This is
+     the equivalent of the Python expression: abs(o).
+       */
+
+     @NoException public static native PyObject PyNumber_Invert(PyObject o);
+
+       /*
+     Returns the bitwise negation of o on success, or NULL on
+     failure.  This is the equivalent of the Python expression:
+     ~o.
+       */
+
+     @NoException public static native PyObject PyNumber_Lshift(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of left shifting o1 by o2 on success, or
+     NULL on failure.  This is the equivalent of the Python
+     expression: o1 << o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Rshift(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of right shifting o1 by o2 on success, or
+     NULL on failure.  This is the equivalent of the Python
+     expression: o1 >> o2.
+       */
+
+     @NoException public static native PyObject PyNumber_And(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of bitwise and of o1 and o2 on success, or
+     NULL on failure. This is the equivalent of the Python
+     expression: o1&o2.
+
+       */
+
+     @NoException public static native PyObject PyNumber_Xor(PyObject o1, PyObject o2);
+
+       /*
+     Returns the bitwise exclusive or of o1 by o2 on success, or
+     NULL on failure.  This is the equivalent of the Python
+     expression: o1^o2.
+       */
+
+     @NoException public static native PyObject PyNumber_Or(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of bitwise or on o1 and o2 on success, or
+     NULL on failure.  This is the equivalent of the Python
+     expression: o1|o2.
+       */
+
+// #define PyIndex_Check(obj)
+//    ((obj)->ob_type->tp_as_number != NULL &&
+//     (obj)->ob_type->tp_as_number->nb_index != NULL)
+
+     @NoException public static native PyObject PyNumber_Index(PyObject o);
+
+       /*
+     Returns the object converted to a Python int
+     or NULL with an error raised on failure.
+       */
+
+     @NoException public static native @Cast("Py_ssize_t") long PyNumber_AsSsize_t(PyObject o, PyObject exc);
+
+       /*
+    Returns the object converted to Py_ssize_t by going through
+    PyNumber_Index first.  If an overflow error occurs while
+    converting the int to Py_ssize_t, then the second argument
+    is the error-type to return.  If it is NULL, then the overflow error
+    is cleared and the value is clipped.
+       */
+
+     @NoException public static native PyObject PyNumber_Long(PyObject o);
+
+       /*
+     Returns the o converted to an integer object on success, or
+     NULL on failure.  This is the equivalent of the Python
+     expression: int(o).
+       */
+
+     @NoException public static native PyObject PyNumber_Float(PyObject o);
+
+       /*
+     Returns the o converted to a float object on success, or NULL
+     on failure.  This is the equivalent of the Python expression:
+     float(o).
+       */
+
+/*  In-place variants of (some of) the above number protocol functions */
+
+     @NoException public static native PyObject PyNumber_InPlaceAdd(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of adding o2 to o1, possibly in-place, or null
+     on failure.  This is the equivalent of the Python expression:
+     o1 += o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceSubtract(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of subtracting o2 from o1, possibly in-place or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 -= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceMultiply(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of multiplying o1 by o2, possibly in-place, or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 *= o2.
+       */
+
+// #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+     @NoException public static native PyObject PyNumber_InPlaceMatrixMultiply(PyObject o1, PyObject o2);
+
+       /*
+     This is the equivalent of the Python expression: o1 @= o2.
+       */
+// #endif
+
+     @NoException public static native PyObject PyNumber_InPlaceFloorDivide(PyObject o1,
+                                                             PyObject o2);
+
+       /*
+     Returns the result of dividing o1 by o2 giving an integral result,
+     possibly in-place, or null on failure.
+     This is the equivalent of the Python expression:
+     o1 /= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceTrueDivide(PyObject o1,
+                                                            PyObject o2);
+
+       /*
+     Returns the result of dividing o1 by o2 giving a float result,
+     possibly in-place, or null on failure.
+     This is the equivalent of the Python expression:
+     o1 /= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceRemainder(PyObject o1, PyObject o2);
+
+       /*
+     Returns the remainder of dividing o1 by o2, possibly in-place, or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 %= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlacePower(PyObject o1, PyObject o2,
+                                                       PyObject o3);
+
+       /*
+     Returns the result of raising o1 to the power of o2, possibly
+     in-place, or null on failure.  This is the equivalent of the Python
+     expression: o1 **= o2, or pow(o1, o2, o3) if o3 is present.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceLshift(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of left shifting o1 by o2, possibly in-place, or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 <<= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceRshift(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of right shifting o1 by o2, possibly in-place or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 >>= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceAnd(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of bitwise and of o1 and o2, possibly in-place,
+     or null on failure. This is the equivalent of the Python
+     expression: o1 &= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceXor(PyObject o1, PyObject o2);
+
+       /*
+     Returns the bitwise exclusive or of o1 by o2, possibly in-place, or
+     null on failure.  This is the equivalent of the Python expression:
+     o1 ^= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_InPlaceOr(PyObject o1, PyObject o2);
+
+       /*
+     Returns the result of bitwise or of o1 and o2, possibly in-place,
+     or null on failure.  This is the equivalent of the Python
+     expression: o1 |= o2.
+       */
+
+     @NoException public static native PyObject PyNumber_ToBase(PyObject n, int base);
+
+       /*
+     Returns the integer n converted to a string with a base, with a base
+     marker of 0b, 0o or 0x prefixed if applicable.
+     If n is not an int object, it is converted with PyNumber_Index first.
+       */
+
+
+/*  Sequence protocol:*/
+
+     @NoException public static native int PySequence_Check(PyObject o);
+
+       /*
+     Return 1 if the object provides sequence protocol, and zero
+     otherwise.
+
+     This function always succeeds.
+       */
+
+     @NoException public static native @Cast("Py_ssize_t") long PySequence_Size(PyObject o);
+
+       /*
+     Return the size of sequence object o, or -1 on failure.
+       */
+
+       /* For DLL compatibility */
+// #undef PySequence_Length
+// #define PySequence_Length PySequence_Size
+
+
+     @NoException public static native PyObject PySequence_Concat(PyObject o1, PyObject o2);
+
+       /*
+     Return the concatenation of o1 and o2 on success, and NULL on
+     failure.   This is the equivalent of the Python
+     expression: o1+o2.
+       */
+
+     @NoException public static native PyObject PySequence_Repeat(PyObject o, @Cast("Py_ssize_t") long count);
+
+       /*
+     Return the result of repeating sequence object o count times,
+     or NULL on failure.  This is the equivalent of the Python
+     expression: o1*count.
+       */
+
+     @NoException public static native PyObject PySequence_GetItem(PyObject o, @Cast("Py_ssize_t") long i);
+
+       /*
+     Return the ith element of o, or NULL on failure. This is the
+     equivalent of the Python expression: o[i].
+       */
+
+     @NoException public static native PyObject PySequence_GetSlice(PyObject o, @Cast("Py_ssize_t") long i1, @Cast("Py_ssize_t") long i2);
+
+       /*
+     Return the slice of sequence object o between i1 and i2, or
+     NULL on failure. This is the equivalent of the Python
+     expression: o[i1:i2].
+       */
+
+     @NoException public static native int PySequence_SetItem(PyObject o, @Cast("Py_ssize_t") long i, PyObject v);
+
+       /*
+     Assign object v to the ith element of o.  Raise an exception and return
+     -1 on failure; return 0 on success.  This is the equivalent of the
+     Python statement o[i]=v.
+       */
+
+     @NoException public static native int PySequence_DelItem(PyObject o, @Cast("Py_ssize_t") long i);
+
+       /*
+     Delete the ith element of object v.  Returns
+     -1 on failure.  This is the equivalent of the Python
+     statement: del o[i].
+       */
+
+     @NoException public static native int PySequence_SetSlice(PyObject o, @Cast("Py_ssize_t") long i1, @Cast("Py_ssize_t") long i2,
+                                              PyObject v);
+
+       /*
+     Assign the sequence object, v, to the slice in sequence
+     object, o, from i1 to i2.  Returns -1 on failure. This is the
+     equivalent of the Python statement: o[i1:i2]=v.
+       */
+
+     @NoException public static native int PySequence_DelSlice(PyObject o, @Cast("Py_ssize_t") long i1, @Cast("Py_ssize_t") long i2);
+
+       /*
+     Delete the slice in sequence object, o, from i1 to i2.
+     Returns -1 on failure. This is the equivalent of the Python
+     statement: del o[i1:i2].
+       */
+
+     @NoException public static native PyObject PySequence_Tuple(PyObject o);
+
+       /*
+     Returns the sequence, o, as a tuple on success, and NULL on failure.
+     This is equivalent to the Python expression: tuple(o)
+       */
+
+
+     @NoException public static native PyObject PySequence_List(PyObject o);
+       /*
+     Returns the sequence, o, as a list on success, and NULL on failure.
+     This is equivalent to the Python expression: list(o)
+       */
+
+     @NoException public static native PyObject PySequence_Fast(PyObject o, @Cast("const char*") BytePointer m);
+     @NoException public static native PyObject PySequence_Fast(PyObject o, String m);
+       /*
+     Return the sequence, o, as a list, unless it's already a
+     tuple or list.  Use PySequence_Fast_GET_ITEM to access the
+     members of this list, and PySequence_Fast_GET_SIZE to get its length.
+
+     Returns NULL on failure.  If the object does not support iteration,
+     raises a TypeError exception with m as the message text.
+       */
+
+// #define PySequence_Fast_GET_SIZE(o)
+//     (PyList_Check(o) ? PyList_GET_SIZE(o) : PyTuple_GET_SIZE(o))
+       /*
+     Return the size of o, assuming that o was returned by
+     PySequence_Fast and is not NULL.
+       */
+
+// #define PySequence_Fast_GET_ITEM(o, i)
+//      (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
+       /*
+     Return the ith element of o, assuming that o was returned by
+     PySequence_Fast, and that i is within bounds.
+       */
+
+// #define PySequence_ITEM(o, i)
+//     ( Py_TYPE(o)->tp_as_sequence->sq_item(o, i) )
+       /* Assume tp_as_sequence and sq_item exist and that i does not
+      need to be corrected for a negative index
+       */
+
+// #define PySequence_Fast_ITEMS(sf)
+//     (PyList_Check(sf) ? ((PyListObject *)(sf))->ob_item
+//                       : ((PyTupleObject *)(sf))->ob_item)
+    /* Return a pointer to the underlying item array for
+       an object retured by PySequence_Fast */
+
+     @NoException public static native @Cast("Py_ssize_t") long PySequence_Count(PyObject o, PyObject value);
+
+       /*
+     Return the number of occurrences on value on o, that is,
+     return the number of keys for which o[key]==value.  On
+     failure, return -1.  This is equivalent to the Python
+     expression: o.count(value).
+       */
+
+     @NoException public static native int PySequence_Contains(PyObject seq, PyObject ob);
+       /*
+     Return -1 if error; 1 if ob in seq; 0 if ob not in seq.
+     Use __contains__ if possible, else _PySequence_IterSearch().
+       */
+
+// #ifndef Py_LIMITED_API
+public static final int PY_ITERSEARCH_COUNT =    1;
+public static final int PY_ITERSEARCH_INDEX =    2;
+public static final int PY_ITERSEARCH_CONTAINS = 3;
+     @NoException public static native @Cast("Py_ssize_t") long _PySequence_IterSearch(PyObject seq,
+                                             PyObject obj, int operation);
+// #endif
+    /*
+      Iterate over seq.  Result depends on the operation:
+      PY_ITERSEARCH_COUNT:  return # of times obj appears in seq; -1 if
+        error.
+      PY_ITERSEARCH_INDEX:  return 0-based index of first occurrence of
+        obj in seq; set ValueError and return -1 if none found;
+        also return -1 on error.
+      PY_ITERSEARCH_CONTAINS:  return 1 if obj in seq, else 0; -1 on
+        error.
+    */
+
+/* For DLL-level backwards compatibility */
+// #undef PySequence_In
+
+/* For source-level backwards compatibility */
+// #define PySequence_In PySequence_Contains
+
+       /*
+     Determine if o contains value.  If an item in o is equal to
+     X, return 1, otherwise return 0.  On error, return -1.  This
+     is equivalent to the Python expression: value in o.
+       */
+
+     @NoException public static native @Cast("Py_ssize_t") long PySequence_Index(PyObject o, PyObject value);
+
+       /*
+     Return the first index for which o[i]=value.  On error,
+     return -1.    This is equivalent to the Python
+     expression: o.index(value).
+       */
+
+/* In-place versions of some of the above Sequence functions. */
+
+     @NoException public static native PyObject PySequence_InPlaceConcat(PyObject o1, PyObject o2);
+
+       /*
+     Append o2 to o1, in-place when possible. Return the resulting
+     object, which could be o1, or NULL on failure.  This is the
+     equivalent of the Python expression: o1 += o2.
+
+       */
+
+     @NoException public static native PyObject PySequence_InPlaceRepeat(PyObject o, @Cast("Py_ssize_t") long count);
+
+       /*
+     Repeat o1 by count, in-place when possible. Return the resulting
+     object, which could be o1, or NULL on failure.  This is the
+     equivalent of the Python expression: o1 *= count.
+
+       */
+
+/*  Mapping protocol:*/
+
+     @NoException public static native int PyMapping_Check(PyObject o);
+
+       /*
+     Return 1 if the object provides mapping protocol, and zero
+     otherwise.
+
+     This function always succeeds.
+       */
+
+     @NoException public static native @Cast("Py_ssize_t") long PyMapping_Size(PyObject o);
+
+       /*
+     Returns the number of keys in object o on success, and -1 on
+     failure.  For objects that do not provide sequence protocol,
+     this is equivalent to the Python expression: len(o).
+       */
+
+       /* For DLL compatibility */
+// #undef PyMapping_Length
+// #define PyMapping_Length PyMapping_Size
+
+
+     /* implemented as a macro:
+
+     int PyMapping_DelItemString(PyObject *o, const char *key);
+
+     Remove the mapping for object, key, from the object *o.
+     Returns -1 on failure.  This is equivalent to
+     the Python statement: del o[key].
+       */
+// #define PyMapping_DelItemString(O,K) PyObject_DelItemString((O),(K))
+
+     /* implemented as a macro:
+
+     int PyMapping_DelItem(PyObject *o, PyObject *key);
+
+     Remove the mapping for object, key, from the object *o.
+     Returns -1 on failure.  This is equivalent to
+     the Python statement: del o[key].
+       */
+// #define PyMapping_DelItem(O,K) PyObject_DelItem((O),(K))
+
+     @NoException public static native int PyMapping_HasKeyString(PyObject o, @Cast("const char*") BytePointer key);
+     @NoException public static native int PyMapping_HasKeyString(PyObject o, String key);
+
+       /*
+     On success, return 1 if the mapping object has the key, key,
+     and 0 otherwise.  This is equivalent to the Python expression:
+     key in o.
+
+     This function always succeeds.
+       */
+
+     @NoException public static native int PyMapping_HasKey(PyObject o, PyObject key);
+
+       /*
+     Return 1 if the mapping object has the key, key,
+     and 0 otherwise.  This is equivalent to the Python expression:
+     key in o.
+
+     This function always succeeds.
+
+       */
+
+     @NoException public static native PyObject PyMapping_Keys(PyObject o);
+
+       /*
+     On success, return a list or tuple of the keys in object o.
+     On failure, return NULL.
+       */
+
+     @NoException public static native PyObject PyMapping_Values(PyObject o);
+
+       /*
+     On success, return a list or tuple of the values in object o.
+     On failure, return NULL.
+       */
+
+     @NoException public static native PyObject PyMapping_Items(PyObject o);
+
+       /*
+     On success, return a list or tuple of the items in object o,
+     where each item is a tuple containing a key-value pair.
+     On failure, return NULL.
+
+       */
+
+     @NoException public static native PyObject PyMapping_GetItemString(PyObject o,
+                                                         @Cast("const char*") BytePointer key);
+     @NoException public static native PyObject PyMapping_GetItemString(PyObject o,
+                                                         String key);
+
+       /*
+     Return element of o corresponding to the object, key, or NULL
+     on failure. This is the equivalent of the Python expression:
+     o[key].
+       */
+
+     @NoException public static native int PyMapping_SetItemString(PyObject o, @Cast("const char*") BytePointer key,
+                                                 PyObject value);
+     @NoException public static native int PyMapping_SetItemString(PyObject o, String key,
+                                                 PyObject value);
+
+       /*
+     Map the object, key, to the value, v.  Returns
+     -1 on failure.  This is the equivalent of the Python
+     statement: o[key]=v.
+      */
+
+
+@NoException public static native int PyObject_IsInstance(PyObject object, PyObject typeorclass);
+      /* isinstance(object, typeorclass) */
+
+@NoException public static native int PyObject_IsSubclass(PyObject object, PyObject typeorclass);
+      /* issubclass(object, typeorclass) */
+
+
+// #ifndef Py_LIMITED_API
+@NoException public static native int _PyObject_RealIsInstance(PyObject inst, PyObject cls);
+
+@NoException public static native int _PyObject_RealIsSubclass(PyObject derived, PyObject cls);
+
+@NoException public static native @Cast("char*const*") PointerPointer _PySequence_BytesToCharpArray(PyObject self);
+
+@NoException public static native void _Py_FreeCharPArray(@Cast("char*const*") PointerPointer array);
+@NoException public static native void _Py_FreeCharPArray(@Cast("char*const*") @ByPtrPtr BytePointer array);
+@NoException public static native void _Py_FreeCharPArray(@Cast("char*const*") @ByPtrPtr ByteBuffer array);
+@NoException public static native void _Py_FreeCharPArray(@Cast("char*const*") @ByPtrPtr byte[] array);
+
+/* For internal use by buffer API functions */
+@NoException public static native void _Py_add_one_to_index_F(int nd, @Cast("Py_ssize_t*") SizeTPointer index,
+                                        @Cast("const Py_ssize_t*") SizeTPointer shape);
+@NoException public static native void _Py_add_one_to_index_C(int nd, @Cast("Py_ssize_t*") SizeTPointer index,
+                                        @Cast("const Py_ssize_t*") SizeTPointer shape);
+// #endif /* !Py_LIMITED_API */
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* Py_ABSTRACTOBJECT_H */
+
+
+// Parsed from bltinmodule.h
+
+// #ifndef Py_BLTINMODULE_H
+// #define Py_BLTINMODULE_H
+// #ifdef __cplusplus
+// #endif
+
+public static native @ByRef PyTypeObject PyFilter_Type(); public static native void PyFilter_Type(PyTypeObject PyFilter_Type);
+public static native @ByRef PyTypeObject PyMap_Type(); public static native void PyMap_Type(PyTypeObject PyMap_Type);
+public static native @ByRef PyTypeObject PyZip_Type(); public static native void PyZip_Type(PyTypeObject PyZip_Type);
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_BLTINMODULE_H */
+
+
 // Parsed from asdl.h
 
 // #ifndef Py_ASDL_H
@@ -4215,13 +14049,6 @@ public static class asdl_int_seq extends Pointer {
 // #define asdl_seq_GET(S, I) (S)->elements[(I)]
 // #define asdl_seq_LEN(S) ((S) == NULL ? 0 : (S)->size)
 // #ifdef Py_DEBUG
-// #define asdl_seq_SET(S, I, V)
-//     do {
-//         Py_ssize_t _asdl_i = (I);
-//         assert((S) != NULL);
-//         assert(_asdl_i < (S)->size);
-//         (S)->elements[_asdl_i] = (V);
-//     } while (0)
 // #else
 // #define asdl_seq_SET(S, I, V) (S)->elements[I] = (V)
 // #endif
@@ -4749,8 +14576,6 @@ public static class node extends Pointer {
 // #  define _Py_OPCODE(word) ((word) >> 8)
 // #  define _Py_OPARG(word) ((word) & 255)
 // #else
-// #  define _Py_OPCODE(word) ((word) & 255)
-// #  define _Py_OPARG(word) ((word) >> 8)
 // #endif
 
 /* Bytecode object */
@@ -5714,6 +15539,242 @@ public static class PyOS_sighandler_t extends FunctionPointer {
 // #ifdef __cplusplus
 // #endif
 // #endif /* !Py_PYLIFECYCLE_H */
+
+
+// Parsed from eval.h
+
+
+/* Interface to execute compiled code */
+
+// #ifndef Py_EVAL_H
+// #define Py_EVAL_H
+// #ifdef __cplusplus
+// #endif
+
+@NoException public static native PyObject PyEval_EvalCode(PyObject arg0, PyObject arg1, PyObject arg2);
+
+@NoException public static native PyObject PyEval_EvalCodeEx(PyObject co,
+					PyObject globals,
+					PyObject locals,
+					@Cast("PyObject**") PointerPointer args, int argc,
+					@Cast("PyObject**") PointerPointer kwds, int kwdc,
+					@Cast("PyObject**") PointerPointer defs, int defc,
+					PyObject kwdefs, PyObject closure);
+@NoException public static native PyObject PyEval_EvalCodeEx(PyObject co,
+					PyObject globals,
+					PyObject locals,
+					@ByPtrPtr PyObject args, int argc,
+					@ByPtrPtr PyObject kwds, int kwdc,
+					@ByPtrPtr PyObject defs, int defc,
+					PyObject kwdefs, PyObject closure);
+
+// #ifndef Py_LIMITED_API
+@NoException public static native PyObject _PyEval_CallTracing(PyObject func, PyObject args);
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+// #endif /* !Py_EVAL_H */
+
+
+// Parsed from pyctype.h
+
+// #ifndef Py_LIMITED_API
+// #ifndef PYCTYPE_H
+// #define PYCTYPE_H
+
+public static final int PY_CTF_LOWER =  0x01;
+public static final int PY_CTF_UPPER =  0x02;
+public static final int PY_CTF_ALPHA =  (PY_CTF_LOWER|PY_CTF_UPPER);
+public static final int PY_CTF_DIGIT =  0x04;
+public static final int PY_CTF_ALNUM =  (PY_CTF_ALPHA|PY_CTF_DIGIT);
+public static final int PY_CTF_SPACE =  0x08;
+public static final int PY_CTF_XDIGIT = 0x10;
+
+@MemberGetter public static native @Cast("const unsigned int") int _Py_ctype_table(int i);
+@MemberGetter public static native @Cast("const unsigned int*") IntPointer _Py_ctype_table();
+
+/* Unlike their C counterparts, the following macros are not meant to
+ * handle an int with any of the values [EOF, 0-UCHAR_MAX]. The argument
+ * must be a signed/unsigned char. */
+// #define Py_ISLOWER(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_LOWER)
+// #define Py_ISUPPER(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_UPPER)
+// #define Py_ISALPHA(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_ALPHA)
+// #define Py_ISDIGIT(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_DIGIT)
+// #define Py_ISXDIGIT(c) (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_XDIGIT)
+// #define Py_ISALNUM(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_ALNUM)
+// #define Py_ISSPACE(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_SPACE)
+
+@MemberGetter public static native @Cast("const unsigned char") byte _Py_ctype_tolower(int i);
+@MemberGetter public static native @Cast("const unsigned char*") BytePointer _Py_ctype_tolower();
+@MemberGetter public static native @Cast("const unsigned char") byte _Py_ctype_toupper(int i);
+@MemberGetter public static native @Cast("const unsigned char*") BytePointer _Py_ctype_toupper();
+
+// #define Py_TOLOWER(c) (_Py_ctype_tolower[Py_CHARMASK(c)])
+// #define Py_TOUPPER(c) (_Py_ctype_toupper[Py_CHARMASK(c)])
+
+// #endif /* !PYCTYPE_H */
+// #endif /* !Py_LIMITED_API */
+
+
+// Parsed from pystrtod.h
+
+// #ifndef Py_STRTOD_H
+// #define Py_STRTOD_H
+
+// #ifdef __cplusplus
+// #endif
+
+
+@NoException public static native double PyOS_string_to_double(@Cast("const char*") BytePointer str,
+                                         @Cast("char**") PointerPointer endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(@Cast("const char*") BytePointer str,
+                                         @Cast("char**") @ByPtrPtr BytePointer endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(String str,
+                                         @Cast("char**") @ByPtrPtr ByteBuffer endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(@Cast("const char*") BytePointer str,
+                                         @Cast("char**") @ByPtrPtr byte[] endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(String str,
+                                         @Cast("char**") @ByPtrPtr BytePointer endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(@Cast("const char*") BytePointer str,
+                                         @Cast("char**") @ByPtrPtr ByteBuffer endptr,
+                                         PyObject overflow_exception);
+@NoException public static native double PyOS_string_to_double(String str,
+                                         @Cast("char**") @ByPtrPtr byte[] endptr,
+                                         PyObject overflow_exception);
+
+/* The caller is responsible for calling PyMem_Free to free the buffer
+   that's is returned. */
+@NoException public static native @Cast("char*") BytePointer PyOS_double_to_string(double val,
+                                         @Cast("char") byte format_code,
+                                         int precision,
+                                         int flags,
+                                         IntPointer type);
+@NoException public static native @Cast("char*") ByteBuffer PyOS_double_to_string(double val,
+                                         @Cast("char") byte format_code,
+                                         int precision,
+                                         int flags,
+                                         IntBuffer type);
+@NoException public static native @Cast("char*") byte[] PyOS_double_to_string(double val,
+                                         @Cast("char") byte format_code,
+                                         int precision,
+                                         int flags,
+                                         int[] type);
+
+// #ifndef Py_LIMITED_API
+public static class Innerfunc_BytePointer_long_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Innerfunc_BytePointer_long_Pointer(Pointer p) { super(p); }
+    protected Innerfunc_BytePointer_long_Pointer() { allocate(); }
+    private native void allocate();
+    public native PyObject call(@Cast("const char*") BytePointer arg0, @Cast("Py_ssize_t") long arg1, Pointer arg2);
+}
+@NoException public static native PyObject _Py_string_to_number_with_underscores(
+    @Cast("const char*") BytePointer str, @Cast("Py_ssize_t") long len, @Cast("const char*") BytePointer what, PyObject obj, Pointer arg,
+    Innerfunc_BytePointer_long_Pointer innerfunc);
+public static class Innerfunc_String_long_Pointer extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Innerfunc_String_long_Pointer(Pointer p) { super(p); }
+    protected Innerfunc_String_long_Pointer() { allocate(); }
+    private native void allocate();
+    public native PyObject call(String arg0, @Cast("Py_ssize_t") long arg1, Pointer arg2);
+}
+@NoException public static native PyObject _Py_string_to_number_with_underscores(
+    String str, @Cast("Py_ssize_t") long len, String what, PyObject obj, Pointer arg,
+    Innerfunc_String_long_Pointer innerfunc);
+
+@NoException public static native double _Py_parse_inf_or_nan(@Cast("const char*") BytePointer p, @Cast("char**") PointerPointer endptr);
+@NoException public static native double _Py_parse_inf_or_nan(@Cast("const char*") BytePointer p, @Cast("char**") @ByPtrPtr BytePointer endptr);
+@NoException public static native double _Py_parse_inf_or_nan(String p, @Cast("char**") @ByPtrPtr ByteBuffer endptr);
+@NoException public static native double _Py_parse_inf_or_nan(@Cast("const char*") BytePointer p, @Cast("char**") @ByPtrPtr byte[] endptr);
+@NoException public static native double _Py_parse_inf_or_nan(String p, @Cast("char**") @ByPtrPtr BytePointer endptr);
+@NoException public static native double _Py_parse_inf_or_nan(@Cast("const char*") BytePointer p, @Cast("char**") @ByPtrPtr ByteBuffer endptr);
+@NoException public static native double _Py_parse_inf_or_nan(String p, @Cast("char**") @ByPtrPtr byte[] endptr);
+// #endif
+
+
+/* PyOS_double_to_string's "flags" parameter can be set to 0 or more of: */
+public static final int Py_DTSF_SIGN =      0x01; /* always add the sign */
+public static final int Py_DTSF_ADD_DOT_0 = 0x02; /* if the result is an integer add ".0" */
+public static final int Py_DTSF_ALT =       0x04; /* "alternate" formatting. it's format_code
+                                  specific */
+
+/* PyOS_double_to_string's "type", if non-NULL, will be set to one of: */
+public static final int Py_DTST_FINITE = 0;
+public static final int Py_DTST_INFINITE = 1;
+public static final int Py_DTST_NAN = 2;
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif /* !Py_STRTOD_H */
+
+
+// Parsed from pystrcmp.h
+
+// #ifndef Py_STRCMP_H
+// #define Py_STRCMP_H
+
+// #ifdef __cplusplus
+// #endif
+
+@NoException public static native int PyOS_mystrnicmp(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1, @Cast("Py_ssize_t") long arg2);
+@NoException public static native int PyOS_mystrnicmp(String arg0, String arg1, @Cast("Py_ssize_t") long arg2);
+@NoException public static native int PyOS_mystricmp(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1);
+@NoException public static native int PyOS_mystricmp(String arg0, String arg1);
+
+// #ifdef MS_WINDOWS
+// #else
+// #define PyOS_strnicmp PyOS_mystrnicmp
+// #define PyOS_stricmp PyOS_mystricmp
+// #endif
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif /* !Py_STRCMP_H */
+
+
+// Parsed from dtoa.h
+
+// #ifndef Py_LIMITED_API
+// #ifndef PY_NO_SHORT_FLOAT_REPR
+// #ifdef __cplusplus
+// #endif
+
+@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") PointerPointer ptr);
+@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr BytePointer ptr);
+@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
+@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr byte[] ptr);
+@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr BytePointer ptr);
+@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
+@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr byte[] ptr);
+@NoException public static native @Cast("char*") BytePointer _Py_dg_dtoa(double d, int mode, int ndigits,
+                        IntPointer decpt, IntPointer sign, @Cast("char**") PointerPointer rve);
+@NoException public static native @Cast("char*") BytePointer _Py_dg_dtoa(double d, int mode, int ndigits,
+                        IntPointer decpt, IntPointer sign, @Cast("char**") @ByPtrPtr BytePointer rve);
+@NoException public static native @Cast("char*") ByteBuffer _Py_dg_dtoa(double d, int mode, int ndigits,
+                        IntBuffer decpt, IntBuffer sign, @Cast("char**") @ByPtrPtr ByteBuffer rve);
+@NoException public static native @Cast("char*") byte[] _Py_dg_dtoa(double d, int mode, int ndigits,
+                        int[] decpt, int[] sign, @Cast("char**") @ByPtrPtr byte[] rve);
+@NoException public static native void _Py_dg_freedtoa(@Cast("char*") BytePointer s);
+@NoException public static native void _Py_dg_freedtoa(@Cast("char*") ByteBuffer s);
+@NoException public static native void _Py_dg_freedtoa(@Cast("char*") byte[] s);
+@NoException public static native double _Py_dg_stdnan(int sign);
+@NoException public static native double _Py_dg_infinity(int sign);
+
+
+// #ifdef __cplusplus
+// #endif
+// #endif
+// #endif
 
 
 // Parsed from fileutils.h
