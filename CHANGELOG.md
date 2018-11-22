@@ -1,4 +1,5 @@
 
+ * Enable x265 multilib depth support at 8, 10, and 12 bits for FFmpeg ([pull #619](https://github.com/bytedeco/javacpp-presets/pull/619))
  * Include all header files from `Python.h` in presets for CPython
  * Fix mapping of `initCameraMatrix2D`, `calibrateCamera`, and `stereoCalibrate` functions from `opencv_calib3d`
  * Build OpenCV with pthreads instead of OpenMP or GCD due to thread-safety and usability issues ([issue bytedeco/javacv#396](https://github.com/bytedeco/javacv/issues/396))
