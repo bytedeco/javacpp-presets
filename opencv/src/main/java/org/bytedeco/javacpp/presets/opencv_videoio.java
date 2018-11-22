@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_imgcodecs.class, value = {
-    @Platform(include = {"<opencv2/videoio/videoio_c.h>", "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.4.0"),
+    @Platform(include = {/*"<opencv2/videoio/videoio_c.h>",*/ "<opencv2/videoio.hpp>"}, link = "opencv_videoio@.4.0"),
     @Platform(value = "android", preload = {
         "native_camera_r2.2.0", "native_camera_r2.3.4", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
         "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
