@@ -5002,6 +5002,8 @@ public static final int
 
     public native @ByVal engine get_engine();
 
+    public native @ByVal primitive_attr get_primitive_attr();
+
     /** Returns implementation name */
     
     ///

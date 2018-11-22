@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL-DNN 0.17-rc  https://01.org/mkl-dnn
+ * MKL-DNN 0.17  https://01.org/mkl-dnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.17-rc-1.4.4-SNAPSHOT</version>
+            <version>0.17-1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
