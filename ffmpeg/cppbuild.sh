@@ -103,14 +103,29 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export LDFLAGS="-Wl,--no-undefined -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
         cd libspeex
@@ -144,9 +159,37 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
@@ -176,14 +219,29 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         cd libspeex
@@ -216,9 +274,37 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-arm64.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         CFLAGS="$CFLAGS -D__uint128_t=__u64" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
@@ -238,6 +324,7 @@ case $PLATFORM in
      android-x86)
 #        ANDROID_ROOT=${ANDROID_ROOT//14/21}
 #        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
+        export AS="nasm"
         export AR="$ANDROID_BIN-ar"
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
@@ -249,14 +336,29 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
         cd libspeex
@@ -290,12 +392,40 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=yasm
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -311,6 +441,7 @@ case $PLATFORM in
         ;;
 
      android-x86_64)
+        export AS="nasm"
         export AR="$ANDROID_BIN-ar"
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
@@ -322,14 +453,29 @@ case $PLATFORM in
         export CXXFLAGS="$ANDROID_FLAGS"
         export LDFLAGS="-Wl,--no-undefined -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
         cd libspeex
@@ -362,12 +508,40 @@ case $PLATFORM in
         make install
         cd ../x265-$X265
         patch -Np1 < ../../../x265-android.patch || true
-        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ x265-static
+        cd build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86_64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86_64.cmake -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DCMAKE_TOOLCHAIN_FILE=../../../android-x86_64.cmake -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=yasm
+        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -382,14 +556,30 @@ case $PLATFORM in
         ;;
 
     linux-x86)
+        export AS="nasm"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         CC="gcc -m32 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j $MAKEJ V=0
@@ -416,12 +606,39 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
         make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-linux-gcc --as=yasm
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-linux-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -447,14 +664,30 @@ case $PLATFORM in
         ;;
 
     linux-x86_64)
+        export AS="nasm"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j $MAKEJ V=0
@@ -481,12 +714,39 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
         make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-linux-gcc --as=yasm
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-linux-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -527,14 +787,29 @@ case $PLATFORM in
           echo "Detected non arm arch so cross compiling";
         fi
 
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ V=0
@@ -571,15 +846,52 @@ case $PLATFORM in
         fi
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
         if [ $CROSSCOMPILE -eq 1 ]
         then
-          $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+          $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../10bit
+          $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../8bit
+          ln -sf ../10bit/libx265.a libx265_main10.a
+          ln -sf ../12bit/libx265.a libx265_main12.a
+          $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         else
-          $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+          $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../10bit
+          $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../8bit
+          ln -sf ../10bit/libx265.a libx265_main10.a
+          ln -sf ../12bit/libx265.a libx265_main12.a
+          $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         fi
         make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
         if [ $CROSSCOMPILE -eq 1 ]
@@ -617,14 +929,29 @@ case $PLATFORM in
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         HOST_ARCH="$(uname -m)"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
         make -j $MAKEJ V=0
@@ -651,10 +978,37 @@ case $PLATFORM in
         LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl  --disable-cli --enable-asm --host=aarch64-linux --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations"
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
         make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
@@ -676,6 +1030,11 @@ case $PLATFORM in
 
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           CC="gcc -m64 -fPIC" ./configure --prefix=$INSTALL_PATH --static
@@ -684,6 +1043,11 @@ case $PLATFORM in
         fi
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
@@ -692,6 +1056,11 @@ case $PLATFORM in
         fi
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
@@ -746,14 +1115,52 @@ case $PLATFORM in
         fi
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
+
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+          CC="gcc -m64" CXX="g++ -m64" $CMAKE ../../../source -DENABLE_ALTIVEC=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../10bit
+          CC="gcc -m64" CXX="g++ -m64" $CMAKE ../../../source -DENABLE_ALTIVEC=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../8bit
+          ln -sf ../10bit/libx265.a libx265_main10.a
+          ln -sf ../12bit/libx265.a libx265_main12.a
+          CC="gcc -m64" CXX="g++ -m64" $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         else
-          $CMAKE -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64" -DCMAKE_C_FLAGS="-m64" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+          $CMAKE ../../../source -DENABLE_ALTIVEC=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64" -DCMAKE_C_FLAGS="-m64" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../10bit
+          $CMAKE ../../../source -DENABLE_ALTIVEC=OFF -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64" -DCMAKE_C_FLAGS="-m64" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+          make -j $MAKEJ
+
+          cd ../8bit
+          ln -sf ../10bit/libx265.a libx265_main10.a
+          ln -sf ../12bit/libx265.a libx265_main12.a
+          $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=ppc64le -DCMAKE_CXX_FLAGS="-m64" -DCMAKE_C_FLAGS="-m64" -DCMAKE_C_COMPILER=powerpc64le-linux-gnu-gcc -DCMAKE_CXX_COMPILER=powerpc64le-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=powerpc64le-linux-gnu-strip -DCMAKE_FIND_ROOT_PATH=powerpc64le-linux-gnu -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         fi
         make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
           ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=generic-gnu
@@ -782,14 +1189,30 @@ case $PLATFORM in
         ;;
 
     macosx-*)
+        export AS="nasm"
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         CC="clang -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ V=0
@@ -816,10 +1239,31 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
         make -j $MAKEJ
+
+        cd ../10bit
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+        /usr/bin/libtool -static -o libx265.a libx265_main.a libx265_main10.a libx265_main12.a 2>/dev/null
+
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         sedinplace '/avx512/d' configure
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
@@ -838,12 +1282,27 @@ case $PLATFORM in
         ;;
 
     windows-x86)
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
         make -j $MAKEJ V=0
@@ -870,10 +1329,37 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
         make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_ASSEMBLY=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86-win32-gcc --disable-avx512
         make -j $MAKEJ
@@ -896,12 +1382,27 @@ case $PLATFORM in
         ;;
 
     windows-x86_64)
+        echo ""
+        echo "--------------------"
+        echo "Building zlib"
+        echo "--------------------"
+        echo ""
         cd $ZLIB
         make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        echo ""
+        echo "--------------------"
+        echo "Building LAME"
+        echo "--------------------"
+        echo ""
         cd ../$LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
         make install
+        echo ""
+        echo "--------------------"
+        echo "Building speex"
+        echo "--------------------"
+        echo ""
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ V=0
@@ -928,10 +1429,37 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
         make -j $MAKEJ V=0
         make install
-        cd ../x265-$X265
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cd ../x265-$X265/build/linux
+        # from x265 multilib.sh
+        mkdir -p 8bit 10bit 12bit
+
+        cd 12bit
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
         make -j $MAKEJ
+
+        cd ../10bit
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe
+        make -j $MAKEJ
+
+        cd ../8bit
+        ln -sf ../10bit/libx265.a libx265_main10.a
+        ln -sf ../12bit/libx265.a libx265_main12.a
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_BUILD_TYPE=Release -DNASM_EXECUTABLE:FILEPATH=$INSTALL_PATH/bin/nasm.exe -DENABLE_CLI=OFF
+        make -j $MAKEJ
+
+        # rename the 8bit library, then combine all three into libx265.a
+        mv libx265.a libx265_main.a
+ar -M <<EOF
+CREATE libx265.a
+ADDLIB libx265_main.a
+ADDLIB libx265_main10.a
+ADDLIB libx265_main12.a
+SAVE
+END
+EOF
         make install
+        # ----
+        cd ../../../
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=x86_64-win64-gcc --disable-avx512
         make -j $MAKEJ
