@@ -57,6 +57,9 @@ sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\
 ' src/io/image_augmenter.h src/io/image_io.cc tools/im2rec.cc
+sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_PNG_COMPRESSION/cv::IMWRITE_PNG_COMPRESSION/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_JPEG_QUALITY/cv::IMWRITE_JPEG_QUALITY/g' tools/im2rec.cc
 
 case $PLATFORM in
     linux-x86)
