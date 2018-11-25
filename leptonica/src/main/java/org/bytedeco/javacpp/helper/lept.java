@@ -28,6 +28,7 @@ import java.nio.FloatBuffer;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.FloatPointer;
+import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.indexer.DoubleIndexer;
 import org.bytedeco.javacpp.indexer.FloatIndexer;
@@ -66,6 +67,8 @@ import static org.bytedeco.javacpp.lept.pixGetWpl;
 public class lept extends org.bytedeco.javacpp.presets.lept {
 
     public static abstract class AbstractPIX extends Pointer implements Indexable {
+        protected IntPointer pointer; // a reference to prevent deallocation
+
         protected static class DestroyDeallocator extends PIX implements Pointer.Deallocator {
             boolean header = false;
             DestroyDeallocator(PIX p) { this(p, false); }
@@ -132,6 +135,16 @@ public class lept extends org.bytedeco.javacpp.presets.lept {
             if (p != null) {
                 p.deallocator(new DestroyDeallocator(p, true));
             }
+            return p;
+        }
+
+        /**
+         * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+         * @return PIX created and initialized. Do not call pixDestroy() on it.
+         */
+        public static PIX create(int width, int height, int depth, Pointer data) {
+            PIX p = createHeader(width, height, depth);
+            p.data(p.pointer = new IntPointer(data));
             return p;
         }
 
