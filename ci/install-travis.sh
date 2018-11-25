@@ -269,7 +269,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_mac -o $HOME/cuda_10.0.130_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.3.0/cudnn-10.0-osx-x64-v7.3.0.29.tgz -o $HOME/cudnn-10.0-osx-x64-v7.3.0.29.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.4.1/cudnn-10.0-osx-x64-v7.4.1.5.tgz -o $HOME/cudnn-10.0-osx-x64-v7.4.1.5.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_10.0.130_mac.dmg
@@ -282,7 +282,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.0-osx-x64-v7.3.0.29.tgz
+        tar xvf $HOME/cudnn-10.0-osx-x64-v7.4.1.5.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
