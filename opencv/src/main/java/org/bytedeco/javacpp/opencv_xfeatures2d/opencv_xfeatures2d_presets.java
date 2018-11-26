@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2014-2017 Samuel Audet
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.bytedeco.javacpp.opencv_xfeatures2d;
+
+import org.bytedeco.javacpp.annotation.Platform;
+import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
+import org.bytedeco.javacpp.opencv_features2d.opencv_features2d_presets;
+import org.bytedeco.javacpp.opencv_ml.opencv_ml_presets;
+import org.bytedeco.javacpp.opencv_shape.opencv_shape_presets;
+import org.bytedeco.javacpp.tools.Info;
+import org.bytedeco.javacpp.tools.InfoMap;
+import org.bytedeco.javacpp.tools.InfoMapper;
+
+/**
+ *   Wrapper for OpenCV module xfeatures2d, part of OpenCV_Contrib.
+ *
+ * @author Jarek Sacha
+ */
+@Properties(inherit = {opencv_calib3d_presets.class, opencv_features2d_presets.class, opencv_ml_presets.class, opencv_shape_presets.class}, value = {
+    @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.4.0",
+              preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0"}),
+    @Platform(value = "ios", preload = "libopencv_xfeatures2d"),
+    @Platform(value = "windows", link = "opencv_xfeatures2d400",
+              preload = {"opencv_cuda400", "opencv_cudaarithm400"})},
+        target = "org.bytedeco.javacpp.opencv_xfeatures2d",
+        global = "opencv_xfeatures2d"
+)
+public class opencv_xfeatures2d_presets implements InfoMapper {
+    public void map(InfoMap infoMap) {
+        infoMap.put(new Info("cv::Matx23f").cast().pointerTypes("FloatPointer"));
+    }
+}
