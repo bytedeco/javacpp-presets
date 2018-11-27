@@ -26,6 +26,11 @@ echo "Decompressing archives..."
 tar --totals -xf ../ngraph.tar.gz
 tar --totals -xf ../ncurses.tar.gz
 
+export LIBRARY_PATH="$INSTALL_PATH/lib"
+export PATH="$PATH:$INSTALL_PATH/bin"
+export CFLAGS="-I$INSTALL_PATH/include"
+export CXXFLAGS="-I$INSTALL_PATH/include"
+
 cd ncurses-$NCURSES
 ./configure "--prefix=$INSTALL_PATH" "--with-shared" CFLAGS=-fPIC CXXFLAGS=-fPIC
 make -j $MAKEJ V=0
