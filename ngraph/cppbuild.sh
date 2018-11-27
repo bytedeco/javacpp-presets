@@ -1,12 +1,30 @@
+#!/bin/bash
+# This file is meant to be included by the parent cppbuild.sh script
+if [[ -z "$PLATFORM" ]]; then
+    pushd ..
+    bash cppbuild.sh "$@" onnx
+    popd
+    exit
+fi
 
+if [[ $PLATFORM == windows* ]]; then
+    #No Windows support yet
+    echo "Error: Platform \"$PLATFORM\" is not supported"
+    exit 1
+fi
+
+export NGRAPH="0.10.0-rc.0"
+
+download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph.tar.gz
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
 INSTALL_PATH=`pwd`
 
-git clone https://github.com/NervanaSystems/ngraph.git
+echo "Decompressing archives..."
+tar --totals -xf ../ngraph.tar.gz
 
-cd ngraph
+cd ngraph-$NGRAPH
 rm -rf build
 mkdir build && cd build
 cmake .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=~/ngraph_dist -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
