@@ -64,6 +64,7 @@ import static org.bytedeco.javacpp.opencv_core.CV_L2;
 import static org.bytedeco.javacpp.opencv_core.CV_MAKETYPE;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_CN;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_DEPTH;
+import static org.bytedeco.javacpp.opencv_core.CV_MAT_DEPTH_MASK;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_MAGIC_VAL;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_TYPE;
 import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_16S;
@@ -92,8 +93,6 @@ import static org.bytedeco.javacpp.opencv_core.cvCreateSparseMat;
 import static org.bytedeco.javacpp.opencv_core.cvGet2D;
 import static org.bytedeco.javacpp.opencv_core.cvGetImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetMat;
-//import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
-//import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseGraphScanner;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImageHeader;
@@ -104,6 +103,20 @@ import static org.bytedeco.javacpp.opencv_core.cvReleaseSparseMat;
 import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
 public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
+
+    public static int CV_ELEM_SIZE1(int type) {
+        switch (type & CV_MAT_DEPTH_MASK) {
+            case CV_8U:
+            case CV_8S:  return 1;
+            case CV_16U:
+            case CV_16S: return 2;
+            case CV_32S:
+            case CV_32F: return 4;
+            case CV_64F: return 8;
+            default: assert false;
+        }
+        return 0;
+    }
 
     public static abstract class AbstractArray extends Pointer implements Indexable {
         static { Loader.load(); }
@@ -1804,6 +1817,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public abstract BytePointer data();
         public abstract int size(int i);
         public abstract int step(int i);
+        public abstract int dims();
 
         @Override public int arrayChannels() { return channels(); }
         @Override public int arrayDepth() {
@@ -1829,6 +1843,45 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public int arrayStep() { return step(0); }
 
         public static final Mat EMPTY = null;
+
+        @Override public <I extends Indexer> I createIndexer(boolean direct) {
+            BytePointer ptr = arrayData();
+            int size = arraySize();
+            int dims = dims();
+            int depth = depth();
+            int elemSize = CV_ELEM_SIZE1(depth);
+
+            long[] sizes = new long[dims+1];
+            long[] strides = new long[dims+1];
+
+            for (int i=0; i<dims; i++) {
+                sizes[i] = size(i);
+                int step = step(i);
+                if (step%elemSize != 0)
+                  throw new UnsupportedOperationException("Step is not a multiple of element size");
+                strides[i] = step/elemSize;
+            }
+            sizes[dims] = arrayChannels();
+            strides[dims] = 1;
+            switch (depth) {
+                case CV_8U:
+                    return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                case CV_8S:
+                    return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                case CV_16U:
+                    return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                case CV_16S:
+                    return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                case CV_32S:
+                    return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
+                case CV_32F:
+                    return (I)FloatIndexer.create(new FloatPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
+                case CV_64F:
+                    return (I)DoubleIndexer.create(new DoublePointer(ptr).capacity(size/8), sizes, strides, direct).indexable(this);
+                default: assert false;
+            }
+            return null;
+        }
     }
 
     public static abstract class AbstractScalar extends DoublePointer {
