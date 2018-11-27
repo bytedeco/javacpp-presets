@@ -47,10 +47,11 @@
           <execution>
             <id>default-compile</id>
             <configuration>
-              <includes>
-                <include>org/opencv/**/*.java</include>
-                <include>org/bytedeco/javacpp/**/*.java</include>
-              </includes>
+              <compileSourceRoots>
+                <compileSourceRoot>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/target/generated-sources</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+              </compileSourceRoots>
             </configuration>
           </execution>
         </executions>

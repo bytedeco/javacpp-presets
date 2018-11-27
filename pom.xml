@@ -151,10 +151,10 @@
           <execution>
             <id>default-compile</id>
             <configuration>
-              <includes>
-                <include>org/bytedeco/javacpp/**/*.java</include>
-              </includes>
-              <generatedSourcesDirectory>target/generated-sources</generatedSourcesDirectory>
+              <compileSourceRoots>
+                <compileSourceRoot>${project.basedir}/target/generated-sources</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+              </compileSourceRoots>
             </configuration>
           </execution>
           <execution>
