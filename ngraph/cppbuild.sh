@@ -14,15 +14,24 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 export NGRAPH="0.10.0-rc.0"
+export NCURSES=6.1
 
 download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph.tar.gz
-
+download https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$NCURSES.tar.gz ncurses.tar.gz
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
 tar --totals -xf ../ngraph.tar.gz
+tar --totals -xf ../ncurses.tar.gz
+
+cd ncurses-$NCURSES
+./configure "--prefix=$INSTALL_PATH" CFLAGS=-fPIC CXXFLAGS=-fPIC
+make -j $MAKEJ V=0
+make install
+
+cd ..
 
 cd ngraph-$NGRAPH
 rm -rf build
