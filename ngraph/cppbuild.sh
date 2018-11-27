@@ -27,9 +27,16 @@ tar --totals -xf ../ngraph.tar.gz
 tar --totals -xf ../ncurses.tar.gz
 
 cd ncurses-$NCURSES
-./configure "--prefix=$INSTALL_PATH" CFLAGS=-fPIC CXXFLAGS=-fPIC
+./configure "--prefix=$INSTALL_PATH" "--with-shared" CFLAGS=-fPIC CXXFLAGS=-fPIC
 make -j $MAKEJ V=0
 make install
+
+cd ..
+
+cd lib
+
+ln -s libncurses.so.6 libtinfo.so.6
+ln -s libncurses.so.6 libtinfo.so
 
 cd ..
 
