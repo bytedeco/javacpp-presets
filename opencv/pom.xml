@@ -49,7 +49,7 @@
             <configuration>
               <includes>
                 <include>org/opencv/**/*.java</include>
-                <include>org/bytedeco/javacpp/*.java</include>
+                <include>org/bytedeco/javacpp/**/*.java</include>
               </includes>
             </configuration>
           </execution>
@@ -70,9 +70,7 @@
             <configuration>
               <includes>
                 <include>org/opencv/**</include>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/javacpp/**</include>
               </includes>
             </configuration>
           </execution>

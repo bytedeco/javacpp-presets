@@ -152,8 +152,9 @@
             <id>default-compile</id>
             <configuration>
               <includes>
-                <include>org/bytedeco/javacpp/*.java</include>
+                <include>org/bytedeco/javacpp/**/*.java</include>
               </includes>
+              <generatedSourcesDirectory>target/generated-sources</generatedSourcesDirectory>
             </configuration>
           </execution>
           <execution>
@@ -164,7 +165,7 @@
             </goals>
             <configuration>
               <includes>
-                <include>org/bytedeco/javacpp/presets/*.java</include>
+                <include>org/bytedeco/javacpp/**/*_presets.java</include>
               </includes>
             </configuration>
           </execution>
@@ -241,7 +242,7 @@
                 <argument>-extension=${javacpp.platform.extension}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <!-- <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName> -->
             </configuration>
           </execution>
           <execution>
@@ -259,19 +260,19 @@
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <!-- <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName> -->
             </configuration>
           </execution>
           <execution>
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>build</goal>
+              <goal>parse</goal>
             </goals>
             <configuration>
               <skip>${javacpp.parser.skip}</skip>
-              <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
             </configuration>
           </execution>
           <execution>
@@ -282,7 +283,7 @@
             </goals>
             <configuration>
               <skip>${javacpp.compiler.skip}</skip>
-              <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
+              <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
               <copyLibs>true</copyLibs>
               <copyResources>true</copyResources>
             </configuration>
@@ -317,9 +318,7 @@
                 </manifestEntries>
               </archive>
               <includes>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/javacpp/**</include>
               </includes>
               <excludes>
                 <exclude>org/bytedeco/javacpp/include/</exclude>
