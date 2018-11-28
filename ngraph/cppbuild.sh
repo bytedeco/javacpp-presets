@@ -2,7 +2,7 @@
 # This file is meant to be included by the parent cppbuild.sh script
 if [[ -z "$PLATFORM" ]]; then
     pushd ..
-    bash cppbuild.sh "$@" onnx
+    bash cppbuild.sh "$@" ngraph
     popd
     exit
 fi
@@ -48,8 +48,8 @@ cd ..
 cd ngraph-$NGRAPH
 rm -rf build
 mkdir build && cd build
-cmake .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=~/ngraph_dist -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
-make -j 8
+cmake .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
+make -j $MAKEJ
 make install
 
 mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/pass ../../include/ngraph/state ../../include/ngraph/codegen ../../include/ngraph/op/util ../../include/ngraph/autodiff/ ../../include/ngraph/descriptor ../../include/ngraph/descriptor/layout ../../include/ngraph/runtime ../../include/ngraph/runtime/cpu ../../include/ngraph/type ../../include/onnx ../../lib
