@@ -57,7 +57,7 @@ mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/pass 
 patch ../src/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
 patch ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
 #patch ../src/ngraph/descriptor/tensor.hpp ../../../../tensor.hpp.patch
-patch ../src/ngraph/type/element_type.hpp ../../../../element_type.hpp.patch
+#patch ../src/ngraph/type/element_type.hpp ../../../../element_type.hpp.patch
 
 cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
 cp src/ngraph/libngraph.so ../../lib/
