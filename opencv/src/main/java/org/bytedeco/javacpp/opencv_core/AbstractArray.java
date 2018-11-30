@@ -2,11 +2,13 @@ package org.bytedeco.javacpp.opencv_core;
 
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.*;
+import org.bytedeco.javacpp.annotation.Properties;
 
 import java.nio.*;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractArray extends Pointer implements Indexable {
     static { Loader.load(); }
     public AbstractArray(Pointer p) { super(p); }

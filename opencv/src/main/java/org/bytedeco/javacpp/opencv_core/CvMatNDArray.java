@@ -3,8 +3,10 @@ package org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.ValueGetter;
+import org.bytedeco.javacpp.annotation.Properties;
 
 @Name("CvMatND*")
+@Properties(inherit = opencv_core_presets.class)
   public class CvMatNDArray extends CvArrArray {
       public CvMatNDArray(CvMatND ... array) { this(array.length); put(array); position(0); }
       public CvMatNDArray(long size) { allocateArray(size); }

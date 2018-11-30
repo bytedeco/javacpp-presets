@@ -4,7 +4,9 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Properties;
 
+@Properties(inherit = opencv_core_presets.class)
 @Name("CvArr*")
   public class CvArrArray extends PointerPointer<CvArr> {
       static { Loader.load(); }

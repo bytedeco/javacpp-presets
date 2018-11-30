@@ -1,10 +1,12 @@
 package org.bytedeco.javacpp.opencv_imgproc;
 
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_core.CvHistogram;
 
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.cvReleaseHist;
 
+@Properties(inherit = opencv_imgproc_presets.class)
 public abstract class AbstractCvHistogram extends Pointer {
       public AbstractCvHistogram(Pointer p) { super(p); }
 

@@ -3,7 +3,9 @@ package org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.FloatPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvPoint3D32f extends FloatPointer {
       static { Loader.load(); }
       public AbstractCvPoint3D32f(Pointer p) { super(p); }

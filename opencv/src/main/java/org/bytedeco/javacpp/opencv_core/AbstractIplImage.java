@@ -3,9 +3,11 @@ package org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractIplImage extends CvArr {
       public AbstractIplImage(Pointer p) { super(p); }
 

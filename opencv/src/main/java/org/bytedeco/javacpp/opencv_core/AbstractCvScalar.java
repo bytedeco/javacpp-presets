@@ -4,7 +4,9 @@ import org.bytedeco.javacpp.DoublePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvScalar extends DoublePointer {
       static { Loader.load(); }
       public AbstractCvScalar(Pointer p) { super(p); }

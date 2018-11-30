@@ -1,11 +1,13 @@
 package org.bytedeco.javacpp.opencv_core;
 
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvCloneMatND;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvCreateMatND;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvReleaseMatND;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvMatND extends CvArr {
       public AbstractCvMatND(Pointer p) { super(p); }
 

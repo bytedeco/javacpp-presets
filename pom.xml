@@ -317,15 +317,16 @@
                   <Specification-Version>${project.version}</Specification-Version>
                 </manifestEntries>
               </archive>
+              <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>org/bytedeco/javacpp/**</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/include/</exclude>
-                <exclude>org/bytedeco/javacpp/linux-*/</exclude>
-                <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</exclude>
+                <exclude>org/bytedeco/javacpp/**/include/</exclude>
+                <exclude>org/bytedeco/javacpp/**/linux-*/</exclude>
+                <exclude>org/bytedeco/javacpp/**/macosx-*/</exclude>
+                <exclude>org/bytedeco/javacpp/**/windows-*/</exclude>
+                <exclude>org/bytedeco/javacpp/**/${javacpp.platform}${javacpp.platform.extension}/</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -341,12 +342,12 @@
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
                 <include>${javacpp.platform}${javacpp.platform.extension}/</include>
-                <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
+                <include>org/bytedeco/javacpp/**/${javacpp.platform}${javacpp.platform.extension}/</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/**/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/**/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/**/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>

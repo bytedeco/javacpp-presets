@@ -3,8 +3,10 @@ package org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Opaque;
+import org.bytedeco.javacpp.annotation.Properties;
 
 @Opaque
+@Properties(inherit = opencv_core_presets.class)
 public class CvArr extends AbstractArray {
       public CvArr(Pointer p) { super(p); }
 

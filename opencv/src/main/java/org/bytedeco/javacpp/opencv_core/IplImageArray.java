@@ -3,8 +3,10 @@ package org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.ValueGetter;
+import org.bytedeco.javacpp.annotation.Properties;
 
 @Name("IplImage*")
+@Properties(inherit = opencv_core_presets.class)
   public class IplImageArray extends CvArrArray {
       public IplImageArray(IplImage ... array) { this(array.length); put(array); position(0); }
       public IplImageArray(long size) { allocateArray(size); }

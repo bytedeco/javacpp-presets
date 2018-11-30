@@ -1,10 +1,12 @@
 package org.bytedeco.javacpp.opencv_core;
 
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvCreateGraphScanner;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvReleaseGraphScanner;
 
+@Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvGraphScanner extends Pointer {
     public AbstractCvGraphScanner(Pointer p) { super(p); }
 

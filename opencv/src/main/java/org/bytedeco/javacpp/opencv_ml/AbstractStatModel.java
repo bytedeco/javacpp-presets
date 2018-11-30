@@ -4,9 +4,11 @@ import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_core.Algorithm;
 import org.bytedeco.javacpp.opencv_core.opencv_core_presets;
 
+@Properties(inherit = opencv_ml_presets.class)
 @Name("cv::ml::StatModel") public abstract class AbstractStatModel extends Algorithm {
     static { Loader.load(); }
     public AbstractStatModel(Pointer p) { super(p); }

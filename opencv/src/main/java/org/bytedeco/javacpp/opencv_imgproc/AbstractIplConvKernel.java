@@ -1,11 +1,13 @@
 package org.bytedeco.javacpp.opencv_imgproc;
 
 import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_core.IplConvKernel;
 
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.cvCreateStructuringElementEx;
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.cvReleaseStructuringElement;
 
+@Properties(inherit = opencv_imgproc_presets.class)
 public abstract class AbstractIplConvKernel extends Pointer {
     public AbstractIplConvKernel(Pointer p) { super(p); }
 

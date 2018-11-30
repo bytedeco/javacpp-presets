@@ -27,6 +27,14 @@ import org.bytedeco.javacpp.IntPointer;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_L2;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvScalar;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_MAT_DEPTH_MASK;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_8U;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_8S;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_16U;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_16S;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_32S;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_32F;
+import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_64F;
 
 public class opencv_core_helper extends opencv_core_presets {
 
