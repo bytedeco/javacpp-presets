@@ -64,7 +64,6 @@ import static org.bytedeco.javacpp.opencv_core.CV_L2;
 import static org.bytedeco.javacpp.opencv_core.CV_MAKETYPE;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_CN;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_DEPTH;
-import static org.bytedeco.javacpp.opencv_core.CV_MAT_DEPTH_MASK;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_MAGIC_VAL;
 import static org.bytedeco.javacpp.opencv_core.CV_MAT_TYPE;
 import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_16S;
@@ -93,6 +92,8 @@ import static org.bytedeco.javacpp.opencv_core.cvCreateSparseMat;
 import static org.bytedeco.javacpp.opencv_core.cvGet2D;
 import static org.bytedeco.javacpp.opencv_core.cvGetImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetMat;
+//import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseGraphScanner;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImageHeader;
@@ -1844,8 +1845,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             for (int i=0; i<dims; i++) {
                 sizes[i] = size(i);
                 int step = step(i);
-                if (step%elemSize != 0)
-                  throw new UnsupportedOperationException("Step is not a multiple of element size");
+                if (step%elemSize != 0) {
+                    throw new UnsupportedOperationException("Step is not a multiple of element size");
+                }
                 strides[i] = step/elemSize;
             }
             sizes[dims] = arrayChannels();
