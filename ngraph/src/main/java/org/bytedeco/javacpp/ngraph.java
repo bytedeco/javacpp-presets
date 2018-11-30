@@ -641,9 +641,9 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongBuffer count);
             public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") long[] count);
 
-            public static native void unregister(@ByVal onnxBackendID backend_id);
+            
 
-            public static native @Const @ByRef NgraphONNXIFIBackend get(@ByVal onnxBackendID backend_id);
+            
         }
 
      // namespace onnxifi
@@ -1179,6 +1179,32 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *               does nothing to dst, and returns false */
             public static native @Cast("bool") boolean merge(@ByRef Type dst, @Const @ByRef Type t1, @Const @ByRef Type t2);
         }
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<char>") Type fromChar();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<bool>") Type fromBool();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<float>") Type fromFloat();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<double>") Type fromDouble();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int8_t>") Type fromInt8t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int16_t>") Type fromInt16t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int32_t>") Type fromInt32t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int64_t>") Type fromInt64t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint8_t>") Type fromUInt8t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint16_t>") Type fromUInt16t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint32_t>") Type fromUInt32t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint64_t>") Type fromUInt64t();
+
+        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<ngraph::bfloat16>") Type fromNGraphBFloat16();
 
         @Namespace("ngraph::element") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Type obj);
     
@@ -2401,6 +2427,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native Output get_output_to(@Const @SharedPtr @ByRef Node dst);
 
         /** Get all the nodes that uses the current node */
+        public native @ByVal NodeVector get_users(@Cast("bool") boolean check_is_used/*=false*/);
         public native @ByVal NodeVector get_users();
 
         public native @SharedPtr @ByVal Node get_default_value();
@@ -2443,7 +2470,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 //                                 ::ngraph::node_validation_assertion_string(node))
 
 
-// Parsed from onnx/onnxifi.h
+// Parsed from ngraph/onnxifi.h
 
 // #ifndef ONNXIFI_H
 public static final int ONNXIFI_H = 1;
