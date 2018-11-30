@@ -798,6 +798,7 @@ public static native int MXGetGPUCount(int[] out);
 
 /**
  * \brief get the free and total available memory on a GPU
+ *  Note: Deprecated, use MXGetGPUMemoryInformation64 instead.
  * @param dev the GPU number to query
  * @param free_mem pointer to the integer holding free GPU memory
  * @param total_mem pointer to the integer holding total GPU memory
@@ -806,6 +807,17 @@ public static native int MXGetGPUCount(int[] out);
 public static native int MXGetGPUMemoryInformation(int dev, IntPointer free_mem, IntPointer total_mem);
 public static native int MXGetGPUMemoryInformation(int dev, IntBuffer free_mem, IntBuffer total_mem);
 public static native int MXGetGPUMemoryInformation(int dev, int[] free_mem, int[] total_mem);
+
+/**
+ * \brief get the free and total available memory on a GPU
+ * @param dev the GPU number to query
+ * @param free_mem pointer to the uint64_t holding free GPU memory
+ * @param total_mem pointer to the uint64_t holding total GPU memory
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") LongPointer free_mem, @Cast("uint64_t*") LongPointer total_mem);
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") LongBuffer free_mem, @Cast("uint64_t*") LongBuffer total_mem);
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") long[] free_mem, @Cast("uint64_t*") long[] total_mem);
 
 /**
  * \brief get the MXNet library version as an integer
