@@ -104,20 +104,6 @@ import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
 public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
-    public static int CV_ELEM_SIZE1(int type) {
-        switch (type & CV_MAT_DEPTH_MASK) {
-            case CV_8U:
-            case CV_8S:  return 1;
-            case CV_16U:
-            case CV_16S: return 2;
-            case CV_32S:
-            case CV_32F: return 4;
-            case CV_64F: return 8;
-            default: assert false;
-        }
-        return 0;
-    }
-
     public static abstract class AbstractArray extends Pointer implements Indexable {
         static { Loader.load(); }
         public AbstractArray(Pointer p) { super(p); }
@@ -1818,6 +1804,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public abstract int size(int i);
         public abstract int step(int i);
         public abstract int dims();
+        public abstract long elemSize1();
 
         @Override public int arrayChannels() { return channels(); }
         @Override public int arrayDepth() {
@@ -1849,7 +1836,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             int size = arraySize();
             int dims = dims();
             int depth = depth();
-            int elemSize = CV_ELEM_SIZE1(depth);
+            long elemSize = elemSize1();
 
             long[] sizes = new long[dims+1];
             long[] strides = new long[dims+1];
