@@ -46,7 +46,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
-  if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "cpython mxnet tensorflow onnx ngraph skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="python36-devel python36-setuptools"
   fi
