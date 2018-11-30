@@ -1,4 +1,5 @@
 
+ * Add support for N-dimensional arrays to `opencv_core.Mat.createIndexer()` ([pull #647](https://github.com/bytedeco/javacpp-presets/pull/647))
  * Add a `PIX.create(..., Pointer data)` helper factory method that prevents premature deallocation ([issue bytedeco/javacpp#272](https://github.com/bytedeco/javacpp/issues/272))
  * Enable x265 multilib depth support at 8, 10, and 12 bits for FFmpeg ([pull #619](https://github.com/bytedeco/javacpp-presets/pull/619))
  * Include all header files from `Python.h` in presets for CPython
