@@ -66,7 +66,7 @@ import java.lang.annotation.Target;
        "ngraph/autodiff/adjoints.hpp",
 	//        "ngraph/partial_shape.hpp",
 	"ngraph/node.hpp",
-	"ngraph/onnxifi.h"
+	"ngraph/frontend/onnxifi/onnxifi.h"
     },
     link = {"onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend", "codegen"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
