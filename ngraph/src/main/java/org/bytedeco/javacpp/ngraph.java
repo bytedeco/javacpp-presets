@@ -2470,7 +2470,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 //                                 ::ngraph::node_validation_assertion_string(node))
 
 
-// Parsed from ngraph/onnxifi.h
+// Parsed from ngraph/frontend/onnxifi/onnxifi.h
 
 // #ifndef ONNXIFI_H
 public static final int ONNXIFI_H = 1;
