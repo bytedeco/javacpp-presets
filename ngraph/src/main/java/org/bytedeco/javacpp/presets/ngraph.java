@@ -68,7 +68,7 @@ import java.lang.annotation.Target;
 	"ngraph/node.hpp",
 	"ngraph/onnxifi.h"
     },
-    link = {"ngraph", "onnxifi-ngraph", "onnxifi"}
+    link = {"onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
     )})
     public class ngraph implements InfoMapper {
