@@ -619,12 +619,10 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include <cstddef> // std::size_t, std::uintptr_t
 // #include <map>     // std::map
 // #include <mutex>   // std::mutex
-
 // #include "onnxifi.h"
 
-// #include "ngraph/runtime/backend.hpp"
-
 // #include "backend.hpp"
+// #include "ngraph/runtime/backend.hpp"
         /** \brief ONNXIFI backend manager */
         @Namespace("ngraph::onnxifi") @NoOffset public static class BackendManager extends Pointer {
             static { Loader.load(); }
@@ -686,7 +684,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             }
         
 
-        /** \brief Compile-time descriptor of a first-class value that is a view of a tensor. */
+        /** \brief Compile-time descriptor of a first-class value that is a tensor. */
         @Name("ngraph::descriptor::Tensor") public static class DescriptorTensor extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1878,7 +1876,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         
             /** @param node Node that owns this output.
              *  @param index Position of the output tensor in all output tensors
-             *  @param tensor The view of this tensor; where the value will be written */
+             *  @param tensor The tensor where the value will be written */
             public Output(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef DescriptorTensor tensor) { super((Pointer)null); allocate(node, index, tensor); }
             private native void allocate(Node node, @Cast("size_t") long index, @Const @SharedPtr @ByRef DescriptorTensor tensor);
 
