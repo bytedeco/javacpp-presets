@@ -13,17 +13,17 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-export NGRAPH="0.10.0-rc.0"
+export NGRAPH="0.10.1"
 export NCURSES=6.1
 
-download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph.tar.gz
+download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz v$NGRAPH.tar.gz
 download https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$NCURSES.tar.gz ncurses.tar.gz
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
 INSTALL_PATH=`pwd`
 
 echo "Decompressing archives..."
-tar --totals -xf ../ngraph.tar.gz
+tar --totals -xf ../v$NGRAPH.tar.gz
 tar --totals -xf ../ncurses.tar.gz
 
 export LIBRARY_PATH="$INSTALL_PATH/lib"
@@ -48,6 +48,7 @@ cd ..
 cd ngraph-$NGRAPH
 rm -rf build
 mkdir build && cd build
+#-DNGRAPH_TBB_ENABLE=FALSE
 cmake .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
 make -j $MAKEJ
 make install
@@ -60,6 +61,8 @@ patch ../src/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
 patch ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
 #patch ../src/ngraph/descriptor/tensor.hpp ../../../../tensor.hpp.patch
 #patch ../src/ngraph/type/element_type.hpp ../../../../element_type.hpp.patch
+
+#execstack -c ../../lib/libtbb.so.2
 
 #cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
 #cp src/ngraph/libngraph.so ../../lib/
