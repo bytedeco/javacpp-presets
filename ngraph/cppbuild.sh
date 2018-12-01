@@ -63,7 +63,7 @@ patch ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_man
 
 #cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
 #cp src/ngraph/libngraph.so ../../lib/
-#cp onnx/bin/libonnxifi.so ../../lib/
+cp onnx/bin/libonnxifi.so ../../lib/
 cp onnx/src/onnx/onnxifi.h ../../include/ngraph/frontend/onnxifi/
 #cp onnx/src/onnx/onnxifi.h ../../include/onnx/
 #cp ../src/ngraph/frontend/onnx_import/onnx.hpp ../../include/ngraph/
