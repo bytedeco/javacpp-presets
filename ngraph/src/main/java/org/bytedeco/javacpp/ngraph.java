@@ -531,7 +531,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
     }
 }
 
-// Parsed from ngraph/backend.hpp
+// Parsed from ngraph/frontend/onnxifi/backend.hpp
 
 //*****************************************************************************
 // Copyright 2017-2018 Intel Corporation
@@ -596,7 +596,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
  // namespace ngraph
 
 
-// Parsed from ngraph/backend_manager.hpp
+// Parsed from ngraph/frontend/onnxifi/backend_manager.hpp
 
 //*****************************************************************************
 // Copyright 2017-2018 Intel Corporation
