@@ -39,8 +39,8 @@ import java.lang.annotation.Target;
     define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
     include = {
-        "ngraph/backend.hpp",
-	"ngraph/backend_manager.hpp",
+        "ngraph/frontend/onnxifi/backend.hpp",
+	"ngraph/frontend/onnxifi/backend_manager.hpp",
 	"ngraph/descriptor/tensor.hpp",
 	"ngraph/runtime/tensor.hpp",
 	"ngraph/runtime/backend.hpp",
@@ -68,7 +68,7 @@ import java.lang.annotation.Target;
 	"ngraph/node.hpp",
 	"ngraph/onnxifi.h"
     },
-    link = {"onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend"}
+    link = {"onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend", "codegen"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
     )})
     public class ngraph implements InfoMapper {
