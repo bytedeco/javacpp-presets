@@ -1,4 +1,5 @@
 
+ * Include `ucrtbase.dll` when bundling the runtime for Visual Studio 2015 on Windows ([issue bytedeco/javacv#1098](https://github.com/bytedeco/javacv/issues/1098))
  * Add support for N-dimensional arrays to `opencv_core.Mat.createIndexer()` ([pull #647](https://github.com/bytedeco/javacpp-presets/pull/647))
  * Add a `PIX.create(..., Pointer data)` helper factory method that prevents premature deallocation ([issue bytedeco/javacpp#272](https://github.com/bytedeco/javacpp/issues/272))
  * Enable x265 multilib depth support at 8, 10, and 12 bits for FFmpeg ([pull #619](https://github.com/bytedeco/javacpp-presets/pull/619))
