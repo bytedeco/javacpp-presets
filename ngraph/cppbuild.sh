@@ -50,8 +50,8 @@ rm -rf build
 mkdir build && cd build
 #-DNGRAPH_TBB_ENABLE=FALSE
 
-patch ../src/ngraph/runtime/cpu/CMakeLists.txt ../../../../CMakeLists.txt.patch
-cmake .. -DNGRAPH_TBB_ENABLE=FALSE -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
+#patch ../src/ngraph/runtime/cpu/CMakeLists.txt ../../../../CMakeLists.txt.patch
+$CMAKE .. -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE
 make -j $MAKEJ
 make install
 
