@@ -73,6 +73,11 @@
                 <include>org/opencv/**</include>
                 <include>org/bytedeco/javacpp/**</include>
               </includes>
+              <archive>
+                <manifestEntries>
+                  <Automatic-Module-Name>org.bytedeco.javacpp.opencv</Automatic-Module-Name>
+                </manifestEntries>
+              </archive>
             </configuration>
           </execution>
           <execution>
