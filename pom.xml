@@ -339,6 +339,7 @@
             </goals>
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
+              <classesDirectory>${project.build.directory}/target</classesDirectory>
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
@@ -349,6 +350,7 @@
                 <exclude>org/bytedeco/javacpp/**/windows-*/*.exp</exclude>
                 <exclude>org/bytedeco/javacpp/**/windows-*/*.lib</exclude>
                 <exclude>org/bytedeco/javacpp/**/windows-*/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/**/include/</exclude>
               </excludes>
             </configuration>
           </execution>
