@@ -72,12 +72,8 @@
               <includes>
                 <include>org/opencv/**</include>
                 <include>org/bytedeco/javacpp/**</include>
+                <include>META-INF/versions/**</include>
               </includes>
-              <archive>
-                <manifestEntries>
-                  <Automatic-Module-Name>org.bytedeco.javacpp.opencv</Automatic-Module-Name>
-                </manifestEntries>
-              </archive>
             </configuration>
           </execution>
           <execution>
