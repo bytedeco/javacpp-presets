@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -338,6 +338,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractIplImage extends CvArr {
+        protected BytePointer pointer; // a reference to prevent deallocation
+
         public AbstractIplImage(Pointer p) { super(p); }
 
         /**
@@ -423,6 +425,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
 
         /**
+         * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
+        public static IplImage create(int width, int height, int depth, int channels, Pointer data) {
+            IplImage i = createHeader(width, height, depth, channels);
+            i.imageData(i.pointer = new BytePointer(data));
+            return i;
+        }
+
+        /**
          * Creates an IplImage based on another IplImage.
          * @return IplImage created. Do not call cvReleaseImage() on it.
          */
@@ -499,6 +511,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvMat extends CvArr {
+        protected BytePointer pointer; // a reference to prevent deallocation
+
         public AbstractCvMat(Pointer p) { super(p); }
 
         /**
@@ -553,6 +567,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
          */
         public static CvMat createHeader(int rows, int cols) {
             return createHeader(rows, cols, CV_64F, 1);
+        }
+
+        /**
+         * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
+        public static CvMat create(int rows, int cols, int depth, int channels, Pointer data) {
+            CvMat m = createHeader(rows, cols, depth, channels);
+            m.data_ptr(m.pointer = new BytePointer(data));
+            return m;
         }
 
         public static ThreadLocal<CvMat> createThreadLocal(final int rows, final int cols, final int type) {
