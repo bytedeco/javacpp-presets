@@ -142,7 +142,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.0</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -152,8 +152,8 @@
             <id>default-compile</id>
             <configuration>
               <compileSourceRoots>
-                <compileSourceRoot>${project.basedir}/target/generated-sources</compileSourceRoot>
-                <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+                <compileSourceRoot>${project.build.directory}/generated-sources</compileSourceRoot>
+                <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
               </compileSourceRoots>
             </configuration>
           </execution>
@@ -194,7 +194,7 @@
           <classPath>${project.build.outputDirectory}</classPath>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
-            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${project.build.outputDirectory}/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
@@ -202,7 +202,7 @@
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
-            <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
+            <resourcePath>${project.build.outputDirectory}/org/bytedeco/javacpp/</resourcePath>
           </resourcePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
@@ -282,6 +282,7 @@
               <goal>build</goal>
             </goals>
             <configuration>
+              <outputDirectory>${project.build.directory}/native/${javacpp.platform}${javacpp.platform.extension}</outputDirectory>
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
               <copyLibs>true</copyLibs>
@@ -339,18 +340,22 @@
             </goals>
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
-              <classesDirectory>${project.build.directory}/target</classesDirectory>
+              <classesDirectory>${project.build.directory}/native</classesDirectory>
               <skipIfEmpty>false</skipIfEmpty>
+              <archive>
+                <manifestEntries>
+                  <Automatic-Module-Name>org.bytedeco.javacpp.${project.artifactId}.${os.name}.${os.arch}</Automatic-Module-Name>
+                </manifestEntries>
+              </archive>
               <includes>
-                <include>${javacpp.platform.library.path}/</include>
-                <include>${javacpp.platform}${javacpp.platform.extension}/</include>
-                <include>org/bytedeco/javacpp/**/${javacpp.platform}${javacpp.platform.extension}/</include>
+                <include>/${javacpp.platform.library.path}/</include>
+                <include>/${javacpp.platform}${javacpp.platform.extension}/</include>
+                <include>META-INF/versions/**</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/**/windows-*/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/**/windows-*/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/**/windows-*/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/**/include/</exclude>
+                <exclude>/windows-*/*.exp</exclude>
+                <exclude>/windows-*/*.lib</exclude>
+                <exclude>/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -391,7 +396,7 @@
             <configuration>
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
-              <sourcepath>${project.basedir}/target/generated-sources:${project.basedir}/src/main/java</sourcepath>
+              <sourcepath>${project.build.directory}/generated-sources:${project.build.sourceDirectory}</sourcepath>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs/</link>
               </links>
@@ -445,6 +450,7 @@
         <plugins>
           <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.0</version>
             <executions>
               <execution>
                 <id>java9</id>
@@ -455,35 +461,37 @@
                 <configuration>
                   <source>9</source>
                   <target>9</target>
+                  <release>9</release>
+                  <multiReleaseOutput>true</multiReleaseOutput>
                   <compileSourceRoots>
                     <compileSourceRoot>${project.basedir}/src/main/java9</compileSourceRoot>
                   </compileSourceRoots>
                 </configuration>
               </execution>
-            </executions>
-          </plugin>
-          <!-- Copy module-info.class into META-INF and make sure to exclude the original from the JAR file -->
-          <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <executions>
+              <!-- Problems with module-info for native jar:
+              1) how to generate a different module name in module-info.java (use of moditect ?)
+              2) It seems that resources in the jar are really open only if the module contains at least
+              one package. But there is no java in the jar, so no package !
+              outputDirectory is undocumented for compiler plugin, but seems to work
+
               <execution>
-                <id>java9</id>
-                <phase>prepare-package</phase>
+                <id>java9native</id>
+                <phase>compile</phase>
                 <goals>
-                  <goal>copy-resources</goal>
+                  <goal>compile</goal>
                 </goals>
                 <configuration>
-                  <outputDirectory>${project.build.outputDirectory}/META-INF/versions/9</outputDirectory>
-                  <resources>
-                    <resource>
-                      <directory>${project.build.outputDirectory}</directory>
-                      <includes>
-                        <include>module-info.class</include>
-                      </includes>
-                    </resource>
-                  </resources>
+                  <outputDirectory>${project.build.directory}/native</outputDirectory>
+                  <source>9</source>
+                  <target>9</target>
+                  <release>9</release>
+                  <multiReleaseOutput>true</multiReleaseOutput>
+                  <compileSourceRoots>
+                    <compileSourceRoot>${project.basedir}/src/main/java9native</compileSourceRoot>
+                  </compileSourceRoots>
                 </configuration>
               </execution>
+              -->
             </executions>
           </plugin>
           <plugin>
@@ -497,11 +505,20 @@
                       <Multi-Release>true</Multi-Release>
                     </manifestEntries>
                   </archive>
-                  <excludes>
-                    <exclude>module-info.class</exclude>
-                  </excludes>
                 </configuration>
               </execution>
+              <!--
+              <execution>
+                <id>${javacpp.platform}${javacpp.platform.extension}</id>
+                <configuration>
+                  <archive>
+                    <manifestEntries>
+                      <Multi-Release>true</Multi-Release>
+                    </manifestEntries>
+                  </archive>
+                </configuration>
+              </execution>
+              -->
             </executions>
           </plugin>
         </plugins>
