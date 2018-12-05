@@ -1,5 +1,5 @@
 module org.bytedeco.javacpp.opencv {
-    requires org.bytedeco.javacpp;
+    requires transitive org.bytedeco.javacpp;
     exports org.bytedeco.javacpp.opencv_aruco;
     exports org.bytedeco.javacpp.opencv_bgsegm;
     exports org.bytedeco.javacpp.opencv_bioinspired;
