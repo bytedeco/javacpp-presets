@@ -340,7 +340,7 @@
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <classesDirectory>${project.build.directory}/target</classesDirectory>
-              <skipIfEmpty>true</skipIfEmpty>
+              <skipIfEmpty>false</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
                 <include>${javacpp.platform}${javacpp.platform.extension}/</include>
