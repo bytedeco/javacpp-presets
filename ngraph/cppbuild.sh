@@ -55,41 +55,26 @@ $CMAKE .. -DNGRAPH_UNIT_TEST_ENABLE=FALSE -DNGRAPH_TOOLS_ENABLE=FALSE -DNGRAPH_O
 make -j $MAKEJ
 make install
 
-rm -r ../../lib/libtbb.so
-ln -s libtbb.so.2 ../../lib/libtbb.so
+#ln -sf libtbb.so.2 ../../lib/libtbb.so
 
 #mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/pass ../../include/ngraph/state ../../include/ngraph/codegen ../../include/ngraph/op/util ../../include/ngraph/autodiff/ ../../include/ngraph/descriptor ../../include/ngraph/descriptor/layout ../../include/ngraph/runtime ../../include/ngraph/runtime/cpu ../../include/ngraph/type ../../include/onnx ../../lib
 
 #mkdir ../../include/onnx
 
-patch ../src/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
-patch ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
+patch ../../include/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
+patch ../../include/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
 #patch ../src/ngraph/descriptor/tensor.hpp ../../../../tensor.hpp.patch
-#patch ../src/ngraph/type/element_type.hpp ../../../../element_type.hpp.patch
+
 
 #execstack -c ../../lib/libtbb.so.2
 
 #cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
 #cp src/ngraph/libngraph.so ../../lib/
-cp onnx/bin/libonnxifi.so ../../lib/
+#cp onnx/bin/libonnxifi.so ../../lib/
 cp onnx/src/onnx/onnxifi.h ../../include/ngraph/frontend/onnxifi/
 #cp onnx/src/onnx/onnxifi.h ../../include/onnx/
 #cp ../src/ngraph/frontend/onnx_import/onnx.hpp ../../include/ngraph/
-cp ../src/ngraph/frontend/onnxifi/backend.hpp ../../include/ngraph/frontend/onnxifi/
-cp ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../include/ngraph/frontend/onnxifi/
-#cp ../src/ngraph/runtime/backend.hpp ../../include/ngraph/runtime/backend.hpp
-#cp ../src/ngraph/runtime/tensor.hpp ../../include/ngraph/runtime/tensor.hpp
-#cp ../src/ngraph/runtime/performance_counter.hpp ../../include/ngraph/runtime/
-#cp ../src/ngraph/runtime/cpu/*.hpp ../../include/ngraph/runtime/cpu/
-#cp ../src/ngraph/type/*.hpp ../../include/ngraph/type/
-#cp ../src/ngraph/op/*.hpp ../../include/ngraph/op/
-#cp ../src/ngraph/op/util/*.hpp ../../include/ngraph/op/util/
-#cp ../src/ngraph/descriptor/*.hpp ../../include/ngraph/descriptor/
-#cp ../src/ngraph/descriptor/layout/*.hpp ../../include/ngraph/descriptor/layout/
-#cp ../src/ngraph/autodiff/*.hpp ../../include/ngraph/autodiff/
-#cp ../src/ngraph/codegen/*.hpp ../../include/ngraph/codegen/
-#cp ../src/ngraph/pass/*.hpp ../../include/ngraph/pass/
-#cp ../src/ngraph/state/*.hpp ../../include/ngraph/state/
-#cp ../src/ngraph/*.hpp ../../include/ngraph/
+#cp ../src/ngraph/frontend/onnxifi/backend.hpp ../../include/ngraph/frontend/onnxifi/
+#cp ../src/ngraph/frontend/onnxifi/backend_manager.hpp ../../include/ngraph/frontend/onnxifi/
 
 cd ../../..
