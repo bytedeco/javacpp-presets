@@ -68,9 +68,13 @@ patch ../../include/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../back
 
 #execstack -c ../../lib/libtbb.so.2
 
-#cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
-#cp src/ngraph/libngraph.so ../../lib/
-#cp onnx/bin/libonnxifi.so ../../lib/
+cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
+cp src/ngraph/libngraph.so ../../lib/
+cp src/ngraph/libcpu_backend.so ../../lib/
+cp src/ngraph/codegen/libcodegen.so ../../lib/
+cp src/ngraph/runtime/cpu/tbb_build/tbb_release/libtbb.so ../../lib/
+cp onnx/bin/libonnxifi.so ../../lib/
+
 cp onnx/src/onnx/onnxifi.h ../../include/ngraph/frontend/onnxifi/
 #cp onnx/src/onnx/onnxifi.h ../../include/onnx/
 #cp ../src/ngraph/frontend/onnx_import/onnx.hpp ../../include/ngraph/
