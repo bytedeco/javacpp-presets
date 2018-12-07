@@ -1,4 +1,5 @@
 
+ * Include `sys/sysinfo.h` for system API of Linux
  * Include `ucrtbase.dll` when bundling the runtime for Visual Studio 2015 on Windows ([issue bytedeco/javacv#1098](https://github.com/bytedeco/javacv/issues/1098))
  * Add support for N-dimensional arrays to `opencv_core.Mat.createIndexer()` ([pull #647](https://github.com/bytedeco/javacpp-presets/pull/647))
  * Add for `CvMat`, `IplImage`, and `PIX`, helper `create(..., Pointer data)` factory methods that prevent premature deallocation ([issue bytedeco/javacpp#272](https://github.com/bytedeco/javacpp/issues/272) and [issue bytedeco/javacv#1101](https://github.com/bytedeco/javacv/issues/1101))
