@@ -55,8 +55,6 @@ $CMAKE .. -DNGRAPH_UNIT_TEST_ENABLE=FALSE -DNGRAPH_TOOLS_ENABLE=FALSE -DNGRAPH_O
 make -j $MAKEJ
 make install
 
-#ln -sf libtbb.so.2 ../../lib/libtbb.so
-
 #mkdir -p ../../include/ngraph ../../include/ngraph/op ../../include/ngraph/pass ../../include/ngraph/state ../../include/ngraph/codegen ../../include/ngraph/op/util ../../include/ngraph/autodiff/ ../../include/ngraph/descriptor ../../include/ngraph/descriptor/layout ../../include/ngraph/runtime ../../include/ngraph/runtime/cpu ../../include/ngraph/type ../../include/onnx ../../lib
 
 #mkdir ../../include/onnx
@@ -74,6 +72,8 @@ cp src/ngraph/libcpu_backend.so ../../lib/
 cp src/ngraph/codegen/libcodegen.so ../../lib/
 cp src/ngraph/runtime/cpu/tbb_build/tbb_release/libtbb.so ../../lib/
 cp onnx/bin/libonnxifi.so ../../lib/
+
+ln -sf libtbb.so.2 ../../lib/libtbb.so
 
 cp onnx/src/onnx/onnxifi.h ../../include/ngraph/frontend/onnxifi/
 #cp onnx/src/onnx/onnxifi.h ../../include/onnx/
