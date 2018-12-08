@@ -72,15 +72,18 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
     }
 
     @Override public void init(ClassProperties properties) {
-        List<String> includePaths = properties.get("platform.includepath");
-        List<String> includes = properties.get("platform.include");
-        for (String path : includePaths) {
-            if (new File(path, "linux/sysinfo.h").exists()) {
-                includes.add("linux/sysinfo.h");
+        String platform = properties.getProperty("platform");
+        if (platform.startsWith("linux")) {
+            List<String> includePaths = properties.get("platform.includepath");
+            List<String> includes = properties.get("platform.include");
+            for (String path : includePaths) {
+                if (new File(path, "linux/sysinfo.h").exists()) {
+                    includes.add("linux/sysinfo.h");
+                }
             }
+            includes.add("linux/kernel.h");
+            includes.add("sys/sysinfo.h");
         }
-        includes.add("linux/kernel.h");
-        includes.add("sys/sysinfo.h");
     }
 
     public void map(InfoMap infoMap) {
