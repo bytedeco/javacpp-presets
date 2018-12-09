@@ -70,7 +70,7 @@ cp src/ngraph/frontend/onnxifi/libonnxifi-ngraph.so ../../lib/
 cp src/ngraph/libngraph.so ../../lib/
 cp src/ngraph/libcpu_backend.so ../../lib/
 cp src/ngraph/codegen/libcodegen.so ../../lib/
-cp src/ngraph/runtime/cpu/tbb_build/tbb_release/libtbb.so ../../lib/
+cp src/ngraph/runtime/cpu/tbb_build/tbb_release/libtbb.so.2 ../../lib/
 cp onnx/bin/libonnxifi.so ../../lib/
 
 ln -sf libtbb.so.2 ../../lib/libtbb.so
