@@ -152,7 +152,7 @@
             <id>default-compile</id>
             <configuration>
               <compileSourceRoots>
-                <compileSourceRoot>${project.build.directory}/generated-sources</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
                 <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
               </compileSourceRoots>
             </configuration>
@@ -271,7 +271,7 @@
             </goals>
             <configuration>
               <skip>${javacpp.parser.skip}</skip>
-              <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+              <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
               <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
             </configuration>
           </execution>
@@ -396,7 +396,7 @@
             <configuration>
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
-              <sourcepath>${project.build.directory}/generated-sources:${project.build.sourceDirectory}</sourcepath>
+              <sourcepath>${project.basedir}/src/gen/java:${project.build.sourceDirectory}</sourcepath>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs/</link>
               </links>

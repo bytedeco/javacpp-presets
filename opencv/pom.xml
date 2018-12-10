@@ -49,8 +49,8 @@
             <configuration>
               <compileSourceRoots>
                 <compileSourceRoot>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</compileSourceRoot>
-                <compileSourceRoot>${project.basedir}/target/generated-sources</compileSourceRoot>
-                <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
+                <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
               </compileSourceRoots>
             </configuration>
           </execution>
