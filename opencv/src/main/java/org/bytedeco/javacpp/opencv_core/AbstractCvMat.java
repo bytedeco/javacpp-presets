@@ -9,6 +9,8 @@ import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
 @Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvMat extends CvArr {
+      protected BytePointer pointer; // a reference to prevent deallocation
+
       public AbstractCvMat(Pointer p) { super(p); }
 
       /**
@@ -63,6 +65,16 @@ public abstract class AbstractCvMat extends CvArr {
        */
       public static CvMat createHeader(int rows, int cols) {
           return createHeader(rows, cols, CV_64F, 1);
+      }
+
+      /**
+       * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+       * @return CvMat created. Do not call cvReleaseMat() on it.
+       */
+      public static CvMat create(int rows, int cols, int depth, int channels, Pointer data) {
+          CvMat m = createHeader(rows, cols, depth, channels);
+          m.data_ptr(m.pointer = new BytePointer(data));
+          return m;
       }
 
       public static ThreadLocal<CvMat> createThreadLocal(final int rows, final int cols, final int type) {

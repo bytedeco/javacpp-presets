@@ -9,6 +9,8 @@ import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
 @Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractIplImage extends CvArr {
+      protected BytePointer pointer; // a reference to prevent deal location
+
       public AbstractIplImage(Pointer p) { super(p); }
 
       /**
@@ -81,6 +83,17 @@ public abstract class AbstractIplImage extends CvArr {
           }
           return i;
       }
+
+      /**
+       * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+       * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+       */
+      public static IplImage create(int width, int height, int depth, int channels, Pointer data) {
+          IplImage i = createHeader(width, height, depth, channels);
+          i.imageData(i.pointer = new BytePointer(data));
+          return i;
+      }
+
       /**
        * Calls cvCreateImageHeader(), and registers a deallocator. Also assigns {@link #origin()}.
        * @return IplImage created. Do not call cvReleaseImageHeader() on it.
