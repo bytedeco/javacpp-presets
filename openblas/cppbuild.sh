@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.3
+OPENBLAS_VERSION=0.3.4
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -93,6 +93,8 @@ case $PLATFORM in
         export TARGET=ATOM
         ;;
     ios-arm)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -102,6 +104,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-arm64)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         # use generic kernels as Xcode assembler does not accept optimized ones: use Accelerate to optimize
         cp kernel/arm/KERNEL.ARMV5 kernel/arm64/KERNEL.ARMV8
         cp kernel/arm/KERNEL.ARMV5 ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/arm64/KERNEL.ARMV8
@@ -114,6 +118,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -123,6 +129,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86_64)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1
