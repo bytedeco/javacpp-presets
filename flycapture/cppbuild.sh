@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-FLYCAPTURE_VERSION=2.12.3.2
+FLYCAPTURE_VERSION=2.13.3.31
 
 case $PLATFORM in
     linux-arm*)

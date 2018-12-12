@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FlyCapture 2.12.3.2  http://www.ptgrey.com/flycapture-sdk
+ * FlyCapture 2.13.3.31  http://www.ptgrey.com/flycapture-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>flycapture-platform</artifactId>
-            <version>2.12.3.2-1.4.3</version>
+            <version>2.13.3.31-1.4.3</version>
         </dependency>
     </dependencies>
 </project>
@@ -227,3 +227,14 @@ public class FlyCapture2Test {
     }
 }
 ```
+
+Changes
+-------
+
+### 2.13.3.31
+The main change in FLIR's FlyCapture2 API is new video library:
+* C++: 
+  * Removed: `AVIRecorder.h` 
+  * Added: `FlyCapture2Video.h`, `FlyCapture2VideoDef.h`
+* C: 
+  * Added: `FlyCapture2Video.h`, `FlyCapture2VideoDef.h`

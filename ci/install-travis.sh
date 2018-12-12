@@ -148,13 +148,13 @@ if [ "$OS" == "linux-armhf" ]; then
 	bash buildme
 	popd
 	if [ "$PROJ" == "flycapture" ]; then
-          if [[ $(find $HOME/downloads/flycapture.2.12.3.2_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
           else
             echo "Downloading flycap-armhf as not found in cache or too small" 
-            python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShMjVXZFlveXpyWE0 $HOME/downloads/flycapture.2.12.3.2_armhf.tar.gz
+            python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShMjVXZFlveXpyWE0 $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
           fi
-	  cp $HOME/downloads/flycapture.2.12.3.2_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
+	  cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
         fi
 
 fi

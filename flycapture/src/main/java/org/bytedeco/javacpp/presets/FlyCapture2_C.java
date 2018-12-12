@@ -44,22 +44,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = {"linux-x86", "linux-arm", "windows"},
                 include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>",
                         "MultiSyncLibraryDefs_C.h", "MultiSyncLibrary_C.h"},
-                link = {"flycapture-c@.2", "multisync-c@.2"}, includepath = "/usr/include/flycapture/C/"),
-        @Platform(value = "linux-arm", include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}, link = "flycapture-c@.2"),
-        @Platform(value = "windows", link = {"FlyCapture2_C_v100", "MultiSyncLibrary_C_v100"},
+                link = {"flycapture-c@.2", "multisync-c@.2", "flycapturevideo-c@.2"},
+                includepath = "/usr/include/flycapture/C/"),
+        @Platform(value = "linux-arm",
+                include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"},
+                link = {"flycapture-c@.2", "flycapturevideo-c@.2"}),
+        @Platform(value = "windows",
+                link = {"FlyCapture2_C_v100", "MultiSyncLibrary_C_v100", "FlyCapture2Video_C_v100"},
                 preload = {"libiomp5md", "FlyCapture2"},
-                includepath =  "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),
+                includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),
         @Platform(value = "windows-x86",
-                linkpath    = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/C/",
-                               "C:/Program Files (x86)/Point Grey Research/FlyCapture2/lib/C/"},
+                linkpath = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/C/",
+                        "C:/Program Files (x86)/Point Grey Research/FlyCapture2/lib/C/"},
                 preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin/",
-                               "C:/Program Files/Point Grey Research/FlyCapture2/bin/C/",
-                               "C:/Program Files (x86)/Point Grey Research/FlyCapture2/bin/",
-                               "C:/Program Files (x86)/Point Grey Research/FlyCapture2/bin/C/"}),
+                        "C:/Program Files/Point Grey Research/FlyCapture2/bin/C/",
+                        "C:/Program Files (x86)/Point Grey Research/FlyCapture2/bin/",
+                        "C:/Program Files (x86)/Point Grey Research/FlyCapture2/bin/C/"}),
         @Platform(value = "windows-x86_64",
-                linkpath    =  "C:/Program Files/Point Grey Research/FlyCapture2/lib64/C/",
+                linkpath = "C:/Program Files/Point Grey Research/FlyCapture2/lib64/C/",
                 preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin64/",
-                               "C:/Program Files/Point Grey Research/FlyCapture2/bin64/C/"}) })
+                        "C:/Program Files/Point Grey Research/FlyCapture2/bin64/C/"})})
 public class FlyCapture2_C implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FLYCAPTURE2_C_API", "FLYCAPTURE2_C_CALL_CONVEN",
@@ -70,7 +74,7 @@ public class FlyCapture2_C implements InfoMapper {
                        .pointerTypes("@Cast(\"fc2ImageEventCallback*\") @ByPtrPtr fc2ImageEventCallback"))
                .put(new Info("fc2Context").valueTypes("fc2Context")
                        .pointerTypes("@Cast(\"fc2Context*\") @ByPtrPtr fc2Context"))
-                // To avoid linking error on Windows 64: "unresolved external symbol __imp_ResetStats"
+               // To avoid linking error on Windows 64: "unresolved external symbol __imp_ResetStats"
                .put(new Info("ResetStats").skip());
     }
 }
