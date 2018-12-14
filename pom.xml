@@ -241,6 +241,9 @@
                 <argument>-platform=${javacpp.platform}</argument>
                 <argument>-extension=${javacpp.platform.extension}</argument>
               </buildCommand>
+              <environmentVariables>
+                <ANDROID_NDK>${javacpp.platform.root}</ANDROID_NDK>
+              </environmentVariables>
               <workingDirectory>${project.basedir}/..</workingDirectory>
               <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
             </configuration>
