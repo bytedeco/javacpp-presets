@@ -1,6 +1,6 @@
 diff -ruN tesseract-4.0.0/src/api/baseapi.cpp tesseract-4.0.0-android/src/api/baseapi.cpp
---- tesseract-4.0.0/src/api/baseapi.cpp	2018-10-29 17:53:12.000000000 +0900
-+++ tesseract-4.0.0-android/src/api/baseapi.cpp	2018-11-05 13:45:44.925599392 +0900
+--- tesseract-4.0.0/src/api/baseapi.cpp	2018-12-13 12:44:56.027806562 +0900
++++ tesseract-4.0.0-android/src/api/baseapi.cpp	2018-12-13 12:44:33.916828074 +0900
 @@ -41,6 +41,10 @@
  #include <unistd.h>
  #endif  // _WIN32
@@ -13,8 +13,8 @@ diff -ruN tesseract-4.0.0/src/api/baseapi.cpp tesseract-4.0.0-android/src/api/ba
  #include <cmath>               // for round, M_PI
  #include <cstdint>             // for int32_t
 diff -ruN tesseract-4.0.0/src/api/Makefile.am tesseract-4.0.0-android/src/api/Makefile.am
---- tesseract-4.0.0/src/api/Makefile.am	2018-10-29 17:53:12.000000000 +0900
-+++ tesseract-4.0.0-android/src/api/Makefile.am	2018-11-05 13:47:48.275392451 +0900
+--- tesseract-4.0.0/src/api/Makefile.am	2018-12-13 12:44:56.026806563 +0900
++++ tesseract-4.0.0-android/src/api/Makefile.am	2018-12-13 12:45:59.175749631 +0900
 @@ -58,7 +58,7 @@
      ../ccutil/libtesseract_ccutil.la \
      ../opencl/libtesseract_opencl.la
@@ -24,9 +24,37 @@ diff -ruN tesseract-4.0.0/src/api/Makefile.am tesseract-4.0.0-android/src/api/Ma
  
  bin_PROGRAMS = tesseract
  tesseract_SOURCES = tesseractmain.cpp
+@@ -80,5 +80,5 @@
+ libtesseract_la_LDFLAGS += -no-undefined -Wl,--as-needed -lws2_32
+ endif
+ if ADD_RT
+-tesseract_LDADD += -lrt
++tesseract_LDADD += 
+ endif
+diff -ruN tesseract-4.0.0/src/api/Makefile.in tesseract-4.0.0-android/src/api/Makefile.in
+--- tesseract-4.0.0/src/api/Makefile.in	2018-12-13 12:44:56.026806563 +0900
++++ tesseract-4.0.0-android/src/api/Makefile.in	2018-12-13 12:45:48.410759336 +0900
+@@ -87,7 +87,7 @@
+ @VISIBILITY_TRUE@am__append_4 = -DTESS_IMPORTS
+ @T_WIN_TRUE@am__append_5 = -lws2_32
+ @T_WIN_TRUE@am__append_6 = -no-undefined -Wl,--as-needed -lws2_32
+-@ADD_RT_TRUE@am__append_7 = -lrt
++@ADD_RT_TRUE@am__append_7 = 
+ subdir = src/api
+ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+ 	$(srcdir)/tess_version.h.in $(top_srcdir)/config/depcomp \
+@@ -397,7 +397,7 @@
+ libtesseract_api_la_CPPFLAGS = $(AM_CPPFLAGS) $(am__append_3)
+ libtesseract_api_la_SOURCES = baseapi.cpp capi.cpp renderer.cpp pdfrenderer.cpp
+ libtesseract_la_LDFLAGS = $(LEPTONICA_LIBS) $(OPENCL_LDFLAGS) \
+-	-version-info $(GENERIC_LIBRARY_VERSION) -no-undefined \
++	-avoid-version -no-undefined \
+ 	$(am__append_6)
+ libtesseract_la_SOURCES = 
+ # Dummy C++ source to cause C++ linking.
 diff -ruN tesseract-4.0.0/src/ccutil/fileio.cpp tesseract-4.0.0-android/src/ccutil/fileio.cpp
 --- tesseract-4.0.0/src/ccutil/fileio.cpp	2018-10-29 17:53:12.000000000 +0900
-+++ tesseract-4.0.0-android/src/ccutil/fileio.cpp	2018-11-05 13:45:44.925599392 +0900
++++ tesseract-4.0.0-android/src/ccutil/fileio.cpp	2018-12-13 12:44:33.917828073 +0900
 @@ -19,7 +19,6 @@
  #include <io.h>
  #endif
@@ -55,7 +83,7 @@ diff -ruN tesseract-4.0.0/src/ccutil/fileio.cpp tesseract-4.0.0-android/src/ccut
  
 diff -ruN tesseract-4.0.0/src/lstm/lstm.cpp tesseract-4.0.0-android/src/lstm/lstm.cpp
 --- tesseract-4.0.0/src/lstm/lstm.cpp	2018-10-29 17:53:12.000000000 +0900
-+++ tesseract-4.0.0-android/src/lstm/lstm.cpp	2018-11-05 13:45:44.926599391 +0900
++++ tesseract-4.0.0-android/src/lstm/lstm.cpp	2018-12-13 12:44:33.918828072 +0900
 @@ -33,6 +33,10 @@
  #include "networkscratch.h"
  #include "tprintf.h"
@@ -69,7 +97,7 @@ diff -ruN tesseract-4.0.0/src/lstm/lstm.cpp tesseract-4.0.0-android/src/lstm/lst
  #define PARALLEL_IF_OPENMP(__num_threads)                                  \
 diff -ruN tesseract-4.0.0/src/lstm/weightmatrix.cpp tesseract-4.0.0-android/src/lstm/weightmatrix.cpp
 --- tesseract-4.0.0/src/lstm/weightmatrix.cpp	2018-10-29 17:53:12.000000000 +0900
-+++ tesseract-4.0.0-android/src/lstm/weightmatrix.cpp	2018-11-05 13:45:44.926599391 +0900
++++ tesseract-4.0.0-android/src/lstm/weightmatrix.cpp	2018-12-13 12:44:33.918828072 +0900
 @@ -25,6 +25,10 @@
  #include "statistc.h"
  #include "tprintf.h"

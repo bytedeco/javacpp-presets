@@ -90,19 +90,11 @@ sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
 
 case $PLATFORM in
     android-arm)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
-        export AR="$ANDROID_BIN-ar"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export CXX="$ANDROID_BIN-g++"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-Wl,--no-undefined -Wl,--fix-cortex-a8 -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export CXX="$ANDROID_CC++ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -146,15 +138,16 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
-        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-arm "$CFLAGS" no-shared -D__ANDROID_API__=14
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm no-shared no-tests -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
-        make install_sw
+        make install_dev
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk
+        sedinplace 's/12/21/g' codec/build/android/dec/jni/Application.mk
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=arm-linux
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
@@ -192,7 +185,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -200,25 +193,18 @@ EOF
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/armeabi/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
-        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
+        sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
 
     android-arm64)
-        export AR="$ANDROID_BIN-ar"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export CXX="$ANDROID_BIN-g++"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-Wl,--no-undefined -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export CXX="$ANDROID_CC++ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -262,14 +248,15 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
-        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-arm64 "$CFLAGS" no-shared -D__ANDROID_API__=21
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-arm64 no-shared no-tests -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
-        make install_sw
+        make install_dev
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk
+        sedinplace 's/12/21/g' codec/build/android/dec/jni/Application.mk
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=aarch64-linux
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
@@ -307,7 +294,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$CFLAGS -D__uint128_t=__u64" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -315,27 +302,18 @@ EOF
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/arm64-v8a/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
-        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
+        sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
 
      android-x86)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
-        export AS="nasm"
-        export AR="$ANDROID_BIN-ar"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export CXX="$ANDROID_BIN-g++"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export CFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export CXXFLAGS="$ANDROID_FLAGS -D_FILE_OFFSET_BITS=32"
-        export LDFLAGS="-Wl,--no-undefined -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export CXX="$ANDROID_CC++ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -379,15 +357,16 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
-        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-x86 "$CFLAGS" no-shared -D__ANDROID_API__=14
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86 no-shared no-tests -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
-        make install_sw
+        make install_dev
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk
+        sedinplace 's/12/21/g' codec/build/android/dec/jni/Application.mk
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
         patch -Np1 < ../../../x264-android.patch || true
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
@@ -425,7 +404,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -433,26 +412,18 @@ EOF
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        sed -i="" 's/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=32/g' configure
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
-        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
+        sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;
 
      android-x86_64)
-        export AS="nasm"
-        export AR="$ANDROID_BIN-ar"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export CXX="$ANDROID_BIN-g++"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export CXXFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-Wl,--no-undefined -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export CXX="$ANDROID_CC++ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
         echo ""
         echo "--------------------"
         echo "Building zlib"
@@ -496,14 +467,15 @@ EOF
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        sedinplace '/CROSS_COMPILE/d' Configurations/15-android.conf
-        PATH="$PATH:${ANDROID_BIN%/*}" ./Configure --prefix=$INSTALL_PATH android-x86_64 "$CFLAGS" no-shared -D__ANDROID_API__=21
+        PATH="${ANDROID_CC%/*}:$ANDROID_BIN/bin:$PATH" ./Configure --prefix=$INSTALL_PATH android-x86_64 no-shared no-tests -D__ANDROID_API__=21
         ANDROID_DEV="$ANDROID_ROOT/usr" make -s -j $MAKEJ
-        make install_sw
+        make install_dev
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
+        sedinplace 's/stlport_shared/system/g' codec/build/android/dec/jni/Application.mk
+        sedinplace 's/12/21/g' codec/build/android/dec/jni/Application.mk
+        CFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86_64 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_PREFIX-" --sysroot="$ANDROID_ROOT" --host=x86_64-linux
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265
@@ -541,7 +513,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        ASFLAGS="-D__ANDROID__" LDFLAGS= ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -549,8 +521,8 @@ EOF
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $CFLAGS" --extra-ldflags="-L../lib/ -L$ANDROID_CPP/libs/x86_64/ $LDFLAGS" --extra-libs="-lgnustl_static $LIBS" --disable-symver --disable-programs
-        sedinplace 's/HAVE_STRUCT_IP_MREQ_SOURCE 1/HAVE_STRUCT_IP_MREQ_SOURCE 0/g' config.h
+        sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver --disable-programs
         make -j $MAKEJ
         make install
         ;;

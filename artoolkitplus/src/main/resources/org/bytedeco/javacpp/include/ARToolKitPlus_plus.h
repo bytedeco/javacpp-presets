@@ -14,7 +14,7 @@ static inline void createImagePattern(IDPATTERN nPattern, uint8_t dataPtr[8*8]) 
     assert(pattBits == 6*6);
     for (int i = 0; i<pattBits; i++) {
         *p-- = isBitSet(nPattern, i) ? 0xFF : 0x00;
-        if ((p-dataPtr)%8 == 0) {
+        if ((p-dataPtr)%8 == 0 && i < pattBits - 1) {
             *p-- = 0x00; // right border
             *p-- = 0x00; // left border
         }

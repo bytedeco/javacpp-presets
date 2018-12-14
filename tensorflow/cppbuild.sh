@@ -86,30 +86,29 @@ export BUILDTARGETS="//tensorflow:libtensorflow_cc.so //tensorflow/java:tensorfl
 export BUILDFLAGS=
 
 case $PLATFORM in
-    # Clang is incapable of compiling TensorFlow for Android, while in $ANDROID_NDK/source.properties,
-    # the value of Pkg.Revision needs to start with "12" for Bazel to accept GCC
-    # Also, the last version of the NDK supported by TensorFlow is android-ndk-r15c
     android-arm)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s --copt=-D__user="
+        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-arm64)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT32_MAX --copt=-std=c++11 --linkopt=-s --copt=-D__user="
+        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86_64)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=gcc-4.9 --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DSIZE_MAX=UINT64_MAX --copt=-std=c++11 --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     linux-x86)
         patch -Np1 < ../../../tensorflow-java.patch

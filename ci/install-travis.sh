@@ -193,50 +193,20 @@ if [[ "$OS" =~ android ]]; then
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
    #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
 
-   curl -L https://dl.google.com/android/repository/android-ndk-r15c-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
+   curl -L https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
     echo "Download failed here, so can't proceed with the build.. Failing.."
     exit 1
    fi
 
    unzip -qq $HOME/ndk.zip -d $HOME/
-   ln -sf $HOME/android-ndk-r15c $HOME/android-ndk
-   if [ "$PROJ" == "tensorflow" ]; then
-     echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
-     sed -i 's/15/12/g' $HOME/android-ndk/source.properties
-   fi
+   ln -sf $HOME/android-ndk-r18b $HOME/android-ndk
    echo "Android NDK setup done"
    echo "export ANDROID_NDK=$HOME/android-ndk/" | tee --append $HOME/vars.list
    cat $HOME/vars.list
+   echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" | tee --append $HOME/vars.list
    echo "export BUILD_OPTIONS=-Djava.library.path=" | tee --append $HOME/vars.list
    echo "export BUILD_ROOT=-Djavacpp.platform.root=$HOME/android-ndk/" | tee --append $HOME/vars.list
-   if [ "$OS" == "android-arm" ]; then
-      echo "export PATH=\$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin" | tee --append $HOME/vars.list
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-arm64" ]; then
-      echo "export PATH=\$PATH:$HOME/android-ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin" | tee --append $HOME/vars.list
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-x86" ]; then
-      echo "Setting build for android-x86"
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-x86_64" ]; then
-      echo "Setting build for android-x86_64"
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$PROJ" == "tensorflow" ]; then
-      echo "adding bazel for tensorflow"
-      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
-      if [ "$CURL_STATUS" != "0" ]; then
-        echo "Download failed here, so can't proceed with the build.. Failing.."
-        exit 1
-      fi
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo bash $HOME/bazel.sh"
-      export TEST_TMPDIR=$HOME/.cache/bazel
-      echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
-   fi
 fi
 
 
