@@ -129,7 +129,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.6.x  https://www.python.org/downloads/
  * LLVM 7.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.76.0  http://www.leptonica.org/download.html
+ * Leptonica 1.77.0  http://www.leptonica.org/download.html
  * Tesseract 4.0.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.0  https://developer.nvidia.com/cuda-downloads

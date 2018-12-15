@@ -13,14 +13,14 @@ LIBJPEG=libjpeg-turbo-1.5.3
 LIBPNG=libpng-1.6.34
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-1.0.0
-LEPTONICA_VERSION=1.76.0
+LEPTONICA_VERSION=1.77.0
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.34/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
-download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
+download https://github.com/DanBloomberg/leptonica/releases/download/$LEPTONICA_VERSION/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -33,8 +33,6 @@ tar --totals -xzf ../$LIBPNG.tar.gz
 tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
-
-patch -Np1 -d leptonica-$LEPTONICA_VERSION < ../../leptonica-tiffio.patch
 
 case $PLATFORM in
     android-arm)

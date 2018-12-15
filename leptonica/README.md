@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Leptonica 1.76.0  http://www.leptonica.org/
+ * Leptonica 1.77.0  http://www.leptonica.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>leptonica-platform</artifactId>
-            <version>1.76.0-1.4.4-SNAPSHOT</version>
+            <version>1.77.0-1.4.4-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
