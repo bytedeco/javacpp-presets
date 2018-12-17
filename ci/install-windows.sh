@@ -79,16 +79,17 @@ fi
 
 if [[ "$PROJ" =~ spinnaker ]]; then
        echo Spinnaker install
-       # Google Drive link ID for Spinnaker libs and includes
-       SPINNAKER_WIN_LINK_ID="1DcYk9p02bimsSkYrCUyzL5KsSFagNzi3"
+       # Google Drive name and link ID for Spinnaker libs and includes
+       SPIN_DOWNLOAD_NAME="spinnaker_lib_inc_win_1.19.0.22.zip"
+       SPIN_DOWNLOAD_LINK="1DcYk9p02bimsSkYrCUyzL5KsSFagNzi3"
        if [[ "$OS" == "windows-x86_64" ]] || [[ "$OS" == "windows-x86" ]]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/${SPIN_DOWNLOAD_NAME} -type f -size +1000k 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
            else
              echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python ${APPVEYOR_BUILD_FOLDER}/ci/gDownload.py ${SPINNAKER_WIN_LINK_ID} /c/Downloads/spinnaker.zip
+             /c/python27/python ${APPVEYOR_BUILD_FOLDER}/ci/gDownload.py ${SPIN_DOWNLOAD_LINK} /c/Downloads/${SPIN_DOWNLOAD_NAME}
            fi
-           unzip /c/Downloads/spinnaker.zip
+           unzip /c/Downloads/${SPIN_DOWNLOAD_NAME}
            mkdir -p /c/Program\ Files/Point\ Grey\ Research
            mv Spinnaker /c/Program\ Files/Point\ Grey\ Research
        fi
