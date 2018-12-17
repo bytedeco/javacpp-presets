@@ -79,26 +79,18 @@ fi
 
 if [[ "$PROJ" =~ spinnaker ]]; then
        echo Spinnaker install
-       if [ "$OS" == "windows-x86_64" ]; then
+       # Google Drive link ID for Spinnaker libs and includes
+       SPINNAKER_WIN_LINK_ID="1DcYk9p02bimsSkYrCUyzL5KsSFagNzi3"
+       if [[ "$OS" == "windows-x86_64" ]] || [[ "$OS" == "windows-x86" ]]; then
            if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
            else
              echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+             /c/python27/python ${APPVEYOR_BUILD_FOLDER}/ci/gDownload.py ${SPINNAKER_WIN_LINK_ID} /c/Downloads/spinnaker.zip
            fi
            unzip /c/Downloads/spinnaker.zip
            mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
-       elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
-             echo "Found spinnaker in cache and size seems ok"
-           else
-             echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
-           fi
-           unzip /c/Downloads/spinnaker.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           mv Spinnaker /c/Program\ Files/Point\ Grey\ Research
        fi
        echo "Finished spinnaker install"
 fi

@@ -44,92 +44,147 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
-  CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-6 python27"
-  if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
-    CENTOS_VERSION=7
-    SCL_ENABLE="python36-devel python36-setuptools"
-  fi
-  echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.0-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
-  DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-  echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
-  if [ "$OS" == "linux-x86" ]; then
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6.1/repo/epel-$CENTOS_VERSION/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo -o /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/\$basearch/i386/g' /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
-  fi
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
-
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.m2 /root/.m2"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
-
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
-
-  if [[ "$PROJ" =~ flycapture ]]; then
-    if [ "$OS" == "linux-x86_64" ]; then
-        if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found flycap64 in cache and size seems ok" 
-        else
-          echo "Downloading flycap64 as not found in cache or too small" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz 
-        fi
-        tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
-    elif [ "$OS" == "linux-x86" ]; then
-        if [[ $(find $HOME/downloads/flycaplinux32.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found flycap32 in cache and size seems ok" 
-        else
-          echo "Downloading flycap32 as not found in cache or too small" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShaDhTN1FOUTE3UkE $HOME/downloads/flycaplinux32.tar.gz 
-        fi
-        tar xzvf $HOME/downloads/flycaplinux32.tar.gz -C $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib" 
-    fi 
-  fi 
   if [[ "$PROJ" =~ spinnaker ]]; then
-    if [ "$OS" == "linux-x86_64" ]; then
-        if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
-          echo "Found spinnaker in cache and size seems ok"
-        else
-          echo "Downloading spinnaker as not found in cache or too small"
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
+    if [[ "$OS" == "linux-x86_64" ]]; then
+      SPIN_DOWNLOAD_XDIR="spinnaker-1.19.0.22-amd64"
+      SPIN_DOWNLOAD_NAME="spinnaker-1.19.0.22-amd64-pkg.tar.gz"
+      SPIN_DOWNLOAD_LINK="1Qe9mzN17h1z6oXNxmRg0-xkcnBTL8rTK"
+      SPIN_DEPENDENCIES="libavcodec57 libavformat57 libswscale4 libswresample2 libavutil55 libusb-1.0-0 libgtkmm-2.4-dev"
+      # Spinnaker bunaries are distributed for Ubuntu, so Ubuntu docker than Centos
+      echo "Starting Ubuntu docker for x86_64 linux"
+      docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup ubuntu:18.04 /bin/bash
+      DOCKER_CONTAINER_ID=$(docker ps | grep ubuntu | awk '{print $1}')
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y update"
+      # Install dependencies for Spinnaker (from README)
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install ${SPIN_DEPENDENCIES}"
+      # Download Spinnaker binaries
+      if [[ $(find ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -type f -size +1000000c 2>/dev/null) ]]; then
+        echo "Found spinnaker in cache and size seems ok"
+      else
+        echo "Downloading spinnaker as not found in cache or too small"
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py ${SPIN_DOWNLOAD_LINK} ${HOME}/downloads/${SPIN_DOWNLOAD_NAME}
+      fi
+      # Install, in docker, only *.deb packages (do not run regular installation script)
+      tar xzvf ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -C ${TRAVIS_BUILD_DIR}/../
+      docker exec -ti ${DOCKER_CONTAINER_ID} /bin/bash -xec "dpkg -i ${HOME}/build/${SPIN_DOWNLOAD_XDIR}/*.deb"
+      # Prepare Java and Maven
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gcc --version"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.m2 /root/.m2"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get install -y maven default-jdk-headless"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
+      # Run Maven build
+      echo "Running install for $PROJ"
+      echo "container id is $DOCKER_CONTAINER_ID"
+      if [ "$1" == "nodeploy" ]; then
+        echo "'nodeploy'"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
+      elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+        echo "Not a pull request so attempting to deploy using docker"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+        if [ $BUILD_STATUS -eq 0 ]; then
+          echo "Deploying platform"
+          for i in ${PROJ//,/ }
+          do
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT "; export BUILD_STATUS=$?
+            if [ $BUILD_STATUS -ne 0 ]; then
+              echo "Build Failed"
+              exit $BUILD_STATUS
+            fi
+          done
         fi
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /"
+      else
+        echo "Pull request so install using docker"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec ". $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+      fi
+      echo "Build status $BUILD_STATUS"
+      if [ $BUILD_STATUS -ne 0 ]; then
+        echo "Build Failed"
+        exit $BUILD_STATUS
+      fi
+      # Shutdown the container used for docker build
+      docker stop $DOCKER_CONTAINER_ID
+      docker rm -v $DOCKER_CONTAINER_ID
     fi
-  fi
-  if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
-         #don't put in download dir as will be cached and we can use direct url instead
-         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14895/l_mkl_2019.1.144.tgz -o $HOME/mkl.tgz
-         tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
-         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.1.144/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.1.144/install.sh -s $HOME/build/l_mkl_2019.1.144/silent.cfg"
-  fi
-  if [ "$PROJ" == "tensorflow" ]; then
-        echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
-        if [ "$CURL_STATUS" != "0" ]; then
-          echo "Download failed here, so can't proceed with the build.. Failing.."
-          exit 1  
+  else
+      CENTOS_VERSION=6
+      SCL_ENABLE="devtoolset-6 python27"
+      if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+        CENTOS_VERSION=7
+        SCL_ENABLE="python36-devel python36-setuptools"
+      fi
+      echo "Starting docker for x86_64 and x86 linux"
+      docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.0-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+      DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+      echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
+      if [ "$OS" == "linux-x86" ]; then
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://copr.fedorainfracloud.org/coprs/mlampe/devtoolset-6.1/repo/epel-$CENTOS_VERSION/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo -o /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/\$basearch/i386/g' /etc/yum.repos.d/mlampe-devtoolset-6.1-epel-$CENTOS_VERSION.repo"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
+      fi
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
+
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.m2 /root/.m2"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.cache /root/.cache"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf $HOME/.ccache /root/.ccache"
+
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "curl -L https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz -o $HOME/apache-maven-3.3.9-bin.tar.gz"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xzf $HOME/apache-maven-3.3.9-bin.tar.gz -C /opt/"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
+
+      if [[ "$PROJ" =~ flycapture ]]; then
+        if [ "$OS" == "linux-x86_64" ]; then
+            if [[ $(find $HOME/downloads/flycap.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+              echo "Found flycap64 in cache and size seems ok"
+            else
+              echo "Downloading flycap64 as not found in cache or too small"
+              python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShS1I1MzN0SmQ1MHc $HOME/downloads/flycap.tar.gz
+            fi
+            tar xzvf $HOME/downloads/flycap.tar.gz -C $TRAVIS_BUILD_DIR/../
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib"
+        elif [ "$OS" == "linux-x86" ]; then
+            if [[ $(find $HOME/downloads/flycaplinux32.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+              echo "Found flycap32 in cache and size seems ok"
+            else
+              echo "Downloading flycap32 as not found in cache or too small"
+              python $TRAVIS_BUILD_DIR/ci/gDownload.py 0B2xpvMUzviShaDhTN1FOUTE3UkE $HOME/downloads/flycaplinux32.tar.gz
+            fi
+            tar xzvf $HOME/downloads/flycaplinux32.tar.gz -C $TRAVIS_BUILD_DIR/../
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -R $HOME/build/include/* /usr/include; cp -R $HOME/build/lib/* /usr/lib"
         fi
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
-        export TEST_TMPDIR=$HOME/.cache/bazel
-        echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
-  fi
-  if [ "$PROJ" == "tensorrt" ]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
+      fi
+      if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
+             #don't put in download dir as will be cached and we can use direct url instead
+             curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14895/l_mkl_2019.1.144.tgz -o $HOME/mkl.tgz
+             tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
+             sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.1.144/silent.cfg
+             docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.1.144/install.sh -s $HOME/build/l_mkl_2019.1.144/silent.cfg"
+      fi
+      if [ "$PROJ" == "tensorflow" ]; then
+            echo "adding bazel for tensorflow"
+            curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+            if [ "$CURL_STATUS" != "0" ]; then
+              echo "Download failed here, so can't proceed with the build.. Failing.."
+              exit 1
+            fi
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
+            export TEST_TMPDIR=$HOME/.cache/bazel
+            echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
+      fi
+      if [ "$PROJ" == "tensorrt" ]; then
+            python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
+            docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
+      fi
   fi
 fi
 
@@ -272,75 +327,78 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 fi  
 
 
+if [[ "$PROJ" =~ spinnaker ]]; then
+    echo "Project $PROJ should be build by now"
+else
+    echo "Running install for $PROJ"
+    if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
+       DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+       echo "container id is $DOCKER_CONTAINER_ID"
+        if [ "$1" == "nodeploy" ]; then
+           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
+        elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+           echo "Not a pull request so attempting to deploy using docker"
+           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+           if [ $BUILD_STATUS -eq 0 ]; then
+             echo "Deploying platform"
+             for i in ${PROJ//,/ }
+             do
+              docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT "; export BUILD_STATUS=$?
+              if [ $BUILD_STATUS -ne 0 ]; then
+               echo "Build Failed"
+               exit $BUILD_STATUS
+              fi
+             done
+           fi
 
-echo "Running install for $PROJ"
-if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
-   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-   echo "container id is $DOCKER_CONTAINER_ID"
-    if [ "$1" == "nodeploy" ]; then
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
-    elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-       echo "Not a pull request so attempting to deploy using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
-       if [ $BUILD_STATUS -eq 0 ]; then
-         echo "Deploying platform"
-         for i in ${PROJ//,/ }
-         do
-          docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets/$i; mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ../ci/settings.xml -f platform/pom.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT "; export BUILD_STATUS=$?
-          if [ $BUILD_STATUS -ne 0 ]; then
-           echo "Build Failed"
-           exit $BUILD_STATUS
-          fi
-         done
+         else
+           echo "Pull request so install using docker"
+           docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+        fi
+
+       echo "Build status $BUILD_STATUS"
+       if [ $BUILD_STATUS -ne 0 ]; then
+         echo "Build Failed"
+         exit $BUILD_STATUS
        fi
-        
-     else
-       echo "Pull request so install using docker"
-       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
+
+    else
+       echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT"
+       if [ "$1" == "nodeploy" ]; then
+          bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT; export BUILD_STATUS=0
+       elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+          echo "Not a pull request so attempting to deploy"
+          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
+          if [ $BUILD_STATUS -eq 0 ]; then
+            echo "Deploying platform step"
+            for i in ${PROJ//,/ }
+            do
+          cd $i
+              mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
+              cd ..
+            done
+          fi
+        else
+          echo "Pull request so install only"
+          mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
+       fi
+
+       echo "Build status $BUILD_STATUS"
+       if [ $BUILD_STATUS -ne 0 ]; then
+         echo "Build Failed"
+         #echo "Dump of config.log output files found follows:"
+         #find . -name config.log | xargs cat
+         exit $BUILD_STATUS
+       fi
     fi
 
-   echo "Build status $BUILD_STATUS"
-   if [ $BUILD_STATUS -ne 0 ]; then  
-     echo "Build Failed"
-     exit $BUILD_STATUS
-   fi
 
-else	
-   echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT"
-   if [ "$1" == "nodeploy" ]; then
-      bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT; export BUILD_STATUS=0
-   elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-      echo "Not a pull request so attempting to deploy"
-      mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
-      if [ $BUILD_STATUS -eq 0 ]; then
-        echo "Deploying platform step"
-        for i in ${PROJ//,/ }
-        do
-	  cd $i
-          mvn clean deploy -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -f platform -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT; export BUILD_STATUS=$?
-          cd ..
-        done
-      fi
-    else
-      echo "Pull request so install only"
-      mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository -Dmaven.repo.local=$HOME/.m2/repository --settings $TRAVIS_BUILD_DIR/ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT -pl .,$PROJ; export BUILD_STATUS=$?
-   fi
-
-   echo "Build status $BUILD_STATUS"
-   if [ $BUILD_STATUS -ne 0 ]; then
-     echo "Build Failed"
-     #echo "Dump of config.log output files found follows:"
-     #find . -name config.log | xargs cat
-     exit $BUILD_STATUS
-   fi
-fi
-
-
-#finally, shutdown any container used for docker builds
-if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
-   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-   docker stop $DOCKER_CONTAINER_ID
-   docker rm -v $DOCKER_CONTAINER_ID
+    #finally, shutdown any container used for docker builds
+    if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]]; then
+       DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+       docker stop $DOCKER_CONTAINER_ID
+       docker rm -v $DOCKER_CONTAINER_ID
+    fi
 fi
 
 sudo chown -R travis:travis $HOME
