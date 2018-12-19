@@ -137,9 +137,9 @@ if [[ "$PROJ" =~ spinnaker ]] && [[ "$OS" == "linux-x86_64" ]]; then
     fi
     # Install Spinnaker packages
     #  sudo apt-get -y install ${SPIN_DEPENDENCIES}
-    tar xzvf ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -C ${TRAVIS_BUILD_DIR}/build/
-    sudo dpkg -i ${TRAVIS_BUILD_DIR}/build/${SPIN_DOWNLOAD_XDIR}/*.deb
-    rm -rf ${TRAVIS_BUILD_DIR}/build/${SPIN_DOWNLOAD_XDIR}
+    tar xzvf ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -C ${HOME}/downloads
+    sudo dpkg -i ${HOME}/downloads/${SPIN_DOWNLOAD_XDIR}/*.deb
+    rm -rf ${HOME}/downloads/${SPIN_DOWNLOAD_XDIR}
 fi
 
 if [ "$OS" == "linux-armhf" ]; then
