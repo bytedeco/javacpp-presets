@@ -43,7 +43,7 @@ fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
-if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
+if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; } && [[ ! $PROJ =~ spinnaker ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
   if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
@@ -283,12 +283,9 @@ fi
 
 
 echo "Running install for $PROJ"
-# Assume that if docker ID was defined a docker build should be used
-echo "container id is $DOCKER_CONTAINER_ID"
-if [[ -n $DOCKER_CONTAINER_ID ]]; then
-#if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
-#   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-#   echo "container id is $DOCKER_CONTAINER_ID"
+if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; } && [[ ! $PROJ =~ spinnaker ]]; then
+    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+    echo "container id is $DOCKER_CONTAINER_ID"
     if [ "$1" == "nodeploy" ]; then
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
     elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
