@@ -316,9 +316,12 @@
                   <Specification-Title>${project.name}</Specification-Title>
                   <Specification-Vendor>Bytedeco</Specification-Vendor>
                   <Specification-Version>${project.version}</Specification-Version>
+                  <MultiReleaseOutput>true</MultiReleaseOutput>
                 </manifestEntries>
               </archive>
               <skipIfEmpty>true</skipIfEmpty>
+              <forceCreation>true</forceCreation> <!-- hack to prevent moditect to fail if module-info.class
+              is already present in jar -->
               <includes>
                 <include>org/bytedeco/javacpp/**</include>
                 <include>META-INF/versions/**</include>
@@ -342,9 +345,11 @@
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <skipIfEmpty>false</skipIfEmpty>
+              <forceCreation>true</forceCreation> <!-- hack to prevent moditect to fail if module-info.class
+              is already present in jar -->
               <archive>
                 <manifestEntries>
-                  <Automatic-Module-Name>org.bytedeco.javacpp.${project.artifactId}.${os.name}.${os.arch}</Automatic-Module-Name>
+                  <MultiReleaseOutput>true</MultiReleaseOutput>
                 </manifestEntries>
               </archive>
               <includes>
@@ -361,6 +366,50 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <jvmVersion>9</jvmVersion>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <modules>
+                <module>
+                  <artifact>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                  </artifact>
+                  <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
+                </module>
+                <module>
+                  <artifact>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
+                  </artifact>
+                  <moduleInfoSource>
+                    open module org.bytedeco.javacpp.${project.artifactId}.${os.name}.${os.arch} {
+                      requires org.bytedeco.javacpp.${project.artifactId} transitive;
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.5.2</version>
@@ -435,91 +484,6 @@
             <configuration>
               <doclint>none</doclint>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-       <!-- If we have at least Java 9, compile module-info.class as well and create a multi-release JAR -->
-    <profile>
-      <id>module-java9-enable</id>
-      <activation>
-        <jdk>[9,)</jdk>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.8.0</version>
-            <executions>
-              <execution>
-                <id>java9</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <source>9</source>
-                  <target>9</target>
-                  <release>9</release>
-                  <multiReleaseOutput>true</multiReleaseOutput>
-                  <compileSourceRoots>
-                    <compileSourceRoot>${project.basedir}/src/main/java9</compileSourceRoot>
-                  </compileSourceRoots>
-                </configuration>
-              </execution>
-              <!-- Problems with module-info for native jar:
-              1) how to generate a different module name in module-info.java (use of moditect ?)
-              2) It seems that resources in the jar are really open only if the module contains at least
-              one package. But there is no java in the jar, so no package !
-              outputDirectory is undocumented for compiler plugin, but seems to work
-
-              <execution>
-                <id>java9native</id>
-                <phase>compile</phase>
-                <goals>
-                  <goal>compile</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${project.build.directory}/native</outputDirectory>
-                  <source>9</source>
-                  <target>9</target>
-                  <release>9</release>
-                  <multiReleaseOutput>true</multiReleaseOutput>
-                  <compileSourceRoots>
-                    <compileSourceRoot>${project.basedir}/src/main/java9native</compileSourceRoot>
-                  </compileSourceRoots>
-                </configuration>
-              </execution>
-              -->
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>default-jar</id>
-                <configuration>
-                  <archive>
-                    <manifestEntries>
-                      <Multi-Release>true</Multi-Release>
-                    </manifestEntries>
-                  </archive>
-                </configuration>
-              </execution>
-              <!--
-              <execution>
-                <id>${javacpp.platform}${javacpp.platform.extension}</id>
-                <configuration>
-                  <archive>
-                    <manifestEntries>
-                      <Multi-Release>true</Multi-Release>
-                    </manifestEntries>
-                  </archive>
-                </configuration>
-              </execution>
-              -->
-            </executions>
           </plugin>
         </plugins>
       </build>
