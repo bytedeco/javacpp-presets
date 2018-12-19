@@ -400,7 +400,7 @@
                   </artifact>
                   <moduleInfoSource>
                     open module org.bytedeco.javacpp.${project.artifactId}.${os.name}.${os.arch} {
-                      requires org.bytedeco.javacpp.${project.artifactId} transitive;
+                      requires transitive org.bytedeco.javacpp.${project.artifactId};
                     }
                   </moduleInfoSource>
                 </module>
