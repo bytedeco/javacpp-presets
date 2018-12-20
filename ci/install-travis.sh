@@ -152,7 +152,7 @@ if [ "$OS" == "linux-armhf" ]; then
 	bash buildme
 	popd
 
-  if [[ "$PROJ" =~ flycapture ]]; then
+	if [[ "$PROJ" =~ flycapture ]]; then
           if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
           else

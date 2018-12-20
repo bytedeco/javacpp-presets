@@ -227,14 +227,3 @@ public class FlyCapture2Test {
     }
 }
 ```
-
-Changes
--------
-
-### 2.13.3.31
-The main change in FLIR's FlyCapture2 API is new video library:
-* C++: 
-  * Removed: `AVIRecorder.h` 
-  * Added: `FlyCapture2Video.h`, `FlyCapture2VideoDef.h`
-* C: 
-  * Added: `FlyCapture2Video.h`, `FlyCapture2VideoDef.h`
