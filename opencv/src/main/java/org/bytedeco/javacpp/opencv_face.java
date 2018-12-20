@@ -72,7 +72,7 @@ the use of this software, even if advised of the possibility of such damage.
 // #include <utility>
 // #include <cfloat>
 
-// #include "opencv2/core/cvstd.hpp"
+// #include "opencv2/core/base.hpp"
 /** \addtogroup face
  *  \{
 /** \brief Abstract base class for all strategies of prediction result handling
@@ -136,9 +136,9 @@ Trace minimal distance with treshhold checking (that is default behavior for mos
     public StandardCollector() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** \brief overloaded interface method */
-    public native void init(@Cast("size_t") long size);
+    public native @Override void init(@Cast("size_t") long size);
     /** \brief overloaded interface method */
-    public native @Cast("bool") boolean collect(int label, double dist);
+    public native @Cast("bool") @Override boolean collect(int label, double dist);
     /** \brief Returns label with minimal distance */
     public native int getMinLabel();
     /** \brief Returns minimal distance value */
@@ -300,7 +300,7 @@ If you've set the threshold to 0.0 as we did above, then:
 <p>
 <pre>{@code
 //
-Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
 // Get a prediction from the model. Note: We've set a threshold of 0.0 above,
 // since the distance is almost always larger than 0.0, you'll get -1 as
 // label, which indicates, this face is unknown
@@ -347,13 +347,13 @@ String name = model->name();
     vector<Mat> images;
     vector<int> labels;
     // images for first person
-    images.push_back(imread("person0/0.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
-    images.push_back(imread("person0/1.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
-    images.push_back(imread("person0/2.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/0.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/1.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
+    images.push_back(imread("person0/2.jpg", IMREAD_GRAYSCALE)); labels.push_back(0);
     // images for second person
-    images.push_back(imread("person1/0.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
-    images.push_back(imread("person1/1.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
-    images.push_back(imread("person1/2.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/0.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/1.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
+    images.push_back(imread("person1/2.jpg", IMREAD_GRAYSCALE)); labels.push_back(1);
     }</pre>
     <p>
     Now that you have read some images, we can create a new FaceRecognizer. In this example I'll create
@@ -464,7 +464,7 @@ String name = model->name();
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
     // Read in a sample image:
-    Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
     // And get a prediction from the cv::FaceRecognizer:
     int predicted = model->predict(img);
     }</pre>
@@ -475,7 +475,7 @@ String name = model->name();
     using namespace cv;
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
-    Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+    Mat img = imread("person1/3.jpg", IMREAD_GRAYSCALE);
     // Some variables for the predicted label and associated confidence (e.g. distance):
     int predicted_label = -1;
     double predicted_confidence = 0.0;
@@ -534,13 +534,13 @@ String name = model->name();
     Saves this model to a given FileStorage.
     @param fs The FileStorage to store this FaceRecognizer to.
     */
-    public native void write(@ByRef FileStorage fs);
+    public native @Override void write(@ByRef FileStorage fs);
 
     /** \overload */
-    public native void read(@Const @ByRef FileNode fn);
+    public native @Override void read(@Const @ByRef FileNode fn);
 
     /** \overload */
-    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") @Override boolean empty();
 
     /** \brief Sets string info for the specified model's label.
     <p>
@@ -613,18 +613,18 @@ String name = model->name();
     /** \copybrief getNumComponents @see getNumComponents */
     public native void setNumComponents(int val);
     /** @see setThreshold */
-    public native double getThreshold();
+    public native @Override double getThreshold();
     /** \copybrief getThreshold @see getThreshold */
-    public native void setThreshold(double val);
+    public native @Override void setThreshold(double val);
     public native @ByVal MatVector getProjections();
     public native @ByVal Mat getLabels();
     public native @ByVal Mat getEigenValues();
     public native @ByVal Mat getEigenVectors();
     public native @ByVal Mat getMean();
 
-    public native void read(@Const @ByRef FileNode fn);
-    public native void write(@ByRef FileStorage fs);
-    public native @Cast("bool") boolean empty();
+    public native @Override void read(@Const @ByRef FileNode fn);
+    public native @Override void write(@ByRef FileStorage fs);
+    public native @Cast("bool") @Override boolean empty();
 }
 
 @Namespace("cv::face") public static class EigenFaceRecognizer extends BasicFaceRecognizer {
@@ -727,9 +727,9 @@ String name = model->name();
     /** \copybrief getNeighbors @see getNeighbors */
     public native void setNeighbors(int val);
     /** @see setThreshold */
-    public native double getThreshold();
+    public native @Override double getThreshold();
     /** \copybrief getThreshold @see getThreshold */
-    public native void setThreshold(double val);
+    public native @Override void setThreshold(double val);
     public native @ByVal MatVector getHistograms();
     public native @ByVal Mat getLabels();
 

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.0.0-rc3
+TESSERACT_VERSION=4.0.0
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -46,73 +46,73 @@ LEPTONICA_PATH="${LEPTONICA_PATH//\\//}"
 
 case $PLATFORM in
     android-arm)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
-        cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
-        "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8 -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
-        sed -i="" s/lstdc++/lgnustl_static/g libtool
+        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
+        # Disable what Autoconf tries to do but that fails for Android
+        sedinplace '/predep_objects=/d' libtool
+        sedinplace '/postdep_objects=/d' libtool
+        sedinplace '/predeps=/d' libtool
+        sedinplace '/postdeps=/d' libtool
+        sedinplace 's/-nostdlib//g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
         ;;
     android-arm64)
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
-        cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
-        "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/arm64-v8a/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
-        sed -i="" s/lstdc++/lgnustl_static/g libtool
+        ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
+        # Disable what Autoconf tries to do but that fails for Android
+        sedinplace '/predep_objects=/d' libtool
+        sedinplace '/postdep_objects=/d' libtool
+        sedinplace '/predeps=/d' libtool
+        sedinplace '/postdeps=/d' libtool
+        sedinplace 's/-nostdlib//g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
         ;;
     android-x86)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
-        cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" src/api
-        "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
-        sed -i="" s/lstdc++/lgnustl_static/g libtool
+        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
+        # Disable what Autoconf tries to do but that fails for Android
+        sedinplace '/predep_objects=/d' libtool
+        sedinplace '/postdep_objects=/d' libtool
+        sedinplace '/predeps=/d' libtool
+        sedinplace '/postdeps=/d' libtool
+        sedinplace 's/-nostdlib//g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
         ;;
     android-x86_64)
         patch -Np1 < ../../../tesseract-android.patch
-        sedinplace 's/cstdio/stdio.h/g' `find -iname *.h` `find -iname *.cpp`
-        cp "$ANDROID_ROOT/usr/lib64/crtbegin_so.o" "$ANDROID_ROOT/usr/lib64/crtend_so.o" src/api
-        "$ANDROID_BIN-ar" r src/api/librt.a "$ANDROID_ROOT/usr/lib64/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ $ANDROID_FLAGS" LDFLAGS="-L$ANDROID_ROOT/usr/lib64/ -L$ANDROID_CPP/libs/x86_64/ -nostdlib -z text -L$LEPTONICA_PATH/lib/ -L./" LIBS="-llept -lgnustl_static -lgcc -ldl -lz -lm -lc"
-        sed -i="" s/lstdc++/lgnustl_static/g libtool
+        ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" AR="$ANDROID_PREFIX-ar" RANLIB="$ANDROID_PREFIX-ranlib" CC="$ANDROID_CC $ANDROID_FLAGS" CXX="$ANDROID_CC++ $ANDROID_FLAGS" STRIP="$ANDROID_PREFIX-strip" CPPFLAGS="-I$LEPTONICA_PATH/include/ -Wno-c++11-narrowing" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept $ANDROID_LIBS"
+        # Disable what Autoconf tries to do but that fails for Android
+        sedinplace '/predep_objects=/d' libtool
+        sedinplace '/postdep_objects=/d' libtool
+        sedinplace '/predeps=/d' libtool
+        sedinplace '/postdeps=/d' libtool
+        sedinplace 's/-nostdlib//g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86)
-        #patch -Np1 < ../../../tesseract-linux.patch
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32" CXX="$OLDCXX -m32" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     linux-armhf)
-        #patch -Np1 < ../../../tesseract-linux.patch
         ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     linux-arm64)
-        #patch -Np1 < ../../../tesseract-linux.patch
         ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu CC="aarch64-linux-gnu-gcc" CXX="aarch64-linux-gnu-g++" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        #patch -Np1 < ../../../tesseract-linux.patch
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/ -Wl,-rpath,$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
@@ -135,14 +135,12 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        #patch -Np1 < ../../../tesseract-windows.patch
         cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
-        #patch -Np1 < ../../../tesseract-windows.patch
         cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ

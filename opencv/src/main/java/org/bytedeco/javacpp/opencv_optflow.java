@@ -93,7 +93,7 @@ Functions reading and writing .flo files in "Middlebury" format, see: <http://vi
 
 // #include "opencv2/optflow/pcaflow.hpp"
 // #include "opencv2/optflow/sparse_matching_gpc.hpp"
-    
+
 /** \addtogroup optflow
  *  \{
 <p>
@@ -184,95 +184,6 @@ See \cite Tao2012 . And site of project - <http://graphics.berkeley.edu/papers/T
                                                  float fgs_sigma/*=1.5f*/ );
 @Namespace("cv::optflow") public static native void calcOpticalFlowSparseToDense( @ByVal GpuMat from, @ByVal GpuMat to, @ByVal GpuMat flow );
 
-/** \brief Read a .flo file
-<p>
-@param path Path to the file to be loaded
-<p>
-The function readOpticalFlow loads a flow field from a file and returns it as a single matrix.
-Resulting Mat has a type CV_32FC2 - floating-point, 2-channel. First channel corresponds to the
-flow in the horizontal direction (u), second - vertical (v).
- */
-@Namespace("cv::optflow") public static native @ByVal Mat readOpticalFlow( @Str BytePointer path );
-@Namespace("cv::optflow") public static native @ByVal Mat readOpticalFlow( @Str String path );
-/** \brief Write a .flo to disk
-<p>
-@param path Path to the file to be written
-@param flow Flow field to be stored
-<p>
-The function stores a flow field in a file, returns true on success, false otherwise.
-The flow field must be a 2-channel, floating-point matrix (CV_32FC2). First channel corresponds
-to the flow in the horizontal direction (u), second - vertical (v).
- */
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal Mat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal Mat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal UMat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal UMat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str BytePointer path, @ByVal GpuMat flow );
-@Namespace("cv::optflow") public static native @Cast("bool") boolean writeOpticalFlow( @Str String path, @ByVal GpuMat flow );
-
-/** \brief Variational optical flow refinement
-<p>
-This class implements variational refinement of the input flow field, i.e.
-it uses input flow to initialize the minimization of the following functional:
-\f$E(U) = \int_{\Omega} \delta \Psi(E_I) + \gamma \Psi(E_G) + \alpha \Psi(E_S) \f$,
-where \f$E_I,E_G,E_S\f$ are color constancy, gradient constancy and smoothness terms
-respectively. \f$\Psi(s^2)=\sqrt{s^2+\epsilon^2}\f$ is a robust penalizer to limit the
-influence of outliers. A complete formulation and a description of the minimization
-procedure can be found in \cite Brox2004
-*/
-@Namespace("cv::optflow") public static class VariationalRefinement extends DenseOpticalFlow {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public VariationalRefinement(Pointer p) { super(p); }
-
-    /** \brief \ref calc function overload to handle separate horizontal (u) and vertical (v) flow components
-    (to avoid extra splits/merges) */
-    public native void calcUV(@ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow_u, @ByVal Mat flow_v);
-    public native void calcUV(@ByVal UMat I0, @ByVal UMat I1, @ByVal UMat flow_u, @ByVal UMat flow_v);
-    public native void calcUV(@ByVal GpuMat I0, @ByVal GpuMat I1, @ByVal GpuMat flow_u, @ByVal GpuMat flow_v);
-
-    /** \brief Number of outer (fixed-point) iterations in the minimization procedure.
-    @see setFixedPointIterations */
-    public native int getFixedPointIterations();
-    /** \copybrief getFixedPointIterations @see getFixedPointIterations */
-    public native void setFixedPointIterations(int val);
-
-    /** \brief Number of inner successive over-relaxation (SOR) iterations
-        in the minimization procedure to solve the respective linear system.
-    @see setSorIterations */
-    public native int getSorIterations();
-    /** \copybrief getSorIterations @see getSorIterations */
-    public native void setSorIterations(int val);
-
-    /** \brief Relaxation factor in SOR
-    @see setOmega */
-    public native float getOmega();
-    /** \copybrief getOmega @see getOmega */
-    public native void setOmega(float val);
-
-    /** \brief Weight of the smoothness term
-    @see setAlpha */
-    public native float getAlpha();
-    /** \copybrief getAlpha @see getAlpha */
-    public native void setAlpha(float val);
-
-    /** \brief Weight of the color constancy term
-    @see setDelta */
-    public native float getDelta();
-    /** \copybrief getDelta @see getDelta */
-    public native void setDelta(float val);
-
-    /** \brief Weight of the gradient constancy term
-    @see setGamma */
-    public native float getGamma();
-    /** \copybrief getGamma @see getGamma */
-    public native void setGamma(float val);
-}
-
-/** \brief Creates an instance of VariationalRefinement
-*/
-@Namespace("cv::optflow") public static native @Ptr VariationalRefinement createVariationalFlowRefinement();
-
 /** \brief DeepFlow optical flow algorithm implementation.
 <p>
 The class implements the DeepFlow optical flow algorithm described in \cite Weinzaepfel2013 . See
@@ -309,109 +220,134 @@ Relaxation factor in SOR
 /** Additional interface to the SparseToDenseFlow algorithm - calcOpticalFlowSparseToDense() */
 @Namespace("cv::optflow") public static native @Ptr DenseOpticalFlow createOptFlow_SparseToDense();
 
-/** \brief DIS optical flow algorithm.
+/** \brief "Dual TV L1" Optical Flow Algorithm.
 <p>
-This class implements the Dense Inverse Search (DIS) optical flow algorithm. More
-details about the algorithm can be found at \cite Kroeger2016 . Includes three presets with preselected
-parameters to provide reasonable trade-off between speed and quality. However, even the slowest preset is
-still relatively fast, use DeepFlow if you need better quality and don't care about speed.
+The class implements the "Dual TV L1" optical flow algorithm described in \cite Zach2007 and
+\cite Javier2012 .
+Here are important members of the class that control the algorithm, which you can set after
+constructing the class instance:
 <p>
-This implementation includes several additional features compared to the algorithm described in the paper,
-including spatial propagation of flow vectors (\ref getUseSpatialPropagation), as well as an option to
-utilize an initial flow approximation passed to \ref calc (which is, essentially, temporal propagation,
-if the previous frame's flow field is passed).
+-   member double tau
+    Time step of the numerical scheme.
+<p>
+-   member double lambda
+    Weight parameter for the data term, attachment parameter. This is the most relevant
+    parameter, which determines the smoothness of the output. The smaller this parameter is,
+    the smoother the solutions we obtain. It depends on the range of motions of the images, so
+    its value should be adapted to each image sequence.
+<p>
+-   member double theta
+    Weight parameter for (u - v)\^2, tightness parameter. It serves as a link between the
+    attachment and the regularization terms. In theory, it should have a small value in order
+    to maintain both parts in correspondence. The method is stable for a large range of values
+    of this parameter.
+<p>
+-   member int nscales
+    Number of scales used to create the pyramid of images.
+<p>
+-   member int warps
+    Number of warpings per scale. Represents the number of times that I1(x+u0) and grad(
+    I1(x+u0) ) are computed per scale. This is a parameter that assures the stability of the
+    method. It also affects the running time, so it is a compromise between speed and
+    accuracy.
+<p>
+-   member double epsilon
+    Stopping criterion threshold used in the numerical scheme, which is a trade-off between
+    precision and running time. A small value will yield more accurate solutions at the
+    expense of a slower convergence.
+<p>
+-   member int iterations
+    Stopping criterion iterations number used in the numerical scheme.
+<p>
+C. Zach, T. Pock and H. Bischof, "A Duality Based Approach for Realtime TV-L1 Optical Flow".
+Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flow Estimation".
 */
-@Namespace("cv::optflow") public static class DISOpticalFlow extends DenseOpticalFlow {
+@Namespace("cv::optflow") public static class DualTVL1OpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DISOpticalFlow(Pointer p) { super(p); }
+    public DualTVL1OpticalFlow(Pointer p) { super(p); }
 
-    /** enum cv::optflow::DISOpticalFlow:: */
-    public static final int
-        PRESET_ULTRAFAST = 0,
-        PRESET_FAST = 1,
-        PRESET_MEDIUM = 2;
+    /** \brief Time step of the numerical scheme
+    /** @see setTau */
+    public native double getTau();
+    /** \copybrief getTau @see getTau */
+    public native void setTau(double val);
+    /** \brief Weight parameter for the data term, attachment parameter
+    /** @see setLambda */
+    public native double getLambda();
+    /** \copybrief getLambda @see getLambda */
+    public native void setLambda(double val);
+    /** \brief Weight parameter for (u - v)^2, tightness parameter
+    /** @see setTheta */
+    public native double getTheta();
+    /** \copybrief getTheta @see getTheta */
+    public native void setTheta(double val);
+    /** \brief coefficient for additional illumination variation term
+    /** @see setGamma */
+    public native double getGamma();
+    /** \copybrief getGamma @see getGamma */
+    public native void setGamma(double val);
+    /** \brief Number of scales used to create the pyramid of images
+    /** @see setScalesNumber */
+    public native int getScalesNumber();
+    /** \copybrief getScalesNumber @see getScalesNumber */
+    public native void setScalesNumber(int val);
+    /** \brief Number of warpings per scale
+    /** @see setWarpingsNumber */
+    public native int getWarpingsNumber();
+    /** \copybrief getWarpingsNumber @see getWarpingsNumber */
+    public native void setWarpingsNumber(int val);
+    /** \brief Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time
+    /** @see setEpsilon */
+    public native double getEpsilon();
+    /** \copybrief getEpsilon @see getEpsilon */
+    public native void setEpsilon(double val);
+    /** \brief Inner iterations (between outlier filtering) used in the numerical scheme
+    /** @see setInnerIterations */
+    public native int getInnerIterations();
+    /** \copybrief getInnerIterations @see getInnerIterations */
+    public native void setInnerIterations(int val);
+    /** \brief Outer iterations (number of inner loops) used in the numerical scheme
+    /** @see setOuterIterations */
+    public native int getOuterIterations();
+    /** \copybrief getOuterIterations @see getOuterIterations */
+    public native void setOuterIterations(int val);
+    /** \brief Use initial flow
+    /** @see setUseInitialFlow */
+    public native @Cast("bool") boolean getUseInitialFlow();
+    /** \copybrief getUseInitialFlow @see getUseInitialFlow */
+    public native void setUseInitialFlow(@Cast("bool") boolean val);
+    /** \brief Step between scales (<1)
+    /** @see setScaleStep */
+    public native double getScaleStep();
+    /** \copybrief getScaleStep @see getScaleStep */
+    public native void setScaleStep(double val);
+    /** \brief Median filter kernel size (1 = no filter) (3 or 5)
+    /** @see setMedianFiltering */
+    public native int getMedianFiltering();
+    /** \copybrief getMedianFiltering @see getMedianFiltering */
+    public native void setMedianFiltering(int val);
 
-    /** \brief Finest level of the Gaussian pyramid on which the flow is computed (zero level
-        corresponds to the original image resolution). The final flow is obtained by bilinear upscaling.
-        @see setFinestScale */
-    public native int getFinestScale();
-    /** \copybrief getFinestScale @see getFinestScale */
-    public native void setFinestScale(int val);
-
-    /** \brief Size of an image patch for matching (in pixels). Normally, default 8x8 patches work well
-        enough in most cases.
-        @see setPatchSize */
-    public native int getPatchSize();
-    /** \copybrief getPatchSize @see getPatchSize */
-    public native void setPatchSize(int val);
-
-    /** \brief Stride between neighbor patches. Must be less than patch size. Lower values correspond
-        to higher flow quality.
-        @see setPatchStride */
-    public native int getPatchStride();
-    /** \copybrief getPatchStride @see getPatchStride */
-    public native void setPatchStride(int val);
-
-    /** \brief Maximum number of gradient descent iterations in the patch inverse search stage. Higher values
-        may improve quality in some cases.
-        @see setGradientDescentIterations */
-    public native int getGradientDescentIterations();
-    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
-    public native void setGradientDescentIterations(int val);
-
-    /** \brief Number of fixed point iterations of variational refinement per scale. Set to zero to
-        disable variational refinement completely. Higher values will typically result in more smooth and
-        high-quality flow.
-    @see setGradientDescentIterations */
-    public native int getVariationalRefinementIterations();
-    /** \copybrief getGradientDescentIterations @see getGradientDescentIterations */
-    public native void setVariationalRefinementIterations(int val);
-
-    /** \brief Weight of the smoothness term
-    @see setVariationalRefinementAlpha */
-    public native float getVariationalRefinementAlpha();
-    /** \copybrief getVariationalRefinementAlpha @see getVariationalRefinementAlpha */
-    public native void setVariationalRefinementAlpha(float val);
-
-    /** \brief Weight of the color constancy term
-    @see setVariationalRefinementDelta */
-    public native float getVariationalRefinementDelta();
-    /** \copybrief getVariationalRefinementDelta @see getVariationalRefinementDelta */
-    public native void setVariationalRefinementDelta(float val);
-
-    /** \brief Weight of the gradient constancy term
-    @see setVariationalRefinementGamma */
-    public native float getVariationalRefinementGamma();
-    /** \copybrief getVariationalRefinementGamma @see getVariationalRefinementGamma */
-    public native void setVariationalRefinementGamma(float val);
-
-
-    /** \brief Whether to use mean-normalization of patches when computing patch distance. It is turned on
-        by default as it typically provides a noticeable quality boost because of increased robustness to
-        illumination variations. Turn it off if you are certain that your sequence doesn't contain any changes
-        in illumination.
-    @see setUseMeanNormalization */
-    public native @Cast("bool") boolean getUseMeanNormalization();
-    /** \copybrief getUseMeanNormalization @see getUseMeanNormalization */
-    public native void setUseMeanNormalization(@Cast("bool") boolean val);
-
-    /** \brief Whether to use spatial propagation of good optical flow vectors. This option is turned on by
-        default, as it tends to work better on average and can sometimes help recover from major errors
-        introduced by the coarse-to-fine scheme employed by the DIS optical flow algorithm. Turning this
-        option off can make the output flow field a bit smoother, however.
-    @see setUseSpatialPropagation */
-    public native @Cast("bool") boolean getUseSpatialPropagation();
-    /** \copybrief getUseSpatialPropagation @see getUseSpatialPropagation */
-    public native void setUseSpatialPropagation(@Cast("bool") boolean val);
+    /** \brief Creates instance of cv::DualTVL1OpticalFlow*/
+    public static native @Ptr DualTVL1OpticalFlow create(
+                                                double tau/*=0.25*/,
+                                                double lambda/*=0.15*/,
+                                                double theta/*=0.3*/,
+                                                int nscales/*=5*/,
+                                                int warps/*=5*/,
+                                                double epsilon/*=0.01*/,
+                                                int innnerIterations/*=30*/,
+                                                int outerIterations/*=10*/,
+                                                double scaleStep/*=0.8*/,
+                                                double gamma/*=0.0*/,
+                                                int medianFiltering/*=5*/,
+                                                @Cast("bool") boolean useInitialFlow/*=false*/);
+    public static native @Ptr DualTVL1OpticalFlow create();
 }
 
-/** \brief Creates an instance of DISOpticalFlow
-<p>
-@param preset one of PRESET_ULTRAFAST, PRESET_FAST and PRESET_MEDIUM
+/** \brief Creates instance of cv::DenseOpticalFlow
 */
-@Namespace("cv::optflow") public static native @Ptr DISOpticalFlow createOptFlow_DIS(int preset/*=cv::optflow::DISOpticalFlow::PRESET_FAST*/);
-@Namespace("cv::optflow") public static native @Ptr DISOpticalFlow createOptFlow_DIS();
+@Namespace("cv::optflow") public static native @Ptr DualTVL1OpticalFlow createOptFlow_DualTVL1();
 
 /** \} */
 

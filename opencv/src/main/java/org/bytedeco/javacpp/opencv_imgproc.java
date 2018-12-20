@@ -459,7 +459,7 @@ public static final int
     /** m00 != 0 ? 1/sqrt(m00) : 0 */
     public native double inv_sqrt_m00(); public native CvMoments inv_sqrt_m00(double inv_sqrt_m00);
 
-// #ifdef __cplusplus
+// #if defined(CV__ENABLE_C_API_CTORS) && defined(__cplusplus)
     public CvMoments() { super((Pointer)null); allocate(); }
     private native void allocate();
     public CvMoments(@Const @ByRef Moments m) { super((Pointer)null); allocate(m); }
@@ -467,6 +467,13 @@ public static final int
     public native @ByVal @Name("operator cv::Moments") Moments asMoments();
 // #endif
 }
+
+// #ifdef __cplusplus // extern "C"
+
+public static native @ByVal CvMoments cvMoments();
+
+public static native @ByVal CvMoments cvMoments(@Const @ByRef Moments m);
+// #endif // __cplusplus
 
 /** Hu invariants */
 public static class CvHuMoments extends Pointer {
@@ -1105,45 +1112,6 @@ public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double maxRadius);
-
-/** \brief Transforms the input image to compensate lens distortion
-@see cv::undistort
-*/
-public static native void cvUndistort2( @Const CvArr src, CvArr dst,
-                          @Const CvMat camera_matrix,
-                          @Const CvMat distortion_coeffs,
-                          @Const CvMat new_camera_matrix/*=0*/ );
-public static native void cvUndistort2( @Const CvArr src, CvArr dst,
-                          @Const CvMat camera_matrix,
-                          @Const CvMat distortion_coeffs );
-
-/** \brief Computes transformation map from intrinsic camera parameters
-   that can used by cvRemap
-*/
-public static native void cvInitUndistortMap( @Const CvMat camera_matrix,
-                                @Const CvMat distortion_coeffs,
-                                CvArr mapx, CvArr mapy );
-
-/** \brief Computes undistortion+rectification map for a head of stereo camera
-@see cv::initUndistortRectifyMap
-*/
-public static native void cvInitUndistortRectifyMap( @Const CvMat camera_matrix,
-                                       @Const CvMat dist_coeffs,
-                                       @Const CvMat R, @Const CvMat new_camera_matrix,
-                                       CvArr mapx, CvArr mapy );
-
-/** \brief Computes the original (undistorted) feature coordinates
-   from the observed (distorted) coordinates
-@see cv::undistortPoints
-*/
-public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
-                               @Const CvMat camera_matrix,
-                               @Const CvMat dist_coeffs,
-                               @Const CvMat R/*=0*/,
-                               @Const CvMat P/*=0*/);
-public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
-                               @Const CvMat camera_matrix,
-                               @Const CvMat dist_coeffs);
 
 /** \brief Returns a structuring element of the specified size and shape for morphological operations.
 <p>
@@ -2509,7 +2477,10 @@ public static native void cvDrawContours( CvArr img, CvSeq contour,
 // #include "opencv2/core.hpp"
 
 /**
-  \defgroup imgproc Image processing
+  \defgroup imgproc Image Processing
+<p>
+This module includes image-processing functions.
+  <p>
   \{
     \defgroup imgproc_filter Image Filtering
 <p>
@@ -2611,6 +2582,7 @@ case, the color[3] is simply copied to the repainted pixels. Thus, if you want t
 semi-transparent shapes, you can paint them in a separate buffer and then blend it with the main
 image.
     <p>
+    \defgroup imgproc_color_conversions Color Space Conversions
     \defgroup imgproc_colormap ColorMaps in OpenCV
 <p>
 The human perception isn't built for observing fine changes in grayscale images. Human eyes are more
@@ -2658,8 +2630,12 @@ location of points on the plane, building special graphs (such as NNG,RNG), and 
 */
 
 /** \addtogroup imgproc_filter
-/** \{
-<p>
+/** \{ */
+
+/** enum cv::SpecialFilter */
+public static final int
+    FILTER_SCHARR = -1;
+
 /** type of morphological operation */
 /** enum cv::MorphTypes */
 public static final int
@@ -2819,12 +2795,6 @@ public static final int
     #getGaussianKernel*/
     ADAPTIVE_THRESH_GAUSSIAN_C = 1;
 
-/** cv::undistort mode */
-/** enum cv::UndistortTypes */
-public static final int
-       PROJ_SPHERICAL_ORTHO  = 0,
-       PROJ_SPHERICAL_EQRECT = 1;
-
 /** class of the pixel in GrabCut algorithm */
 /** enum cv::GrabCutClasses */
 public static final int
@@ -2956,6 +2926,9 @@ public static final int
 
 /** \} imgproc_shape
  <p>
+ *  \addtogroup imgproc_feature
+ *  \{
+ <p>
  *  Variants of a Hough transform */
 /** enum cv::HoughModes */
 public static final int
@@ -2976,8 +2949,7 @@ public static final int
     /** basically *21HT*, described in \cite Yuen90 */
     HOUGH_GRADIENT      = 3;
 
-/** Variants of Line Segment %Detector
- *  \ingroup imgproc_feature */
+/** Variants of Line Segment %Detector */
 /** enum cv::LineSegmentDetectorModes */
 public static final int
     /** No refinement applied */
@@ -2988,6 +2960,8 @@ public static final int
  *  refined through increase of precision, decrement in size, etc. */
     LSD_REFINE_ADV  = 2;
 
+/** \} imgproc_feature
+<p>
 /** Histogram comparison methods
   \ingroup imgproc_hist
 */
@@ -3019,9 +2993,9 @@ public static final int
     \f[d(H_1,H_2) = \sum _I H_1(I) \log \left(\frac{H_1(I)}{H_2(I)}\right)\f] */
     HISTCMP_KL_DIV        = 5;
 
-/** the color conversion code
+/** the color conversion codes
 @see \ref imgproc_color_conversions
-\ingroup imgproc_misc
+\ingroup imgproc_color_conversions
  */
 /** enum cv::ColorConversionCodes */
 public static final int
@@ -3122,7 +3096,6 @@ public static final int
     COLOR_HLS2BGR      = 60,
     COLOR_HLS2RGB      = 61,
 
-    //!<
     COLOR_BGR2HSV_FULL = 66,
     COLOR_RGB2HSV_FULL = 67,
     COLOR_BGR2HLS_FULL = 68,
@@ -3307,9 +3280,10 @@ public static final int
 
     COLOR_COLORCVT_MAX  = 143;
 
-/** types of intersection between rectangles
-\ingroup imgproc_shape
-*/
+/** \addtogroup imgproc_shape
+ *  \{
+ <p>
+ *  types of intersection between rectangles */
 /** enum cv::RectanglesIntersectTypes */
 public static final int
     /** No intersection */
@@ -3319,7 +3293,65 @@ public static final int
     /** One of the rectangle is fully enclosed in the other */
     INTERSECT_FULL  = 2;
 
-/** finds arbitrary template in the grayscale image using Generalized Hough Transform */
+/** types of line
+\ingroup imgproc_draw
+*/
+/** enum cv::LineTypes */
+public static final int
+    FILLED  = -1,
+    /** 4-connected line */
+    LINE_4  = 4,
+    /** 8-connected line */
+    LINE_8  = 8,
+    /** antialiased line */
+    LINE_AA = 16;
+
+/** Only a subset of Hershey fonts <https://en.wikipedia.org/wiki/Hershey_fonts> are supported
+\ingroup imgproc_draw
+*/
+/** enum cv::HersheyFonts */
+public static final int
+    /** normal size sans-serif font */
+    FONT_HERSHEY_SIMPLEX        = 0,
+    /** small size sans-serif font */
+    FONT_HERSHEY_PLAIN          = 1,
+    /** normal size sans-serif font (more complex than FONT_HERSHEY_SIMPLEX) */
+    FONT_HERSHEY_DUPLEX         = 2,
+    /** normal size serif font */
+    FONT_HERSHEY_COMPLEX        = 3,
+    /** normal size serif font (more complex than FONT_HERSHEY_COMPLEX) */
+    FONT_HERSHEY_TRIPLEX        = 4,
+    /** smaller version of FONT_HERSHEY_COMPLEX */
+    FONT_HERSHEY_COMPLEX_SMALL  = 5,
+    /** hand-writing style font */
+    FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
+    /** more complex variant of FONT_HERSHEY_SCRIPT_SIMPLEX */
+    FONT_HERSHEY_SCRIPT_COMPLEX = 7,
+    /** flag for italic font */
+    FONT_ITALIC                 = 16;
+
+/** Possible set of marker types used for the cv::drawMarker function
+\ingroup imgproc_draw
+*/
+/** enum cv::MarkerTypes */
+public static final int
+    /** A crosshair marker shape */
+    MARKER_CROSS = 0,
+    /** A 45 degree tilted crosshair marker shape */
+    MARKER_TILTED_CROSS = 1,
+    /** A star marker shape, combination of cross and tilted cross */
+    MARKER_STAR = 2,
+    /** A diamond marker shape */
+    MARKER_DIAMOND = 3,
+    /** A square marker shape */
+    MARKER_SQUARE = 4,
+    /** An upwards pointing triangle marker shape */
+    MARKER_TRIANGLE_UP = 5,
+    /** A downwards pointing triangle marker shape */
+    MARKER_TRIANGLE_DOWN = 6;
+
+/** \brief finds arbitrary template in the grayscale image using Generalized Hough Transform
+*/
 @Namespace("cv") public static class GeneralizedHough extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3374,8 +3406,10 @@ public static final int
     public native int getMaxBufferSize();
 }
 
-/** Ballard, D.H. (1981). Generalizing the Hough transform to detect arbitrary shapes. Pattern Recognition 13 (2): 111-122.
- *  Detects position only without translation and rotation */
+/** \brief finds arbitrary template in the grayscale image using Generalized Hough Transform
+<p>
+Detects position only without translation and rotation \cite Ballard1981 .
+*/
 @Namespace("cv") public static class GeneralizedHoughBallard extends GeneralizedHough {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3390,8 +3424,10 @@ public static final int
     public native int getVotesThreshold();
 }
 
-/** Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038.
- *  Detects position, translation and rotation */
+/** \brief finds arbitrary template in the grayscale image using Generalized Hough Transform
+<p>
+Detects position, translation and rotation \cite Guil1999 .
+*/
 @Namespace("cv") public static class GeneralizedHoughGuil extends GeneralizedHough {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3446,8 +3482,13 @@ public static final int
     public native int getPosThresh();
 }
 
-/** \brief Base class for Contrast Limited Adaptive Histogram Equalization. :
- */
+/** \} imgproc_shape
+ <p>
+ *  \addtogroup imgproc_hist
+ *  \{
+<p>
+/** \brief Base class for Contrast Limited Adaptive Histogram Equalization.
+*/
 @Namespace("cv") public static class CLAHE extends Algorithm {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -3455,7 +3496,7 @@ public static final int
 
     /** \brief Equalizes the histogram of a grayscale image using Contrast Limited Adaptive Histogram Equalization.
     <p>
-    @param src Source image with CV_8UC1 type.
+    @param src Source image of type CV_8UC1 or CV_16UC1.
     @param dst Destination image.
      */
     public native void apply(@ByVal Mat src, @ByVal Mat dst);
@@ -3484,8 +3525,9 @@ public static final int
     public native void collectGarbage();
 }
 
-
-/** \addtogroup imgproc_subdiv2d
+/** \} imgproc_hist
+ <p>
+ *  \addtogroup imgproc_subdiv2d
  *  \{ */
 
 @Namespace("cv") @NoOffset public static class Subdiv2D extends Pointer {
@@ -3854,14 +3896,14 @@ You may also use the higher-level GaussianBlur.
 /** \brief Returns filter coefficients for computing spatial image derivatives.
 <p>
 The function computes and returns the filter coefficients for spatial image derivatives. When
-{@code ksize=CV_SCHARR}, the Scharr \f$3 \times 3\f$ kernels are generated (see #Scharr). Otherwise, Sobel
+{@code ksize=FILTER_SCHARR}, the Scharr \f$3 \times 3\f$ kernels are generated (see #Scharr). Otherwise, Sobel
 kernels are generated (see #Sobel). The filters are normally passed to #sepFilter2D or to
 <p>
 @param kx Output matrix of row filter coefficients. It has the type ktype .
 @param ky Output matrix of column filter coefficients. It has the type ktype .
 @param dx Derivative order in respect of x.
 @param dy Derivative order in respect of y.
-@param ksize Aperture size. It can be CV_SCHARR, 1, 3, 5, or 7.
+@param ksize Aperture size. It can be FILTER_SCHARR, 1, 3, 5, or 7.
 @param normalize Flag indicating whether to normalize (scale down) the filter coefficients or not.
 Theoretically, the coefficients should have the denominator \f$=2^{ksize*2-dx-dy-2}\f$. If you are
 going to filter floating-point images, you are likely to use the normalized kernels. But if you
@@ -4077,8 +4119,8 @@ pixel values which overlap the filter placed over the pixel \f$ (x, y) \f$.
 The unnormalized square box filter can be useful in computing local image statistics such as the the local
 variance and standard deviation around the neighborhood of a pixel.
 <p>
-@param _src input image
-@param _dst output image of the same size and type as _src
+@param src input image
+@param dst output image of the same size and type as _src
 @param ddepth the output image depth (-1 to use src.depth())
 @param ksize kernel size
 @param anchor kernel anchor point. The default value of Point(-1, -1) denotes that the anchor is at the kernel
@@ -4087,23 +4129,23 @@ center.
 @param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
 \sa boxFilter
 */
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat _src, @ByVal Mat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                 @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                 @Cast("bool") boolean normalize/*=true*/,
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat _src, @ByVal Mat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                 @ByVal Size ksize );
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal UMat _src, @ByVal UMat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                                 @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                 @Cast("bool") boolean normalize/*=true*/,
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal UMat _src, @ByVal UMat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal UMat src, @ByVal UMat dst, int ddepth,
                                 @ByVal Size ksize );
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat _src, @ByVal GpuMat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
                                 @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                 @Cast("bool") boolean normalize/*=true*/,
                                 int borderType/*=cv::BORDER_DEFAULT*/ );
-@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat _src, @ByVal GpuMat _dst, int ddepth,
+@Namespace("cv") public static native void sqrBoxFilter( @ByVal GpuMat src, @ByVal GpuMat dst, int ddepth,
                                 @ByVal Size ksize );
 
 /** \brief Blurs an image using the normalized box filter.
@@ -4235,7 +4277,7 @@ calculate the derivative. When \f$\texttt{ksize = 1}\f$, the \f$3 \times 1\f$ or
 kernel is used (that is, no Gaussian smoothing is done). {@code ksize = 1} can only be used for the first
 or the second x- or y- derivatives.
 <p>
-There is also the special value {@code ksize = #CV_SCHARR (-1)} that corresponds to the \f$3\times3\f$ Scharr
+There is also the special value {@code ksize = #FILTER_SCHARR (-1)} that corresponds to the \f$3\times3\f$ Scharr
 filter that may give more accurate results than the \f$3\times3\f$ Sobel. The Scharr aperture is
 <p>
 \f[\vecthreethree{-3}{0}{3}{-10}{0}{10}{-3}{0}{3}\f]
@@ -4332,7 +4374,7 @@ call
 <p>
 is equivalent to
 <p>
-\f[\texttt{Sobel(src, dst, ddepth, dx, dy, CV_SCHARR, scale, delta, borderType)} .\f]
+\f[\texttt{Sobel(src, dst, ddepth, dx, dy, FILTER_SCHARR, scale, delta, borderType)} .\f]
 <p>
 @param src input image.
 @param dst output image of the same size and the same number of channels as src.
@@ -4773,10 +4815,10 @@ transform.
 <p>
 @param image 8-bit, single-channel binary source image. The image may be modified by the function.
 @param lines Output vector of lines. Each line is represented by a 2 or 3 element vector
-\f$(\rho, \theta)\f$ or \f$(\rho, \theta, \votes)\f$ . \f$\rho\f$ is the distance from the coordinate origin \f$(0,0)\f$ (top-left corner of
+\f$(\rho, \theta)\f$ or \f$(\rho, \theta, \textrm{votes})\f$ . \f$\rho\f$ is the distance from the coordinate origin \f$(0,0)\f$ (top-left corner of
 the image). \f$\theta\f$ is the line rotation angle in radians (
 \f$0 \sim \textrm{vertical line}, \pi/2 \sim \textrm{horizontal line}\f$ ).
-\f$\votes\f$ is the value of accumulator.
+\f$\textrm{votes}\f$ is the value of accumulator.
 @param rho Distance resolution of the accumulator in pixels.
 @param theta Angle resolution of the accumulator in radians.
 @param threshold Accumulator threshold parameter. Only those lines are returned that get enough
@@ -5349,9 +5391,6 @@ coordinate origin is assumed to be the top-left corner).
  */
 @Namespace("cv") public static native @ByVal Mat getRotationMatrix2D( @ByVal Point2f center, double angle, double scale );
 
-/** returns 3x3 perspective transformation for the corresponding 4 point pairs. */
-@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @Const Point2f src, @Const Point2f dst );
-
 /** \brief Calculates an affine transform from three pairs of the corresponding points.
 <p>
 The function calculates the \f$2 \times 3\f$ matrix of an affine transform so that:
@@ -5396,12 +5435,21 @@ where
 <p>
 @param src Coordinates of quadrangle vertices in the source image.
 @param dst Coordinates of the corresponding quadrangle vertices in the destination image.
+@param solveMethod method passed to cv::solve (#DecompTypes)
 <p>
 \sa  findHomography, warpPerspective, perspectiveTransform
  */
-@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal Mat src, @ByVal Mat dst );
-@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal UMat src, @ByVal UMat dst );
-@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal GpuMat src, @ByVal GpuMat dst );
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal Mat src, @ByVal Mat dst, int solveMethod/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal Mat src, @ByVal Mat dst);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal UMat src, @ByVal UMat dst, int solveMethod/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal UMat src, @ByVal UMat dst);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal GpuMat src, @ByVal GpuMat dst, int solveMethod/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal GpuMat src, @ByVal GpuMat dst);
+
+/** \overload */
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@Const Point2f src, @Const Point2f dst, int solveMethod/*=cv::DECOMP_LU*/);
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@Const Point2f src, @Const Point2f dst);
+
 
 @Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal Mat src, @ByVal Mat dst );
 @Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal UMat src, @ByVal UMat dst );
@@ -6089,258 +6137,6 @@ same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, an
 
 /** \} imgproc_filter
  <p>
- *  \addtogroup imgproc_transform
- *  \{
-<p>
-/** \brief Transforms an image to compensate for lens distortion.
-<p>
-The function transforms an image to compensate radial and tangential lens distortion.
-<p>
-The function is simply a combination of #initUndistortRectifyMap (with unity R ) and #remap
-(with bilinear interpolation). See the former function for details of the transformation being
-performed.
-<p>
-Those pixels in the destination image, for which there is no correspondent pixels in the source
-image, are filled with zeros (black color).
-<p>
-A particular subset of the source image that will be visible in the corrected image can be regulated
-by newCameraMatrix. You can use #getOptimalNewCameraMatrix to compute the appropriate
-newCameraMatrix depending on your requirements.
-<p>
-The camera matrix and the distortion parameters can be determined using #calibrateCamera. If
-the resolution of images is different from the resolution used at the calibration stage, \f$f_x,
-f_y, c_x\f$ and \f$c_y\f$ need to be scaled accordingly, while the distortion coefficients remain
-the same.
-<p>
-@param src Input (distorted) image.
-@param dst Output (corrected) image that has the same size and type as src .
-@param cameraMatrix Input camera matrix \f$A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
-@param distCoeffs Input vector of distortion coefficients
-\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
-of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
-@param newCameraMatrix Camera matrix of the distorted image. By default, it is the same as
-cameraMatrix but you may additionally scale and shift the result by using a different matrix.
- */
-@Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
-                             @ByVal Mat cameraMatrix,
-                             @ByVal Mat distCoeffs,
-                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat newCameraMatrix );
-@Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
-                             @ByVal Mat cameraMatrix,
-                             @ByVal Mat distCoeffs );
-@Namespace("cv") public static native void undistort( @ByVal UMat src, @ByVal UMat dst,
-                             @ByVal UMat cameraMatrix,
-                             @ByVal UMat distCoeffs,
-                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat newCameraMatrix );
-@Namespace("cv") public static native void undistort( @ByVal UMat src, @ByVal UMat dst,
-                             @ByVal UMat cameraMatrix,
-                             @ByVal UMat distCoeffs );
-@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
-                             @ByVal GpuMat cameraMatrix,
-                             @ByVal GpuMat distCoeffs,
-                             @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat newCameraMatrix );
-@Namespace("cv") public static native void undistort( @ByVal GpuMat src, @ByVal GpuMat dst,
-                             @ByVal GpuMat cameraMatrix,
-                             @ByVal GpuMat distCoeffs );
-
-/** \brief Computes the undistortion and rectification transformation map.
-<p>
-The function computes the joint undistortion and rectification transformation and represents the
-result in the form of maps for remap. The undistorted image looks like original, as if it is
-captured with a camera using the camera matrix =newCameraMatrix and zero distortion. In case of a
-monocular camera, newCameraMatrix is usually equal to cameraMatrix, or it can be computed by
-#getOptimalNewCameraMatrix for a better control over scaling. In case of a stereo camera,
-newCameraMatrix is normally set to P1 or P2 computed by #stereoRectify .
-<p>
-Also, this new camera is oriented differently in the coordinate space, according to R. That, for
-example, helps to align two heads of a stereo camera so that the epipolar lines on both images
-become horizontal and have the same y- coordinate (in case of a horizontally aligned stereo camera).
-<p>
-The function actually builds the maps for the inverse mapping algorithm that is used by remap. That
-is, for each pixel \f$(u, v)\f$ in the destination (corrected and rectified) image, the function
-computes the corresponding coordinates in the source image (that is, in the original image from
-camera). The following process is applied:
-\f[
-\begin{array}{l}
-x  \leftarrow (u - {c'}_x)/{f'}_x  \\
-y  \leftarrow (v - {c'}_y)/{f'}_y  \\
-{[X\,Y\,W]} ^T  \leftarrow R^{-1}*[x \, y \, 1]^T  \\
-x'  \leftarrow X/W  \\
-y'  \leftarrow Y/W  \\
-r^2  \leftarrow x'^2 + y'^2 \\
-x''  \leftarrow x' \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6}
-+ 2p_1 x' y' + p_2(r^2 + 2 x'^2)  + s_1 r^2 + s_2 r^4\\
-y''  \leftarrow y' \frac{1 + k_1 r^2 + k_2 r^4 + k_3 r^6}{1 + k_4 r^2 + k_5 r^4 + k_6 r^6}
-+ p_1 (r^2 + 2 y'^2) + 2 p_2 x' y' + s_3 r^2 + s_4 r^4 \\
-s\vecthree{x'''}{y'''}{1} =
-\vecthreethree{R_{33}(\tau_x, \tau_y)}{0}{-R_{13}((\tau_x, \tau_y)}
-{0}{R_{33}(\tau_x, \tau_y)}{-R_{23}(\tau_x, \tau_y)}
-{0}{0}{1} R(\tau_x, \tau_y) \vecthree{x''}{y''}{1}\\
-map_x(u,v)  \leftarrow x''' f_x + c_x  \\
-map_y(u,v)  \leftarrow y''' f_y + c_y
-\end{array}
-\f]
-where \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
-are the distortion coefficients.
-<p>
-In case of a stereo camera, this function is called twice: once for each camera head, after
-stereoRectify, which in its turn is called after #stereoCalibrate. But if the stereo camera
-was not calibrated, it is still possible to compute the rectification transformations directly from
-the fundamental matrix using #stereoRectifyUncalibrated. For each camera, the function computes
-homography H as the rectification transformation in a pixel domain, not a rotation matrix R in 3D
-space. R can be computed from H as
-\f[\texttt{R} = \texttt{cameraMatrix} ^{-1} \cdot \texttt{H} \cdot \texttt{cameraMatrix}\f]
-where cameraMatrix can be chosen arbitrarily.
-<p>
-@param cameraMatrix Input camera matrix \f$A=\vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
-@param distCoeffs Input vector of distortion coefficients
-\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
-of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
-@param R Optional rectification transformation in the object space (3x3 matrix). R1 or R2 ,
-computed by #stereoRectify can be passed here. If the matrix is empty, the identity transformation
-is assumed. In cvInitUndistortMap R assumed to be an identity matrix.
-@param newCameraMatrix New camera matrix \f$A'=\vecthreethree{f_x'}{0}{c_x'}{0}{f_y'}{c_y'}{0}{0}{1}\f$.
-@param size Undistorted image size.
-@param m1type Type of the first output map that can be CV_32FC1, CV_32FC2 or CV_16SC2, see #convertMaps
-@param map1 The first output map.
-@param map2 The second output map.
- */
-@Namespace("cv") public static native void initUndistortRectifyMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                           @ByVal Mat R, @ByVal Mat newCameraMatrix,
-                           @ByVal Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2 );
-@Namespace("cv") public static native void initUndistortRectifyMap( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                           @ByVal UMat R, @ByVal UMat newCameraMatrix,
-                           @ByVal Size size, int m1type, @ByVal UMat map1, @ByVal UMat map2 );
-@Namespace("cv") public static native void initUndistortRectifyMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                           @ByVal GpuMat R, @ByVal GpuMat newCameraMatrix,
-                           @ByVal Size size, int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2 );
-
-/** initializes maps for #remap for wide-angle */
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal Mat map1, @ByVal Mat map2,
-                                         int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal Mat map1, @ByVal Mat map2);
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal UMat map1, @ByVal UMat map2,
-                                         int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal UMat map1, @ByVal UMat map2);
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2,
-                                         int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
-@Namespace("cv") public static native float initWideAngleProjMap( @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                         @ByVal Size imageSize, int destImageWidth,
-                                         int m1type, @ByVal GpuMat map1, @ByVal GpuMat map2);
-
-/** \brief Returns the default new camera matrix.
-<p>
-The function returns the camera matrix that is either an exact copy of the input cameraMatrix (when
-centerPrinicipalPoint=false ), or the modified one (when centerPrincipalPoint=true).
-<p>
-In the latter case, the new camera matrix will be:
-<p>
-\f[\begin{bmatrix} f_x && 0 && ( \texttt{imgSize.width} -1)*0.5  \\ 0 && f_y && ( \texttt{imgSize.height} -1)*0.5  \\ 0 && 0 && 1 \end{bmatrix} ,\f]
-<p>
-where \f$f_x\f$ and \f$f_y\f$ are \f$(0,0)\f$ and \f$(1,1)\f$ elements of cameraMatrix, respectively.
-<p>
-By default, the undistortion functions in OpenCV (see #initUndistortRectifyMap, #undistort) do not
-move the principal point. However, when you work with stereo, it is important to move the principal
-points in both views to the same y-coordinate (which is required by most of stereo correspondence
-algorithms), and may be to the same x-coordinate too. So, you can form the new camera matrix for
-each view where the principal points are located at the center.
-<p>
-@param cameraMatrix Input camera matrix.
-@param imgsize Camera view image size in pixels.
-@param centerPrincipalPoint Location of the principal point in the new camera matrix. The
-parameter indicates whether this location should be at the image center or not.
- */
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
-                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix );
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal UMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
-                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal UMat cameraMatrix );
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal GpuMat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize,
-                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal GpuMat cameraMatrix );
-
-/** \brief Computes the ideal point coordinates from the observed point coordinates.
-<p>
-The function is similar to #undistort and #initUndistortRectifyMap but it operates on a
-sparse set of points instead of a raster image. Also the function performs a reverse transformation
-to projectPoints. In case of a 3D object, it does not reconstruct its 3D coordinates, but for a
-planar object, it does, up to a translation vector, if the proper R is specified.
-<p>
-For each observed point coordinate \f$(u, v)\f$ the function computes:
-\f[
-\begin{array}{l}
-x^{"}  \leftarrow (u - c_x)/f_x  \\
-y^{"}  \leftarrow (v - c_y)/f_y  \\
-(x',y') = undistort(x^{"},y^{"}, \texttt{distCoeffs}) \\
-{[X\,Y\,W]} ^T  \leftarrow R*[x' \, y' \, 1]^T  \\
-x  \leftarrow X/W  \\
-y  \leftarrow Y/W  \\
-\text{only performed if P is specified:} \\
-u'  \leftarrow x {f'}_x + {c'}_x  \\
-v'  \leftarrow y {f'}_y + {c'}_y
-\end{array}
-\f]
-<p>
-where *undistort* is an approximate iterative algorithm that estimates the normalized original
-point coordinates out of the normalized distorted point coordinates ("normalized" means that the
-coordinates do not depend on the camera matrix).
-<p>
-The function can be used for both a stereo camera head or a monocular camera (when R is empty).
-<p>
-@param src Observed point coordinates, 1xN or Nx1 2-channel (CV_32FC2 or CV_64FC2).
-@param dst Output ideal point coordinates after undistortion and reverse perspective
-transformation. If matrix P is identity or omitted, dst will contain normalized point coordinates.
-@param cameraMatrix Camera matrix \f$\vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$ .
-@param distCoeffs Input vector of distortion coefficients
-\f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6[, s_1, s_2, s_3, s_4[, \tau_x, \tau_y]]]])\f$
-of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.
-@param R Rectification transformation in the object space (3x3 matrix). R1 or R2 computed by
-#stereoRectify can be passed here. If the matrix is empty, the identity transformation is used.
-@param P New camera matrix (3x3) or new projection matrix (3x4) \f$\begin{bmatrix} {f'}_x & 0 & {c'}_x & t_x \\ 0 & {f'}_y & {c'}_y & t_y \\ 0 & 0 & 1 & t_z \end{bmatrix}\f$. P1 or P2 computed by
-#stereoRectify can be passed here. If the matrix is empty, the identity new camera matrix is used.
- */
-@Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
-                                   @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                   @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat P);
-@Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
-                                   @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs);
-@Namespace("cv") public static native void undistortPoints( @ByVal UMat src, @ByVal UMat dst,
-                                   @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                   @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat P);
-@Namespace("cv") public static native void undistortPoints( @ByVal UMat src, @ByVal UMat dst,
-                                   @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs);
-@Namespace("cv") public static native void undistortPoints( @ByVal GpuMat src, @ByVal GpuMat dst,
-                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                   @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat R, @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat P);
-@Namespace("cv") public static native void undistortPoints( @ByVal GpuMat src, @ByVal GpuMat dst,
-                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs);
-/** \overload
-    \note Default version of #undistortPoints does 5 iterations to compute undistorted points.
- <p>
- */
-@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal Mat src, @ByVal Mat dst,
-                                   @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                   @ByVal Mat R, @ByVal Mat P, @ByVal TermCriteria criteria);
-@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal UMat src, @ByVal UMat dst,
-                                   @ByVal UMat cameraMatrix, @ByVal UMat distCoeffs,
-                                   @ByVal UMat R, @ByVal UMat P, @ByVal TermCriteria criteria);
-@Namespace("cv") public static native @Name("undistortPoints") void undistortPointsIter( @ByVal GpuMat src, @ByVal GpuMat dst,
-                                   @ByVal GpuMat cameraMatrix, @ByVal GpuMat distCoeffs,
-                                   @ByVal GpuMat R, @ByVal GpuMat P, @ByVal TermCriteria criteria);
-
-/** \} imgproc_transform
- <p>
  *  \addtogroup imgproc_hist
  *  \{
 <p>
@@ -6905,6 +6701,15 @@ The algorithm normalizes the brightness and increases the contrast of the image.
 @Namespace("cv") public static native void equalizeHist( @ByVal UMat src, @ByVal UMat dst );
 @Namespace("cv") public static native void equalizeHist( @ByVal GpuMat src, @ByVal GpuMat dst );
 
+/** \brief Creates a smart pointer to a cv::CLAHE class and initializes it.
+<p>
+@param clipLimit Threshold for contrast limiting.
+@param tileGridSize Size of grid for histogram equalization. Input image will be divided into
+equally sized rectangular tiles. tileGridSize defines the number of tiles in row and column.
+ */
+@Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal(nullValue = "cv::Size(8, 8)") Size tileGridSize);
+@Namespace("cv") public static native @Ptr CLAHE createCLAHE();
+
 /** \brief Computes the "minimal work" distance between two weighted point configurations.
 <p>
 The function computes the earth mover distance and/or a lower boundary of the distance between the
@@ -7325,6 +7130,22 @@ pixel \f$(x+1, y+1)\f$ in the mask .
 @Namespace("cv") public static native int floodFill( @ByVal GpuMat image, @ByVal GpuMat mask,
                             @ByVal Point seedPoint, @ByVal Scalar newVal );
 
+/** Performs linear blending of two images:
+ *  \f[ \texttt{dst}(i,j) = \texttt{weights1}(i,j)*\texttt{src1}(i,j) + \texttt{weights2}(i,j)*\texttt{src2}(i,j) \f]
+ *  @param src1 It has a type of CV_8UC(n) or CV_32FC(n), where n is a positive integer.
+ *  @param src2 It has the same type and size as src1.
+ *  @param weights1 It has a type of CV_32FC1 and the same size with src1.
+ *  @param weights2 It has a type of CV_32FC1 and the same size with src1.
+ *  @param dst It is created if it does not have the same size and type with src1. */
+@Namespace("cv") public static native void blendLinear(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat weights1, @ByVal Mat weights2, @ByVal Mat dst);
+@Namespace("cv") public static native void blendLinear(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat weights1, @ByVal UMat weights2, @ByVal UMat dst);
+@Namespace("cv") public static native void blendLinear(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat weights1, @ByVal GpuMat weights2, @ByVal GpuMat dst);
+
+/** \} imgproc_misc
+ <p>
+ *  \addtogroup imgproc_color_conversions
+ *  \{
+<p>
 /** \brief Converts an image from one color space to another.
 <p>
 The function converts an input image from one color space to another. In case of a transformation
@@ -7373,21 +7194,68 @@ channels is derived automatically from src and code.
 @Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code, int dstCn/*=0*/ );
 @Namespace("cv") public static native void cvtColor( @ByVal GpuMat src, @ByVal GpuMat dst, int code );
 
+/** \brief Converts an image from one color space to another where the source image is
+stored in two planes.
+<p>
+This function only supports YUV420 to RGB conversion as of now.
+<p>
+@param src1: 8-bit image (#CV_8U) of the Y plane.
+@param src2: image containing interleaved U/V plane.
+@param dst: output image.
+@param code: Specifies the type of conversion. It can take any of the following values:
+- #COLOR_YUV2BGR_NV12
+- #COLOR_YUV2RGB_NV12
+- #COLOR_YUV2BGRA_NV12
+- #COLOR_YUV2RGBA_NV12
+- #COLOR_YUV2BGR_NV21
+- #COLOR_YUV2RGB_NV21
+- #COLOR_YUV2BGRA_NV21
+- #COLOR_YUV2RGBA_NV21
+*/
 @Namespace("cv") public static native void cvtColorTwoPlane( @ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int code );
 @Namespace("cv") public static native void cvtColorTwoPlane( @ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst, int code );
 @Namespace("cv") public static native void cvtColorTwoPlane( @ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat dst, int code );
 
-/** \} imgproc_misc */
+/** \brief main function for all demosaicing processes
+<p>
+@param src input image: 8-bit unsigned or 16-bit unsigned.
+@param dst output image of the same size and depth as src.
+@param code Color space conversion code (see the description below).
+@param dstCn number of channels in the destination image; if the parameter is 0, the number of the
+channels is derived automatically from src and code.
+<p>
+The function can do the following transformations:
+<p>
+-   Demosaicing using bilinear interpolation
+    <p>
+    #COLOR_BayerBG2BGR , #COLOR_BayerGB2BGR , #COLOR_BayerRG2BGR , #COLOR_BayerGR2BGR
+    <p>
+    #COLOR_BayerBG2GRAY , #COLOR_BayerGB2GRAY , #COLOR_BayerRG2GRAY , #COLOR_BayerGR2GRAY
+<p>
+-   Demosaicing using Variable Number of Gradients.
+    <p>
+    #COLOR_BayerBG2BGR_VNG , #COLOR_BayerGB2BGR_VNG , #COLOR_BayerRG2BGR_VNG , #COLOR_BayerGR2BGR_VNG
+<p>
+-   Edge-Aware Demosaicing.
+    <p>
+    #COLOR_BayerBG2BGR_EA , #COLOR_BayerGB2BGR_EA , #COLOR_BayerRG2BGR_EA , #COLOR_BayerGR2BGR_EA
+<p>
+-   Demosaicing with alpha channel
+    <p>
+    #COLOR_BayerBG2BGRA , #COLOR_BayerGB2BGRA , #COLOR_BayerRG2BGRA , #COLOR_BayerGR2BGRA
+<p>
+\sa cvtColor
+*/
+@Namespace("cv") public static native void demosaicing(@ByVal Mat src, @ByVal Mat dst, int code, int dstCn/*=0*/);
+@Namespace("cv") public static native void demosaicing(@ByVal Mat src, @ByVal Mat dst, int code);
+@Namespace("cv") public static native void demosaicing(@ByVal UMat src, @ByVal UMat dst, int code, int dstCn/*=0*/);
+@Namespace("cv") public static native void demosaicing(@ByVal UMat src, @ByVal UMat dst, int code);
+@Namespace("cv") public static native void demosaicing(@ByVal GpuMat src, @ByVal GpuMat dst, int code, int dstCn/*=0*/);
+@Namespace("cv") public static native void demosaicing(@ByVal GpuMat src, @ByVal GpuMat dst, int code);
 
-// main function for all demosaicing processes
-@Namespace("cv") public static native void demosaicing(@ByVal Mat _src, @ByVal Mat _dst, int code, int dcn/*=0*/);
-@Namespace("cv") public static native void demosaicing(@ByVal Mat _src, @ByVal Mat _dst, int code);
-@Namespace("cv") public static native void demosaicing(@ByVal UMat _src, @ByVal UMat _dst, int code, int dcn/*=0*/);
-@Namespace("cv") public static native void demosaicing(@ByVal UMat _src, @ByVal UMat _dst, int code);
-@Namespace("cv") public static native void demosaicing(@ByVal GpuMat _src, @ByVal GpuMat _dst, int code, int dcn/*=0*/);
-@Namespace("cv") public static native void demosaicing(@ByVal GpuMat _src, @ByVal GpuMat _dst, int code);
-
-/** \addtogroup imgproc_shape
+/** \} imgproc_color_conversions
+ <p>
+ *  \addtogroup imgproc_shape
  *  \{
 <p>
 /** \brief Calculates all of the moments up to the third order of a polygon or rasterized shape.
@@ -7778,15 +7646,16 @@ The function computes a curve length or a closed contour perimeter.
 @Namespace("cv") public static native double arcLength( @ByVal UMat curve, @Cast("bool") boolean closed );
 @Namespace("cv") public static native double arcLength( @ByVal GpuMat curve, @Cast("bool") boolean closed );
 
-/** \brief Calculates the up-right bounding rectangle of a point set.
+/** \brief Calculates the up-right bounding rectangle of a point set or non-zero pixels of gray-scale image.
 <p>
-The function calculates and returns the minimal up-right bounding rectangle for the specified point set.
+The function calculates and returns the minimal up-right bounding rectangle for the specified point set or
+non-zero pixels of gray-scale image.
 <p>
-@param points Input 2D point set, stored in std::vector or Mat.
+@param array Input gray-scale image or 2D point set, stored in std::vector or Mat.
  */
-@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal Mat points );
-@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal UMat points );
-@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal GpuMat points );
+@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal Mat array );
+@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal UMat array );
+@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal GpuMat array );
 
 /** \brief Calculates a contour area.
 <p>
@@ -7943,6 +7812,12 @@ vector: std::vector\<int\> implies returnPoints=false, std::vector\<Point\> impl
 returnPoints=true.
 <p>
 \note {@code points} and {@code hull} should be different arrays, inplace processing isn't supported.
+<p>
+Check \ref tutorial_hull "the corresponding tutorial" for more details.
+<p>
+useful links:
+<p>
+https://www.learnopencv.com/convex-hull-using-opencv-in-python-and-c/
  */
 @Namespace("cv") public static native void convexHull( @ByVal Mat points, @ByVal Mat hull,
                               @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
@@ -8184,36 +8059,17 @@ at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of ty
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal UMat intersectingRegion  );
 @Namespace("cv") public static native int rotatedRectangleIntersection( @Const @ByRef RotatedRect rect1, @Const @ByRef RotatedRect rect2, @ByVal GpuMat intersectingRegion  );
 
-/** \} imgproc_shape
-/** \brief Creates implementation for cv::CLAHE .
-<p>
-@param clipLimit Threshold for contrast limiting.
-@param tileGridSize Size of grid for histogram equalization. Input image will be divided into
-equally sized rectangular tiles. tileGridSize defines the number of tiles in row and column.
- */
-@Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal(nullValue = "cv::Size(8, 8)") Size tileGridSize);
-@Namespace("cv") public static native @Ptr CLAHE createCLAHE();
-
-/** Ballard, D.H. (1981). Generalizing the Hough transform to detect arbitrary shapes. Pattern Recognition 13 (2): 111-122.
- *  Detects position only without translation and rotation */
+/** \brief Creates a smart pointer to a cv::GeneralizedHoughBallard class and initializes it.
+*/
 @Namespace("cv") public static native @Ptr GeneralizedHoughBallard createGeneralizedHoughBallard();
 
-/** Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038.
- *  Detects position, translation and rotation */
+/** \brief Creates a smart pointer to a cv::GeneralizedHoughGuil class and initializes it.
+*/
 @Namespace("cv") public static native @Ptr GeneralizedHoughGuil createGeneralizedHoughGuil();
 
-/** Performs linear blending of two images:
- *  \f[ \texttt{dst}(i,j) = \texttt{weights1}(i,j)*\texttt{src1}(i,j) + \texttt{weights2}(i,j)*\texttt{src2}(i,j) \f]
- *  @param src1 It has a type of CV_8UC(n) or CV_32FC(n), where n is a positive integer.
- *  @param src2 It has the same type and size as src1.
- *  @param weights1 It has a type of CV_32FC1 and the same size with src1.
- *  @param weights2 It has a type of CV_32FC1 and the same size with src1.
- *  @param dst It is created if it does not have the same size and type with src1. */
-@Namespace("cv") public static native void blendLinear(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat weights1, @ByVal Mat weights2, @ByVal Mat dst);
-@Namespace("cv") public static native void blendLinear(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat weights1, @ByVal UMat weights2, @ByVal UMat dst);
-@Namespace("cv") public static native void blendLinear(@ByVal GpuMat src1, @ByVal GpuMat src2, @ByVal GpuMat weights1, @ByVal GpuMat weights2, @ByVal GpuMat dst);
-
-/** \addtogroup imgproc_colormap
+/** \} imgproc_shape
+ <p>
+ *  \addtogroup imgproc_colormap
  *  \{
  <p>
  *  GNU Octave/MATLAB equivalent colormaps */
@@ -8362,10 +8218,20 @@ mean that the function has to draw a filled rectangle.
 use {@code rec} parameter as alternative specification of the drawn rectangle: {@code r.tl() and
 r.br()-Point(1,1)} are opposite corners
 */
-@Namespace("cv") public static native void rectangle(@ByRef Mat img, @ByVal Rect rec,
+@Namespace("cv") public static native void rectangle(@ByVal Mat img, @ByVal Rect rec,
                           @Const @ByRef Scalar color, int thickness/*=1*/,
                           int lineType/*=cv::LINE_8*/, int shift/*=0*/);
-@Namespace("cv") public static native void rectangle(@ByRef Mat img, @ByVal Rect rec,
+@Namespace("cv") public static native void rectangle(@ByVal Mat img, @ByVal Rect rec,
+                          @Const @ByRef Scalar color);
+@Namespace("cv") public static native void rectangle(@ByVal UMat img, @ByVal Rect rec,
+                          @Const @ByRef Scalar color, int thickness/*=1*/,
+                          int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void rectangle(@ByVal UMat img, @ByVal Rect rec,
+                          @Const @ByRef Scalar color);
+@Namespace("cv") public static native void rectangle(@ByVal GpuMat img, @ByVal Rect rec,
+                          @Const @ByRef Scalar color, int thickness/*=1*/,
+                          int lineType/*=cv::LINE_8*/, int shift/*=0*/);
+@Namespace("cv") public static native void rectangle(@ByVal GpuMat img, @ByVal Rect rec,
                           @Const @ByRef Scalar color);
 
 /** \example samples/cpp/tutorial_code/ImgProc/basic_drawing/Drawing_2.cpp
@@ -8470,24 +8336,6 @@ a filled ellipse sector is to be drawn.
 /* ADDING A SET OF PREDEFINED MARKERS WHICH COULD BE USED TO HIGHLIGHT POSITIONS IN AN IMAGE */
 /* ----------------------------------------------------------------------------------------- */
 
-/** Possible set of marker types used for the cv::drawMarker function */
-/** enum cv::MarkerTypes */
-public static final int
-    /** A crosshair marker shape */
-    MARKER_CROSS = 0,
-    /** A 45 degree tilted crosshair marker shape */
-    MARKER_TILTED_CROSS = 1,
-    /** A star marker shape, combination of cross and tilted cross */
-    MARKER_STAR = 2,
-    /** A diamond marker shape */
-    MARKER_DIAMOND = 3,
-    /** A square marker shape */
-    MARKER_SQUARE = 4,
-    /** An upwards pointing triangle marker shape */
-    MARKER_TRIANGLE_UP = 5,
-    /** A downwards pointing triangle marker shape */
-    MARKER_TRIANGLE_DOWN = 6;
-
 /** \brief Draws a marker on a predefined position in an image.
 <p>
 The function cv::drawMarker draws a marker on a given position in the image. For the moment several
@@ -8501,20 +8349,38 @@ marker types are supported, see #MarkerTypes for more information.
 @param line_type Type of the line, See #LineTypes
 @param markerSize The length of the marker axis [default = 20 pixels]
  */
-@Namespace("cv") public static native void drawMarker(@ByRef Mat img, @ByVal Point position, @Const @ByRef Scalar color,
+@Namespace("cv") public static native void drawMarker(@ByVal Mat img, @ByVal Point position, @Const @ByRef Scalar color,
                              int markerType/*=cv::MARKER_CROSS*/, int markerSize/*=20*/, int thickness/*=1*/,
                              int line_type/*=8*/);
-@Namespace("cv") public static native void drawMarker(@ByRef Mat img, @ByVal Point position, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void drawMarker(@ByVal Mat img, @ByVal Point position, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void drawMarker(@ByVal UMat img, @ByVal Point position, @Const @ByRef Scalar color,
+                             int markerType/*=cv::MARKER_CROSS*/, int markerSize/*=20*/, int thickness/*=1*/,
+                             int line_type/*=8*/);
+@Namespace("cv") public static native void drawMarker(@ByVal UMat img, @ByVal Point position, @Const @ByRef Scalar color);
+@Namespace("cv") public static native void drawMarker(@ByVal GpuMat img, @ByVal Point position, @Const @ByRef Scalar color,
+                             int markerType/*=cv::MARKER_CROSS*/, int markerSize/*=20*/, int thickness/*=1*/,
+                             int line_type/*=8*/);
+@Namespace("cv") public static native void drawMarker(@ByVal GpuMat img, @ByVal Point position, @Const @ByRef Scalar color);
 
 /* ----------------------------------------------------------------------------------------- */
 /* END OF MARKER SECTION */
 /* ----------------------------------------------------------------------------------------- */
 
 /** \overload */
-@Namespace("cv") public static native void fillConvexPoly(@ByRef Mat img, @Const Point pts, int npts,
+@Namespace("cv") public static native void fillConvexPoly(@ByVal Mat img, @Const Point pts, int npts,
                                @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/,
                                int shift/*=0*/);
-@Namespace("cv") public static native void fillConvexPoly(@ByRef Mat img, @Const Point pts, int npts,
+@Namespace("cv") public static native void fillConvexPoly(@ByVal Mat img, @Const Point pts, int npts,
+                               @Const @ByRef Scalar color);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal UMat img, @Const Point pts, int npts,
+                               @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/,
+                               int shift/*=0*/);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal UMat img, @Const Point pts, int npts,
+                               @Const @ByRef Scalar color);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal GpuMat img, @Const Point pts, int npts,
+                               @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/,
+                               int shift/*=0*/);
+@Namespace("cv") public static native void fillConvexPoly(@ByVal GpuMat img, @Const Point pts, int npts,
                                @Const @ByRef Scalar color);
 
 /** \brief Fills a convex polygon.
@@ -8547,29 +8413,71 @@ twice at the most (though, its top-most and/or the bottom edge could be horizont
                                  @Const @ByRef Scalar color);
 
 /** \overload */
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Cast("const cv::Point**") PointerPointer pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Cast("const cv::Point**") PointerPointer pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                          @ByVal(nullValue = "cv::Point()") Point offset );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                          @ByVal(nullValue = "cv::Point()") Point offset );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntBuffer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                          @ByVal(nullValue = "cv::Point()") Point offset );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntBuffer npts, int ncontours,
                          @Const @ByRef Scalar color );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
                          @Const int[] npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
                          @ByVal(nullValue = "cv::Point()") Point offset );
-@Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
+@Namespace("cv") public static native void fillPoly(@ByVal Mat img, @Const @ByPtrPtr Point pts,
+                         @Const int[] npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntPointer npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntPointer npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntBuffer npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntBuffer npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const int[] npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal UMat img, @Const @ByPtrPtr Point pts,
+                         @Const int[] npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntPointer npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntPointer npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntBuffer npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
+                         @Const IntBuffer npts, int ncontours,
+                         @Const @ByRef Scalar color );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
+                         @Const int[] npts, int ncontours,
+                         @Const @ByRef Scalar color, int lineType/*=cv::LINE_8*/, int shift/*=0*/,
+                         @ByVal(nullValue = "cv::Point()") Point offset );
+@Namespace("cv") public static native void fillPoly(@ByVal GpuMat img, @Const @ByPtrPtr Point pts,
                          @Const int[] npts, int ncontours,
                          @Const @ByRef Scalar color );
 
@@ -8638,23 +8546,53 @@ parts), and so forth.
                            @Const @ByRef Scalar color );
 
 /** \overload */
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Cast("const cv::Point*const*") PointerPointer pts, @Const IntPointer npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Cast("const cv::Point*const*") PointerPointer pts, @Const IntPointer npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                           int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                           int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                           int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
                           int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
-@Namespace("cv") public static native void polylines(@ByRef Mat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+@Namespace("cv") public static native void polylines(@ByVal Mat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal UMat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const IntPointer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const IntBuffer npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
+                          int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color,
+                          int thickness/*=1*/, int lineType/*=cv::LINE_8*/, int shift/*=0*/ );
+@Namespace("cv") public static native void polylines(@ByVal GpuMat img, @Const @ByPtrPtr Point pts, @Const int[] npts,
                           int ncontours, @Cast("bool") boolean isClosed, @Const @ByRef Scalar color );
 
 /** \brief Draws several polygonal curves.
@@ -9103,14 +9041,10 @@ for(int i = 0; i < it2.count; i++, ++it2)
 
  // cv
 
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/imgproc/imgproc_c.h"
-// #endif
-
 // #endif
 
 
-// Parsed from <opencv2/imgproc/detail/distortion_model.hpp>
+// Parsed from <opencv2/imgproc/detail/gcgraph.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -9121,11 +9055,10 @@ for(int i = 0; i < it2.count; i++, ++it2)
 //  copy or use the software.
 //
 //
-//                           License Agreement
+//                        Intel License Agreement
 //                For Open Source Computer Vision Library
 //
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Copyright (C) 2000, Intel Corporation, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -9138,7 +9071,7 @@ for(int i = 0; i < it2.count; i++, ++it2)
 //     this list of conditions and the following disclaimer in the documentation
 //     and/or other materials provided with the distribution.
 //
-//   * The name of the copyright holders may not be used to endorse or promote products
+//   * The name of Intel Corporation may not be used to endorse or promote products
 //     derived from this software without specific prior written permission.
 //
 // This software is provided by the copyright holders and contributors "as is" and
@@ -9154,41 +9087,32 @@ for(int i = 0; i < it2.count; i++, ++it2)
 //
 //M*/
 
-// #ifndef OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
-// #define OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
+// #ifndef OPENCV_IMGPROC_DETAIL_GCGRAPH_HPP
+// #define OPENCV_IMGPROC_DETAIL_GCGRAPH_HPP
 
 /** \cond IGNORED */
-/**
-Computes the matrix for the projection onto a tilted image sensor
-@param tauX angular parameter rotation around x-axis
-@param tauY angular parameter rotation around y-axis
-@param matTilt if not NULL returns the matrix
-\f[
-\vecthreethree{R_{33}(\tau_x, \tau_y)}{0}{-R_{13}((\tau_x, \tau_y)}
-{0}{R_{33}(\tau_x, \tau_y)}{-R_{23}(\tau_x, \tau_y)}
-{0}{0}{1} R(\tau_x, \tau_y)
-\f]
-where
-\f[
-R(\tau_x, \tau_y) =
-\vecthreethree{\cos(\tau_y)}{0}{-\sin(\tau_y)}{0}{1}{0}{\sin(\tau_y)}{0}{\cos(\tau_y)}
-\vecthreethree{1}{0}{0}{0}{\cos(\tau_x)}{\sin(\tau_x)}{0}{-\sin(\tau_x)}{\cos(\tau_x)} =
-\vecthreethree{\cos(\tau_y)}{\sin(\tau_y)\sin(\tau_x)}{-\sin(\tau_y)\cos(\tau_x)}
-{0}{\cos(\tau_x)}{\sin(\tau_x)}
-{\sin(\tau_y)}{-\cos(\tau_y)\sin(\tau_x)}{\cos(\tau_y)\cos(\tau_x)}.
-\f]
-@param dMatTiltdTauX if not NULL it returns the derivative of matTilt with
-respect to \f$\tau_x\f$.
-@param dMatTiltdTauY if not NULL it returns the derivative of matTilt with
-respect to \f$\tau_y\f$.
-@param invMatTilt if not NULL it returns the inverse of matTilt
-**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  // namespace detail, cv
 
 
 /** \endcond */
 
-// #endif // OPENCV_IMGPROC_DETAIL_DISTORTION_MODEL_HPP
+// #endif  // OPENCV_IMGPROC_DETAIL_GCGRAPH_HPP
 
 
 }

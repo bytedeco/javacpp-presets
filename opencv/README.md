@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 3.4.3  http://opencv.org/
+ * OpenCV 4.0.0  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>3.4.3-1.4.4-SNAPSHOT</version>
+            <version>4.0.0-1.4.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.3-1.4.4-SNAPSHOT</version>
+            <version>4.0.0-1.4.4-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.3-1.4.4-SNAPSHOT</version>
+            <version>4.0.0-1.4.4-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.3-1.4.4-SNAPSHOT</version>
+            <version>4.0.0-1.4.4-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
@@ -71,19 +71,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
@@ -152,7 +152,7 @@ public class Stitching {
         }
 
         Mat pano = new Mat();
-        Stitcher stitcher = Stitcher.createDefault(try_use_gpu);
+        Stitcher stitcher = createStitcher(try_use_gpu);
         int status = stitcher.stitch(imgs, pano);
 
         if (status != Stitcher.OK) {

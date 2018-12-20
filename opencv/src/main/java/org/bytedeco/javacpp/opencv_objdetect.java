@@ -12,273 +12,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdetect {
     static { Loader.load(); }
 
-// Parsed from <opencv2/objdetect/objdetect_c.h>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef OPENCV_OBJDETECT_C_H
-// #define OPENCV_OBJDETECT_C_H
-
-// #include "opencv2/core/core_c.h"
-
-// #ifdef __cplusplus
-// #include <deque>
-// #include <vector>
-// #endif
-
-/** \addtogroup objdetect_c
-  \{
-  */
-
-/****************************************************************************************\
-*                         Haar-like Object Detection functions                           *
-\****************************************************************************************/
-
-public static final int CV_HAAR_MAGIC_VAL =    0x42500000;
-public static final String CV_TYPE_NAME_HAAR =    "opencv-haar-classifier";
-
-// #define CV_IS_HAAR_CLASSIFIER( haar )
-//     ((haar) != NULL &&
-//     (((const CvHaarClassifierCascade*)(haar))->flags & CV_MAGIC_MASK)==CV_HAAR_MAGIC_VAL)
-
-public static final int CV_HAAR_FEATURE_MAX =  3;
-public static final int CV_HAAR_STAGE_MAX = 1000;
-
-public static class CvHaarFeature extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarFeature() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarFeature(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarFeature(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarFeature position(long position) {
-        return (CvHaarFeature)super.position(position);
-    }
-
-    public native int tilted(); public native CvHaarFeature tilted(int tilted);
-        @Name({"rect", ".r"}) public native @ByRef CvRect rect_r(int i); public native CvHaarFeature rect_r(int i, CvRect rect_r);
-        @Name({"rect", ".weight"}) public native float rect_weight(int i); public native CvHaarFeature rect_weight(int i, float rect_weight);
-}
-
-public static class CvHaarClassifier extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarClassifier(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarClassifier(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarClassifier position(long position) {
-        return (CvHaarClassifier)super.position(position);
-    }
-
-    public native int count(); public native CvHaarClassifier count(int count);
-    public native CvHaarFeature haar_feature(); public native CvHaarClassifier haar_feature(CvHaarFeature haar_feature);
-    public native FloatPointer threshold(); public native CvHaarClassifier threshold(FloatPointer threshold);
-    public native IntPointer left(); public native CvHaarClassifier left(IntPointer left);
-    public native IntPointer right(); public native CvHaarClassifier right(IntPointer right);
-    public native FloatPointer alpha(); public native CvHaarClassifier alpha(FloatPointer alpha);
-}
-
-public static class CvHaarStageClassifier extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarStageClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarStageClassifier(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarStageClassifier(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarStageClassifier position(long position) {
-        return (CvHaarStageClassifier)super.position(position);
-    }
-
-    public native int count(); public native CvHaarStageClassifier count(int count);
-    public native float threshold(); public native CvHaarStageClassifier threshold(float threshold);
-    public native CvHaarClassifier classifier(); public native CvHaarStageClassifier classifier(CvHaarClassifier classifier);
-
-    public native int next(); public native CvHaarStageClassifier next(int next);
-    public native int child(); public native CvHaarStageClassifier child(int child);
-    public native int parent(); public native CvHaarStageClassifier parent(int parent);
-}
-
-@Opaque public static class CvHidHaarClassifierCascade extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public CvHidHaarClassifierCascade() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHidHaarClassifierCascade(Pointer p) { super(p); }
-}
-
-public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCascade {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvHaarClassifierCascade() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvHaarClassifierCascade(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvHaarClassifierCascade(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvHaarClassifierCascade position(long position) {
-        return (CvHaarClassifierCascade)super.position(position);
-    }
-
-    public native int flags(); public native CvHaarClassifierCascade flags(int flags);
-    public native int count(); public native CvHaarClassifierCascade count(int count);
-    public native @ByRef CvSize orig_window_size(); public native CvHaarClassifierCascade orig_window_size(CvSize orig_window_size);
-    public native @ByRef CvSize real_window_size(); public native CvHaarClassifierCascade real_window_size(CvSize real_window_size);
-    public native double scale(); public native CvHaarClassifierCascade scale(double scale);
-    public native CvHaarStageClassifier stage_classifier(); public native CvHaarClassifierCascade stage_classifier(CvHaarStageClassifier stage_classifier);
-    public native CvHidHaarClassifierCascade hid_cascade(); public native CvHaarClassifierCascade hid_cascade(CvHidHaarClassifierCascade hid_cascade);
-}
-
-public static class CvAvgComp extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvAvgComp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvAvgComp(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvAvgComp(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public CvAvgComp position(long position) {
-        return (CvAvgComp)super.position(position);
-    }
-
-    public native @ByRef CvRect rect(); public native CvAvgComp rect(CvRect rect);
-    public native int neighbors(); public native CvAvgComp neighbors(int neighbors);
-}
-
-/* Loads haar classifier cascade from a directory.
-   It is obsolete: convert your cascade to xml and use cvLoad instead */
-public static native CvHaarClassifierCascade cvLoadHaarClassifierCascade(
-                    @Cast("const char*") BytePointer directory, @ByVal CvSize orig_window_size);
-public static native CvHaarClassifierCascade cvLoadHaarClassifierCascade(
-                    String directory, @ByVal CvSize orig_window_size);
-
-public static native void cvReleaseHaarClassifierCascade( @Cast("CvHaarClassifierCascade**") PointerPointer cascade );
-public static native void cvReleaseHaarClassifierCascade( @ByPtrPtr CvHaarClassifierCascade cascade );
-
-public static final int CV_HAAR_DO_CANNY_PRUNING =    1;
-public static final int CV_HAAR_SCALE_IMAGE =         2;
-public static final int CV_HAAR_FIND_BIGGEST_OBJECT = 4;
-public static final int CV_HAAR_DO_ROUGH_SEARCH =     8;
-
-public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0,0))") CvSize max_size);
-public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage);
-
-/* sets images for haar classifier cascade */
-public static native void cvSetImagesForHaarClassifierCascade( CvHaarClassifierCascade cascade,
-                                                @Const CvArr sum, @Const CvArr sqsum,
-                                                @Const CvArr tilted_sum, double scale );
-
-/* runs the cascade on the specified window */
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal CvPoint pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal CvPoint pt);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") IntBuffer pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") IntBuffer pt);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") int[] pt, int start_stage/*=0*/);
-public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") int[] pt);
-
-/** \} objdetect_c */
-
-// #ifdef __cplusplus
-
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector int[] rejectLevels, @StdVector double[] levelWeightds,
-                     double scale_factor/*=1.1*/,
-                     int min_neighbors/*=3*/, int flags/*=0*/,
-                     @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize min_size, @ByVal(nullValue = "CvSize(cvSize(0, 0))") CvSize max_size,
-                     @Cast("bool") boolean outputRejectLevels/*=false*/ );
-public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
-                     CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     @StdVector int[] rejectLevels, @StdVector double[] levelWeightds );
-
-// #endif
-
-// #endif /* OPENCV_OBJDETECT_C_H */
-
-
 // Parsed from <opencv2/objdetect.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -374,7 +107,7 @@ compensate for the differences in the size of areas. The sums of pixel values ov
 regions are calculated rapidly using integral images (see below and the integral description).
 <p>
 To see the object detector at work, have a look at the facedetect demo:
-<https://github.com/opencv/opencv/tree/3.4/samples/cpp/dbt_face_detection.cpp>
+<https://github.com/opencv/opencv/tree/master/samples/cpp/dbt_face_detection.cpp>
 <p>
 The following reference is for the detection part only. There is a separate application called
 opencv_traincascade that can train a cascade of boosted classifiers from a set of samples.
@@ -388,6 +121,13 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
     \defgroup objdetect_c C API
 \}
  */
+
+@Opaque public static class CvHaarClassifierCascade extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvHaarClassifierCascade() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CvHaarClassifierCascade(Pointer p) { super(p); }
+}
 
 /** \addtogroup objdetect
  *  \{
@@ -474,8 +214,6 @@ cluster, the average rectangle is computed and put into the output rectangle lis
 @Namespace("cv") public static native void groupRectangles_meanshift(@ByRef RectVector rectList, @StdVector double[] foundWeights,
                                             @StdVector double[] foundScales);
 
-
-
 /** enum cv:: */
 public static final int CASCADE_DO_CANNY_PRUNING    = 1,
        CASCADE_SCALE_IMAGE         = 2,
@@ -487,7 +225,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseCascadeClassifier(Pointer p) { super(p); }
 
-    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") @Override boolean empty();
     public native @Cast("bool") boolean load( @Str BytePointer filename );
     public native @Cast("bool") boolean load( @Str String filename );
     public native void detectMultiScale( @ByVal Mat image,
@@ -1050,15 +788,18 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
         return (HOGDescriptor)super.position(position);
     }
 
-    /** enum cv::HOGDescriptor:: */
+    /** enum cv::HOGDescriptor::HistogramNormType */
     public static final int /** Default histogramNormType */
  L2Hys = 0;
     /** enum cv::HOGDescriptor:: */
     public static final int /** Default nlevels value. */
  DEFAULT_NLEVELS = 64;
+    /** enum cv::HOGDescriptor::DescriptorStorageFormat */
+    public static final int DESCR_FORMAT_COL_BY_COL = 0, DESCR_FORMAT_ROW_BY_ROW = 1;
+
     /**\brief Creates the HOG descriptor and detector with default params.
     <p>
-    aqual to HOGDescriptor(Size(64,128), Size(16,16), Size(8,8), Size(8,8), 9, 1 )
+    aqual to HOGDescriptor(Size(64,128), Size(16,16), Size(8,8), Size(8,8), 9 )
     */
     public HOGDescriptor() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -1079,12 +820,12 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     */
     public HOGDescriptor(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
                       @ByVal Size _cellSize, int _nbins, int _derivAperture/*=1*/, double _winSigma/*=-1*/,
-                      int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
+                      @Cast("cv::HOGDescriptor::HistogramNormType") int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
                       double _L2HysThreshold/*=0.2*/, @Cast("bool") boolean _gammaCorrection/*=false*/,
                       int _nlevels/*=cv::HOGDescriptor::DEFAULT_NLEVELS*/, @Cast("bool") boolean _signedGradient/*=false*/) { super((Pointer)null); allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection, _nlevels, _signedGradient); }
     private native void allocate(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
                       @ByVal Size _cellSize, int _nbins, int _derivAperture/*=1*/, double _winSigma/*=-1*/,
-                      int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
+                      @Cast("cv::HOGDescriptor::HistogramNormType") int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
                       double _L2HysThreshold/*=0.2*/, @Cast("bool") boolean _gammaCorrection/*=false*/,
                       int _nlevels/*=cv::HOGDescriptor::DEFAULT_NLEVELS*/, @Cast("bool") boolean _signedGradient/*=false*/);
     public HOGDescriptor(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
@@ -1093,7 +834,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
                       @ByVal Size _cellSize, int _nbins);
 
     /** \overload
-    @param filename the file name containing  HOGDescriptor properties and coefficients of the trained classifier
+    @param filename The file name containing HOGDescriptor properties and coefficients for the linear SVM classifier.
     */
     public HOGDescriptor(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str BytePointer filename);
@@ -1124,26 +865,26 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     /**\example samples/cpp/peopledetect.cpp
     */
     /**\brief Sets coefficients for the linear SVM classifier.
-    @param _svmdetector coefficients for the linear SVM classifier.
+    @param svmdetector coefficients for the linear SVM classifier.
     */
-    public native void setSVMDetector(@ByVal Mat _svmdetector);
-    public native void setSVMDetector(@ByVal UMat _svmdetector);
-    public native void setSVMDetector(@ByVal GpuMat _svmdetector);
+    public native void setSVMDetector(@ByVal Mat svmdetector);
+    public native void setSVMDetector(@ByVal UMat svmdetector);
+    public native void setSVMDetector(@ByVal GpuMat svmdetector);
 
-    /** \brief Reads HOGDescriptor parameters from a file node.
+    /** \brief Reads HOGDescriptor parameters from a cv::FileNode.
     @param fn File node
     */
     public native @Cast("bool") boolean read(@ByRef FileNode fn);
 
-    /** \brief Stores HOGDescriptor parameters in a file storage.
+    /** \brief Stores HOGDescriptor parameters in a cv::FileStorage.
     @param fs File storage
     @param objname Object name
     */
     public native void write(@ByRef FileStorage fs, @Str BytePointer objname);
     public native void write(@ByRef FileStorage fs, @Str String objname);
 
-    /** \brief loads coefficients for the linear SVM classifier from a file
-    @param filename Name of the file to read.
+    /** \brief loads HOGDescriptor parameters and coefficients for the linear SVM classifier from a file.
+    @param filename Path of the file to read.
     @param objname The optional name of the node to read (if empty, the first top-level node will be used).
     */
     public native @Cast("bool") boolean load(@Str BytePointer filename, @Str BytePointer objname/*=cv::String()*/);
@@ -1151,7 +892,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public native @Cast("bool") boolean load(@Str String filename, @Str String objname/*=cv::String()*/);
     public native @Cast("bool") boolean load(@Str String filename);
 
-    /** \brief saves coefficients for the linear SVM classifier to a file
+    /** \brief saves HOGDescriptor parameters and coefficients for the linear SVM classifier to a file
     @param filename File name
     @param objname Object name
     */
@@ -1240,26 +981,68 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param padding Padding
     @param searchLocations Vector of Point includes set of requested locations to be evaluated.
     */
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             @StdVector DoublePointer weights,
                             double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                             @ByVal(nullValue = "cv::Size()") Size padding,
                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             @StdVector DoublePointer weights);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             @StdVector DoubleBuffer weights,
                             double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                             @ByVal(nullValue = "cv::Size()") Size padding,
                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             @StdVector DoubleBuffer weights);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             @StdVector double[] weights,
                             double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                             @ByVal(nullValue = "cv::Size()") Size padding,
                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
+                            @StdVector double[] weights);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoublePointer weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoublePointer weights);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoubleBuffer weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoubleBuffer weights);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector double[] weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            @StdVector double[] weights);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoublePointer weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoublePointer weights);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoubleBuffer weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            @StdVector DoubleBuffer weights);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            @StdVector double[] weights,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
                             @StdVector double[] weights);
 
     /** \brief Performs object detection without a multi-scale window.
@@ -1272,11 +1055,21 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param padding Padding
     @param searchLocations Vector of Point includes locations to search.
     */
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations,
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations,
                             double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                             @ByVal(nullValue = "cv::Size()") Size padding,
                             @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
-    public native void detect(@Const @ByRef Mat img, @ByRef PointVector foundLocations);
+    public native void detect(@ByVal Mat img, @ByRef PointVector foundLocations);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal UMat img, @ByRef PointVector foundLocations);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations,
+                            double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                            @ByVal(nullValue = "cv::Size()") Size padding,
+                            @Const @ByRef(nullValue = "std::vector<cv::Point>()") PointVector searchLocations);
+    public native void detect(@ByVal GpuMat img, @ByRef PointVector foundLocations);
 
     /** \brief Detects objects of different sizes in the input image. The detected objects are returned as a list
     of rectangles.
@@ -1383,9 +1176,15 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param paddingTL Padding from top-left
     @param paddingBR Padding from bottom-right
     */
-    public native void computeGradient(@Const @ByRef Mat img, @ByRef Mat grad, @ByRef Mat angleOfs,
+    public native void computeGradient(@ByVal Mat img, @ByVal Mat grad, @ByVal Mat angleOfs,
                                      @ByVal(nullValue = "cv::Size()") Size paddingTL, @ByVal(nullValue = "cv::Size()") Size paddingBR);
-    public native void computeGradient(@Const @ByRef Mat img, @ByRef Mat grad, @ByRef Mat angleOfs);
+    public native void computeGradient(@ByVal Mat img, @ByVal Mat grad, @ByVal Mat angleOfs);
+    public native void computeGradient(@ByVal UMat img, @ByVal UMat grad, @ByVal UMat angleOfs,
+                                     @ByVal(nullValue = "cv::Size()") Size paddingTL, @ByVal(nullValue = "cv::Size()") Size paddingBR);
+    public native void computeGradient(@ByVal UMat img, @ByVal UMat grad, @ByVal UMat angleOfs);
+    public native void computeGradient(@ByVal GpuMat img, @ByVal GpuMat grad, @ByVal GpuMat angleOfs,
+                                     @ByVal(nullValue = "cv::Size()") Size paddingTL, @ByVal(nullValue = "cv::Size()") Size paddingBR);
+    public native void computeGradient(@ByVal GpuMat img, @ByVal GpuMat grad, @ByVal GpuMat angleOfs);
 
     /** \brief Returns coefficients of the classifier trained for people detection (for 64x128 windows).
     */
@@ -1419,7 +1218,7 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public native double winSigma(); public native HOGDescriptor winSigma(double winSigma);
 
     /** histogramNormType */
-    public native int histogramNormType(); public native HOGDescriptor histogramNormType(int histogramNormType);
+    public native @Cast("cv::HOGDescriptor::HistogramNormType") int histogramNormType(); public native HOGDescriptor histogramNormType(int histogramNormType);
 
     /** L2-Hys normalization method shrinkage. */
     public native double L2HysThreshold(); public native HOGDescriptor L2HysThreshold(double L2HysThreshold);
@@ -1453,23 +1252,59 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     @param winStride winStride
     @param padding padding
     */
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector DoublePointer confidences,
                                        double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                        @ByVal(nullValue = "cv::Size()") Size padding);
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector DoublePointer confidences);
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences,
                                        double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                        @ByVal(nullValue = "cv::Size()") Size padding);
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences);
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector double[] confidences,
                                        double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
                                        @ByVal(nullValue = "cv::Size()") Size padding);
-    public native void detectROI(@Const @ByRef Mat img, @Const @ByRef PointVector locations,
+    public native void detectROI(@ByVal Mat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector double[] confidences);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoublePointer confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoublePointer confidences);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector double[] confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal UMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector double[] confidences);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoublePointer confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoublePointer confidences);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector DoubleBuffer confidences);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
+                                       @ByRef PointVector foundLocations, @StdVector double[] confidences,
+                                       double hitThreshold/*=0*/, @ByVal(nullValue = "cv::Size()") Size winStride,
+                                       @ByVal(nullValue = "cv::Size()") Size padding);
+    public native void detectROI(@ByVal GpuMat img, @Const @ByRef PointVector locations,
                                        @ByRef PointVector foundLocations, @StdVector double[] confidences);
 
     /** \brief evaluate specified ROI and return confidence value for each location in multiple scales
@@ -1480,20 +1315,30 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     in the detector coefficients (as the last free coefficient). But if the free coefficient is omitted (which is allowed), you can specify it manually here.
     @param groupThreshold Minimum possible number of rectangles minus 1. The threshold is used in a group of rectangles to retain it.
     */
-    public native void detectMultiScaleROI(@Const @ByRef Mat img,
+    public native void detectMultiScaleROI(@ByVal Mat img,
                                          @ByRef RectVector foundLocations,
                                          @StdVector DetectionROI locations,
                                          double hitThreshold/*=0*/,
                                          int groupThreshold/*=0*/);
-    public native void detectMultiScaleROI(@Const @ByRef Mat img,
+    public native void detectMultiScaleROI(@ByVal Mat img,
                                          @ByRef RectVector foundLocations,
                                          @StdVector DetectionROI locations);
-
-    /** \brief read/parse Dalal's alt model file
-    @param modelfile Path of Dalal's alt model file.
-    */
-    public native void readALTModel(@Str BytePointer modelfile);
-    public native void readALTModel(@Str String modelfile);
+    public native void detectMultiScaleROI(@ByVal UMat img,
+                                         @ByRef RectVector foundLocations,
+                                         @StdVector DetectionROI locations,
+                                         double hitThreshold/*=0*/,
+                                         int groupThreshold/*=0*/);
+    public native void detectMultiScaleROI(@ByVal UMat img,
+                                         @ByRef RectVector foundLocations,
+                                         @StdVector DetectionROI locations);
+    public native void detectMultiScaleROI(@ByVal GpuMat img,
+                                         @ByRef RectVector foundLocations,
+                                         @StdVector DetectionROI locations,
+                                         double hitThreshold/*=0*/,
+                                         int groupThreshold/*=0*/);
+    public native void detectMultiScaleROI(@ByVal GpuMat img,
+                                         @ByRef RectVector foundLocations,
+                                         @StdVector DetectionROI locations);
 
     /** \brief Groups the object candidate rectangles.
     @param rectList  Input/output vector of rectangles. Output vector includes retained and grouped rectangles. (The Python list is not modified in place.)
@@ -1520,36 +1365,60 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
     public QRCodeDetector() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** \brief sets the epsilon used during the horizontal scan of QR code stop marker detection.
+     @param epsX Epsilon neighborhood, which allows you to determine the horizontal pattern
+     of the scheme 1:1:3:1:1 according to QR code standard.
+    */
     public native void setEpsX(double epsX);
+    /** \brief sets the epsilon used during the vertical scan of QR code stop marker detection.
+     @param epsY Epsilon neighborhood, which allows you to determine the vertical pattern
+     of the scheme 1:1:3:1:1 according to QR code standard.
+     */
     public native void setEpsY(double epsY);
 
-    public native @Cast("bool") boolean detect(@ByVal Mat in, @ByVal Mat points);
-    public native @Cast("bool") boolean detect(@ByVal UMat in, @ByVal UMat points);
-    public native @Cast("bool") boolean detect(@ByVal GpuMat in, @ByVal GpuMat points);
-}
+    /** \brief Detects QR code in image and returns the quadrangle containing the code.
+     @param img grayscale or color (BGR) image containing (or not) QR code.
+     @param points Output vector of vertices of the minimum-area quadrangle containing the code.
+     */
+    public native @Cast("bool") boolean detect(@ByVal Mat img, @ByVal Mat points);
+    public native @Cast("bool") boolean detect(@ByVal UMat img, @ByVal UMat points);
+    public native @Cast("bool") boolean detect(@ByVal GpuMat img, @ByVal GpuMat points);
 
-/** \brief Detect QR code in image and return minimum area of quadrangle that describes QR code.
-    @param in  Matrix of the type CV_8UC1 containing an image where QR code are detected.
-    @param points Output vector of vertices of a quadrangle of minimal area that describes QR code.
-    @param eps_x Epsilon neighborhood, which allows you to determine the horizontal pattern of the scheme 1:1:3:1:1 according to QR code standard.
-    @param eps_y Epsilon neighborhood, which allows you to determine the vertical pattern of the scheme 1:1:3:1:1 according to QR code standard.
-    */
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal Mat in, @ByRef PointVector points);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal UMat in, @ByRef PointVector points);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points, double eps_x/*=0.2*/, double eps_y/*=0.1*/);
-@Namespace("cv") public static native @Cast("bool") boolean detectQRCode(@ByVal GpuMat in, @ByRef PointVector points);
+    /** \brief Decodes QR code in image once it's found by the detect() method.
+     Returns UTF8-encoded output string or empty string if the code cannot be decoded.
+     <p>
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points Quadrangle vertices found by detect() method (or some other algorithm).
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @StdString BytePointer decode(@ByVal Mat img, @ByVal Mat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @StdString BytePointer decode(@ByVal Mat img, @ByVal Mat points);
+    public native @StdString String decode(@ByVal UMat img, @ByVal UMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @StdString String decode(@ByVal UMat img, @ByVal UMat points);
+    public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @StdString BytePointer decode(@ByVal GpuMat img, @ByVal GpuMat points);
+
+    /** \brief Both detects and decodes QR code
+     <p>
+     @param img grayscale or color (BGR) image containing QR code.
+     @param points opiotnal output array of vertices of the found QR code quadrangle. Will be empty if not found.
+     @param straight_qrcode The optional output image containing rectified and binarized QR code
+     */
+    public native @StdString BytePointer detectAndDecode(@ByVal Mat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat straight_qrcode);
+    public native @StdString BytePointer detectAndDecode(@ByVal Mat img);
+    public native @StdString String detectAndDecode(@ByVal UMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat straight_qrcode);
+    public native @StdString String detectAndDecode(@ByVal UMat img);
+    public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat points,
+                                            @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat straight_qrcode);
+    public native @StdString BytePointer detectAndDecode(@ByVal GpuMat img);
+}
 
 /** \} objdetect */
 
 
-
 // #include "opencv2/objdetect/detection_based_tracker.hpp"
-
-// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
-// #include "opencv2/objdetect/objdetect_c.h"
-// #endif
 
 // #endif
 
@@ -1603,10 +1472,6 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
 // #define OPENCV_OBJDETECT_DBT_HPP
 
 // #include <opencv2/core.hpp>
-
-// After this condition removal update blacklist for bindings: modules/python/common.cmake
-// #if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) ||
-//   defined(CV_CXX11)
 
 // #include <vector>
 
@@ -1694,7 +1559,6 @@ http://www.learnopencv.com/handwritten-digits-classification-an-opencv-c-python-
 /** \} objdetect */
 
  //end of cv namespace
-// #endif
 
 // #endif
 

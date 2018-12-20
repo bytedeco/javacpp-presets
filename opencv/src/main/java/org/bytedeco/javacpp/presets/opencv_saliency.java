@@ -22,7 +22,6 @@
 
 package org.bytedeco.javacpp.presets;
 
-import org.bytedeco.javacpp.opencv_imgproc;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -38,10 +37,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             	"<opencv2/saliency/saliencyBaseClasses.hpp>",
                 "<opencv2/saliency/saliencySpecializedClasses.hpp>"
             },
-            link = "opencv_saliency@.3.4"
+            link = "opencv_saliency@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_saliency"),
-        @Platform(value = "windows", link = "opencv_saliency343")
+        @Platform(value = "windows", link = "opencv_saliency400")
     },
     target = "org.bytedeco.javacpp.opencv_saliency"
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 Samuel Audet
+ * Copyright (C) 2016-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,15 +33,16 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_imgproc.class, value = {
-    @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
+    @Platform(include = {"<opencv2/dnn.hpp>", "<opencv2/dnn/version.hpp>", "<opencv2/dnn/dict.hpp>","<opencv2/dnn/all_layers.hpp>",
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
-              link = "opencv_dnn@.3.4"),
+              link = "opencv_dnn@.4.0"),
     @Platform(value = "ios", preload = "libopencv_dnn"),
-    @Platform(value = "windows", link = "opencv_dnn343")},
+    @Platform(value = "windows", link = "opencv_dnn400")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CV__DNN_EXPERIMENTAL_NS_BEGIN", "CV__DNN_EXPERIMENTAL_NS_END").cppTypes().annotations())
+               .put(new Info("!defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_INLINE_NS").define(false))
                .put(new Info("cv::dnn::MatShape").annotations("@StdVector").pointerTypes("IntPointer"))
                .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
                .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())

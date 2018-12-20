@@ -22,7 +22,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.3.0
+MXNET_VERSION=1.3.1
 download http://apache.org/dist/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -53,6 +53,13 @@ cd apache-mxnet-src-$MXNET_VERSION-incubating
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
+
+sedinplace '/#include <opencv2\/opencv.hpp>/a\
+#include <opencv2/imgproc/types_c.h>\
+' src/io/image_augmenter.h src/io/image_io.cc tools/im2rec.cc
+sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_PNG_COMPRESSION/cv::IMWRITE_PNG_COMPRESSION/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_JPEG_QUALITY/cv::IMWRITE_JPEG_QUALITY/g' tools/im2rec.cc
 
 case $PLATFORM in
     linux-x86)

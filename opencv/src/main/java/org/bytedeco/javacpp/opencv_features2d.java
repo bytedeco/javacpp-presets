@@ -165,6 +165,8 @@ This section describes approaches based on local 2D features and used to categor
 
 /** \brief Abstract base class for 2D image feature detectors and descriptor extractors
 */
+// #ifdef __EMSCRIPTEN__
+// #else
 @Namespace("cv") public static class Feature2D extends Algorithm {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -301,14 +303,14 @@ This section describes approaches based on local 2D features and used to categor
     public native void read( @Str BytePointer fileName );
     public native void read( @Str String fileName );
 
-    public native void write( @ByRef FileStorage arg0);
+    public native @Override void write( @ByRef FileStorage arg0);
 
     // see corresponding cv::Algorithm method
-    public native void read( @Const @ByRef FileNode arg0);
+    public native @Override void read( @Const @ByRef FileNode arg0);
 
     /** Return true if detector object is empty */
-    public native @Cast("bool") boolean empty();
-    public native @Str BytePointer getDefaultName();
+    public native @Cast("bool") @Override boolean empty();
+    public native @Str @Override BytePointer getDefaultName();
 
     // see corresponding cv::Algorithm method
     public native void write(@Ptr FileStorage fs, @Str BytePointer name/*=cv::String()*/);
@@ -403,7 +405,7 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
             @StdVector int[] indexChange/*=std::vector<int>()*/);
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
             @StdVector int[] numberList);
-    public native @Str BytePointer getDefaultName();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \brief Class implementing the ORB (*oriented BRIEF*) keypoint detector and descriptor extractor
@@ -413,13 +415,15 @@ the strongest features using FAST or Harris response, finds their orientation us
 moments and computes the descriptors using BRIEF (where the coordinates of random point pairs (or
 k-tuples) are rotated according to the measured orientation).
  */
-@Namespace("cv") public static class ORB extends Feature2D {
+@Namespace("cv") @NoOffset public static class ORB extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ORB(Pointer p) { super(p); }
 
-    /** enum cv::ORB:: */
-    public static final int kBytes = 32, HARRIS_SCORE = 0, FAST_SCORE = 1;
+    /** enum cv::ORB::ScoreType */
+    public static final int HARRIS_SCORE = 0, FAST_SCORE = 1;
+    @MemberGetter public static native int kBytes();
+    public static final int kBytes = kBytes();
 
     /** \brief The ORB constructor
     <p>
@@ -453,7 +457,7 @@ k-tuples) are rotated according to the measured orientation).
     @param fastThreshold
      */
     public static native @Ptr ORB create(int nfeatures/*=500*/, float scaleFactor/*=1.2f*/, int nlevels/*=8*/, int edgeThreshold/*=31*/,
-            int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=cv::ORB::HARRIS_SCORE*/, int patchSize/*=31*/, int fastThreshold/*=20*/);
+            int firstLevel/*=0*/, int WTA_K/*=2*/, @Cast("cv::ORB::ScoreType") int scoreType/*=cv::ORB::HARRIS_SCORE*/, int patchSize/*=31*/, int fastThreshold/*=20*/);
     public static native @Ptr ORB create();
 
     public native void setMaxFeatures(int maxFeatures);
@@ -474,15 +478,15 @@ k-tuples) are rotated according to the measured orientation).
     public native void setWTA_K(int wta_k);
     public native int getWTA_K();
 
-    public native void setScoreType(int scoreType);
-    public native int getScoreType();
+    public native void setScoreType(@Cast("cv::ORB::ScoreType") int scoreType);
+    public native @Cast("cv::ORB::ScoreType") int getScoreType();
 
     public native void setPatchSize(int patchSize);
     public native int getPatchSize();
 
     public native void setFastThreshold(int fastThreshold);
     public native int getFastThreshold();
-    public native @Str BytePointer getDefaultName();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \brief Maximally stable extremal region extractor
@@ -551,7 +555,43 @@ code which is distributed under GPL.
 
     public native void setPass2Only(@Cast("bool") boolean f);
     public native @Cast("bool") boolean getPass2Only();
-    public native @Str BytePointer getDefaultName();
+    public native @Str @Override BytePointer getDefaultName();
+}
+
+/** \} features2d_main
+ <p>
+ *  \addtogroup features2d_main
+ *  \{
+<p>
+/** \brief Wrapping class for feature detection using the FAST method. :
+ */
+@Namespace("cv") public static class FastFeatureDetector extends Feature2D {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FastFeatureDetector(Pointer p) { super(p); }
+
+    /** enum cv::FastFeatureDetector::DetectorType */
+    public static final int
+        TYPE_5_8 = 0, TYPE_7_12 = 1, TYPE_9_16 = 2;
+    /** enum cv::FastFeatureDetector:: */
+    public static final int
+        THRESHOLD = 10000, NONMAX_SUPPRESSION = 10001, FAST_N = 10002;
+
+
+    public static native @Ptr FastFeatureDetector create( int threshold/*=10*/,
+                                                        @Cast("bool") boolean nonmaxSuppression/*=true*/,
+                                                        @Cast("cv::FastFeatureDetector::DetectorType") int type/*=cv::FastFeatureDetector::TYPE_9_16*/ );
+    public static native @Ptr FastFeatureDetector create( );
+
+    public native void setThreshold(int threshold);
+    public native int getThreshold();
+
+    public native void setNonmaxSuppression(@Cast("bool") boolean f);
+    public native @Cast("bool") boolean getNonmaxSuppression();
+
+    public native void setType(@Cast("cv::FastFeatureDetector::DetectorType") int type);
+    public native @Cast("cv::FastFeatureDetector::DetectorType") int getType();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \overload */
@@ -587,33 +627,36 @@ cv2.FAST_FEATURE_DETECTOR_TYPE_7_12 and cv2.FAST_FEATURE_DETECTOR_TYPE_9_16. For
 detection, use cv2.FAST.detect() method.
  */
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::FastFeatureDetector::DetectorType") int type );
 @Namespace("cv") public static native void FAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::FastFeatureDetector::DetectorType") int type );
 @Namespace("cv") public static native void FAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::FastFeatureDetector::DetectorType") int type );
 
 /** \} features2d_main
  <p>
  *  \addtogroup features2d_main
  *  \{
 <p>
-/** \brief Wrapping class for feature detection using the FAST method. :
+/** \brief Wrapping class for feature detection using the AGAST method. :
  */
-@Namespace("cv") public static class FastFeatureDetector extends Feature2D {
+@Namespace("cv") public static class AgastFeatureDetector extends Feature2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FastFeatureDetector(Pointer p) { super(p); }
+    public AgastFeatureDetector(Pointer p) { super(p); }
 
-    /** enum cv::FastFeatureDetector:: */
+    /** enum cv::AgastFeatureDetector::DetectorType */
     public static final int
-        TYPE_5_8 = 0, TYPE_7_12 = 1, TYPE_9_16 = 2,
-        THRESHOLD = 10000, NONMAX_SUPPRESSION = 10001, FAST_N = 10002;
+        AGAST_5_8 = 0, AGAST_7_12d = 1, AGAST_7_12s = 2, OAST_9_16 = 3;
 
-    public static native @Ptr FastFeatureDetector create( int threshold/*=10*/,
-                                                        @Cast("bool") boolean nonmaxSuppression/*=true*/,
-                                                        int type/*=cv::FastFeatureDetector::TYPE_9_16*/ );
-    public static native @Ptr FastFeatureDetector create( );
+    /** enum cv::AgastFeatureDetector:: */
+    public static final int
+        THRESHOLD = 10000, NONMAX_SUPPRESSION = 10001;
+
+    public static native @Ptr AgastFeatureDetector create( int threshold/*=10*/,
+                                                         @Cast("bool") boolean nonmaxSuppression/*=true*/,
+                                                         @Cast("cv::AgastFeatureDetector::DetectorType") int type/*=cv::AgastFeatureDetector::OAST_9_16*/);
+    public static native @Ptr AgastFeatureDetector create();
 
     public native void setThreshold(int threshold);
     public native int getThreshold();
@@ -621,9 +664,9 @@ detection, use cv2.FAST.detect() method.
     public native void setNonmaxSuppression(@Cast("bool") boolean f);
     public native @Cast("bool") boolean getNonmaxSuppression();
 
-    public native void setType(int type);
-    public native int getType();
-    public native @Str BytePointer getDefaultName();
+    public native void setType(@Cast("cv::AgastFeatureDetector::DetectorType") int type);
+    public native @Cast("cv::AgastFeatureDetector::DetectorType") int getType();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \overload */
@@ -659,43 +702,11 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
  <p>
  */
 @Namespace("cv") public static native void AGAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::AgastFeatureDetector::DetectorType") int type );
 @Namespace("cv") public static native void AGAST( @ByVal UMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::AgastFeatureDetector::DetectorType") int type );
 @Namespace("cv") public static native void AGAST( @ByVal GpuMat image, @ByRef KeyPointVector keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
-/** \} features2d_main
- <p>
- *  \addtogroup features2d_main
- *  \{
-<p>
-/** \brief Wrapping class for feature detection using the AGAST method. :
- */
-@Namespace("cv") public static class AgastFeatureDetector extends Feature2D {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AgastFeatureDetector(Pointer p) { super(p); }
-
-    /** enum cv::AgastFeatureDetector:: */
-    public static final int
-        AGAST_5_8 = 0, AGAST_7_12d = 1, AGAST_7_12s = 2, OAST_9_16 = 3,
-        THRESHOLD = 10000, NONMAX_SUPPRESSION = 10001;
-
-    public static native @Ptr AgastFeatureDetector create( int threshold/*=10*/,
-                                                         @Cast("bool") boolean nonmaxSuppression/*=true*/,
-                                                         int type/*=cv::AgastFeatureDetector::OAST_9_16*/ );
-    public static native @Ptr AgastFeatureDetector create( );
-
-    public native void setThreshold(int threshold);
-    public native int getThreshold();
-
-    public native void setNonmaxSuppression(@Cast("bool") boolean f);
-    public native @Cast("bool") boolean getNonmaxSuppression();
-
-    public native void setType(int type);
-    public native int getType();
-    public native @Str BytePointer getDefaultName();
-}
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::AgastFeatureDetector::DetectorType") int type );
 
 /** \brief Wrapping class for feature detection using the goodFeaturesToTrack function. :
  */
@@ -728,7 +739,7 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 
     public native void setK(double k);
     public native double getK();
-    public native @Str BytePointer getDefaultName();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \brief Class for extracting blobs from an image. :
@@ -820,7 +831,7 @@ Default values of parameters are tuned to extract dark circular blobs.
 
   public static native @Ptr SimpleBlobDetector create(@Const @ByRef(nullValue = "cv::SimpleBlobDetector::Params()") Params parameters);
   public static native @Ptr SimpleBlobDetector create();
-  public native @Str BytePointer getDefaultName();
+  public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \} features2d_main
@@ -839,7 +850,7 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KAZE(Pointer p) { super(p); }
 
-    /** enum cv::KAZE:: */
+    /** enum cv::KAZE::DiffusivityType */
     public static final int
         DIFF_PM_G1 = 0,
         DIFF_PM_G2 = 1,
@@ -859,7 +870,7 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
     public static native @Ptr KAZE create(@Cast("bool") boolean extended/*=false*/, @Cast("bool") boolean upright/*=false*/,
                                         float threshold/*=0.001f*/,
                                         int nOctaves/*=4*/, int nOctaveLayers/*=4*/,
-                                        int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
+                                        @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
     public static native @Ptr KAZE create();
 
     public native void setExtended(@Cast("bool") boolean extended);
@@ -877,9 +888,9 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
     public native void setNOctaveLayers(int octaveLayers);
     public native int getNOctaveLayers();
 
-    public native void setDiffusivity(int diff);
-    public native int getDiffusivity();
-    public native @Str BytePointer getDefaultName();
+    public native void setDiffusivity(@Cast("cv::KAZE::DiffusivityType") int diff);
+    public native @Cast("cv::KAZE::DiffusivityType") int getDiffusivity();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \brief Class implementing the AKAZE keypoint detector and descriptor extractor, described in \cite ANB13.
@@ -904,7 +915,7 @@ British Machine Vision Conference (BMVC), Bristol, UK, September 2013.
     public AKAZE(Pointer p) { super(p); }
 
     // AKAZE descriptor type
-    /** enum cv::AKAZE:: */
+    /** enum cv::AKAZE::DescriptorType */
     public static final int
         /** Upright descriptors, not invariant to rotation */
         DESCRIPTOR_KAZE_UPRIGHT = 2,
@@ -925,14 +936,14 @@ British Machine Vision Conference (BMVC), Bristol, UK, September 2013.
     @param diffusivity Diffusivity type. DIFF_PM_G1, DIFF_PM_G2, DIFF_WEICKERT or
     DIFF_CHARBONNIER
      */
-    public static native @Ptr AKAZE create(int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
+    public static native @Ptr AKAZE create(@Cast("cv::AKAZE::DescriptorType") int descriptor_type/*=cv::AKAZE::DESCRIPTOR_MLDB*/,
                                          int descriptor_size/*=0*/, int descriptor_channels/*=3*/,
                                          float threshold/*=0.001f*/, int nOctaves/*=4*/,
-                                         int nOctaveLayers/*=4*/, int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
+                                         int nOctaveLayers/*=4*/, @Cast("cv::KAZE::DiffusivityType") int diffusivity/*=cv::KAZE::DIFF_PM_G2*/);
     public static native @Ptr AKAZE create();
 
-    public native void setDescriptorType(int dtype);
-    public native int getDescriptorType();
+    public native void setDescriptorType(@Cast("cv::AKAZE::DescriptorType") int dtype);
+    public native @Cast("cv::AKAZE::DescriptorType") int getDescriptorType();
 
     public native void setDescriptorSize(int dsize);
     public native int getDescriptorSize();
@@ -949,9 +960,9 @@ British Machine Vision Conference (BMVC), Bristol, UK, September 2013.
     public native void setNOctaveLayers(int octaveLayers);
     public native int getNOctaveLayers();
 
-    public native void setDiffusivity(int diff);
-    public native int getDiffusivity();
-    public native @Str BytePointer getDefaultName();
+    public native void setDiffusivity(@Cast("cv::KAZE::DiffusivityType") int diff);
+    public native @Cast("cv::KAZE::DiffusivityType") int getDiffusivity();
+    public native @Str @Override BytePointer getDefaultName();
 }
 
 /** \} features2d_main
@@ -1004,7 +1015,7 @@ an image set.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
 
-   /** enum cv::DescriptorMatcher:: */
+   /** enum cv::DescriptorMatcher::MatcherType */
    public static final int
         FLANNBASED            = 1,
         BRUTEFORCE            = 2,
@@ -1031,11 +1042,11 @@ an image set.
 
     /** \brief Clears the train descriptor collections.
      */
-    public native void clear();
+    public native @Override void clear();
 
     /** \brief Returns true if there are no train descriptors in the both collections.
      */
-    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") @Override boolean empty();
 
     /** \brief Returns true if the descriptor matcher supports masking permissible matches.
      */
@@ -1250,9 +1261,9 @@ an image set.
     public native void read( @Str String fileName );
     // Reads matcher object from a file node
     // see corresponding cv::Algorithm method
-    public native void read( @Const @ByRef FileNode arg0 );
+    public native @Override void read( @Const @ByRef FileNode arg0 );
     // Writes matcher object to a file storage
-    public native void write( @ByRef FileStorage arg0 );
+    public native @Override void write( @ByRef FileStorage arg0 );
 
     /** \brief Clones the matcher.
     <p>
@@ -1277,7 +1288,7 @@ an image set.
     public static native @Ptr DescriptorMatcher create( @Str BytePointer descriptorMatcherType );
     public static native @Ptr DescriptorMatcher create( @Str String descriptorMatcherType );
 
-    public static native @Ptr DescriptorMatcher create( int matcherType );
+    public static native @Ptr DescriptorMatcher create( @Cast("const cv::DescriptorMatcher::MatcherType") int matcherType );
 
 
     // see corresponding cv::Algorithm method
@@ -1311,7 +1322,7 @@ sets.
     public BFMatcher( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 
-    public native @Cast("bool") boolean isMaskSupported();
+    public native @Cast("bool") @Override boolean isMaskSupported();
 
     /** \brief Brute-force matcher create method.
     @param normType One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2. L1 and L2 norms are
@@ -1328,7 +1339,7 @@ sets.
     public static native @Ptr BFMatcher create( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
     public static native @Ptr BFMatcher create( );
 
-    public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr @Override DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );
 }
 
@@ -1359,22 +1370,22 @@ matches of descriptor sets because flann::Index does not support this. :
     public FlannBasedMatcher( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 
-    public native void add( @ByVal MatVector descriptors );
-    public native void add( @ByVal UMatVector descriptors );
-    public native void add( @ByVal GpuMatVector descriptors );
-    public native void clear();
+    public native @Override void add( @ByVal MatVector descriptors );
+    public native @Override void add( @ByVal UMatVector descriptors );
+    public native @Override void add( @ByVal GpuMatVector descriptors );
+    public native @Override void clear();
 
     // Reads matcher object from a file node
-    public native void read( @Const @ByRef FileNode arg0 );
+    public native @Override void read( @Const @ByRef FileNode arg0 );
     // Writes matcher object to a file storage
-    public native void write( @ByRef FileStorage arg0 );
+    public native @Override void write( @ByRef FileStorage arg0 );
 
-    public native void train();
-    public native @Cast("bool") boolean isMaskSupported();
+    public native @Override void train();
+    public native @Cast("bool") @Override boolean isMaskSupported();
 
     public static native @Ptr FlannBasedMatcher create();
 
-    public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr @Override DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );
 }
 
@@ -1389,36 +1400,49 @@ matches of descriptor sets because flann::Index does not support this. :
 /** \addtogroup features2d_draw
 /** \{ */
 
-@Namespace("cv") public static class DrawMatchesFlags extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public DrawMatchesFlags() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DrawMatchesFlags(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public DrawMatchesFlags(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public DrawMatchesFlags position(long position) {
-        return (DrawMatchesFlags)super.position(position);
-    }
-
-    /** enum cv::DrawMatchesFlags:: */
-    public static final int /** Output image matrix will be created (Mat::create),
+/** enum struct cv::DrawMatchesFlags */
+public static final int
+  /** Output image matrix will be created (Mat::create),
  *  i.e. existing memory of output image may be reused.
  *  Two source image, matches and single keypoints will be drawn.
  *  For each keypoint only the center point will be drawn (without
  *  the circle around keypoint with keypoint size and orientation). */
- DEFAULT = 0,
-          /** Output image matrix will not be created (Mat::create).
+  DEFAULT = 0,
+  /** Output image matrix will not be created (Mat::create).
  *  Matches will be drawn on existing content of output image. */
-          DRAW_OVER_OUTIMG = 1,
-          /** Single keypoints will not be drawn. */
-          NOT_DRAW_SINGLE_POINTS = 2,
-          /** For each keypoint the circle around keypoint with keypoint size and
+  DRAW_OVER_OUTIMG = 1,
+  /** Single keypoints will not be drawn. */
+  NOT_DRAW_SINGLE_POINTS = 2,
+  /** For each keypoint the circle around keypoint with keypoint size and
  *  orientation will be drawn. */
-          DRAW_RICH_KEYPOINTS = 4;
-}
+  DRAW_RICH_KEYPOINTS = 4;
+@Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Cast("const cv::DrawMatchesFlags") int val);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("const cv::DrawMatchesFlags") int a, int b);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("const cv::DrawMatchesFlags") int a, int b);
+
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator |") int or(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator &") int and(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags") @Name("operator ^") int xor(@Cast("const cv::DrawMatchesFlags") int a, @Cast("const cv::DrawMatchesFlags") int b);
+
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator |=") int[] orPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator &=") int[] andPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntPointer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef IntBuffer _this, @Cast("const cv::DrawMatchesFlags") int val);
+@Namespace("cv") public static native @Cast("cv::DrawMatchesFlags*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("cv::DrawMatchesFlags*") @ByRef int[] _this, @Cast("const cv::DrawMatchesFlags") int val);
+
+
 
 /** \brief Draws keypoints.
 <p>
@@ -1436,13 +1460,13 @@ cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS, cv2.DRAW_MATCHES_FLAGS_DRAW_OVER_OUT
 cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS
  */
 @Namespace("cv") public static native void drawKeypoints( @ByVal Mat image, @Const @ByRef KeyPointVector keypoints, @ByVal Mat outImage,
-                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawKeypoints( @ByVal Mat image, @Const @ByRef KeyPointVector keypoints, @ByVal Mat outImage );
 @Namespace("cv") public static native void drawKeypoints( @ByVal UMat image, @Const @ByRef KeyPointVector keypoints, @ByVal UMat outImage,
-                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawKeypoints( @ByVal UMat image, @Const @ByRef KeyPointVector keypoints, @ByVal UMat outImage );
 @Namespace("cv") public static native void drawKeypoints( @ByVal GpuMat image, @Const @ByRef KeyPointVector keypoints, @ByVal GpuMat outImage,
-                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawKeypoints( @ByVal GpuMat image, @Const @ByRef KeyPointVector keypoints, @ByVal GpuMat outImage );
 
 /** \brief Draws the found matches of keypoints from two images.
@@ -1471,7 +1495,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg );
@@ -1479,17 +1503,17 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal Mat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg );
@@ -1497,17 +1521,17 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg );
@@ -1515,19 +1539,19 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVector matches1to2, @ByVal GpuMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 
 /** \overload */
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal Mat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal Mat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal Mat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal Mat outImg );
@@ -1535,7 +1559,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal UMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal UMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal UMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal UMat outImg );
@@ -1543,7 +1567,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal GpuMat outImg,
                              @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor,
-                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
+                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native @Name("drawMatches") void drawMatchesKnn( @ByVal GpuMat img1, @Const @ByRef KeyPointVector keypoints1,
                              @ByVal GpuMat img2, @Const @ByRef KeyPointVector keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal GpuMat outImg );
@@ -1654,8 +1678,8 @@ Christopher R. Dance, Lixin Fan, Jutta Willamowski, Cedric Bray, 2004. :
     private native void allocate( int clusterCount );
 
     // Returns trained vocabulary (i.e. cluster centers).
-    public native @ByVal Mat cluster();
-    public native @ByVal Mat cluster( @Const @ByRef Mat descriptors );
+    public native @ByVal @Override Mat cluster();
+    public native @ByVal @Override Mat cluster( @Const @ByRef Mat descriptors );
 }
 
 /** \brief Class to compute an image descriptor using the *bag of visual words*.

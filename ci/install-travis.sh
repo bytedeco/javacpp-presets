@@ -46,7 +46,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
-  if [[ "librealsense cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
+  if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="python36-devel python36-setuptools"
   fi
@@ -77,7 +77,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
 
-  if [ "$PROJ" == "flycapture" ]; then
+  if [[ "$PROJ" =~ flycapture ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_bionic.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap64 in cache and size seems ok" 
@@ -102,12 +102,12 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
 	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
     fi 
   fi 
-  if [ "$PROJ" == "spinnaker" ]; then
+  if [[ "$PROJ" =~ spinnaker ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
         if [[ $(find $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found spinnaker in cache and size seems ok"
         else
-          echo "Downloading flycap64 as not found in cache or too small"
+          echo "Downloading spinnaker as not found in cache or too small"
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 1IYtvqzpNHJgZK-TPztW_WDYuDEyo56D_ $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz
         fi
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/spinnaker_local_v.1.15.0.63.tar.gz -C /"
@@ -115,10 +115,10 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
-         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13575/l_mkl_2019.0.117.tgz -o $HOME/mkl.tgz
+         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14895/l_mkl_2019.1.144.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
-         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.0.117/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.0.117/install.sh -s $HOME/build/l_mkl_2019.0.117/silent.cfg"
+         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.1.144/silent.cfg
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.1.144/install.sh -s $HOME/build/l_mkl_2019.1.144/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
@@ -151,7 +151,8 @@ if [ "$OS" == "linux-armhf" ]; then
 	pushd $HOME/userland
 	bash buildme
 	popd
-	if [ "$PROJ" == "flycapture" ]; then
+
+  if [[ "$PROJ" =~ flycapture ]]; then
           if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
           else
@@ -197,50 +198,20 @@ if [[ "$OS" =~ android ]]; then
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
    #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
 
-   curl -L https://dl.google.com/android/repository/android-ndk-r15c-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
+   curl -L https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
     echo "Download failed here, so can't proceed with the build.. Failing.."
     exit 1
    fi
 
    unzip -qq $HOME/ndk.zip -d $HOME/
-   ln -sf $HOME/android-ndk-r15c $HOME/android-ndk
-   if [ "$PROJ" == "tensorflow" ]; then
-     echo "modifying ndk version 14 to 12 as per tensorflow cppbuild.sh suggestion"
-     sed -i 's/15/12/g' $HOME/android-ndk/source.properties
-   fi
+   ln -sf $HOME/android-ndk-r18b $HOME/android-ndk
    echo "Android NDK setup done"
    echo "export ANDROID_NDK=$HOME/android-ndk/" | tee --append $HOME/vars.list
    cat $HOME/vars.list
+   echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" | tee --append $HOME/vars.list
    echo "export BUILD_OPTIONS=-Djava.library.path=" | tee --append $HOME/vars.list
    echo "export BUILD_ROOT=-Djavacpp.platform.root=$HOME/android-ndk/" | tee --append $HOME/vars.list
-   if [ "$OS" == "android-arm" ]; then
-      echo "export PATH=\$PATH:$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin" | tee --append $HOME/vars.list
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-arm64" ]; then
-      echo "export PATH=\$PATH:$HOME/android-ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin" | tee --append $HOME/vars.list
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-x86" ]; then
-      echo "Setting build for android-x86"
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$OS" == "android-x86_64" ]; then
-      echo "Setting build for android-x86_64"
-      echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-g++" | tee --append $HOME/vars.list
-   fi
-   if [ "$PROJ" == "tensorflow" ]; then
-      echo "adding bazel for tensorflow"
-      curl -L  https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
-      if [ "$CURL_STATUS" != "0" ]; then
-        echo "Download failed here, so can't proceed with the build.. Failing.."
-        exit 1
-      fi
-      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sudo bash $HOME/bazel.sh"
-      export TEST_TMPDIR=$HOME/.cache/bazel
-      echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
-   fi
 fi
 
 
@@ -255,13 +226,13 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "mkl" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13565/m_mkl_2019.0.117.dmg -o $HOME/mkl.dmg
+        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14894/m_mkl_2019.1.144.dmg -o $HOME/mkl.dmg
         echo "Mount mkl dmg"
         hdiutil mount $HOME/mkl.dmg
         sleep 10
-        cp /Volumes/m_mkl_2019.0.117/m_mkl_2019.0.117.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
+        cp /Volumes/m_mkl_2019.1.144/m_mkl_2019.1.144.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
         sed -i -e 's/decline/accept/g' $HOME/silent.cfg
-        sudo /Volumes/m_mkl_2019.0.117/m_mkl_2019.0.117.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
+        sudo /Volumes/m_mkl_2019.1.144/m_mkl_2019.1.144.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
         echo "mkl status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "mkl Failed"
@@ -273,7 +244,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_mac -o $HOME/cuda_10.0.130_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.3.0/cudnn-10.0-osx-x64-v7.3.0.29.tgz -o $HOME/cudnn-10.0-osx-x64-v7.3.0.29.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.4.1/cudnn-10.0-osx-x64-v7.4.1.5.tgz -o $HOME/cudnn-10.0-osx-x64-v7.4.1.5.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_10.0.130_mac.dmg
@@ -286,7 +257,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.0-osx-x64-v7.3.0.29.tgz
+        tar xvf $HOME/cudnn-10.0-osx-x64-v7.4.1.5.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/

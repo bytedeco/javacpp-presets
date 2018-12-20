@@ -33,9 +33,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_imgproc.class, opencv_videoio.class}, value = {
-    @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.3.4"),
+    @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.4.0"),
     @Platform(value = "ios", preload = "libopencv_highgui"),
-    @Platform(value = "windows", link = "opencv_highgui343")},
+    @Platform(value = "windows", link = "opencv_highgui400")},
         target = "org.bytedeco.javacpp.opencv_highgui")
 public class opencv_highgui implements InfoMapper {
     public void map(InfoMap infoMap) {

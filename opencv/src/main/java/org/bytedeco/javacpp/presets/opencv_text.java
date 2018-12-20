@@ -35,9 +35,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_dnn.class, opencv_features2d.class, opencv_ml.class}, value = {
     @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>", "opencv2/text/textDetector.hpp"},
-              link = "opencv_text@.3.4"),
+              link = "opencv_text@.4.0"),
     @Platform(value = "ios", preload = "libopencv_text"),
-    @Platform(value = "windows", link = "opencv_text343")},
+    @Platform(value = "windows", link = "opencv_text400")},
               target = "org.bytedeco.javacpp.opencv_text")
 public class opencv_text implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -48,6 +48,7 @@ public class opencv_text implements InfoMapper {
                .put(new Info("std::vector<double>").pointerTypes("DoubleVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StdStringVector").define())
                .put(new Info("std::vector<cv::Vec2i>").pointerTypes("PointVector").cast())
-               .put(new Info("std::vector<std::vector<cv::Vec2i> >").pointerTypes("PointVectorVector").cast());
+               .put(new Info("std::vector<std::vector<cv::Vec2i> >").pointerTypes("PointVectorVector").cast())
+               .put(new Info("cv::text::OCRBeamSearchDecoder::create").skipDefaults());
     }
 }

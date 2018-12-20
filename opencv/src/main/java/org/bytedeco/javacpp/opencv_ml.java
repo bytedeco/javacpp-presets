@@ -404,7 +404,7 @@ of this class into StatModel::train.
     /** \brief Returns the number of variables in training samples */
     public native int getVarCount();
 
-    public native @Cast("bool") boolean empty();
+    public native @Cast("bool") @Override boolean empty();
 
     /** \brief Returns true if the model is trained */
     public native @Cast("bool") boolean isTrained();
@@ -1060,11 +1060,11 @@ of this class into StatModel::train.
     posterior probabilities for each sample from the input
     @param flags This parameter will be ignored
      */
-    public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat results, int flags/*=0*/ );
     public native float predict( @ByVal Mat samples );
-    public native float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
     public native float predict( @ByVal UMat samples );
-    public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
     public native float predict( @ByVal GpuMat samples );
 
     /** \brief Returns a likelihood logarithm value and an index of the most probable mixture component
@@ -1862,6 +1862,9 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 
 }
 
+// #ifndef DISABLE_OPENCV_3_COMPATIBILITY
+// #endif
+
 /****************************************************************************************\
 *                           Logistic Regression                                          *
 \****************************************************************************************/
@@ -1938,11 +1941,11 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     @param results Predicted labels as a column matrix of type CV_32S.
     @param flags Not used.
      */
-    public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat results, int flags/*=0*/ );
     public native float predict( @ByVal Mat samples );
-    public native float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal UMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat results, int flags/*=0*/ );
     public native float predict( @ByVal UMat samples );
-    public native float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
+    public native @Override float predict( @ByVal GpuMat samples, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat results, int flags/*=0*/ );
     public native float predict( @ByVal GpuMat samples );
 
     /** \brief This function returns the trained parameters arranged across rows.
@@ -2173,45 +2176,6 @@ svmsgd->predict(samples, responses);
                                                 @ByVal UMat samples, @ByVal UMat responses);
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
                                                 @ByVal GpuMat samples, @ByVal GpuMat responses);
-
-/** \brief Artificial Neural Networks - Multi-Layer Perceptrons.
-<p>
-\sa \ref ml_intro_ann
-*/
-@Namespace("cv::ml") public static class ANN_MLP_ANNEAL extends ANN_MLP {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ANN_MLP_ANNEAL(Pointer p) { super(p); }
-
-    /** @see setAnnealInitialT */
-    public native double getAnnealInitialT();
-    /** \copybrief getAnnealInitialT @see getAnnealInitialT */
-    public native void setAnnealInitialT(double val);
-
-    /** ANNEAL: Update final temperature.
-    It must be \>=0 and less than initialT. Default value is 0.1.*/
-    /** @see setAnnealFinalT */
-    public native double getAnnealFinalT();
-    /** \copybrief getAnnealFinalT @see getAnnealFinalT */
-    public native void setAnnealFinalT(double val);
-
-    /** ANNEAL: Update cooling ratio.
-    It must be \>0 and less than 1. Default value is 0.95.*/
-    /** @see setAnnealCoolingRatio */
-    public native double getAnnealCoolingRatio();
-    /** \copybrief getAnnealCoolingRatio @see getAnnealCoolingRatio */
-    public native void setAnnealCoolingRatio(double val);
-
-    /** ANNEAL: Update iteration per step.
-    It must be \>0 . Default value is 10.*/
-    /** @see setAnnealItePerStep */
-    public native int getAnnealItePerStep();
-    /** \copybrief getAnnealItePerStep @see getAnnealItePerStep */
-    public native void setAnnealItePerStep(int val);
-
-    /** \brief Set/initialize anneal RNG */
-    public native void setAnnealEnergyRNG(@Const @ByRef RNG rng);
-}
 
 
 /****************************************************************************************\

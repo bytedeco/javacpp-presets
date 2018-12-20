@@ -79,6 +79,9 @@ public class opencv_ximgproc extends org.bytedeco.javacpp.presets.opencv_ximgpro
 // #include "ximgproc/fourier_descriptors.hpp"
 // #include "ximgproc/ridgefilter.hpp"
 // #include "ximgproc/brightedges.hpp"
+// #include "ximgproc/run_length_morphology.hpp"
+// #include "ximgproc/edgepreserving_filter.hpp"
+// #include "ximgproc/color_match.hpp"
 
 
 /** \defgroup ximgproc Extended Image Processing
@@ -99,6 +102,26 @@ i.e. algorithms which somehow takes into account pixel affinities in natural ima
     \defgroup ximgproc_fast_line_detector Fast line detector
     <p>
     \defgroup ximgproc_fourier Fourier descriptors
+    <p>
+    \defgroup ximgproc_run_length_morphology Binary morphology on run-length encoded image
+    <p>
+    These functions support morphological operations on binary images. In order to be fast and space efficient binary images are encoded with a run-length representation.
+    This representation groups continuous horizontal sequences of "on" pixels together in a "run". A run is charactarized by the column position of the first pixel in the run, the column
+    position of the last pixel in the run and the row position. This representation is very compact for binary images which contain large continuous areas of "on" and "off" pixels. A checkerboard
+    pattern would be a good example. The representation is not so suitable for binary images created from random noise images or other images where little correlation between neighboring pixels
+    exists.
+    <p>
+    The morphological operations supported here are very similar to the operations supported in the imgproc module. In general they are fast. However on several occasions they are slower than the functions
+    from imgproc. The structuring elements of cv::MORPH_RECT and cv::MORPH_CROSS have very good support from the imgproc module. Also small structuring elements are very fast in imgproc (presumably
+    due to opencl support). Therefore the functions from this module are recommended for larger structuring elements (cv::MORPH_ELLIPSE or self defined structuring elements). A sample application
+    (run_length_morphology_demo) is supplied which allows to compare the speed of some morphological operations for the functions using run-length encoding and the imgproc functions for a given image.
+    <p>
+    Run length encoded images are stored in standard opencv images. Images have a single column of cv::Point3i elements. The number of rows is the number of run + 1. The first row contains
+    the size of the original (not encoded) image.  For the runs the following mapping is used (x: column begin, y: column end (last column), z: row).
+    <p>
+    The size of the original image is required for compatiblity with the imgproc functions when the boundary handling requires that pixel outside the image boundary are
+    "on".
+    <p>
     \}
 */
 
@@ -648,6 +671,94 @@ proportional to sigmaSpace .
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+/** \brief Interface for implementations of Fast Bilateral Solver.
+<p>
+For more details about this solver see \cite BarronPoole2016 .
+*/
+@Namespace("cv::ximgproc") public static class FastBilateralSolverFilter extends Algorithm {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FastBilateralSolverFilter(Pointer p) { super(p); }
+
+    /** \brief Apply smoothing operation to the source image.
+    <p>
+    @param src source image for filtering with unsigned 8-bit or signed 16-bit or floating-point 32-bit depth and up to 3 channels.
+    <p>
+    @param confidence confidence image with unsigned 8-bit or floating-point 32-bit confidence and 1 channel.
+    <p>
+    @param dst destination image.
+    <p>
+    \note Confidence images with CV_8U depth are expected to in [0, 255] and CV_32F in [0, 1] range.
+    */
+    public native void filter(@ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst);
+    public native void filter(@ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst);
+    public native void filter(@ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst);
+}
+
+/** \brief Factory method, create instance of FastBilateralSolverFilter and execute the initialization routines.
+<p>
+@param guide image serving as guide for filtering. It should have 8-bit depth and either 1 or 3 channels.
+<p>
+@param sigma_spatial parameter, that is similar to spatial space sigma (bandwidth) in bilateralFilter.
+<p>
+@param sigma_luma parameter, that is similar to luma space sigma (bandwidth) in bilateralFilter.
+<p>
+@param sigma_chroma parameter, that is similar to chroma space sigma (bandwidth) in bilateralFilter.
+<p>
+@param lambda smoothness strength parameter for solver.
+<p>
+@param num_iter number of iterations used for solver, 25 is usually enough.
+<p>
+@param max_tol convergence tolerance used for solver.
+<p>
+For more details about the Fast Bilateral Solver parameters, see the original paper \cite BarronPoole2016.
+<p>
+*/
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal Mat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal UMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal UMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal GpuMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native @Ptr FastBilateralSolverFilter createFastBilateralSolverFilter(@ByVal GpuMat guide, double sigma_spatial, double sigma_luma, double sigma_chroma);
+
+
+
+/** \brief Simple one-line Fast Bilateral Solver filter call. If you have multiple images to filter with the same
+guide then use FastBilateralSolverFilter interface to avoid extra computations.
+<p>
+@param guide image serving as guide for filtering. It should have 8-bit depth and either 1 or 3 channels.
+<p>
+@param src source image for filtering with unsigned 8-bit or signed 16-bit or floating-point 32-bit depth and up to 4 channels.
+<p>
+@param confidence confidence image with unsigned 8-bit or floating-point 32-bit confidence and 1 channel.
+<p>
+@param dst destination image.
+<p>
+@param sigma_spatial parameter, that is similar to spatial space sigma (bandwidth) in bilateralFilter.
+<p>
+@param sigma_luma parameter, that is similar to luma space sigma (bandwidth) in bilateralFilter.
+<p>
+@param sigma_chroma parameter, that is similar to chroma space sigma (bandwidth) in bilateralFilter.
+<p>
+@param lambda smoothness strength parameter for solver.
+<p>
+@param num_iter number of iterations used for solver, 25 is usually enough.
+<p>
+@param max_tol convergence tolerance used for solver.
+<p>
+For more details about the Fast Bilateral Solver parameters, see the original paper \cite BarronPoole2016.
+<p>
+\note Confidence images with CV_8U depth are expected to in [0, 255] and CV_32F in [0, 1] range.
+*/
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat confidence, @ByVal Mat dst);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat confidence, @ByVal UMat dst);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst, double sigma_spatial/*=8*/, double sigma_luma/*=8*/, double sigma_chroma/*=8*/, double lambda/*=128.0*/, int num_iter/*=25*/, double max_tol/*=1e-5*/);
+@Namespace("cv::ximgproc") public static native void fastBilateralSolverFilter(@ByVal GpuMat guide, @ByVal GpuMat src, @ByVal GpuMat confidence, @ByVal GpuMat dst);
+
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 
 /** \brief Interface for implementations of Fast Global Smoother filter.
 <p>
@@ -2118,7 +2229,7 @@ and the number of elements in the estimated covariance matrix.
 /** \addtogroup ximgproc_superpixel
  *  \{ */
 
-    /** enum cv::ximgproc::SLIC */
+    /** enum cv::ximgproc::SLICType */
     public static final int SLIC = 100, SLICO = 101, MSLIC = 102;
 
 /** \brief Class implementing the SLIC (Simple Linear Iterative Clustering) superpixels

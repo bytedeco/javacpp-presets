@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2016 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -92,8 +92,8 @@ import static org.bytedeco.javacpp.opencv_core.cvCreateSparseMat;
 import static org.bytedeco.javacpp.opencv_core.cvGet2D;
 import static org.bytedeco.javacpp.opencv_core.cvGetImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetMat;
-import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
-import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.cvOpenFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.cvReleaseFileStorage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseGraphScanner;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImageHeader;
@@ -338,6 +338,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractIplImage extends CvArr {
+        protected BytePointer pointer; // a reference to prevent deallocation
+
         public AbstractIplImage(Pointer p) { super(p); }
 
         /**
@@ -423,6 +425,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
 
         /**
+         * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
+        public static IplImage create(int width, int height, int depth, int channels, Pointer data) {
+            IplImage i = createHeader(width, height, depth, channels);
+            i.imageData(i.pointer = new BytePointer(data));
+            return i;
+        }
+
+        /**
          * Creates an IplImage based on another IplImage.
          * @return IplImage created. Do not call cvReleaseImage() on it.
          */
@@ -499,6 +511,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvMat extends CvArr {
+        protected BytePointer pointer; // a reference to prevent deallocation
+
         public AbstractCvMat(Pointer p) { super(p); }
 
         /**
@@ -553,6 +567,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
          */
         public static CvMat createHeader(int rows, int cols) {
             return createHeader(rows, cols, CV_64F, 1);
+        }
+
+        /**
+         * Calls createHeader(), and initializes data, keeping a reference to prevent deallocation.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
+        public static CvMat create(int rows, int cols, int depth, int channels, Pointer data) {
+            CvMat m = createHeader(rows, cols, depth, channels);
+            m.data_ptr(m.pointer = new BytePointer(data));
+            return m;
         }
 
         public static ThreadLocal<CvMat> createThreadLocal(final int rows, final int cols, final int type) {
@@ -1696,39 +1720,39 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvFileStorage extends Pointer {
-        public AbstractCvFileStorage(Pointer p) { super(p); }
-
-        /**
-         * Calls cvOpenFileStorage(), and registers a deallocator. Uses default encoding.
-         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
-         */
-        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags) {
-            return open(filename, memstorage, flags, null);
-        }
-        /**
-         * Calls cvOpenFileStorage(), and registers a deallocator.
-         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
-         */
-        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags, String encoding) {
-            CvFileStorage f = cvOpenFileStorage(filename, memstorage, flags, encoding);
-            if (f != null) {
-                f.deallocator(new ReleaseDeallocator(f));
-            }
-            return f;
-        }
-
-        /**
-         * Calls the deallocator, if registered, otherwise has no effect.
-         */
-        public void release() {
-            deallocate();
-        }
-        protected static class ReleaseDeallocator extends CvFileStorage implements Deallocator {
-            ReleaseDeallocator(CvFileStorage p) { super(p); }
-            @Override public void deallocate() { cvReleaseFileStorage(this); }
-        }
-    }
+//    public static abstract class AbstractCvFileStorage extends Pointer {
+//        public AbstractCvFileStorage(Pointer p) { super(p); }
+//
+//        /**
+//         * Calls cvOpenFileStorage(), and registers a deallocator. Uses default encoding.
+//         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+//         */
+//        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags) {
+//            return open(filename, memstorage, flags, null);
+//        }
+//        /**
+//         * Calls cvOpenFileStorage(), and registers a deallocator.
+//         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+//         */
+//        public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags, String encoding) {
+//            CvFileStorage f = cvOpenFileStorage(filename, memstorage, flags, encoding);
+//            if (f != null) {
+//                f.deallocator(new ReleaseDeallocator(f));
+//            }
+//            return f;
+//        }
+//
+//        /**
+//         * Calls the deallocator, if registered, otherwise has no effect.
+//         */
+//        public void release() {
+//            deallocate();
+//        }
+//        protected static class ReleaseDeallocator extends CvFileStorage implements Deallocator {
+//            ReleaseDeallocator(CvFileStorage p) { super(p); }
+//            @Override public void deallocate() { cvReleaseFileStorage(this); }
+//        }
+//    }
 
     public static abstract class AbstractCvGraphScanner extends Pointer {
         public AbstractCvGraphScanner(Pointer p) { super(p); }
@@ -1804,6 +1828,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public abstract BytePointer data();
         public abstract int size(int i);
         public abstract int step(int i);
+        public abstract int dims();
+        public abstract long elemSize1();
 
         @Override public int arrayChannels() { return channels(); }
         @Override public int arrayDepth() {
@@ -1829,6 +1855,46 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public int arrayStep() { return step(0); }
 
         public static final Mat EMPTY = null;
+
+        @Override public <I extends Indexer> I createIndexer(boolean direct) {
+            BytePointer ptr = arrayData();
+            int size = arraySize();
+            int dims = dims();
+            int depth = depth();
+            long elemSize = elemSize1();
+
+            long[] sizes = new long[dims+1];
+            long[] strides = new long[dims+1];
+
+            for (int i=0; i<dims; i++) {
+                sizes[i] = size(i);
+                int step = step(i);
+                if (step%elemSize != 0) {
+                    throw new UnsupportedOperationException("Step is not a multiple of element size");
+                }
+                strides[i] = step/elemSize;
+            }
+            sizes[dims] = arrayChannels();
+            strides[dims] = 1;
+            switch (depth) {
+                case CV_8U:
+                    return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                case CV_8S:
+                    return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                case CV_16U:
+                    return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                case CV_16S:
+                    return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                case CV_32S:
+                    return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
+                case CV_32F:
+                    return (I)FloatIndexer.create(new FloatPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
+                case CV_64F:
+                    return (I)DoubleIndexer.create(new DoublePointer(ptr).capacity(size/8), sizes, strides, direct).indexable(this);
+                default: assert false;
+            }
+            return null;
+        }
     }
 
     public static abstract class AbstractScalar extends DoublePointer {

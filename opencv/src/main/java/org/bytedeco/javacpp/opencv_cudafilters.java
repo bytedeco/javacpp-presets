@@ -120,7 +120,7 @@ center.
 <p>
 \sa boxFilter
  */
-@Namespace("cv::cuda") public static native @Ptr Filter createBoxFilter(int srcType, int dstType, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+@Namespace("cv::cuda") public static native @Ptr Filter createBoxFilter(int srcType, int dstType, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                        int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createBoxFilter(int srcType, int dstType, @ByVal Size ksize);
 
@@ -139,13 +139,13 @@ center.
 <p>
 \sa filter2D
  */
-@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                           int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal Mat kernel);
-@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal UMat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal UMat kernel, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                           int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal UMat kernel);
-@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal GpuMat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
+@Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal GpuMat kernel, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
                                           int borderMode/*=cv::BORDER_DEFAULT*/, @ByVal(nullValue = "cv::Scalar::all(0)") Scalar borderVal);
 @Namespace("cv::cuda") public static native @Ptr Filter createLinearFilter(int srcType, int dstType, @ByVal GpuMat kernel);
 

@@ -161,6 +161,8 @@ cp SENet-master/src/caffe/layers/axpy_layer.* caffe-$CAFFE_VERSION/src/caffe/lay
 
 cd caffe-$CAFFE_VERSION
 patch -Np1 < ../../../caffe-nogpu.patch
+sedinplace 's/CV_LOAD_IMAGE_GRAYSCALE/cv::IMREAD_GRAYSCALE/g' src/caffe/util/io.cpp src/caffe/layers/window_data_layer.cpp
+sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' src/caffe/util/io.cpp src/caffe/layers/window_data_layer.cpp
 cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include -I$HDF5_PATH/include -std=c++11"

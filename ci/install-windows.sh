@@ -51,7 +51,7 @@ fi
 
 echo Perform download files out of main repo
 cd ..
-if [ "$PROJ" == "flycapture" ]; then
+if [[ "$PROJ" =~ flycapture ]]; then
        echo Flycapture install
        if [ "$OS" == "windows-x86_64" ]; then
            if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
@@ -61,7 +61,8 @@ if [ "$PROJ" == "flycapture" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
            fi
            unzip /c/Downloads/pgr.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
@@ -70,13 +71,14 @@ if [ "$PROJ" == "flycapture" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
            fi
            unzip /c/Downloads/pgr32.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        fi
        echo "Finished flycapture install"
 fi
 
-if [ "$PROJ" == "spinnaker" ]; then
-       echo Flycapture install
+if [[ "$PROJ" =~ spinnaker ]]; then
+       echo Spinnaker install
        if [ "$OS" == "windows-x86_64" ]; then
            if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
@@ -85,7 +87,8 @@ if [ "$PROJ" == "spinnaker" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
            fi
            unzip /c/Downloads/spinnaker.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
@@ -94,14 +97,15 @@ if [ "$PROJ" == "spinnaker" ]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
            fi
            unzip /c/Downloads/spinnaker.zip
-           mv Point\ Grey\ Research /c/Program\ Files
+           mkdir -p /c/Program\ Files/Point\ Grey\ Research
+           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
        fi
        echo "Finished spinnaker install"
 fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13558/w_mkl_2019.0.117.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14893/w_mkl_2019.1.144.exe"
        ./mkl.exe --s --x --f .
        ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -112,10 +116,10 @@ fi
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_10.0.130_411.31_windows.exe "https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_411.31_windows"
-       curl -L -o cudnn-10.0-windows7-x64-v7.3.0.29.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.3.0/cudnn-10.0-windows7-x64-v7.3.0.29.zip"
+       curl -L -o cudnn-10.0-windows7-x64-v7.4.1.5.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.4.1/cudnn-10.0-windows7-x64-v7.4.1.5.zip"
        ./cuda_10.0.130_411.31_windows.exe -s
        sleep 60
-       unzip ./cudnn-10.0-windows7-x64-v7.3.0.29.zip
+       unzip ./cudnn-10.0-windows7-x64-v7.4.1.5.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/lib/x64
@@ -174,6 +178,10 @@ rm -Rf /c/go*
 rm -Rf /c/qt*
 rm -Rf /c/ruby*
 rm -Rf /c/cygwin*
+rm -Rf /c/miniconda*
+rm -Rf /c/libraries/llvm*
+rm -Rf "/c/Program Files/LLVM*"
+rm -Rf "/c/Program Files (x86)/Microsoft DirectX SDK*"
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason

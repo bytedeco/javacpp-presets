@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tensorflow-platform</artifactId>
-  <version>1.12.0-rc2-${project.parent.version}</version>
+  <version>1.12.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for TensorFlow</name>
 
   <properties>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.16-${project.parent.version}</version>
+      <version>0.17.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

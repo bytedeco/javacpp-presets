@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.3
+OPENBLAS_VERSION=0.3.4
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -33,29 +33,27 @@ case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-android.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
-        export CFLAGS="$ANDROID_FLAGS"
-        export CC="$ANDROID_BIN-gcc $CFLAGS"
-        export FC="$ANDROID_BIN-gfortran $CFLAGS"
-        export CROSS_SUFFIX="$ANDROID_BIN-"
-        export LDFLAGS="-Wl,--fix-cortex-a8 -Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
-        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
+        export CROSS_SUFFIX="$ANDROID_PREFIX-"
+        export LDFLAGS="-ldl -lm -lc"
+        if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
             export NO_LAPACK=1
             export NOFORTRAN=1
         fi
         export BINARY=32
         export TARGET=ARMV5 # to disable hard-float functions unsupported by Android
         export ARM_SOFTFP_ABI=1
-        sed -i 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm
+        sedinplace 's/-march=armv5/-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16/' Makefile.arm ../OpenBLAS-$OPENBLAS_VERSION-nolapack/Makefile.arm
         ;;
     android-arm64)
         patch -Np1 < ../../../OpenBLAS-android.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
-        export CFLAGS="$ANDROID_FLAGS"
-        export CC="$ANDROID_BIN-gcc $CFLAGS"
-        export FC="$ANDROID_BIN-gfortran $CFLAGS"
-        export CROSS_SUFFIX="$ANDROID_BIN-"
-        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
-        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
+        export CROSS_SUFFIX="$ANDROID_PREFIX-"
+        export LDFLAGS="-ldl -lm -lc"
+        if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
             export NO_LAPACK=1
             export NOFORTRAN=1
         fi
@@ -65,12 +63,11 @@ case $PLATFORM in
     android-x86)
         patch -Np1 < ../../../OpenBLAS-android.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
-        export CFLAGS="$ANDROID_FLAGS"
-        export CC="$ANDROID_BIN-gcc $CFLAGS"
-        export FC="$ANDROID_BIN-gfortran $CFLAGS"
-        export CROSS_SUFFIX="$ANDROID_BIN-"
-        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
-        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
+        export CROSS_SUFFIX="$ANDROID_PREFIX-"
+        export LDFLAGS="-ldl -lm -lc"
+        if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
             export NO_LAPACK=1
             export NOFORTRAN=1
         fi
@@ -80,12 +77,11 @@ case $PLATFORM in
     android-x86_64)
         patch -Np1 < ../../../OpenBLAS-android.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-android.patch
-        export CFLAGS="$ANDROID_FLAGS"
-        export CC="$ANDROID_BIN-gcc $CFLAGS"
-        export FC="$ANDROID_BIN-gfortran $CFLAGS"
-        export CROSS_SUFFIX="$ANDROID_BIN-"
-        export LDFLAGS="-Wl,--no-undefined -z text -lgcc -ldl -lz -lm -lc"
-        if [[ ! -x "$ANDROID_BIN-gfortran" ]]; then
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export FC="$ANDROID_PREFIX-gfortran $ANDROID_FLAGS"
+        export CROSS_SUFFIX="$ANDROID_PREFIX-"
+        export LDFLAGS="-ldl -lm -lc"
+        if [[ ! -x "$ANDROID_PREFIX-gfortran" ]]; then
             export NO_LAPACK=1
             export NOFORTRAN=1
         fi
@@ -93,6 +89,8 @@ case $PLATFORM in
         export TARGET=ATOM
         ;;
     ios-arm)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphoneos --find clang) -isysroot $(xcrun --sdk iphoneos --show-sdk-path) -arch armv7 -miphoneos-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -102,6 +100,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-arm64)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         # use generic kernels as Xcode assembler does not accept optimized ones: use Accelerate to optimize
         cp kernel/arm/KERNEL.ARMV5 kernel/arm64/KERNEL.ARMV8
         cp kernel/arm/KERNEL.ARMV5 ../OpenBLAS-$OPENBLAS_VERSION-nolapack/kernel/arm64/KERNEL.ARMV8
@@ -114,6 +114,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch i686 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1
@@ -123,6 +125,8 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     ios-x86_64)
+        patch -Np1 < ../../../OpenBLAS-ios.patch
+        patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-ios.patch
         export CC="$(xcrun --sdk iphonesimulator --find clang) -isysroot $(xcrun --sdk iphonesimulator --show-sdk-path) -arch x86_64 -mios-simulator-version-min=5.0"
         export FC=
         export NO_LAPACK=1

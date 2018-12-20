@@ -112,6 +112,9 @@ public class mklml implements LoadEnabled, InfoMapper {
                              "MKL_Somatcopy2", "MKL_Domatcopy2", "MKL_Comatcopy2", "MKL_Zomatcopy2",
                              "MKL_Somatadd", "MKL_Domatadd", "MKL_Comatadd", "MKL_Zomatadd",
                              "cblas_ctrsm_batch", "cblas_dtrsm_batch", "cblas_strsm_batch", "cblas_ztrsm_batch",
+                             "cblas_sgemm_pack_get_size", "cblas_dgemm_pack_get_size",
+                             "cblas_gemm_s8u8s32_pack_get_size", "cblas_gemm_s8u8s32_pack", "cblas_gemm_s8u8s32_compute",
+                             "cblas_gemm_s16s16s32_pack_get_size", "cblas_gemm_s16s16s32_pack", "cblas_gemm_s16s16s32_compute",
                              "mkl_cblas_jit_create_dgemm", "mkl_cblas_jit_create_sgemm",
                              "mkl_jit_get_dgemm_ptr", "mkl_jit_get_sgemm_ptr", "mkl_jit_destroy").skip())
 

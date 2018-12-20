@@ -347,6 +347,27 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #endif /* OPENCV_DNN_HPP */
 
 
+// Parsed from <opencv2/dnn/version.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+// #ifndef OPENCV_DNN_VERSION_HPP
+// #define OPENCV_DNN_VERSION_HPP
+
+/** Use with major OpenCV version only. */
+public static final int OPENCV_DNN_API_VERSION = 20180917;
+
+// #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_INLINE_NS
+// #else
+// #define CV__DNN_INLINE_NS_BEGIN
+// #define CV__DNN_INLINE_NS_END
+// #endif
+
+// #endif  // OPENCV_DNN_VERSION_HPP
+
+
 // Parsed from <opencv2/dnn/dict.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -398,6 +419,12 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 
 // #ifndef OPENCV_DNN_DNN_DICT_HPP
 // #define OPENCV_DNN_DNN_DICT_HPP
+/** \addtogroup dnn
+ *  \{
+<p>
+/** \brief This struct stores the scalar value (or array) of one of the following type: double, cv::String or int64.
+ *  \todo Maybe int64 is useless because double type exactly stores at least 2^52 integers.
+ */
 @Namespace("cv::dnn") @NoOffset public static class DictValue extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -405,6 +432,9 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 
     public DictValue(@Const @ByRef DictValue r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef DictValue r);
+    /** Constructs integer scalar */
+    public DictValue(@Cast("bool") boolean i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Cast("bool") boolean i);
     /** Constructs integer scalar */
     public DictValue(@Cast("int64") long i/*=0*/) { super((Pointer)null); allocate(i); }
     private native void allocate(@Cast("int64") long i/*=0*/);
@@ -476,6 +506,10 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 
     /** Sets new \p value for the \p key, or adds new key-value pair into the dictionary. */
 
+    /** Erase \p key from the dictionary. */
+    public native void erase(@Str BytePointer key);
+    public native void erase(@Str String key);
+
     
 }
 
@@ -532,11 +566,36 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #ifndef OPENCV_DNN_DNN_ALL_LAYERS_HPP
 // #define OPENCV_DNN_DNN_ALL_LAYERS_HPP
 // #include <opencv2/dnn.hpp>
-@Namespace("cv::dnn") public static class BlankLayer extends Layer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public BlankLayer(Pointer p) { super(p); }
+/** \addtogroup dnn
+ *  \{
+<p>
+/** \defgroup dnnLayerList Partial List of Implemented Layers
+  \{
+  This subsection of dnn module contains information about built-in layers and their descriptions.
+  <p>
+  Classes listed here, in fact, provides C++ API for creating instances of built-in layers.
+  In addition to this way of layers instantiation, there is a more common factory API (see \ref dnnLayerFactory), it allows to create layers dynamically (by name) and register new ones.
+  You can use both API, but factory API is less convenient for native C++ programming and basically designed for use inside importers (see \ref readNetFromCaffe(), \ref readNetFromTorch(), \ref readNetFromTensorflow()).
+  <p>
+  Built-in layers partially reproduce functionality of corresponding Caffe and Torch7 layers.
+  In particular, the following layers and Caffe importer were tested to reproduce <a href="http://caffe.berkeleyvision.org/tutorial/layers.html">Caffe</a> functionality:
+  - Convolution
+  - Deconvolution
+  - Pooling
+  - InnerProduct
+  - TanH, ReLU, Sigmoid, BNLL, Power, AbsVal
+  - Softmax
+  - Reshape, Flatten, Slice, Split
+  - LRN
+  - MVN
+  - Dropout (since it does nothing on forward pass -))
+*/
 
+    @Namespace("cv::dnn") public static class BlankLayer extends Layer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public BlankLayer(Pointer p) { super(p); }
+    
         public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
 
@@ -620,10 +679,10 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
          * (i.e. @f$ x_{t}^{stream} @f$ is stored inside @p input[0][stream, ...]).
         */
 
-        public native int inputNameToIndex(@Str BytePointer inputName);
-        public native int inputNameToIndex(@Str String inputName);
-        public native int outputNameToIndex(@Str BytePointer outputName);
-        public native int outputNameToIndex(@Str String outputName);
+        public native @Override int inputNameToIndex(@Str BytePointer inputName);
+        public native @Override int inputNameToIndex(@Str String inputName);
+        public native @Override int outputNameToIndex(@Str BytePointer outputName);
+        public native @Override int outputNameToIndex(@Str String outputName);
     }
 
     /** \brief Classical recurrent layer
@@ -725,7 +784,11 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         public native @Name("type") int poolingType(); public native PoolingLayer poolingType(int poolingType);
         public native @ByRef Size kernel(); public native PoolingLayer kernel(Size kernel);
         public native @ByRef Size stride(); public native PoolingLayer stride(Size stride);
-        public native @ByRef Size pad(); public native PoolingLayer pad(Size pad);
+        public native int pad_l(); public native PoolingLayer pad_l(int pad_l);
+        public native int pad_t(); public native PoolingLayer pad_t(int pad_t);
+        public native int pad_r(); public native PoolingLayer pad_r(int pad_r);
+        public native int pad_b(); public native PoolingLayer pad_b(int pad_b);
+        public native @Deprecated @ByRef Size pad(); public native PoolingLayer pad(Size pad);
         public native @Cast("bool") boolean globalPooling(); public native PoolingLayer globalPooling(boolean globalPooling);
         public native @Cast("bool") boolean computeMaxIdx(); public native PoolingLayer computeMaxIdx(boolean computeMaxIdx);
         public native @Str BytePointer padMode(); public native PoolingLayer padMode(BytePointer padMode);
@@ -1245,14 +1308,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #include <vector>
 // #include <opencv2/core.hpp>
 
-// #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_EXPERIMENTAL_NS
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN namespace experimental_dnn_34_v7 {
-// #define CV__DNN_EXPERIMENTAL_NS_END }
- 
-// #else
-// #define CV__DNN_EXPERIMENTAL_NS_BEGIN
-// #define CV__DNN_EXPERIMENTAL_NS_END
-// #endif
+// #include "../dnn/version.hpp"
 
 // #include <opencv2/dnn/dict.hpp>
 /** \addtogroup dnn
@@ -1270,7 +1326,8 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         DNN_BACKEND_DEFAULT = 0,
         DNN_BACKEND_HALIDE = 1,
         DNN_BACKEND_INFERENCE_ENGINE = 2,
-        DNN_BACKEND_OPENCV = 3;
+        DNN_BACKEND_OPENCV = 3,
+        DNN_BACKEND_VKCOM = 4;
 
     /**
      * \brief Enum of target devices for computations.
@@ -1281,7 +1338,8 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         DNN_TARGET_CPU = 0,
         DNN_TARGET_OPENCL = 1,
         DNN_TARGET_OPENCL_FP16 = 2,
-        DNN_TARGET_MYRIAD = 3;
+        DNN_TARGET_MYRIAD = 3,
+        DNN_TARGET_VULKAN = 4;
 
     /** \brief This class provides all data needed to initialize layer.
      *
@@ -1380,26 +1438,45 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Layer(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Layer(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Layer position(long position) {
+            return (Layer)super.position(position);
+        }
     
 
         /** List of learned parameters must be stored here to allow read them by using Net::getParam(). */
         public native @ByRef MatVector blobs(); public native Layer blobs(MatVector blobs);
 
         /** \brief Computes and sets internal parameters according to inputs, outputs and blobs.
+         *  @deprecated Use Layer::finalize(InputArrayOfArrays, OutputArrayOfArrays) instead
          *  @param [in]  input  vector of already allocated input blobs
          *  @param [out] output vector of already allocated output blobs
          *
          * If this method is called after network has allocated all memory for input and output blobs
          * and before inferencing.
          */
-        public native void finalize(@Const @ByRef MatPointerVector input, @ByRef MatVector output);
+        public native @Deprecated void finalize(@Const @ByRef MatPointerVector input, @ByRef MatVector output);
+
+        /** \brief Computes and sets internal parameters according to inputs, outputs and blobs.
+         *  @param [in]  inputs  vector of already allocated input blobs
+         *  @param [out] outputs vector of already allocated output blobs
+         *
+         * If this method is called after network has allocated all memory for input and output blobs
+         * and before inferencing.
+         */
+        public native void finalize(@ByVal MatVector inputs, @ByVal MatVector outputs);
+        public native void finalize(@ByVal UMatVector inputs, @ByVal UMatVector outputs);
+        public native void finalize(@ByVal GpuMatVector inputs, @ByVal GpuMatVector outputs);
 
         /** \brief Given the \p input blobs, computes the output \p blobs.
+         *  @deprecated Use Layer::forward(InputArrayOfArrays, OutputArrayOfArrays, OutputArrayOfArrays) instead
          *  @param [in]  input  the input blobs.
          *  @param [out] output allocated output blobs, which will store results of the computation.
          *  @param [out] internals allocated internal blobs
          */
-        public native void forward(@ByRef MatPointerVector input, @ByRef MatVector output, @ByRef MatVector internals);
+        public native @Deprecated void forward(@ByRef MatPointerVector input, @ByRef MatVector output, @ByRef MatVector internals);
 
         /** \brief Given the \p input blobs, computes the output \p blobs.
          *  @param [in]  inputs  the input blobs.
@@ -1419,15 +1496,22 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         public native void forward_fallback(@ByVal UMatVector inputs, @ByVal UMatVector outputs, @ByVal UMatVector internals);
         public native void forward_fallback(@ByVal GpuMatVector inputs, @ByVal GpuMatVector outputs, @ByVal GpuMatVector internals);
 
-        /** \brief \overload */
-        public native void finalize(@Const @ByRef MatVector inputs, @ByRef MatVector outputs);
+        /** \brief
+         * \overload
+         * @deprecated Use Layer::finalize(InputArrayOfArrays, OutputArrayOfArrays) instead
+         */
 
-        /** \brief \overload */
-        public native @ByVal MatVector finalize(@Const @ByRef MatVector inputs);
+        /** \brief
+         * \overload
+         * @deprecated Use Layer::finalize(InputArrayOfArrays, OutputArrayOfArrays) instead
+         */
+        public native @Deprecated @ByVal MatVector finalize(@Const @ByRef MatVector inputs);
 
-        /** \brief Allocates layer and computes output. */
-        public native void run(@Const @ByRef MatVector inputs, @ByRef MatVector outputs,
-                                 @ByRef MatVector internals);
+        /** \brief Allocates layer and computes output.
+         *  @deprecated This method will be removed in the future release.
+         */
+        public native @Deprecated void run(@Const @ByRef MatVector inputs, @ByRef MatVector outputs,
+                                               @ByRef MatVector internals);
 
         /** \brief Returns index of input blob into the input array.
          *  @param inputName label of input blob
@@ -1460,7 +1544,6 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
          * it helps prevent some memory management issues (if something wrong,
          * Halide tests will be failed).
          */
-
        /**
         * \brief Automatic Halide scheduling based on layer hyper-parameters.
         * @param [in] node Backend node with Halide functions.
@@ -1536,6 +1619,12 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         public native @Str BytePointer type(); public native Layer type(BytePointer type);
         /** prefer target for layer forwarding */
         public native int preferableTarget(); public native Layer preferableTarget(int preferableTarget);
+
+        public Layer() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        /** Initializes only #name, #type and #blobs fields. */
+        public Layer(@Const @ByRef LayerParams params) { super((Pointer)null); allocate(params); }
+        private native void allocate(@Const @ByRef LayerParams params);
         /** Initializes only #name, #type and #blobs fields. */
         public native void setParamsFrom(@Const @ByRef LayerParams params);
     }
@@ -1606,9 +1695,6 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         public native @Ptr Layer getLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layerId);
 
         /** \brief Returns pointers to input layers of specific layer. */ // FIXIT: CV_WRAP
-
-        /** \brief Delete layer for the network (not implemented yet) */
-        public native void deleteLayer(@ByVal @Cast("cv::dnn::Net::LayerId*") DictValue layer);
 
         /** \brief Connects output of the first layer to input of the second layer.
          *  @param outPin descriptor of the first layer output.
@@ -1770,6 +1856,11 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
         /** \brief Returns indexes of layers with unconnected outputs.
          */
         public native @StdVector IntPointer getUnconnectedOutLayers();
+
+        /** \brief Returns names of layers with unconnected outputs.
+         */
+        public native @ByVal StringVector getUnconnectedOutLayersNames();
+
         /** \brief Returns input and output shapes for all layers in loaded model;
          *  preliminary inferencing isn't necessary.
          *  @param netInputShapes shapes for all input blobs in net input layer.
@@ -2137,6 +2228,20 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str BytePointer xml, @Str BytePointer bin);
     @Namespace("cv::dnn") public static native @ByVal Net readNetFromModelOptimizer(@Str String xml, @Str String bin);
 
+    /** \brief Reads a network model <a href="https://onnx.ai/">ONNX</a>.
+     *  @param onnxFile path to the .onnx file with text description of the network architecture.
+     *  @return Network object that ready to do forward, throw an exception in failure cases.
+     */
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromONNX(@Str BytePointer onnxFile);
+    @Namespace("cv::dnn") public static native @ByVal Net readNetFromONNX(@Str String onnxFile);
+
+    /** \brief Creates blob from .pb file.
+     *  @param path to the .pb file with input tensor.
+     *  @return Mat.
+     */
+    @Namespace("cv::dnn") public static native @ByVal Mat readTensorFromONNX(@Str BytePointer path);
+    @Namespace("cv::dnn") public static native @ByVal Mat readTensorFromONNX(@Str String path);
+
     /** \brief Creates 4-dimensional blob from image. Optionally resizes and crops \p image from center,
      *  subtract \p mean values, scales values by \p scalefactor, swap Blue and Red channels.
      *  @param image input image (with 1-, 3- or 4-channels).
@@ -2154,15 +2259,15 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
      *  @return 4-dimensional Mat with NCHW dimensions order.
      */
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal Mat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal Mat image);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal UMat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal UMat image);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image, double scalefactor/*=1.0*/, @Const @ByRef(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImage(@ByVal GpuMat image);
 
@@ -2172,15 +2277,15 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
      */
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal Mat image, @ByVal Mat blob, double scalefactor/*=1.0*/,
                                       @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
-                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/, int ddepth/*=CV_32F*/);
+                                      @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/, int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal Mat image, @ByVal Mat blob);
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal UMat image, @ByVal UMat blob, double scalefactor/*=1.0*/,
                                       @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
-                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/, int ddepth/*=CV_32F*/);
+                                      @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/, int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal UMat image, @ByVal UMat blob);
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal GpuMat image, @ByVal GpuMat blob, double scalefactor/*=1.0*/,
                                       @Const @ByRef(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean,
-                                      @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/, int ddepth/*=CV_32F*/);
+                                      @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/, int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImage(@ByVal GpuMat image, @ByVal GpuMat blob);
 
 
@@ -2202,15 +2307,15 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
      *  @return 4-dimensional Mat with NCHW dimensions order.
      */
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal MatVector images, double scalefactor/*=1.0*/,
-                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                         int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal MatVector images);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal UMatVector images, double scalefactor/*=1.0*/,
-                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                         int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal UMatVector images);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal GpuMatVector images, double scalefactor/*=1.0*/,
-                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                        @ByVal(nullValue = "cv::Size()") Size size, @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                         int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native @ByVal Mat blobFromImages(@ByVal GpuMatVector images);
 
@@ -2220,47 +2325,47 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
      */
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal Mat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal Mat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal Mat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal Mat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal Mat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal Mat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal UMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal UMat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal UMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal UMat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal UMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal UMat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal GpuMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal MatVector images, @ByVal GpuMat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal GpuMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal UMatVector images, @ByVal GpuMat blob);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal GpuMat blob,
                                        double scalefactor/*=1.0*/, @ByVal(nullValue = "cv::Size()") Size size,
-                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=true*/, @Cast("bool") boolean crop/*=true*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar mean, @Cast("bool") boolean swapRB/*=false*/, @Cast("bool") boolean crop/*=false*/,
                                        int ddepth/*=CV_32F*/);
     @Namespace("cv::dnn") public static native void blobFromImages(@ByVal GpuMatVector images, @ByVal GpuMat blob);
 
@@ -2296,6 +2401,15 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
                                            @Const @ByRef(nullValue = "std::vector<cv::String>()") StringVector layersTypes);
     @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str String src, @Str String dst);
 
+    /** \brief Create a text representation for a binary network stored in protocol buffer format.
+     *  @param [in] model  A path to binary network.
+     *  @param [in] output A path to output text file to be created.
+     *
+     *  \note To reduce output file size, trained weights are not included.
+     */
+    @Namespace("cv::dnn") public static native void writeTextGraph(@Str BytePointer model, @Str BytePointer output);
+    @Namespace("cv::dnn") public static native void writeTextGraph(@Str String model, @Str String output);
+
     /** \brief Performs non maximum suppression given boxes and corresponding scores.
      <p>
      * @param bboxes a set of bounding boxes to apply NMS.
@@ -2328,6 +2442,28 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
                                    float score_threshold, float nms_threshold,
                                    @StdVector int[] indices);
 
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector FloatPointer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntPointer indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector FloatPointer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntPointer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector FloatBuffer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntBuffer indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector FloatBuffer scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector IntBuffer indices);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector float[] scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector int[] indices,
+                                   float eta/*=1.f*/, int top_k/*=0*/);
+    @Namespace("cv::dnn") public static native void NMSBoxes(@Const @ByRef Rect2dVector bboxes, @StdVector float[] scores,
+                                   float score_threshold, float nms_threshold,
+                                   @StdVector int[] indices);
+
     @Namespace("cv::dnn") public static native @Name("NMSBoxes") void NMSBoxesRotated(@StdVector RotatedRect bboxes, @StdVector FloatPointer scores,
                                  float score_threshold, float nms_threshold,
                                  @StdVector IntPointer indices,
@@ -2349,6 +2485,13 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
     @Namespace("cv::dnn") public static native @Name("NMSBoxes") void NMSBoxesRotated(@StdVector RotatedRect bboxes, @StdVector float[] scores,
                                  float score_threshold, float nms_threshold,
                                  @StdVector int[] indices);
+
+    /** \brief Release a Myriad device is binded by OpenCV.
+     *
+     * Single Myriad device cannot be shared across multiple processes which uses
+     * Inference Engine's Myriad plugin.
+     */
+    @Namespace("cv::dnn") public static native void resetMyriadDevice();
 
 /** \} */
 

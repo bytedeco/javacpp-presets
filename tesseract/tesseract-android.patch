@@ -1,7 +1,7 @@
-diff -ruN tesseract-4.0.0-rc2/src/api/baseapi.cpp tesseract-4.0.0-rc2-android/src/api/baseapi.cpp
---- tesseract-4.0.0-rc2/src/api/baseapi.cpp	2018-10-08 04:10:50.000000000 +0900
-+++ tesseract-4.0.0-rc2-android/src/api/baseapi.cpp	2018-10-11 19:33:45.672781817 +0900
-@@ -42,6 +42,10 @@
+diff -ruN tesseract-4.0.0/src/api/baseapi.cpp tesseract-4.0.0-android/src/api/baseapi.cpp
+--- tesseract-4.0.0/src/api/baseapi.cpp	2018-12-13 12:44:56.027806562 +0900
++++ tesseract-4.0.0-android/src/api/baseapi.cpp	2018-12-13 12:44:33.916828074 +0900
+@@ -41,6 +41,10 @@
  #include <unistd.h>
  #endif  // _WIN32
  
@@ -12,21 +12,49 @@ diff -ruN tesseract-4.0.0-rc2/src/api/baseapi.cpp tesseract-4.0.0-rc2-android/sr
  #include <clocale>             // for LC_ALL, LC_CTYPE, LC_NUMERIC
  #include <cmath>               // for round, M_PI
  #include <cstdint>             // for int32_t
-diff -ruN tesseract-4.0.0-rc2/src/api/Makefile.am tesseract-4.0.0-rc2-android/src/api/Makefile.am
---- tesseract-4.0.0-rc2/src/api/Makefile.am	2018-10-08 04:10:50.000000000 +0900
-+++ tesseract-4.0.0-rc2-android/src/api/Makefile.am	2018-10-11 19:33:45.672781817 +0900
+diff -ruN tesseract-4.0.0/src/api/Makefile.am tesseract-4.0.0-android/src/api/Makefile.am
+--- tesseract-4.0.0/src/api/Makefile.am	2018-12-13 12:44:56.026806563 +0900
++++ tesseract-4.0.0-android/src/api/Makefile.am	2018-12-13 12:45:59.175749631 +0900
 @@ -58,7 +58,7 @@
      ../ccutil/libtesseract_ccutil.la \
      ../opencl/libtesseract_opencl.la
  
--libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) -no-undefined
-+libtesseract_la_LDFLAGS += -avoid-version -no-undefined
+-libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION) $(NOUNDEFINED)
++libtesseract_la_LDFLAGS += -avoid-version $(NOUNDEFINED)
  
  bin_PROGRAMS = tesseract
  tesseract_SOURCES = tesseractmain.cpp
-diff -ruN tesseract-4.0.0-rc2/src/ccutil/fileio.cpp tesseract-4.0.0-rc2-android/src/ccutil/fileio.cpp
---- tesseract-4.0.0-rc2/src/ccutil/fileio.cpp	2018-10-08 04:10:50.000000000 +0900
-+++ tesseract-4.0.0-rc2-android/src/ccutil/fileio.cpp	2018-10-11 19:34:03.024789315 +0900
+@@ -80,5 +80,5 @@
+ libtesseract_la_LDFLAGS += -no-undefined -Wl,--as-needed -lws2_32
+ endif
+ if ADD_RT
+-tesseract_LDADD += -lrt
++tesseract_LDADD += 
+ endif
+diff -ruN tesseract-4.0.0/src/api/Makefile.in tesseract-4.0.0-android/src/api/Makefile.in
+--- tesseract-4.0.0/src/api/Makefile.in	2018-12-13 12:44:56.026806563 +0900
++++ tesseract-4.0.0-android/src/api/Makefile.in	2018-12-13 12:45:48.410759336 +0900
+@@ -87,7 +87,7 @@
+ @VISIBILITY_TRUE@am__append_4 = -DTESS_IMPORTS
+ @T_WIN_TRUE@am__append_5 = -lws2_32
+ @T_WIN_TRUE@am__append_6 = -no-undefined -Wl,--as-needed -lws2_32
+-@ADD_RT_TRUE@am__append_7 = -lrt
++@ADD_RT_TRUE@am__append_7 = 
+ subdir = src/api
+ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
+ 	$(srcdir)/tess_version.h.in $(top_srcdir)/config/depcomp \
+@@ -397,7 +397,7 @@
+ libtesseract_api_la_CPPFLAGS = $(AM_CPPFLAGS) $(am__append_3)
+ libtesseract_api_la_SOURCES = baseapi.cpp capi.cpp renderer.cpp pdfrenderer.cpp
+ libtesseract_la_LDFLAGS = $(LEPTONICA_LIBS) $(OPENCL_LDFLAGS) \
+-	-version-info $(GENERIC_LIBRARY_VERSION) -no-undefined \
++	-avoid-version -no-undefined \
+ 	$(am__append_6)
+ libtesseract_la_SOURCES = 
+ # Dummy C++ source to cause C++ linking.
+diff -ruN tesseract-4.0.0/src/ccutil/fileio.cpp tesseract-4.0.0-android/src/ccutil/fileio.cpp
+--- tesseract-4.0.0/src/ccutil/fileio.cpp	2018-10-29 17:53:12.000000000 +0900
++++ tesseract-4.0.0-android/src/ccutil/fileio.cpp	2018-12-13 12:44:33.917828073 +0900
 @@ -19,7 +19,6 @@
  #include <io.h>
  #endif
@@ -53,9 +81,9 @@ diff -ruN tesseract-4.0.0-rc2/src/ccutil/fileio.cpp tesseract-4.0.0-rc2-android/
  }
  #endif
  
-diff -ruN tesseract-4.0.0-rc2/src/lstm/lstm.cpp tesseract-4.0.0-rc2-android/src/lstm/lstm.cpp
---- tesseract-4.0.0-rc2/src/lstm/lstm.cpp	2018-10-08 04:10:50.000000000 +0900
-+++ tesseract-4.0.0-rc2-android/src/lstm/lstm.cpp	2018-10-11 19:33:45.673781818 +0900
+diff -ruN tesseract-4.0.0/src/lstm/lstm.cpp tesseract-4.0.0-android/src/lstm/lstm.cpp
+--- tesseract-4.0.0/src/lstm/lstm.cpp	2018-10-29 17:53:12.000000000 +0900
++++ tesseract-4.0.0-android/src/lstm/lstm.cpp	2018-12-13 12:44:33.918828072 +0900
 @@ -33,6 +33,10 @@
  #include "networkscratch.h"
  #include "tprintf.h"
@@ -67,9 +95,9 @@ diff -ruN tesseract-4.0.0-rc2/src/lstm/lstm.cpp tesseract-4.0.0-rc2-android/src/
  // Macros for openmp code if it is available, otherwise empty macros.
  #ifdef _OPENMP
  #define PARALLEL_IF_OPENMP(__num_threads)                                  \
-diff -ruN tesseract-4.0.0-rc2/src/lstm/weightmatrix.cpp tesseract-4.0.0-rc2-android/src/lstm/weightmatrix.cpp
---- tesseract-4.0.0-rc2/src/lstm/weightmatrix.cpp	2018-10-08 04:10:50.000000000 +0900
-+++ tesseract-4.0.0-rc2-android/src/lstm/weightmatrix.cpp	2018-10-11 19:33:45.673781818 +0900
+diff -ruN tesseract-4.0.0/src/lstm/weightmatrix.cpp tesseract-4.0.0-android/src/lstm/weightmatrix.cpp
+--- tesseract-4.0.0/src/lstm/weightmatrix.cpp	2018-10-29 17:53:12.000000000 +0900
++++ tesseract-4.0.0-android/src/lstm/weightmatrix.cpp	2018-12-13 12:44:33.918828072 +0900
 @@ -25,6 +25,10 @@
  #include "statistc.h"
  #include "tprintf.h"
@@ -80,4 +108,4 @@ diff -ruN tesseract-4.0.0-rc2/src/lstm/weightmatrix.cpp tesseract-4.0.0-rc2-andr
 +
  namespace tesseract {
  
- #if (defined(_MSC_VER) && _MSC_VER < 1900) || defined(ANDROID)
+ #if defined(ANDROID)

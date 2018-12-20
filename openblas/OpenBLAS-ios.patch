@@ -1,0 +1,27 @@
+diff -ruN OpenBLAS-0.3.4/driver/level2/gemv_thread.c OpenBLAS-0.3.4-ios/driver/level2/gemv_thread.c
+--- OpenBLAS-0.3.4/driver/level2/gemv_thread.c	2018-12-03 07:41:17.000000000 +0900
++++ OpenBLAS-0.3.4-ios/driver/level2/gemv_thread.c	2018-12-07 09:59:27.952572870 +0900
+@@ -63,23 +63,8 @@
+ #endif
+ 
+ #ifndef thread_local
+-# if __STDC_VERSION__ >= 201112 && !defined __STDC_NO_THREADS__
+-#  define thread_local _Thread_local
+-# elif defined _WIN32 && ( \
+-       defined _MSC_VER || \
+-       defined __ICL || \
+-       defined __DMC__ || \
+-       defined __BORLANDC__ )
+-#  define thread_local __declspec(thread) 
+-/* note that ICC (linux) and Clang are covered by __GNUC__ */
+-# elif defined __GNUC__ || \
+-       defined __SUNPRO_C || \
+-       defined __xlC__
+-#  define thread_local __thread
+-# else
+ # define UNSAFE
+ #endif
+-#endif
+ #if defined USE_OPENMP
+ #undef UNSAFE
+ #endif

@@ -36,60 +36,44 @@ cd gsl-$GSL_VERSION
 export GSL_LDFLAGS="-L$OPENBLAS_PATH/ -L$OPENBLAS_PATH/lib/ -lopenblas"
 case $PLATFORM in
     android-arm)
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LIBS="-ldl -lm -lc"
         patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
         ;;
     android-arm64)
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LIBS="-ldl -lm -lc"
         patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="aarch64-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
         ;;
      android-x86)
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LIBS="-ldl -lm -lc"
         patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
         make install-strip
         ;;
      android-x86_64)
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp"
-        export CC="$ANDROID_BIN-gcc"
-        export STRIP="$ANDROID_BIN-strip"
-        export CPPFLAGS="$ANDROID_FLAGS"
-        export CFLAGS="$ANDROID_FLAGS"
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LIBS="-ldl -lm -lc"
         patch -Np1 < ../../../gsl-android.patch
         ./configure --prefix=$INSTALL_PATH --host="x86_64-linux-android" --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ V=0
