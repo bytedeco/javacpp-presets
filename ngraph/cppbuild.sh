@@ -59,6 +59,12 @@ make install
 
 #mkdir ../../include/onnx
 
+cp -r ../src/ngraph/frontend/onnx_import/core/ ../../include/
+cp -r ../src/ngraph/frontend/onnx_import/utils/ ../../include/
+cp -r ../src/ngraph/frontend/onnx_import/utils/ ../../include/ngraph/frontend/onnx_import/op/
+cp -r ../src/ngraph/frontend/onnx_import/exceptions.hpp ../../include/
+
+
 patch ../../include/ngraph/frontend/onnxifi/backend.hpp ../../../../backend.hpp.patch
 patch ../../include/ngraph/frontend/onnxifi/backend_manager.hpp ../../../../backend_manager.hpp.patch
 #patch ../src/ngraph/descriptor/tensor.hpp ../../../../tensor.hpp.patch
