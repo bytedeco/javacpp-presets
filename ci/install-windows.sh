@@ -54,25 +54,21 @@ cd ..
 if [[ "$PROJ" =~ flycapture ]]; then
        echo Flycapture install
        if [ "$OS" == "windows-x86_64" ]; then
-           if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap in cache and size seems ok"
            else
-             echo "Downloading pgr.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
+             echo "Downloading flycap to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 14QM7W5RHhvZanF1UBobgEIvwdy6VwTht /c/Downloads/FlyCapture_2.13.3.31_x64.msi
            fi
-           unzip /c/Downloads/pgr.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           msiexec //quiet //i c:\\Downloads\\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL
        elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
            else
-             echo "Downloading pgr32.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
+             echo "Downloading flycap32 to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr /c/Downloads/FlyCapture_2.13.3.31_x86.msi
            fi
-           unzip /c/Downloads/pgr32.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           msiexec //quiet //i c:\\Downloads\\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL
        fi
        echo "Finished flycapture install"
 fi
