@@ -79,13 +79,13 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
 
   if [[ "$PROJ" =~ flycapture ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
-        if [[ $(find $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_bionic.tgz -type f -size +1000000c 2>/dev/null) ]]; then
+        if [[ $(find $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap64 in cache and size seems ok" 
         else
           echo "Downloading flycap64 as not found in cache or too small" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 131EsFE2nNjaA4fmksf3BN6mOXK56DKu_ $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_bionic.tgz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
         fi
-        tar xzvf $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_bionic.tgz -C $TRAVIS_BUILD_DIR/../
+        tar xzvf $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
 	ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
 	mv usr $TRAVIS_BUILD_DIR/../
 	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
@@ -94,7 +94,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
           echo "Found flycap32 in cache and size seems ok" 
         else
           echo "Downloading flycap32 as not found in cache or too small" 
-          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1E-L19cpc-tw87HyF7PzUxeGmaqwLE2T1 $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1BOpSik1Fndagzjf4ykwzermt2qlTzsWI $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz
         fi
         tar xzvf $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
 	ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-i386/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
@@ -157,7 +157,7 @@ if [ "$OS" == "linux-armhf" ]; then
             echo "Found flycap-armhf in cache and size seems ok" 
           else
             echo "Downloading flycap-armhf as not found in cache or too small" 
-            python $TRAVIS_BUILD_DIR/ci/gDownload.py 1eTDF6lbxlcwl-6Lf2Wyfw4NpDjE7aONv $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
+            python $TRAVIS_BUILD_DIR/ci/gDownload.py 16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
           fi
 	  cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
         fi
