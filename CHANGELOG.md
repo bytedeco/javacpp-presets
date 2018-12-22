@@ -1,4 +1,5 @@
 
+ * Add `FlyCapture2Video.h` and `FlyCapture2VideoDef.h`, and remove `AVIRecorder.h` in presets for FlyCapture
  * Switch to Clang for Android builds with recent versions of the NDK ([issue #562](https://github.com/bytedeco/javacpp-presets/issues/562))
  * Include `sys/sysinfo.h` for system API of Linux
  * Include `ucrtbase.dll` when bundling the runtime for Visual Studio 2015 on Windows ([issue bytedeco/javacv#1098](https://github.com/bytedeco/javacv/issues/1098))
@@ -14,7 +15,7 @@
  * Add builds for `linux-mips64el` to presets for ARToolKitPlus, Chilitags, flandmark, OpenBLAS, and FFTW ([pull #637](https://github.com/bytedeco/javacpp-presets/pull/637))
  * Update sample code for GSL with a more complex example ([issue #636](https://github.com/bytedeco/javacpp-presets/issues/636))
  * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
- * Upgrade presets for OpenCV 4.0.0, and FFmpeg 4.1, HDF5 1.10.4, MKL 2019.1, MKL-DNN 0.17, OpenBLAS 0.3.4, Leptonica 1.77.0, Tesseract 4.0.0, cuDNN 7.4, MXNet 1.3.1, TensorFlow 1.12.0, and their dependencies
+ * Upgrade presets for OpenCV 4.0.0, and FFmpeg 4.1, FlyCapture 2.13.3.31, HDF5 1.10.4, MKL 2019.1, MKL-DNN 0.17.1, OpenBLAS 0.3.4, Leptonica 1.77.0, Tesseract 4.0.0, cuDNN 7.4, MXNet 1.3.1, TensorFlow 1.12.0, and their dependencies
 
 ### October 15, 2018 version 1.4.3
  * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`
