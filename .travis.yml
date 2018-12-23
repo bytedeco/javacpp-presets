@@ -290,12 +290,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=flycapture,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86_64
-        install: true
-        script: ./ci/install-travis.sh
-      - os: linux
-        dist: bionic
-        env: PROJ=spinnaker OS=linux-x86_64
+        env: PROJ=flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux

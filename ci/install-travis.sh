@@ -43,7 +43,7 @@ fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
 
-if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; } && [[ ! $PROJ =~ spinnaker ]]; then
+if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-6 python27"
   if [[ "cpython mxnet tensorflow onnx skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
@@ -86,9 +86,9 @@ if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ 
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 1YtVjdnbQLZHX_ocQ6xAmiq6pjftuPOPd $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz
         fi
         tar xzvf $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
-	ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
-	mv usr $TRAVIS_BUILD_DIR/../
-	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+        ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
+        mv usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
     elif [ "$OS" == "linux-x86" ]; then
         if [[ $(find $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap32 in cache and size seems ok" 
@@ -97,12 +97,27 @@ if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ 
           python $TRAVIS_BUILD_DIR/ci/gDownload.py 1BOpSik1Fndagzjf4ykwzermt2qlTzsWI $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz
         fi
         tar xzvf $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
-	ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-i386/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
-	mv usr $TRAVIS_BUILD_DIR/../
-	docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+        ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-i386/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
+        mv usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
     fi 
   fi 
-
+  if [[ "$PROJ" =~ spinnaker ]]; then
+    if [ "$OS" == "linux-x86_64" ]; then
+        if [[ $(find $HOME/downloads/spinnaker-1.19.0.22-amd64-pkg.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+          echo "Found spinnaker in cache and size seems ok"
+        else
+          echo "Downloading spinnaker as not found in cache or too small"
+          python $TRAVIS_BUILD_DIR/ci/gDownload.py 1PifxEkF5dVEgdO8s7vJKyfZEP9mqhkCU $HOME/downloads/spinnaker-1.19.0.22-amd64-pkg.tar.gz
+        fi
+        tar xzvf $HOME/downloads/spinnaker-1.19.0.22-amd64-pkg.tar.gz -C $TRAVIS_BUILD_DIR/../
+        ls $TRAVIS_BUILD_DIR/../spinnaker-1.19.0.22-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
+        ln -s libSpinnaker_C.so.1.19.0.22 usr/lib/libSpinnaker_C.so.1
+        ln -s libSpinnaker.so.1.19.0.22 usr/lib/libSpinnaker.so.1
+        mv usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+    fi
+  fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
          curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14895/l_mkl_2019.1.144.tgz -o $HOME/mkl.tgz
@@ -115,7 +130,7 @@ if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ 
         curl -L https://github.com/bazelbuild/bazel/releases/download/0.15.2/bazel-0.15.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
-          exit 1
+          exit 1  
         fi
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
         export TEST_TMPDIR=$HOME/.cache/bazel
@@ -125,26 +140,6 @@ if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ 
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
-fi
-
-if [[ "$PROJ" =~ spinnaker ]] && [[ "$OS" == "linux-x86_64" ]]; then
-    echo "Installing Spinnaker SDK"
-    SPIN_DOWNLOAD_XDIR="spinnaker-1.19.0.22-amd64"
-    SPIN_DOWNLOAD_NAME="spinnaker-1.19.0.22-amd64-pkg.tar.gz"
-    SPIN_DOWNLOAD_LINK="1Qe9mzN17h1z6oXNxmRg0-xkcnBTL8rTK"
-    SPIN_DEPENDENCIES="libavcodec57 libavformat57 libswscale4 libswresample2 libavutil55 libusb-1.0-0 libgtkmm-2.4-dev"
-    # Download Spinnaker SDK
-    if [[ $(find ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -type f -size +1000000c 2>/dev/null) ]]; then
-        echo "Found spinnaker in cache and size seems ok"
-    else
-        echo "Downloading spinnaker as not found in cache or too small"
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py ${SPIN_DOWNLOAD_LINK} ${HOME}/downloads/${SPIN_DOWNLOAD_NAME}
-    fi
-    # Install Spinnaker packages
-    #  sudo apt-get -y install ${SPIN_DEPENDENCIES}
-    tar xzvf ${HOME}/downloads/${SPIN_DOWNLOAD_NAME} -C ${HOME}/downloads
-    sudo dpkg -i ${HOME}/downloads/${SPIN_DOWNLOAD_XDIR}/*.deb
-    rm -rf ${HOME}/downloads/${SPIN_DOWNLOAD_XDIR}
 fi
 
 if [ "$OS" == "linux-armhf" ]; then
@@ -289,9 +284,9 @@ fi
 
 
 echo "Running install for $PROJ"
-if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; } && [[ ! $PROJ =~ spinnaker ]]; then
-    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-    echo "container id is $DOCKER_CONTAINER_ID"
+if  [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
+   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
+   echo "container id is $DOCKER_CONTAINER_ID"
     if [ "$1" == "nodeploy" ]; then
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT"; export BUILD_STATUS=0
     elif [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
@@ -308,19 +303,19 @@ if { [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ 
           fi
          done
        fi
-
+        
      else
        echo "Pull request so install using docker"
        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; . $HOME/vars.list; cd $HOME/build/javacpp-presets; mvn clean install -B -U -Dmaven.repo.local=$HOME/.m2/repository --settings ./ci/settings.xml -Dmaven.test.skip=true $MAVEN_RELEASE \$BUILD_COMPILER \$BUILD_OPTIONS \$BUILD_ROOT -Djavacpp.platform=$OS -Djavacpp.platform.extension=$EXT -pl .,$PROJ"; export BUILD_STATUS=$?
     fi
 
    echo "Build status $BUILD_STATUS"
-   if [ $BUILD_STATUS -ne 0 ]; then
+   if [ $BUILD_STATUS -ne 0 ]; then  
      echo "Build Failed"
      exit $BUILD_STATUS
    fi
 
-else
+else	
    echo "Building $PROJ, with additional build flags $BUILD_COMPILER $BUILD_OPTIONS $BUILD_ROOT"
    if [ "$1" == "nodeploy" ]; then
       bash cppbuild.sh install $PROJ -platform=$OS -extension=$EXT; export BUILD_STATUS=0
