@@ -87,8 +87,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         fi
         tar xzvf $HOME/downloads/flycapture2-2.13.3.31-amd64-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
         ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
-        mv usr $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+        cp -a usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a $HOME/build/usr/* /usr/"
     elif [ "$OS" == "linux-x86" ]; then
         if [[ $(find $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz -type f -size +1000000c 2>/dev/null) ]]; then
           echo "Found flycap32 in cache and size seems ok" 
@@ -98,8 +98,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         fi
         tar xzvf $HOME/downloads/flycapture2-2.13.3.31-i386-pkg_xenial.tgz -C $TRAVIS_BUILD_DIR/../
         ls $TRAVIS_BUILD_DIR/../flycapture2-2.13.3.31-i386/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
-        mv usr $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+        cp -a usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a $HOME/build/usr/* /usr/"
     fi 
   fi 
   if [[ "$PROJ" =~ spinnaker ]]; then
@@ -114,8 +114,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         ls $TRAVIS_BUILD_DIR/../spinnaker-1.19.0.22-amd64/*.deb | while read fName; do ar vx $fName; tar -xvf data.tar.xz; done;
         ln -s libSpinnaker_C.so.1.19.0.22 usr/lib/libSpinnaker_C.so.1
         ln -s libSpinnaker.so.1.19.0.22 usr/lib/libSpinnaker.so.1
-        mv usr $TRAVIS_BUILD_DIR/../
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -pr $HOME/build/usr/* /usr/"
+        cp -a usr $TRAVIS_BUILD_DIR/../
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a $HOME/build/usr/* /usr/"
     fi
   fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
