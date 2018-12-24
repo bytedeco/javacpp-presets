@@ -77,7 +77,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>spinnaker-platform</artifactId>
-      <version>1.15.0.63-${project.version}</version>
+      <version>1.19.0.22-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

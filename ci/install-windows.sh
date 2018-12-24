@@ -60,7 +60,8 @@ if [[ "$PROJ" =~ flycapture ]]; then
              echo "Downloading flycap to cache as not found"
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 14QM7W5RHhvZanF1UBobgEIvwdy6VwTht /c/Downloads/FlyCapture_2.13.3.31_x64.msi
            fi
-           msiexec //quiet //i c:\\Downloads\\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL
+           # we can get this msi file by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL'
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
@@ -68,7 +69,8 @@ if [[ "$PROJ" =~ flycapture ]]; then
              echo "Downloading flycap32 to cache as not found"
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr /c/Downloads/FlyCapture_2.13.3.31_x86.msi
            fi
-           msiexec //quiet //i c:\\Downloads\\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL
+           # we can get this msi file by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL'
        fi
        echo "Finished flycapture install"
 fi
@@ -76,25 +78,27 @@ fi
 if [[ "$PROJ" =~ spinnaker ]]; then
        echo Spinnaker install
        if [ "$OS" == "windows-x86_64" ]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/Spinnaker_*_v140_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
            else
-             echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+             echo "Downloading spinnaker to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1sjFe7KyvjxPEmEFp9xP3wIs3QCOHAN1m /c/Downloads/Spinnaker_Binaries_v140_x64.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1gLfpCE3XkcXbWaoFqT6kQqQm_EO55vYS /c/Downloads/Spinnaker_SourceCode_v140_x64.msi
            fi
-           unzip /c/Downloads/spinnaker.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get these msi files by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
        elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
-             echo "Found spinnaker in cache and size seems ok"
+           if [[ $(find /c/Downloads/Spinnaker_*_v140_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker32 in cache and size seems ok"
            else
-             echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+             echo "Downloading spinnaker32 to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1YJcLAaf8Bf2XzC7Puv4ZwXdibdmVcwNg /c/Downloads/Spinnaker_Binaries_v140_x86.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1BG51avW4q605c2KGGJ3ehjhUlVFBObqh /c/Downloads/Spinnaker_SourceCode_v140_x86.msi
            fi
-           unzip /c/Downloads/spinnaker.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get these msi files by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
        fi
        echo "Finished spinnaker install"
 fi
