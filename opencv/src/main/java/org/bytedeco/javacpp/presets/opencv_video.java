@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_imgproc.class, value = {
+@Properties(inherit = opencv_calib3d.class, value = {
     @Platform(include = {"<opencv2/video.hpp>", /*"<opencv2/video/tracking_c.h>",*/ "<opencv2/video/tracking.hpp>",
                          "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.4.0"),
     @Platform(value = "ios", preload = "libopencv_video"),

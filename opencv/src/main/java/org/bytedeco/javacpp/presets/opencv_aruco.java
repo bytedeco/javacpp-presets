@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_calib3d.class, opencv_flann.class, opencv_highgui.class},
+    inherit = opencv_calib3d.class,
     value = {
         @Platform(
             include = {"<opencv2/aruco/dictionary.hpp>", "<opencv2/aruco.hpp>", "<opencv2/aruco/charuco.hpp>"},

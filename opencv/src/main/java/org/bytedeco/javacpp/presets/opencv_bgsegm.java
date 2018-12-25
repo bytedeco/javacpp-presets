@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_calib3d.class, opencv_flann.class, opencv_highgui.class, opencv_video.class},
+    inherit = opencv_video.class,
     value = {
         @Platform(
             include = "<opencv2/bgsegm.hpp>",

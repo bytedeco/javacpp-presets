@@ -12,7 +12,6 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import static org.bytedeco.javacpp.opencv_videoio.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_flann.*;
-import static org.bytedeco.javacpp.opencv_ml.*;
 
 public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_features2d {
     static { Loader.load(); }
