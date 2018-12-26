@@ -24,7 +24,6 @@ package org.bytedeco.javacpp.opencv_features2d;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_ml.opencv_ml_presets;
 import org.bytedeco.javacpp.opencv_flann.opencv_flann_presets;
 import org.bytedeco.javacpp.opencv_highgui.opencv_highgui_presets;
 import org.bytedeco.javacpp.tools.InfoMap;

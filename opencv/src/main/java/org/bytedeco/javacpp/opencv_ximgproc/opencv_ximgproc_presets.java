@@ -25,7 +25,6 @@ package org.bytedeco.javacpp.opencv_ximgproc;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
-import org.bytedeco.javacpp.opencv_features2d.opencv_features2d_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;

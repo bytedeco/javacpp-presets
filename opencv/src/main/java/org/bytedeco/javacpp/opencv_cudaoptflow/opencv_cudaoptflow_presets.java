@@ -27,6 +27,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
 import org.bytedeco.javacpp.opencv_cudaimgproc.opencv_cudaimgproc_presets;
 import org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect_presets;
+import org.bytedeco.javacpp.opencv_optflow.opencv_optflow_presets;
 import org.bytedeco.javacpp.opencv_video.opencv_video_presets;
 import org.bytedeco.javacpp.opencv_cudawarping.opencv_cudawarping_presets;
 import org.bytedeco.javacpp.opencv_videoio.opencv_videoio_presets;

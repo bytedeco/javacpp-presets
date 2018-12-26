@@ -24,9 +24,6 @@ package org.bytedeco.javacpp.opencv_stitching;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
-import org.bytedeco.javacpp.opencv_features2d.opencv_features2d_presets;
-import org.bytedeco.javacpp.opencv_ml.opencv_ml_presets;
 import org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect_presets;
 import org.bytedeco.javacpp.opencv_video.opencv_video_presets;
 import org.bytedeco.javacpp.opencv_xfeatures2d.opencv_xfeatures2d_presets;

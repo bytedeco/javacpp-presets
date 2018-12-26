@@ -24,12 +24,9 @@ package org.bytedeco.javacpp.opencv_videostab;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
-import org.bytedeco.javacpp.opencv_features2d.opencv_features2d_presets;
-import org.bytedeco.javacpp.opencv_ml.opencv_ml_presets;
+import org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect_presets;
+import org.bytedeco.javacpp.opencv_optflow.opencv_optflow_presets;
 import org.bytedeco.javacpp.opencv_photo.opencv_photo_presets;
-import org.bytedeco.javacpp.opencv_video.opencv_video_presets;
-import org.bytedeco.javacpp.opencv_videoio.opencv_videoio_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;

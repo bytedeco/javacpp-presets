@@ -24,7 +24,6 @@ package org.bytedeco.javacpp.opencv_bioinspired;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_core.opencv_core_presets;
 import org.bytedeco.javacpp.opencv_highgui.opencv_highgui_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;

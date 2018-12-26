@@ -8,6 +8,8 @@ import org.bytedeco.javacpp.annotation.*;
 
 import org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
+import org.bytedeco.javacpp.opencv_ml.*;
+import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 import org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.*;
 import org.bytedeco.javacpp.opencv_imgcodecs.*;
@@ -18,14 +20,10 @@ import org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_highgui.opencv_highgui.*;
 import org.bytedeco.javacpp.opencv_flann.*;
 import static org.bytedeco.javacpp.opencv_flann.opencv_flann.*;
-import org.bytedeco.javacpp.opencv_ml.*;
-import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 import org.bytedeco.javacpp.opencv_features2d.*;
 import static org.bytedeco.javacpp.opencv_features2d.opencv_features2d.*;
 import org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d.*;
-import org.bytedeco.javacpp.opencv_video.*;
-import static org.bytedeco.javacpp.opencv_video.opencv_video.*;
 import org.bytedeco.javacpp.opencv_shape.*;
 import static org.bytedeco.javacpp.opencv_shape.opencv_shape.*;
 

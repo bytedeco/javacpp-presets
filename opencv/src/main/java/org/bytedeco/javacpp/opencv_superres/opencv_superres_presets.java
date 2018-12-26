@@ -24,8 +24,8 @@ package org.bytedeco.javacpp.opencv_superres;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_video.opencv_video_presets;
-import org.bytedeco.javacpp.opencv_videoio.opencv_videoio_presets;
+import org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect_presets;
+import org.bytedeco.javacpp.opencv_optflow.opencv_optflow_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;

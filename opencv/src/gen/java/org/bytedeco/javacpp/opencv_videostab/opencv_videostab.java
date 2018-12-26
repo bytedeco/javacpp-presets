@@ -18,16 +18,20 @@ import org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_highgui.opencv_highgui.*;
 import org.bytedeco.javacpp.opencv_flann.*;
 import static org.bytedeco.javacpp.opencv_flann.opencv_flann.*;
-import org.bytedeco.javacpp.opencv_ml.*;
-import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 import org.bytedeco.javacpp.opencv_features2d.*;
 import static org.bytedeco.javacpp.opencv_features2d.opencv_features2d.*;
 import org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d.*;
-import org.bytedeco.javacpp.opencv_photo.*;
-import static org.bytedeco.javacpp.opencv_photo.opencv_photo.*;
+import org.bytedeco.javacpp.opencv_objdetect.*;
+import static org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect.*;
+import org.bytedeco.javacpp.opencv_ximgproc.*;
+import static org.bytedeco.javacpp.opencv_ximgproc.opencv_ximgproc.*;
 import org.bytedeco.javacpp.opencv_video.*;
 import static org.bytedeco.javacpp.opencv_video.opencv_video.*;
+import org.bytedeco.javacpp.opencv_optflow.*;
+import static org.bytedeco.javacpp.opencv_optflow.opencv_optflow.*;
+import org.bytedeco.javacpp.opencv_photo.*;
+import static org.bytedeco.javacpp.opencv_photo.opencv_photo.*;
 
 public class opencv_videostab extends org.bytedeco.javacpp.opencv_videostab.opencv_videostab_presets {
     static { Loader.load(); }

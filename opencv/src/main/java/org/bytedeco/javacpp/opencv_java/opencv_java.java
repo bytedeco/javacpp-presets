@@ -22,11 +22,10 @@
 
 package org.bytedeco.javacpp.opencv_java;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.tools.Info;
-import org.bytedeco.javacpp.tools.InfoMap;
-import org.bytedeco.javacpp.tools.InfoMapper;
+
 
 /**
  * This is only a placeholder to facilitate loading the {@code opencv_java} module with JavaCPP.

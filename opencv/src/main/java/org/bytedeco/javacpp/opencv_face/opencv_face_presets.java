@@ -26,8 +26,6 @@ import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_objdetect.opencv_objdetect_presets;
 import org.bytedeco.javacpp.opencv_photo.opencv_photo_presets;
-import org.bytedeco.javacpp.opencv_plot.opencv_plot_presets;
-import org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;

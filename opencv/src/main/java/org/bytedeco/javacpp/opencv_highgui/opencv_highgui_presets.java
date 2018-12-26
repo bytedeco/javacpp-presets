@@ -24,7 +24,6 @@ package org.bytedeco.javacpp.opencv_highgui;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc_presets;
 import org.bytedeco.javacpp.opencv_videoio.opencv_videoio_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;

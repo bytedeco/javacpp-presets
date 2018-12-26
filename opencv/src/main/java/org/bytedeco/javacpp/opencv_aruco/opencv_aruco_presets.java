@@ -25,8 +25,6 @@ package org.bytedeco.javacpp.opencv_aruco;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
-import org.bytedeco.javacpp.opencv_flann.opencv_flann_presets;
-import org.bytedeco.javacpp.opencv_highgui.opencv_highgui_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;

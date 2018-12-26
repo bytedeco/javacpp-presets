@@ -24,7 +24,6 @@ package org.bytedeco.javacpp.opencv_optflow;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
 import org.bytedeco.javacpp.opencv_video.opencv_video_presets;
 import org.bytedeco.javacpp.opencv_ximgproc.opencv_ximgproc_presets;
 import org.bytedeco.javacpp.tools.InfoMap;

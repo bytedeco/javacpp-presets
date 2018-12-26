@@ -18,8 +18,6 @@ import org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_highgui.opencv_highgui.*;
 import org.bytedeco.javacpp.opencv_flann.*;
 import static org.bytedeco.javacpp.opencv_flann.opencv_flann.*;
-import org.bytedeco.javacpp.opencv_ml.*;
-import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 import org.bytedeco.javacpp.opencv_features2d.*;
 import static org.bytedeco.javacpp.opencv_features2d.opencv_features2d.*;
 

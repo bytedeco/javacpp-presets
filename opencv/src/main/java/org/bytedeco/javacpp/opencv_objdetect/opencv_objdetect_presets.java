@@ -24,7 +24,7 @@ package org.bytedeco.javacpp.opencv_objdetect;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc_presets;
+import org.bytedeco.javacpp.opencv_calib3d.opencv_calib3d_presets;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
