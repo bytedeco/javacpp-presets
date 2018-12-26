@@ -286,7 +286,7 @@
               <goal>build</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/native/${javacpp.platform}${javacpp.platform.extension}</outputDirectory>
+              <outputDirectory>${project.build.directory}/native/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}</outputDirectory>
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
               <copyLibs>true</copyLibs>
@@ -345,11 +345,6 @@
                   <MultiReleaseOutput>true</MultiReleaseOutput>
                 </manifestEntries>
               </archive>
-              <includes>
-                <include>/${javacpp.platform.library.path}/</include>
-                <include>/${javacpp.platform}${javacpp.platform.extension}/</include>
-                <include>META-INF/versions/**</include>
-              </includes>
               <excludes>
                 <exclude>/windows-*/*.exp</exclude>
                 <exclude>/windows-*/*.lib</exclude>
