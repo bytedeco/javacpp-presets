@@ -54,7 +54,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 public class opencv_tracking_presets implements InfoMapper {
     @Override public void map(InfoMap infoMap) {
-        infoMap.put(new Info("override").annotations()) // pure virtual functions are not mapped unless virtualized, so disable override annotation
+        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
+               .put(new Info("override").annotations()) // pure virtual functions are not mapped unless virtualized, so disable override annotation
                .put(new Info("cv::Ptr<cv::Tracker>").annotations("@Ptr").pointerTypes("Tracker"))
                .put(new Info("cv::Ptr<cv::TrackerFeature>").annotations("@Ptr").pointerTypes("TrackerFeature"))
                .put(new Info("cv::Ptr<cv::TrackerTargetState>").annotations("@Ptr").pointerTypes("TrackerTargetState"))

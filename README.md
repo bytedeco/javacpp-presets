@@ -108,8 +108,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
 
  * OpenCV 4.0.0  https://opencv.org/releases.html
  * FFmpeg 4.1.x  http://ffmpeg.org/download.html
- * FlyCapture 2.11.x  http://www.ptgrey.com/flycapture-sdk
- * Spinnaker 1.15.x https://www.ptgrey.com/spinnaker-sdk
+ * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
+ * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.3  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.4  https://www.hdfgroup.org/downloads/
  * MKL 2019.1  https://software.intel.com/intel-mkl
- * MKL-DNN 0.17  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.17.1  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.4  http://www.openblas.net/
  * ARPACK-NG 3.6.3  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -129,7 +129,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CPython 3.6.x  https://www.python.org/downloads/
  * LLVM 7.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
- * Leptonica 1.76.0  http://www.leptonica.org/download.html
+ * Leptonica 1.77.0  http://www.leptonica.org/download.html
  * Tesseract 4.0.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.0  https://developer.nvidia.com/cuda-downloads

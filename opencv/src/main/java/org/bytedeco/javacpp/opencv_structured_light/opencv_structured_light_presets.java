@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_phase_unwrapping_presets.class, opencv_calib3d_presets.class, opencv_flann_presets.class, opencv_highgui_presets.class},
+    inherit = {opencv_phase_unwrapping_presets.class, opencv_calib3d_presets.class},
     value = {
         @Platform(
             include = {

@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_calib3d_presets.class, opencv_features2d_presets.class, opencv_objdetect_presets.class, opencv_ml_presets.class, opencv_video_presets.class, opencv_xfeatures2d_presets.class}, value = {
+@Properties(inherit = {opencv_objdetect_presets.class, opencv_video_presets.class, opencv_xfeatures2d_presets.class}, value = {
     @Platform(include = {
         "<opencv2/stitching/detail/warpers.hpp>", "<opencv2/stitching/detail/matchers.hpp>", "<opencv2/stitching/detail/util.hpp>",
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",

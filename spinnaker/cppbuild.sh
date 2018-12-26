@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SPINNAKER_VERSION=1.15.0.63
+SPINNAKER_VERSION=1.19.0.22
 
 case $PLATFORM in
     linux-arm*)
@@ -29,7 +29,7 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files/Point Grey Research/" ]]; then
+        if [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
             exit 1
         fi

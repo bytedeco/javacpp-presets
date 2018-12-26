@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_imgproc_presets.class, opencv_videoio_presets.class}, value = {
+@Properties(inherit = opencv_videoio_presets.class, value = {
     @Platform(include = {"<opencv2/highgui/highgui_c.h>", "<opencv2/highgui.hpp>"}, link = "opencv_highgui@.4.0"),
     @Platform(value = "ios", preload = "libopencv_highgui"),
     @Platform(value = "windows", link = "opencv_highgui400")},

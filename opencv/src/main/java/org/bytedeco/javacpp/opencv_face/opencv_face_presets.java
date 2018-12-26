@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_tracking_presets.class, opencv_objdetect_presets.class, opencv_photo_presets.class, opencv_plot_presets.class}, value = {
+@Properties(inherit = {opencv_objdetect_presets.class, opencv_photo_presets.class}, value = {
     @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>",
                          "<opencv2/face/facemark.hpp>", "<opencv2/face/facemark_train.hpp>", "<opencv2/face/facemarkLBF.hpp>",
                          "<opencv2/face/facemarkAAM.hpp>", "<opencv2/face/face_alignment.hpp>"},

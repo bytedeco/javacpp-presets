@@ -1,7 +1,7 @@
-diff -ruN libvpx-1.6.1/build/make/configure.sh libvpx-1.6.1-android/build/make/configure.sh
---- libvpx-1.6.1/build/make/configure.sh	2017-01-13 05:27:27.000000000 +0900
-+++ libvpx-1.6.1-android/build/make/configure.sh	2018-04-02 10:15:16.326675003 +0900
-@@ -979,11 +979,8 @@
+diff -ruN libvpx-1.7.0/build/make/configure.sh libvpx-1.7.0-android/build/make/configure.sh
+--- libvpx-1.7.0/build/make/configure.sh	2018-01-25 07:25:44.000000000 +0900
++++ libvpx-1.7.0-android/build/make/configure.sh	2018-12-12 16:37:30.534315950 +0900
+@@ -1021,45 +1021,24 @@
            ;;
  
          android*)
@@ -10,12 +10,15 @@ diff -ruN libvpx-1.6.1/build/make/configure.sh libvpx-1.6.1-android/build/make/c
 -            COMPILER_LOCATION=`find "${SDK_PATH}" \
 -              -name "arm-linux-androideabi-gcc*" -print -quit`
 -            TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/arm-linux-androideabi-
+-            CC=${TOOLCHAIN_PATH}gcc
+-            CXX=${TOOLCHAIN_PATH}g++
 +          if [ -n "${ANDROID_NDK}" ]; then
-+            TOOLCHAIN_PATH=${ANDROID_BIN}-
-             CC=${TOOLCHAIN_PATH}gcc
-             CXX=${TOOLCHAIN_PATH}g++
++            TOOLCHAIN_PATH=${ANDROID_PREFIX}-
++            CC=${ANDROID_CC}
++            CXX=${ANDROID_CC}++
              AR=${TOOLCHAIN_PATH}ar
-@@ -991,33 +988,15 @@
+-            LD=${TOOLCHAIN_PATH}gcc
++            LD=${ANDROID_CC}
              AS=${TOOLCHAIN_PATH}as
              STRIP=${TOOLCHAIN_PATH}strip
              NM=${TOOLCHAIN_PATH}nm
@@ -50,17 +53,17 @@ diff -ruN libvpx-1.6.1/build/make/configure.sh libvpx-1.6.1-android/build/make/c
            else
              echo "Assuming standalone build with NDK toolchain."
              echo "See build/make/Android.mk for details."
-@@ -1150,6 +1129,32 @@
+@@ -1202,6 +1181,32 @@
        ;;
      x86*)
        case  ${tgt_os} in
 +        android*)
 +          if [ -n "${ANDROID_NDK}" ]; then
-+            TOOLCHAIN_PATH=${ANDROID_BIN}-
-+            CC=${TOOLCHAIN_PATH}gcc
-+            CXX=${TOOLCHAIN_PATH}g++
++            TOOLCHAIN_PATH=${ANDROID_PREFIX}-
++            CC=${ANDROID_CC}
++            CXX=${ANDROID_CC}++
 +            AR=${TOOLCHAIN_PATH}ar
-+            LD=${TOOLCHAIN_PATH}gcc
++            LD=${ANDROID_CC}
 +            AS=${TOOLCHAIN_PATH}as
 +            STRIP=${TOOLCHAIN_PATH}strip
 +            NM=${TOOLCHAIN_PATH}nm

@@ -12,7 +12,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>flycapture-platform</artifactId>
-  <version>2.11.3.121-${project.parent.version}</version>
+  <version>2.13.3.31-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for FlyCapture</name>
 
   <properties>

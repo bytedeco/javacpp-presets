@@ -38,8 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_calib3d_presets.class, opencv_features2d_presets.class, opencv_photo_presets.class, opencv_video_presets.class,
-                       opencv_videoio_presets.class, opencv_ml_presets.class}, value = {
+@Properties(inherit = {opencv_objdetect_presets.class, opencv_optflow_presets.class, opencv_photo_presets.class}, value = {
     @Platform(include = {
         "<opencv2/videostab/frame_source.hpp>", "<opencv2/videostab/log.hpp>", "<opencv2/videostab/fast_marching.hpp>",
         "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",

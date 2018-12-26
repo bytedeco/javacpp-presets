@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sam Carlberg, Samuel Audet
+ * Copyright (C) 2017-2018 Sam Carlberg, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = opencv_core_presets.class,
+    inherit = opencv_imgproc_presets.class,
     value = {
         @Platform(
             include = "<opencv2/cudawarping.hpp>",

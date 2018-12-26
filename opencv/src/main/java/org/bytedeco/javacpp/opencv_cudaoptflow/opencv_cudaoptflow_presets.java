@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Sam Carlberg, Samuel Audet
+ * Copyright (C) 2017-2018 Sam Carlberg, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = {
         opencv_calib3d_presets.class,
         opencv_objdetect_presets.class,
+        opencv_optflow_presets.class,
         opencv_video_presets.class,
         opencv_videoio_presets.class,
         opencv_cudaimgproc_presets.class,

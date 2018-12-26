@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jarek Sacha
  */
 @Properties(target = "org.bytedeco.javacpp.Spinnaker_C", value = {
-        @Platform(value = {"linux-x86", "linux-arm", "windows"},
+        @Platform(value = {"linux-x86_64", "linux-arm64", "windows"},
                 include = {"<SpinnakerPlatformC.h>",
                         "<SpinnakerDefsC.h>",
                         "<CameraDefsC.h>",
@@ -43,18 +43,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                         "<SpinnakerGenApiDefsC.h>",
                         "<SpinnakerGenApiC.h>",
                         "<SpinnakerC.h>",
+                        "<SpinVideoC.h>",
+                        "<QuickSpinDefsC.h>",
+                        "<QuickSpinC.h>",
+                        "<TransportLayerDefsC.h>",
+                        "<TransportLayerDeviceC.h>",
+                        "<TransportLayerInterfaceC.h>",
+                        "<TransportLayerStreamC.h>",
                 },
-                link = {"Spinnaker_C@.2"}, includepath = "/usr/include/spinnaker/spinc/"),
-        @Platform(value = "linux-arm", link = "Spinnaker_C@.2"),
-        @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140"},
-                includepath = "C:/Program Files/Point Grey Research/Spinnaker/include/spinc/"),
+                link = {"SpinVideo_C@.1.19.0.22", "Spinnaker_C@.1.19.0.22"},
+                linkpath = "/usr/lib/",
+                includepath = "/usr/include/spinnaker/spinc/"),
+        @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140", "SpinVideoC_v140", "SpinVideo_v140"},
+                includepath = {"C:/Program Files/Point Grey Research/Spinnaker/include/spinc/",
+                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/include/spinc/"}),
         @Platform(value = "windows-x86",
-                linkpath = {"C:/Program Files/Point Grey Research/Spinnaker/lib/vs2015/",
-                        "C:/Program Files (x86)/Point Grey Research/Spinnaker/lib/vs2015/"},
+                linkpath    = {"C:/Program Files/Point Grey Research/Spinnaker/lib/vs2015/",
+                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/lib/vs2015/"},
                 preloadpath = {"C:/Program Files/Point Grey Research/Spinnaker/bin/vs2015/",
-                        "C:/Program Files (x86)/Point Grey Research/Spinnaker/bin/vs2015/"}),
+                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/bin/vs2015/"}),
         @Platform(value = "windows-x86_64",
-                linkpath = "C:/Program Files/Point Grey Research/Spinnaker/lib64/vs2015/",
+                linkpath    =  "C:/Program Files/Point Grey Research/Spinnaker/lib64/vs2015/",
                 preloadpath = {"C:/Program Files/Point Grey Research/Spinnaker/bin64/vs2015/"})})
 public class Spinnaker_C implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -67,6 +76,8 @@ public class Spinnaker_C implements InfoMapper {
                 .put(new Info("spinRegisterSetEx").skip())
                 // Skip deprecation macro, as it is causing parsing error in javacpp
                 .put(new Info("SPINNAKERC_API_DEPRECATED").skip())
+                // Avoid: jniSpinnaker_C.obj : error LNK2001: unresolved external symbol __imp_spinCameraForceIP
+                .put(new Info("spinCameraForceIP").skip())
         ;
     }
 }
