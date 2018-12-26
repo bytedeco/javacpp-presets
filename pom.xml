@@ -320,8 +320,6 @@
                 </manifestEntries>
               </archive>
               <skipIfEmpty>true</skipIfEmpty>
-              <forceCreation>true</forceCreation> <!-- hack to prevent moditect to fail if module-info.class
-              is already present in jar -->
               <includes>
                 <include>org/bytedeco/javacpp/**</include>
                 <include>META-INF/versions/**</include>
@@ -338,8 +336,6 @@
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <skipIfEmpty>false</skipIfEmpty>
-              <forceCreation>true</forceCreation> <!-- hack to prevent moditect to fail if module-info.class
-              is already present in jar -->
               <archive>
                 <manifestEntries>
                   <MultiReleaseOutput>true</MultiReleaseOutput>
