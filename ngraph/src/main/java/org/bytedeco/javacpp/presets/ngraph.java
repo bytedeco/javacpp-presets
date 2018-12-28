@@ -61,6 +61,7 @@ import java.lang.annotation.Target;
 	"ngraph/op/op.hpp",
 	"ngraph/parameter_vector.hpp",
        "ngraph/op/parameter.hpp",
+       "ngraph/op/constant.hpp",
 	"ngraph/result_vector.hpp",
 	"ngraph/op/util/op_annotations.hpp",
        "ngraph/autodiff/adjoints.hpp",
