@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mxnet</artifactId>
-  <version>1.3.1-${project.parent.version}</version>
+  <version>1.4.0.rc0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
 
   <dependencies>
@@ -33,6 +33,34 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>args4j</groupId>
+      <artifactId>args4j</artifactId>
+      <version>2.33</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.11</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.25</version>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>2.11.12</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-mllib_2.11</artifactId>
+      <version>1.6.3</version>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 
@@ -69,6 +97,28 @@
             <artifactId>openblas</artifactId>
             <version>0.3.4-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl-dnn</artifactId>
+            <version>0.17.1-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl-dnn</artifactId>
+            <version>0.17.1-${project.parent.version}</version>
+            <classifier>${javacpp.platform}</classifier>
+          </dependency>
+          <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
+          <dependency>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>3.4.4</version>
+          </dependency>
+          <dependency>
+            <groupId>org.scalamacros</groupId>
+            <artifactId>paradise_2.11.12</artifactId>
+            <version>2.1.1</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -114,8 +164,88 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.4.4</version>
+        <configuration>
+          <scalaVersion>2.11.12</scalaVersion>
+          <classifier>scaladoc</classifier>
+          <compilerPlugins>
+            <compilerPlugin>
+              <groupId>org.scalamacros</groupId>
+              <artifactId>paradise_2.11.12</artifactId>
+              <version>2.1.1</version>
+            </compilerPlugin>
+          </compilerPlugins>
+<!--        <displayCmd>true</displayCmd>-->
+          <jvmArgs>
+            <arg>-cp</arg>
+            <arg>${javacpp.platform.artifacts}</arg>
+<!--          <arg>-verbose</arg>-->
+<!--          <arg>-Dorg.bytedeco.javacpp.logger.debug=true</arg>-->
+          </jvmArgs>
+          <args>
+            <arg>-nobootcp</arg>
+            <arg>-usejavacp</arg>
+          </args>
+        </configuration>
+        <executions>
+          <execution>
+            <id>scala-compile-init</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <sourceDir>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/scala/init/</sourceDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>scala-compile-core</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <sourceDir>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/scala/core/</sourceDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>scala-add-source-init</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sourceDir>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/scala/init/</sourceDir>
+            </configuration>
+          </execution>
+          <execution>
+            <id>scala-doc-jar-core</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>doc-jar</goal>
+            </goals>
+            <configuration>
+              <sourceDir>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/scala/core/</sourceDir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
+          <execution>
+            <id>default-jar</id>
+            <configuration>
+              <includes>
+                <include>org/apache/mxnet/**</include>
+                <include>org/bytedeco/javacpp/*</include>
+                <include>org/bytedeco/javacpp/helper/*</include>
+                <include>org/bytedeco/javacpp/presets/*</include>
+              </includes>
+            </configuration>
+          </execution>
           <execution>
             <id>${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
@@ -142,5 +272,79 @@
       </plugin>
     </plugins>
   </build>
+
+  <!-- Scala build for linux-x86 requires a 32-bit JDK, and for CUDA, an actual GPU... -->
+  <profiles>
+    <profile>
+      <id>mxnet-linux-x86</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>linux-x86</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>scala-compile-init</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-compile-core</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-add-source-init</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-doc-jar-core</id>
+                <phase>disabled</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>mxnet-gpu</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.extension</name>
+          <value>-gpu</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>scala-compile-init</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-compile-core</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-add-source-init</id>
+                <phase>disabled</phase>
+              </execution>
+              <execution>
+                <id>scala-doc-jar-core</id>
+                <phase>disabled</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

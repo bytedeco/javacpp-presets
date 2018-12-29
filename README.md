@@ -134,7 +134,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.0  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.4  https://developer.nvidia.com/cudnn
- * MXNet 1.3.1  https://github.com/dmlc/mxnet
+ * MXNet 1.4.0.rc0  https://github.com/dmlc/mxnet
  * TensorFlow 1.12.0  https://github.com/tensorflow/tensorflow
  * TensorRT 5.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
