@@ -14,6 +14,10 @@
   <version>1.4.0.rc0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
 
+  <properties>
+    <javacpp.mkldnn.platform>${javacpp.platform}</javacpp.mkldnn.platform>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -88,6 +92,11 @@
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl-dnn</artifactId>
+            <version>0.17.1-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
             <version>4.0.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
@@ -102,12 +111,7 @@
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn</artifactId>
             <version>0.17.1-${project.parent.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>mkl-dnn</artifactId>
-            <version>0.17.1-${project.parent.version}</version>
-            <classifier>${javacpp.platform}</classifier>
+            <classifier>${javacpp.mkldnn.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
           <dependency>
@@ -182,7 +186,7 @@
             <arg>-cp</arg>
             <arg>${javacpp.platform.artifacts}</arg>
 <!--          <arg>-verbose</arg>-->
-<!--          <arg>-Dorg.bytedeco.javacpp.logger.debug=true</arg>-->
+            <arg>-Dorg.bytedeco.javacpp.logger.debug=true</arg>
           </jvmArgs>
           <args>
             <arg>-nobootcp</arg>
@@ -273,7 +277,7 @@
     </plugins>
   </build>
 
-  <!-- Scala build for linux-x86 requires a 32-bit JDK, and for CUDA, an actual GPU... -->
+  <!-- Scala build for linux-x86 requires a 32-bit JDK, and for CUDA, an actual GPU, so use binaries from another build -->
   <profiles>
     <profile>
       <id>mxnet-linux-x86</id>
@@ -283,29 +287,34 @@
           <value>linux-x86</value>
         </property>
       </activation>
+      <properties>
+        <javacpp.mkldnn.platform>linux-x86_64</javacpp.mkldnn.platform>
+      </properties>
       <build>
         <plugins>
           <plugin>
-            <groupId>net.alchim31.maven</groupId>
-            <artifactId>scala-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>scala-compile-init</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-compile-core</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-add-source-init</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-doc-jar-core</id>
-                <phase>disabled</phase>
-              </execution>
-            </executions>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <artifactId>opencv</artifactId>
+                <version>4.0.0-${project.parent.version}</version>
+                <classifier>linux-x86_64</classifier>
+              </dependency>
+              <dependency>
+                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <artifactId>openblas</artifactId>
+                <version>0.3.4-${project.parent.version}</version>
+                <classifier>linux-x86_64</classifier>
+              </dependency>
+              <dependency>
+                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <artifactId>mxnet</artifactId>
+                <version>${project.version}</version>
+                <classifier>linux-x86_64</classifier>
+              </dependency>
+            </dependencies>
           </plugin>
         </plugins>
       </build>
@@ -321,26 +330,29 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <dependencies>
+              <dependency>
+                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <artifactId>mxnet</artifactId>
+                <version>${project.version}</version>
+                <classifier>${javacpp.platform}<!-- no -gpu --></classifier>
+              </dependency>
+            </dependencies>
+          </plugin>
+          <plugin>
             <groupId>net.alchim31.maven</groupId>
             <artifactId>scala-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>scala-compile-init</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-compile-core</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-add-source-init</id>
-                <phase>disabled</phase>
-              </execution>
-              <execution>
-                <id>scala-doc-jar-core</id>
-                <phase>disabled</phase>
-              </execution>
-            </executions>
+            <configuration>
+              <jvmArgs>
+                <arg>-cp</arg>
+                <arg>${javacpp.platform.artifacts}</arg>
+                <arg>-Dorg.bytedeco.javacpp.platform.extension=<!-- no -gpu --></arg>
+<!--              <arg>-verbose</arg>-->
+                <arg>-Dorg.bytedeco.javacpp.logger.debug=true</arg>
+              </jvmArgs>
+            </configuration>
           </plugin>
         </plugins>
       </build>

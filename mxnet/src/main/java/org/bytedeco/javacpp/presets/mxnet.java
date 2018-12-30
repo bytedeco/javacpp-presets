@@ -40,13 +40,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {openblas.class, opencv_imgcodecs.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.mxnet", value = {
-    @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 0"},
+    @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11",
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 0", "MSHADOW_USE_F16C 0"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
                    "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/
                    "org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc"},
         link = "mxnet", preload = {"iomp5", "libiomp5md", "mklml", "mklml_intel", "mkldnn@.0", "libmxnet"}, /*resource = {"include", "lib"},*/
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
-    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1"},
+    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0"},
         link = {"cudart@.10.0#", "cuda@.10.0#", "mxnet"}, preload = {"cudart64_100", "iomp5", "libiomp5md", "mklml", "mklml_intel", "mkldnn@.0", "libmxnet"},
         includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
         linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/"},

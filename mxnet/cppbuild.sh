@@ -45,8 +45,8 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-echo "Decompressing archives..."
-tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+echo "Decompressing archives...  (ignore any errors)"
+tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
@@ -128,11 +128,9 @@ if [[ ! "$PLATFORM" == windows* ]]; then
 fi
 
 # add Scala files we cannot get with CMake for Windows
-if [[ "$EXTENSION" == *gpu ]]; then
-    patch -Np1 < ../../../mxnet-scala-cuda.patch || true
-else
-    patch -Np1 < ../../../mxnet-scala.patch || true
-fi
+patch -Np1 < ../../../mxnet-scala.patch || true
+# use mxnet-scala-cuda.patch to get a couple of CUDA ops,
+# but an actual GPU becomes necessary for the build
 
 # copy official JNI functions and adjust include directives
 cp -r 3rdparty/dlpack/include/dlpack 3rdparty/tvm/nnvm/include/* ../include
