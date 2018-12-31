@@ -45,7 +45,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-echo "Decompressing archives...  (ignore any errors)"
+echo "Decompressing archives... (ignore any errors)"
 tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
