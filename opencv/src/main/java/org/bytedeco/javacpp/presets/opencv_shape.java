@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/shape.hpp>", "<opencv2/shape/emdL1.hpp>", "<opencv2/shape/shape_transformer.hpp>",
         "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.4.0"),
     @Platform(value = "ios", preload = "libopencv_shape"),
-    @Platform(value = "windows", link = "opencv_shape400")},
+    @Platform(value = "windows", link = "opencv_shape401")},
         target = "org.bytedeco.javacpp.opencv_shape")
 public class opencv_shape implements InfoMapper {
     public void map(InfoMap infoMap) {

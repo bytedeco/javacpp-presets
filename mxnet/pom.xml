@@ -22,17 +22,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.0.0-${project.parent.version}</version>
+      <version>4.0.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.4-${project.parent.version}</version>
+      <version>0.3.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.17.1-${project.parent.version}</version>
+      <version>0.17.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -83,34 +83,34 @@
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.0.0-${project.parent.version}</version>
+            <version>4.0.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.4-${project.parent.version}</version>
+            <version>0.3.5-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.17.1-${project.parent.version}</version>
+            <version>0.17.2-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.0.0-${project.parent.version}</version>
+            <version>4.0.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.4-${project.parent.version}</version>
+            <version>0.3.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.17.1-${project.parent.version}</version>
+            <version>0.17.2-${project.parent.version}</version>
             <classifier>${javacpp.mkldnn.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
@@ -299,13 +299,13 @@
               <dependency>
                 <groupId>org.bytedeco.javacpp-presets</groupId>
                 <artifactId>opencv</artifactId>
-                <version>4.0.0-${project.parent.version}</version>
+                <version>4.0.1-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>
                 <groupId>org.bytedeco.javacpp-presets</groupId>
                 <artifactId>openblas</artifactId>
-                <version>0.3.4-${project.parent.version}</version>
+                <version>0.3.5-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>

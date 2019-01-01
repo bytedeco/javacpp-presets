@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
               link = "opencv_dnn@.4.0"),
     @Platform(value = "ios", preload = "libopencv_dnn"),
-    @Platform(value = "windows", link = "opencv_dnn400")},
+    @Platform(value = "windows", link = "opencv_dnn401")},
         target = "org.bytedeco.javacpp.opencv_dnn")
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -47,6 +47,7 @@ public class opencv_dnn implements InfoMapper {
                .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
                .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Range> >").pointerTypes("RangeVectorVector").define())
+               .put(new Info("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >").pointerTypes("IntIntPairVector").cast())
                .put(new Info("cv::dnn::LRNLayer::type").javaNames("lrnType"))
                .put(new Info("cv::dnn::PoolingLayer::type").javaNames("poolingType"))
                .put(new Info("cv::dnn::BlankLayer", "cv::dnn::LSTMLayer", "cv::dnn::RNNLayer", "cv::dnn::BaseConvolutionLayer",

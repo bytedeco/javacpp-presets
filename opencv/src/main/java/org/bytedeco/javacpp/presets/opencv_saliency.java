@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_saliency@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_saliency"),
-        @Platform(value = "windows", link = "opencv_saliency400")
+        @Platform(value = "windows", link = "opencv_saliency401")
     },
     target = "org.bytedeco.javacpp.opencv_saliency"
 )

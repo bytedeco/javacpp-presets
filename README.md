@@ -106,7 +106,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.0.0  https://opencv.org/releases.html
+ * OpenCV 4.0.1  https://opencv.org/releases.html
  * FFmpeg 4.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
  * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
@@ -120,14 +120,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.4  https://www.hdfgroup.org/downloads/
  * MKL 2019.1  https://software.intel.com/intel-mkl
- * MKL-DNN 0.17.1  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.4  http://www.openblas.net/
+ * MKL-DNN 0.17.2  https://github.com/intel/mkl-dnn
+ * OpenBLAS 0.3.5  http://www.openblas.net/
  * ARPACK-NG 3.6.3  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.6.x  https://www.python.org/downloads/
- * LLVM 7.0.0  http://llvm.org/releases/download.html
+ * LLVM 7.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.77.0  http://www.leptonica.org/download.html
  * Tesseract 4.0.0  https://github.com/tesseract-ocr/tesseract

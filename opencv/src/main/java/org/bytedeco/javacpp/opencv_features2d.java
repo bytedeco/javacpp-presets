@@ -405,6 +405,18 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
             @StdVector int[] numberList);
     public native @Str @Override BytePointer getDefaultName();
+
+    /** \brief Set detection threshold.
+    @param threshold AGAST detection threshold score.
+    */
+    public native void setThreshold(int threshold);
+    public native int getThreshold();
+
+    /** \brief Set detection octaves.
+    @param octaves detection octaves. Use 0 to do single scale.
+    */
+    public native void setOctaves(int octaves);
+    public native int getOctaves();
 }
 
 /** \brief Class implementing the ORB (*oriented BRIEF*) keypoint detector and descriptor extractor
@@ -621,9 +633,9 @@ FastFeatureDetector::TYPE_5_8
 <p>
 Detects corners using the FAST algorithm by \cite Rosten06 .
 <p>
-\note In Python API, types are given as cv2.FAST_FEATURE_DETECTOR_TYPE_5_8,
-cv2.FAST_FEATURE_DETECTOR_TYPE_7_12 and cv2.FAST_FEATURE_DETECTOR_TYPE_9_16. For corner
-detection, use cv2.FAST.detect() method.
+\note In Python API, types are given as cv.FAST_FEATURE_DETECTOR_TYPE_5_8,
+cv.FAST_FEATURE_DETECTOR_TYPE_7_12 and cv.FAST_FEATURE_DETECTOR_TYPE_9_16. For corner
+detection, use cv.FAST.detect() method.
  */
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, @Cast("cv::FastFeatureDetector::DetectorType") int type );
@@ -1454,9 +1466,9 @@ output image. See possible flags bit values below.
 DrawMatchesFlags. See details above in drawMatches .
 <p>
 \note
-For Python API, flags are modified as cv2.DRAW_MATCHES_FLAGS_DEFAULT,
-cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS, cv2.DRAW_MATCHES_FLAGS_DRAW_OVER_OUTIMG,
-cv2.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS
+For Python API, flags are modified as cv.DRAW_MATCHES_FLAGS_DEFAULT,
+cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS, cv.DRAW_MATCHES_FLAGS_DRAW_OVER_OUTIMG,
+cv.DRAW_MATCHES_FLAGS_NOT_DRAW_SINGLE_POINTS
  */
 @Namespace("cv") public static native void drawKeypoints( @ByVal Mat image, @Const @ByRef KeyPointVector keypoints, @ByVal Mat outImage,
                                @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color, @Cast("cv::DrawMatchesFlags") int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );

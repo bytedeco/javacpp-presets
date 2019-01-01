@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/text.hpp>", "<opencv2/text/erfilter.hpp>", "<opencv2/text/ocr.hpp>", "opencv2/text/textDetector.hpp"},
               link = "opencv_text@.4.0"),
     @Platform(value = "ios", preload = "libopencv_text"),
-    @Platform(value = "windows", link = "opencv_text400")},
+    @Platform(value = "windows", link = "opencv_text401")},
               target = "org.bytedeco.javacpp.opencv_text")
 public class opencv_text implements InfoMapper {
     public void map(InfoMap infoMap) {

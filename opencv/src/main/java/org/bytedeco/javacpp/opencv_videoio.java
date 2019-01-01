@@ -802,7 +802,8 @@ public static final int CAP_PROP_INTELPERC_PROFILE_COUNT               = 11001,
 /** enum cv:: */
 public static final int CAP_INTELPERC_DEPTH_GENERATOR = 1 << 29,
        CAP_INTELPERC_IMAGE_GENERATOR = 1 << 28,
-       CAP_INTELPERC_GENERATORS_MASK = CAP_INTELPERC_DEPTH_GENERATOR + CAP_INTELPERC_IMAGE_GENERATOR;
+       CAP_INTELPERC_IR_GENERATOR    = 1 << 27,
+       CAP_INTELPERC_GENERATORS_MASK = CAP_INTELPERC_DEPTH_GENERATOR + CAP_INTELPERC_IMAGE_GENERATOR + CAP_INTELPERC_IR_GENERATOR;
 
 /** enum cv:: */
 public static final int /** Each pixel is a 16-bit integer. The value indicates the distance from an object to the camera's XY plane or the Cartesian depth. */

@@ -23,17 +23,17 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>opencv-platform</artifactId>
-      <version>4.0.0-${project.parent.version}</version>
+      <version>4.0.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.4-${project.parent.version}</version>
+      <version>0.3.5-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.17.1-${project.parent.version}</version>
+      <version>0.17.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

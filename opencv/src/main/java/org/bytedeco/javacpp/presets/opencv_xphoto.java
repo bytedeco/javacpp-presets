@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = opencv_imgproc.class,
+    inherit = opencv_photo.class,
     value = {
         @Platform(
             include = {
@@ -38,11 +38,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/xphoto/white_balance.hpp>",
                 "<opencv2/xphoto/dct_image_denoising.hpp>",
                 "<opencv2/xphoto/bm3d_image_denoising.hpp>",
+                "<opencv2/xphoto/oilpainting.hpp>",
+                "<opencv2/xphoto/tonemap.hpp>",
             },
             link = "opencv_xphoto@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_xphoto"),
-        @Platform(value = "windows", link = "opencv_xphoto400")
+        @Platform(value = "windows", link = "opencv_xphoto401")
     },
     target = "org.bytedeco.javacpp.opencv_xphoto"
 )
