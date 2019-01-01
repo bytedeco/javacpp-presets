@@ -62,6 +62,7 @@ sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' tools/im2rec.cc
 sedinplace 's/CV_IMWRITE_PNG_COMPRESSION/cv::IMWRITE_PNG_COMPRESSION/g' tools/im2rec.cc
 sedinplace 's/CV_IMWRITE_JPEG_QUALITY/cv::IMWRITE_JPEG_QUALITY/g' tools/im2rec.cc
 
+# note: MXNet needs full path to ccache wrappers to use them
 case $PLATFORM in
     linux-x86)
         export CC="$(which gcc) -m32"
@@ -75,6 +76,8 @@ case $PLATFORM in
         export BLAS="openblas"
         ;;
     macosx-*)
+        # remove harmful changes to rpath
+        sedinplace '/install_name_tool/d' Makefile
         export CC="$(which clang)"
         export CXX="$(which clang++)"
         export BLAS="openblas"
