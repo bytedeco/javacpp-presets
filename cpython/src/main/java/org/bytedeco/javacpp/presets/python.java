@@ -145,7 +145,8 @@ public class python implements InfoMapper {
         infoMap.put(new Info("Python-ast.h").linePatterns("#define Module.*",
                                                           "int PyAST_Check.*").skip())
 
-               .put(new Info("Py_NTDDI", "Py_IS_NAN", "copysign", "hypot", "timezone", "daylight", "tzname",
+               .put(new Info("COMPILER", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
+                             "copysign", "hypot", "timezone", "daylight", "tzname",
                              "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented",
                              "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T",
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "PyMODINIT_FUNC", "Py_VA_COPY",
