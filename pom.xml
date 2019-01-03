@@ -65,6 +65,7 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.platform.nativeOutputPath>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
     <javacpp.platform.root></javacpp.platform.root>
     <javacpp.platform.compiler></javacpp.platform.compiler>
     <javacpp.platform.extension></javacpp.platform.extension>
@@ -286,7 +287,7 @@
               <goal>build</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/native/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}</outputDirectory>
+              <outputDirectory>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}</outputDirectory>
               <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
               <copyLibs>true</copyLibs>
@@ -346,9 +347,9 @@
                 </manifestEntries>
               </archive>
               <excludes>
-                <exclude>/windows-*/*.exp</exclude>
-                <exclude>/windows-*/*.lib</exclude>
-                <exclude>/windows-*/*.obj</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/javacpp/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -358,7 +359,7 @@
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0.Beta2</version>
         <executions>
           <execution>
             <id>add-module-infos</id>
@@ -696,6 +697,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -741,6 +743,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -786,6 +789,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -831,6 +835,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
