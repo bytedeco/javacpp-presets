@@ -49,6 +49,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.opencv_stitching",
         global = "opencv_stitching"
 )
+public class opencv_stitching_presets implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("override").annotations()) // we are not exposing all subclasses, so disable override annotation
                .put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))

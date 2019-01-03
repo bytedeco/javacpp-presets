@@ -24,7 +24,7 @@ package org.bytedeco.javacpp.opencv_xphoto;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc_presets;
+import org.bytedeco.javacpp.opencv_photo.opencv_photo_presets;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
