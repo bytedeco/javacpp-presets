@@ -58,6 +58,18 @@ public class GraphCutSeamFinder extends GraphCutSeamFinderBase {
                            float bad_region_penalty/*=1000.f*/);
     public GraphCutSeamFinder() { super((Pointer)null); allocate(); }
     private native void allocate();
+    public GraphCutSeamFinder(@Str BytePointer cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/) { super((Pointer)null); allocate(cost_type, terminal_cost, bad_region_penalty); }
+    private native void allocate(@Str BytePointer cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/);
+    public GraphCutSeamFinder(@Str BytePointer cost_type) { super((Pointer)null); allocate(cost_type); }
+    private native void allocate(@Str BytePointer cost_type);
+    public GraphCutSeamFinder(@Str String cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/) { super((Pointer)null); allocate(cost_type, terminal_cost, bad_region_penalty); }
+    private native void allocate(@Str String cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/);
+    public GraphCutSeamFinder(@Str String cost_type) { super((Pointer)null); allocate(cost_type); }
+    private native void allocate(@Str String cost_type);
 
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                   @ByRef UMatVector masks);

@@ -80,11 +80,11 @@ public class DetailPlaneWarper extends RotationWarper {
     public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R,
                    int interp_mode, int border_mode, @ByVal GpuMat dst);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
-                   @ByVal Mat dst);
+            @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, int interp_mode, int border_mode,
-                   @ByVal UMat dst);
+            @ByVal UMat dst);
     public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, int interp_mode, int border_mode,
-                   @ByVal GpuMat dst);
+            @ByVal GpuMat dst);
 
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);

@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_plot@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_plot"),
-        @Platform(value = "windows", link = "opencv_plot400")
+        @Platform(value = "windows", link = "opencv_plot401")
     },
     target = "org.bytedeco.javacpp.opencv_plot",
     global = "opencv_plot"

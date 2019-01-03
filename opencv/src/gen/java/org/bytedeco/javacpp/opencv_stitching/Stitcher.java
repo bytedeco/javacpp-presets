@@ -134,6 +134,9 @@ public class Stitcher extends Pointer {
     public native @Cast("bool") boolean waveCorrection();
     public native void setWaveCorrection(@Cast("bool") boolean flag);
 
+    public native @Cast("cv::InterpolationFlags") int interpolationFlags();
+    public native void setInterpolationFlags(@Cast("cv::InterpolationFlags") int interp_flags);
+
     public native @Cast("cv::detail::WaveCorrectKind") int waveCorrectKind();
     public native void setWaveCorrectKind(@Cast("cv::detail::WaveCorrectKind") int kind);
 

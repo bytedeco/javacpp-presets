@@ -10,6 +10,8 @@ import org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 import org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.*;
+import org.bytedeco.javacpp.opencv_photo.*;
+import static org.bytedeco.javacpp.opencv_photo.opencv_photo.*;
 
 import static org.bytedeco.javacpp.opencv_xphoto.opencv_xphoto.*;
 

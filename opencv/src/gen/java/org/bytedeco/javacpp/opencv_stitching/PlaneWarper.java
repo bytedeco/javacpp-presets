@@ -36,6 +36,7 @@ import static org.bytedeco.javacpp.opencv_xfeatures2d.opencv_xfeatures2d.*;
 import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 
 
+
 /** \brief Plane warper factory class.
   \sa detail::PlaneWarper
  */

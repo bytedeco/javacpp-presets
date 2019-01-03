@@ -86,7 +86,7 @@ public class Blender extends Pointer {
     @param dst Final pano
     @param dst_mask Final pano mask
      */
-    public native void blend(@ByVal Mat dst, @ByVal Mat dst_mask);
-    public native void blend(@ByVal UMat dst, @ByVal UMat dst_mask);
-    public native void blend(@ByVal GpuMat dst, @ByVal GpuMat dst_mask);
+    public native void blend(@ByVal Mat dst,@ByVal Mat dst_mask);
+    public native void blend(@ByVal UMat dst,@ByVal UMat dst_mask);
+    public native void blend(@ByVal GpuMat dst,@ByVal GpuMat dst_mask);
 }

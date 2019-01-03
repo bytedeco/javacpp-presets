@@ -57,20 +57,24 @@ public class ExposureCompensator extends Pointer {
     @param images Source images
     @param masks Image masks to update (second value in pair specifies the value which should be used
     to detect where image is)
-     */
+        */
     public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
-                  @Const @ByRef UMatVector masks);
+            @Const @ByRef UMatVector masks);
     /** \overload */
     public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
-                          @Const @ByRef UMatBytePairVector masks);
+            @Const @ByRef UMatBytePairVector masks);
     /** \brief Compensate exposure in the specified image.
     <p>
     @param index Image index
     @param corner Image top-left corner
     @param image Image to process
     @param mask Image mask
-     */
+        */
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
+    public native void getMatGains(@ByRef MatVector arg0 );
+    public native void setMatGains(@ByRef MatVector arg0 );
+    public native void setUpdateGain(@Cast("bool") boolean b);
+    public native @Cast("bool") boolean getUpdateGain();
 }

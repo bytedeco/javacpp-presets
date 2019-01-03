@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc.hpp>",
                          "<opencv2/imgproc/detail/gcgraph.hpp>"}, link = "opencv_imgproc@.4.0"),
     @Platform(value = "ios", preload = "libopencv_imgproc"),
-    @Platform(value = "windows", link = "opencv_imgproc400")},
+    @Platform(value = "windows", link = "opencv_imgproc401")},
         target = "org.bytedeco.javacpp.opencv_imgproc",
         helper = "org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc_helper",
         global = "opencv_imgproc"

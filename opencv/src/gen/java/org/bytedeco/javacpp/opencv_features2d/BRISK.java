@@ -102,4 +102,16 @@ public class BRISK extends Feature2D {
     public static native @Ptr BRISK create(int thresh, int octaves, @StdVector float[] radiusList,
             @StdVector int[] numberList);
     public native @Str @Override BytePointer getDefaultName();
+
+    /** \brief Set detection threshold.
+    @param threshold AGAST detection threshold score.
+    */
+    public native void setThreshold(int threshold);
+    public native int getThreshold();
+
+    /** \brief Set detection octaves.
+    @param octaves detection octaves. Use 0 to do single scale.
+    */
+    public native void setOctaves(int octaves);
+    public native int getOctaves();
 }

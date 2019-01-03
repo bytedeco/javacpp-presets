@@ -36,7 +36,8 @@ import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 /************************************ MultiTracker Class ---By Laksono Kurnianggoro---) ************************************/
 /** \brief This class is used to track multiple objects using the specified tracker algorithm.
-* The MultiTracker is naive implementation of multiple object tracking.
+<p>
+* The %MultiTracker is naive implementation of multiple object tracking.
 * It process the tracked objects independently without any optimization accross the tracked objects.
 */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)

@@ -10,6 +10,8 @@ import org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 import org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.*;
+import org.bytedeco.javacpp.opencv_photo.*;
+import static org.bytedeco.javacpp.opencv_photo.opencv_photo.*;
 
 public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xphoto_presets {
     static { Loader.load(); }
@@ -69,6 +71,8 @@ public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xph
 // #include "xphoto/dct_image_denoising.hpp"
 // #include "xphoto/bm3d_image_denoising.hpp"
 // #include "xphoto/oilpainting.hpp"
+// #include "xphoto/tonemap.hpp"
+
 // #endif
 
 
@@ -600,6 +604,82 @@ public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xph
 
 
 // #endif // __OPENCV_BM3D_IMAGE_DENOISING_HPP__
+
+
+// Parsed from <opencv2/xphoto/oilpainting.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+
+// #ifndef __OPENCV_OIL_PAINTING_HPP__
+// #define __OPENCV_OIL_PAINTING_HPP__
+
+// #include <opencv2/core.hpp>
+// #include <opencv2/imgproc.hpp>
+
+/** \addtogroup xphoto
+ *  \{
+<p>
+/** \brief oilPainting
+See the book \cite Holzmann1988 for details.
+@param src Input three-channel or one channel image (either CV_8UC3 or CV_8UC1)
+@param dst Output image of the same size and type as src.
+@param size neighbouring size is 2-size+1
+@param dynRatio image is divided by dynRatio before histogram processing
+@param code	color space conversion code(see ColorConversionCodes). Histogram will used only first plane
+*/
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal Mat src, @ByVal Mat dst, int size, int dynRatio, int code);
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal UMat src, @ByVal UMat dst, int size, int dynRatio, int code);
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal GpuMat src, @ByVal GpuMat dst, int size, int dynRatio, int code);
+/** \brief oilPainting
+See the book \cite Holzmann1988 for details.
+@param src Input three-channel or one channel image (either CV_8UC3 or CV_8UC1)
+@param dst Output image of the same size and type as src.
+@param size neighbouring size is 2-size+1
+@param dynRatio image is divided by dynRatio before histogram processing
+*/
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal Mat src, @ByVal Mat dst, int size, int dynRatio);
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal UMat src, @ByVal UMat dst, int size, int dynRatio);
+@Namespace("cv::xphoto") public static native void oilPainting(@ByVal GpuMat src, @ByVal GpuMat dst, int size, int dynRatio);
+/** \} */
+
+
+
+// #endif // __OPENCV_OIL_PAINTING_HPP__
+
+
+// Parsed from <opencv2/xphoto/tonemap.hpp>
+
+// This file is part of OpenCV project.
+// It is subject to the license terms in the LICENSE file found in the top-level directory
+// of this distribution and at http://opencv.org/license.html.
+
+// #ifndef OPENCV_XPHOTO_TONEMAP_HPP
+// #define OPENCV_XPHOTO_TONEMAP_HPP
+
+// #include "opencv2/photo.hpp"
+// Targeting TonemapDurand.java
+
+
+
+/** \brief Creates TonemapDurand object
+<p>
+You need to set the OPENCV_ENABLE_NONFREE option in cmake to use those. Use them at your own risk.
+<p>
+@param gamma gamma value for gamma correction. See createTonemap
+@param contrast resulting contrast on logarithmic scale, i. e. log(max / min), where max and min
+are maximum and minimum luminance values of the resulting image.
+@param saturation saturation enhancement value. See createTonemapDrago
+@param sigma_space bilateral filter sigma in color space
+@param sigma_color bilateral filter sigma in coordinate space
+ */
+@Namespace("cv::xphoto") public static native @Ptr TonemapDurand createTonemapDurand(float gamma/*=1.0f*/, float contrast/*=4.0f*/, float saturation/*=1.0f*/, float sigma_space/*=2.0f*/, float sigma_color/*=2.0f*/);
+@Namespace("cv::xphoto") public static native @Ptr TonemapDurand createTonemapDurand();
+
+ // namespace
+// #endif  // OPENCV_XPHOTO_TONEMAP_HPP
 
 
 }

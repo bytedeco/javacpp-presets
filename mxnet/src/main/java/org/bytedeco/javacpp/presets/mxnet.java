@@ -22,6 +22,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.util.Arrays;
 import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
@@ -40,12 +41,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = {openblas.class, opencv_imgcodecs.class, opencv_highgui.class}, target = "org.bytedeco.javacpp.mxnet", value = {
-    @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
+    @Platform(value = {"linux-x86", "macosx", "windows"}, compiler = {"cpp11", "fastfpu"},
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 0", "MSHADOW_USE_F16C 0"},
         include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
-                   "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/},
-        link = "mxnet", preload = {"iomp5", "libiomp5md", "mklml", "mklml_intel", "mkldnn@.0", "libmxnet"}, /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
-        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
-    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1"}, extension = "-gpu") })
+                   "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/
+                   "org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc"},
+        link = "mxnet", preload = {"mkldnn@.0", "libmxnet"}, /*resource = {"include", "lib"},*/
+        includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
+    @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
+        define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0"},
+        link = {"cudart@.10.0#", "cuda@.10.0#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
+        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
+        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/"},
+        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
@@ -53,7 +61,10 @@ public class mxnet implements LoadEnabled, InfoMapper {
         String extension = properties.getProperty("platform.extension");
         List<String> preloads = properties.get("platform.preload");
 
-        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        // Only apply this at load time since we don't want to copy the MKL or CUDA libraries here
+        if (Loader.isLoadLibraries()) {
+            preloads.addAll(0, Arrays.asList("iomp5", "libiomp5md", "mklml", "mklml_intel"));
+        }
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
             return;
         }
@@ -78,7 +89,8 @@ public class mxnet implements LoadEnabled, InfoMapper {
     }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("MXNET_EXTERN_C", "MXNET_DLL").cppTypes().annotations())
+        infoMap.put(new Info("org_apache_mxnet_init_native_c_api.cc", "org_apache_mxnet_native_c_api.cc").skip())
+               .put(new Info("MXNET_EXTERN_C", "MXNET_DLL").cppTypes().annotations())
                .put(new Info("NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
                .put(new Info("const NDArrayHandle").valueTypes("NDArrayHandle").pointerTypes("@Cast(\"NDArrayHandle*\") PointerPointer", "@Cast(\"NDArrayHandle*\") @ByPtrPtr NDArrayHandle"))
                .put(new Info("FunctionHandle").annotations("@Const").valueTypes("FunctionHandle").pointerTypes("PointerPointer", "@Cast(\"FunctionHandle*\") @ByPtrPtr FunctionHandle"))

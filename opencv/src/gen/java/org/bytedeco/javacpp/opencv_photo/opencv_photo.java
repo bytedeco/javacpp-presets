@@ -589,21 +589,6 @@ results, default value is 0.85.
  */
 @Namespace("cv") public static native @Ptr TonemapDrago createTonemapDrago(float gamma/*=1.0f*/, float saturation/*=1.0f*/, float bias/*=0.85f*/);
 @Namespace("cv") public static native @Ptr TonemapDrago createTonemapDrago();
-// Targeting TonemapDurand.java
-
-
-
-/** \brief Creates TonemapDurand object
-<p>
-@param gamma gamma value for gamma correction. See createTonemap
-@param contrast resulting contrast on logarithmic scale, i. e. log(max / min), where max and min
-are maximum and minimum luminance values of the resulting image.
-@param saturation saturation enhancement value. See createTonemapDrago
-@param sigma_space bilateral filter sigma in color space
-@param sigma_color bilateral filter sigma in coordinate space
- */
-@Namespace("cv") public static native @Ptr TonemapDurand createTonemapDurand(float gamma/*=1.0f*/, float contrast/*=4.0f*/, float saturation/*=1.0f*/, float sigma_space/*=2.0f*/, float sigma_color/*=2.0f*/);
-@Namespace("cv") public static native @Ptr TonemapDurand createTonemapDurand();
 // Targeting TonemapReinhard.java
 
 

@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_core_presets.class, value = {
     @Platform(include = {"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link = "opencv_flann@.4.0"),
     @Platform(value = "ios", preload = "libopencv_flann"),
-    @Platform(value = "windows", link = "opencv_flann400")},
+    @Platform(value = "windows", link = "opencv_flann401")},
         target = "org.bytedeco.javacpp.opencv_flann",
         global = "opencv_flann"
 )

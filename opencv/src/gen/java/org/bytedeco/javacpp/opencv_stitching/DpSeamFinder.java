@@ -56,9 +56,15 @@ public class DpSeamFinder extends SeamFinder {
     private native void allocate(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=cv::detail::DpSeamFinder::COLOR*/);
     public DpSeamFinder() { super((Pointer)null); allocate(); }
     private native void allocate();
+    public DpSeamFinder(@Str BytePointer costFunc ) { super((Pointer)null); allocate(costFunc); }
+    private native void allocate(@Str BytePointer costFunc );
+    public DpSeamFinder(@Str String costFunc ) { super((Pointer)null); allocate(costFunc); }
+    private native void allocate(@Str String costFunc );
 
     public native @Cast("cv::detail::DpSeamFinder::CostFunction") int costFunction();
     public native void setCostFunction(@Cast("cv::detail::DpSeamFinder::CostFunction") int val);
+    public native void setCostFunction(@Str BytePointer val);
+    public native void setCostFunction(@Str String val);
 
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                           @ByRef UMatVector masks);

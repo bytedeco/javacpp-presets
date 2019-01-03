@@ -33,8 +33,9 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \brief This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm.
+/** \brief the Boosting tracker
 <p>
+This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm.
 The classifier uses the surrounding background as negative examples in update step to avoid the
 drifting problem. The implementation is based on \cite OLB .
  */

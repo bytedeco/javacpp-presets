@@ -33,9 +33,10 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \brief the MOSSE tracker
-note, that this tracker works with grayscale images, if passed bgr ones, they will get converted internally.
-\cite MOSSE Visual Object Tracking using Adaptive Correlation Filters
+/** \brief the MOSSE (Minimum Output Sum of Squared %Error) tracker
+<p>
+The implementation is based on \cite MOSSE Visual Object Tracking using Adaptive Correlation Filters
+\note this tracker works with grayscale images, if passed bgr ones, they will get converted internally.
 */
 
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)

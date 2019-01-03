@@ -487,9 +487,10 @@ public static final int CV_CPU_AVX_512PF =        19;
 public static final int CV_CPU_AVX_512VBMI =      20;
 public static final int CV_CPU_AVX_512VL =        21;
 
-public static final int CV_CPU_NEON =   100;
+public static final int CV_CPU_NEON =             100;
 
-public static final int CV_CPU_VSX = 200;
+public static final int CV_CPU_VSX =              200;
+public static final int CV_CPU_VSX3 =             201;
 
 // CPU features groups
 public static final int CV_CPU_AVX512_SKX =       256;
@@ -528,6 +529,7 @@ public static final int
     CPU_NEON            = 100,
 
     CPU_VSX             = 200,
+    CPU_VSX3            = 201,
 
     /** Skylake-X with AVX-512F/CD/BW/DQ/VL */
     CPU_AVX512_SKX      = 256,
@@ -1799,7 +1801,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    0;
-public static final int CV_VERSION_REVISION = 0;
+public static final int CV_VERSION_REVISION = 1;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A

@@ -69,5 +69,5 @@ public class FeatherBlender extends Blender {
     /** Creates weight maps for fixed set of source images by their masks and top-left corners.
      *  Final image can be obtained by simple weighting of the source images. */
     public native @ByVal Rect createWeightMaps(@Const @ByRef UMatVector masks, @Const @ByRef PointVector corners,
-                              @ByRef UMatVector weight_maps);
+            @ByRef UMatVector weight_maps);
 }

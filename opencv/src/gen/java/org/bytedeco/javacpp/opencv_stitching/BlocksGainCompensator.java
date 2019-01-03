@@ -60,4 +60,6 @@ public class BlocksGainCompensator extends ExposureCompensator {
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
+    public native void getMatGains(@ByRef MatVector umv);
+    public native void setMatGains(@ByRef MatVector umv);
 }

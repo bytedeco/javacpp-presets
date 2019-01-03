@@ -62,6 +62,6 @@ public class Estimator extends Pointer {
     @return True in case of success, false otherwise
      */
     public native @Cast("bool") @Name("operator ()") boolean apply(@StdVector ImageFeatures features,
-                         @StdVector MatchesInfo pairwise_matches,
-                         @StdVector CameraParams cameras);
+            @StdVector MatchesInfo pairwise_matches,
+            @StdVector CameraParams cameras);
 }

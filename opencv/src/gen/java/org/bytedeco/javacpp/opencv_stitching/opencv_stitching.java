@@ -254,7 +254,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.opencv_stitching.open
 // Targeting ImageFeatures.java
 
 
-
+/** \brief
+<p>
+@param featuresFinder
+@param images
+@param features
+@param masks
+*/
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal MatVector images,
@@ -283,30 +289,37 @@ public class opencv_stitching extends org.bytedeco.javacpp.opencv_stitching.open
     @ByVal GpuMatVector images,
     @StdVector ImageFeatures features);
 
-@Namespace("cv::detail") public static native void computeImageFeatures(
+/** \brief
+<p>
+@param featuresFinder
+@param image
+@param features
+@param mask
+*/
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal Mat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal Mat image,
     @ByRef ImageFeatures features);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal UMat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal UMat image,
     @ByRef ImageFeatures features);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMat image,
     @ByRef ImageFeatures features);
@@ -946,7 +959,7 @@ by Heung-Yeung Shum and Richard Szeliski.
                               @StdVector MatchesInfo pairwise_matches,
                               @StdVector double[] focals);
 
-@Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs, @ByRef Mat K);
+@Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs,@ByRef Mat K);
 
 /** \} stitching_autocalib */
 
@@ -1068,6 +1081,10 @@ by Heung-Yeung Shum and Richard Szeliski.
 // #define OPENCV_STITCHING_WARPER_CREATORS_HPP
 
 // #include "opencv2/stitching/detail/warpers.hpp"
+// #include <string>
+// Targeting PyRotationWarper.java
+
+
 // Targeting WarperCreator.java
 
 

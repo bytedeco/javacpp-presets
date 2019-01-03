@@ -41,6 +41,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 <p>
 /** \brief Image warper factories base class.
  */
+
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class WarperCreator extends Pointer {
     static { Loader.load(); }

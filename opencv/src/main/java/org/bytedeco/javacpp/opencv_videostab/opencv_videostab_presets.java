@@ -46,10 +46,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "opencv_cudaimgproc@.4.0", "opencv_cudafeatures2d@.4.0", "opencv_cudalegacy@.4.0",
                          "opencv_cudaoptflow@.4.0", "opencv_cudawarping@.4.0"}),
     @Platform(value = "ios", preload = "libopencv_videostab"),
-    @Platform(value = "windows", link = "opencv_videostab400",
-              preload = {"opencv_cuda400", "opencv_cudaarithm400", "opencv_cudafilters400",
-                         "opencv_cudaimgproc400", "opencv_cudafeatures2d400", "opencv_cudalegacy400",
-                         "opencv_cudaoptflow400", "opencv_cudawarping400"})},
+    @Platform(value = "windows", link = "opencv_videostab401",
+              preload = {"opencv_cuda401", "opencv_cudaarithm401", "opencv_cudafilters401",
+                         "opencv_cudaimgproc401", "opencv_cudafeatures2d401", "opencv_cudalegacy401",
+                         "opencv_cudaoptflow401", "opencv_cudawarping401"})},
         target = "org.bytedeco.javacpp.opencv_videostab",
         global = "opencv_videostab"
 )

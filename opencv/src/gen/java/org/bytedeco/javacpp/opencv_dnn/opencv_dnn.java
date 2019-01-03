@@ -118,7 +118,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20180917;
+public static final int OPENCV_DNN_API_VERSION = 20181221;
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #else
@@ -241,6 +241,9 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
 // #define OPENCV_DNN_DNN_ALL_LAYERS_HPP
 // #include <opencv2/dnn.hpp>
 // Targeting BlankLayer.java
+
+
+// Targeting ConstLayer.java
 
 
 // Targeting LSTMLayer.java
@@ -460,7 +463,12 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
         DNN_TARGET_OPENCL = 1,
         DNN_TARGET_OPENCL_FP16 = 2,
         DNN_TARGET_MYRIAD = 3,
-        DNN_TARGET_VULKAN = 4;
+        DNN_TARGET_VULKAN = 4,
+        /** FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin. */
+        DNN_TARGET_FPGA = 5;
+
+    @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
+    @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
 // Targeting LayerParams.java
 
 
@@ -595,6 +603,7 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
      *  \brief Reads a network model stored in <a href="http://torch.ch">Torch7</a> framework's format.
      *  @param model    path to the file, dumped from Torch by using torch.save() function.
      *  @param isBinary specifies whether the network was serialized in ascii mode or binary.
+     *  @param evaluate specifies testing phase of network. If true, it's similar to evaluate() method in Torch.
      *  @return Net object.
      *
      *  \note Ascii mode of Torch serializer is more preferable, because binary mode extensively use {@code long} type of C language,
@@ -616,9 +625,9 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
      *
      * Also some equivalents of these classes from cunn, cudnn, and fbcunn may be successfully imported.
      */
-     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/, @Cast("bool") boolean evaluate/*=true*/);
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model);
-     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/, @Cast("bool") boolean evaluate/*=true*/);
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
 
      /**

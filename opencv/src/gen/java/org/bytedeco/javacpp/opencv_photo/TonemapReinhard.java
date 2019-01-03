@@ -14,6 +14,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_photo.opencv_photo.*;
 
 
+
 /** \brief This is a global tonemapping operator that models human visual system.
 <p>
 Mapping function is controlled by adaptation parameter, that is computed using light adaptation and

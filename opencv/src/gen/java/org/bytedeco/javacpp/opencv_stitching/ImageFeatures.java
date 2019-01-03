@@ -59,4 +59,5 @@ public class ImageFeatures extends Pointer {
     public native @ByRef Size img_size(); public native ImageFeatures img_size(Size img_size);
     public native @ByRef KeyPointVector keypoints(); public native ImageFeatures keypoints(KeyPointVector keypoints);
     public native @ByRef UMat descriptors(); public native ImageFeatures descriptors(UMat descriptors);
+    public native @ByVal KeyPointVector getKeypoints();
 }

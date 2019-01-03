@@ -33,7 +33,9 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \brief GOTURN (\cite GOTURN) is kind of trackers based on Convolutional Neural Networks (CNN). While taking all advantages of CNN trackers,
+/** \brief the GOTURN (Generic Object Tracking Using Regression Networks) tracker
+ <p>
+ *  GOTURN (\cite GOTURN) is kind of trackers based on Convolutional Neural Networks (CNN). While taking all advantages of CNN trackers,
  *  GOTURN is much faster due to offline training without online fine-tuning nature.
  *  GOTURN tracker addresses the problem of single target tracking: given a bounding box label of an object in the first frame of the video,
  *  we track that object through the rest of the video. NOTE: Current method of GOTURN does not handle occlusions; however, it is fairly

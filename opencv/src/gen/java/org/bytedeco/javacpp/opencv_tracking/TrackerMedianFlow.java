@@ -33,7 +33,7 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \brief Median Flow tracker implementation.
+/** \brief the Median Flow tracker
 <p>
 Implementation of a paper \cite MedianFlow .
 <p>

@@ -47,6 +47,8 @@ public class SeamFinder extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SeamFinder(Pointer p) { super(p); }
 
+    /** enum cv::detail::SeamFinder:: */
+    public static final int NO = 0, VORONOI_SEAM = 1, DP_SEAM = 2;
     /** \brief Estimates seams.
     <p>
     @param src Source images
@@ -55,4 +57,5 @@ public class SeamFinder extends Pointer {
      */
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                           @ByRef UMatVector masks);
+    public static native @Ptr SeamFinder createDefault(int type);
 }

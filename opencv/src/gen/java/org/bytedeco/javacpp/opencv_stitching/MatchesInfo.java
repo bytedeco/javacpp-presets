@@ -61,8 +61,8 @@ public class MatchesInfo extends Pointer {
     private native void allocate(@Const @ByRef MatchesInfo other);
     public native @ByRef @Name("operator =") MatchesInfo put(@Const @ByRef MatchesInfo other);
 
-    /** Images indices (optional) */
     public native int src_img_idx(); public native MatchesInfo src_img_idx(int src_img_idx);
+    /** Images indices (optional) */
     public native int dst_img_idx(); public native MatchesInfo dst_img_idx(int dst_img_idx);
     public native @ByRef DMatchVector matches(); public native MatchesInfo matches(DMatchVector matches);
     /** Geometrically consistent matches mask */
@@ -73,4 +73,6 @@ public class MatchesInfo extends Pointer {
     public native @ByRef Mat H(); public native MatchesInfo H(Mat H);
     /** Confidence two images are from the same panorama */
     public native double confidence(); public native MatchesInfo confidence(double confidence);
+    public native @ByVal DMatchVector getMatches();
+    public native @Cast("uchar*") @StdVector BytePointer getInliers();
 }

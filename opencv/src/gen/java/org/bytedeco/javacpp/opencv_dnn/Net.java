@@ -191,6 +191,7 @@ public class Net extends Pointer {
          * | DNN_TARGET_OPENCL      |                  + |                            + |                  + |
          * | DNN_TARGET_OPENCL_FP16 |                  + |                            + |                    |
          * | DNN_TARGET_MYRIAD      |                    |                            + |                    |
+         * | DNN_TARGET_FPGA        |                    |                            + |                    |
          */
         public native void setPreferableTarget(int targetId);
 

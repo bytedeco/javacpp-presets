@@ -1,4 +1,5 @@
 
+ * Bundle the new official Java/Scala API of MXNet via the `jnimxnet` library
  * Add `QuickSpinC.h`, `SpinVideoC.h`, and `TransportLayer*C.h` for Spinnaker ([pull #660](https://github.com/bytedeco/javacpp-presets/pull/660))
  * Add `FlyCapture2Video.h` and `FlyCapture2VideoDef.h`, and remove `AVIRecorder.h` for FlyCapture ([pull #613](https://github.com/bytedeco/javacpp-presets/pull/613))
  * Switch to Clang for Android builds with recent versions of the NDK ([issue #562](https://github.com/bytedeco/javacpp-presets/issues/562))
@@ -16,7 +17,7 @@
  * Add builds for `linux-mips64el` to presets for ARToolKitPlus, Chilitags, flandmark, OpenBLAS, and FFTW ([pull #637](https://github.com/bytedeco/javacpp-presets/pull/637))
  * Update sample code for GSL with a more complex example ([issue #636](https://github.com/bytedeco/javacpp-presets/issues/636))
  * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
- * Upgrade presets for OpenCV 4.0.0, and FFmpeg 4.1, FlyCapture 2.13.3.31, Spinnaker 1.19.0.22, HDF5 1.10.4, MKL 2019.1, MKL-DNN 0.17.1, OpenBLAS 0.3.4, Leptonica 1.77.0, Tesseract 4.0.0, cuDNN 7.4, MXNet 1.3.1, TensorFlow 1.12.0, and their dependencies
+ * Upgrade presets for OpenCV 4.0.1, FFmpeg 4.1, FlyCapture 2.13.3.31, Spinnaker 1.19.0.22, HDF5 1.10.4, MKL 2019.1, MKL-DNN 0.17.2, OpenBLAS 0.3.5, LLVM 7.0.1, Leptonica 1.77.0, Tesseract 4.0.0, cuDNN 7.4, MXNet 1.4.0.rc0, TensorFlow 1.12.0, and their dependencies
 
 ### October 15, 2018 version 1.4.3
  * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`

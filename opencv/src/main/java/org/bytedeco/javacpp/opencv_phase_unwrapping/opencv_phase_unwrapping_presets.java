@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_phase_unwrapping@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_phase_unwrapping"),
-        @Platform(value = "windows", link = "opencv_phase_unwrapping400")
+        @Platform(value = "windows", link = "opencv_phase_unwrapping401")
     },
     target = "org.bytedeco.javacpp.opencv_phase_unwrapping",
     global = "opencv_phase_unwrapping"

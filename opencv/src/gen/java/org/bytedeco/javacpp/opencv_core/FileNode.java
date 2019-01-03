@@ -177,7 +177,7 @@ public class FileNode extends Pointer {
     /** Simplified reading API to use with bindings. */
     public native double real();
     /** Simplified reading API to use with bindings. */
-    public native @Str BytePointer string();
+    public native @StdString BytePointer string();
     /** Simplified reading API to use with bindings. */
     public native @ByVal Mat mat();
 

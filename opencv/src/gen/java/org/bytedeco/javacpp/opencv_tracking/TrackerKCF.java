@@ -33,7 +33,9 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \brief KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
+/** \brief the KCF (Kernelized Correlation Filter) tracker
+ <p>
+ * KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
  * This tracking method is an implementation of \cite KCF_ECCV which is extended to KCF with color-names features (\cite KCF_CN).
  * The original paper of KCF is available at <http://www.robots.ox.ac.uk/~joao/publications/henriques_tpami2015.pdf>
  * as well as the matlab implementation. For more information about KCF with color-names features, please refer to

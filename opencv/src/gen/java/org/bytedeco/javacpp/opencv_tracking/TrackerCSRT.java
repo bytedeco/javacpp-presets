@@ -33,10 +33,10 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
 import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 
-/** \}
-<p>
 /*********************************** CSRT ************************************/
-/** \brief Discriminative Correlation Filter Tracker with Channel and Spatial Reliability
+/** \brief the CSRT tracker
+<p>
+The implementation is based on \cite Lukezic_IJCV2018 Discriminative Correlation Filter with Channel and Spatial Reliability
 */
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)
 public class TrackerCSRT extends Tracker {
@@ -62,12 +62,12 @@ public class TrackerCSRT extends Tracker {
     private native void allocate();
 
     /**
-    * \brief Read parameters from file
+    * \brief Read parameters from a file
     */
     public native void read(@Const @ByRef FileNode arg0);
 
     /**
-    * \brief Write parameters from file
+    * \brief Write parameters to a file
     */
     public native void write(@ByRef FileStorage fs);
 

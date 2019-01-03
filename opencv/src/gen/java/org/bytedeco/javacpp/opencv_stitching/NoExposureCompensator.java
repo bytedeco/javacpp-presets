@@ -58,4 +58,6 @@ public class NoExposureCompensator extends ExposureCompensator {
     public native void apply(int arg0, @ByVal Point arg1, @ByVal Mat arg2, @ByVal Mat arg3);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal UMat arg2, @ByVal UMat arg3);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal GpuMat arg2, @ByVal GpuMat arg3);
+    public native void getMatGains(@ByRef MatVector umv);
+    public native void setMatGains(@ByRef MatVector umv);
 }

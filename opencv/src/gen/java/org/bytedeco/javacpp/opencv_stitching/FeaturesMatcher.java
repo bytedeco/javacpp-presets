@@ -62,15 +62,15 @@ public class FeaturesMatcher extends Pointer {
     <p>
     \sa detail::MatchesInfo
     */
-    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
+    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
                          @Const @ByRef(nullValue = "cv::UMat()") UMat mask);
-    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
+    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 
     /** @return True, if it's possible to use the same matcher instance in parallel, false otherwise
     */
-    public native @Cast("bool") boolean isThreadSafe();
+   public native @Cast("bool") boolean isThreadSafe();
 
     /** \brief Frees unused memory allocated before if there is any.
     */
-    public native void collectGarbage();
+   public native void collectGarbage();
 }

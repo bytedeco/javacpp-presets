@@ -70,4 +70,7 @@ public class BestOf2NearestMatcher extends FeaturesMatcher {
     private native void allocate();
 
     public native void collectGarbage();
+    public static native @Ptr BestOf2NearestMatcher create(@Cast("bool") boolean try_use_gpu/*=false*/, float match_conf/*=0.3f*/, int num_matches_thresh1/*=6*/,
+            int num_matches_thresh2/*=6*/);
+    public static native @Ptr BestOf2NearestMatcher create();
 }
