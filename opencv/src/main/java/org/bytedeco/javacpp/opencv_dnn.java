@@ -357,7 +357,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20180917;
+public static final int OPENCV_DNN_API_VERSION = 20181221;
 
 // #if !defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #else
@@ -432,6 +432,9 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
 
     public DictValue(@Const @ByRef DictValue r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef DictValue r);
+    /** Constructs integer scalar */
+    public DictValue(@Cast("bool") boolean i) { super((Pointer)null); allocate(i); }
+    private native void allocate(@Cast("bool") boolean i);
     /** Constructs integer scalar */
     public DictValue(@Cast("int64") long i/*=0*/) { super((Pointer)null); allocate(i); }
     private native void allocate(@Cast("int64") long i/*=0*/);
@@ -592,6 +595,26 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public BlankLayer(Pointer p) { super(p); }
+    
+        public static native @Ptr Layer create(@Const @ByRef LayerParams params);
+    }
+
+    /**
+     * Constant layer produces the same data blob at an every forward pass.
+     */
+    @Namespace("cv::dnn") public static class ConstLayer extends Layer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public ConstLayer() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ConstLayer(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ConstLayer(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public ConstLayer position(long position) {
+            return (ConstLayer)super.position(position);
+        }
     
         public static native @Ptr Layer create(@Const @ByRef LayerParams params);
     }
@@ -1336,7 +1359,12 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
         DNN_TARGET_OPENCL = 1,
         DNN_TARGET_OPENCL_FP16 = 2,
         DNN_TARGET_MYRIAD = 3,
-        DNN_TARGET_VULKAN = 4;
+        DNN_TARGET_VULKAN = 4,
+        /** FPGA device with CPU fallbacks using Inference Engine's Heterogeneous plugin. */
+        DNN_TARGET_FPGA = 5;
+
+    @Namespace("cv::dnn") public static native @ByVal @Cast("std::vector<std::pair<cv::dnn::Backend,cv::dnn::Target> >*") IntIntPairVector getAvailableBackends();
+    @Namespace("cv::dnn") public static native @Cast("cv::dnn::Target*") @StdVector IntPointer getAvailableTargets(@Cast("cv::dnn::Backend") int be);
 
     /** \brief This class provides all data needed to initialize layer.
      *
@@ -1802,6 +1830,7 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
          * | DNN_TARGET_OPENCL      |                  + |                            + |                  + |
          * | DNN_TARGET_OPENCL_FP16 |                  + |                            + |                    |
          * | DNN_TARGET_MYRIAD      |                    |                            + |                    |
+         * | DNN_TARGET_FPGA        |                    |                            + |                    |
          */
         public native void setPreferableTarget(int targetId);
 
@@ -2127,6 +2156,7 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
      *  \brief Reads a network model stored in <a href="http://torch.ch">Torch7</a> framework's format.
      *  @param model    path to the file, dumped from Torch by using torch.save() function.
      *  @param isBinary specifies whether the network was serialized in ascii mode or binary.
+     *  @param evaluate specifies testing phase of network. If true, it's similar to evaluate() method in Torch.
      *  @return Net object.
      *
      *  \note Ascii mode of Torch serializer is more preferable, because binary mode extensively use {@code long} type of C language,
@@ -2148,9 +2178,9 @@ public static final int OPENCV_DNN_API_VERSION = 20180917;
      *
      * Also some equivalents of these classes from cunn, cudnn, and fbcunn may be successfully imported.
      */
-     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model, @Cast("bool") boolean isBinary/*=true*/, @Cast("bool") boolean evaluate/*=true*/);
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str BytePointer model);
-     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/);
+     @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model, @Cast("bool") boolean isBinary/*=true*/, @Cast("bool") boolean evaluate/*=true*/);
      @Namespace("cv::dnn") public static native @ByVal Net readNetFromTorch(@Str String model);
 
      /**

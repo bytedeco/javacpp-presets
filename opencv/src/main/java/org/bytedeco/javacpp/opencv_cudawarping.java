@@ -7,6 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
 
 public class opencv_cudawarping extends org.bytedeco.javacpp.presets.opencv_cudawarping {
     static { Loader.load(); }
@@ -129,11 +130,11 @@ supported for now.
 <p>
 \sa resize
  */
-@Namespace("cv::cuda") public static native void resize(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void resize(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void resize(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void resize(@ByVal UMat src, @ByVal UMat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void resize(@ByVal UMat src, @ByVal UMat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void resize(@ByVal UMat src, @ByVal UMat dst, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void resize(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+@Namespace("cv::cuda") public static native void resize(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/, int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void resize(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size dsize);
 
 /** \brief Applies an affine transformation to an image.
@@ -152,13 +153,13 @@ INTER_NEAREST , INTER_LINEAR , and INTER_CUBIC interpolation methods are support
 <p>
 \sa warpAffine
  */
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpAffine(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpAffine(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpAffine(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpAffine(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize);
 
@@ -196,13 +197,13 @@ INTER_NEAREST , INTER_LINEAR , and INTER_CUBIC interpolation methods are support
 <p>
 \sa warpPerspective
  */
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpPerspective(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpPerspective(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpPerspective(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpPerspective(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize);
 
@@ -240,13 +241,13 @@ are supported.
 \sa cuda::warpAffine
  */
 @Namespace("cv::cuda") public static native void rotate(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize, double angle, double xShift/*=0*/, double yShift/*=0*/,
-                       int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+                       int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void rotate(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize, double angle);
 @Namespace("cv::cuda") public static native void rotate(@ByVal UMat src, @ByVal UMat dst, @ByVal Size dsize, double angle, double xShift/*=0*/, double yShift/*=0*/,
-                       int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+                       int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void rotate(@ByVal UMat src, @ByVal UMat dst, @ByVal Size dsize, double angle);
 @Namespace("cv::cuda") public static native void rotate(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size dsize, double angle, double xShift/*=0*/, double yShift/*=0*/,
-                       int interpolation/*=INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
+                       int interpolation/*=cv::INTER_LINEAR*/, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
 @Namespace("cv::cuda") public static native void rotate(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Size dsize, double angle);
 
 /** \brief Smoothes an image and downsamples it.

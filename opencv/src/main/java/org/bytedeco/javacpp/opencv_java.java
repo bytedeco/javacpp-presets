@@ -44,13 +44,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         opencv_img_hash.class,
         opencv_structured_light.class,
         opencv_text.class,
+        opencv_tracking.class,
         opencv_xfeatures2d.class,
         opencv_ximgproc.class,
         opencv_xphoto.class,
     },
     value = {
-        @Platform(preload = "opencv_java"),
+        @Platform(preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0", "opencv_cudafilters@.4.0", "opencv_cudaimgproc@.4.0", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
+        @Platform(value = "windows", preload = {"opencv_cuda400", "opencv_cudaarithm400", "opencv_cudafilters400", "opencv_cudaimgproc400", "opencv_java"}),
     }
 )
 public class opencv_java {

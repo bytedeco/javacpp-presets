@@ -29,14 +29,14 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_calib3d.class, opencv_flann.class, opencv_highgui.class, opencv_video.class},
+    inherit = opencv_video.class,
     value = {
         @Platform(
             include = "<opencv2/bgsegm.hpp>",
             link = "opencv_bgsegm@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_bgsegm"),
-        @Platform(value = "windows", link = "opencv_bgsegm400")
+        @Platform(value = "windows", link = "opencv_bgsegm401")
     },
     target = "org.bytedeco.javacpp.opencv_bgsegm"
 )

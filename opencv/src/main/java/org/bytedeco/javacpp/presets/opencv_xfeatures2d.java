@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,12 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Jarek Sacha
  */
-@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_ml.class, opencv_shape.class}, value = {
+@Properties(inherit = {opencv_ml.class, opencv_shape.class}, value = {
     @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.4.0",
               preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0"}),
     @Platform(value = "ios", preload = "libopencv_xfeatures2d"),
-    @Platform(value = "windows", link = "opencv_xfeatures2d400",
-              preload = {"opencv_cuda400", "opencv_cudaarithm400"})},
+    @Platform(value = "windows", link = "opencv_xfeatures2d401",
+              preload = {"opencv_cuda401", "opencv_cudaarithm401"})},
         target = "org.bytedeco.javacpp.opencv_xfeatures2d")
 public class opencv_xfeatures2d implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2017 Samuel Audet
+ * Copyright (C) 2014-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_core.class, value = {
     @Platform(include = "<opencv2/ml.hpp>", link = "opencv_ml@.4.0"),
     @Platform(value = "ios", preload = "libopencv_ml"),
-    @Platform(value = "windows", link = "opencv_ml400")},
+    @Platform(value = "windows", link = "opencv_ml401")},
         target = "org.bytedeco.javacpp.opencv_ml", helper = "org.bytedeco.javacpp.helper.opencv_ml")
 public class opencv_ml implements InfoMapper {
     public void map(InfoMap infoMap) {

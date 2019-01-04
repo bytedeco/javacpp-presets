@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2017 Samuel Audet
+ * Copyright (C) 2013-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc.hpp>",
                          "<opencv2/imgproc/detail/gcgraph.hpp>"}, link = "opencv_imgproc@.4.0"),
     @Platform(value = "ios", preload = "libopencv_imgproc"),
-    @Platform(value = "windows", link = "opencv_imgproc400")},
+    @Platform(value = "windows", link = "opencv_imgproc401")},
         target = "org.bytedeco.javacpp.opencv_imgproc", helper = "org.bytedeco.javacpp.helper.opencv_imgproc")
 public class opencv_imgproc implements InfoMapper {
     public void map(InfoMap infoMap) {

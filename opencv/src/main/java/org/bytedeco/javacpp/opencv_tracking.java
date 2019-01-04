@@ -2,6 +2,7 @@
 
 package org.bytedeco.javacpp;
 
+import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -9,6 +10,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
 import static org.bytedeco.javacpp.opencv_plot.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_videoio.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_flann.*;
+import static org.bytedeco.javacpp.opencv_features2d.*;
+import static org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_video.*;
 import static org.bytedeco.javacpp.opencv_dnn.*;
 
@@ -366,8 +373,8 @@ public class opencv_tracking extends org.bytedeco.javacpp.presets.opencv_trackin
  //
  //M*/
 
-// #ifndef __OPENCV_TRACKING_LENLEN_HPP__
-// #define __OPENCV_TRACKING_LENLEN_HPP__
+// #ifndef __OPENCV_TRACKING_HPP__
+// #define __OPENCV_TRACKING_HPP__
 
 // #include "opencv2/core/cvdef.h"
 
@@ -376,12 +383,12 @@ public class opencv_tracking extends org.bytedeco.javacpp.presets.opencv_trackin
 Long-term optical tracking API
 ------------------------------
 <p>
-Long-term optical tracking is one of most important issue for many computer vision applications in
+Long-term optical tracking is an important issue for many computer vision applications in
 real world scenario. The development in this area is very fragmented and this API is an unique
 interface useful for plug several algorithms and compare them. This work is partially based on
 \cite AAM and \cite AMVOT .
 <p>
-This algorithms start from a bounding box of the target and with their internal representation they
+These algorithms start from a bounding box of the target and with their internal representation they
 avoid the drift during the tracking. These long-term trackers are able to evaluate online the
 quality of the location of the target in the new frame, without ground truth.
 <p>
@@ -396,23 +403,16 @@ the TrackerModel is the statistical model.
 <p>
 A recent benchmark between these algorithms can be found in \cite OOT
 <p>
-To see how API works, try tracker demo:
-<https://github.com/lenlen/opencv/blob/tracking_api/samples/cpp/tracker.cpp>
-<p>
-Creating Own Tracker
+Creating Your Own %Tracker
 --------------------
 <p>
-If you want create a new tracker, here's what you have to do. First, decide on the name of the class
+If you want to create a new tracker, here's what you have to do. First, decide on the name of the class
 for the tracker (to meet the existing style, we suggest something with prefix "tracker", e.g.
-trackerMIL, trackerBoosting) -- we shall refer to this choice as to "classname" in subsequent. Also,
-you should decide upon the name of the tracker, is it will be known to user (the current style
-suggests using all capitals, say MIL or BOOSTING) --we'll call it a "name".
+trackerMIL, trackerBoosting) -- we shall refer to this choice as to "classname" in subsequent.
 <p>
--   Declare your tracker in include/opencv2/tracking/tracker.hpp. Your tracker should inherit from
+-   Declare your tracker in modules/tracking/include/opencv2/tracking/tracker.hpp. Your tracker should inherit from
     Tracker (please, see the example below). You should declare the specialized Param structure,
-    where you probably will want to put the data, needed to initialize your tracker. Also don't
-    forget to put the BOILERPLATE_CODE(name,classname) macro inside the class declaration. That
-    macro will generate static createTracker() function, which we'll talk about later. You should
+    where you probably will want to put the data, needed to initialize your tracker. You should
     get something similar to :
 <pre>{@code
         class CV_EXPORTS_W TrackerMIL : public Tracker
@@ -436,20 +436,10 @@ suggests using all capitals, say MIL or BOOSTING) --we'll call it a "name".
 }</pre>
     of course, you can also add any additional methods of your choice. It should be pointed out,
     however, that it is not expected to have a constructor declared, as creation should be done via
-    the corresponding createTracker() method.
--   In src/tracker.cpp file add BOILERPLATE_CODE(name,classname) line to the body of
-    Tracker::create() method you will find there, like :
-<pre>{@code
-        Ptr<Tracker> Tracker::create( const String& trackerType )
-        {
-          BOILERPLATE_CODE("BOOSTING",TrackerBoosting);
-          BOILERPLATE_CODE("MIL",TrackerMIL);
-          return Ptr<Tracker>();
-        }
-}</pre>
+    the corresponding create() method.
 -   Finally, you should implement the function with signature :
 <pre>{@code
-        Ptr<classname> classname::createTracker(const classname::Params &parameters){
+        Ptr<classname> classname::create(const classname::Params &parameters){
             ...
         }
 }</pre>
@@ -619,19 +609,13 @@ Example of creating specialized TrackerTargetState TrackerMILTargetState : :
 
     };
 }</pre>
-### Try it
-<p>
-To try your tracker you can use the demo at
-<https://github.com/lenlen/opencv/blob/tracking_api/samples/cpp/tracker.cpp>.
-<p>
-The first argument is the name of the tracker and the second is a video source.
 <p>
 */
 
 // #include <opencv2/tracking/tracker.hpp>
 // #include <opencv2/tracking/tldDataset.hpp>
 
-// #endif //__OPENCV_TRACKING_LENLEN
+// #endif //__OPENCV_TRACKING_HPP__
 
 
 // Parsed from <opencv2/tracking/feature.hpp>
@@ -2756,8 +2740,9 @@ Original code can be found here <http://vision.ucsd.edu/~bbabenko/project_miltra
   public static native @Ptr TrackerMIL create();
 }
 
-/** \brief This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm.
+/** \brief the Boosting tracker
 <p>
+This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm.
 The classifier uses the surrounding background as negative examples in update step to avoid the
 drifting problem. The implementation is based on \cite OLB .
  */
@@ -2808,7 +2793,7 @@ drifting problem. The implementation is based on \cite OLB .
   public static native @Ptr TrackerBoosting create();
 }
 
-/** \brief Median Flow tracker implementation.
+/** \brief the Median Flow tracker
 <p>
 Implementation of a paper \cite MedianFlow .
 <p>
@@ -2864,7 +2849,9 @@ reference purpose.
   public static native @Ptr TrackerMedianFlow create();
 }
 
-/** \brief TLD is a novel tracking framework that explicitly decomposes the long-term tracking task into
+/** \brief the TLD (Tracking, learning and detection) tracker
+<p>
+TLD is a novel tracking framework that explicitly decomposes the long-term tracking task into
 tracking, learning and detection.
 <p>
 The tracker follows the object from frame to frame. The detector localizes all appearances that
@@ -2872,7 +2859,7 @@ have been observed so far and corrects the tracker if necessary. The learning es
 errors and updates it to avoid these errors in the future. The implementation is based on \cite TLD .
 <p>
 The Median Flow algorithm (see cv::TrackerMedianFlow) was chosen as a tracking component in this
-implementation, following authors. Tracker is supposed to be able to handle rapid motions, partial
+implementation, following authors. The tracker is supposed to be able to handle rapid motions, partial
 occlusions, object absence etc.
  */
 @Namespace("cv") public static class TrackerTLD extends Tracker {
@@ -2905,7 +2892,9 @@ occlusions, object absence etc.
   public static native @Ptr TrackerTLD create();
 }
 
-/** \brief KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
+/** \brief the KCF (Kernelized Correlation Filter) tracker
+ <p>
+ * KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
  * This tracking method is an implementation of \cite KCF_ECCV which is extended to KCF with color-names features (\cite KCF_CN).
  * The original paper of KCF is available at <http://www.robots.ox.ac.uk/~joao/publications/henriques_tpami2015.pdf>
  * as well as the matlab implementation. For more information about KCF with color-names features, please refer to
@@ -3004,7 +2993,9 @@ occlusions, object absence etc.
   public static native @Ptr TrackerKCF create();
 }
 
-/** \brief GOTURN (\cite GOTURN) is kind of trackers based on Convolutional Neural Networks (CNN). While taking all advantages of CNN trackers,
+/** \brief the GOTURN (Generic Object Tracking Using Regression Networks) tracker
+ <p>
+ *  GOTURN (\cite GOTURN) is kind of trackers based on Convolutional Neural Networks (CNN). While taking all advantages of CNN trackers,
  *  GOTURN is much faster due to offline training without online fine-tuning nature.
  *  GOTURN tracker addresses the problem of single target tracking: given a bounding box label of an object in the first frame of the video,
  *  we track that object through the rest of the video. NOTE: Current method of GOTURN does not handle occlusions; however, it is fairly
@@ -3047,9 +3038,10 @@ occlusions, object absence etc.
   public static native @Ptr TrackerGOTURN create();
 }
 
-/** \brief the MOSSE tracker
-note, that this tracker works with grayscale images, if passed bgr ones, they will get converted internally.
-\cite MOSSE Visual Object Tracking using Adaptive Correlation Filters
+/** \brief the MOSSE (Minimum Output Sum of Squared %Error) tracker
+<p>
+The implementation is based on \cite MOSSE Visual Object Tracking using Adaptive Correlation Filters
+\note this tracker works with grayscale images, if passed bgr ones, they will get converted internally.
 */
 
 @Namespace("cv") public static class TrackerMOSSE extends Tracker {
@@ -3065,7 +3057,8 @@ note, that this tracker works with grayscale images, if passed bgr ones, they wi
 
 /************************************ MultiTracker Class ---By Laksono Kurnianggoro---) ************************************/
 /** \brief This class is used to track multiple objects using the specified tracker algorithm.
-* The MultiTracker is naive implementation of multiple object tracking.
+<p>
+* The %MultiTracker is naive implementation of multiple object tracking.
 * It process the tracked objects independently without any optimization accross the tracked objects.
 */
 @Namespace("cv") @NoOffset public static class MultiTracker extends Algorithm {
@@ -3200,7 +3193,9 @@ note, that this tracker works with grayscale images, if passed bgr ones, they wi
   public native @ByRef ScalarVector colors(); public native MultiTracker_Alt colors(ScalarVector colors);
 }
 
-/** \brief Multi Object Tracker for TLD. TLD is a novel tracking framework that explicitly decomposes
+/** \brief Multi Object %Tracker for TLD.
+<p>
+TLD is a novel tracking framework that explicitly decomposes
 the long-term tracking task into tracking, learning and detection.
 <p>
 The tracker follows the object from frame to frame. The detector localizes all appearances that
@@ -3208,7 +3203,7 @@ have been observed so far and corrects the tracker if necessary. The learning es
 errors and updates it to avoid these errors in the future. The implementation is based on \cite TLD .
 <p>
 The Median Flow algorithm (see cv::TrackerMedianFlow) was chosen as a tracking component in this
-implementation, following authors. Tracker is supposed to be able to handle rapid motions, partial
+implementation, following authors. The tracker is supposed to be able to handle rapid motions, partial
 occlusions, object absence etc.
 <p>
 \sa Tracker, MultiTracker, TrackerTLD
@@ -3242,10 +3237,10 @@ occlusions, object absence etc.
   public native @Cast("bool") boolean update_opt(@ByVal GpuMat image);
 }
 
-/** \}
-<p>
 /*********************************** CSRT ************************************/
-/** \brief Discriminative Correlation Filter Tracker with Channel and Spatial Reliability
+/** \brief the CSRT tracker
+<p>
+The implementation is based on \cite Lukezic_IJCV2018 Discriminative Correlation Filter with Channel and Spatial Reliability
 */
 @Namespace("cv") public static class TrackerCSRT extends Tracker {
     static { Loader.load(); }
@@ -3270,12 +3265,12 @@ occlusions, object absence etc.
     private native void allocate();
 
     /**
-    * \brief Read parameters from file
+    * \brief Read parameters from a file
     */
     public native void read(@Const @ByRef FileNode arg0);
 
     /**
-    * \brief Write parameters from file
+    * \brief Write parameters to a file
     */
     public native void write(@ByRef FileStorage fs);
 
@@ -3325,6 +3320,7 @@ occlusions, object absence etc.
   public native void setInitialMask(@ByVal GpuMat mask);
 }
 
+/** \} */
  /* namespace cv */
 
 // #endif

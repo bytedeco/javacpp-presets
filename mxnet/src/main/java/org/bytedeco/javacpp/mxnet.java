@@ -184,6 +184,13 @@ public class mxnet extends org.bytedeco.javacpp.presets.mxnet {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ProfileHandle(Pointer p) { super(p); }
 }
+/** \brief handle to DLManagedTensor*/
+@Namespace @Name("void") @Opaque public static class DLManagedTensorHandle extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DLManagedTensorHandle() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DLManagedTensorHandle(Pointer p) { super(p); }
+}
 
 public static class ExecutorMonitorCallback extends FunctionPointer {
     static { Loader.load(); }
@@ -798,6 +805,7 @@ public static native int MXGetGPUCount(int[] out);
 
 /**
  * \brief get the free and total available memory on a GPU
+ *  Note: Deprecated, use MXGetGPUMemoryInformation64 instead.
  * @param dev the GPU number to query
  * @param free_mem pointer to the integer holding free GPU memory
  * @param total_mem pointer to the integer holding total GPU memory
@@ -806,6 +814,17 @@ public static native int MXGetGPUCount(int[] out);
 public static native int MXGetGPUMemoryInformation(int dev, IntPointer free_mem, IntPointer total_mem);
 public static native int MXGetGPUMemoryInformation(int dev, IntBuffer free_mem, IntBuffer total_mem);
 public static native int MXGetGPUMemoryInformation(int dev, int[] free_mem, int[] total_mem);
+
+/**
+ * \brief get the free and total available memory on a GPU
+ * @param dev the GPU number to query
+ * @param free_mem pointer to the uint64_t holding free GPU memory
+ * @param total_mem pointer to the uint64_t holding total GPU memory
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") LongPointer free_mem, @Cast("uint64_t*") LongPointer total_mem);
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") LongBuffer free_mem, @Cast("uint64_t*") LongBuffer total_mem);
+public static native int MXGetGPUMemoryInformation64(int dev, @Cast("uint64_t*") long[] free_mem, @Cast("uint64_t*") long[] total_mem);
 
 /**
  * \brief get the MXNet library version as an integer
@@ -1375,6 +1394,42 @@ public static native int MXNDArrayGetData(NDArrayHandle handle,
                                @Cast("void**") PointerPointer out_pdata);
 public static native int MXNDArrayGetData(NDArrayHandle handle,
                                @Cast("void**") @ByPtrPtr Pointer out_pdata);
+/**
+* \brief Create a reference view of NDArray that
+*  represents as DLManagedTensor
+*  Notice: MXNet uses asynchronous execution. Please call MXNDArrayWaitToRead or
+*          MXNDArrayWaitToWrite before calling MXNDArrayToDLPack.
+* @param handle the handle to the ndarray
+* @param out_dlpack pointer holder to get pointer of DLManagedTensor
+* @return 0 when success, -1 when failure happens
+*/
+public static native int MXNDArrayToDLPack(NDArrayHandle handle,
+                                       @ByPtrPtr DLManagedTensorHandle out_dlpack);
+
+/**
+* \brief Create a NDArray backed by a dlpack tensor.
+*
+* This allows us to create a NDArray using the memory
+* allocated by an external deep learning framework
+* that is DLPack compatible.
+*
+* The memory is retained until the NDArray went out of scope.
+*
+* @param dlpack the pointer of the input DLManagedTensor
+* @param out_handle pointer holder to get pointer of NDArray
+* @return 0 when success, -1 when failure happens
+*/
+public static native int MXNDArrayFromDLPack(DLManagedTensorHandle dlpack,
+                                  PointerPointer out_handle);
+public static native int MXNDArrayFromDLPack(DLManagedTensorHandle dlpack,
+                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out_handle);
+/**
+ * \brief Delete a dlpack tensor
+ * @param dlpack the pointer of the input DLManagedTensor
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXNDArrayCallDLPackDeleter(DLManagedTensorHandle dlpack);
+
 /**
  * \brief get the type of the data in NDArray
  * @param handle the handle to the narray
@@ -2920,60 +2975,47 @@ public static native int MXSymbolInferType(SymbolHandle sym,
  * @param sym_handle symbol to be converted
  * @param ret_sym_handle quantized symbol result
  * @param num_excluded_symbols number of layers excluded from being quantized in the input symbol
- * @param excluded_symbols array of symbols to be excluded from being quantized
+ * @param excluded_symbols op names to be excluded from being quantized
  * @param num_offline number of parameters that are quantized offline
  * @param offline_params array of c strings representing the names of params quantized offline
  * @param quantized_dtype the quantized destination type for input data.
+ * @param calib_quantize whether calibrate quantize op with offline calibration data.
  */
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               PointerPointer ret_sym_handle,
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, PointerPointer ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") PointerPointer excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") PointerPointer offline_params,
-                               @Cast("const char*") BytePointer quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               PointerPointer ret_sym_handle,
+                               @Cast("const char**") PointerPointer excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") PointerPointer offline_params,
+                               @Cast("const char*") BytePointer quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, PointerPointer ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") PointerPointer excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr BytePointer offline_params,
-                               @Cast("const char*") BytePointer quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
+                               @Cast("const char**") @ByPtrPtr BytePointer excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr BytePointer offline_params,
+                               @Cast("const char*") BytePointer quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr ByteBuffer offline_params,
-                               String quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               PointerPointer ret_sym_handle,
+                               @Cast("const char**") @ByPtrPtr ByteBuffer excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr ByteBuffer offline_params,
+                               String quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, PointerPointer ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") PointerPointer excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr byte[] offline_params,
-                               @Cast("const char*") BytePointer quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
+                               @Cast("const char**") @ByPtrPtr byte[] excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr byte[] offline_params,
+                               @Cast("const char*") BytePointer quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr BytePointer offline_params,
-                               String quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               PointerPointer ret_sym_handle,
+                               @Cast("const char**") @ByPtrPtr BytePointer excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr BytePointer offline_params,
+                               String quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, PointerPointer ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") PointerPointer excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr ByteBuffer offline_params,
-                               @Cast("const char*") BytePointer quantized_dtype);
-public static native int MXQuantizeSymbol(SymbolHandle sym_handle,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
+                               @Cast("const char**") @ByPtrPtr ByteBuffer excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr ByteBuffer offline_params,
+                               @Cast("const char*") BytePointer quantized_dtype, @Cast("const bool") boolean calib_quantize);
+public static native int MXQuantizeSymbol(SymbolHandle sym_handle, @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle,
                                @Cast("const mx_uint") int num_excluded_symbols,
-                               @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle excluded_symbols,
-                               @Cast("const mx_uint") int num_offline,
-                               @Cast("const char**") @ByPtrPtr byte[] offline_params,
-                               String quantized_dtype);
+                               @Cast("const char**") @ByPtrPtr byte[] excluded_symbols,
+                               @Cast("const mx_uint") int num_offline, @Cast("const char**") @ByPtrPtr byte[] offline_params,
+                               String quantized_dtype, @Cast("const bool") boolean calib_quantize);
 
 /**
  * \brief Set calibration table to node attributes in the sym
@@ -3026,6 +3068,17 @@ public static native int MXSetCalibTableToQuantizedSymbol(SymbolHandle qsym_hand
                                                @Const float[] low_quantiles,
                                                @Const float[] high_quantiles,
                                                @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle);
+
+/**
+ * \brief Run subgraph pass based on the backend provided
+ * @param sym_handle symbol to be converted
+ * @param backend backend names for subgraph pass
+ * @param ret_sym_handle returned symbol
+ */
+public static native int MXGenBackendSubgraph(SymbolHandle sym_handle, @Cast("const char*") BytePointer backend,
+                                   PointerPointer ret_sym_handle);
+public static native int MXGenBackendSubgraph(SymbolHandle sym_handle, String backend,
+                                   @Cast("SymbolHandle*") @ByPtrPtr SymbolHandle ret_sym_handle);
 
 //--------------------------------------------
 // Part 4: Executor interface
@@ -5115,7 +5168,7 @@ public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared
  * @param input_shape_indptr Index pointer of shapes of each input node.
  *    The length of this array = num_input_nodes + 1.
  *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
- * @param input_shape_data A flatted data of shapes of each input node.
+ * @param input_shape_data A flattened data of shapes of each input node.
  *    For feedforward net that takes 4 dimensional input, this is the shape data.
  * @param out The created predictor handle.
  * @return 0 when success, -1 when failure.
@@ -5198,7 +5251,7 @@ public static native int MXPredCreate(String symbol_json_str,
  * @param input_shape_indptr Index pointer of shapes of each input node.
  *    The length of this array = num_input_nodes + 1.
  *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
- * @param input_shape_data A flatted data of shapes of each input node.
+ * @param input_shape_data A flattened data of shapes of each input node.
  *    For feedforward net that takes 4 dimensional input, this is the shape data.
  * @param num_output_nodes Number of output nodes to the net,
  * @param output_keys The name of output argument.
@@ -5284,6 +5337,99 @@ public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr byte[] output_keys,
                                      @ByPtrPtr PredictorHandle out);
+
+/**
+ * \brief create predictors for multiple threads. One predictor for a thread.
+ * @param symbol_json_str The JSON string of the symbol.
+ * @param param_bytes The in-memory raw bytes of parameter ndarray file.
+ * @param param_size The size of parameter ndarray file.
+ * @param dev_type The device type, 1: cpu, 2:gpu
+ * @param dev_id The device id of the predictor.
+ * @param num_input_nodes Number of input nodes to the net,
+ *    For feedforward net, this is 1.
+ * @param input_keys The name of input argument.
+ *    For feedforward net, this is {"data"}
+ * @param input_shape_indptr Index pointer of shapes of each input node.
+ *    The length of this array = num_input_nodes + 1.
+ *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
+ * @param input_shape_data A flattened data of shapes of each input node.
+ *    For feedforward net that takes 4 dimensional input, this is the shape data.
+ * @param num_threads The number of threads that we'll run the predictors.
+ * @param out An array of created predictor handles. The array has to be large
+ *   enough to keep {@code num_threads} predictors.
+ * @return 0 when success, -1 when failure.
+ */
+public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") PointerPointer input_keys,
+                                      @Cast("const mx_uint*") IntPointer input_shape_indptr,
+                                      @Cast("const mx_uint*") IntPointer input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr BytePointer input_keys,
+                                      @Cast("const mx_uint*") IntPointer input_shape_indptr,
+                                      @Cast("const mx_uint*") IntPointer input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(String symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
+                                      @Cast("const mx_uint*") IntBuffer input_shape_indptr,
+                                      @Cast("const mx_uint*") IntBuffer input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr byte[] input_keys,
+                                      @Cast("const mx_uint*") int[] input_shape_indptr,
+                                      @Cast("const mx_uint*") int[] input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(String symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr BytePointer input_keys,
+                                      @Cast("const mx_uint*") IntPointer input_shape_indptr,
+                                      @Cast("const mx_uint*") IntPointer input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
+                                      @Cast("const mx_uint*") IntBuffer input_shape_indptr,
+                                      @Cast("const mx_uint*") IntBuffer input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+public static native int MXPredCreateMultiThread(String symbol_json_str,
+                                      @Const Pointer param_bytes,
+                                      int param_size,
+                                      int dev_type, int dev_id,
+                                      @Cast("mx_uint") int num_input_nodes,
+                                      @Cast("const char**") @ByPtrPtr byte[] input_keys,
+                                      @Cast("const mx_uint*") int[] input_shape_indptr,
+                                      @Cast("const mx_uint*") int[] input_shape_data,
+                                      int num_threads,
+                                      @ByPtrPtr PredictorHandle out);
+
 /**
  * \brief Change the input shape of an existing predictor.
  * @param num_input_nodes Number of input nodes to the net,
@@ -5293,7 +5439,7 @@ public static native int MXPredCreatePartialOut(String symbol_json_str,
  * @param input_shape_indptr Index pointer of shapes of each input node.
  *    The length of this array = num_input_nodes + 1.
  *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
- * @param input_shape_data A flatted data of shapes of each input node.
+ * @param input_shape_data A flattened data of shapes of each input node.
  *    For feedforward net that takes 4 dimensional input, this is the shape data.
  * @param handle The original predictor handle.
  * @param out The reshaped predictor handle.

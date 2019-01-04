@@ -1,5 +1,15 @@
 
- * Include `ceval.h` for CPython
+ * Bundle libraries from raspberrypi/userland to avoid loading issues on `linux-armhf` devices other than Raspberry Pi ([issue bytedeco/javacv#1118](https://github.com/bytedeco/javacv/issues/1118))
+ * Bundle the new official Java/Scala API of MXNet via the `jnimxnet` library
+ * Add `QuickSpinC.h`, `SpinVideoC.h`, and `TransportLayer*C.h` for Spinnaker ([pull #660](https://github.com/bytedeco/javacpp-presets/pull/660))
+ * Add `FlyCapture2Video.h` and `FlyCapture2VideoDef.h`, and remove `AVIRecorder.h` for FlyCapture ([pull #613](https://github.com/bytedeco/javacpp-presets/pull/613))
+ * Switch to Clang for Android builds with recent versions of the NDK ([issue #562](https://github.com/bytedeco/javacpp-presets/issues/562))
+ * Include `sys/sysinfo.h` for system API of Linux
+ * Include `ucrtbase.dll` when bundling the runtime for Visual Studio 2015 on Windows ([issue bytedeco/javacv#1098](https://github.com/bytedeco/javacv/issues/1098))
+ * Add support for N-dimensional arrays to `opencv_core.Mat.createIndexer()` ([pull #647](https://github.com/bytedeco/javacpp-presets/pull/647))
+ * Add for `CvMat`, `IplImage`, and `PIX`, helper `create(..., Pointer data)` factory methods that prevent premature deallocation ([issue bytedeco/javacpp#272](https://github.com/bytedeco/javacpp/issues/272) and [issue bytedeco/javacv#1101](https://github.com/bytedeco/javacv/issues/1101))
+ * Enable x265 multilib depth support at 8, 10, and 12 bits for FFmpeg ([pull #619](https://github.com/bytedeco/javacpp-presets/pull/619))
+ * Include all header files from `Python.h` in presets for CPython
  * Fix mapping of `initCameraMatrix2D`, `calibrateCamera`, and `stereoCalibrate` functions from `opencv_calib3d`
  * Build OpenCV with pthreads instead of OpenMP or GCD due to thread-safety and usability issues ([issue bytedeco/javacv#396](https://github.com/bytedeco/javacv/issues/396))
  * Include IR, optimizer, and version converter for ONNX ([pull #622](https://github.com/bytedeco/javacpp-presets/pull/622))
@@ -8,7 +18,7 @@
  * Add builds for `linux-mips64el` to presets for ARToolKitPlus, Chilitags, flandmark, OpenBLAS, and FFTW ([pull #637](https://github.com/bytedeco/javacpp-presets/pull/637))
  * Update sample code for GSL with a more complex example ([issue #636](https://github.com/bytedeco/javacpp-presets/issues/636))
  * Fix CUDA build for OpenCV on Mac OS X missing `libopencv_cudev.dylib` ([issue #626](https://github.com/bytedeco/javacpp-presets/issues/626))
- * Upgrade presets for OpenCV 4.0.0-rc, and FFmpeg 4.1, HDF5 1.10.4, MKL-DNN 0.17-rc, Tesseract 4.0.0, TensorFlow 1.12.0, and their dependencies
+ * Upgrade presets for OpenCV 4.0.1, FFmpeg 4.1, FlyCapture 2.13.3.31, Spinnaker 1.19.0.22, HDF5 1.10.4, MKL 2019.1, MKL-DNN 0.17.2, OpenBLAS 0.3.5, LLVM 7.0.1, Leptonica 1.77.0, Tesseract 4.0.0, cuDNN 7.4, MXNet 1.4.0.rc0, TensorFlow 1.12.0, and their dependencies
 
 ### October 15, 2018 version 1.4.3
  * Keep globally shared dummy deallocator for `TF_Tensor` out of `PointerScope`

@@ -13,14 +13,14 @@ LIBJPEG=libjpeg-turbo-1.5.3
 LIBPNG=libpng-1.6.34
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-1.0.0
-LEPTONICA_VERSION=1.76.0
+LEPTONICA_VERSION=1.77.0
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
 download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.34/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
-download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
+download https://github.com/DanBloomberg/leptonica/releases/download/$LEPTONICA_VERSION/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -34,24 +34,13 @@ tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
-patch -Np1 -d leptonica-$LEPTONICA_VERSION < ../../leptonica-tiffio.patch
-
 case $PLATFORM in
     android-arm)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT32_MAX"
-        export CXX=
-        export CPPFLAGS=
-        export CFLAGS=
-        export CXXFLAGS=
-        export LDFLAGS="-Wl,--fix-cortex-a8 -z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
-        export STRIP="$ANDROID_BIN-strip"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LDFLAGS="-ldl -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j $MAKEJ
@@ -86,18 +75,11 @@ case $PLATFORM in
         make install-strip
         ;;
     android-arm64)
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT64_MAX"
-        export CXX=
-        export CPPFLAGS=
-        export CFLAGS=
-        export CXXFLAGS=
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
-        export STRIP="$ANDROID_BIN-strip"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LDFLAGS="-ldl -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=aarch64-linux
         make -j $MAKEJ
@@ -132,20 +114,11 @@ case $PLATFORM in
         make install-strip
         ;;
      android-x86)
-#        ANDROID_ROOT=${ANDROID_ROOT//14/21}
-#        ANDROID_FLAGS=${ANDROID_FLAGS//14/21}
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT32_MAX"
-        export CXX=
-        export CPPFLAGS=
-        export CFLAGS=
-        export CXXFLAGS=
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
-        export STRIP="$ANDROID_BIN-strip"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LDFLAGS="-ldl -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=i686-linux
         make -j $MAKEJ
@@ -179,18 +152,11 @@ case $PLATFORM in
         make install-strip
         ;;
      android-x86_64)
-        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
-        export AR="$ANDROID_BIN-ar"
-        export RANLIB="$ANDROID_BIN-ranlib"
-        export CPP="$ANDROID_BIN-cpp $FLAGS"
-        export CC="$ANDROID_BIN-gcc $FLAGS -DSIZE_MAX=UINT64_MAX"
-        export CXX=
-        export CPPFLAGS=
-        export CFLAGS=
-        export CXXFLAGS=
-        export LDFLAGS="-z text"
-        export LIBS="-lgcc -ldl -lz -lm -lc"
-        export STRIP="$ANDROID_BIN-strip"
+        export AR="$ANDROID_PREFIX-ar"
+        export RANLIB="$ANDROID_PREFIX-ranlib"
+        export CC="$ANDROID_CC -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -L$INSTALL_PATH/lib/ $ANDROID_FLAGS"
+        export STRIP="$ANDROID_PREFIX-strip"
+        export LDFLAGS="-ldl -lm -lc"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=x86_64-linux
         make -j $MAKEJ

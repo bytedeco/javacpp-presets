@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-FLYCAPTURE_VERSION=2.11.3.121
+FLYCAPTURE_VERSION=2.13.3.31
 
 case $PLATFORM in
     linux-arm*)
@@ -29,7 +29,7 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files/Point Grey Research/" ]]; then
+        if [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
             echo "Please install FlyCapture under the default installation directory"
             exit 1
         fi

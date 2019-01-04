@@ -22,8 +22,8 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.3.0
-download http://apache.org/dist/incubator/mxnet/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+MXNET_VERSION=1.4.0.rc0
+download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
@@ -45,11 +45,12 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     IFS="$PREVIFS"
 fi
 
-echo "Decompressing archives..."
-tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
+echo "Decompressing archives... (ignore any errors)"
+tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
+# patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
@@ -57,27 +58,30 @@ sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-
 sedinplace '/#include <opencv2\/opencv.hpp>/a\
 #include <opencv2/imgproc/types_c.h>\
 ' src/io/image_augmenter.h src/io/image_io.cc tools/im2rec.cc
+sedinplace 's/CV_LOAD_IMAGE_COLOR/cv::IMREAD_COLOR/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_PNG_COMPRESSION/cv::IMWRITE_PNG_COMPRESSION/g' tools/im2rec.cc
+sedinplace 's/CV_IMWRITE_JPEG_QUALITY/cv::IMWRITE_JPEG_QUALITY/g' tools/im2rec.cc
 
+# note: MXNet needs full path to ccache wrappers to use them
 case $PLATFORM in
     linux-x86)
-        export CC="gcc -m32"
-        export CXX="g++ -m32"
+        export CC="$(which gcc) -m32"
+        export CXX="$(which g++) -m32"
         export BLAS="openblas"
         export USE_MKLDNN=0
         ;;
     linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
-        if which g++-6 &> /dev/null; then
-            export CC="gcc-6 -m64"
-            export CXX="g++-6 -m64"
-        fi
+        export CC="$(which gcc) -m64"
+        export CXX="$(which g++) -m64"
         export BLAS="openblas"
         ;;
     macosx-*)
-        export CC="clang"
-        export CXX="clang++"
+        # remove harmful changes to rpath
+        sedinplace '/install_name_tool/d' Makefile
+        export CC="$(which clang)"
+        export CXX="$(which clang++)"
         export BLAS="openblas"
+        export USE_OPENMP=0
         ;;
     windows-x86_64)
         # copy include files
@@ -104,8 +108,7 @@ case $PLATFORM in
         cp Release/libmxnet.lib ../lib/mxnet.lib
 
         # finish
-        cd ../..
-        return 0
+        cd ../apache-mxnet-src-$MXNET_VERSION-incubating
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -113,18 +116,41 @@ case $PLATFORM in
         ;;
 esac
 
-export C_INCLUDE_PATH="$OPENBLAS_PATH/include/:$OPENCV_PATH/include/"
-export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/"
+if [[ ! "$PLATFORM" == windows* ]]; then
+    export C_INCLUDE_PATH="$OPENBLAS_PATH/include/:$OPENCV_PATH/include/"
+    export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+    export LIBRARY_PATH="$OPENBLAS_PATH/:$OPENBLAS_PATH/lib/:$OPENCV_PATH/:$OPENCV_PATH/lib/"
 
-sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
-sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
-cp -r include lib 3rdparty/dmlc-core/include ..
-cp -r 3rdparty/mshadow/mshadow ../include
-unset CC
-unset CXX
+    sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
+    sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
+    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+    cp -r include lib 3rdparty/dmlc-core/include ..
+    cp -r 3rdparty/mshadow/mshadow ../include
+    unset CC
+    unset CXX
+fi
 
+# add Scala files we cannot get with CMake for Windows
+patch -Np1 < ../../../mxnet-scala.patch || true
+# use mxnet-scala-cuda.patch to get a couple of CUDA ops,
+# but an actual GPU becomes necessary for the build
+
+# copy official JNI functions and adjust include directives
+cp -r 3rdparty/dlpack/include/dlpack 3rdparty/tvm/nnvm/include/* ../include
+cp src/common/cuda_utils.h scala-package/init-native/src/main/native/* scala-package/native/src/main/native/* ../include
+sedinplace 's:../src/common/::g' ../include/*.cc
+
+# copy/adjust Scala source files and work around loader issue in Base.scala
+mkdir -p ../scala/init ../scala/core
+cp -r scala-package/init/src/main/scala/* ../scala/init
+cp -r scala-package/macros/src/main/scala/* ../scala/init
+cp -r scala-package/core/src/main/scala/* ../scala/core
+cp -r scala-package/infer/src/main/scala/* ../scala/core
+cp -r scala-package/spark/src/main/scala/* ../scala/core
+sedinplace 's/  tryLoadInitLibrary()/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.javacpp.mxnet])/g' ../scala/init/org/apache/mxnet/init/Base.scala
+sedinplace 's/  tryLoadLibraryOS("mxnet-scala")/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.javacpp.mxnet])/g' ../scala/core/org/apache/mxnet/Base.scala
+
+# fix library with correct rpath on Mac
 case $PLATFORM in
     macosx-*)
         install_name_tool -add_rpath @loader_path/. -id @rpath/libmxnet.so ../lib/libmxnet.so

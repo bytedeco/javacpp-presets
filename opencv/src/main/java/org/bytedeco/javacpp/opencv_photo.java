@@ -77,11 +77,6 @@ camera calibration with multiple exposures and exposure fusion.
 \}
   */
 
-/** enum InpaintingModes */
-public static final int
-    CV_INPAINT_NS      = 0,
-    CV_INPAINT_TELEA   = 1;
-
 /** \addtogroup photo
  *  \{
  <p>
@@ -630,45 +625,6 @@ results, default value is 0.85.
 @Namespace("cv") public static native @Ptr TonemapDrago createTonemapDrago(float gamma/*=1.0f*/, float saturation/*=1.0f*/, float bias/*=0.85f*/);
 @Namespace("cv") public static native @Ptr TonemapDrago createTonemapDrago();
 
-/** \brief This algorithm decomposes image into two layers: base layer and detail layer using bilateral filter
-and compresses contrast of the base layer thus preserving all the details.
-<p>
-This implementation uses regular bilateral filter from opencv.
-<p>
-Saturation enhancement is possible as in ocvTonemapDrago.
-<p>
-For more information see \cite DD02 .
- */
-@Namespace("cv") public static class TonemapDurand extends Tonemap {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TonemapDurand(Pointer p) { super(p); }
-
-
-    public native float getSaturation();
-    public native void setSaturation(float saturation);
-
-    public native float getContrast();
-    public native void setContrast(float contrast);
-
-    public native float getSigmaSpace();
-    public native void setSigmaSpace(float sigma_space);
-
-    public native float getSigmaColor();
-    public native void setSigmaColor(float sigma_color);
-}
-
-/** \brief Creates TonemapDurand object
-<p>
-@param gamma gamma value for gamma correction. See createTonemap
-@param contrast resulting contrast on logarithmic scale, i. e. log(max / min), where max and min
-are maximum and minimum luminance values of the resulting image.
-@param saturation saturation enhancement value. See createTonemapDrago
-@param sigma_space bilateral filter sigma in color space
-@param sigma_color bilateral filter sigma in coordinate space
- */
-@Namespace("cv") public static native @Ptr TonemapDurand createTonemapDurand(float gamma/*=1.0f*/, float contrast/*=4.0f*/, float saturation/*=1.0f*/, float sigma_space/*=2.0f*/, float sigma_color/*=2.0f*/);
-@Namespace("cv") public static native @Ptr TonemapDurand createTonemapDurand();
 
 /** \brief This is a global tonemapping operator that models human visual system.
 <p>

@@ -12,11 +12,11 @@ import static org.bytedeco.javacpp.opencv_imgcodecs.*;
 import static org.bytedeco.javacpp.opencv_videoio.*;
 import static org.bytedeco.javacpp.opencv_highgui.*;
 import static org.bytedeco.javacpp.opencv_flann.*;
-import static org.bytedeco.javacpp.opencv_ml.*;
 import static org.bytedeco.javacpp.opencv_features2d.*;
 import static org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
 import static org.bytedeco.javacpp.opencv_video.*;
+import static org.bytedeco.javacpp.opencv_ml.*;
 import static org.bytedeco.javacpp.opencv_shape.*;
 import static org.bytedeco.javacpp.opencv_xfeatures2d.*;
 
@@ -267,11 +267,11 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R,
                    int interp_mode, int border_mode, @ByVal GpuMat dst);
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
-                   @ByVal Mat dst);
+            @ByVal Mat dst);
     public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, @ByVal UMat T, int interp_mode, int border_mode,
-                   @ByVal UMat dst);
+            @ByVal UMat dst);
     public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat T, int interp_mode, int border_mode,
-                   @ByVal GpuMat dst);
+            @ByVal GpuMat dst);
 
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
     public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
@@ -1003,8 +1003,15 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByRef Size img_size(); public native ImageFeatures img_size(Size img_size);
     public native @ByRef KeyPointVector keypoints(); public native ImageFeatures keypoints(KeyPointVector keypoints);
     public native @ByRef UMat descriptors(); public native ImageFeatures descriptors(UMat descriptors);
+    public native @ByVal KeyPointVector getKeypoints();
 }
-
+/** \brief
+<p>
+@param featuresFinder
+@param images
+@param features
+@param masks
+*/
 @Namespace("cv::detail") public static native void computeImageFeatures(
     @Ptr Feature2D featuresFinder,
     @ByVal MatVector images,
@@ -1033,30 +1040,37 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     @ByVal GpuMatVector images,
     @StdVector ImageFeatures features);
 
-@Namespace("cv::detail") public static native void computeImageFeatures(
+/** \brief
+<p>
+@param featuresFinder
+@param image
+@param features
+@param mask
+*/
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal Mat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal Mat image,
     @ByRef ImageFeatures features);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal UMat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") UMat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal UMat image,
     @ByRef ImageFeatures features);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMat image,
     @ByRef ImageFeatures features,
     @ByVal(nullValue = "cv::InputArray(cv::noArray())") GpuMat mask);
-@Namespace("cv::detail") public static native void computeImageFeatures(
+@Namespace("cv::detail") public static native @Name("computeImageFeatures") void computeImageFeatures2(
     @Ptr Feature2D featuresFinder,
     @ByVal GpuMat image,
     @ByRef ImageFeatures features);
@@ -1085,8 +1099,8 @@ homography or affine transformation based on selected matcher.
     private native void allocate(@Const @ByRef MatchesInfo other);
     public native @ByRef @Name("operator =") MatchesInfo put(@Const @ByRef MatchesInfo other);
 
-    /** Images indices (optional) */
     public native int src_img_idx(); public native MatchesInfo src_img_idx(int src_img_idx);
+    /** Images indices (optional) */
     public native int dst_img_idx(); public native MatchesInfo dst_img_idx(int dst_img_idx);
     public native @ByRef DMatchVector matches(); public native MatchesInfo matches(DMatchVector matches);
     /** Geometrically consistent matches mask */
@@ -1097,6 +1111,8 @@ homography or affine transformation based on selected matcher.
     public native @ByRef Mat H(); public native MatchesInfo H(Mat H);
     /** Confidence two images are from the same panorama */
     public native double confidence(); public native MatchesInfo confidence(double confidence);
+    public native @ByVal DMatchVector getMatches();
+    public native @Cast("uchar*") @StdVector BytePointer getInliers();
 }
 
 /** \brief Feature matchers base class. */
@@ -1124,17 +1140,17 @@ homography or affine transformation based on selected matcher.
     <p>
     \sa detail::MatchesInfo
     */
-    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
+    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
                          @Const @ByRef(nullValue = "cv::UMat()") UMat mask);
-    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
+    public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 
     /** @return True, if it's possible to use the same matcher instance in parallel, false otherwise
     */
-    public native @Cast("bool") boolean isThreadSafe();
+   public native @Cast("bool") boolean isThreadSafe();
 
     /** \brief Frees unused memory allocated before if there is any.
     */
-    public native void collectGarbage();
+   public native void collectGarbage();
 }
 
 /** \brief Features matcher which finds two best matches for each feature and leaves the best one only if the
@@ -1170,6 +1186,9 @@ ratio between descriptor distances is greater than the threshold match_conf
     private native void allocate();
 
     public native void collectGarbage();
+    public static native @Ptr BestOf2NearestMatcher create(@Cast("bool") boolean try_use_gpu/*=false*/, float match_conf/*=0.3f*/, int num_matches_thresh1/*=6*/,
+            int num_matches_thresh2/*=6*/);
+    public static native @Ptr BestOf2NearestMatcher create();
 }
 
 @Namespace("cv::detail") @NoOffset public static class BestOf2NearestRangeMatcher extends BestOf2NearestMatcher {
@@ -1553,8 +1572,8 @@ rotations in respect to the first camera, for instance. :
     @return True in case of success, false otherwise
      */
     public native @Cast("bool") @Name("operator ()") boolean apply(@StdVector ImageFeatures features,
-                         @StdVector MatchesInfo pairwise_matches,
-                         @StdVector CameraParams cameras);
+            @StdVector MatchesInfo pairwise_matches,
+            @StdVector CameraParams cameras);
 }
 
 /** \brief Homography based rotation estimator.
@@ -1844,22 +1863,26 @@ public static final int
     @param images Source images
     @param masks Image masks to update (second value in pair specifies the value which should be used
     to detect where image is)
-     */
+        */
     public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
-                  @Const @ByRef UMatVector masks);
+            @Const @ByRef UMatVector masks);
     /** \overload */
     public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
-                          @Const @ByRef UMatBytePairVector masks);
+            @Const @ByRef UMatBytePairVector masks);
     /** \brief Compensate exposure in the specified image.
     <p>
     @param index Image index
     @param corner Image top-left corner
     @param image Image to process
     @param mask Image mask
-     */
+        */
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
+    public native void getMatGains(@ByRef MatVector arg0 );
+    public native void setMatGains(@ByRef MatVector arg0 );
+    public native void setUpdateGain(@Cast("bool") boolean b);
+    public native @Cast("bool") boolean getUpdateGain();
 }
 
 /** \brief Stub exposure compensator which does nothing.
@@ -1883,6 +1906,8 @@ public static final int
     public native void apply(int arg0, @ByVal Point arg1, @ByVal Mat arg2, @ByVal Mat arg3);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal UMat arg2, @ByVal UMat arg3);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal GpuMat arg2, @ByVal GpuMat arg3);
+    public native void getMatGains(@ByRef MatVector umv);
+    public native void setMatGains(@ByRef MatVector umv);
 }
 
 /** \brief Exposure compensator which tries to remove exposure related artifacts by adjusting image
@@ -1907,6 +1932,8 @@ intensities, see \cite BL07 and \cite WJ10 for details.
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
+    public native void getMatGains(@ByRef MatVector umv);
+    public native void setMatGains(@ByRef MatVector umv);
     public native @StdVector DoublePointer gains();
 }
 
@@ -1933,6 +1960,8 @@ intensities, see \cite UES01 for details.
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal UMat image, @ByVal UMat mask);
     public native void apply(int index, @ByVal Point corner, @ByVal GpuMat image, @ByVal GpuMat mask);
+    public native void getMatGains(@ByRef MatVector umv);
+    public native void setMatGains(@ByRef MatVector umv);
 }
 
 /** \} */
@@ -2004,6 +2033,8 @@ intensities, see \cite UES01 for details.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SeamFinder(Pointer p) { super(p); }
 
+    /** enum cv::detail::SeamFinder:: */
+    public static final int NO = 0, VORONOI_SEAM = 1, DP_SEAM = 2;
     /** \brief Estimates seams.
     <p>
     @param src Source images
@@ -2012,6 +2043,7 @@ intensities, see \cite UES01 for details.
      */
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                           @ByRef UMatVector masks);
+    public static native @Ptr SeamFinder createDefault(int type);
 }
 
 /** \brief Stub seam estimator which does nothing.
@@ -2085,9 +2117,15 @@ intensities, see \cite UES01 for details.
     private native void allocate(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=cv::detail::DpSeamFinder::COLOR*/);
     public DpSeamFinder() { super((Pointer)null); allocate(); }
     private native void allocate();
+    public DpSeamFinder(@Str BytePointer costFunc ) { super((Pointer)null); allocate(costFunc); }
+    private native void allocate(@Str BytePointer costFunc );
+    public DpSeamFinder(@Str String costFunc ) { super((Pointer)null); allocate(costFunc); }
+    private native void allocate(@Str String costFunc );
 
     public native @Cast("cv::detail::DpSeamFinder::CostFunction") int costFunction();
     public native void setCostFunction(@Cast("cv::detail::DpSeamFinder::CostFunction") int val);
+    public native void setCostFunction(@Str BytePointer val);
+    public native void setCostFunction(@Str String val);
 
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                           @ByRef UMatVector masks);
@@ -2134,6 +2172,18 @@ intensities, see \cite UES01 for details.
                            float bad_region_penalty/*=1000.f*/);
     public GraphCutSeamFinder() { super((Pointer)null); allocate(); }
     private native void allocate();
+    public GraphCutSeamFinder(@Str BytePointer cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/) { super((Pointer)null); allocate(cost_type, terminal_cost, bad_region_penalty); }
+    private native void allocate(@Str BytePointer cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/);
+    public GraphCutSeamFinder(@Str BytePointer cost_type) { super((Pointer)null); allocate(cost_type); }
+    private native void allocate(@Str BytePointer cost_type);
+    public GraphCutSeamFinder(@Str String cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/) { super((Pointer)null); allocate(cost_type, terminal_cost, bad_region_penalty); }
+    private native void allocate(@Str String cost_type,float terminal_cost/*=10000.f*/,
+            float bad_region_penalty/*=1000.f*/);
+    public GraphCutSeamFinder(@Str String cost_type) { super((Pointer)null); allocate(cost_type); }
+    private native void allocate(@Str String cost_type);
 
     public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
                   @ByRef UMatVector masks);
@@ -2254,9 +2304,9 @@ Simple blender which puts one image over another
     @param dst Final pano
     @param dst_mask Final pano mask
      */
-    public native void blend(@ByVal Mat dst, @ByVal Mat dst_mask);
-    public native void blend(@ByVal UMat dst, @ByVal UMat dst_mask);
-    public native void blend(@ByVal GpuMat dst, @ByVal GpuMat dst_mask);
+    public native void blend(@ByVal Mat dst,@ByVal Mat dst_mask);
+    public native void blend(@ByVal UMat dst,@ByVal UMat dst_mask);
+    public native void blend(@ByVal GpuMat dst,@ByVal GpuMat dst_mask);
 }
 
 /** \brief Simple blender which mixes images at its borders.
@@ -2291,7 +2341,7 @@ Simple blender which puts one image over another
     /** Creates weight maps for fixed set of source images by their masks and top-left corners.
      *  Final image can be obtained by simple weighting of the source images. */
     public native @ByVal Rect createWeightMaps(@Const @ByRef UMatVector masks, @Const @ByRef PointVector corners,
-                              @ByRef UMatVector weight_maps);
+            @ByRef UMatVector weight_maps);
 }
 
 
@@ -2445,7 +2495,7 @@ by Heung-Yeung Shum and Richard Szeliski.
                               @StdVector MatchesInfo pairwise_matches,
                               @StdVector double[] focals);
 
-@Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs, @ByRef Mat K);
+@Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs,@ByRef Mat K);
 
 /** \} stitching_autocalib */
 
@@ -2611,12 +2661,103 @@ by Heung-Yeung Shum and Richard Szeliski.
 // #define OPENCV_STITCHING_WARPER_CREATORS_HPP
 
 // #include "opencv2/stitching/detail/warpers.hpp"
+// #include <string>
+    @Namespace("cv") @NoOffset public static class PyRotationWarper extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public PyRotationWarper(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PyRotationWarper(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PyRotationWarper position(long position) {
+            return (PyRotationWarper)super.position(position);
+        }
+    
+        public PyRotationWarper(@Str BytePointer type, float scale) { super((Pointer)null); allocate(type, scale); }
+        private native void allocate(@Str BytePointer type, float scale);
+        public PyRotationWarper(@Str String type, float scale) { super((Pointer)null); allocate(type, scale); }
+        private native void allocate(@Str String type, float scale);
+        public PyRotationWarper() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        /** \brief Projects the image point.
+        <p>
+        @param pt Source point
+        @param K Camera intrinsic parameters
+        @param R Camera rotation matrix
+        @return Projected point
+        */
+        public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
+        public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal UMat K, @ByVal UMat R);
+        public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal GpuMat K, @ByVal GpuMat R);
+
+        /** \brief Builds the projection maps according to the given camera data.
+        <p>
+        @param src_size Source image size
+        @param K Camera intrinsic parameters
+        @param R Camera rotation matrix
+        @param xmap Projection map for the x axis
+        @param ymap Projection map for the y axis
+        @return Projected image minimum bounding box
+        */
+        public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
+        public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R, @ByVal UMat xmap, @ByVal UMat ymap);
+        public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R, @ByVal GpuMat xmap, @ByVal GpuMat ymap);
+
+        /** \brief Projects the image.
+        <p>
+        @param src Source image
+        @param K Camera intrinsic parameters
+        @param R Camera rotation matrix
+        @param interp_mode Interpolation mode
+        @param border_mode Border extrapolation mode
+        @param dst Projected image
+        @return Project image top-left corner
+        */
+        public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
+                    @ByVal Mat dst);
+        public native @ByVal Point warp(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
+                    @ByVal UMat dst);
+        public native @ByVal Point warp(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                    @ByVal GpuMat dst);
+
+        /** \brief Projects the image backward.
+        <p>
+        @param src Projected image
+        @param K Camera intrinsic parameters
+        @param R Camera rotation matrix
+        @param interp_mode Interpolation mode
+        @param border_mode Border extrapolation mode
+        @param dst_size Backward-projected image size
+        @param dst Backward-projected image
+        */
+        public native void warpBackward(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
+                    @ByVal Size dst_size, @ByVal Mat dst);
+        public native void warpBackward(@ByVal UMat src, @ByVal UMat K, @ByVal UMat R, int interp_mode, int border_mode,
+                    @ByVal Size dst_size, @ByVal UMat dst);
+        public native void warpBackward(@ByVal GpuMat src, @ByVal GpuMat K, @ByVal GpuMat R, int interp_mode, int border_mode,
+                    @ByVal Size dst_size, @ByVal GpuMat dst);
+
+        /**
+        @param src_size Source image bounding box
+        @param K Camera intrinsic parameters
+        @param R Camera rotation matrix
+        @return Projected image minimum bounding box
+        */
+        public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R);
+        public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal UMat K, @ByVal UMat R);
+        public native @ByVal Rect warpRoi(@ByVal Size src_size, @ByVal GpuMat K, @ByVal GpuMat R);
+
+        public native float getScale();
+        public native void setScale(float arg0);
+    }
 
 /** \addtogroup stitching_warp
  *  \{
 <p>
 /** \brief Image warper factories base class.
  */
+
 @Namespace("cv") public static class WarperCreator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -2624,6 +2765,7 @@ by Heung-Yeung Shum and Richard Szeliski.
 
     public native @Ptr RotationWarper create(float scale);
 }
+
 
 /** \brief Plane warper factory class.
   \sa detail::PlaneWarper
@@ -3043,6 +3185,9 @@ familiar with the theory is recommended.
 
     public native @Cast("bool") boolean waveCorrection();
     public native void setWaveCorrection(@Cast("bool") boolean flag);
+
+    public native @Cast("cv::InterpolationFlags") int interpolationFlags();
+    public native void setInterpolationFlags(@Cast("cv::InterpolationFlags") int interp_flags);
 
     public native @Cast("cv::detail::WaveCorrectKind") int waveCorrectKind();
     public native void setWaveCorrectKind(@Cast("cv::detail::WaveCorrectKind") int kind);

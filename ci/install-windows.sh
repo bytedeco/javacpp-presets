@@ -54,25 +54,23 @@ cd ..
 if [[ "$PROJ" =~ flycapture ]]; then
        echo Flycapture install
        if [ "$OS" == "windows-x86_64" ]; then
-           if [[ $(find /c/Downloads/pgr.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap in cache and size seems ok"
            else
-             echo "Downloading pgr.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShRFl3aWVWOVFPYlU /c/Downloads/pgr.zip 
+             echo "Downloading flycap to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 14QM7W5RHhvZanF1UBobgEIvwdy6VwTht /c/Downloads/FlyCapture_2.13.3.31_x64.msi
            fi
-           unzip /c/Downloads/pgr.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get this msi file by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL'
        elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/pgr32.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
            else
-             echo "Downloading pgr32.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 0B2xpvMUzviShQlpQSEFhZkUwc0U /c/Downloads/pgr32.zip 
+             echo "Downloading flycap32 to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr /c/Downloads/FlyCapture_2.13.3.31_x86.msi
            fi
-           unzip /c/Downloads/pgr32.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get this msi file by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL'
        fi
        echo "Finished flycapture install"
 fi
@@ -80,32 +78,34 @@ fi
 if [[ "$PROJ" =~ spinnaker ]]; then
        echo Spinnaker install
        if [ "$OS" == "windows-x86_64" ]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
+           if [[ $(find /c/Downloads/Spinnaker_*_v140_x64.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker in cache and size seems ok"
            else
-             echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+             echo "Downloading spinnaker to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1sjFe7KyvjxPEmEFp9xP3wIs3QCOHAN1m /c/Downloads/Spinnaker_Binaries_v140_x64.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1gLfpCE3XkcXbWaoFqT6kQqQm_EO55vYS /c/Downloads/Spinnaker_SourceCode_v140_x64.msi
            fi
-           unzip /c/Downloads/spinnaker.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get these msi files by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
        elif [ "$OS" == "windows-x86" ]; then
-           if [[ $(find /c/Downloads/spinnaker.zip -type f -size +1000000c 2>/dev/null) ]]; then
-             echo "Found spinnaker in cache and size seems ok"
+           if [[ $(find /c/Downloads/Spinnaker_*_v140_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
+             echo "Found spinnaker32 in cache and size seems ok"
            else
-             echo "Downloading spinnaker.zip to cache as not found"
-             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1b5vduBfsK44cJdwzMaR_f1kkmQxhsO7C /c/Downloads/spinnaker.zip
+             echo "Downloading spinnaker32 to cache as not found"
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1YJcLAaf8Bf2XzC7Puv4ZwXdibdmVcwNg /c/Downloads/Spinnaker_Binaries_v140_x86.msi
+             /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1BG51avW4q605c2KGGJ3ehjhUlVFBObqh /c/Downloads/Spinnaker_SourceCode_v140_x86.msi
            fi
-           unzip /c/Downloads/spinnaker.zip
-           mkdir -p /c/Program\ Files/Point\ Grey\ Research
-           mv Point\ Grey\ Research/* /c/Program\ Files/Point\ Grey\ Research
+           # we can get these msi files by starting the installation from the exe file
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
+           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
        fi
        echo "Finished spinnaker install"
 fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/13558/w_mkl_2019.0.117.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/14893/w_mkl_2019.1.144.exe"
        ./mkl.exe --s --x --f .
        ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -116,10 +116,10 @@ fi
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_10.0.130_411.31_windows.exe "https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda_10.0.130_411.31_windows"
-       curl -L -o cudnn-10.0-windows7-x64-v7.3.0.29.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.3.0/cudnn-10.0-windows7-x64-v7.3.0.29.zip"
+       curl -L -o cudnn-10.0-windows7-x64-v7.4.1.5.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.4.1/cudnn-10.0-windows7-x64-v7.4.1.5.zip"
        ./cuda_10.0.130_411.31_windows.exe -s
        sleep 60
-       unzip ./cudnn-10.0-windows7-x64-v7.3.0.29.zip
+       unzip ./cudnn-10.0-windows7-x64-v7.4.1.5.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.0/lib/x64
@@ -173,15 +173,15 @@ curl -L -o mingw-w64-x86_64-winpthreads-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 curl -L -o mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-libwinpthread-git-6.0.0.5134.2416de71-1-any.pkg.tar.xz
 pacman -U --noconfirm *.pkg.tar.xz
 
-# get rid of some stuff we don't use to avoid running out of disk space
+# get rid of some stuff we don't use to avoid running out of disk space and that may actually interfere with our builds
 rm -Rf /c/go*
 rm -Rf /c/qt*
 rm -Rf /c/ruby*
 rm -Rf /c/cygwin*
 rm -Rf /c/miniconda*
 rm -Rf /c/libraries/llvm*
-rm -Rf "/c/Program Files/LLVM*"
-rm -Rf "/c/Program Files (x86)/Microsoft DirectX SDK*"
+rm -Rf /c/Program\ Files/LLVM*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason

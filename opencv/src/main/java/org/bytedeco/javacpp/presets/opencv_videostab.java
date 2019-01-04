@@ -32,8 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_photo.class, opencv_video.class,
-                       opencv_videoio.class, opencv_ml.class}, value = {
+@Properties(inherit = {opencv_objdetect.class, opencv_optflow.class, opencv_photo.class}, value = {
     @Platform(include = {
         "<opencv2/videostab/frame_source.hpp>", "<opencv2/videostab/log.hpp>", "<opencv2/videostab/fast_marching.hpp>",
         "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/motion_core.hpp>", "<opencv2/videostab/outlier_rejection.hpp>",
@@ -44,10 +43,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "opencv_cudaimgproc@.4.0", "opencv_cudafeatures2d@.4.0", "opencv_cudalegacy@.4.0",
                          "opencv_cudaoptflow@.4.0", "opencv_cudawarping@.4.0"}),
     @Platform(value = "ios", preload = "libopencv_videostab"),
-    @Platform(value = "windows", link = "opencv_videostab400",
-              preload = {"opencv_cuda400", "opencv_cudaarithm400", "opencv_cudafilters400",
-                         "opencv_cudaimgproc400", "opencv_cudafeatures2d400", "opencv_cudalegacy400",
-                         "opencv_cudaoptflow400", "opencv_cudawarping400"})},
+    @Platform(value = "windows", link = "opencv_videostab401",
+              preload = {"opencv_cuda401", "opencv_cudaarithm401", "opencv_cudafilters401",
+                         "opencv_cudaimgproc401", "opencv_cudafeatures2d401", "opencv_cudalegacy401",
+                         "opencv_cudaoptflow401", "opencv_cudawarping401"})},
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {

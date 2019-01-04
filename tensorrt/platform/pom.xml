@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>10.0-7.3-${project.parent.version}</version>
+      <version>10.0-7.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

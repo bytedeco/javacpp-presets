@@ -31,7 +31,7 @@ import static org.bytedeco.javacpp.opencv_core.cvCreateImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetSize;
 import static org.bytedeco.javacpp.opencv_core.cvIplImage;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
-import static org.bytedeco.javacpp.opencv_imgcodecs.CV_LOAD_IMAGE_COLOR;
+import static org.bytedeco.javacpp.opencv_imgcodecs.IMREAD_COLOR;
 //import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imread;
 import static org.bytedeco.javacpp.opencv_imgcodecs.imwrite;
@@ -42,7 +42,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 public class opencv_imgcodecs extends org.bytedeco.javacpp.presets.opencv_imgcodecs {
 
     public static IplImage cvLoadImage(String filename) {
-        return cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
+        return cvLoadImage(filename, IMREAD_COLOR);
     }
     public static IplImage cvLoadImage(String filename, int iscolor) {
         return new IplImage(cvClone(cvIplImage(imread(filename, iscolor))));
@@ -56,7 +56,7 @@ public class opencv_imgcodecs extends org.bytedeco.javacpp.presets.opencv_imgcod
     }
 
     public static IplImage cvLoadImageBGRA(String filename) {
-        IplImage imageBGR = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
+        IplImage imageBGR = cvLoadImage(filename, IMREAD_COLOR);
         if (imageBGR == null) {
             return null;
         } else {
@@ -68,7 +68,7 @@ public class opencv_imgcodecs extends org.bytedeco.javacpp.presets.opencv_imgcod
     }
 
     public static IplImage cvLoadImageRGBA(String filename) {
-        IplImage imageBGR = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);
+        IplImage imageBGR = cvLoadImage(filename, IMREAD_COLOR);
         if (imageBGR == null) {
             return null;
         } else {

@@ -8,6 +8,12 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_videoio.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
+import static org.bytedeco.javacpp.opencv_flann.*;
+import static org.bytedeco.javacpp.opencv_features2d.*;
+import static org.bytedeco.javacpp.opencv_calib3d.*;
 
 public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
     static { Loader.load(); }
@@ -125,13 +131,6 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
-
-/** enum  */
-public static final int
-    CV_LKFLOW_PYR_A_READY = 1,
-    CV_LKFLOW_PYR_B_READY = 2,
-    CV_LKFLOW_INITIAL_GUESSES = 4,
-    CV_LKFLOW_GET_MIN_EIGENVALS = 8;
 
 /** \addtogroup video_track
  *  \{ */

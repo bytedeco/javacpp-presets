@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2018 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,8 +22,12 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.io.File;
 import java.nio.ByteBuffer;
+import java.util.List;
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Cast;
@@ -52,7 +56,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
     link = "dl")}, target = "org.bytedeco.javacpp.linux")
 @NoException
-public class linux implements BuildEnabled, InfoMapper {
+public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
     private Logger logger;
     private java.util.Properties properties;
@@ -65,6 +69,21 @@ public class linux implements BuildEnabled, InfoMapper {
         this.properties = properties;
         this.encoding = encoding;
         this.is64bits = properties.getProperty("platform").contains("64");
+    }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        if (platform.startsWith("linux")) {
+            List<String> includePaths = properties.get("platform.includepath");
+            List<String> includes = properties.get("platform.include");
+            for (String path : includePaths) {
+                if (new File(path, "linux/sysinfo.h").exists()) {
+                    includes.add("linux/sysinfo.h");
+                }
+            }
+            includes.add("linux/kernel.h");
+            includes.add("sys/sysinfo.h");
+        }
     }
 
     public void map(InfoMap infoMap) {
@@ -101,14 +120,14 @@ public class linux implements BuildEnabled, InfoMapper {
                              "defined __x86_64__ && __WORDSIZE == 32",
                              "defined __USE_XOPEN2K && !defined __USE_GNU",
                              "defined __GNUC__ && __GNUC__ >= 2 && defined __USE_EXTERN_INLINES",
-                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64").define(false))
+                             "__USE_EXTERN_INLINES", "__USE_FILE_OFFSET64", "_LINUX_KERNEL_H").define(false).cppTypes())
 
                .put(new Info("__SOCKADDR_ARG", "__CONST_SOCKADDR_ARG", "__SOCKADDR_ALLTYPES", "CLK_TCK",
                              "error_t", "__extern_always_inline", "__extern_inline", "_EXTERN_INLINE", "__inline",
                              "__ext", "__extension__", "__mode__", "__nonnull", "__ss_aligntype", "__sysconf",
                              "__REDIRECT_NTH", "__REDIRECT", "__THROW", "__restrict", "__wur",
                              "__WAIT_STATUS", "__WAIT_STATUS_DEFN", "sched_priority", "sigcontext_struct",
-                             "sigev_notify_function", "sigev_notify_attributes", "sv_onstack").annotations().cppTypes())
+                             "sigev_notify_function", "sigev_notify_attributes", "sv_onstack", "__FUNCTION__").annotations().cppTypes())
 
                .put(new Info("_POSIX2_VERSION", "_POSIX2_C_VERSION", "_POSIX2_C_BIND",
                              "_POSIX2_C_DEV", "_POSIX2_SW_DEV", "_POSIX2_LOCALEDEF").cppTypes("long"))
@@ -201,6 +220,8 @@ public class linux implements BuildEnabled, InfoMapper {
                      + "        public native void call(int arg0, siginfo_t arg1, Pointer arg2);\n"
                      + "    }\n"
                      + "    public native Sa_sigaction_int_siginfo_t_Pointer sa_sigaction(); public native sigaction sa_sigaction(Sa_sigaction_int_siginfo_t_Pointer sa_sigaction);\n"))
+
+               .put(new Info("sysinfo::_f").javaText("@MemberGetter public native @Cast(\"char*\") BytePointer _f();    /* Padding: libc5 uses this.. */"))
 
                .put(new Info("LC_GLOBAL_LOCALE").cppTypes("__locale_t").translate(false))
                .put(new Info("RTLD_NEXT", "RTLD_DEFAULT", "RTLD_SELF", "RTLD_MAIN_ONLY").cppTypes("void*").translate(false))

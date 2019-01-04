@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 @Properties(
-    inherit = {opencv_phase_unwrapping.class, opencv_calib3d.class, opencv_flann.class, opencv_highgui.class},
+    inherit = {opencv_phase_unwrapping.class, opencv_calib3d.class},
     value = {
         @Platform(
             include = {
@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_structured_light@.4.0"
         ),
         @Platform(value = "ios", preload = "libopencv_structured_light"),
-        @Platform(value = "windows", link = "opencv_structured_light400")
+        @Platform(value = "windows", link = "opencv_structured_light401")
     },
     target = "org.bytedeco.javacpp.opencv_structured_light"
 )

@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet 1.3.0  http://mxnet.incubator.apache.org/
+ * MXNet 1.4.0.rc0  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -17,6 +17,13 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/mxnet/apidocs/
 
 &lowast; Bindings are currently available only for the C API of MXNet.
+
+Scala API documentation is available here:
+
+ * http://bytedeco.org/javacpp-presets/mxnet/scaladocs/
+
+&lowast; Call `Loader.load(org.bytedeco.javacpp.mxnet.class)` before using the API in the `org.apache.mxnet` package.
+
 
 Sample Usage
 ------------
@@ -36,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -44,26 +51,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.3.0-1.4.3</version>
+            <version>1.4.0.rc0-1.4.4-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.3.0-1.4.3</version>
+            <version>1.4.0.rc0-1.4.4-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.3.0-1.4.3</version>
+            <version>1.4.0.rc0-1.4.4-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.3.0-1.4.3</version>
+            <version>1.4.0.rc0-1.4.4-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
@@ -71,19 +78,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.3</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.3</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.3-1.4.3</version>
+            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

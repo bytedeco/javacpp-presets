@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_objdetect.class, opencv_ml.class, opencv_video.class, opencv_xfeatures2d.class}, value = {
+@Properties(inherit = {opencv_objdetect.class, opencv_video.class, opencv_xfeatures2d.class}, value = {
     @Platform(include = {
         "<opencv2/stitching/detail/warpers.hpp>", "<opencv2/stitching/detail/matchers.hpp>", "<opencv2/stitching/detail/util.hpp>",
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
@@ -41,8 +41,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               link = "opencv_stitching@.4.0", preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0", "opencv_cudafilters@.4.0",
               "opencv_cudaimgproc@.4.0", "opencv_cudafeatures2d@.4.0", "opencv_cudalegacy@.4.0", "opencv_cudawarping@.4.0"}),
     @Platform(value = "ios", preload = "libopencv_stitching"),
-    @Platform(value = "windows", link = "opencv_stitching400", preload = {"opencv_cuda400", "opencv_cudaarithm400", "opencv_cudafilters400",
-              "opencv_cudaimgproc400", "opencv_cudafeatures2d400", "opencv_cudalegacy400", "opencv_cudawarping400"})},
+    @Platform(value = "windows", link = "opencv_stitching401", preload = {"opencv_cuda401", "opencv_cudaarithm401", "opencv_cudafilters401",
+              "opencv_cudaimgproc401", "opencv_cudafeatures2d401", "opencv_cudalegacy401", "opencv_cudawarping401"})},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {

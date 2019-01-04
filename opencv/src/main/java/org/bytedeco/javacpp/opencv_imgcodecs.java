@@ -69,50 +69,6 @@ public class opencv_imgcodecs extends org.bytedeco.javacpp.helper.opencv_imgcode
   \}
 */
 
-/* duplicate of "ImreadModes" enumeration for better compatibility with OpenCV 3.x */
-/** enum  */
-public static final int
-/* 8bit, color or not */
-    CV_LOAD_IMAGE_UNCHANGED  = -1,
-/* 8bit, gray */
-    CV_LOAD_IMAGE_GRAYSCALE  = 0,
-/* ?, color */
-    CV_LOAD_IMAGE_COLOR      = 1,
-/* any depth, ? */
-    CV_LOAD_IMAGE_ANYDEPTH   = 2,
-/* ?, any color */
-    CV_LOAD_IMAGE_ANYCOLOR   = 4,
-/* ?, no rotate */
-    CV_LOAD_IMAGE_IGNORE_ORIENTATION  = 128;
-
-/* duplicate of "ImwriteFlags" enumeration for better compatibility with OpenCV 3.x */
-/** enum  */
-public static final int
-    CV_IMWRITE_JPEG_QUALITY = 1,
-    CV_IMWRITE_JPEG_PROGRESSIVE = 2,
-    CV_IMWRITE_JPEG_OPTIMIZE = 3,
-    CV_IMWRITE_JPEG_RST_INTERVAL = 4,
-    CV_IMWRITE_JPEG_LUMA_QUALITY = 5,
-    CV_IMWRITE_JPEG_CHROMA_QUALITY = 6,
-    CV_IMWRITE_PNG_COMPRESSION = 16,
-    CV_IMWRITE_PNG_STRATEGY = 17,
-    CV_IMWRITE_PNG_BILEVEL = 18,
-    CV_IMWRITE_PNG_STRATEGY_DEFAULT = 0,
-    CV_IMWRITE_PNG_STRATEGY_FILTERED = 1,
-    CV_IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY = 2,
-    CV_IMWRITE_PNG_STRATEGY_RLE = 3,
-    CV_IMWRITE_PNG_STRATEGY_FIXED = 4,
-    CV_IMWRITE_PXM_BINARY = 32,
-    CV_IMWRITE_EXR_TYPE = 48,
-    CV_IMWRITE_WEBP_QUALITY = 64,
-    CV_IMWRITE_PAM_TUPLETYPE = 128,
-    CV_IMWRITE_PAM_FORMAT_NULL = 0,
-    CV_IMWRITE_PAM_FORMAT_BLACKANDWHITE = 1,
-    CV_IMWRITE_PAM_FORMAT_GRAYSCALE = 2,
-    CV_IMWRITE_PAM_FORMAT_GRAYSCALE_ALPHA = 3,
-    CV_IMWRITE_PAM_FORMAT_RGB = 4,
-    CV_IMWRITE_PAM_FORMAT_RGB_ALPHA = 5;
-
 //////////////////////////////// image codec ////////////////////////////////
 
 /** \addtogroup imgcodecs
@@ -239,6 +195,7 @@ Currently, the following file formats are supported:
 -   Portable Network Graphics - \*.png (see the *Note* section)
 -   WebP - \*.webp (see the *Note* section)
 -   Portable image format - \*.pbm, \*.pgm, \*.ppm \*.pxm, \*.pnm (always supported)
+-   PFM files - \*.pfm (see the *Note* section)
 -   Sun rasters - \*.sr, \*.ras (always supported)
 -   TIFF files - \*.tiff, \*.tif (see the *Note* section)
 -   OpenEXR Image files - \*.exr (see the *Note* section)
@@ -265,6 +222,9 @@ Currently, the following file formats are supported:
     [Vector](http://www.gdal.org/ogr_formats.html).
 -   If EXIF information are embedded in the image file, the EXIF orientation will be taken into account
     and thus the image will be rotated accordingly except if the flag \ref IMREAD_IGNORE_ORIENTATION is passed.
+-   Use the IMREAD_UNCHANGED flag to keep the floating point values from PFM image.
+-   By default number of pixels must be less than 2^30. Limit can be set using system
+    variable OPENCV_IO_MAX_IMAGE_PIXELS
 <p>
 @param filename Name of file to be loaded.
 @param flags Flag that can take values of cv::ImreadModes
@@ -295,8 +255,9 @@ single-channel or 3-channel (with 'BGR' channel order) images
 can be saved using this function, with these exceptions:
 <p>
 - 16-bit unsigned (CV_16U) images can be saved in the case of PNG, JPEG 2000, and TIFF formats
-- 32-bit float (CV_32F) images can be saved in TIFF, OpenEXR, and Radiance HDR formats; 3-channel
-(CV_32FC3) TIFF images will be saved using the LogLuv high dynamic range encoding (4 bytes per pixel)
+- 32-bit float (CV_32F) images can be saved in PFM, TIFF, OpenEXR, and Radiance HDR formats;
+  3-channel (CV_32FC3) TIFF images will be saved using the LogLuv high dynamic range encoding
+  (4 bytes per pixel)
 - PNG images with an alpha channel can be saved using this function. To do this, create
 8-bit (or 16-bit) 4-channel image BGRA, where the alpha channel goes last. Fully transparent pixels
 should have alpha set to 0, fully opaque pixels should have alpha set to 255/65535 (see the code sample below).
