@@ -1,4 +1,5 @@
 
+ * Bundle libraries from raspberrypi/userland to avoid loading issues on `linux-armhf` devices other than Raspberry Pi ([issue bytedeco/javacv#1118](https://github.com/bytedeco/javacv/issues/1118))
  * Bundle the new official Java/Scala API of MXNet via the `jnimxnet` library
  * Add `QuickSpinC.h`, `SpinVideoC.h`, and `TransportLayer*C.h` for Spinnaker ([pull #660](https://github.com/bytedeco/javacpp-presets/pull/660))
  * Add `FlyCapture2Video.h` and `FlyCapture2VideoDef.h`, and remove `AVIRecorder.h` for FlyCapture ([pull #613](https://github.com/bytedeco/javacpp-presets/pull/613))
