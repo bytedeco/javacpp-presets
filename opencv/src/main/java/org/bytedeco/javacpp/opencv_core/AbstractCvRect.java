@@ -7,33 +7,33 @@ import org.bytedeco.javacpp.annotation.Properties;
 
 @Properties(inherit = opencv_core_presets.class)
 public abstract class AbstractCvRect extends IntPointer {
-      static { Loader.load(); }
-      public AbstractCvRect(Pointer p) { super(p); }
+    static { Loader.load(); }
+    public AbstractCvRect(Pointer p) { super(p); }
 
-//        public CvRect(int x, int y, int width, int height) {
-//            allocate(); x(x).y(y).width(width).height(height);
-//        }
+//    public CvRect(int x, int y, int width, int height) {
+//        allocate(); x(x).y(y).width(width).height(height);
+//    }
 
-      public abstract int x();
-      public abstract int y();
-      public abstract int width();
-      public abstract int height();
+    public abstract int x();
+    public abstract int y();
+    public abstract int width();
+    public abstract int height();
 
-      @Override public String toString() {
-          if (isNull()) {
-              return super.toString();
-          } else {
-              if (capacity() == 0) {
-                  return "(" + x() + ", " + y() + "; " + width() + ", " + height() + ")";
-              }
-              String s = "";
-              long p = position();
-              for (long i = 0; i < capacity(); i++) {
-                  position(i);
-                  s += (i == 0 ? "(" : " (") + x() + ", " + y() + "; " + width() + ", " + height() + ")";
-              }
-              position(p);
-              return s;
-          }
-      }
-  }
+    @Override public String toString() {
+        if (isNull()) {
+            return super.toString();
+        } else {
+            if (capacity() == 0) {
+                return "(" + x() + ", " + y() + "; " + width() + ", " + height() + ")";
+            }
+            String s = "";
+            long p = position();
+            for (long i = 0; i < capacity(); i++) {
+                position(i);
+                s += (i == 0 ? "(" : " (") + x() + ", " + y() + "; " + width() + ", " + height() + ")";
+            }
+            position(p);
+            return s;
+        }
+    }
+}

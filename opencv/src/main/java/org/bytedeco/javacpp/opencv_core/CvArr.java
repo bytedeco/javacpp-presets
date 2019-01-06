@@ -8,16 +8,16 @@ import org.bytedeco.javacpp.annotation.Properties;
 @Opaque
 @Properties(inherit = opencv_core_presets.class)
 public class CvArr extends AbstractArray {
-      public CvArr(Pointer p) { super(p); }
+    public CvArr(Pointer p) { super(p); }
 
-      @Override public int arrayChannels()          { throw new UnsupportedOperationException(); }
-      @Override public int arrayDepth()             { throw new UnsupportedOperationException(); }
-      @Override public int arrayOrigin()            { throw new UnsupportedOperationException(); }
-      @Override public void arrayOrigin(int origin) { throw new UnsupportedOperationException(); }
-      @Override public int arrayWidth()             { throw new UnsupportedOperationException(); }
-      @Override public int arrayHeight()            { throw new UnsupportedOperationException(); }
-      @Override public IplROI arrayROI()            { throw new UnsupportedOperationException(); }
-      @Override public int arraySize()              { throw new UnsupportedOperationException(); }
-      @Override public BytePointer arrayData()      { throw new UnsupportedOperationException(); }
-      @Override public int arrayStep()              { throw new UnsupportedOperationException(); }
-  }
+    @Override public int arrayChannels()          { throw new UnsupportedOperationException(); }
+    @Override public int arrayDepth()             { throw new UnsupportedOperationException(); }
+    @Override public int arrayOrigin()            { throw new UnsupportedOperationException(); }
+    @Override public void arrayOrigin(int origin) { throw new UnsupportedOperationException(); }
+    @Override public int arrayWidth()             { throw new UnsupportedOperationException(); }
+    @Override public int arrayHeight()            { throw new UnsupportedOperationException(); }
+    @Override public IplROI arrayROI()            { throw new UnsupportedOperationException(); }
+    @Override public int arraySize()              { throw new UnsupportedOperationException(); }
+    @Override public BytePointer arrayData()      { throw new UnsupportedOperationException(); }
+    @Override public int arrayStep()              { throw new UnsupportedOperationException(); }
+}

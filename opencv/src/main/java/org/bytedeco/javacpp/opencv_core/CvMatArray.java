@@ -7,25 +7,25 @@ import org.bytedeco.javacpp.annotation.Properties;
 
 @Name("CvMat*")
 @Properties(inherit = opencv_core_presets.class)
-  public class CvMatArray extends CvArrArray {
-      public CvMatArray(CvMat ... array) { this(array.length); put(array); position(0); }
-      public CvMatArray(long size) { allocateArray(size); }
-      public CvMatArray(Pointer p) { super(p); }
-      private native void allocateArray(long size);
+public class CvMatArray extends CvArrArray {
+    public CvMatArray(CvMat ... array) { this(array.length); put(array); position(0); }
+    public CvMatArray(long size) { allocateArray(size); }
+    public CvMatArray(Pointer p) { super(p); }
+    private native void allocateArray(long size);
 
-      @Override public CvMatArray position(long position) {
-          return (CvMatArray)super.position(position);
-      }
-      @Override public CvMatArray put(CvArr ... array) {
-          return (CvMatArray)super.put(array);
-      }
-      @Override @ValueGetter
-      public native CvMat get();
-      @Override public CvMatArray put(CvArr p) {
-          if (p instanceof CvMat) {
-              return (CvMatArray)super.put(p);
-          } else {
-              throw new ArrayStoreException(p.getClass().getName());
-          }
-      }
-  }
+    @Override public CvMatArray position(long position) {
+        return (CvMatArray)super.position(position);
+    }
+    @Override public CvMatArray put(CvArr ... array) {
+        return (CvMatArray)super.put(array);
+    }
+    @Override @ValueGetter
+    public native CvMat get();
+    @Override public CvMatArray put(CvArr p) {
+        if (p instanceof CvMat) {
+            return (CvMatArray)super.put(p);
+        } else {
+            throw new ArrayStoreException(p.getClass().getName());
+        }
+    }
+}
