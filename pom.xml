@@ -339,6 +339,9 @@
             </goals>
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
+              <includes>
+                <include>${javacpp.platform.nativeOutputPath}/</include>
+              </includes>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <skipIfEmpty>false</skipIfEmpty>
               <archive>
