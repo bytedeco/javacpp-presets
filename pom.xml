@@ -542,6 +542,7 @@
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
+        <module>qt</module>
       </modules>
       <properties>
         <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
