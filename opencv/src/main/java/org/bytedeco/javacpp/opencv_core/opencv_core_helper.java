@@ -25,16 +25,11 @@ package org.bytedeco.javacpp.opencv_core;
 
 import org.bytedeco.javacpp.IntPointer;
 
+// required by javac to resolve circular dependencies
 import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_L2;
+//import static org.bytedeco.javacpp.opencv_core.opencv_core.cvOpenFileStorage;
+//import static org.bytedeco.javacpp.opencv_core.opencv_core.cvReleaseFileStorage;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.cvScalar;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_MAT_DEPTH_MASK;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_8U;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_8S;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_16U;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_16S;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_32S;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_32F;
-import static org.bytedeco.javacpp.opencv_core.opencv_core.CV_64F;
 
 public class opencv_core_helper extends opencv_core_presets {
 
@@ -42,7 +37,7 @@ public class opencv_core_helper extends opencv_core_presets {
         return cvScalar(b, g, r, 0);
     }
 
-  //    public static abstract class AbstractCvFileStorage extends Pointer {
+//    public static abstract class AbstractCvFileStorage extends Pointer {
 //        public AbstractCvFileStorage(Pointer p) { super(p); }
 //
 //        /**

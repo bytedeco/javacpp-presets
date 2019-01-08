@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.opencv_core.*;
 public class opencv_imgproc_helper extends opencv_imgproc_presets {
 
     public static int cvFindContours(CvArr image, CvMemStorage storage, CvSeq first_contour,
-                                     int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
+            int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
         return opencv_imgproc.cvFindContours(image, storage, first_contour, header_size, mode, method, CvPoint.ZERO);
     }
 
@@ -53,7 +53,7 @@ public class opencv_imgproc_helper extends opencv_imgproc_presets {
     }
 
     public static CvHistogram cvMakeHistHeaderForArray(int dims, int[] sizes, CvHistogram hist,
-                                                       float[] data, float[][] ranges/*=null*/, int uniform/*=1*/) {
+            float[] data, float[][] ranges/*=null*/, int uniform/*=1*/) {
         return opencv_imgproc.cvMakeHistHeaderForArray(dims, new IntPointer(sizes), hist,
                 new FloatPointer(data), ranges == null ? null : new PointerPointer(ranges), uniform);
     }
@@ -66,11 +66,9 @@ public class opencv_imgproc_helper extends opencv_imgproc_presets {
     public static void cvCalcArrHist(CvArr[] arr, CvHistogram hist, int accumulate/*=0*/, CvArr mask/*=null*/) {
         opencv_imgproc.cvCalcArrHist(new CvArrArray(arr), hist, accumulate, mask);
     }
-
     public static void cvCalcHist(IplImage[] arr, CvHistogram hist, int accumulate/*=0*/, CvArr mask/*=null*/) {
         opencv_imgproc.cvCalcHist(new IplImageArray(arr), hist, accumulate, mask);
     }
-
     public static void cvCalcHist(IplImageArray arr, CvHistogram hist,
             int accumulate/*=0*/, CvArr mask/*=null*/) {
         opencv_imgproc.cvCalcArrHist(arr, hist, accumulate, mask);

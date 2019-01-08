@@ -23,7 +23,6 @@
 package org.bytedeco.javacpp.opencv_video;
 
 // required by javac to resolve circular dependencies
-
 //import static org.bytedeco.javacpp.opencv_video.cvCreateKalman;
 //import static org.bytedeco.javacpp.opencv_video.cvReleaseKalman;
 

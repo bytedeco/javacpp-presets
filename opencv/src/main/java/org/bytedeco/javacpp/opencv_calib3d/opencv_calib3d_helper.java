@@ -23,7 +23,6 @@
 package org.bytedeco.javacpp.opencv_calib3d;
 
 // required by javac to resolve circular dependencies
-//import org.bytedeco.javacpp.opencv_core.*;
 //import static org.bytedeco.javacpp.opencv_calib3d.cvCreatePOSITObject;
 //import static org.bytedeco.javacpp.opencv_calib3d.cvCreateStereoBMState;
 //import static org.bytedeco.javacpp.opencv_calib3d.cvReleasePOSITObject;

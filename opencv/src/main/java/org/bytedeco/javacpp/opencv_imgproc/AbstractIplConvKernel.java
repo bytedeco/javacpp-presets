@@ -16,7 +16,7 @@ public abstract class AbstractIplConvKernel extends Pointer {
      * @return IplConvKernel created. Do not call cvReleaseStructuringElement() on it.
      */
     public static IplConvKernel create(int cols, int rows,
-                                       int anchor_x, int anchor_y, int shape, int[] values/*=null*/) {
+            int anchor_x, int anchor_y, int shape, int[] values/*=null*/) {
         IplConvKernel p = cvCreateStructuringElementEx(cols, rows,
                 anchor_x, anchor_y, shape, values);
         if (p != null) {

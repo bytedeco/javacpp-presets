@@ -5,8 +5,8 @@ import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.ValueGetter;
 import org.bytedeco.javacpp.annotation.Properties;
 
-@Name("IplImage*")
 @Properties(inherit = opencv_core_presets.class)
+@Name("IplImage*")
 public class IplImageArray extends CvArrArray {
     public IplImageArray(IplImage ... array) { this(array.length); put(array); position(0); }
     public IplImageArray(long size) { allocateArray(size); }
@@ -19,8 +19,7 @@ public class IplImageArray extends CvArrArray {
     @Override public IplImageArray put(CvArr ... array) {
         return (IplImageArray)super.put(array);
     }
-    @Override @ValueGetter
-    public native IplImage get();
+    @Override @ValueGetter public native IplImage get();
     @Override public IplImageArray put(CvArr p) {
         if (p instanceof IplImage) {
             return (IplImageArray)super.put(p);

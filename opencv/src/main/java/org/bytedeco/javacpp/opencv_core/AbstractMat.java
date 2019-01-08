@@ -28,7 +28,6 @@ public abstract class AbstractMat extends AbstractArray {
     public abstract int dims();
     public abstract long elemSize1();
 
-
     @Override public int arrayChannels() { return channels(); }
     @Override public int arrayDepth() {
         switch (depth()) {

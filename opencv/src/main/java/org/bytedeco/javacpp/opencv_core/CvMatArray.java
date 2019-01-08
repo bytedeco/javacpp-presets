@@ -5,8 +5,8 @@ import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.ValueGetter;
 import org.bytedeco.javacpp.annotation.Properties;
 
-@Name("CvMat*")
 @Properties(inherit = opencv_core_presets.class)
+@Name("CvMat*")
 public class CvMatArray extends CvArrArray {
     public CvMatArray(CvMat ... array) { this(array.length); put(array); position(0); }
     public CvMatArray(long size) { allocateArray(size); }
@@ -19,8 +19,7 @@ public class CvMatArray extends CvArrArray {
     @Override public CvMatArray put(CvArr ... array) {
         return (CvMatArray)super.put(array);
     }
-    @Override @ValueGetter
-    public native CvMat get();
+    @Override @ValueGetter public native CvMat get();
     @Override public CvMatArray put(CvArr p) {
         if (p instanceof CvMat) {
             return (CvMatArray)super.put(p);

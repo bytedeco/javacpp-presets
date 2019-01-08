@@ -1,9 +1,13 @@
 package org.bytedeco.javacpp.opencv_core;
 
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.Properties;
-
-import java.nio.*;
 
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
@@ -126,10 +130,10 @@ public abstract class AbstractCvMat extends CvArr {
 
     public abstract int type(); public abstract CvMat type(int type);
     public abstract int step();
-    public abstract BytePointer data_ptr();
-    public abstract FloatPointer data_fl();
+    public abstract BytePointer   data_ptr();
+    public abstract FloatPointer  data_fl();
     public abstract DoublePointer data_db();
-    public abstract IntPointer data_i();
+    public abstract IntPointer    data_i();
     public abstract ShortPointer  data_s();
     public abstract int rows();
     public abstract int cols();
