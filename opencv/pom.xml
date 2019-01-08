@@ -43,25 +43,10 @@
         <configuration>
           <encoding>ISO-8859-1</encoding>
         </configuration>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <configuration>
-              <compileSourceRoots>
-                <compileSourceRoot>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</compileSourceRoot>
-                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
-                <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
-              </compileSourceRoots>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

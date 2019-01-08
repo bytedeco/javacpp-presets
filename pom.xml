@@ -154,8 +154,9 @@
             <id>default-compile</id>
             <configuration>
               <compileSourceRoots>
-                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
                 <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</compileSourceRoot>
               </compileSourceRoots>
             </configuration>
           </execution>
@@ -437,7 +438,7 @@
             <configuration>
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
-              <sourcepath>${project.basedir}/src/gen/java:${project.build.sourceDirectory}</sourcepath>
+              <sourcepath>${project.build.sourceDirectory}:${project.basedir}/src/gen/java:${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</sourcepath>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs/</link>
               </links>
