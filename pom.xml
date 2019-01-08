@@ -393,7 +393,7 @@
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
               <links>
-                <link>http://bytedeco.org/javacpp/apidocs/</link>
+                <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
             </configuration>
           </execution>
