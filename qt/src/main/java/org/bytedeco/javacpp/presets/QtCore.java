@@ -116,6 +116,7 @@ public class QtCore extends AbstractQtPreset {
         "Qt::ApplicationAttribute",
         "Qt::CaseSensitivity",
         "Qt::FindChildOption",
+        "Qt::MouseButton",
         "Qt::Orientation",
         "QtMsgType"
     };
@@ -126,7 +127,22 @@ public class QtCore extends AbstractQtPreset {
     Map<String, String> flags = new HashMap<>();
     flags.put("QEventLoop::ProcessEventsFlags", "QEventLoop::ProcessEventsFlag");
     flags.put("QString::SectionFlags", "QString::SectionFlag");
+    flags.put("Qt::MouseButtons", "Qt::MouseButton");
     return flags;
+  }
+
+  @Override
+  protected String[] intEnums() {
+    return new String[]{
+        "Qt::KeyboardModifier",
+    };
+  }
+
+  @Override
+  protected String[] intFlags() {
+    return new String[]{
+        "Qt::KeyboardModifiers",
+    };
   }
 
   @Override

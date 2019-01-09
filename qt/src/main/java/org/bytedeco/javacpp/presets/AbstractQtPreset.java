@@ -97,15 +97,16 @@ abstract class AbstractQtPreset implements InfoMapper, LoadEnabled {
 
     infoMap.put(new Info(intEnums()));
 
-    // Flags
+    // TODO Flags
     for (Map.Entry<String, String> entry : flags().entrySet()) {
       String flagType = entry.getKey();
       String enumType = entry.getValue().replace("::", ".");
-      // TODO
 //      infoMap.put(new Info(flagType).valueTypes("@Cast(\"" + flagType + "\") " + enumType));
       infoMap.put(new Info(flagType).skip());
     }
-    infoMap.put(new Info(intFlags()));
+    for (String flag : intFlags()) {
+      infoMap.put(new Info(flag).pointerTypes("@Cast(\"" + flag + "\") int"));
+    }
 
     // Macros
     for (Map.Entry<String, String> macro : macros().entrySet()) {
