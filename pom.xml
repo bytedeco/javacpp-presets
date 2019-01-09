@@ -65,6 +65,7 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.platform.nativeOutputPath>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
     <javacpp.platform.root></javacpp.platform.root>
     <javacpp.platform.compiler></javacpp.platform.compiler>
     <javacpp.platform.extension></javacpp.platform.extension>
@@ -143,7 +144,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.8.0</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -152,9 +153,11 @@
           <execution>
             <id>default-compile</id>
             <configuration>
-              <includes>
-                <include>org/bytedeco/javacpp/*.java</include>
-              </includes>
+              <compileSourceRoots>
+                <compileSourceRoot>${project.build.sourceDirectory}</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/src/gen/java</compileSourceRoot>
+                <compileSourceRoot>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</compileSourceRoot>
+              </compileSourceRoots>
             </configuration>
           </execution>
           <execution>
@@ -165,7 +168,7 @@
             </goals>
             <configuration>
               <includes>
-                <include>org/bytedeco/javacpp/presets/*.java</include>
+                <include>org/bytedeco/javacpp/**/*_presets.java</include>
               </includes>
             </configuration>
           </execution>
@@ -194,7 +197,7 @@
           <classPath>${project.build.outputDirectory}</classPath>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
-            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${project.build.outputDirectory}/org/bytedeco/javacpp/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
@@ -202,7 +205,7 @@
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
-            <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
+            <resourcePath>${project.build.outputDirectory}/org/bytedeco/javacpp/</resourcePath>
           </resourcePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
@@ -245,7 +248,7 @@
                 <ANDROID_NDK>${javacpp.platform.root}</ANDROID_NDK>
               </environmentVariables>
               <workingDirectory>${project.basedir}/..</workingDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <!-- <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName> -->
             </configuration>
           </execution>
           <execution>
@@ -263,19 +266,19 @@
                 <argument>${javacpp.moduleId}</argument>
               </buildCommand>
               <workingDirectory>${project.basedir}/..</workingDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <!-- <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName> -->
             </configuration>
           </execution>
           <execution>
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>build</goal>
+              <goal>parse</goal>
             </goals>
             <configuration>
               <skip>${javacpp.parser.skip}</skip>
-              <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
+              <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
             </configuration>
           </execution>
           <execution>
@@ -285,8 +288,9 @@
               <goal>build</goal>
             </goals>
             <configuration>
+              <outputDirectory>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}</outputDirectory>
               <skip>${javacpp.compiler.skip}</skip>
-              <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
+              <classOrPackageName>org.bytedeco.javacpp.**</classOrPackageName>
               <copyLibs>true</copyLibs>
               <copyResources>true</copyResources>
             </configuration>
@@ -318,20 +322,14 @@
                   <Specification-Title>${project.name}</Specification-Title>
                   <Specification-Vendor>Bytedeco</Specification-Vendor>
                   <Specification-Version>${project.version}</Specification-Version>
+                  <MultiReleaseOutput>true</MultiReleaseOutput>
                 </manifestEntries>
               </archive>
+              <skipIfEmpty>true</skipIfEmpty>
               <includes>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/javacpp/**</include>
+                <include>META-INF/versions/**</include>
               </includes>
-              <excludes>
-                <exclude>org/bytedeco/javacpp/include/</exclude>
-                <exclude>org/bytedeco/javacpp/linux-*/</exclude>
-                <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</exclude>
-              </excludes>
             </configuration>
           </execution>
           <execution>
@@ -342,12 +340,16 @@
             </goals>
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
-              <skipIfEmpty>true</skipIfEmpty>
               <includes>
-                <include>${javacpp.platform.library.path}/</include>
-                <include>${javacpp.platform}${javacpp.platform.extension}/</include>
-                <include>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</include>
+                <include>${javacpp.platform.nativeOutputPath}/</include>
               </includes>
+              <classesDirectory>${project.build.directory}/native</classesDirectory>
+              <skipIfEmpty>false</skipIfEmpty>
+              <archive>
+                <manifestEntries>
+                  <MultiReleaseOutput>true</MultiReleaseOutput>
+                </manifestEntries>
+              </archive>
               <excludes>
                 <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
@@ -357,6 +359,50 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <version>1.0.0.Beta2</version>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <jvmVersion>9</jvmVersion>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
+              <outputDirectory>${project.build.directory}</outputDirectory>
+              <modules>
+                <module>
+                  <artifact>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                  </artifact>
+                  <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
+                </module>
+                <module>
+                  <artifact>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>${project.artifactId}</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
+                  </artifact>
+                  <moduleInfoSource>
+                    open module org.bytedeco.javacpp.${project.artifactId}.${os.name}.${os.arch} {
+                      requires transitive org.bytedeco.javacpp.${project.artifactId};
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.5.2</version>
@@ -392,6 +438,7 @@
             <configuration>
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
+              <sourcepath>${project.build.sourceDirectory}:${project.basedir}/src/gen/java:${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</sourcepath>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
@@ -654,6 +701,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -699,6 +747,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -744,6 +793,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
@@ -789,6 +839,7 @@
         <module>tensorflow</module>
       </modules>
       <properties>
+        <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
         <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
