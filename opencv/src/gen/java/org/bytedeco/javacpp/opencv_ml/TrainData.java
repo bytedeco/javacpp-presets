@@ -19,7 +19,7 @@ All the statistical model classes in _ml_ module accepts Ptr\<TrainData\> as par
 words, you can create your own class derived from TrainData and pass smart pointer to the instance
 of this class into StatModel::train.
 <p>
-\sa \ref ml_intro_data
+@see \ref ml_intro_data
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class TrainData extends Pointer {
@@ -124,7 +124,7 @@ public class TrainData extends Pointer {
     public native @ByVal Mat getCatMap();
 
     /** \brief Splits the training data into the training and test parts
-    \sa TrainData::setTrainTestSplitRatio
+    @see TrainData::setTrainTestSplitRatio
      */
     public native void setTrainTestSplit(int count, @Cast("bool") boolean shuffle/*=true*/);
     public native void setTrainTestSplit(int count);
@@ -135,7 +135,7 @@ public class TrainData extends Pointer {
     set. If the function is not called, all the data is used for training. Please, note that for
     each of TrainData::getTrain\* there is corresponding TrainData::getTest\*, so that the test
     subset can be retrieved and processed as well.
-    \sa TrainData::setTrainTestSplit
+    @see TrainData::setTrainTestSplit
      */
     public native void setTrainTestSplitRatio(double ratio, @Cast("bool") boolean shuffle/*=true*/);
     public native void setTrainTestSplitRatio(double ratio);

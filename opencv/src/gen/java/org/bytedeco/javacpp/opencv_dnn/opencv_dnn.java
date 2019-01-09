@@ -632,20 +632,20 @@ public static final int OPENCV_DNN_API_VERSION = 20181221;
 
      /**
       * \brief Read deep learning network represented in one of the supported formats.
-      * @param [in] model Binary file contains trained weights. The following file
+      * @param model [in]  Binary file contains trained weights. The following file
       *                  extensions are expected for models from different frameworks:
       *                  * {@code *.caffemodel} (Caffe, http://caffe.berkeleyvision.org/)
       *                  * {@code *.pb} (TensorFlow, https://www.tensorflow.org/)
       *                  * {@code *.t7} | {@code *.net} (Torch, http://torch.ch/)
       *                  * {@code *.weights} (Darknet, https://pjreddie.com/darknet/)
       *                  * {@code *.bin} (DLDT, https://software.intel.com/openvino-toolkit)
-      * @param [in] config Text file contains network configuration. It could be a
+      * @param config [in]  Text file contains network configuration. It could be a
       *                   file with the following extensions:
       *                  * {@code *.prototxt} (Caffe, http://caffe.berkeleyvision.org/)
       *                  * {@code *.pbtxt} (TensorFlow, https://www.tensorflow.org/)
       *                  * {@code *.cfg} (Darknet, https://pjreddie.com/darknet/)
       *                  * {@code *.xml} (DLDT, https://software.intel.com/openvino-toolkit)
-      * @param [in] framework Explicit framework name tag to determine a format.
+      * @param framework [in]  Explicit framework name tag to determine a format.
       * @return Net object.
       *
       * This function automatically detects an origin framework of trained model
@@ -662,9 +662,9 @@ public static final int OPENCV_DNN_API_VERSION = 20181221;
       * \brief Read deep learning network represented in one of the supported formats.
       * \details This is an overloaded member function, provided for convenience.
       *          It differs from the above function only in what argument(s) it accepts.
-      * @param [in] framework    Name of origin framework.
-      * @param [in] bufferModel  A buffer with a content of binary file with weights
-      * @param [in] bufferConfig A buffer with a content of text file contains network configuration.
+      * @param framework [in]     Name of origin framework.
+      * @param bufferModel [in]   A buffer with a content of binary file with weights
+      * @param bufferConfig [in]  A buffer with a content of text file contains network configuration.
       * @return Net object.
       */
      @Namespace("cv::dnn") public static native @ByVal Net readNet(@Str BytePointer framework, @Cast("uchar*") @StdVector BytePointer bufferModel);
@@ -693,8 +693,8 @@ public static final int OPENCV_DNN_API_VERSION = 20181221;
     @Namespace("cv::dnn") public static native @ByVal Mat readTorchBlob(@Str String filename);
 
     /** \brief Load a network from Intel's Model Optimizer intermediate representation.
-     *  @param [in] xml XML configuration file with network's topology.
-     *  @param [in] bin Binary file with trained weights.
+     *  @param xml [in]  XML configuration file with network's topology.
+     *  @param bin [in]  Binary file with trained weights.
      *  @return Net object.
      *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
      *  backend.
@@ -845,9 +845,9 @@ public static final int OPENCV_DNN_API_VERSION = 20181221;
 
     /** \brief Parse a 4D blob and output the images it contains as 2D arrays through a simpler data structure
      *  (std::vector<cv::Mat>).
-     *  @param [in] blob_ 4 dimensional array (images, channels, height, width) in floating point precision (CV_32F) from
+     *  @param blob_ [in]  4 dimensional array (images, channels, height, width) in floating point precision (CV_32F) from
      *  which you would like to extract the images.
-     *  @param [out] images_ array of 2D Mat containing the images extracted from the blob in floating point precision
+     *  @param images_ [out]  array of 2D Mat containing the images extracted from the blob in floating point precision
      *  (CV_32F). They are non normalized neither mean added. The number of returned images equals the first dimension
      *  of the blob (batch size). Every image has a number of channels equals to the second dimension of the blob (depth).
      */
@@ -876,8 +876,8 @@ public static final int OPENCV_DNN_API_VERSION = 20181221;
     @Namespace("cv::dnn") public static native void shrinkCaffeModel(@Str String src, @Str String dst);
 
     /** \brief Create a text representation for a binary network stored in protocol buffer format.
-     *  @param [in] model  A path to binary network.
-     *  @param [in] output A path to output text file to be created.
+     *  @param model [in]   A path to binary network.
+     *  @param output [in]  A path to output text file to be created.
      *
      *  \note To reduce output file size, trained weights are not included.
      */

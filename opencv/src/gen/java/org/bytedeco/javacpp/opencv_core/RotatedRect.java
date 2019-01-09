@@ -20,7 +20,7 @@ The sample below demonstrates how to use RotatedRect:
 \snippet snippets/core_various.cpp RotatedRect_demo
 ![image](pics/rotatedrect.png)
 <p>
-\sa CamShift, fitEllipse, minAreaRect, CvBox2D
+@see CamShift, fitEllipse, minAreaRect, CvBox2D
 */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class RotatedRect extends FloatPointer {

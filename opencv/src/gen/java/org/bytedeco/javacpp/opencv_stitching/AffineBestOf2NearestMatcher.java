@@ -43,7 +43,7 @@ ratio between descriptor distances is greater than the threshold match_conf.
 Unlike cv::detail::BestOf2NearestMatcher this matcher uses affine
 transformation (affine trasformation estimate will be placed in matches_info).
 <p>
-\sa cv::detail::FeaturesMatcher cv::detail::BestOf2NearestMatcher
+@see cv::detail::FeaturesMatcher cv::detail::BestOf2NearestMatcher
  */
 @Namespace("cv::detail") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class AffineBestOf2NearestMatcher extends BestOf2NearestMatcher {
@@ -67,7 +67,7 @@ public class AffineBestOf2NearestMatcher extends BestOf2NearestMatcher {
     @param num_matches_thresh1 Minimum number of matches required for the 2D affine transform
     estimation used in the inliers classification step
     <p>
-    \sa cv::estimateAffine2D cv::estimateAffinePartial2D
+    @see cv::estimateAffine2D cv::estimateAffinePartial2D
      */
     public AffineBestOf2NearestMatcher(@Cast("bool") boolean full_affine/*=false*/, @Cast("bool") boolean try_use_gpu/*=false*/,
                                     float match_conf/*=0.3f*/, int num_matches_thresh1/*=6*/) { super((Pointer)null); allocate(full_affine, try_use_gpu, match_conf, num_matches_thresh1); }

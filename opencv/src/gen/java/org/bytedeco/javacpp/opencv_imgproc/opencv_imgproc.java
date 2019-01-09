@@ -2125,7 +2125,7 @@ value means a non-italic font, 1.0f means about a 45 degree slope, etc.
 @param thickness Thickness of the text strokes
 @param line_type Type of the strokes, see line description
 <p>
-\sa cvPutText
+@see cvPutText
  */
 public static native void cvInitFont( CvFont font, int font_face,
                          double hscale, double vscale,
@@ -2506,7 +2506,7 @@ public static final int
     WARP_INVERSE_MAP     = 16;
 
 /** \brief Specify the polar mapping mode
-\sa warpPolar
+@see warpPolar
 */
 /** enum cv::WarpPolarMode */
 public static final int
@@ -3206,7 +3206,7 @@ You may also use the higher-level GaussianBlur.
 @param sigma Gaussian standard deviation. If it is non-positive, it is computed from ksize as
 {@code sigma = 0.3*((ksize-1)*0.5 - 1) + 0.8}.
 @param ktype Type of filter coefficients. It can be CV_32F or CV_64F .
-\sa  sepFilter2D, getDerivKernels, getStructuringElement, GaussianBlur
+@see  sepFilter2D, getDerivKernels, getStructuringElement, GaussianBlur
  */
 @Namespace("cv") public static native @ByVal Mat getGaussianKernel( int ksize, double sigma, int ktype/*=CV_64F*/ );
 @Namespace("cv") public static native @ByVal Mat getGaussianKernel( int ksize, double sigma );
@@ -3300,7 +3300,7 @@ In-place operation is supported.
 CV_8U, CV_16U, or CV_32F, for larger aperture sizes, it can only be CV_8U.
 @param dst destination array of the same size and type as src.
 @param ksize aperture linear size; it must be odd and greater than 1, for example: 3, 5, 7 ...
-\sa  bilateralFilter, blur, boxFilter, GaussianBlur
+@see  bilateralFilter, blur, boxFilter, GaussianBlur
  */
 @Namespace("cv") public static native void medianBlur( @ByVal Mat src, @ByVal Mat dst, int ksize );
 @Namespace("cv") public static native void medianBlur( @ByVal UMat src, @ByVal UMat dst, int ksize );
@@ -3324,7 +3324,7 @@ possible future modifications of all this semantics, it is recommended to specif
 sigmaX, and sigmaY.
 @param borderType pixel extrapolation method, see #BorderTypes
 <p>
-\sa  sepFilter2D, filter2D, blur, boxFilter, bilateralFilter, medianBlur
+@see  sepFilter2D, filter2D, blur, boxFilter, bilateralFilter, medianBlur
  */
 @Namespace("cv") public static native void GaussianBlur( @ByVal Mat src, @ByVal Mat dst, @ByVal Size ksize,
                                 double sigmaX, double sigmaY/*=0*/,
@@ -3408,7 +3408,7 @@ algorithms, and so on). If you need to compute pixel sums over variable-size win
 center.
 @param normalize flag, specifying whether the kernel is normalized by its area or not.
 @param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
-\sa  blur, bilateralFilter, GaussianBlur, medianBlur, integral
+@see  blur, bilateralFilter, GaussianBlur, medianBlur, integral
  */
 @Namespace("cv") public static native void boxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                              @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
@@ -3445,7 +3445,7 @@ variance and standard deviation around the neighborhood of a pixel.
 center.
 @param normalize flag, specifying whether the kernel is to be normalized by it's area or not.
 @param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
-\sa boxFilter
+@see boxFilter
 */
 @Namespace("cv") public static native void sqrBoxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                 @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor,
@@ -3482,7 +3482,7 @@ the depth should be CV_8U, CV_16U, CV_16S, CV_32F or CV_64F.
 @param anchor anchor point; default value Point(-1,-1) means that the anchor is at the kernel
 center.
 @param borderType border mode used to extrapolate pixels outside of the image, see #BorderTypes
-\sa  boxFilter, bilateralFilter, GaussianBlur, medianBlur
+@see  boxFilter, bilateralFilter, GaussianBlur, medianBlur
  */
 @Namespace("cv") public static native void blur( @ByVal Mat src, @ByVal Mat dst,
                         @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
@@ -3528,7 +3528,7 @@ the kernel; the anchor should lie within the kernel; default value (-1,-1) means
 is at the kernel center.
 @param delta optional value added to the filtered pixels before storing them in dst.
 @param borderType pixel extrapolation method, see #BorderTypes
-\sa  sepFilter2D, dft, matchTemplate
+@see  sepFilter2D, dft, matchTemplate
  */
 @Namespace("cv") public static native void filter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                             @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor,
@@ -3561,7 +3561,7 @@ kernel kernelY. The final result shifted by delta is stored in dst .
 is at the kernel center.
 @param delta Value added to the filtered results before storing them.
 @param borderType Pixel extrapolation method, see #BorderTypes
-\sa  filter2D, Sobel, GaussianBlur, boxFilter, blur
+@see  filter2D, Sobel, GaussianBlur, boxFilter, blur
  */
 @Namespace("cv") public static native void sepFilter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                @ByVal Mat kernelX, @ByVal Mat kernelY,
@@ -3628,7 +3628,7 @@ The second case corresponds to a kernel of:
 applied (see #getDerivKernels for details).
 @param delta optional delta value that is added to the results prior to storing them in dst.
 @param borderType pixel extrapolation method, see #BorderTypes
-\sa  Scharr, Laplacian, sepFilter2D, filter2D, GaussianBlur, cartToPolar
+@see  Scharr, Laplacian, sepFilter2D, filter2D, GaussianBlur, cartToPolar
  */
 @Namespace("cv") public static native void Sobel( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                          int dx, int dy, int ksize/*=3*/,
@@ -3664,7 +3664,7 @@ Sobel( src, dy, CV_16SC1, 0, 1, 3 );
 @param ksize size of Sobel kernel. It must be 3.
 @param borderType pixel extrapolation method, see #BorderTypes
 <p>
-\sa Sobel
+@see Sobel
  */
 
 @Namespace("cv") public static native void spatialGradient( @ByVal Mat src, @ByVal Mat dx,
@@ -3703,7 +3703,7 @@ is equivalent to
 applied (see #getDerivKernels for details).
 @param delta optional delta value that is added to the results prior to storing them in dst.
 @param borderType pixel extrapolation method, see #BorderTypes
-\sa  cartToPolar
+@see  cartToPolar
  */
 @Namespace("cv") public static native void Scharr( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                           int dx, int dy, double scale/*=1*/, double delta/*=0*/,
@@ -3746,7 +3746,7 @@ details. The size must be positive and odd.
 applied. See #getDerivKernels for details.
 @param delta Optional delta value that is added to the results prior to storing them in dst .
 @param borderType Pixel extrapolation method, see #BorderTypes
-\sa  Sobel, Scharr
+@see  Sobel, Scharr
  */
 @Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                              int ksize/*=1*/, double scale/*=1*/, double delta/*=0*/,
@@ -3929,7 +3929,7 @@ The output of the function can be used for robust edge or corner detection.
 @param ksize Aperture parameter for the Sobel operator.
 @param borderType Pixel extrapolation method. See #BorderTypes.
 <p>
-\sa  cornerMinEigenVal, cornerHarris, preCornerDetect
+@see  cornerMinEigenVal, cornerHarris, preCornerDetect
  */
 @Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal Mat src, @ByVal Mat dst,
                                           int blockSize, int ksize,
@@ -4071,7 +4071,7 @@ pixel neighborhood. See cornerEigenValsAndVecs .
 or #cornerMinEigenVal.
 @param k Free parameter of the Harris detector.
 <p>
-\sa  cornerMinEigenVal, cornerHarris, calcOpticalFlowPyrLK, estimateRigidTransform,
+@see  cornerMinEigenVal, cornerHarris, calcOpticalFlowPyrLK, estimateRigidTransform,
  */
 
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
@@ -4196,7 +4196,7 @@ votes ( \f$>\texttt{threshold}\f$ ).
 @param minLineLength Minimum line length. Line segments shorter than that are rejected.
 @param maxLineGap Maximum allowed gap between points on the same line to link them.
 <p>
-\sa LineSegmentDetector
+@see LineSegmentDetector
  */
 @Namespace("cv") public static native void HoughLinesP( @ByVal Mat image, @ByVal Mat lines,
                                double rho, double theta, int threshold,
@@ -4277,7 +4277,7 @@ returned first.
 @param maxRadius Maximum circle radius. If <= 0, uses the maximum image dimension. If < 0, returns
 centers without finding the radius.
 <p>
-\sa fitEllipse, minEnclosingCircle
+@see fitEllipse, minEnclosingCircle
  */
 @Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Mat circles,
                                int method, double dp, double minDist,
@@ -4329,7 +4329,7 @@ anchor is at the element center.
 @param iterations number of times erosion is applied.
 @param borderType pixel extrapolation method, see #BorderTypes
 @param borderValue border value in case of a constant border
-\sa  dilate, morphologyEx, getStructuringElement
+@see  dilate, morphologyEx, getStructuringElement
  */
 @Namespace("cv") public static native void erode( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
                          @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
@@ -4372,7 +4372,7 @@ anchor is at the element center.
 @param iterations number of times dilation is applied.
 @param borderType pixel extrapolation method, see #BorderTypes
 @param borderValue border value in case of a constant border
-\sa  erode, morphologyEx, getStructuringElement
+@see  erode, morphologyEx, getStructuringElement
  */
 @Namespace("cv") public static native void dilate( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
                           @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor, int iterations/*=1*/,
@@ -4409,7 +4409,7 @@ kernel center.
 @param borderType Pixel extrapolation method, see #BorderTypes
 @param borderValue Border value in case of a constant border. The default value has a special
 meaning.
-\sa  dilate, erode, getStructuringElement
+@see  dilate, erode, getStructuringElement
 \note The number of iterations is the number of times erosion or dilatation operation will be applied.
 For instance, an opening operation (#MORPH_OPEN) with two iterations is equivalent to apply
 successively: erode -> erode -> dilate -> dilate (and not erode -> dilate -> erode -> dilate).
@@ -4473,7 +4473,7 @@ src.size(), fx, and fy; the type of dst is the same as of src.
 \f[\texttt{(double)dsize.height/src.rows}\f]
 @param interpolation interpolation method, see #InterpolationFlags
 <p>
-\sa  warpAffine, warpPerspective, remap
+@see  warpAffine, warpPerspective, remap
  */
 @Namespace("cv") public static native void resize( @ByVal Mat src, @ByVal Mat dst,
                           @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/,
@@ -4513,7 +4513,7 @@ borderMode=#BORDER_TRANSPARENT, it means that the pixels in the destination imag
 the "outliers" in the source image are not modified by the function.
 @param borderValue value used in case of a constant border; by default, it is 0.
 <p>
-\sa  warpPerspective, resize, remap, getRectSubPix, transform
+@see  warpPerspective, resize, remap, getRectSubPix, transform
  */
 @Namespace("cv") public static native void warpAffine( @ByVal Mat src, @ByVal Mat dst,
                               @ByVal Mat M, @ByVal Size dsize,
@@ -4561,7 +4561,7 @@ optional flag #WARP_INVERSE_MAP, that sets M as the inverse transformation (
 @param borderMode pixel extrapolation method (#BORDER_CONSTANT or #BORDER_REPLICATE).
 @param borderValue value used in case of a constant border; by default, it equals 0.
 <p>
-\sa  warpAffine, resize, remap, getRectSubPix, perspectiveTransform
+@see  warpAffine, resize, remap, getRectSubPix, perspectiveTransform
  */
 @Namespace("cv") public static native void warpPerspective( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat M, @ByVal Size dsize,
@@ -4667,7 +4667,7 @@ CV_32FC2 .
 @param nninterpolation Flag indicating whether the fixed-point maps are used for the
 nearest-neighbor or for a more complex interpolation.
 <p>
-\sa  remap, undistort, initUndistortRectifyMap
+@see  remap, undistort, initUndistortRectifyMap
  */
 @Namespace("cv") public static native void convertMaps( @ByVal Mat map1, @ByVal Mat map2,
                                @ByVal Mat dstmap1, @ByVal Mat dstmap2,
@@ -4705,7 +4705,7 @@ The transformation maps the rotation center to itself. If this is not the target
 coordinate origin is assumed to be the top-left corner).
 @param scale Isotropic scale factor.
 <p>
-\sa  getAffineTransform, warpAffine, transform
+@see  getAffineTransform, warpAffine, transform
  */
 @Namespace("cv") public static native @ByVal Mat getRotationMatrix2D( @ByVal Point2f center, double angle, double scale );
 
@@ -4722,7 +4722,7 @@ where
 @param src Coordinates of triangle vertices in the source image.
 @param dst Coordinates of the corresponding triangle vertices in the destination image.
 <p>
-\sa  warpAffine, transform
+@see  warpAffine, transform
  */
 @Namespace("cv") public static native @ByVal Mat getAffineTransform( @Const Point2f src, @Const Point2f dst );
 
@@ -4755,7 +4755,7 @@ where
 @param dst Coordinates of the corresponding quadrangle vertices in the destination image.
 @param solveMethod method passed to cv::solve (#DecompTypes)
 <p>
-\sa  findHomography, warpPerspective, perspectiveTransform
+@see  findHomography, warpPerspective, perspectiveTransform
  */
 @Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal Mat src, @ByVal Mat dst, int solveMethod/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native @ByVal Mat getPerspectiveTransform(@ByVal Mat src, @ByVal Mat dst);
@@ -4791,7 +4791,7 @@ source image. The center must be inside the image.
 @param patch Extracted patch that has the size patchSize and the same number of channels as src .
 @param patchType Depth of the extracted pixels. By default, they have the same depth as src .
 <p>
-\sa  warpAffine, warpPerspective
+@see  warpAffine, warpPerspective
  */
 @Namespace("cv") public static native void getRectSubPix( @ByVal Mat image, @ByVal Size patchSize,
                                  @ByVal Point2f center, @ByVal Mat patch, int patchType/*=-1*/ );
@@ -4846,7 +4846,7 @@ rotation-invariant template matching, for object tracking and so forth.
 -   The function can not operate in-place.
 -   To calculate magnitude and angle in degrees #cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
 <p>
-\sa cv::linearPolar
+@see cv::linearPolar
 \endinternal
 */
 @Namespace("cv") public static native void logPolar( @ByVal Mat src, @ByVal Mat dst,
@@ -4891,7 +4891,7 @@ and
 -   The function can not operate in-place.
 -   To calculate magnitude and angle in degrees #cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
 <p>
-\sa cv::logPolar
+@see cv::logPolar
 \endinternal
 */
 @Namespace("cv") public static native void linearPolar( @ByVal Mat src, @ByVal Mat dst,
@@ -4987,7 +4987,7 @@ In addiction, to calculate the original coordinate from a polar mapped coordinat
 -  To calculate magnitude and angle in degrees #cartToPolar is used internally thus angles are measured from 0 to 360 with accuracy about 0.3 degrees.
 -  This function uses #remap. Due to current implementation limitations the size of an input and output images should be less than 32767x32767.
 <p>
-\sa cv::remap
+@see cv::remap
 */
 @Namespace("cv") public static native void warpPolar(@ByVal Mat src, @ByVal Mat dst, @ByVal Size dsize,
                             @ByVal Point2f center, double maxRadius, int flags);
@@ -5094,7 +5094,7 @@ viewed by a still camera and for the further foreground-background segmentation.
 @param dst %Accumulator image with the same number of channels as input image, and a depth of CV_32F or CV_64F.
 @param mask Optional operation mask.
 <p>
-\sa  accumulateSquare, accumulateProduct, accumulateWeighted
+@see  accumulateSquare, accumulateProduct, accumulateWeighted
  */
 @Namespace("cv") public static native void accumulate( @ByVal Mat src, @ByVal Mat dst,
                               @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
@@ -5120,7 +5120,7 @@ The function supports multi-channel images. Each channel is processed independen
 floating-point.
 @param mask Optional operation mask.
 <p>
-\sa  accumulateSquare, accumulateProduct, accumulateWeighted
+@see  accumulateSquare, accumulateProduct, accumulateWeighted
  */
 @Namespace("cv") public static native void accumulateSquare( @ByVal Mat src, @ByVal Mat dst,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
@@ -5146,7 +5146,7 @@ The function supports multi-channel images. Each channel is processed independen
 floating-point.
 @param mask Optional operation mask.
 <p>
-\sa  accumulate, accumulateSquare, accumulateWeighted
+@see  accumulate, accumulateSquare, accumulateWeighted
  */
 @Namespace("cv") public static native void accumulateProduct( @ByVal Mat src1, @ByVal Mat src2,
                                      @ByVal Mat dst, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
@@ -5177,7 +5177,7 @@ floating-point.
 @param alpha Weight of the input image.
 @param mask Optional operation mask.
 <p>
-\sa  accumulate, accumulateSquare, accumulateProduct
+@see  accumulate, accumulateSquare, accumulateProduct
  */
 @Namespace("cv") public static native void accumulateWeighted( @ByVal Mat src, @ByVal Mat dst,
                                       double alpha, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask );
@@ -5225,7 +5225,7 @@ peak) and will be smaller when there are multiple peaks.
 @param response Signal power within the 5x5 centroid around the peak, between 0 and 1 (optional).
 @return detected phase shift (sub-pixel) between the two arrays.
 <p>
-\sa dft, getOptimalDFTSize, idft, mulSpectrums createHanningWindow
+@see dft, getOptimalDFTSize, idft, mulSpectrums createHanningWindow
  */
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2,
                                     @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat window, DoublePointer response/*=0*/);
@@ -5295,7 +5295,7 @@ types.
 @param type thresholding type (see #ThresholdTypes).
 @return the computed threshold value if Otsu's or Triangle methods used.
 <p>
-\sa  adaptiveThreshold, findContours, compare, min, max
+@see  adaptiveThreshold, findContours, compare, min, max
  */
 @Namespace("cv") public static native double threshold( @ByVal Mat src, @ByVal Mat dst,
                                double thresh, double maxval, int type );
@@ -5328,7 +5328,7 @@ pixel: 3, 5, 7, and so on.
 @param C Constant subtracted from the mean or weighted mean (see the details below). Normally, it
 is positive but may be zero or negative as well.
 <p>
-\sa  threshold, blur, GaussianBlur
+@see  threshold, blur, GaussianBlur
  */
 @Namespace("cv") public static native void adaptiveThreshold( @ByVal Mat src, @ByVal Mat dst,
                                      double maxValue, int adaptiveMethod,
@@ -5801,7 +5801,7 @@ size and depth as images[0] .
 @param scale Optional scale factor for the output back projection.
 @param uniform Flag indicating whether the histogram is uniform or not (see above).
 <p>
-\sa calcHist, compareHist
+@see calcHist, compareHist
  */
 @Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
                                  @Const IntPointer channels, @ByVal Mat hist,
@@ -6124,7 +6124,7 @@ function.
 @param markers Input/output 32-bit single-channel image (map) of markers. It should have the same
 size as image .
 <p>
-\sa findContours
+@see findContours
 <p>
 \ingroup imgproc_misc
  */
@@ -6427,7 +6427,7 @@ bit-wise or (|), see #FloodFillFlags.
 \note Since the mask is larger than the filled image, a pixel \f$(x, y)\f$ in image corresponds to the
 pixel \f$(x+1, y+1)\f$ in the mask .
 <p>
-\sa findContours
+@see findContours
  */
 @Namespace("cv") public static native int floodFill( @ByVal Mat image, @ByVal Mat mask,
                             @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
@@ -6562,7 +6562,7 @@ The function can do the following transformations:
     <p>
     #COLOR_BayerBG2BGRA , #COLOR_BayerGB2BGRA , #COLOR_BayerRG2BGRA , #COLOR_BayerGR2BGRA
 <p>
-\sa cvtColor
+@see cvtColor
 */
 @Namespace("cv") public static native void demosaicing(@ByVal Mat src, @ByVal Mat dst, int code, int dstCn/*=0*/);
 @Namespace("cv") public static native void demosaicing(@ByVal Mat src, @ByVal Mat dst, int code);
@@ -6590,7 +6590,7 @@ used for images only.
 \note Only applicable to contour moments calculations from Python bindings: Note that the numpy
 type for the input array should be either np.int32 or np.float32.
 <p>
-\sa  contourArea, arcLength
+@see  contourArea, arcLength
  */
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal Mat array, @Cast("bool") boolean binaryImage/*=false*/ );
 @Namespace("cv") public static native @ByVal Moments moments( @ByVal Mat array );
@@ -6616,7 +6616,7 @@ transformed images are a bit different.
 @param moments Input moments computed with moments .
 @param hu Output Hu invariants.
 <p>
-\sa matchShapes
+@see matchShapes
  */
 @Namespace("cv") public static native void HuMoments( @Const @ByRef Moments moments, DoublePointer hu );
 @Namespace("cv") public static native void HuMoments( @Const @ByRef Moments moments, DoubleBuffer hu );
@@ -8221,7 +8221,7 @@ That is, the following code renders some text, the tight box surrounding it, and
 @param fontFace Font to use, see #HersheyFonts.
 @param fontScale Font scale factor that is multiplied by the font-specific base size.
 @param thickness Thickness of lines used to render the text. See #putText for details.
-@param [out] baseLine y-coordinate of the baseline relative to the bottom-most text
+@param baseLine [out]  y-coordinate of the baseline relative to the bottom-most text
 point.
 @return The size of a box that contains the specified text.
 <p>

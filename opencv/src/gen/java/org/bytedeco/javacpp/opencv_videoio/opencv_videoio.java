@@ -157,7 +157,7 @@ public static final int
  <p>
  Reading / writing properties involves many layers. Some unexpected result might happens along this chain.
  Effective behaviour depends from device hardware, driver and API Backend.
- \sa videoio_flags_others, VideoCapture::get(), VideoCapture::set()
+ @see videoio_flags_others, VideoCapture::get(), VideoCapture::set()
 */
 /** enum cv::VideoCaptureProperties */
 public static final int
@@ -238,7 +238,7 @@ public static final int
 // #endif
 
 /** \brief %VideoWriter generic properties identifier.
- \sa VideoWriter::get(), VideoWriter::set()
+ @see VideoWriter::get(), VideoWriter::set()
 */
 /** enum cv::VideoWriterProperties */
 public static final int

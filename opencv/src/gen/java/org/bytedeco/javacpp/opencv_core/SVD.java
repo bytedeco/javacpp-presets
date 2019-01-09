@@ -21,7 +21,7 @@ its determinant, you do not need {@code u} and {@code vt}. You can pass
 flags=SVD::NO_UV|... . Another flag SVD::FULL_UV indicates that full-size u
 and vt must be computed, which is not necessary most of the time.
 <p>
-\sa invert, solve, eigen, determinant
+@see invert, solve, eigen, determinant
 */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class SVD extends Pointer {

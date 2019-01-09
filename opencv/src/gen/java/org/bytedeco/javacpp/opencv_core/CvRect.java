@@ -14,7 +14,7 @@ import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 \****************************************************************************************/
 
 /*************************************** CvRect *****************************************/
-/** \sa Rect_ */
+/** @see Rect_ */
 @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class CvRect extends AbstractCvRect {
     static { Loader.load(); }

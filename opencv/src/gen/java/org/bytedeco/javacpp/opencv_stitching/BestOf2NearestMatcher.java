@@ -39,7 +39,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 /** \brief Features matcher which finds two best matches for each feature and leaves the best one only if the
 ratio between descriptor distances is greater than the threshold match_conf
 <p>
-\sa detail::FeaturesMatcher
+@see detail::FeaturesMatcher
  */
 @Namespace("cv::detail") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class BestOf2NearestMatcher extends FeaturesMatcher {

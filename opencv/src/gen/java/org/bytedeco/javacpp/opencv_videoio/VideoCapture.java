@@ -65,7 +65,7 @@ public class VideoCapture extends Pointer {
       documentation of source stream to know the right URL.
     @param apiPreference preferred Capture API backends to use. Can be used to enforce a specific reader
     implementation if multiple are available: e.g. cv::CAP_FFMPEG or cv::CAP_IMAGES or cv::CAP_DSHOW.
-    \sa The list of supported API backends cv::VideoCaptureAPIs
+    @see The list of supported API backends cv::VideoCaptureAPIs
     */
     public VideoCapture(@Str BytePointer filename, int apiPreference/*=cv::CAP_ANY*/) { super((Pointer)null); allocate(filename, apiPreference); }
     private native void allocate(@Str BytePointer filename, int apiPreference/*=cv::CAP_ANY*/);
@@ -84,7 +84,7 @@ public class VideoCapture extends Pointer {
     @param apiPreference preferred Capture API backends to use. Can be used to enforce a specific reader
     implementation if multiple are available: e.g. cv::CAP_DSHOW or cv::CAP_MSMF or cv::CAP_V4L.
     <p>
-    \sa The list of supported API backends cv::VideoCaptureAPIs
+    @see The list of supported API backends cv::VideoCaptureAPIs
     */
     public VideoCapture(int index, int apiPreference/*=cv::CAP_ANY*/) { super((Pointer)null); allocate(index, apiPreference); }
     private native void allocate(int index, int apiPreference/*=cv::CAP_ANY*/);
@@ -161,7 +161,7 @@ public class VideoCapture extends Pointer {
 
     /** \brief Decodes and returns the grabbed video frame.
     <p>
-    @param [out] image the video frame is returned here. If no frames has been grabbed the image will be empty.
+    @param image [out]  the video frame is returned here. If no frames has been grabbed the image will be empty.
     @param flag it could be a frame index or a driver specific flag
     @return {@code false} if no frames has been grabbed
     <p>
@@ -169,7 +169,7 @@ public class VideoCapture extends Pointer {
     (camera has been disconnected, or there are no more frames in video file), the method returns false
     and the function returns an empty image (with %cv::Mat, test it with Mat::empty()).
     <p>
-    \sa read()
+    @see read()
     <p>
     \note In \ref videoio_c "C API", functions cvRetrieveFrame() and cv.RetrieveFrame() return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
@@ -183,18 +183,18 @@ public class VideoCapture extends Pointer {
     public native @Cast("bool") boolean retrieve(@ByVal GpuMat image);
 
     /** \brief Stream operator to read the next video frame.
-    \sa read()
+    @see read()
     */
     public native @ByRef @Name("operator >>") VideoCapture shiftRight(@ByRef Mat image);
 
     /** \overload
-    \sa read()
+    @see read()
     */
     public native @ByRef @Name("operator >>") VideoCapture shiftRight(@ByRef UMat image);
 
     /** \brief Grabs, decodes and returns the next video frame.
     <p>
-    @param [out] image the video frame is returned here. If no frames has been grabbed the image will be empty.
+    @param image [out]  the video frame is returned here. If no frames has been grabbed the image will be empty.
     @return {@code false} if no frames has been grabbed
     <p>
     The method/function combines VideoCapture::grab() and VideoCapture::retrieve() in one call. This is the

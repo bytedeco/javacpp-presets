@@ -23,7 +23,7 @@ the class is capable of storing multiple decision trees and using them for predi
 responses or using a voting schemes), and the derived from DTrees classes (such as RTrees and Boost)
 use this capability to implement decision tree ensembles.
 <p>
-\sa \ref ml_intro_trees
+@see \ref ml_intro_trees
 */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class DTrees extends StatModel {

@@ -234,7 +234,7 @@ public static final int CV_16FC4 = CV_16FC4();
 /** \}
  <p>
  *  \name Comparison operation
- *  \sa cv::CmpTypes
+ *  @see cv::CmpTypes
  *  \{ */
 public static final int CV_HAL_CMP_EQ = 0;
 public static final int CV_HAL_CMP_GT = 1;
@@ -245,7 +245,7 @@ public static final int CV_HAL_CMP_NE = 5;
 /** \}
  <p>
  *  \name Border processing modes
- *  \sa cv::BorderTypes
+ *  @see cv::BorderTypes
  *  \{ */
 public static final int CV_HAL_BORDER_CONSTANT = 0;
 public static final int CV_HAL_BORDER_REPLICATE = 1;
@@ -1702,7 +1702,7 @@ public static native int cvIsInf( float value );
  This operation is used in the simplest or most complex image processing functions in OpenCV.
  <p>
  @param v Function parameter.
- \sa add, subtract, multiply, divide, Mat::convertTo
+ @see add, subtract, multiply, divide, Mat::convertTo
  */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("uchar") byte v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("uchar") byte v);
@@ -2612,7 +2612,7 @@ framework:
 -   {@code GCD} - Supports only values \<= 0.
 -   {@code C=} - No special defined behaviour.
 @param nthreads Number of threads used by OpenCV.
-\sa getNumThreads, getThreadNum
+@see getNumThreads, getThreadNum
  */
 @Namespace("cv") public static native void setNumThreads(int nthreads);
 
@@ -2630,7 +2630,7 @@ The exact meaning of return value depends on the threading framework used by Ope
 - {@code C=} - The number of threads, that OpenCV will try to use for parallel regions, if before
   called setNumThreads with threads \> 0, otherwise returns the number of logical CPUs,
   available for the process.
-\sa setNumThreads, getThreadNum
+@see setNumThreads, getThreadNum
  */
 @Namespace("cv") public static native int getNumThreads();
 
@@ -2646,7 +2646,7 @@ The exact meaning of the return value depends on the threading framework used by
   for master thread and unique number for others, but not necessary 1,2,3,...).
 - {@code GCD} - System calling thread's ID. Never returns 0 inside parallel region.
 - {@code C=} - The index of the current parallel task.
-\sa setNumThreads, getNumThreads
+@see setNumThreads, getNumThreads
  */
 @Namespace("cv") public static native int getThreadNum();
 
@@ -2662,7 +2662,7 @@ architecture.
 <p>
 For example "3.4.1-dev".
 <p>
-\sa getMajorVersion, getMinorVersion, getRevisionVersion
+@see getMajorVersion, getMinorVersion, getRevisionVersion
 */
 @Namespace("cv") public static native @Str BytePointer getVersionString();
 
@@ -2680,7 +2680,7 @@ For example "3.4.1-dev".
 The function returns the number of ticks after the certain event (for example, when the machine was
 turned on). It can be used to initialize RNG or to measure a function execution time by reading the
 tick count before and after the function call.
-\sa getTickFrequency, TickMeter
+@see getTickFrequency, TickMeter
  */
 @Namespace("cv") public static native @Cast("int64") long getTickCount();
 
@@ -2693,7 +2693,7 @@ execution time in seconds:
     // do something ...
     t = ((double)getTickCount() - t)/getTickFrequency();
 }</pre>
-\sa getTickCount, TickMeter
+@see getTickCount, TickMeter
  */
 @Namespace("cv") public static native double getTickFrequency();
 // Targeting TickMeter.java
@@ -2780,7 +2780,7 @@ The function returns the minimum number that is greater than or equal to sz and 
 <p>
 Use this function instead of {@code ceil((float)a / b)} expressions.
 <p>
-\sa alignSize
+@see alignSize
 */
 @Namespace("cv") public static native int divUp(int a, @Cast("unsigned int") int b);
 /** \overload */
@@ -2790,7 +2790,7 @@ Use this function instead of {@code ceil((float)a / b)} expressions.
 <p>
 Use this function instead of {@code ceil((float)a / b) * b} expressions.
 <p>
-\sa divUp
+@see divUp
 */
 @Namespace("cv") public static native int roundUp(int a, @Cast("unsigned int") int b);
 /** \overload */
@@ -3341,7 +3341,7 @@ The function initializes a random number generator and returns the state. The po
 can be then passed to the cvRandInt, cvRandReal and cvRandArr functions. In the current
 implementation a multiply-with-carry generator is used.
 @param seed 64-bit value used to initiate a random sequence
-\sa the C++ class RNG replaced CvRNG.
+@see the C++ class RNG replaced CvRNG.
  */
 public static native @Cast("CvRNG") long cvRNG( @Cast("int64") long seed/*=-1*/);
 public static native @Cast("CvRNG") long cvRNG();
@@ -4996,7 +4996,7 @@ with planar data layout, even though OpenCV does not support such images.
 @param allowND If non-zero, the function accepts multi-dimensional dense arrays (CvMatND\*) and
 returns 2D matrix (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or
 more than 2 dimensions). The CvMatND array must be continuous.
-\sa cvGetImage, cvarrToMat.
+@see cvGetImage, cvarrToMat.
  */
 public static native CvMat cvGetMat( @Const CvArr arr, CvMat header,
                        IntPointer coi/*=NULL*/,
@@ -5523,7 +5523,7 @@ is the mean value of the random numbers.
 @param param2 The second parameter of the distribution. In the case of a uniform distribution it
 is the exclusive upper boundary of the random numbers range. In the case of a normal distribution
 it is the standard deviation of the random numbers.
-\sa randu, randn, RNG::fill.
+@see randu, randn, RNG::fill.
  */
 public static native void cvRandArr( @Cast("CvRNG*") LongPointer rng, CvArr arr, int dist_type,
                       @ByVal CvScalar param1, @ByVal CvScalar param2 );
@@ -7320,7 +7320,7 @@ copyMakeBorder.
 #BORDER_ISOLATED . When borderType==#BORDER_CONSTANT , the function always returns -1, regardless
 of p and len.
 <p>
-\sa copyMakeBorder
+@see copyMakeBorder
 */
 @Namespace("cv") public static native int borderInterpolate(int p, int len, int borderType);
 
@@ -7370,7 +7370,7 @@ to be built.
 @param borderType Border type. See borderInterpolate for details.
 @param value Border value if borderType==BORDER_CONSTANT .
 <p>
-\sa  borderInterpolate
+@see  borderInterpolate
 */
 @Namespace("cv") public static native void copyMakeBorder(@ByVal Mat src, @ByVal Mat dst,
                                  int top, int bottom, int left, int right,
@@ -7425,7 +7425,7 @@ depth is defined by dtype or src1/src2.
 @param mask optional operation mask - 8-bit single channel array, that specifies elements of the
 output array to be changed.
 @param dtype optional depth of the output array (see the discussion below).
-\sa subtract, addWeighted, scaleAdd, Mat::convertTo
+@see subtract, addWeighted, scaleAdd, Mat::convertTo
 */
 @Namespace("cv") public static native void add(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                       @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask, int dtype/*=-1*/);
@@ -7472,7 +7472,7 @@ result of an incorrect sign in the case of overflow.
 @param mask optional operation mask; this is an 8-bit single channel array that specifies elements
 of the output array to be changed.
 @param dtype optional depth of the output array
-\sa  add, addWeighted, scaleAdd, Mat::convertTo
+@see  add, addWeighted, scaleAdd, Mat::convertTo
   */
 @Namespace("cv") public static native void subtract(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                            @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask, int dtype/*=-1*/);
@@ -7503,7 +7503,7 @@ overflow.
 @param dst output array of the same size and type as src1.
 @param scale optional scale factor.
 @param dtype optional depth of the output array
-\sa add, subtract, divide, scaleAdd, addWeighted, accumulate, accumulateProduct, accumulateSquare,
+@see add, subtract, divide, scaleAdd, addWeighted, accumulate, accumulateProduct, accumulateSquare,
 Mat::convertTo
 */
 @Namespace("cv") public static native void multiply(@ByVal Mat src1, @ByVal Mat src2,
@@ -7542,7 +7542,7 @@ result of an incorrect sign in the case of overflow.
 @param dst output array of the same size and type as src2.
 @param dtype optional depth of the output array; if -1, dst will have depth src2.depth(), but in
 case of an array-by-array division, you can only pass -1 when src1.depth()==src2.depth().
-\sa  multiply, add, subtract
+@see  multiply, add, subtract
 */
 @Namespace("cv") public static native void divide(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                          double scale/*=1*/, int dtype/*=-1*/);
@@ -7584,7 +7584,7 @@ The function can also be emulated with a matrix expression, for example:
 @param alpha scale factor for the first array.
 @param src2 second input array of the same size and type as src1.
 @param dst output array of the same size and type as src1.
-\sa add, addWeighted, subtract, Mat::dot, Mat::convertTo
+@see add, addWeighted, subtract, Mat::dot, Mat::convertTo
 */
 @Namespace("cv") public static native void scaleAdd(@ByVal Mat src1, double alpha, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void scaleAdd(@ByVal UMat src1, double alpha, @ByVal UMat src2, @ByVal UMat dst);
@@ -7614,7 +7614,7 @@ result of an incorrect sign in the case of overflow.
 @param dst output array that has the same size and number of channels as the input arrays.
 @param dtype optional depth of the output array; when both input arrays have the same depth, dtype
 can be set to -1, which will be equivalent to src1.depth().
-\sa  add, subtract, scaleAdd, Mat::convertTo
+@see  add, subtract, scaleAdd, Mat::convertTo
 */
 @Namespace("cv") public static native void addWeighted(@ByVal Mat src1, double alpha, @ByVal Mat src2,
                               double beta, double gamma, @ByVal Mat dst, int dtype/*=-1*/);
@@ -7652,7 +7652,7 @@ For example:
 @param dst output array.
 @param alpha optional scale factor.
 @param beta optional delta added to the scaled values.
-\sa  Mat::convertTo, cv::abs(const Mat&)
+@see  Mat::convertTo, cv::abs(const Mat&)
 */
 @Namespace("cv") public static native void convertScaleAbs(@ByVal Mat src, @ByVal Mat dst,
                                   double alpha/*=1*/, double beta/*=0*/);
@@ -7690,7 +7690,7 @@ where
 either have a single channel (in this case the same table is used for all channels) or the same
 number of channels as in the input array.
 @param dst output array of the same size and number of channels as src, and the same depth as lut.
-\sa  convertScaleAbs, Mat::convertTo
+@see  convertScaleAbs, Mat::convertTo
 */
 @Namespace("cv") public static native void LUT(@ByVal Mat src, @ByVal Mat lut, @ByVal Mat dst);
 @Namespace("cv") public static native void LUT(@ByVal UMat src, @ByVal UMat lut, @ByVal UMat dst);
@@ -7701,7 +7701,7 @@ number of channels as in the input array.
 The function cv::sum calculates and returns the sum of array elements,
 independently for each channel.
 @param src input array that must have from 1 to 4 channels.
-\sa  countNonZero, mean, meanStdDev, norm, minMaxLoc, reduce
+@see  countNonZero, mean, meanStdDev, norm, minMaxLoc, reduce
 */
 @Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal Mat src);
 @Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal UMat src);
@@ -7712,7 +7712,7 @@ independently for each channel.
 The function returns the number of non-zero elements in src :
 \f[\sum _{I: \; \texttt{src} (I) \ne0 } 1\f]
 @param src single-channel array.
-\sa  mean, meanStdDev, norm, minMaxLoc, calcCovarMatrix
+@see  mean, meanStdDev, norm, minMaxLoc, calcCovarMatrix
 */
 @Namespace("cv") public static native int countNonZero( @ByVal Mat src );
 @Namespace("cv") public static native int countNonZero( @ByVal UMat src );
@@ -7757,7 +7757,7 @@ When all the mask elements are 0's, the function returns Scalar::all(0)
 @param src input array that should have from 1 to 4 channels so that the result can be stored in
 Scalar_ .
 @param mask optional operation mask.
-\sa  countNonZero, meanStdDev, norm, minMaxLoc
+@see  countNonZero, meanStdDev, norm, minMaxLoc
 */
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src);
@@ -7784,7 +7784,7 @@ Scalar_ 's.
 @param mean output parameter: calculated mean value.
 @param stddev output parameter: calculated standard deviation.
 @param mask optional operation mask.
-\sa  countNonZero, mean, norm, minMaxLoc, calcCovarMatrix
+@see  countNonZero, mean, norm, minMaxLoc, calcCovarMatrix
 */
 @Namespace("cv") public static native void meanStdDev(@ByVal Mat src, @ByVal Mat mean, @ByVal Mat stddev,
                              @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
@@ -7974,7 +7974,7 @@ normalization.
 @param dtype when negative, the output array has the same type as src; otherwise, it has the same
 number of channels as src and the depth =CV_MAT_DEPTH(dtype).
 @param mask optional operation mask.
-\sa norm, Mat::convertTo, SparseMat::convertTo
+@see norm, Mat::convertTo, SparseMat::convertTo
 */
 @Namespace("cv") public static native void normalize( @ByVal Mat src, @ByVal Mat dst, double alpha/*=1*/, double beta/*=0*/,
                              int norm_type/*=cv::NORM_L2*/, int dtype/*=-1*/, @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat mask);
@@ -8011,7 +8011,7 @@ mixChannels , or split .
 @param minLoc pointer to the returned minimum location (in 2D case); NULL is used if not required.
 @param maxLoc pointer to the returned maximum location (in 2D case); NULL is used if not required.
 @param mask optional mask used to select a sub-array.
-\sa max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
+@see max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoublePointer minVal,
                             DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
@@ -8146,7 +8146,7 @@ a single row. 1 means that the matrix is reduced to a single column.
 @param rtype reduction operation that could be one of #ReduceTypes
 @param dtype when negative, the output vector will have the same type as the input matrix,
 otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
-\sa repeat
+@see repeat
 */
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype, int dtype/*=-1*/);
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype);
@@ -8172,7 +8172,7 @@ size and the same depth.
 @param count number of input matrices when mv is a plain C array; it must be greater than zero.
 @param dst output array of the same size and the same depth as mv[0]; The number of channels will
 be equal to the parameter count.
-\sa  mixChannels, split, Mat::reshape
+@see  mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal Mat dst);
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal UMat dst);
@@ -8207,7 +8207,7 @@ The following example demonstrates how to split a 3-channel matrix into 3 single
 @param src input multi-channel array.
 @param mvbegin output array; the number of arrays must match src.channels(); the arrays themselves are
 reallocated, if needed.
-\sa merge, mixChannels, cvtColor
+@see merge, mixChannels, cvtColor
 */
 @Namespace("cv") public static native void split(@Const @ByRef Mat src, Mat mvbegin);
 
@@ -8264,7 +8264,7 @@ src[0].channels() + src[1].channels()-1, and so on, the same scheme is used for 
 channels; as a special case, when fromTo[k\*2] is negative, the corresponding output channel is
 filled with zero .
 @param npairs number of index pairs in {@code fromTo}.
-\sa split, merge, extractChannel, insertChannel, cvtColor
+@see split, merge, extractChannel, insertChannel, cvtColor
 */
 @Namespace("cv") public static native void mixChannels(@Const Mat src, @Cast("size_t") long nsrcs, Mat dst, @Cast("size_t") long ndsts,
                             @Const IntPointer fromTo, @Cast("size_t") long npairs);
@@ -8318,7 +8318,7 @@ filled with zero .
 @param src input array
 @param dst output array
 @param coi index of channel to extract
-\sa mixChannels, split
+@see mixChannels, split
 */
 @Namespace("cv") public static native void extractChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void extractChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
@@ -8328,7 +8328,7 @@ filled with zero .
 @param src input array
 @param dst output array
 @param coi index of channel for insertion
-\sa mixChannels, merge
+@see mixChannels, merge
 */
 @Namespace("cv") public static native void insertChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 @Namespace("cv") public static native void insertChannel(@ByVal UMat src, @ByVal UMat dst, int coi);
@@ -8364,7 +8364,7 @@ The example scenarios of using the function are the following:
 flipping around the x-axis and positive value (for example, 1) means
 flipping around y-axis. Negative value (for example, -1) means flipping
 around both axes.
-\sa transpose , repeat , completeSymm
+@see transpose , repeat , completeSymm
 */
 @Namespace("cv") public static native void flip(@ByVal Mat src, @ByVal Mat dst, int flipCode);
 @Namespace("cv") public static native void flip(@ByVal UMat src, @ByVal UMat dst, int flipCode);
@@ -8387,7 +8387,7 @@ The function cv::rotate rotates the array in one of three different ways:
 @param dst output array of the same type as src.  The size is the same with ROTATE_180,
 and the rows and cols are switched for ROTATE_90_CLOCKWISE and ROTATE_90_COUNTERCLOCKWISE.
 @param rotateCode an enum to specify how to rotate the array; see the enum #RotateFlags
-\sa transpose , repeat , completeSymm, flip, RotateFlags
+@see transpose , repeat , completeSymm, flip, RotateFlags
 */
 @Namespace("cv") public static native void rotate(@ByVal Mat src, @ByVal Mat dst, int rotateCode);
 @Namespace("cv") public static native void rotate(@ByVal UMat src, @ByVal UMat dst, int rotateCode);
@@ -8404,7 +8404,7 @@ vertical axis.
 @param nx Flag to specify how many times the {@code src} is repeated along the
 horizontal axis.
 @param dst output array of the same type as {@code src}.
-\sa cv::reduce
+@see cv::reduce
 */
 @Namespace("cv") public static native void repeat(@ByVal Mat src, int ny, int nx, @ByVal Mat dst);
 @Namespace("cv") public static native void repeat(@ByVal UMat src, int ny, int nx, @ByVal UMat dst);
@@ -8438,7 +8438,7 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
 @param src input array or vector of matrices. all of the matrices must have the same number of rows and the same depth.
 @param nsrc number of matrices in src.
 @param dst output array. It has the same number of rows and depth as the src, and the sum of cols of the src.
-\sa cv::vconcat(const Mat*, size_t, OutputArray), \sa cv::vconcat(InputArrayOfArrays, OutputArray) and \sa cv::vconcat(InputArray, InputArray, OutputArray)
+@see cv::vconcat(const Mat*, size_t, OutputArray), @see cv::vconcat(InputArrayOfArrays, OutputArray) and @see cv::vconcat(InputArray, InputArray, OutputArray)
 */
 @Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
 @Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal UMat dst);
@@ -8512,7 +8512,7 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
 @param src input array or vector of matrices. all of the matrices must have the same number of cols and the same depth.
 @param nsrc number of matrices in src.
 @param dst output array. It has the same number of cols and depth as the src, and the sum of rows of the src.
-\sa cv::hconcat(const Mat*, size_t, OutputArray), \sa cv::hconcat(InputArrayOfArrays, OutputArray) and \sa cv::hconcat(InputArray, InputArray, OutputArray)
+@see cv::hconcat(const Mat*, size_t, OutputArray), @see cv::hconcat(InputArrayOfArrays, OutputArray) and @see cv::hconcat(InputArray, InputArray, OutputArray)
 */
 @Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
 @Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal UMat dst);
@@ -8728,7 +8728,7 @@ You may even get a negative value in the case of overflow.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
 @param dst output array that has the same size and type as input arrays.
-\sa cv::abs(const Mat&)
+@see cv::abs(const Mat&)
 */
 @Namespace("cv") public static native void absdiff(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 @Namespace("cv") public static native void absdiff(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst);
@@ -8797,7 +8797,7 @@ equivalent matrix expressions:
 @param dst output array of type ref CV_8U that has the same size and the same number of channels as
     the input arrays.
 @param cmpop a flag, that specifies correspondence between the arrays (cv::CmpTypes)
-\sa checkRange, min, max, threshold
+@see checkRange, min, max, threshold
 */
 @Namespace("cv") public static native void compare(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int cmpop);
 @Namespace("cv") public static native void compare(@ByVal UMat src1, @ByVal UMat src2, @ByVal UMat dst, int cmpop);
@@ -8812,7 +8812,7 @@ or array and a scalar:
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1.
 @param dst output array of the same size and type as src1.
-\sa max, compare, inRange, minMaxLoc
+@see max, compare, inRange, minMaxLoc
 */
 
 /** \overload
@@ -8833,7 +8833,7 @@ or array and a scalar:
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1 .
 @param dst output array of the same size and type as src1.
-\sa  min, compare, inRange, minMaxLoc, \ref MatrixExpressions
+@see  min, compare, inRange, minMaxLoc, \ref MatrixExpressions
 */
 
 /** \overload
@@ -8879,7 +8879,7 @@ Special values (NaN, Inf) are not handled.
 @param src input array.
 @param power exponent of power.
 @param dst output array of the same size and type as src.
-\sa sqrt, exp, log, cartToPolar, polarToCart
+@see sqrt, exp, log, cartToPolar, polarToCart
 */
 @Namespace("cv") public static native void pow(@ByVal Mat src, double power, @ByVal Mat dst);
 @Namespace("cv") public static native void pow(@ByVal UMat src, double power, @ByVal UMat dst);
@@ -8897,7 +8897,7 @@ converts denormalized values to zeros on output. Special values (NaN,
 Inf) are not handled.
 @param src input array.
 @param dst output array of the same size and type as src.
-\sa log , cartToPolar , polarToCart , phase , pow , sqrt , magnitude
+@see log , cartToPolar , polarToCart , phase , pow , sqrt , magnitude
 */
 @Namespace("cv") public static native void exp(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void exp(@ByVal UMat src, @ByVal UMat dst);
@@ -8912,7 +8912,7 @@ Output on zero, negative and special (NaN, Inf) values is undefined.
 <p>
 @param src input array.
 @param dst output array of the same size and type as src .
-\sa exp, cartToPolar, polarToCart, phase, pow, sqrt, magnitude
+@see exp, cartToPolar, polarToCart, phase, pow, sqrt, magnitude
 */
 @Namespace("cv") public static native void log(@ByVal Mat src, @ByVal Mat dst);
 @Namespace("cv") public static native void log(@ByVal UMat src, @ByVal UMat dst);
@@ -8936,7 +8936,7 @@ size and type as angle.
 size and type as angle.
 @param angleInDegrees when true, the input angles are measured in
 degrees, otherwise, they are measured in radians.
-\sa cartToPolar, magnitude, phase, exp, log, pow, sqrt
+@see cartToPolar, magnitude, phase, exp, log, pow, sqrt
 */
 @Namespace("cv") public static native void polarToCart(@ByVal Mat magnitude, @ByVal Mat angle,
                               @ByVal Mat x, @ByVal Mat y, @Cast("bool") boolean angleInDegrees/*=false*/);
@@ -8967,7 +8967,7 @@ double-precision floating-point array.
 x; the angles are measured in radians (from 0 to 2\*Pi) or in degrees (0 to 360 degrees).
 @param angleInDegrees a flag, indicating whether the angles are measured
 in radians (which is by default), or in degrees.
-\sa Sobel, Scharr
+@see Sobel, Scharr
 */
 @Namespace("cv") public static native void cartToPolar(@ByVal Mat x, @ByVal Mat y,
                               @ByVal Mat magnitude, @ByVal Mat angle,
@@ -9020,7 +9020,7 @@ from the corresponding elements of x and y arrays:
 @param y floating-point array of y-coordinates of the vectors; it must
 have the same size as x.
 @param magnitude output array of the same size and type as x.
-\sa cartToPolar, polarToCart, phase, sqrt
+@see cartToPolar, polarToCart, phase, sqrt
 */
 @Namespace("cv") public static native void magnitude(@ByVal Mat x, @ByVal Mat y, @ByVal Mat magnitude);
 @Namespace("cv") public static native void magnitude(@ByVal UMat x, @ByVal UMat y, @ByVal UMat magnitude);
@@ -9086,7 +9086,7 @@ should have the same type as src1 and src2.
 @param dst output matrix; it has the proper size and the same type as
 input matrices.
 @param flags operation flags (cv::GemmFlags)
-\sa mulTransposed , transform
+@see mulTransposed , transform
 */
 @Namespace("cv") public static native void gemm(@ByVal Mat src1, @ByVal Mat src2, double alpha,
                        @ByVal Mat src3, double beta, @ByVal Mat dst, int flags/*=0*/);
@@ -9127,7 +9127,7 @@ output matrix. See the dtype parameter description below.
 @param dtype Optional type of the output matrix. When it is negative,
 the output matrix will have the same type as src . Otherwise, it will be
 type=CV_MAT_DEPTH(dtype) that should be either CV_32F or CV_64F .
-\sa calcCovarMatrix, gemm, repeat, reduce
+@see calcCovarMatrix, gemm, repeat, reduce
 */
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa,
                                  @ByVal(nullValue = "cv::InputArray(cv::noArray())") Mat delta,
@@ -9177,7 +9177,7 @@ m.cols or m.cols-1.
 @param dst output array of the same size and depth as src; it has as
 many channels as m.rows.
 @param m transformation 2x2 or 2x3 floating-point matrix.
-\sa perspectiveTransform, getAffineTransform, estimateAffine2D, warpAffine, warpPerspective
+@see perspectiveTransform, getAffineTransform, estimateAffine2D, warpAffine, warpPerspective
 */
 @Namespace("cv") public static native void transform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 @Namespace("cv") public static native void transform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
@@ -9206,7 +9206,7 @@ findHomography .
 element is a 2D/3D vector to be transformed.
 @param dst output array of the same size and type as src.
 @param m 3x3 or 4x4 floating-point transformation matrix.
-\sa  transform, warpPerspective, getPerspectiveTransform, findHomography
+@see  transform, warpPerspective, getPerspectiveTransform, findHomography
 */
 @Namespace("cv") public static native void perspectiveTransform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 @Namespace("cv") public static native void perspectiveTransform(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat m );
@@ -9224,7 +9224,7 @@ its another half. The matrix diagonal remains unchanged:
 @param m input-output floating-point square matrix.
 @param lowerToUpper operation flag; if true, the lower half is copied to
 the upper half. Otherwise, the upper half is copied to the lower half.
-\sa flip, transpose
+@see flip, transpose
 */
 @Namespace("cv") public static native void completeSymm(@ByVal Mat m, @Cast("bool") boolean lowerToUpper/*=false*/);
 @Namespace("cv") public static native void completeSymm(@ByVal Mat m);
@@ -9246,7 +9246,7 @@ matrix expressions:
 }</pre>
 @param mtx matrix to initialize (not necessarily square).
 @param s value to assign to diagonal elements.
-\sa Mat::zeros, Mat::ones, Mat::setTo, Mat::operator=
+@see Mat::zeros, Mat::ones, Mat::setTo, Mat::operator=
 */
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx, @Const @ByRef(nullValue = "cv::Scalar(1)") Scalar s);
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx);
@@ -9266,7 +9266,7 @@ For symmetric positively-determined matrices, it is also possible to use
 eigen decomposition to calculate the determinant.
 @param mtx input matrix that must have CV_32FC1 or CV_64FC1 type and
 square size.
-\sa trace, invert, solve, eigen, \ref MatrixExpressions
+@see trace, invert, solve, eigen, \ref MatrixExpressions
 */
 @Namespace("cv") public static native double determinant(@ByVal Mat mtx);
 @Namespace("cv") public static native double determinant(@ByVal UMat mtx);
@@ -9306,7 +9306,7 @@ matrix in dst and returns non-zero. Otherwise, it returns 0.
 @param src input floating-point M x N matrix.
 @param dst output matrix of N x M size and the same type as src.
 @param flags inversion method (cv::DecompTypes)
-\sa solve, SVD
+@see solve, SVD
 */
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst);
@@ -9335,7 +9335,7 @@ will not do the work. Use SVD::solveZ instead.
 @param src2 input matrix on the right-hand side of the system.
 @param dst output solution.
 @param flags solution (matrix inversion) method (#DecompTypes)
-\sa invert, SVD, eigen
+@see invert, SVD, eigen
 */
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
                         @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
@@ -9361,7 +9361,7 @@ proper comparison predicate.
 @param src input single-channel array.
 @param dst output array of the same size and type as src.
 @param flags operation flags, a combination of #SortFlags
-\sa sortIdx, randShuffle
+@see sortIdx, randShuffle
 */
 @Namespace("cv") public static native void sort(@ByVal Mat src, @ByVal Mat dst, int flags);
 @Namespace("cv") public static native void sort(@ByVal UMat src, @ByVal UMat dst, int flags);
@@ -9383,7 +9383,7 @@ stores the indices of sorted elements in the output array. For example:
 @param src input single-channel array.
 @param dst output integer array of the same size as src.
 @param flags operation flags that could be a combination of cv::SortFlags
-\sa sort, randShuffle
+@see sort, randShuffle
 */
 @Namespace("cv") public static native void sortIdx(@ByVal Mat src, @ByVal Mat dst, int flags);
 @Namespace("cv") public static native void sortIdx(@ByVal UMat src, @ByVal UMat dst, int flags);
@@ -9438,7 +9438,7 @@ in the descending order.
 @param eigenvectors output matrix of eigenvectors; it has the same size and type as src; the
 eigenvectors are stored as subsequent matrix rows, in the same order as the corresponding
 eigenvalues.
-\sa eigenNonSymmetric, completeSymm , PCA
+@see eigenNonSymmetric, completeSymm , PCA
 */
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal Mat src, @ByVal Mat eigenvalues,
                         @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat eigenvectors);
@@ -9462,7 +9462,7 @@ The function calculates eigenvalues and eigenvectors (optional) of the square ma
 @param src input matrix (CV_32FC1 or CV_64FC1 type).
 @param eigenvalues output vector of eigenvalues (type is the same type as src).
 @param eigenvectors output matrix of eigenvectors (type is the same type as src). The eigenvectors are stored as subsequent matrix rows, in the same order as the corresponding eigenvalues.
-\sa eigen
+@see eigen
 */
 @Namespace("cv") public static native void eigenNonSymmetric(@ByVal Mat src, @ByVal Mat eigenvalues,
                                     @ByVal Mat eigenvectors);
@@ -9481,7 +9481,7 @@ the set of input vectors.
 @param mean input or output (depending on the flags) array as the average value of the input vectors.
 @param flags operation flags as a combination of #CovarFlags
 @param ctype type of the matrixl; it equals 'CV_64F' by default.
-\sa PCA, mulTransposed, Mahalanobis
+@see PCA, mulTransposed, Mahalanobis
 \todo InputArrayOfArrays
 */
 @Namespace("cv") public static native void calcCovarMatrix( @Const Mat samples, int nsamples, @ByRef Mat covar, @ByRef Mat mean,
@@ -9735,7 +9735,7 @@ nonzeroRows rows of the input array (#DFT_INVERSE is not set) or only the first 
 output array (#DFT_INVERSE is set) contain non-zeros, thus, the function can handle the rest of the
 rows more efficiently and save some time; this technique is very useful for calculating array
 cross-correlation or convolution using DFT.
-\sa dct , getOptimalDFTSize , mulSpectrums, filter2D , matchTemplate , flip , cartToPolar ,
+@see dct , getOptimalDFTSize , mulSpectrums, filter2D , matchTemplate , flip , cartToPolar ,
 magnitude , phase
 */
 @Namespace("cv") public static native void dft(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
@@ -9750,7 +9750,7 @@ magnitude , phase
 idft(src, dst, flags) is equivalent to dft(src, dst, flags | #DFT_INVERSE) .
 \note None of dft and idft scales the result by default. So, you should pass #DFT_SCALE to one of
 dft or idft explicitly to make these transforms mutually inverse.
-\sa dft, dct, idct, mulSpectrums, getOptimalDFTSize
+@see dft, dct, idct, mulSpectrums, getOptimalDFTSize
 @param src input floating-point real or complex array.
 @param dst output array whose size and type depend on the flags.
 @param flags operation flags (see dft and #DftFlags).
@@ -9801,7 +9801,7 @@ of a vector of size N/2 . Thus, the optimal DCT size N1 \>= N can be calculated 
 @param src input floating-point array.
 @param dst output array of the same size and type as src .
 @param flags transformation flags as a combination of cv::DftFlags (DCT_*)
-\sa dft , getOptimalDFTSize , idct
+@see dft , getOptimalDFTSize , idct
 */
 @Namespace("cv") public static native void dct(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void dct(@ByVal Mat src, @ByVal Mat dst);
@@ -9816,7 +9816,7 @@ idct(src, dst, flags) is equivalent to dct(src, dst, flags | DCT_INVERSE).
 @param src input floating-point single-channel array.
 @param dst output array of the same size and type as src.
 @param flags operation flags.
-\sa  dct, dft, idft, getOptimalDFTSize
+@see  dct, dft, idft, getOptimalDFTSize
 */
 @Namespace("cv") public static native void idct(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void idct(@ByVal Mat src, @ByVal Mat dst);
@@ -9874,7 +9874,7 @@ While the function cannot be used directly to estimate the optimal vector size f
 (since the current DCT implementation supports only even-size vectors), it can be easily processed
 as getOptimalDFTSize((vecsize+1)/2)\*2.
 @param vecsize vector size.
-\sa dft , dct , idft , idct , mulSpectrums
+@see dft , dct , idft , idct , mulSpectrums
 */
 @Namespace("cv") public static native int getOptimalDFTSize(int vecsize);
 
@@ -9885,7 +9885,7 @@ separate random number generator, so you can use the function safely in multi-th
 If you just need to get a single random number using this generator or initialize an array, you can
 use randu or randn instead. But if you are going to generate many random numbers inside a loop, it
 is much faster to use this function to retrieve the generator and then use RNG::operator _Tp() .
-\sa RNG, randu, randn
+@see RNG, randu, randn
 */
 @Namespace("cv") public static native @ByRef RNG theRNG();
 
@@ -9893,7 +9893,7 @@ is much faster to use this function to retrieve the generator and then use RNG::
 <p>
 The function cv::setRNGSeed sets state of default random number generator to custom value.
 @param seed new state for default random number generator
-\sa RNG, randu, randn
+@see RNG, randu, randn
 */
 @Namespace("cv") public static native void setRNGSeed(int seed);
 
@@ -9905,7 +9905,7 @@ random numbers from the specified range:
 @param dst output array of random numbers; the array must be pre-allocated.
 @param low inclusive lower boundary of the generated random numbers.
 @param high exclusive upper boundary of the generated random numbers.
-\sa RNG, randn, theRNG
+@see RNG, randn, theRNG
 */
 @Namespace("cv") public static native void randu(@ByVal Mat dst, @ByVal Mat low, @ByVal Mat high);
 @Namespace("cv") public static native void randu(@ByVal UMat dst, @ByVal UMat low, @ByVal UMat high);
@@ -9920,7 +9920,7 @@ value range of the output array data type.
 @param mean mean value (expectation) of the generated random numbers.
 @param stddev standard deviation of the generated random numbers; it can be either a vector (in
 which case a diagonal standard deviation matrix is assumed) or a square matrix.
-\sa RNG, randu
+@see RNG, randu
 */
 @Namespace("cv") public static native void randn(@ByVal Mat dst, @ByVal Mat mean, @ByVal Mat stddev);
 @Namespace("cv") public static native void randn(@ByVal UMat dst, @ByVal UMat mean, @ByVal UMat stddev);
@@ -9935,7 +9935,7 @@ swapping them. The number of such swap operations will be dst.rows\*dst.cols\*it
 below).
 @param rng optional random number generator used for shuffling; if it is zero, theRNG () is used
 instead.
-\sa RNG, sort
+@see RNG, sort
 */
 @Namespace("cv") public static native void randShuffle(@ByVal Mat dst, double iterFactor/*=1.*/, RNG rng/*=0*/);
 @Namespace("cv") public static native void randShuffle(@ByVal Mat dst);
@@ -10253,7 +10253,7 @@ public static final int
 @param _src input array.
 @param _dst output array.
 @param stream Stream for the asynchronous version.
-\sa convertFp16
+@see convertFp16
 */
 
 
@@ -11311,7 +11311,7 @@ beta)}
 The output matrix has the same size and the same type as the input one except for the last case,
 where C is depth=CV_8U .
 @param m matrix.
-\sa \ref MatrixExpressions, absdiff, convertScaleAbs
+@see \ref MatrixExpressions, absdiff, convertScaleAbs
  */
 @Namespace("cv") public static native @ByVal MatExpr abs(@Const @ByRef Mat m);
 /** \overload

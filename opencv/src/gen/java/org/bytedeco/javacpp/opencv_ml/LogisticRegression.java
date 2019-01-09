@@ -19,7 +19,7 @@ import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 
 /** \brief Implements Logistic Regression classifier.
 <p>
-\sa \ref ml_intro_lr
+@see \ref ml_intro_lr
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class LogisticRegression extends StatModel {

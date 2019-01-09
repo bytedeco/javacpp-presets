@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 
 /** \brief The class implements the Expectation Maximization algorithm.
 <p>
-\sa \ref ml_intro_em
+@see \ref ml_intro_em
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class EM extends StatModel {

@@ -42,8 +42,8 @@ public class Net extends Pointer {
         private native void allocate();
 
         /** \brief Create a network from Intel's Model Optimizer intermediate representation.
-         *  @param [in] xml XML configuration file with network's topology.
-         *  @param [in] bin Binary file with trained weights.
+         *  @param xml [in]  XML configuration file with network's topology.
+         *  @param bin [in]  Binary file with trained weights.
          *  Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine
          *  backend.
          */
@@ -159,7 +159,7 @@ public class Net extends Pointer {
 
         /**
          * \brief Compile Halide layers.
-         * @param [in] scheduler Path to YAML file with scheduling directives.
+         * @param scheduler [in]  Path to YAML file with scheduling directives.
          * @see setPreferableBackend
          *
          * Schedule layers that support Halide backend. Then compile them for
@@ -171,7 +171,7 @@ public class Net extends Pointer {
 
         /**
          * \brief Ask network to use specific computation backend where it supported.
-         * @param [in] backendId backend identifier.
+         * @param backendId [in]  backend identifier.
          * @see Backend
          *
          * If OpenCV is compiled with Intel's Inference Engine library, DNN_BACKEND_DEFAULT
@@ -181,7 +181,7 @@ public class Net extends Pointer {
 
         /**
          * \brief Ask network to make computations on specific target device.
-         * @param [in] targetId target identifier.
+         * @param targetId [in]  target identifier.
          * @see Target
          *
          * List of supported combinations backend / target:

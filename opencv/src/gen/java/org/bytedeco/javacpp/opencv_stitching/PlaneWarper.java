@@ -38,7 +38,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 
 
 /** \brief Plane warper factory class.
-  \sa detail::PlaneWarper
+  @see detail::PlaneWarper
  */
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class PlaneWarper extends WarperCreator {

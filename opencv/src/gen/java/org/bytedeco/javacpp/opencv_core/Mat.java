@@ -1131,7 +1131,7 @@ public class Mat extends AbstractMat {
     @param dbottom Shift of the bottom submatrix boundary downwards.
     @param dleft Shift of the left submatrix boundary to the left.
     @param dright Shift of the right submatrix boundary to the right.
-    \sa copyMakeBorder
+    @see copyMakeBorder
      */
     public native @ByRef Mat adjustROI( int dtop, int dbottom, int dleft, int dright );
 

@@ -206,13 +206,13 @@ public class SparseMat extends Pointer {
     public native void convertTo( @ByRef SparseMat m, int rtype );
     /** converts sparse matrix to dense n-dim matrix with optional type conversion and scaling.
     /**
-        @param [out] m - output matrix; if it does not have a proper size or type before the operation,
+        @param m [out]  - output matrix; if it does not have a proper size or type before the operation,
             it is reallocated
-        @param [in] rtype - desired output matrix type or, rather, the depth since the number of channels
+        @param rtype [in]  - desired output matrix type or, rather, the depth since the number of channels
             are the same as the input has; if rtype is negative, the output matrix will have the
             same type as the input.
-        @param [in] alpha - optional scale factor
-        @param [in] beta - optional delta added to the scaled values
+        @param alpha [in]  - optional scale factor
+        @param beta [in]  - optional delta added to the scaled values
     */
     public native void convertTo( @ByRef Mat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByRef Mat m, int rtype );

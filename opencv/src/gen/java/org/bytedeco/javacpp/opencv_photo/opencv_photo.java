@@ -971,7 +971,7 @@ contrast while preserving, or enhancing, high-contrast features.
 BORDER_REPLICATE , BORDER_CONSTANT , BORDER_REFLECT and BORDER_WRAP are supported for now.
 @param stream Stream for the asynchronous version.
 <p>
-\sa
+@see
    fastNlMeansDenoising
  */
 @Namespace("cv::cuda") public static native void nonLocalMeans(@ByVal Mat src, @ByVal Mat dst,
@@ -1017,7 +1017,7 @@ odd. Recommended value 7 pixels
 This function expected to be applied to grayscale images. For colored images look at
 FastNonLocalMeansDenoising::labMethod.
 <p>
-\sa
+@see
    fastNlMeansDenoising
  */
 @Namespace("cv::cuda") public static native void fastNlMeansDenoising(@ByVal Mat src, @ByVal Mat dst,
@@ -1060,7 +1060,7 @@ odd. Recommended value 7 pixels
 The function converts image to CIELAB colorspace and then separately denoise L and AB components
 with given h parameters using FastNonLocalMeansDenoising::simpleMethod function.
 <p>
-\sa
+@see
    fastNlMeansDenoisingColored
  */
 @Namespace("cv::cuda") public static native void fastNlMeansDenoisingColored(@ByVal Mat src, @ByVal Mat dst,

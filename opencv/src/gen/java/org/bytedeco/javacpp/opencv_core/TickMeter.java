@@ -33,7 +33,7 @@ for (int i = 0; i < 100; i++)
 double average_time = tm.getTimeSec() / tm.getCounter();
 std::cout << "Average time in second per iteration is: " << average_time << std::endl;
 }</pre>
-\sa getTickCount, getTickFrequency
+@see getTickCount, getTickFrequency
 */
 
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)

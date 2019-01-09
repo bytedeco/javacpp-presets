@@ -154,12 +154,12 @@ public class VideoWriter extends Pointer {
     public native void release();
 
     /** \brief Stream operator to write the next video frame.
-    \sa write
+    @see write
     */
     public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef Mat image);
 
     /** \overload
-    \sa write
+    @see write
     */
     public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef UMat image);
 

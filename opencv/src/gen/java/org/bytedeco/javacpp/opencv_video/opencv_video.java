@@ -435,7 +435,7 @@ when fullAffine=false.
 @deprecated Use cv::estimateAffine2D, cv::estimateAffinePartial2D instead. If you are using this fuction
 with images, extract points using cv::calcOpticalFlowPyrLK and then use the estimation fuctions.
 <p>
-\sa
+@see
 estimateAffine2D, estimateAffinePartial2D, getAffineTransform, getPerspectiveTransform, findHomography
  */
 @Namespace("cv") public static native @Deprecated @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
@@ -500,7 +500,7 @@ one, i.e. use the flag WARP_INVERSE_MAP with warpAffine or warpPerspective. See 
 sample image_alignment.cpp that demonstrates the use of the function. Note that the function throws
 an exception if algorithm does not converges.
 <p>
-\sa
+@see
 estimateAffine2D, estimateAffinePartial2D, findHomography
  */
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,

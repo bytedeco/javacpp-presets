@@ -43,7 +43,7 @@ public class StructuredEdgeDetection extends Algorithm {
     approaches, e.g. Sobel
     @param _src source image (RGB, float, in [0;1]) to detect edges
     @param _dst destination image (grayscale, float, in [0;1]) where edges are drawn
-    \sa Sobel, Canny
+    @see Sobel, Canny
      */
     public native void detectEdges(@ByVal Mat _src, @ByVal Mat _dst);
     public native void detectEdges(@ByVal UMat _src, @ByVal UMat _dst);

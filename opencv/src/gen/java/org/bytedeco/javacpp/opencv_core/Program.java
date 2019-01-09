@@ -48,9 +48,9 @@ public class Program extends Pointer {
      *
      * Returns RAW OpenCL executable binary without additional attachments.
      *
-     * \sa ProgramSource::fromBinary
+     * @see ProgramSource::fromBinary
      *
-     * @param [out] binary output buffer
+     * @param binary [out]  output buffer
      */
     public native void getBinary(@Cast("char*") @StdVector BytePointer binary);
     public native void getBinary(@Cast("char*") @StdVector ByteBuffer binary);

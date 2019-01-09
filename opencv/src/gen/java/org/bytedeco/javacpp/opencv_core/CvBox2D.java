@@ -10,7 +10,7 @@ import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
 // #endif
 
-/** \sa RotatedRect
+/** @see RotatedRect
  */
 @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class CvBox2D extends AbstractCvBox2D {

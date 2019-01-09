@@ -205,7 +205,7 @@ Example of adding TrackerSamplerAlgorithm to TrackerSampler : :
     //or add CSC sampler with default parameters
     //sampler->addTrackerSamplerAlgorithm( "CSC" );
 }</pre>
-\sa
+@see
    TrackerSamplerCSC, TrackerSamplerAlgorithm
 <p>
 ### TrackerFeatureSet
@@ -238,7 +238,7 @@ Example of adding TrackerFeature to TrackerFeatureSet : :
     Ptr<TrackerFeature> trackerFeature = new TrackerFeatureHAAR( HAARparameters );
     featureSet->addTrackerFeature( trackerFeature );
 }</pre>
-\sa
+@see
    TrackerFeatureHAAR, TrackerFeatureSet
 <p>
 ### TrackerModel
@@ -307,7 +307,7 @@ And add it in your TrackerModel : :
     Ptr<TrackerStateEstimatorMILBoosting> stateEstimator = new TrackerStateEstimatorMILBoosting( params.featureSetNumFeatures );
     model->setTrackerStateEstimator( stateEstimator );
 }</pre>
-\sa
+@see
    TrackerModel, TrackerStateEstimatorMILBoosting, TrackerTargetState
 <p>
 During this step, you should define your TrackerTargetState based on your implementation.
@@ -835,14 +835,14 @@ public static final int N_CELLS = 4;
 /** \brief Represents the model of the target at frame \f$k\f$ (all states and scores)
 <p>
 See \cite AAM The set of the pair \f$\langle \hat{x}^{i}_{k}, C^{i}_{k} \rangle\f$
-\sa TrackerTargetState
+@see TrackerTargetState
  */
 
 /** \brief Represents the estimate states for all frames
 <p>
 \cite AAM \f$x_{k}\f$ is the trajectory of the target up to time \f$k\f$
 <p>
-\sa TrackerTargetState
+@see TrackerTargetState
  */
 // Targeting TrackerStateEstimator.java
 

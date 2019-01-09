@@ -44,7 +44,7 @@ error squares
 <p>
 It estimates all transformation parameters. Refinement mask is ignored.
 <p>
-\sa AffineBasedEstimator AffineBestOf2NearestMatcher BundleAdjusterAffinePartial
+@see AffineBasedEstimator AffineBestOf2NearestMatcher BundleAdjusterAffinePartial
  */
 @Namespace("cv::detail") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class BundleAdjusterAffine extends BundleAdjusterBase {

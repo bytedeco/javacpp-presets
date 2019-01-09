@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
 
-/** \sa TermCriteria
+/** @see TermCriteria
  */
 @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class CvTermCriteria extends Pointer {

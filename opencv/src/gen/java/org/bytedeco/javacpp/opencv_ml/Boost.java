@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 
 /** \brief Boosted tree classifier derived from DTrees
 <p>
-\sa \ref ml_intro_boost
+@see \ref ml_intro_boost
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class Boost extends DTrees {

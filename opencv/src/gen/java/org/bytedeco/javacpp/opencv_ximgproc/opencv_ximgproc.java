@@ -183,7 +183,7 @@ the mean.
 @param binarizationMethod Binarization method to use. By default, Niblack's technique is used.
 Other techniques can be specified, see cv::ximgproc::LocalBinarizationMethods.
 <p>
-\sa  threshold, adaptiveThreshold
+@see  threshold, adaptiveThreshold
  */
 @Namespace("cv::ximgproc") public static native void niBlackThreshold( @ByVal Mat _src, @ByVal Mat _dst,
                                     double maxValue, int type,
@@ -350,7 +350,7 @@ color space into bilateralFilter.
 @param mode one form three modes DTF_NC, DTF_RF and DTF_IC which corresponds to three modes for
 filtering 2D signals in the article.
 @param numIters optional number of iterations used for filtering, 3 is quite enough.
-\sa bilateralFilter, guidedFilter, amFilter
+@see bilateralFilter, guidedFilter, amFilter
  */
 @Namespace("cv::ximgproc") public static native void dtFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, double sigmaSpatial, double sigmaColor, int mode/*=cv::ximgproc::DTF_NC*/, int numIters/*=3*/);
 @Namespace("cv::ximgproc") public static native void dtFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, double sigmaSpatial, double sigmaColor);
@@ -397,7 +397,7 @@ space into bilateralFilter.
 <p>
 @param dDepth optional depth of the output image.
 <p>
-\sa bilateralFilter, dtFilter, amFilter */
+@see bilateralFilter, dtFilter, amFilter */
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, int radius, double eps, int dDepth/*=-1*/);
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal Mat guide, @ByVal Mat src, @ByVal Mat dst, int radius, double eps);
 @Namespace("cv::ximgproc") public static native void guidedFilter(@ByVal UMat guide, @ByVal UMat src, @ByVal UMat dst, int radius, double eps, int dDepth/*=-1*/);
@@ -445,7 +445,7 @@ original paper.
 <p>
 \note Joint images with CV_8U and CV_16U depth converted to images with CV_32F depth and [0; 1]
 color range before processing. Hence color space sigma sigma_r must be in [0; 1] range, unlike same
-sigmas in bilateralFilter and dtFilter functions. \sa bilateralFilter, dtFilter, guidedFilter
+sigmas in bilateralFilter and dtFilter functions. @see bilateralFilter, dtFilter, guidedFilter
 */
 @Namespace("cv::ximgproc") public static native void amFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, double sigma_s, double sigma_r, @Cast("bool") boolean adjust_outliers/*=false*/);
 @Namespace("cv::ximgproc") public static native void amFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, double sigma_s, double sigma_r);
@@ -482,7 +482,7 @@ proportional to sigmaSpace .
 <p>
 \note bilateralFilter and jointBilateralFilter use L1 norm to compute difference between colors.
 <p>
-\sa bilateralFilter, amFilter
+@see bilateralFilter, amFilter
 */
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, int d, double sigmaColor, double sigmaSpace, int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv::ximgproc") public static native void jointBilateralFilter(@ByVal Mat joint, @ByVal Mat src, @ByVal Mat dst, int d, double sigmaColor, double sigmaSpace);
@@ -508,7 +508,7 @@ a bigger value means sharper transition. When the value is negative, it is autom
 @param sigmaAvg Range blur parameter for texture blurring. Larger value makes result to be more blurred. When the
 value is negative, it is automatically calculated as described in the paper.
 <p>
-\sa rollingGuidanceFilter, bilateralFilter
+@see rollingGuidanceFilter, bilateralFilter
 */
 @Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal Mat src, @ByVal Mat dst, int fr/*=3*/, int numIter/*=1*/, double sigmaAlpha/*=-1.*/, double sigmaAvg/*=-1.*/);
 @Namespace("cv::ximgproc") public static native void bilateralTextureFilter(@ByVal Mat src, @ByVal Mat dst);
@@ -546,7 +546,7 @@ proportional to sigmaSpace .
 <p>
 \note  rollingGuidanceFilter uses jointBilateralFilter as the edge-preserving filter.
 <p>
-\sa jointBilateralFilter, bilateralFilter, amFilter
+@see jointBilateralFilter, bilateralFilter, amFilter
 */
 @Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal Mat src, @ByVal Mat dst, int d/*=-1*/, double sigmaColor/*=25*/, double sigmaSpace/*=3*/, int numOfIter/*=4*/, int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv::ximgproc") public static native void rollingGuidanceFilter(@ByVal Mat src, @ByVal Mat dst);
@@ -784,7 +784,7 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 <p>
 @param dst output disparity map, CV_16S depth
 <p>
-\result returns zero if successfully read the ground truth
+@return returns zero if successfully read the ground truth
  */
 @Namespace("cv::ximgproc") public static native int readGT(@Str BytePointer src_path,@ByVal Mat dst);
 @Namespace("cv::ximgproc") public static native int readGT(@Str String src_path,@ByVal Mat dst);
@@ -801,7 +801,7 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 <p>
 @param ROI region of interest
 <p>
-\result returns mean square error between GT and src
+@return returns mean square error between GT and src
  */
 @Namespace("cv::ximgproc") public static native double computeMSE(@ByVal Mat GT, @ByVal Mat src, @ByVal Rect ROI);
 @Namespace("cv::ximgproc") public static native double computeMSE(@ByVal UMat GT, @ByVal UMat src, @ByVal Rect ROI);
@@ -818,7 +818,7 @@ and MPI-Sintel formats. Note that the resulting disparity map is scaled by 16.
 <p>
 @param thresh threshold used to determine "bad" pixels
 <p>
-\result returns mean square error between GT and src
+@return returns mean square error between GT and src
  */
 @Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal Mat GT, @ByVal Mat src, @ByVal Rect ROI, int thresh/*=24*/);
 @Namespace("cv::ximgproc") public static native double computeBadPixelPercent(@ByVal Mat GT, @ByVal Mat src, @ByVal Rect ROI);

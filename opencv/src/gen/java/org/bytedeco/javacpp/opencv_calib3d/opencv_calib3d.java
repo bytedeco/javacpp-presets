@@ -531,7 +531,7 @@ The function is used to find initial intrinsic and extrinsic matrices. Homograph
 determined up to a scale. Thus, it is normalized so that \f$h_{33}=1\f$. Note that whenever an \f$H\f$ matrix
 cannot be estimated, an empty one will be returned.
 <p>
-\sa
+@see
 getAffineTransform, estimateAffine2D, estimateAffinePartial2D, getPerspectiveTransform, warpPerspective,
 perspectiveTransform
  */
@@ -1252,7 +1252,7 @@ found, or as colored corners connected with lines if the board was found.
 @Namespace("cv") public static native void drawChessboardCorners( @ByVal GpuMat image, @ByVal Size patternSize,
                                          @ByVal GpuMat corners, @Cast("bool") boolean patternWasFound );
 
-/** \brief Draw axes of the world/object coordinate system from pose estimation. \sa solvePnP
+/** \brief Draw axes of the world/object coordinate system from pose estimation. @see solvePnP
 <p>
 @param image Input/output image. It must have 1 or 3 channels. The number of channels is not altered.
 @param cameraMatrix Input 3x3 floating-point matrix of camera intrinsic parameters.
@@ -1460,7 +1460,7 @@ The algorithm performs the following steps:
     then you have probably used patternSize=cvSize(rows,cols) instead of using
     patternSize=cvSize(cols,rows) in findChessboardCorners .
 <p>
-\sa
+@see
    calibrateCameraRO, findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
  */
 @Namespace("cv") public static native @Name("calibrateCamera") double calibrateCameraExtended( @ByVal Point3fVectorVector objectPoints,
@@ -1546,7 +1546,7 @@ less precise and less stable in some rare cases.
 The function estimates the intrinsic camera parameters and extrinsic parameters for each of the
 views. The algorithm is based on \cite Zhang2000, \cite BouguetMCT and \cite strobl2011iccv. See
 calibrateCamera() for other detailed explanations.
-\sa
+@see
    calibrateCamera, findChessboardCorners, solvePnP, initCameraMatrix2D, stereoCalibrate, undistort
  */
 @Namespace("cv") public static native @Name("calibrateCameraRO") double calibrateCameraROExtended( @ByVal Point3fVectorVector objectPoints,
@@ -2498,7 +2498,7 @@ observations with a stereo camera. Projections matrices can be obtained from ste
 \note
    Keep in mind that all input data should be of float type in order for this function to work.
 <p>
-\sa
+@see
    reprojectImageTo3D
  */
 @Namespace("cv") public static native void triangulatePoints( @ByVal Mat projMatr1, @ByVal Mat projMatr2,
@@ -2773,7 +2773,7 @@ The RANSAC method can handle practically any ratio of outliers but needs a thres
 distinguish inliers from outliers. The method LMeDS does not need any threshold but it works
 correctly only when there are more than 50% of inliers.
 <p>
-\sa estimateAffinePartial2D, getAffineTransform
+@see estimateAffinePartial2D, getAffineTransform
 */
 @Namespace("cv") public static native @ByVal Mat estimateAffine2D(@ByVal Mat from, @ByVal Mat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat inliers,
                                   int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,
@@ -2832,7 +2832,7 @@ The RANSAC method can handle practically any ratio of outliers but need a thresh
 distinguish inliers from outliers. The method LMeDS does not need any threshold but it works
 correctly only when there are more than 50% of inliers.
 <p>
-\sa estimateAffine2D, getAffineTransform
+@see estimateAffine2D, getAffineTransform
 */
 @Namespace("cv") public static native @ByVal Mat estimateAffinePartial2D(@ByVal Mat from, @ByVal Mat to, @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat inliers,
                                   int method/*=cv::RANSAC*/, double ransacReprojThreshold/*=3*/,

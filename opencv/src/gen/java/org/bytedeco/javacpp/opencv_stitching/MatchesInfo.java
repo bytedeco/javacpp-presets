@@ -41,7 +41,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 It's assumed that there is a transformation between those images. Transformation may be
 homography or affine transformation based on selected matcher.
 <p>
-\sa detail::FeaturesMatcher
+@see detail::FeaturesMatcher
 */
 @Namespace("cv::detail") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class MatchesInfo extends Pointer {

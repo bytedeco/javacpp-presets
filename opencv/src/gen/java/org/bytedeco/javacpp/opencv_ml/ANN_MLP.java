@@ -57,7 +57,7 @@ once, that is, the weights can be adjusted based on the new training data.
 <p>
 Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 <p>
-\sa \ref ml_intro_ann
+@see \ref ml_intro_ann
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class ANN_MLP extends StatModel {
@@ -98,7 +98,7 @@ public class ANN_MLP extends StatModel {
     /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
     The very first element specifies the number of elements in the input layer.
     The last element - number of elements in the output layer. Default value is empty Mat.
-    \sa getLayerSizes */
+    @see getLayerSizes */
     public native void setLayerSizes(@ByVal Mat _layer_sizes);
     public native void setLayerSizes(@ByVal UMat _layer_sizes);
     public native void setLayerSizes(@ByVal GpuMat _layer_sizes);
@@ -106,7 +106,7 @@ public class ANN_MLP extends StatModel {
     /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
     The very first element specifies the number of elements in the input layer.
     The last element - number of elements in the output layer.
-    \sa setLayerSizes */
+    @see setLayerSizes */
     public native @ByVal Mat getLayerSizes();
 
     /** Termination criteria of the training algorithm.

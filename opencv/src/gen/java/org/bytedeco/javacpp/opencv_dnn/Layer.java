@@ -37,8 +37,8 @@ public class Layer extends Algorithm {
 
         /** \brief Computes and sets internal parameters according to inputs, outputs and blobs.
          *  @deprecated Use Layer::finalize(InputArrayOfArrays, OutputArrayOfArrays) instead
-         *  @param [in]  input  vector of already allocated input blobs
-         *  @param [out] output vector of already allocated output blobs
+         *  @param input [in]   vector of already allocated input blobs
+         *  @param output [out]  vector of already allocated output blobs
          *
          * If this method is called after network has allocated all memory for input and output blobs
          * and before inferencing.
@@ -46,8 +46,8 @@ public class Layer extends Algorithm {
         public native @Deprecated void finalize(@Const @ByRef MatPointerVector input, @ByRef MatVector output);
 
         /** \brief Computes and sets internal parameters according to inputs, outputs and blobs.
-         *  @param [in]  inputs  vector of already allocated input blobs
-         *  @param [out] outputs vector of already allocated output blobs
+         *  @param inputs [in]   vector of already allocated input blobs
+         *  @param outputs [out]  vector of already allocated output blobs
          *
          * If this method is called after network has allocated all memory for input and output blobs
          * and before inferencing.
@@ -58,25 +58,25 @@ public class Layer extends Algorithm {
 
         /** \brief Given the \p input blobs, computes the output \p blobs.
          *  @deprecated Use Layer::forward(InputArrayOfArrays, OutputArrayOfArrays, OutputArrayOfArrays) instead
-         *  @param [in]  input  the input blobs.
-         *  @param [out] output allocated output blobs, which will store results of the computation.
-         *  @param [out] internals allocated internal blobs
+         *  @param input [in]   the input blobs.
+         *  @param output [out]  allocated output blobs, which will store results of the computation.
+         *  @param internals [out]  allocated internal blobs
          */
         public native @Deprecated void forward(@ByRef MatPointerVector input, @ByRef MatVector output, @ByRef MatVector internals);
 
         /** \brief Given the \p input blobs, computes the output \p blobs.
-         *  @param [in]  inputs  the input blobs.
-         *  @param [out] outputs allocated output blobs, which will store results of the computation.
-         *  @param [out] internals allocated internal blobs
+         *  @param inputs [in]   the input blobs.
+         *  @param outputs [out]  allocated output blobs, which will store results of the computation.
+         *  @param internals [out]  allocated internal blobs
          */
         public native void forward(@ByVal MatVector inputs, @ByVal MatVector outputs, @ByVal MatVector internals);
         public native void forward(@ByVal UMatVector inputs, @ByVal UMatVector outputs, @ByVal UMatVector internals);
         public native void forward(@ByVal GpuMatVector inputs, @ByVal GpuMatVector outputs, @ByVal GpuMatVector internals);
 
         /** \brief Given the \p input blobs, computes the output \p blobs.
-         *  @param [in]  inputs  the input blobs.
-         *  @param [out] outputs allocated output blobs, which will store results of the computation.
-         *  @param [out] internals allocated internal blobs
+         *  @param inputs [in]   the input blobs.
+         *  @param outputs [out]  allocated output blobs, which will store results of the computation.
+         *  @param internals [out]  allocated internal blobs
          */
         public native void forward_fallback(@ByVal MatVector inputs, @ByVal MatVector outputs, @ByVal MatVector internals);
         public native void forward_fallback(@ByVal UMatVector inputs, @ByVal UMatVector outputs, @ByVal UMatVector internals);
@@ -115,14 +115,14 @@ public class Layer extends Algorithm {
 
         /**
          * \brief Ask layer if it support specific backend for doing computations.
-         * @param [in] backendId computation backend identifier.
+         * @param backendId [in]  computation backend identifier.
          * @see Backend
          */
         public native @Cast("bool") boolean supportBackend(int backendId);
 
         /**
          * \brief Returns Halide backend node.
-         * @param [in] inputs Input Halide buffers.
+         * @param inputs [in]  Input Halide buffers.
          * @see BackendNode, BackendWrapper
          *
          * Input buffers should be exactly the same that will be used in forward invocations.
@@ -132,10 +132,10 @@ public class Layer extends Algorithm {
          */
        /**
         * \brief Automatic Halide scheduling based on layer hyper-parameters.
-        * @param [in] node Backend node with Halide functions.
-        * @param [in] inputs Blobs that will be used in forward invocations.
-        * @param [in] outputs Blobs that will be used in forward invocations.
-        * @param [in] targetId Target identifier
+        * @param node [in]  Backend node with Halide functions.
+        * @param inputs [in]  Blobs that will be used in forward invocations.
+        * @param outputs [in]  Blobs that will be used in forward invocations.
+        * @param targetId [in]  Target identifier
         * @see BackendNode, Target
         *
         * Layer don't use own Halide::Func members because we can have applied
@@ -148,7 +148,7 @@ public class Layer extends Algorithm {
 
         /**
          * \brief Implement layers fusing.
-         * @param [in] node Backend node of bottom layer.
+         * @param node [in]  Backend node of bottom layer.
          * @see BackendNode
          *
          * Actual for graph-based backends. If layer attached successfully,
@@ -159,7 +159,7 @@ public class Layer extends Algorithm {
 
         /**
          * \brief Tries to attach to the layer the subsequent activation layer, i.e. do the layer fusion in a partial case.
-         * @param [in] layer The subsequent activation layer.
+         * @param layer [in]  The subsequent activation layer.
          *
          * Returns true if the activation layer has been attached successfully.
          */
@@ -167,16 +167,16 @@ public class Layer extends Algorithm {
 
         /**
          * \brief Try to fuse current layer with a next one
-         * @param [in] top Next layer to be fused.
+         * @param top [in]  Next layer to be fused.
          * @return True if fusion was performed.
          */
         public native @Cast("bool") boolean tryFuse(@Ptr Layer top);
 
         /**
          * \brief Returns parameters of layers with channel-wise multiplication and addition.
-         * @param [out] scale Channel-wise multipliers. Total number of values should
+         * @param scale [out]  Channel-wise multipliers. Total number of values should
          *                   be equal to number of channels.
-         * @param [out] shift Channel-wise offsets. Total number of values should
+         * @param shift [out]  Channel-wise offsets. Total number of values should
          *                   be equal to number of channels.
          *
          * Some layers can fuse their transformations with further layers.

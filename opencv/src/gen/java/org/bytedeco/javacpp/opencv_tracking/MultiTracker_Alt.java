@@ -37,7 +37,7 @@ import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 
 /** \brief Base abstract class for the long-term Multi Object Trackers:
 <p>
-\sa Tracker, MultiTrackerTLD
+@see Tracker, MultiTrackerTLD
 */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)
 public class MultiTracker_Alt extends Pointer {

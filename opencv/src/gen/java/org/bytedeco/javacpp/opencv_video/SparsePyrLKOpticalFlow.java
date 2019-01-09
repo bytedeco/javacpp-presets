@@ -31,7 +31,7 @@ import static org.bytedeco.javacpp.opencv_video.opencv_video.*;
 The class can calculate an optical flow for a sparse feature set using the
 iterative Lucas-Kanade method with pyramids.
 <p>
-\sa calcOpticalFlowPyrLK
+@see calcOpticalFlowPyrLK
 <p>
 */
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_video.opencv_video_presets.class)

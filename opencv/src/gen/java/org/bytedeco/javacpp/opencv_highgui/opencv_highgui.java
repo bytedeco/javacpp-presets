@@ -882,7 +882,7 @@ The function getWindowProperty returns properties of a window.
 @param winname Name of the window.
 @param prop_id Window property to retrieve. The following operation flags are available: (cv::WindowPropertyFlags)
 <p>
-\sa setWindowProperty
+@see setWindowProperty
  */
 @Namespace("cv") public static native double getWindowProperty(@Str BytePointer winname, int prop_id);
 @Namespace("cv") public static native double getWindowProperty(@Str String winname, int prop_id);
@@ -893,7 +893,7 @@ The function getWindowImageRect returns the client screen coordinates, width and
 <p>
 @param winname Name of the window.
 <p>
-\sa resizeWindow moveWindow
+@see resizeWindow moveWindow
  */
 @Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str BytePointer winname);
 @Namespace("cv") public static native @ByVal Rect getWindowImageRect(@Str String winname);

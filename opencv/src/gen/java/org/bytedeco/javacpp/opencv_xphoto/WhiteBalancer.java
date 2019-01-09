@@ -31,7 +31,7 @@ public class WhiteBalancer extends Algorithm {
     <p>
     @param src Input image
     @param dst White balancing result
-    \sa cvtColor, equalizeHist
+    @see cvtColor, equalizeHist
     */
     public native void balanceWhite(@ByVal Mat src, @ByVal Mat dst);
     public native void balanceWhite(@ByVal UMat src, @ByVal UMat dst);

@@ -31,7 +31,7 @@ import static org.bytedeco.javacpp.opencv_aruco.opencv_aruco.*;
 /**
  * \brief Planar board with grid arrangement of markers
  * More common type of board. All markers are placed in the same plane in a grid arrangment.
- * The board can be drawn using drawPlanarBoard() function (\sa drawPlanarBoard)
+ * The board can be drawn using drawPlanarBoard() function (@see drawPlanarBoard)
  */
 @Namespace("cv::aruco") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_aruco.opencv_aruco_presets.class)
 public class GridBoard extends Board {

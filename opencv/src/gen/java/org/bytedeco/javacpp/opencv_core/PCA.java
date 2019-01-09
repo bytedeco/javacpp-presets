@@ -72,7 +72,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     return pca;
 }
 }</pre>
-\sa calcCovarMatrix, mulTransposed, SVD, dft, dct
+@see calcCovarMatrix, mulTransposed, SVD, dft, dct
 */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class PCA extends Pointer {

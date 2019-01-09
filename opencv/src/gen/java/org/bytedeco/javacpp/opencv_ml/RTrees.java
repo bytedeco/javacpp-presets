@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 
 /** \brief The class implements the random forest predictor.
 <p>
-\sa \ref ml_intro_rtrees
+@see \ref ml_intro_rtrees
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class RTrees extends DTrees {

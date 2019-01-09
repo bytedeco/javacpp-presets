@@ -26,16 +26,16 @@ public class BackendWrapper extends Pointer {
 
         /**
          * \brief Wrap cv::Mat for specific backend and target.
-         * @param [in] targetId Target identifier.
-         * @param [in] m cv::Mat for wrapping.
+         * @param targetId [in]  Target identifier.
+         * @param m [in]  cv::Mat for wrapping.
          *
          * Make CPU->GPU data transfer if it's require for the target.
          */
 
         /**
          * \brief Make wrapper for reused cv::Mat.
-         * @param [in] base Wrapper of cv::Mat that will be reused.
-         * @param [in] shape Specific shape.
+         * @param base [in]  Wrapper of cv::Mat that will be reused.
+         * @param shape [in]  Specific shape.
          *
          * Initialize wrapper from another one. It'll wrap the same host CPU
          * memory and mustn't allocate memory on device(i.e. GPU). It might

@@ -45,7 +45,7 @@ Compared to their blocking counterpart, non-blocking functions accept Stream as 
 argument. If a non-default stream is passed, the GPU operation may overlap with operations in other
 streams.
 <p>
-\sa Mat
+@see Mat
  */
 @Namespace("cv::cuda") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class GpuMat extends Pointer {

@@ -17,8 +17,8 @@ import static org.bytedeco.javacpp.opencv_dnn.opencv_dnn.*;
     /**
      * Slice layer has several modes:
      * 1. Caffe mode
-     * @param [in] axis Axis of split operation
-     * @param [in] slice_point Array of split points
+     * @param axis [in]  Axis of split operation
+     * @param slice_point [in]  Array of split points
      *
      * Number of output blobs equals to number of split points plus one. The
      * first blob is a slice on input from 0 to \p slice_point[0] - 1 by \p axis,

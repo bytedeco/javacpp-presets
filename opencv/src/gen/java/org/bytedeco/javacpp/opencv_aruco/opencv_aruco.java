@@ -231,11 +231,11 @@ the use of this software, even if advised of the possibility of such damage.
  *
  * Markers can also be detected based on the AprilTag 2 \cite wang2016iros fiducial detection method.
  *
- * \sa S. Garrido-Jurado, R. Muñoz-Salinas, F. J. Madrid-Cuevas, and M. J. Marín-Jiménez. 2014.
+ * @see S. Garrido-Jurado, R. Muñoz-Salinas, F. J. Madrid-Cuevas, and M. J. Marín-Jiménez. 2014.
  * "Automatic generation and detection of highly reliable fiducial markers under occlusion".
  * Pattern Recogn. 47, 6 (June 2014), 2280-2292. DOI=10.1016/j.patcog.2014.01.005
  *
- * \sa http://www.uco.es/investiga/grupos/ava/node/26
+ * @see http://www.uco.es/investiga/grupos/ava/node/26
  *
  * This module has been originally developed by Sergio Garrido-Jurado as a project
  * for Google Summer of Code 2015 (GSoC 15).
@@ -285,7 +285,7 @@ public static final int
  * are searched. For each detected marker, it returns the 2D position of its corner in the image
  * and its corresponding identifier.
  * Note that this function does not perform pose estimation.
- * \sa estimatePoseSingleMarkers,  estimatePoseBoard
+ * @see estimatePoseSingleMarkers,  estimatePoseBoard
  *
  */
 @Namespace("cv::aruco") public static native void detectMarkers(@ByVal Mat image, @Ptr Dictionary dictionary, @ByVal MatVector corners,
@@ -342,14 +342,14 @@ public static final int
  * @param corners vector of already detected markers corners. For each marker, its four corners
  * are provided, (e.g std::vector<std::vector<cv::Point2f> > ). For N detected markers,
  * the dimensions of this array should be Nx4. The order of the corners should be clockwise.
- * \sa detectMarkers
+ * @see detectMarkers
  * @param markerLength the length of the markers' side. The returning translation vectors will
  * be in the same unit. Normally, unit is meters.
  * @param cameraMatrix input 3x3 floating-point camera matrix
  * \f$A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$
  * @param distCoeffs vector of distortion coefficients
  * \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6],[s_1, s_2, s_3, s_4]])\f$ of 4, 5, 8 or 12 elements
- * @param rvecs array of output rotation vectors (\sa Rodrigues) (e.g. std::vector<cv::Vec3d>).
+ * @param rvecs array of output rotation vectors (@see Rodrigues) (e.g. std::vector<cv::Vec3d>).
  * Each element in rvecs corresponds to the specific marker in imgPoints.
  * @param tvecs array of output translation vectors (e.g. std::vector<cv::Vec3d>).
  * Each element in tvecs corresponds to the specific marker in imgPoints.
@@ -694,7 +694,7 @@ public static final int
  * \f$A = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{1}\f$
  * @param distCoeffs vector of distortion coefficients
  * \f$(k_1, k_2, p_1, p_2[, k_3[, k_4, k_5, k_6],[s_1, s_2, s_3, s_4]])\f$ of 4, 5, 8 or 12 elements
- * @param rvec rotation vector of the coordinate system that will be drawn. (\sa Rodrigues).
+ * @param rvec rotation vector of the coordinate system that will be drawn. (@see Rodrigues).
  * @param tvec translation vector of the coordinate system that will be drawn.
  * @param length length of the painted axis in the same unit than tvec (usually in meters)
  *
@@ -736,7 +736,7 @@ public static final int
 
 /**
  * \brief Draw a planar board
- * \sa _drawPlanarBoardImpl
+ * @see _drawPlanarBoardImpl
  *
  * @param board layout of the board that will be drawn. The board should be planar,
  * z coordinate is ignored

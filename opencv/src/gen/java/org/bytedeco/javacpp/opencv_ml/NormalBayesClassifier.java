@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_ml.opencv_ml.*;
 
 /** \brief Bayes classifier for normally distributed data.
 <p>
-\sa \ref ml_intro_bayes
+@see \ref ml_intro_bayes
  */
 @Namespace("cv::ml") @Properties(inherit = org.bytedeco.javacpp.opencv_ml.opencv_ml_presets.class)
 public class NormalBayesClassifier extends StatModel {

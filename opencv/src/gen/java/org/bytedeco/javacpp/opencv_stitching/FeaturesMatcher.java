@@ -60,7 +60,7 @@ public class FeaturesMatcher extends Pointer {
     <p>
     The function is parallelized with the TBB library.
     <p>
-    \sa detail::MatchesInfo
+    @see detail::MatchesInfo
     */
     public native @Name("operator ()") void apply2(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
                          @Const @ByRef(nullValue = "cv::UMat()") UMat mask);

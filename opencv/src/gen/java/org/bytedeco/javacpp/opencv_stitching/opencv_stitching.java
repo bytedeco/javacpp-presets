@@ -1093,7 +1093,7 @@ by Heung-Yeung Shum and Richard Szeliski.
 
 
 /** \brief Affine warper factory class.
-  \sa detail::AffineWarper
+  @see detail::AffineWarper
  */
 // Targeting CylindricalWarper.java
 

@@ -46,7 +46,7 @@ The Median Flow algorithm (see cv::TrackerMedianFlow) was chosen as a tracking c
 implementation, following authors. The tracker is supposed to be able to handle rapid motions, partial
 occlusions, object absence etc.
 <p>
-\sa Tracker, MultiTracker, TrackerTLD
+@see Tracker, MultiTracker, TrackerTLD
 */
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)
 public class MultiTrackerTLD extends MultiTracker_Alt {

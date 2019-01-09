@@ -330,7 +330,7 @@ public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xph
     @param sigma expected noise standard deviation
     @param psize size of block side where dct is computed
     <p>
-    \sa
+    @see
        fastNlMeansDenoising
      */
     @Namespace("cv::xphoto") public static native void dctDenoising(@Const @ByRef Mat src, @ByRef Mat dst, double sigma, int psize/*=16*/);
@@ -450,7 +450,7 @@ public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xph
         This function expected to be applied to grayscale images. Advanced usage of this function
         can be manual denoising of colored image in different colorspaces.
         <p>
-        \sa
+        @see
         fastNlMeansDenoising
         */
         @Namespace("cv::xphoto") public static native void bm3dDenoising(
@@ -545,7 +545,7 @@ public class opencv_xphoto extends org.bytedeco.javacpp.opencv_xphoto.opencv_xph
         This function expected to be applied to grayscale images. Advanced usage of this function
         can be manual denoising of colored image in different colorspaces.
         <p>
-        \sa
+        @see
         fastNlMeansDenoising
         */
         @Namespace("cv::xphoto") public static native void bm3dDenoising(

@@ -37,7 +37,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 
 
 /** \brief Cylindrical warper factory class.
-\sa detail::CylindricalWarper
+@see detail::CylindricalWarper
 */
 @Namespace("cv") @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class CylindricalWarper extends WarperCreator {

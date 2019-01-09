@@ -43,7 +43,7 @@ import static org.bytedeco.javacpp.opencv_tracking.opencv_tracking.*;
 \cite AAM Sampling e Labeling. See table I and section III B
 <p>
 TrackerSampler is an aggregation of TrackerSamplerAlgorithm
-\sa
+@see
    TrackerSamplerAlgorithm
  */
 @Namespace("cv") @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_tracking.opencv_tracking_presets.class)

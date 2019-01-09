@@ -12,7 +12,7 @@ import static org.bytedeco.javacpp.opencv_core.opencv_core.*;
 
 
 /************************************* CvScalar *****************************************/
-/** \sa Scalar_
+/** @see Scalar_
  */
 @NoOffset @Properties(inherit = org.bytedeco.javacpp.opencv_core.opencv_core_presets.class)
 public class CvScalar extends AbstractCvScalar {

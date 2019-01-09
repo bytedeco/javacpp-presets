@@ -99,13 +99,13 @@ public class Stitcher extends Pointer {
         /** Mode for creating photo panoramas. Expects images under perspective
         transformation and projects resulting pano to sphere.
         <p>
-        \sa detail::BestOf2NearestMatcher SphericalWarper
+        @see detail::BestOf2NearestMatcher SphericalWarper
         */
         PANORAMA = 0,
         /** Mode for composing scans. Expects images under affine transformation does
         not compensate exposure by default.
         <p>
-        \sa detail::AffineBestOf2NearestMatcher AffineWarper
+        @see detail::AffineBestOf2NearestMatcher AffineWarper
         */
         SCANS = 1;
 

@@ -41,7 +41,7 @@ import static org.bytedeco.javacpp.opencv_stitching.opencv_stitching.*;
 This estimator uses pairwise transformations estimated by matcher to estimate
 final transformation for each camera.
 <p>
-\sa cv::detail::HomographyBasedEstimator
+@see cv::detail::HomographyBasedEstimator
  */
 @Namespace("cv::detail") @Properties(inherit = org.bytedeco.javacpp.opencv_stitching.opencv_stitching_presets.class)
 public class AffineBasedEstimator extends Estimator {
