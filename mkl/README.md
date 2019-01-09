@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/mkl/apidocs/
 
-&lowast; MKL also gets used by the [JavaCPP Presets for OpenBLAS](https://github.com/bytedeco/javacpp-presets/tree/master/openblas).
+&lowast; MKL also gets used by the [JavaCPP Presets for OpenBLAS](../openblas), the [JavaCPP Presets for MKL-DNN](../mkl-dnn), or any other library that depends on one of them.
 
 
 Sample Usage
@@ -46,6 +46,39 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>mkl-platform</artifactId>
             <version>2019.1-1.4.4-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled full version of MKL -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <classifier>linux-x86-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <classifier>windows-x86-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
 </project>
 ```

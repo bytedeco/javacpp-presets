@@ -886,6 +886,8 @@ EOF
         if [ $CROSSCOMPILE -eq 1 ]
         then
           USERLAND_PATH="$(which arm-linux-gnueabihf-gcc | grep -o '.*/tools/')../userland"
+          mkdir -p ../lib
+          cp $USERLAND_PATH/build/lib/* ../lib
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I$USERLAND_PATH/ -I$USERLAND_PATH/interface/vmcs_host/khronos/IL/ -I$USERLAND_PATH/host_applications/linux/libs/bcm_host/include/ -I../include/" --extra-ldflags="-L$USERLAND_PATH/build/lib/ -L../lib/" --extra-libs="-lstdc++ -lasound -lvcos -lpthread -ldl -lz -lm" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" --disable-doc --disable-programs
         else
           PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-omx --enable-mmal --enable-omx-rpi --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -L/opt/vc/lib" --extra-libs="-lstdc++ -lasound -lvcos -lpthread -ldl -lz -lm" --pkg-config-flags="--static" --pkg-config="pkg-config --static"

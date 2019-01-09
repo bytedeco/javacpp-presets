@@ -440,7 +440,7 @@
               <maxmemory>1024m</maxmemory>
               <sourcepath>${project.build.sourceDirectory}:${project.basedir}/src/gen/java:${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</sourcepath>
               <links>
-                <link>http://bytedeco.org/javacpp/apidocs/</link>
+                <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
             </configuration>
           </execution>
