@@ -8,9 +8,9 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 
 @Properties(
-//    helper = "org.bytedeco.javacpp.helper.QtGui",
+    helper = "org.bytedeco.javacpp.helper.QtGui",
     inherit = QtCore.class,
-    target =  "org.bytedeco.javacpp.QtGui",
+    target = "org.bytedeco.javacpp.QtGui",
     value = {
         @Platform(
             include = {
@@ -62,18 +62,29 @@ public class QtGui extends AbstractQtPreset {
   protected String[] skip() {
     return new String[]{
         // Classes
+        "QBackingStore",
+        "QBitmap",
         "QClipboard",
         "QCursor",
+        "QFontInfo",
+        "QFontMetrics",
         "QIcon",
         "QInputMethod",
-        "QPaintDevice",
+        "QKeySequence",
+        "QPaintEngine",
+        "QPainter",
         "QPalette",
+        "QPixmap",
         "QPlatformNativeInterface",
+        "QRegion",
         "QScreen",
         "QStyleHints",
         "QValidator",
         "QWindow",
         "QWindowList",
+
+        // Enums
+        "QPalette::ColorRole",
 
         // Members
         "QFont::resolve"

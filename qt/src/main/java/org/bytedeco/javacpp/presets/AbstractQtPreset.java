@@ -94,8 +94,9 @@ abstract class AbstractQtPreset implements InfoMapper, LoadEnabled {
         infoMap.put(new Info(enumName).enumerate());
       }
     }
-
-    infoMap.put(new Info(intEnums()));
+    for (String enumName : intEnums()) {
+      infoMap.put(new Info(enumName).valueTypes("@Cast(\"" + enumName + "\") int"));
+    }
 
     // TODO Flags
     for (Map.Entry<String, String> entry : flags().entrySet()) {
@@ -186,7 +187,7 @@ abstract class AbstractQtPreset implements InfoMapper, LoadEnabled {
   // --------
 
   protected String matchClass(String name) {
-    return " *class (Q_[A-Z]+_EXPORT )?" + name + "( :.*)?";
+    return " *class (Q_[A-Z]+_EXPORT )?" + name + "( *:.*)?";
   }
 
   protected String matchEnd() {

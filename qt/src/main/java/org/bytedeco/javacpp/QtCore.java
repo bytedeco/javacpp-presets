@@ -357,13 +357,19 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(WindowFlags, WindowType)
     
 
-    /** enum Qt::WindowState */
-    public static final int
-        WindowNoState    = 0x00000000,
-        WindowMinimized  = 0x00000001,
-        WindowMaximized  = 0x00000002,
-        WindowFullScreen = 0x00000004,
-        WindowActive     = 0x00000008;
+    @Namespace("Qt") public enum WindowState {
+        WindowNoState   (0x00000000),
+        WindowMinimized (0x00000001),
+        WindowMaximized (0x00000002),
+        WindowFullScreen(0x00000004),
+        WindowActive    (0x00000008);
+
+        public final int value;
+        private WindowState(int v) { this.value = v; }
+        private WindowState(WindowState e) { this.value = e.value; }
+        public WindowState intern() { for (WindowState e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(WindowStates, WindowState)
     
@@ -1454,38 +1460,44 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(InputMethodQueries, InputMethodQuery)
     
 
-    /** enum Qt::InputMethodHint */
-    public static final int
-        ImhNone = 0x0,
+    @Namespace("Qt") public enum InputMethodHint {
+        ImhNone(0x0),
 
-        ImhHiddenText = 0x1,
-        ImhSensitiveData = 0x2,
-        ImhNoAutoUppercase = 0x4,
-        ImhPreferNumbers = 0x8,
-        ImhPreferUppercase = 0x10,
-        ImhPreferLowercase = 0x20,
-        ImhNoPredictiveText = 0x40,
+        ImhHiddenText(0x1),
+        ImhSensitiveData(0x2),
+        ImhNoAutoUppercase(0x4),
+        ImhPreferNumbers(0x8),
+        ImhPreferUppercase(0x10),
+        ImhPreferLowercase(0x20),
+        ImhNoPredictiveText(0x40),
 
-        ImhDate = 0x80,
-        ImhTime = 0x100,
+        ImhDate(0x80),
+        ImhTime(0x100),
 
-        ImhPreferLatin = 0x200,
+        ImhPreferLatin(0x200),
 
-        ImhMultiLine = 0x400,
+        ImhMultiLine(0x400),
 
-        ImhNoEditMenu = 0x800,
-        ImhNoTextHandles = 0x1000,
+        ImhNoEditMenu(0x800),
+        ImhNoTextHandles(0x1000),
 
-        ImhDigitsOnly = 0x10000,
-        ImhFormattedNumbersOnly = 0x20000,
-        ImhUppercaseOnly = 0x40000,
-        ImhLowercaseOnly = 0x80000,
-        ImhDialableCharactersOnly = 0x100000,
-        ImhEmailCharactersOnly = 0x200000,
-        ImhUrlCharactersOnly = 0x400000,
-        ImhLatinOnly = 0x800000,
+        ImhDigitsOnly(0x10000),
+        ImhFormattedNumbersOnly(0x20000),
+        ImhUppercaseOnly(0x40000),
+        ImhLowercaseOnly(0x80000),
+        ImhDialableCharactersOnly(0x100000),
+        ImhEmailCharactersOnly(0x200000),
+        ImhUrlCharactersOnly(0x400000),
+        ImhLatinOnly(0x800000),
 
-        ImhExclusiveInputMask = 0xffff0000;
+        ImhExclusiveInputMask(0xffff0000);
+
+        public final int value;
+        private InputMethodHint(int v) { this.value = v; }
+        private InputMethodHint(InputMethodHint e) { this.value = e.value; }
+        public InputMethodHint intern() { for (InputMethodHint e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(InputMethodHints, InputMethodHint)
     
 
@@ -1714,11 +1726,17 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 
         LastGestureType   = ~0L;
 
-    /** enum Qt::GestureFlag */
-    public static final int
-        DontStartGestureOnChildren = 0x01,
-        ReceivePartialGestures     = 0x02,
-        IgnoredGesturesPropagateToParent = 0x04;
+    @Namespace("Qt") public enum GestureFlag {
+        DontStartGestureOnChildren(0x01),
+        ReceivePartialGestures    (0x02),
+        IgnoredGesturesPropagateToParent(0x04);
+
+        public final int value;
+        private GestureFlag(int v) { this.value = v; }
+        private GestureFlag(GestureFlag e) { this.value = e.value; }
+        public GestureFlag intern() { for (GestureFlag e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(GestureFlags, GestureFlag)
     
 

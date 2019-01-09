@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.QtCore.*;
 
-public class QtGui extends org.bytedeco.javacpp.presets.QtGui {
+public class QtGui extends org.bytedeco.javacpp.helper.QtGui {
     static { Loader.load(); }
 
 // Parsed from QtGui/qfont.h
@@ -140,6 +140,8 @@ public class QtGui extends org.bytedeco.javacpp.presets.QtGui {
     private native void allocate(@Const @ByRef QString family, int pointSize/*=-1*/, int weight/*=-1*/, @Cast("bool") boolean italic/*=false*/);
     public QFont(@Const @ByRef QString family) { super((Pointer)null); allocate(family); }
     private native void allocate(@Const @ByRef QString family);
+    public QFont(@Const @ByRef QFont arg0, QPaintDevice pd) { super((Pointer)null); allocate(arg0, pd); }
+    private native void allocate(@Const @ByRef QFont arg0, QPaintDevice pd);
     public QFont(@Const @ByRef QFont arg0) { super((Pointer)null); allocate(arg0); }
     private native void allocate(@Const @ByRef QFont arg0);
 

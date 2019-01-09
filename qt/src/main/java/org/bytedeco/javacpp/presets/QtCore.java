@@ -112,12 +112,16 @@ public class QtCore extends AbstractQtPreset {
   protected String[] enums() {
     return new String[]{
         "QEventLoop::ProcessEventsFlag",
+        "QSizePolicy::ControlType",
         "QString::SectionFlag",
         "Qt::ApplicationAttribute",
         "Qt::CaseSensitivity",
         "Qt::FindChildOption",
+        "Qt::GestureFlag",
+        "Qt::InputMethodHint",
         "Qt::MouseButton",
         "Qt::Orientation",
+        "Qt::WindowState",
         "QtMsgType"
     };
   }
@@ -126,22 +130,33 @@ public class QtCore extends AbstractQtPreset {
   protected Map<String, String> flags() {
     Map<String, String> flags = new HashMap<>();
     flags.put("QEventLoop::ProcessEventsFlags", "QEventLoop::ProcessEventsFlag");
+    flags.put("QSizePolicy::ControlTypes", "QSizePolicy::ControlType");
     flags.put("QString::SectionFlags", "QString::SectionFlag");
+    flags.put("Qt::FindChildOptions", "Qt::FindChildOption");
+    flags.put("Qt::GestureFlags", "Qt::GestureFlag");
+    flags.put("Qt::InputMethodHints", "Qt::InputMethodHint");
     flags.put("Qt::MouseButtons", "Qt::MouseButton");
+    flags.put("Qt::Orientations", "Qt::Orientation");
+    flags.put("Qt::WindowStates", "Qt::WindowState");
     return flags;
   }
 
   @Override
   protected String[] intEnums() {
     return new String[]{
+        "Qt::AlignmentFlag",
         "Qt::KeyboardModifier",
+        "Qt::WindowType",
+        "QSizePolicy::Policy"
     };
   }
 
   @Override
   protected String[] intFlags() {
     return new String[]{
+        "Qt::Alignment",
         "Qt::KeyboardModifiers",
+        "Qt::WindowFlags"
     };
   }
 
