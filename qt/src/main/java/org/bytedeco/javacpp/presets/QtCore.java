@@ -24,8 +24,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QString",
                 "QStringList",
                 "QThread"
-            },
-            preload = "Qt5Core@5"
+            }
         ),
         @Platform(
             includepath = "/usr/local/Cellar/qt/5.12.0/include",

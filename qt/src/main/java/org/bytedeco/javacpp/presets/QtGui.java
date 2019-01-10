@@ -16,8 +16,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
             include = {
                 "QFont",
                 "QGuiApplication"
-            },
-            preload = "Qt5Gui@5"
+            }
         ),
         @Platform(
             includepath = "/usr/local/Cellar/qt/5.12.0/include",
@@ -62,24 +61,41 @@ public class QtGui extends AbstractQtPreset {
   protected String[] skip() {
     return new String[]{
         // Classes
+        "QActionEvent",
         "QBackingStore",
         "QBitmap",
         "QClipboard",
+        "QCloseEvent",
+        "QContextMenuEvent",
         "QCursor",
+        "QDragEnterEvent",
+        "QDragLeaveEvent",
+        "QDragMoveEvent",
+        "QDropEvent",
+        "QFocusEvent",
         "QFontInfo",
         "QFontMetrics",
+        "QHideEvent",
         "QIcon",
         "QInputMethod",
+        "QInputMethodEvent",
+        "QKeyEvent",
         "QKeySequence",
+        "QMouseEvent",
+        "QMoveEvent",
         "QPaintEngine",
         "QPainter",
         "QPalette",
         "QPixmap",
         "QPlatformNativeInterface",
         "QRegion",
+        "QResizeEvent",
         "QScreen",
+        "QShowEvent",
         "QStyleHints",
+        "QTabletEvent",
         "QValidator",
+        "QWheelEvent",
         "QWindow",
         "QWindowList",
 

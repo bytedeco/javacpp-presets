@@ -22,8 +22,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QSizePolicy",
                 "QToolButton",
                 "QWidget"
-            },
-            preload = "Qt5Widgets@5"
+            }
         )
     }
 )
@@ -43,10 +42,7 @@ public class QtWidgets extends AbstractQtPreset {
         .put(new Info("qlineedit.h").linePatterns(
             matchClass("QLineEdit"), "#if QT_CONFIG\\(action\\)",
             "#endif", matchEnd()))
-        .put(new Info("qsizepolicy.h").linePatterns(
-            matchClass("QSizePolicy"), "public:",
-            " *enum ControlType \\{", matchEnd()
-        ))
+        .put(new Info("qsizepolicy.h").linePatterns(matchClass("QSizePolicy"), matchEnd()))
         .put(new Info("qtoolbutton.h").linePatterns(matchClass("QToolButton"), matchEnd()))
         .put(new Info("qwidget.h").linePatterns(matchClass("QWidget"), matchEnd()));
   }
@@ -87,4 +83,11 @@ public class QtWidgets extends AbstractQtPreset {
         "QWidget::setupUi"
     };
   }
+
+//  @Override
+//  protected String[] virtual() {
+//    return new String[]{
+//        "QWidget"
+//    };
+//  }
 }

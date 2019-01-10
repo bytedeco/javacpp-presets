@@ -435,6 +435,24 @@ public static class QSizePolicy extends Pointer {
         return (QSizePolicy)super.position(position);
     }
 
+    /** enum QSizePolicy::PolicyFlag */
+    public static final int
+        GrowFlag = 1,
+        ExpandFlag = 2,
+        ShrinkFlag = 4,
+        IgnoreFlag = 8;
+
+    /** enum QSizePolicy::Policy */
+    public static final int
+        Fixed = 0,
+        Minimum = GrowFlag,
+        Maximum = ShrinkFlag,
+        Preferred = GrowFlag | ShrinkFlag,
+        MinimumExpanding = GrowFlag | ExpandFlag,
+        Expanding = GrowFlag | ShrinkFlag | ExpandFlag,
+        Ignored = ShrinkFlag | GrowFlag | IgnoreFlag;
+    
+
     public enum ControlType {
         DefaultType     (0x00000001),
         ButtonBox       (0x00000002),

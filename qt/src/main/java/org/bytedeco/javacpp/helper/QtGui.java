@@ -10,4 +10,10 @@ public class QtGui extends org.bytedeco.javacpp.presets.QtGui {
     public QPaintDevice() { super((Pointer)null); }
     public QPaintDevice(Pointer p) { super(p); }
   }
+
+  @Opaque
+  public static class QPaintEvent extends Pointer {
+    public QPaintEvent() { super((Pointer)null); }
+    public QPaintEvent(Pointer p) { super(p); }
+  }
 }

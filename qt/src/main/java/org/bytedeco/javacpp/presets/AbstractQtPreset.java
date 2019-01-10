@@ -120,6 +120,9 @@ abstract class AbstractQtPreset implements InfoMapper, LoadEnabled {
 
     // Skip
     infoMap.put(new Info(skip()).skip());
+
+    // Virtual
+    infoMap.put(new Info(virtual()).virtualize());
   }
 
   // ----
@@ -179,6 +182,13 @@ abstract class AbstractQtPreset implements InfoMapper, LoadEnabled {
    * C++ names to skip
    */
   protected String[] skip() {
+    return new String[0];
+  }
+
+  /**
+   * C++ names of classes with virtual members
+   */
+  protected String[] virtual() {
     return new String[0];
   }
 
