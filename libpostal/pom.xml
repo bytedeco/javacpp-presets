@@ -8,7 +8,7 @@
   <parent>
     <artifactId>javacpp-presets</artifactId>
     <groupId>org.bytedeco</groupId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.4</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>

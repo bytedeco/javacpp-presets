@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mkl</groupId>
     <artifactId>mkl</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.4</version>
     <properties>
         <exec.mainClass>DGEMMExample</exec.mainClass>
     </properties>
@@ -44,38 +44,38 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
             <classifier>linux-x86-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
             <classifier>windows-x86-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4-SNAPSHOT</version>
+            <version>2019.1-1.4.4</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

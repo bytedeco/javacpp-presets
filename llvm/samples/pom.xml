@@ -5,7 +5,7 @@
 
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>llvm-samples</artifactId>
-    <version>7.0.1-1.4.4-SNAPSHOT</version>
+    <version>7.0.1-1.4.4</version>
     <name>JavaCPP Presets Samples for LLVM</name>
 
     <properties>

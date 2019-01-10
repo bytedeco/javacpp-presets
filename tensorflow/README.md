@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.4</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.12.0-1.4.4-SNAPSHOT</version>
+            <version>1.12.0-1.4.4</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.12.0-1.4.4-SNAPSHOT</version>
+            <version>1.12.0-1.4.4</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.12.0-1.4.4-SNAPSHOT</version>
+            <version>1.12.0-1.4.4</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.12.0-1.4.4-SNAPSHOT</version>
+            <version>1.12.0-1.4.4</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
@@ -71,19 +71,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4-SNAPSHOT</version>
+            <version>10.0-7.4-1.4.4</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

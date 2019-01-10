@@ -1,4 +1,5 @@
 
+### January 11, 2019 version 1.4.4
  * Bundle the full version of MKL now that its new license permits it ([issue #601](https://github.com/bytedeco/javacpp-presets/issues/601))
  * Bundle libraries from raspberrypi/userland to avoid loading issues on `linux-armhf` devices other than Raspberry Pi ([issue bytedeco/javacv#1118](https://github.com/bytedeco/javacv/issues/1118))
  * Bundle the new official Java/Scala API of MXNet via the `jnimxnet` library
