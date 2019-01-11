@@ -1,0 +1,931 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>AdaDelta - JavaCPP Presets for MXNet 1.4.0.rc0-1.4.4 API - org.apache.mxnet.optimizer.AdaDelta</title>
+          <meta name="description" content="AdaDelta - JavaCPP Presets for MXNet 1.4.0.rc0 - 1.4.4 API - org.apache.mxnet.optimizer.AdaDelta" />
+          <meta name="keywords" content="AdaDelta JavaCPP Presets for MXNet 1.4.0.rc0 1.4.4 API org.apache.mxnet.optimizer.AdaDelta" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.apache.mxnet.optimizer.AdaDelta';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Class" src="../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.apache">apache</a>.<a href="../package.html" class="extype" name="org.apache.mxnet">mxnet</a>.<a href="package.html" class="extype" name="org.apache.mxnet.optimizer">optimizer</a></p>
+        <h1>AdaDelta</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.apache.mxnet.optimizer">package optimizer</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AdaDelta</span><span class="result"> extends <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>AdaDelta optimizer as described in Matthew D. Zeiler, 2012.
+http://arxiv.org/abs/1212.5701
+</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.apache.mxnet.optimizer.AdaDelta"><span>AdaDelta</span></li><li class="in" name="org.apache.mxnet.Optimizer"><span>Optimizer</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.apache.mxnet.optimizer.AdaDelta#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(rho:Float,rescaleGradient:Float,epsilon:Float,wd:Float,clipGradient:Float):org.apache.mxnet.optimizer.AdaDelta"></a>
+      <a id="&lt;init&gt;:AdaDelta"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">AdaDelta</span><span class="params">(<span name="rho">rho: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.05f</span></span>, <span name="rescaleGradient">rescaleGradient: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0f</span></span>, <span name="epsilon">epsilon: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1e-8f</span></span>, <span name="wd">wd: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.0f</span></span>, <span name="clipGradient">clipGradient: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0f</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@&lt;init&gt;(rho:Float,rescaleGradient:Float,epsilon:Float,wd:Float,clipGradient:Float):org.apache.mxnet.optimizer.AdaDelta" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">rho</dt><dd class="cmt"><p>Decay rate for both squared gradients and delta x.</p></dd><dt class="param">rescaleGradient</dt><dd class="cmt"><p>rescaling factor of gradient.</p></dd><dt class="param">epsilon</dt><dd class="cmt"><p>The constant as described in the thesis</p></dd><dt class="param">wd</dt><dd class="cmt"><p>L2 regularization coefficient add to all the weights</p></dd><dt class="param">clipGradient</dt><dd class="cmt"><p>clip gradient in range [-clip_gradient, clip_gradient]</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@##():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.optimizer.AdaDelta#createState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createState(index:Int,weight:org.apache.mxnet.NDArray):(org.apache.mxnet.NDArray,org.apache.mxnet.NDArray)"></a>
+      <a id="createState(Int,NDArray):(NDArray,NDArray)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createState</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="weight">weight: <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>)</span><span class="result">: (<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>, <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@createState(index:Int,weight:org.apache.mxnet.NDArray):(org.apache.mxnet.NDArray,org.apache.mxnet.NDArray)" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.optimizer.AdaDelta">AdaDelta</a> → <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.optimizer.AdaDelta#deserializeState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="deserializeState(bytes:Array[Byte]):AnyRef"></a>
+      <a id="deserializeState(Array[Byte]):AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">deserializeState</span><span class="params">(<span name="bytes">bytes: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>)</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@deserializeState(bytes:Array[Byte]):AnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.optimizer.AdaDelta">AdaDelta</a> → <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.optimizer.AdaDelta#disposeState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="disposeState(state:AnyRef):Unit"></a>
+      <a id="disposeState(AnyRef):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">disposeState</span><span class="params">(<span name="state">state: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@disposeState(state:AnyRef):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.optimizer.AdaDelta">AdaDelta</a> → <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#getLr" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getLr(index:Int,lr:Float):Float"></a>
+      <a id="getLr(Int,Float):Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLr</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="lr">lr: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@getLr(index:Int,lr:Float):Float" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#getWd" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getWd(index:Int,wd:Float):Float"></a>
+      <a id="getWd(Int,Float):Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getWd</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="wd">wd: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@getWd(index:Int,wd:Float):Float" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#idx2name" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="idx2name:Map[Int,String]"></a>
+      <a id="idx2name:Map[Int,String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">idx2name</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@idx2name:Map[Int,String]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#indexUpdateCount" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="indexUpdateCount:scala.collection.mutable.Map[Int,Int]"></a>
+      <a id="indexUpdateCount:Map[Int,Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">indexUpdateCount</span><span class="result">: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@indexUpdateCount:scala.collection.mutable.Map[Int,Int]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#lrMult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="lrMult:scala.collection.mutable.Map[scala.util.Either[Int,String],Float]"></a>
+      <a id="lrMult:Map[Either[Int,String],Float]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lrMult</span><span class="result">: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Float">Float</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@lrMult:scala.collection.mutable.Map[scala.util.Either[Int,String],Float]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#numUpdate" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="numUpdate:Int"></a>
+      <a id="numUpdate:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">numUpdate</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@numUpdate:Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#rescaleGrad" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="rescaleGrad:Float"></a>
+      <a id="rescaleGrad:Float"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">rescaleGrad</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@rescaleGrad:Float" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.optimizer.AdaDelta#serializeState" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="serializeState(state:AnyRef):Array[Byte]"></a>
+      <a id="serializeState(AnyRef):Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serializeState</span><span class="params">(<span name="state">state: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@serializeState(state:AnyRef):Array[Byte]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.optimizer.AdaDelta">AdaDelta</a> → <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setArgNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setArgNames(argNames:Seq[String]):Unit"></a>
+      <a id="setArgNames(Seq[String]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setArgNames</span><span class="params">(<span name="argNames">argNames: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setArgNames(argNames:Seq[String]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setIdx2Name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setIdx2Name(paramIdx2Name:Map[Int,String]):Unit"></a>
+      <a id="setIdx2Name(Map[Int,String]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setIdx2Name</span><span class="params">(<span name="paramIdx2Name">paramIdx2Name: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setIdx2Name(paramIdx2Name:Map[Int,String]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setLrMult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setLrMult(argsLrMult:Map[scala.util.Either[Int,String],Float]):Unit"></a>
+      <a id="setLrMult(Map[Either[Int,String],Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setLrMult</span><span class="params">(<span name="argsLrMult">argsLrMult: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setLrMult(argsLrMult:Map[scala.util.Either[Int,String],Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets an individual learning rate multiplier for each parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Sets an individual learning rate multiplier for each parameter.
+If you specify a learning rate multiplier for a parameter, then
+the learning rate for the parameter will be set as the product of
+the global learning rate and its multiplier.
+note:: The default learning rate multiplier of a <code>Variable</code>
+can be set with <code>lr_mult</code> argument in the constructor.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setRescaleGrad" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setRescaleGrad(rescaleGrad:Float):Unit"></a>
+      <a id="setRescaleGrad(Float):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setRescaleGrad</span><span class="params">(<span name="rescaleGrad">rescaleGrad: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setRescaleGrad(rescaleGrad:Float):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setSymbol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setSymbol(sym:org.apache.mxnet.Symbol):Unit"></a>
+      <a id="setSymbol(Symbol):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setSymbol</span><span class="params">(<span name="sym">sym: <a href="../Symbol.html" class="extype" name="org.apache.mxnet.Symbol">Symbol</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setSymbol(sym:org.apache.mxnet.Symbol):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#setWdMult" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setWdMult(argsWdMult:Map[scala.util.Either[Int,String],Float]):Unit"></a>
+      <a id="setWdMult(Map[Either[Int,String],Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setWdMult</span><span class="params">(<span name="argsWdMult">argsWdMult: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setWdMult(argsWdMult:Map[scala.util.Either[Int,String],Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Sets an individual weight decay multiplier for each parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Sets an individual weight decay multiplier for each parameter.</p><p>By default, the weight decay multipler is set as 0 for all
+parameters whose name don't end with <code><code>_weight</code></code> or <code><code>_gamma</code></code>, if
+you call the <code>setIdx2Name</code> method to set idx2name.</p><p>note:: The default weight decay multiplier for a <code>Variable</code>
+can be set with its <code>wd_mult</code> argument in the constructor.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#specialized" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="specialized:Boolean"></a>
+      <a id="specialized:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">specialized</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@specialized:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#symbol" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="symbol:org.apache.mxnet.Symbol"></a>
+      <a id="symbol:Symbol"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">symbol</span><span class="result">: <a href="../Symbol.html" class="extype" name="org.apache.mxnet.Symbol">Symbol</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@symbol:org.apache.mxnet.Symbol" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@toString():String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.optimizer.AdaDelta#update" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="update(index:Int,weight:org.apache.mxnet.NDArray,grad:org.apache.mxnet.NDArray,state:AnyRef):Unit"></a>
+      <a id="update(Int,NDArray,NDArray,AnyRef):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">update</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>, <span name="weight">weight: <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>, <span name="grad">grad: <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>, <span name="state">state: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@update(index:Int,weight:org.apache.mxnet.NDArray,grad:org.apache.mxnet.NDArray,state:AnyRef):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Update the parameters.</p><div class="fullcomment"><div class="comment cmt"><p>Update the parameters.</p></div><dl class="paramcmts block"><dt class="param">index</dt><dd class="cmt"><p>An unique integer key used to index the parameters</p></dd><dt class="param">weight</dt><dd class="cmt"><p>weight ndarray</p></dd><dt class="param">grad</dt><dd class="cmt"><p>grad ndarray</p></dd><dt class="param">state</dt><dd class="cmt"><p>NDArray or other objects returned by initState
+             The auxiliary state used in optimization.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.optimizer.AdaDelta">AdaDelta</a> → <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#updateCount" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateCount(index:Int):Unit"></a>
+      <a id="updateCount(Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateCount</span><span class="params">(<span name="index">index: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@updateCount(index:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">update num_update</p><div class="fullcomment"><div class="comment cmt"><p>update num_update</p></div><dl class="paramcmts block"><dt class="param">index</dt><dd class="cmt"><p>The index will be updated</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#wdMult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wdMult:scala.collection.mutable.Map[scala.util.Either[Int,String],Float]"></a>
+      <a id="wdMult:Map[Either[Int,String],Float]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wdMult</span><span class="result">: <span class="extype" name="scala.collection.mutable.Map">Map</span>[<span class="extype" name="scala.util.Either">Either</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Predef.String">String</span>], <span class="extype" name="scala.Float">Float</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@wdMult:scala.collection.mutable.Map[scala.util.Either[Int,String],Float]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.Optimizer#weightSet" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="weightSet:scala.collection.mutable.Set[Int]"></a>
+      <a id="weightSet:Set[Int]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">weightSet</span><span class="result">: <span class="extype" name="scala.collection.mutable.Set">Set</span>[<span class="extype" name="scala.Int">Int</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@weightSet:scala.collection.mutable.Set[Int]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="org.apache.mxnet.Optimizer#setLrScale" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setLrScale(lrScale:Map[Int,Float]):Unit"></a>
+      <a id="setLrScale(Map[Int,Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 0.10.0) Use setLrMult instead.">setLrScale</span><span class="params">(<span name="lrScale">lrScale: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Int">Int</span>, <span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.optimizer.AdaDelta@setLrScale(lrScale:Map[Int,Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 0.10.0)</i> Use setLrMult instead.</p></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.apache.mxnet.Optimizer">
+              <h3>Inherited from <a href="../Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

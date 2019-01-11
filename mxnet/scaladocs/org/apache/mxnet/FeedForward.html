@@ -1,0 +1,1093 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>FeedForward - JavaCPP Presets for MXNet 1.4.0.rc0-1.4.4 API - org.apache.mxnet.FeedForward</title>
+          <meta name="description" content="FeedForward - JavaCPP Presets for MXNet 1.4.0.rc0 - 1.4.4 API - org.apache.mxnet.FeedForward" />
+          <meta name="keywords" content="FeedForward JavaCPP Presets for MXNet 1.4.0.rc0 1.4.4 API org.apache.mxnet.FeedForward" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../index.html';
+            var hash = 'org.apache.mxnet.FeedForward';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <a href="FeedForward$.html" title="See companion object"><img alt="Class/Object" src="../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a href="../../package.html" class="extype" name="org">org</a>.<a href="../package.html" class="extype" name="org.apache">apache</a>.<a href="package.html" class="extype" name="org.apache.mxnet">mxnet</a></p>
+        <h1><a href="FeedForward$.html" title="See companion object">FeedForward</a></h1><h3><span class="morelinks"><div>
+            Related Docs:
+            <a href="FeedForward$.html" title="See companion object">object FeedForward</a>
+            | <a href="package.html" class="extype" name="org.apache.mxnet">package mxnet</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FeedForward</span><span class="result"> extends <span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Model class of MXNet for training and predicting feedforward nets.
+This class is designed for a single-data single output supervised network.</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span>, <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a>, <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.apache.mxnet.FeedForward"><span>FeedForward</span></li><li class="in" name="org.apache.mxnet.NativeResource"><span>NativeResource</span></li><li class="in" name="org.apache.mxnet.WarnIfNotDisposed"><span>WarnIfNotDisposed</span></li><li class="in" name="java.lang.AutoCloseable"><span>AutoCloseable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.apache.mxnet.FeedForward#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(symbol:org.apache.mxnet.SymbolGenerator,ctx:Array[org.apache.mxnet.Context],numEpoch:Int,epochSize:Int,optimizer:org.apache.mxnet.Optimizer,initializer:org.apache.mxnet.Initializer,batchSize:Int,argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtraParams:Boolean,beginEpoch:Int):org.apache.mxnet.FeedForward"></a>
+      <a id="&lt;init&gt;:FeedForward"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FeedForward</span><span class="params">(<span name="symbol">symbol: <a href="SymbolGenerator.html" class="extype" name="org.apache.mxnet.SymbolGenerator">SymbolGenerator</a></span>, <span name="ctx">ctx: <span class="extype" name="scala.Array">Array</span>[<a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a>]</span>, <span name="numEpoch">numEpoch: <span class="extype" name="scala.Int">Int</span></span>, <span name="epochSize">epochSize: <span class="extype" name="scala.Int">Int</span></span>, <span name="optimizer">optimizer: <a href="Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a></span>, <span name="initializer">initializer: <a href="Initializer.html" class="extype" name="org.apache.mxnet.Initializer">Initializer</a></span>, <span name="batchSize">batchSize: <span class="extype" name="scala.Int">Int</span></span>, <span name="argParams">argParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>, <span name="auxParams">auxParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>, <span name="allowExtraParams">allowExtraParams: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="beginEpoch">beginEpoch: <span class="extype" name="scala.Int">Int</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@&lt;init&gt;(symbol:org.apache.mxnet.SymbolGenerator,ctx:Array[org.apache.mxnet.Context],numEpoch:Int,epochSize:Int,optimizer:org.apache.mxnet.Optimizer,initializer:org.apache.mxnet.Initializer,batchSize:Int,argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtraParams:Boolean,beginEpoch:Int):org.apache.mxnet.FeedForward" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(symbol:org.apache.mxnet.Symbol,ctx:Array[org.apache.mxnet.Context],numEpoch:Int,epochSize:Int,optimizer:org.apache.mxnet.Optimizer,initializer:org.apache.mxnet.Initializer,batchSize:Int,argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtraParams:Boolean,beginEpoch:Int):org.apache.mxnet.FeedForward"></a>
+      <a id="&lt;init&gt;:FeedForward"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">FeedForward</span><span class="params">(<span name="symbol">symbol: <a href="Symbol.html" class="extype" name="org.apache.mxnet.Symbol">Symbol</a></span>, <span name="ctx">ctx: <span class="extype" name="scala.Array">Array</span>[<a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a>] = <span class="symbol"><span class="name"><a href="Context$.html">Array(Context.cpu())</a></span></span></span>, <span name="numEpoch">numEpoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="epochSize">epochSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>, <span name="optimizer">optimizer: <a href="Optimizer.html" class="extype" name="org.apache.mxnet.Optimizer">Optimizer</a> = <span class="symbol"><span class="name"><a href="../../package.html">new SGD()</a></span></span></span>, <span name="initializer">initializer: <a href="Initializer.html" class="extype" name="org.apache.mxnet.Initializer">Initializer</a> = <span class="symbol"><span class="name"><a href="Uniform.html">new Uniform(0.01f)</a></span></span></span>, <span name="batchSize">batchSize: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">128</span></span>, <span name="argParams">argParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>] = <span class="symbol">null</span></span>, <span name="auxParams">auxParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>] = <span class="symbol">null</span></span>, <span name="allowExtraParams">allowExtraParams: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>, <span name="beginEpoch">beginEpoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@&lt;init&gt;(symbol:org.apache.mxnet.Symbol,ctx:Array[org.apache.mxnet.Context],numEpoch:Int,epochSize:Int,optimizer:org.apache.mxnet.Optimizer,initializer:org.apache.mxnet.Initializer,batchSize:Int,argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtraParams:Boolean,beginEpoch:Int):org.apache.mxnet.FeedForward" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@##():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#beginEpoch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="beginEpoch:Int"></a>
+      <a id="beginEpoch:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">beginEpoch</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@beginEpoch:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The beginning training epoch.</p>
+    </li><li name="org.apache.mxnet.FeedForward#bytesAllocated" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bytesAllocated:Long"></a>
+      <a id="bytesAllocated:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bytesAllocated</span><span class="result">: <span class="extype" name="scala.Long">Long</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@bytesAllocated:Long" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Off-Heap Bytes Allocated for this object
+</p><div class="fullcomment"><div class="comment cmt"><p>Off-Heap Bytes Allocated for this object
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.FeedForward">FeedForward</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#checkArguments" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="checkArguments():Unit"></a>
+      <a id="checkArguments():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">checkArguments</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@checkArguments():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@clone():Object" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#close" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="close():Unit"></a>
+      <a id="close():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">close</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@close():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource → AutoCloseable</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#creationTrace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="creationTrace:Option[Array[StackTraceElement]]"></a>
+      <a id="creationTrace:Option[Array[StackTraceElement]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">creationTrace</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@creationTrace:Option[Array[StackTraceElement]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#dispose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dispose():Unit"></a>
+      <a id="dispose():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dispose</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@dispose():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.FeedForward">FeedForward</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#epochSize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="epochSize:Int"></a>
+      <a id="epochSize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">epochSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@epochSize:Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Number of batches in a epoch.</p><div class="fullcomment"><div class="comment cmt"><p>Number of batches in a epoch. In default, it is set to
+                 ceil(num_train_examples / batch_size)</p></div></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a> → AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,kvStore:org.apache.mxnet.KVStore):Unit"></a>
+      <a id="fit(DataIter,DataIter,KVStore):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="kvStore">kvStore: <a href="KVStore.html" class="extype" name="org.apache.mxnet.KVStore">KVStore</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,kvStore:org.apache.mxnet.KVStore):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStore:org.apache.mxnet.KVStore):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,KVStore):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kvStore">kvStore: <a href="KVStore.html" class="extype" name="org.apache.mxnet.KVStore">KVStore</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStore:org.apache.mxnet.KVStore):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStore:org.apache.mxnet.KVStore,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,KVStore,EpochEndCallback,BatchEndCallback):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kvStore">kvStore: <a href="KVStore.html" class="extype" name="org.apache.mxnet.KVStore">KVStore</a></span>, <span name="epochEndCallback">epochEndCallback: <a href="EpochEndCallback.html" class="extype" name="org.apache.mxnet.EpochEndCallback">EpochEndCallback</a></span>, <span name="batchEndCallback">batchEndCallback: <a href="BatchEndCallback.html" class="extype" name="org.apache.mxnet.BatchEndCallback">BatchEndCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStore:org.apache.mxnet.KVStore,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kv:org.apache.mxnet.KVStore,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback,logger:org.slf4j.Logger,workLoadList:Seq[Float]):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,KVStore,EpochEndCallback,BatchEndCallback,Logger,Seq[Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kv">kv: <a href="KVStore.html" class="extype" name="org.apache.mxnet.KVStore">KVStore</a></span>, <span name="epochEndCallback">epochEndCallback: <a href="EpochEndCallback.html" class="extype" name="org.apache.mxnet.EpochEndCallback">EpochEndCallback</a></span>, <span name="batchEndCallback">batchEndCallback: <a href="BatchEndCallback.html" class="extype" name="org.apache.mxnet.BatchEndCallback">BatchEndCallback</a></span>, <span name="logger">logger: <span class="extype" name="org.slf4j.Logger">Logger</span></span>, <span name="workLoadList">workLoadList: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kv:org.apache.mxnet.KVStore,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback,logger:org.slf4j.Logger,workLoadList:Seq[Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter):Unit"></a>
+      <a id="fit(DataIter,DataIter):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kvStoreType">kvStoreType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,String,EpochEndCallback,BatchEndCallback):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kvStoreType">kvStoreType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="epochEndCallback">epochEndCallback: <a href="EpochEndCallback.html" class="extype" name="org.apache.mxnet.EpochEndCallback">EpochEndCallback</a></span>, <span name="batchEndCallback">batchEndCallback: <a href="BatchEndCallback.html" class="extype" name="org.apache.mxnet.BatchEndCallback">BatchEndCallback</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#fit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback,logger:org.slf4j.Logger,workLoadList:Seq[Float]):Unit"></a>
+      <a id="fit(DataIter,DataIter,EvalMetric,String,EpochEndCallback,BatchEndCallback,Logger,Seq[Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="trainData">trainData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalData">evalData: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="evalMetric">evalMetric: <a href="EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="kvStoreType">kvStoreType: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="epochEndCallback">epochEndCallback: <a href="EpochEndCallback.html" class="extype" name="org.apache.mxnet.EpochEndCallback">EpochEndCallback</a></span>, <span name="batchEndCallback">batchEndCallback: <a href="BatchEndCallback.html" class="extype" name="org.apache.mxnet.BatchEndCallback">BatchEndCallback</a></span>, <span name="logger">logger: <span class="extype" name="org.slf4j.Logger">Logger</span></span>, <span name="workLoadList">workLoadList: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Float">Float</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@fit(trainData:org.apache.mxnet.DataIter,evalData:org.apache.mxnet.DataIter,evalMetric:org.apache.mxnet.EvalMetric,kvStoreType:String,epochEndCallback:org.apache.mxnet.EpochEndCallback,batchEndCallback:org.apache.mxnet.BatchEndCallback,logger:org.slf4j.Logger,workLoadList:Seq[Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Fit the model.</p><div class="fullcomment"><div class="comment cmt"><p>Fit the model.</p></div><dl class="paramcmts block"><dt class="param">trainData</dt><dd class="cmt"><p>Training data</p></dd><dt class="param">evalData</dt><dd class="cmt"><p>Evaluation data</p></dd><dt class="param">evalMetric</dt><dd class="cmt"><p>The evaluation metric, cannot be null</p></dd><dt class="param">kvStoreType</dt><dd class="cmt"><p>A string kvstore type:
+                   'local' : multi-devices on a single machine, will automatically
+                   choose one from 'local_update_cpu', 'local_allreduce_cpu', and
+                   'local_allreduce_device'
+                   'dist_sync' : multi-machines with BSP
+                   'dist_async' : multi-machines with partical asynchronous
+                   In default uses 'local', often no need to change for single machine.</p></dd><dt class="param">epochEndCallback</dt><dd class="cmt"><p>A callback that is invoked at end of each epoch.
+                        This can be used to checkpoint model each epoch.</p></dd><dt class="param">batchEndCallback</dt><dd class="cmt"><p>A callback that is invoked at end of each batch
+                        For print purpose</p></dd><dt class="param">logger</dt><dd class="cmt"><p>When not specified, default logger will be used.</p></dd><dt class="param">workLoadList</dt><dd class="cmt"><p>The list of work load for different devices, in the same order as ctx</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#getArgParams" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getArgParams:Map[String,org.apache.mxnet.NDArray]"></a>
+      <a id="getArgParams:Map[String,NDArray]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getArgParams</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@getArgParams:Map[String,org.apache.mxnet.NDArray]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#getAuxParams" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getAuxParams:Map[String,org.apache.mxnet.NDArray]"></a>
+      <a id="getAuxParams:Map[String,NDArray]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getAuxParams</span><span class="result">: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@getAuxParams:Map[String,org.apache.mxnet.NDArray]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#isDisposed" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDisposed:Boolean"></a>
+      <a id="isDisposed:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDisposed</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@isDisposed:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource → <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#logDisposeWarning" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logDisposeWarning():Unit"></a>
+      <a id="logDisposeWarning():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logDisposeWarning</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@logDisposeWarning():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#logger" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="logger:org.slf4j.Logger"></a>
+      <a id="logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="org.slf4j.Logger">Logger</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@logger:org.slf4j.Logger" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#nativeAddress" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nativeAddress:org.apache.mxnet.Base.CPtrAddress"></a>
+      <a id="nativeAddress:CPtrAddress"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nativeAddress</span><span class="result">: <span class="extype" name="org.apache.mxnet.Base.CPtrAddress">CPtrAddress</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@nativeAddress:org.apache.mxnet.Base.CPtrAddress" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">native Address associated with this object
+</p><div class="fullcomment"><div class="comment cmt"><p>native Address associated with this object
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.FeedForward">FeedForward</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#nativeDeAllocator" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="nativeDeAllocator:org.apache.mxnet.Base.CPtrAddress=&gt;Int"></a>
+      <a id="nativeDeAllocator:(CPtrAddress)⇒Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">nativeDeAllocator</span><span class="result">: (<span class="extype" name="org.apache.mxnet.Base.CPtrAddress">CPtrAddress</span>) ⇒ <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@nativeDeAllocator:org.apache.mxnet.Base.CPtrAddress=&gt;Int" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Function Pointer to the NativeDeAllocator of nativeAddress
+</p><div class="fullcomment"><div class="comment cmt"><p>Function Pointer to the NativeDeAllocator of nativeAddress
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.FeedForward">FeedForward</a> → NativeResource</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#predExec" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="predExec:org.apache.mxnet.Executor"></a>
+      <a id="predExec:Executor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predExec</span><span class="result">: <a href="Executor.html" class="extype" name="org.apache.mxnet.Executor">Executor</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@predExec:org.apache.mxnet.Executor" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.FeedForward#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(data:org.apache.mxnet.DataIter,numBatch:Int):Array[org.apache.mxnet.NDArray]"></a>
+      <a id="predict(DataIter,Int):Array[NDArray]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="data">data: <a href="DataIter.html" class="extype" name="org.apache.mxnet.DataIter">DataIter</a></span>, <span name="numBatch">numBatch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">1</span></span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@predict(data:org.apache.mxnet.DataIter,numBatch:Int):Array[org.apache.mxnet.NDArray]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Run the prediction, always only use one device.</p><div class="fullcomment"><div class="comment cmt"><p>Run the prediction, always only use one device.</p></div><dl class="paramcmts block"><dt class="param">data</dt><dd class="cmt"><p>eval data</p></dd><dt class="param">numBatch</dt><dd class="cmt"><p>the number of batch to run. Go though all batches if set -1</p></dd><dt>returns</dt><dd class="cmt"><p>The predicted value of the output.
+        Note the network may have multiple outputs, thus it return an array of <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></p></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#ref" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ref:org.apache.mxnet.NativeResourceRef"></a>
+      <a id="ref:NativeResourceRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ref</span><span class="result">: <span class="extype" name="org.apache.mxnet.NativeResourceRef">NativeResourceRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@ref:org.apache.mxnet.NativeResourceRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Call NativeResource.register to get the reference
+</p><div class="fullcomment"><div class="comment cmt"><p>Call NativeResource.register to get the reference
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.FeedForward">FeedForward</a> → NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.NativeResource#register" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="register():org.apache.mxnet.NativeResourceRef"></a>
+      <a id="register():NativeResourceRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">register</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.mxnet.NativeResourceRef">NativeResourceRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@register():org.apache.mxnet.NativeResourceRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Register this object for PhantomReference tracking and in
+ResourceScope if used inside ResourceScope.</p><div class="fullcomment"><div class="comment cmt"><p>Register this object for PhantomReference tracking and in
+ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>NativeResourceRef that tracks reachability of this object
+        using PhantomReference</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd>NativeResource</dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#save" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="save(prefix:String,epoch:Int):Unit"></a>
+      <a id="save(String,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="params">(<span name="prefix">prefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">this.numEpoch</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@save(prefix:String,epoch:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Checkpoint the model checkpoint into file.</p><div class="fullcomment"><div class="comment cmt"><p>Checkpoint the model checkpoint into file.
+You can also use pickle to do the job if you only work on python.
+The advantage of load/save is the file is language agnostic.
+This means the file saved using save can be loaded by other language binding of mxnet.
+You also get the benefit being able to directly load/save from cloud storage(S3, HDFS)</p></div><dl class="paramcmts block"><dt class="param">prefix</dt><dd class="cmt"><p>Prefix of model name.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>
+- <code><code>prefix-symbol.json</code></code> will be saved for symbol.
+- <code><code>prefix-epoch.params</code></code> will be saved for parameters.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p>FeedForward.load : the method to load the model back.</p></span></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#serialize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="serialize():Array[Byte]"></a>
+      <a id="serialize():Array[Byte]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serialize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Byte">Byte</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@serialize():Array[Byte]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Serialize the model to Java byte array</p><div class="fullcomment"><div class="comment cmt"><p>Serialize the model to Java byte array</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>serialized model bytes</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#setMonitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setMonitor(m:org.apache.mxnet.Monitor):Unit"></a>
+      <a id="setMonitor(Monitor):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setMonitor</span><span class="params">(<span name="m">m: <a href="Monitor.html" class="extype" name="org.apache.mxnet.Monitor">Monitor</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@setMonitor(m:org.apache.mxnet.Monitor):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@toString():String" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.WarnIfNotDisposed#tracingEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="tracingEnabled:Boolean"></a>
+      <a id="tracingEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">tracingEnabled</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@tracingEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></dd></dl></div>
+    </li><li name="org.apache.mxnet.FeedForward#unsetMonitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="unsetMonitor():Unit"></a>
+      <a id="unsetMonitor():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unsetMonitor</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@unsetMonitor():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.FeedForward@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.apache.mxnet.NativeResource">
+              <h3>Inherited from <span class="extype" name="org.apache.mxnet.NativeResource">NativeResource</span></h3>
+            </div><div class="parent" name="org.apache.mxnet.WarnIfNotDisposed">
+              <h3>Inherited from <a href="WarnIfNotDisposed.html" class="extype" name="org.apache.mxnet.WarnIfNotDisposed">WarnIfNotDisposed</a></h3>
+            </div><div class="parent" name="java.lang.AutoCloseable">
+              <h3>Inherited from <span class="extype" name="java.lang.AutoCloseable">AutoCloseable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

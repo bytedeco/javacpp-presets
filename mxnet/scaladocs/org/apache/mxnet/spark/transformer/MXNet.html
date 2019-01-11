@@ -1,0 +1,1691 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>MXNet - JavaCPP Presets for MXNet 1.4.0.rc0-1.4.4 API - org.apache.mxnet.spark.transformer.MXNet</title>
+          <meta name="description" content="MXNet - JavaCPP Presets for MXNet 1.4.0.rc0 - 1.4.4 API - org.apache.mxnet.spark.transformer.MXNet" />
+          <meta name="keywords" content="MXNet JavaCPP Presets for MXNet 1.4.0.rc0 1.4.4 API org.apache.mxnet.spark.transformer.MXNet" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'org.apache.mxnet.spark.transformer.MXNet';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Class" src="../../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="org">org</a>.<a href="../../../package.html" class="extype" name="org.apache">apache</a>.<a href="../../package.html" class="extype" name="org.apache.mxnet">mxnet</a>.<a href="../package.html" class="extype" name="org.apache.mxnet.spark">spark</a>.<a href="package.html" class="extype" name="org.apache.mxnet.spark.transformer">transformer</a></p>
+        <h1>MXNet</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.apache.mxnet.spark.transformer">package transformer</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MXNet</span><span class="result"> extends <span class="extype" name="org.apache.spark.ml.Predictor">Predictor</span>[<span class="extype" name="org.apache.spark.mllib.linalg.Vector">Vector</span>, <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>, <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>]</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="org.apache.spark.ml.Predictor">Predictor</span>[<span class="extype" name="org.apache.spark.mllib.linalg.Vector">Vector</span>, <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>, <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>], <span class="extype" name="org.apache.spark.ml.PredictorParams">PredictorParams</span>, <span class="extype" name="org.apache.spark.ml.param.shared.HasPredictionCol">HasPredictionCol</span>, <span class="extype" name="org.apache.spark.ml.param.shared.HasFeaturesCol">HasFeaturesCol</span>, <span class="extype" name="org.apache.spark.ml.param.shared.HasLabelCol">HasLabelCol</span>, <span class="extype" name="org.apache.spark.ml.Estimator">Estimator</span>[<a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>], <span class="extype" name="org.apache.spark.ml.PipelineStage">PipelineStage</span>, <span class="extype" name="org.apache.spark.Logging">Logging</span>, <span class="extype" name="org.apache.spark.ml.param.Params">Params</span>, <span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="org.apache.spark.ml.util.Identifiable">Identifiable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.apache.mxnet.spark.transformer.MXNet"><span>MXNet</span></li><li class="in" name="org.apache.spark.ml.Predictor"><span>Predictor</span></li><li class="in" name="org.apache.spark.ml.PredictorParams"><span>PredictorParams</span></li><li class="in" name="org.apache.spark.ml.param.shared.HasPredictionCol"><span>HasPredictionCol</span></li><li class="in" name="org.apache.spark.ml.param.shared.HasFeaturesCol"><span>HasFeaturesCol</span></li><li class="in" name="org.apache.spark.ml.param.shared.HasLabelCol"><span>HasLabelCol</span></li><li class="in" name="org.apache.spark.ml.Estimator"><span>Estimator</span></li><li class="in" name="org.apache.spark.ml.PipelineStage"><span>PipelineStage</span></li><li class="in" name="org.apache.spark.Logging"><span>Logging</span></li><li class="in" name="org.apache.spark.ml.param.Params"><span>Params</span></li><li class="in" name="scala.Serializable"><span>Serializable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="org.apache.spark.ml.util.Identifiable"><span>Identifiable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.apache.mxnet.spark.transformer.MXNet#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;():org.apache.mxnet.spark.transformer.MXNet"></a>
+      <a id="&lt;init&gt;:MXNet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">MXNet</span><span class="params">()</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@&lt;init&gt;():org.apache.mxnet.spark.transformer.MXNet" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#$" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="$[T](param:org.apache.spark.ml.param.Param[T]):T"></a>
+      <a id="$[T](Param[T]):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">$</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.$.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Params.$.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@$[T](param:org.apache.spark.ml.param.Param[T]):T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#clear" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clear(param:org.apache.spark.ml.param.Param[_]):Params.this.type"></a>
+      <a id="clear(Param[_]):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clear</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[_]</span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@clear(param:org.apache.spark.ml.param.Param[_]):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#copy" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copy(extra:org.apache.spark.ml.param.ParamMap):org.apache.mxnet.spark.transformer.MXNet"></a>
+      <a id="copy(ParamMap):MXNet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copy</span><span class="params">(<span name="extra">extra: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@copy(extra:org.apache.spark.ml.param.ParamMap):org.apache.mxnet.spark.transformer.MXNet" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a> → Predictor → Estimator → PipelineStage → Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#copyValues" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copyValues[T&lt;:org.apache.spark.ml.param.Params](to:T,extra:org.apache.spark.ml.param.ParamMap):T"></a>
+      <a id="copyValues[T&lt;:Params](T,ParamMap):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copyValues</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="org.apache.spark.ml.param.Params">Params</span></span>]</span><span class="params">(<span name="to">to: <span class="extype" name="org.apache.spark.ml.param.Params.copyValues.T">T</span></span>, <span name="extra">extra: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Params.copyValues.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@copyValues[T&lt;:org.apache.spark.ml.param.Params](to:T,extra:org.apache.spark.ml.param.ParamMap):T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#defaultCopy" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultCopy[T&lt;:org.apache.spark.ml.param.Params](extra:org.apache.spark.ml.param.ParamMap):T"></a>
+      <a id="defaultCopy[T&lt;:Params](ParamMap):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultCopy</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="org.apache.spark.ml.param.Params">Params</span></span>]</span><span class="params">(<span name="extra">extra: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Params.defaultCopy.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@defaultCopy[T&lt;:org.apache.spark.ml.param.Params](extra:org.apache.spark.ml.param.ParamMap):T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#explainParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="explainParam(param:org.apache.spark.ml.param.Param[_]):String"></a>
+      <a id="explainParam(Param[_]):String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">explainParam</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[_]</span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@explainParam(param:org.apache.spark.ml.param.Param[_]):String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#explainParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="explainParams():String"></a>
+      <a id="explainParams():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">explainParams</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@explainParams():String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.Predictor#extractLabeledPoints" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="extractLabeledPoints(dataset:&lt;?&gt;):org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]"></a>
+      <a id="extractLabeledPoints(DataFrame):RDD[LabeledPoint]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extractLabeledPoints</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.rdd.RDD">RDD</span>[<span class="extype" name="org.apache.spark.mllib.regression.LabeledPoint">LabeledPoint</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@extractLabeledPoints(dataset:org.apache.spark.sql.DataFrame):org.apache.spark.rdd.RDD[org.apache.spark.mllib.regression.LabeledPoint]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Predictor</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#extractParamMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="extractParamMap():org.apache.spark.ml.param.ParamMap"></a>
+      <a id="extractParamMap():ParamMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extractParamMap</span><span class="params">()</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@extractParamMap():org.apache.spark.ml.param.ParamMap" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#extractParamMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="extractParamMap(extra:org.apache.spark.ml.param.ParamMap):org.apache.spark.ml.param.ParamMap"></a>
+      <a id="extractParamMap(ParamMap):ParamMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">extractParamMap</span><span class="params">(<span name="extra">extra: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@extractParamMap(extra:org.apache.spark.ml.param.ParamMap):org.apache.spark.ml.param.ParamMap" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasFeaturesCol#featuresCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="featuresCol:org.apache.spark.ml.param.Param[String]"></a>
+      <a id="featuresCol:Param[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">featuresCol</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@featuresCol:org.apache.spark.ml.param.Param[String]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasFeaturesCol</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.spark.ml.Predictor#fit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fit(dataset:org.apache.spark.sql.DataFrame):M"></a>
+      <a id="fit(DataFrame):MXNetModelWrap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>)</span><span class="result">: <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@fit(dataset:org.apache.spark.sql.DataFrame):M" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Predictor → Estimator</dd></dl></div>
+    </li><li name="org.apache.spark.ml.Estimator#fit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fit(dataset:org.apache.spark.sql.DataFrame,paramMaps:Array[org.apache.spark.ml.param.ParamMap]):Seq[M]"></a>
+      <a id="fit(DataFrame,Array[ParamMap]):Seq[MXNetModelWrap]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="paramMaps">paramMaps: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@fit(dataset:org.apache.spark.sql.DataFrame,paramMaps:Array[org.apache.spark.ml.param.ParamMap]):Seq[M]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Estimator</dd></dl></div>
+    </li><li name="org.apache.spark.ml.Estimator#fit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fit(dataset:org.apache.spark.sql.DataFrame,paramMap:org.apache.spark.ml.param.ParamMap):M"></a>
+      <a id="fit(DataFrame,ParamMap):MXNetModelWrap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="paramMap">paramMap: <span class="extype" name="org.apache.spark.ml.param.ParamMap">ParamMap</span></span>)</span><span class="result">: <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@fit(dataset:org.apache.spark.sql.DataFrame,paramMap:org.apache.spark.ml.param.ParamMap):M" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Estimator</dd></dl></div>
+    </li><li name="org.apache.spark.ml.Estimator#fit" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fit(dataset:org.apache.spark.sql.DataFrame,firstParamPair:org.apache.spark.ml.param.ParamPair[_],otherParamPairs:org.apache.spark.ml.param.ParamPair[_]*):M"></a>
+      <a id="fit(DataFrame,ParamPair[_],ParamPair[_]*):MXNetModelWrap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fit</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>, <span name="firstParamPair">firstParamPair: <span class="extype" name="org.apache.spark.ml.param.ParamPair">ParamPair</span>[_]</span>, <span name="otherParamPairs">otherParamPairs: <span class="extype" name="org.apache.spark.ml.param.ParamPair">ParamPair</span>[_]*</span>)</span><span class="result">: <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@fit(dataset:org.apache.spark.sql.DataFrame,firstParamPair:org.apache.spark.ml.param.ParamPair[_],otherParamPairs:org.apache.spark.ml.param.ParamPair[_]*):M" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Estimator</dd><dt>Annotations</dt><dd>
+                <span class="name">@varargs</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="get[T](param:org.apache.spark.ml.param.Param[T]):Option[T]"></a>
+      <a id="get[T](Param[T]):Option[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">get</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.get.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.apache.spark.ml.param.Params.get.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@get[T](param:org.apache.spark.ml.param.Param[T]):Option[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#getDefault" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getDefault[T](param:org.apache.spark.ml.param.Param[T]):Option[T]"></a>
+      <a id="getDefault[T](Param[T]):Option[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.getDefault.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.apache.spark.ml.param.Params.getDefault.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getDefault[T](param:org.apache.spark.ml.param.Param[T]):Option[T]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasFeaturesCol#getFeaturesCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getFeaturesCol:String"></a>
+      <a id="getFeaturesCol:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getFeaturesCol</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getFeaturesCol:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasFeaturesCol</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasLabelCol#getLabelCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getLabelCol:String"></a>
+      <a id="getLabelCol:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLabelCol</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getLabelCol:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasLabelCol</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#getOrDefault" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getOrDefault[T](param:org.apache.spark.ml.param.Param[T]):T"></a>
+      <a id="getOrDefault[T](Param[T]):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.getOrDefault.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Params.getOrDefault.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getOrDefault[T](param:org.apache.spark.ml.param.Param[T]):T" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#getParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getParam(paramName:String):org.apache.spark.ml.param.Param[Any]"></a>
+      <a id="getParam(String):Param[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getParam</span><span class="params">(<span name="paramName">paramName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="scala.Any">Any</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getParam(paramName:String):org.apache.spark.ml.param.Param[Any]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasPredictionCol#getPredictionCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getPredictionCol:String"></a>
+      <a id="getPredictionCol:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getPredictionCol</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@getPredictionCol:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasPredictionCol</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#hasDefault" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hasDefault[T](param:org.apache.spark.ml.param.Param[T]):Boolean"></a>
+      <a id="hasDefault[T](Param[T]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hasDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.hasDefault.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@hasDefault[T](param:org.apache.spark.ml.param.Param[T]):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#hasParam" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hasParam(paramName:String):Boolean"></a>
+      <a id="hasParam(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hasParam</span><span class="params">(<span name="paramName">paramName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@hasParam(paramName:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#isDefined" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDefined(param:org.apache.spark.ml.param.Param[_]):Boolean"></a>
+      <a id="isDefined(Param[_]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDefined</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[_]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@isDefined(param:org.apache.spark.ml.param.Param[_]):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#isSet" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isSet(param:org.apache.spark.ml.param.Param[_]):Boolean"></a>
+      <a id="isSet(Param[_]):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isSet</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[_]</span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@isSet(param:org.apache.spark.ml.param.Param[_]):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#isTraceEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isTraceEnabled():Boolean"></a>
+      <a id="isTraceEnabled():Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isTraceEnabled</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@isTraceEnabled():Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasLabelCol#labelCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="labelCol:org.apache.spark.ml.param.Param[String]"></a>
+      <a id="labelCol:Param[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">labelCol</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@labelCol:org.apache.spark.ml.param.Param[String]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasLabelCol</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#log" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="log:org.slf4j.Logger"></a>
+      <a id="log:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">log</span><span class="result">: <span class="extype" name="org.slf4j.Logger">Logger</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@log:org.slf4j.Logger" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logDebug" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logDebug(msg:=&gt;String,throwable:Throwable):Unit"></a>
+      <a id="logDebug(⇒String,Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logDebug</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logDebug(msg:=&gt;String,throwable:Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logDebug" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logDebug(msg:=&gt;String):Unit"></a>
+      <a id="logDebug(⇒String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logDebug</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logDebug(msg:=&gt;String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logError" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logError(msg:=&gt;String,throwable:Throwable):Unit"></a>
+      <a id="logError(⇒String,Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logError</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logError(msg:=&gt;String,throwable:Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logError" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logError(msg:=&gt;String):Unit"></a>
+      <a id="logError(⇒String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logError</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logError(msg:=&gt;String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logInfo(msg:=&gt;String,throwable:Throwable):Unit"></a>
+      <a id="logInfo(⇒String,Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logInfo</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logInfo(msg:=&gt;String,throwable:Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logInfo" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logInfo(msg:=&gt;String):Unit"></a>
+      <a id="logInfo(⇒String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logInfo</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logInfo(msg:=&gt;String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logName" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logName:String"></a>
+      <a id="logName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logName:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logTrace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logTrace(msg:=&gt;String,throwable:Throwable):Unit"></a>
+      <a id="logTrace(⇒String,Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logTrace</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logTrace(msg:=&gt;String,throwable:Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logTrace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logTrace(msg:=&gt;String):Unit"></a>
+      <a id="logTrace(⇒String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logTrace</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logTrace(msg:=&gt;String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logWarning" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logWarning(msg:=&gt;String,throwable:Throwable):Unit"></a>
+      <a id="logWarning(⇒String,Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logWarning</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logWarning(msg:=&gt;String,throwable:Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="org.apache.spark.Logging#logWarning" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logWarning(msg:=&gt;String):Unit"></a>
+      <a id="logWarning(⇒String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logWarning</span><span class="params">(<span name="msg">msg: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@logWarning(msg:=&gt;String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#params" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="params:Array[org.apache.spark.ml.param.Param[_]]"></a>
+      <a id="params:Array[Param[_]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">params</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[_]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@params:Array[org.apache.spark.ml.param.Param[_]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.shared.HasPredictionCol#predictionCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predictionCol:org.apache.spark.ml.param.Param[String]"></a>
+      <a id="predictionCol:Param[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predictionCol</span><span class="result">: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@predictionCol:org.apache.spark.ml.param.Param[String]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>HasPredictionCol</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#set" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(paramPair:org.apache.spark.ml.param.ParamPair[_]):Params.this.type"></a>
+      <a id="set(ParamPair[_]):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="paramPair">paramPair: <span class="extype" name="org.apache.spark.ml.param.ParamPair">ParamPair</span>[_]</span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@set(paramPair:org.apache.spark.ml.param.ParamPair[_]):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#set" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set(param:String,value:Any):Params.this.type"></a>
+      <a id="set(String,Any):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="param">param: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@set(param:String,value:Any):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="set[T](param:org.apache.spark.ml.param.Param[T],value:T):Params.this.type"></a>
+      <a id="set[T](Param[T],T):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.set.T">T</span>]</span>, <span name="value">value: <span class="extype" name="org.apache.spark.ml.param.Params.set.T">T</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@set[T](param:org.apache.spark.ml.param.Param[T],value:T):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setBatchSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setBatchSize(batchSize:Int):MXNet.this.type"></a>
+      <a id="setBatchSize(Int):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setBatchSize</span><span class="params">(<span name="batchSize">batchSize: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setBatchSize(batchSize:Int):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setContext(ctx:Array[org.apache.mxnet.Context]):MXNet.this.type"></a>
+      <a id="setContext(Array[Context]):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setContext</span><span class="params">(<span name="ctx">ctx: <span class="extype" name="scala.Array">Array</span>[<a href="../../Context.html" class="extype" name="org.apache.mxnet.Context">Context</a>]</span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setContext(ctx:Array[org.apache.mxnet.Context]):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setDataName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setDataName(name:String):MXNet.this.type"></a>
+      <a id="setDataName(String):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setDataName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setDataName(name:String):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.spark.ml.param.Params#setDefault" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setDefault(paramPairs:org.apache.spark.ml.param.ParamPair[_]*):Params.this.type"></a>
+      <a id="setDefault(ParamPair[_]*):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setDefault</span><span class="params">(<span name="paramPairs">paramPairs: <span class="extype" name="org.apache.spark.ml.param.ParamPair">ParamPair</span>[_]*</span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setDefault(paramPairs:org.apache.spark.ml.param.ParamPair[_]*):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#setDefault" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setDefault[T](param:org.apache.spark.ml.param.Param[T],value:T):Params.this.type"></a>
+      <a id="setDefault[T](Param[T],T):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setDefault</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <span class="extype" name="org.apache.spark.ml.param.Param">Param</span>[<span class="extype" name="org.apache.spark.ml.param.Params.setDefault.T">T</span>]</span>, <span name="value">value: <span class="extype" name="org.apache.spark.ml.param.Params.setDefault.T">T</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setDefault[T](param:org.apache.spark.ml.param.Param[T],value:T):Params.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setDimension" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setDimension(dimension:org.apache.mxnet.Shape):MXNet.this.type"></a>
+      <a id="setDimension(Shape):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setDimension</span><span class="params">(<span name="dimension">dimension: <a href="../../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setDimension(dimension:org.apache.mxnet.Shape):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setExecutorJars" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setExecutorJars(jars:String):MXNet.this.type"></a>
+      <a id="setExecutorJars(String):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setExecutorJars</span><span class="params">(<span name="jars">jars: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setExecutorJars(jars:String):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">These jars are required by the KVStores at runtime.</p><div class="fullcomment"><div class="comment cmt"><p>These jars are required by the KVStores at runtime.
+They will be uploaded and distributed to each node automatically</p></div><dl class="paramcmts block"><dt class="param">jars</dt><dd class="cmt"><p>jars required by the KVStore at runtime.</p></dd></dl></div>
+    </li><li name="org.apache.spark.ml.Predictor#setFeaturesCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setFeaturesCol(value:&lt;?&gt;):Learner"></a>
+      <a id="setFeaturesCol(String):MXNet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setFeaturesCol</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setFeaturesCol(value:String):Learner" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Predictor</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setJava" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setJava(java:String):MXNet.this.type"></a>
+      <a id="setJava(String):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setJava</span><span class="params">(<span name="java">java: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setJava(java:String):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.spark.ml.Predictor#setLabelCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setLabelCol(value:&lt;?&gt;):Learner"></a>
+      <a id="setLabelCol(String):MXNet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setLabelCol</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setLabelCol(value:String):Learner" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Predictor</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setLabelName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setLabelName(name:String):MXNet.this.type"></a>
+      <a id="setLabelName(String):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setLabelName</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setLabelName(name:String):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setNetwork" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setNetwork(network:org.apache.mxnet.Symbol):MXNet.this.type"></a>
+      <a id="setNetwork(Symbol):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNetwork</span><span class="params">(<span name="network">network: <a href="../../Symbol.html" class="extype" name="org.apache.mxnet.Symbol">Symbol</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setNetwork(network:org.apache.mxnet.Symbol):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setNumEpoch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setNumEpoch(numEpoch:Int):MXNet.this.type"></a>
+      <a id="setNumEpoch(Int):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNumEpoch</span><span class="params">(<span name="numEpoch">numEpoch: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setNumEpoch(numEpoch:Int):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setNumServer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setNumServer(numServer:Int):MXNet.this.type"></a>
+      <a id="setNumServer(Int):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNumServer</span><span class="params">(<span name="numServer">numServer: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setNumServer(numServer:Int):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setNumWorker" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="setNumWorker(numWorker:Int):MXNet.this.type"></a>
+      <a id="setNumWorker(Int):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setNumWorker</span><span class="params">(<span name="numWorker">numWorker: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setNumWorker(numWorker:Int):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.spark.ml.Predictor#setPredictionCol" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setPredictionCol(value:&lt;?&gt;):Learner"></a>
+      <a id="setPredictionCol(String):MXNet"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setPredictionCol</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setPredictionCol(value:String):Learner" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Predictor</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#setTimeout" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setTimeout(timeout:Int):MXNet.this.type"></a>
+      <a id="setTimeout(Int):MXNet.this.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setTimeout</span><span class="params">(<span name="timeout">timeout: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>.this.type</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@setTimeout(timeout:Int):MXNet.this.type" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">The application (including parameter scheduler &amp; servers)
+will exist if it hasn't received heart beat for over timeout seconds</p><div class="fullcomment"><div class="comment cmt"><p>The application (including parameter scheduler &amp; servers)
+will exist if it hasn't received heart beat for over timeout seconds</p></div><dl class="paramcmts block"><dt class="param">timeout</dt><dd class="cmt"><p>timeout in seconds (default 300)</p></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.spark.ml.util.Identifiable#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Identifiable → AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#train" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="train(dataset:org.apache.spark.sql.DataFrame):org.apache.mxnet.spark.transformer.MXNetModelWrap"></a>
+      <a id="train(DataFrame):MXNetModelWrap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">train</span><span class="params">(<span name="dataset">dataset: <span class="extype" name="org.apache.spark.sql.DataFrame">DataFrame</span></span>)</span><span class="result">: <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@train(dataset:org.apache.spark.sql.DataFrame):org.apache.mxnet.spark.transformer.MXNetModelWrap" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a> → Predictor</dd></dl></div>
+    </li><li name="org.apache.spark.ml.Predictor#transformSchema" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="transformSchema(schema:org.apache.spark.sql.types.StructType):org.apache.spark.sql.types.StructType"></a>
+      <a id="transformSchema(StructType):StructType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transformSchema</span><span class="params">(<span name="schema">schema: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@transformSchema(schema:org.apache.spark.sql.types.StructType):org.apache.spark.sql.types.StructType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Predictor → PipelineStage</dd></dl></div>
+    </li><li name="org.apache.spark.ml.PipelineStage#transformSchema" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="transformSchema(schema:org.apache.spark.sql.types.StructType,logging:Boolean):org.apache.spark.sql.types.StructType"></a>
+      <a id="transformSchema(StructType,Boolean):StructType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">transformSchema</span><span class="params">(<span name="schema">schema: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>, <span name="logging">logging: <span class="extype" name="scala.Boolean">Boolean</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@transformSchema(schema:org.apache.spark.sql.types.StructType,logging:Boolean):org.apache.spark.sql.types.StructType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>PipelineStage</dd><dt>Annotations</dt><dd>
+                <span class="name">@DeveloperApi</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.spark.transformer.MXNet#uid" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="uid:String"></a>
+      <a id="uid:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">uid</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@uid:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a> → Identifiable</dd></dl></div>
+    </li><li name="org.apache.spark.ml.PredictorParams#validateAndTransformSchema" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validateAndTransformSchema(schema:org.apache.spark.sql.types.StructType,fitting:Boolean,featuresDataType:org.apache.spark.sql.types.DataType):org.apache.spark.sql.types.StructType"></a>
+      <a id="validateAndTransformSchema(StructType,Boolean,DataType):StructType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateAndTransformSchema</span><span class="params">(<span name="schema">schema: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>, <span name="fitting">fitting: <span class="extype" name="scala.Boolean">Boolean</span></span>, <span name="featuresDataType">featuresDataType: <span class="extype" name="org.apache.spark.sql.types.DataType">DataType</span></span>)</span><span class="result">: <span class="extype" name="org.apache.spark.sql.types.StructType">StructType</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@validateAndTransformSchema(schema:org.apache.spark.sql.types.StructType,fitting:Boolean,featuresDataType:org.apache.spark.sql.types.DataType):org.apache.spark.sql.types.StructType" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>PredictorParams</dd></dl></div>
+    </li><li name="org.apache.spark.ml.param.Params#validateParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="validateParams():Unit"></a>
+      <a id="validateParams():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateParams</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@validateParams():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Params</dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.spark.transformer.MXNet@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="org.apache.spark.ml.Predictor">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.Predictor">Predictor</span>[<span class="extype" name="org.apache.spark.mllib.linalg.Vector">Vector</span>, <a href="" class="extype" name="org.apache.mxnet.spark.transformer.MXNet">MXNet</a>, <a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>]</h3>
+            </div><div class="parent" name="org.apache.spark.ml.PredictorParams">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.PredictorParams">PredictorParams</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.param.shared.HasPredictionCol">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.param.shared.HasPredictionCol">HasPredictionCol</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.param.shared.HasFeaturesCol">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.param.shared.HasFeaturesCol">HasFeaturesCol</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.param.shared.HasLabelCol">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.param.shared.HasLabelCol">HasLabelCol</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.Estimator">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.Estimator">Estimator</span>[<a href="MXNetModelWrap.html" class="extype" name="org.apache.mxnet.spark.transformer.MXNetModelWrap">MXNetModelWrap</a>]</h3>
+            </div><div class="parent" name="org.apache.spark.ml.PipelineStage">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.PipelineStage">PipelineStage</span></h3>
+            </div><div class="parent" name="org.apache.spark.Logging">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.Logging">Logging</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.param.Params">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.param.Params">Params</span></h3>
+            </div><div class="parent" name="scala.Serializable">
+              <h3>Inherited from <span class="extype" name="scala.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="org.apache.spark.ml.util.Identifiable">
+              <h3>Inherited from <span class="extype" name="org.apache.spark.ml.util.Identifiable">Identifiable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

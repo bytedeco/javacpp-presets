@@ -1,0 +1,780 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>DataParallelExecutorGroup - JavaCPP Presets for MXNet 1.4.0.rc0-1.4.4 API - org.apache.mxnet.module.DataParallelExecutorGroup</title>
+          <meta name="description" content="DataParallelExecutorGroup - JavaCPP Presets for MXNet 1.4.0.rc0 - 1.4.4 API - org.apache.mxnet.module.DataParallelExecutorGroup" />
+          <meta name="keywords" content="DataParallelExecutorGroup JavaCPP Presets for MXNet 1.4.0.rc0 1.4.4 API org.apache.mxnet.module.DataParallelExecutorGroup" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'org.apache.mxnet.module.DataParallelExecutorGroup';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="type">
+      <div id="definition">
+        <img alt="Class" src="../../../../lib/class_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="org">org</a>.<a href="../../package.html" class="extype" name="org.apache">apache</a>.<a href="../package.html" class="extype" name="org.apache.mxnet">mxnet</a>.<a href="package.html" class="extype" name="org.apache.mxnet.module">module</a></p>
+        <h1>DataParallelExecutorGroup</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="org.apache.mxnet.module">package module</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">DataParallelExecutorGroup</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>DataParallelExecutorGroup is a group of executors that lives on a group of devices.
+This is a helper class used to implement data parallelism. Each mini-batch will
+be split and run on the devices.</p></div><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="org.apache.mxnet.module.DataParallelExecutorGroup"><span>DataParallelExecutorGroup</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show All</span></li>
+            </ol>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="!=(x$1:Any):Boolean"></a>
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="##():Int"></a>
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@##():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="==(x$1:Any):Boolean"></a>
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#backward" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="backward(outGrads:Array[org.apache.mxnet.NDArray]):Unit"></a>
+      <a id="backward(Array[NDArray]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">backward</span><span class="params">(<span name="outGrads">outGrads: <span class="extype" name="scala.Array">Array</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>] = <span class="symbol">null</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@backward(outGrads:Array[org.apache.mxnet.NDArray]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Run backward on all devices.</p><div class="fullcomment"><div class="comment cmt"><p>Run backward on all devices. A backward should be called after
+a call to the forward function. Backward cannot be called unless
+<code>this.for_training</code> is <code>True</code>.</p></div><dl class="paramcmts block"><dt class="param">outGrads</dt><dd class="cmt"><p>Gradient on the outputs to be propagated back.
+                This parameter is only needed when bind is called
+                on outputs that are not a loss function.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#bindExec" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="bindExec(dataShapes:IndexedSeq[org.apache.mxnet.DataDesc],labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]],sharedGroup:Option[org.apache.mxnet.module.DataParallelExecutorGroup],reshape:Boolean):Unit"></a>
+      <a id="bindExec(IndexedSeq[DataDesc],Option[IndexedSeq[DataDesc]],Option[DataParallelExecutorGroup],Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">bindExec</span><span class="params">(<span name="dataShapes">dataShapes: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]</span>, <span name="labelShapes">labelShapes: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]]</span>, <span name="sharedGroup">sharedGroup: <span class="extype" name="scala.Option">Option</span>[<a href="" class="extype" name="org.apache.mxnet.module.DataParallelExecutorGroup">DataParallelExecutorGroup</a>]</span>, <span name="reshape">reshape: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@bindExec(dataShapes:IndexedSeq[org.apache.mxnet.DataDesc],labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]],sharedGroup:Option[org.apache.mxnet.module.DataParallelExecutorGroup],reshape:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bind executors on their respective devices.</p><div class="fullcomment"><div class="comment cmt"><p>Bind executors on their respective devices.</p></div><dl class="paramcmts block"><dt class="param">dataShapes</dt><dd class="cmt"><p>DataDesc for input data.</p></dd><dt class="param">labelShapes</dt><dd class="cmt"><p>DataDesc for input labels.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clone():Object"></a>
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#dataShapes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="dataShapes:IndexedSeq[org.apache.mxnet.DataDesc]"></a>
+      <a id="dataShapes:IndexedSeq[DataDesc]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">dataShapes</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@dataShapes:IndexedSeq[org.apache.mxnet.DataDesc]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Should be a list of (name, shape) tuples, for the shapes of data.</p><div class="fullcomment"><div class="comment cmt"><p>Should be a list of (name, shape) tuples, for the shapes of data.
+                  Note the order is important and should be the same as the order that
+                  the <code>DataIter</code> provide the data.</p></div></div>
+    </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="eq(x$1:AnyRef):Boolean"></a>
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="equals(x$1:Any):Boolean"></a>
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Any">Any</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="finalize():Unit"></a>
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="symbol">classOf[java.lang.Throwable]</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#forward" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="forward(dataBatch:org.apache.mxnet.DataBatch,isTrain:Option[Boolean]):Unit"></a>
+      <a id="forward(DataBatch,Option[Boolean]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">forward</span><span class="params">(<span name="dataBatch">dataBatch: <a href="../DataBatch.html" class="extype" name="org.apache.mxnet.DataBatch">DataBatch</a></span>, <span name="isTrain">isTrain: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@forward(dataBatch:org.apache.mxnet.DataBatch,isTrain:Option[Boolean]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Split <code>dataBatch</code> according to workload and run forward on each devices.</p><div class="fullcomment"><div class="comment cmt"><p>Split <code>dataBatch</code> according to workload and run forward on each devices.</p></div><dl class="paramcmts block"><dt class="param">isTrain</dt><dd class="cmt"><p>The hint for the backend, indicating whether we are during training phase.
+               Default is <code>None</code>, then the value <code>self.for_training</code> will be used.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getBatchSize" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getBatchSize:Int"></a>
+      <a id="getBatchSize:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getBatchSize</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getBatchSize:Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getClass():Class[_]"></a>
+      <a id="getClass():Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getInputGrads" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getInputGrads():IndexedSeq[IndexedSeq[org.apache.mxnet.NDArray]]"></a>
+      <a id="getInputGrads():IndexedSeq[IndexedSeq[NDArray]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getInputGrads</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getInputGrads():IndexedSeq[IndexedSeq[org.apache.mxnet.NDArray]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the gradients to the inputs, computed in the previous backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Get the gradients to the inputs, computed in the previous backward computation.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>In the case when data-parallelism is used,
+        the grads will be collected from multiple devices.
+        The results will look like <code>[ [grad1_dev1, grad1_dev2], [grad2_dev1, grad2_dev2] ]</code>,
+        those <code>NDArray</code> might live on different devices.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getInputGradsMerged" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getInputGradsMerged():IndexedSeq[org.apache.mxnet.NDArray]"></a>
+      <a id="getInputGradsMerged():IndexedSeq[NDArray]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getInputGradsMerged</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getInputGradsMerged():IndexedSeq[org.apache.mxnet.NDArray]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the gradients to the inputs, computed in the previous backward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Get the gradients to the inputs, computed in the previous backward computation.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>In the case when data-parallelism is used,
+        the grads will be merged from multiple devices,
+        as they look like from a single executor.
+        The results will look like <code>[grad1, grad2]</code></p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getOutputShapes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="getOutputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]"></a>
+      <a id="getOutputShapes:IndexedSeq[(String,Shape)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOutputShapes</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getOutputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getOutputs" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getOutputs():IndexedSeq[IndexedSeq[org.apache.mxnet.NDArray]]"></a>
+      <a id="getOutputs():IndexedSeq[IndexedSeq[NDArray]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOutputs</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getOutputs():IndexedSeq[IndexedSeq[org.apache.mxnet.NDArray]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get outputs of the previous forward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Get outputs of the previous forward computation.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>In the case when data-parallelism is used,
+        the outputs will be collected from multiple devices.
+        The results will look like <code>[ [out1_dev1, out1_dev2], [out2_dev1, out2_dev2] ]</code>,
+        those <code>NDArray</code> might live on different devices.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getOutputsMerged" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getOutputsMerged():IndexedSeq[org.apache.mxnet.NDArray]"></a>
+      <a id="getOutputsMerged():IndexedSeq[NDArray]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOutputsMerged</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getOutputsMerged():IndexedSeq[org.apache.mxnet.NDArray]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get outputs of the previous forward computation.</p><div class="fullcomment"><div class="comment cmt"><p>Get outputs of the previous forward computation.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>In the case when data-parallelism is used,
+        the outputs will be merged from multiple devices,
+        as they look like from a single executor.
+        The results will look like <code>[out1, out2]</code></p></dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#getParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getParams(argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray]):Unit"></a>
+      <a id="getParams(Map[String,NDArray],Map[String,NDArray]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getParams</span><span class="params">(<span name="argParams">argParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>, <span name="auxParams">auxParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@getParams(argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Copy data from each executor to <code>arg_params</code> and <code>aux_params</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Copy data from each executor to <code>arg_params</code> and <code>aux_params</code>.</p></div><dl class="paramcmts block"><dt class="param">argParams</dt><dd class="cmt"><p>target parameter arrays</p></dd><dt class="param">auxParams</dt><dd class="cmt"><p>target aux arrays
+Note this function will inplace update the NDArrays in arg_params and aux_params.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="hashCode():Int"></a>
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#installMonitor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="installMonitor(monitor:org.apache.mxnet.Monitor):Unit"></a>
+      <a id="installMonitor(Monitor):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">installMonitor</span><span class="params">(<span name="monitor">monitor: <a href="../Monitor.html" class="extype" name="org.apache.mxnet.Monitor">Monitor</a></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@installMonitor(monitor:org.apache.mxnet.Monitor):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#labelShapes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]]"></a>
+      <a id="labelShapes:Option[IndexedSeq[DataDesc]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">labelShapes</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Should be a list of (name, shape) tuples, for the shapes of label.</p><div class="fullcomment"><div class="comment cmt"><p>Should be a list of (name, shape) tuples, for the shapes of label.
+                   Note the order is important and should be the same as the order that
+                   the <code>DataIter</code> provide the label.</p></div></div>
+    </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ne(x$1:AnyRef):Boolean"></a>
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.AnyRef">AnyRef</span></span>)</span><span class="result">: <span class="extype" name="scala.Boolean">Boolean</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notify():Unit"></a>
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="notifyAll():Unit"></a>
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#reshape" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="reshape(dataShapes:IndexedSeq[org.apache.mxnet.DataDesc],labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]]):Unit"></a>
+      <a id="reshape(IndexedSeq[DataDesc],Option[IndexedSeq[DataDesc]]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reshape</span><span class="params">(<span name="dataShapes">dataShapes: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]</span>, <span name="labelShapes">labelShapes: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@reshape(dataShapes:IndexedSeq[org.apache.mxnet.DataDesc],labelShapes:Option[IndexedSeq[org.apache.mxnet.DataDesc]]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Reshape executors.</p>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#setParams" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setParams(argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtra:Boolean):Unit"></a>
+      <a id="setParams(Map[String,NDArray],Map[String,NDArray],Boolean):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setParams</span><span class="params">(<span name="argParams">argParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>, <span name="auxParams">auxParams: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>, <span name="allowExtra">allowExtra: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">false</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@setParams(argParams:Map[String,org.apache.mxnet.NDArray],auxParams:Map[String,org.apache.mxnet.NDArray],allowExtra:Boolean):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Assign, i.e.</p><div class="fullcomment"><div class="comment cmt"><p>Assign, i.e. copy parameters to all the executors.</p></div><dl class="paramcmts block"><dt class="param">argParams</dt><dd class="cmt"><p>A dictionary of name to <code>NDArray</code> parameter mapping.</p></dd><dt class="param">auxParams</dt><dd class="cmt"><p>A dictionary of name to <code>NDArray</code> auxiliary variable mapping.</p></dd><dt class="param">allowExtra</dt><dd class="cmt"><p>hether allow extra parameters that are not needed by symbol.
+        If this is True, no error will be thrown when argParams or auxParams
+        contain extra parameters that is not needed by the executor.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
+      <a id="synchronized[T0](⇒T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toString():String"></a>
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@toString():String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="org.apache.mxnet.module.DataParallelExecutorGroup#updateMetric" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="updateMetric(evalMetric:org.apache.mxnet.EvalMetric,labels:IndexedSeq[org.apache.mxnet.NDArray]):Unit"></a>
+      <a id="updateMetric(EvalMetric,IndexedSeq[NDArray]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">updateMetric</span><span class="params">(<span name="evalMetric">evalMetric: <a href="../EvalMetric.html" class="extype" name="org.apache.mxnet.EvalMetric">EvalMetric</a></span>, <span name="labels">labels: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>]</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@updateMetric(evalMetric:org.apache.mxnet.EvalMetric,labels:IndexedSeq[org.apache.mxnet.NDArray]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Accumulate the performance according to <code>eval_metric</code> on all devices.</p><div class="fullcomment"><div class="comment cmt"><p>Accumulate the performance according to <code>eval_metric</code> on all devices.</p></div><dl class="paramcmts block"><dt class="param">evalMetric</dt><dd class="cmt"><p>The metric used for evaluation.</p></dd><dt class="param">labels</dt><dd class="cmt"><p>Typically comes from <code>label</code> of a <code>DataBatch</code>.</p></dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait():Unit"></a>
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long,x$2:Int):Unit"></a>
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="wait(x$1:Long):Unit"></a>
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Long">Long</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.module.DataParallelExecutorGroup@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">(<span>
+      
+      <span class="defval" name="classOf[java.lang.InterruptedException]">...</span>
+    </span>)</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <span class="extype" name="scala.Any">Any</span></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
