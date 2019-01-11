@@ -66,8 +66,6 @@ public class CalculatorExample {
     }
 
     public Calculator(QWidget parent) {
-      super(parent);
-
       sumInMemory = 0.0;
       sumSoFar = 0.0;
       factorSoFar = 0.0;

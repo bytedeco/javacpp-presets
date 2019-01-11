@@ -34,6 +34,10 @@ public class QtWidgets extends AbstractQtPreset {
     infoMap
         .put(new Info("Q_WIDGETS_EXPORT").cppTypes().annotations())
 
+        // Java methods
+        .put(new Info("QToolButton::sizeHint").javaText(
+            "@Virtual public native @ByVal @Const({false, false, true}) QSize sizeHint();"))
+
         // Line patterns
         .put(new Info("qabstractbutton.h").linePatterns(matchClass("QAbstractButton"), matchEnd()))
         .put(new Info("qapplication.h").linePatterns(matchClass("QApplication"), matchEnd()))
@@ -83,11 +87,4 @@ public class QtWidgets extends AbstractQtPreset {
         "QWidget::setupUi"
     };
   }
-
-//  @Override
-//  protected String[] virtual() {
-//    return new String[]{
-//        "QWidget"
-//    };
-//  }
 }

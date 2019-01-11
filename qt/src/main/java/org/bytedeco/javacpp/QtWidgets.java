@@ -550,7 +550,7 @@ public static class QToolButton extends QAbstractButton {
     public QToolButton() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    public native @ByVal QSize sizeHint();
+    @Virtual public native @ByVal @Const({false, false, true}) QSize sizeHint();
     public native @ByVal QSize minimumSizeHint();
 
     public native @Cast("Qt::ToolButtonStyle") int toolButtonStyle();
