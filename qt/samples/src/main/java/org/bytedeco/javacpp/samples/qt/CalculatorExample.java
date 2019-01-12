@@ -22,10 +22,6 @@ public class CalculatorExample {
   private static Calculator calc;
 
   public static void main(String[] args) {
-    System.load("/usr/local/Cellar/qt/5.12.0/lib/QtCore.framework/QtCore");
-    System.load("/usr/local/Cellar/qt/5.12.0/lib/QtGui.framework/QtGui");
-    System.load("/usr/local/Cellar/qt/5.12.0/lib/QtWidgets.framework/QtWidgets");
-
     new QtCore();
     argc = new IntPointer(new int[]{0});
     argv = new PointerPointer<>("calc", null);

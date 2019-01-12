@@ -11,6 +11,24 @@ import static org.bytedeco.javacpp.QtCore.*;
 public class QtGui extends org.bytedeco.javacpp.helper.QtGui {
     static { Loader.load(); }
 
+// Parsed from QtGui/qevent.h
+
+public static class QCloseEvent extends QEvent {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QCloseEvent(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QCloseEvent(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QCloseEvent position(long position) {
+        return (QCloseEvent)super.position(position);
+    }
+
+    public QCloseEvent() { super((Pointer)null); allocate(); }
+    private native void allocate();
+}
+
+
 // Parsed from QtGui/qfont.h
 
 @NoOffset public static class QFont extends Pointer {
@@ -222,6 +240,7 @@ public class QtGui extends org.bytedeco.javacpp.helper.QtGui {
     public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef QFont arg0);
     public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef QFont arg0);
     public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef QFont arg0);
+    public native @ByVal @Name("operator QVariant") QVariant asQVariant();
     public native @Cast("bool") boolean isCopyOf(@Const @ByRef QFont arg0);
 // #ifdef Q_COMPILER_RVALUE_REFS
 // #endif
@@ -256,6 +275,73 @@ public class QtGui extends org.bytedeco.javacpp.helper.QtGui {
 }
 
 
+// Parsed from QtGui/qicon.h
+
+public static class QIcon extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QIcon(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QIcon(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QIcon position(long position) {
+        return (QIcon)super.position(position);
+    }
+
+    /** enum QIcon::Mode */
+    public static final int Normal = 0, Disabled = 1, Active = 2, Selected = 3;
+    /** enum QIcon::State */
+    public static final int On = 0, Off = 1;
+
+    public QIcon() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QIcon(@Const @ByRef QIcon other) { super((Pointer)null); allocate(other); }
+    private native void allocate(@Const @ByRef QIcon other);
+// #ifdef Q_COMPILER_RVALUE_REFS
+// #endif
+    public QIcon(@Const @ByRef QString fileName) { super((Pointer)null); allocate(fileName); }
+    private native void allocate(@Const @ByRef QString fileName); // file or resource name
+    public native @ByRef @Name("operator =") QIcon put(@Const @ByRef QIcon other);
+// #ifdef Q_COMPILER_RVALUE_REFS
+// #endif
+    public native void swap(@ByRef QIcon other);
+
+    public native @ByVal @Name("operator QVariant") QVariant asQVariant();
+
+    public native @ByVal QSize actualSize(@Const @ByRef QSize size, @Cast("QIcon::Mode") int mode/*=QIcon::Normal*/, @Cast("QIcon::State") int state/*=QIcon::Off*/);
+    public native @ByVal QSize actualSize(@Const @ByRef QSize size);
+
+    public native @ByVal QString name();
+
+    public native @Cast("bool") boolean isNull();
+    public native @Cast("bool") boolean isDetached();
+    public native void detach();
+
+// #if QT_DEPRECATED_SINCE(5, 0)
+// #endif
+    public native long cacheKey();
+    public native void addFile(@Const @ByRef QString fileName, @Const @ByRef(nullValue = "QSize()") QSize size, @Cast("QIcon::Mode") int mode/*=QIcon::Normal*/, @Cast("QIcon::State") int state/*=QIcon::Off*/);
+    public native void addFile(@Const @ByRef QString fileName);
+
+    public native void setIsMask(@Cast("bool") boolean isMask);
+    public native @Cast("bool") boolean isMask();
+
+    public static native @ByVal QIcon fromTheme(@Const @ByRef QString name);
+    public static native @ByVal QIcon fromTheme(@Const @ByRef QString name, @Const @ByRef QIcon fallback);
+    public static native @Cast("bool") boolean hasThemeIcon(@Const @ByRef QString name);
+
+    public static native @ByVal QString themeName();
+    public static native void setThemeName(@Const @ByRef QString path);
+
+    public static native @ByVal QString fallbackThemeName();
+    public static native void setFallbackThemeName(@Const @ByRef QString name);
+// #if !defined(QT_NO_DATASTREAM)
+    
+    
+    public native @Cast("QIcon::DataPtr*") @ByRef PointerPointer data_ptr();
+}
+
+
 // Parsed from QtGui/qguiapplication.h
 
 public static class QGuiApplication extends QCoreApplication {
@@ -280,6 +366,9 @@ public static class QGuiApplication extends QCoreApplication {
 
     public static native void setDesktopFileName(@Const @ByRef QString name);
     public static native @ByVal QString desktopFileName();
+
+    public static native void setWindowIcon(@Const @ByRef QIcon icon);
+    public static native @ByVal QIcon windowIcon();
 
     public static native @ByVal QString platformName();
     public static native QObject focusObject();
@@ -313,6 +402,7 @@ public static class QGuiApplication extends QCoreApplication {
     public static native @Cast("Qt::ApplicationState") int applicationState();
 
     public static native int exec();
+    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
 
 // #ifndef QT_NO_SESSIONMANAGER
     // session management

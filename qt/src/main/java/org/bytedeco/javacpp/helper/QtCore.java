@@ -1,9 +1,17 @@
 package org.bytedeco.javacpp.helper;
 
+import java.io.File;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.QtCore.QString;
 
 public class QtCore extends org.bytedeco.javacpp.presets.QtCore {
+
+  static {
+    File framework = new File("/usr/local/Cellar/qt/5.12.0/lib/QtCore.framework/QtCore");
+    if (framework.exists()) {
+      System.load(framework.getAbsolutePath());
+    }
+  }
 
   public abstract static class AbstractQString extends Pointer {
 

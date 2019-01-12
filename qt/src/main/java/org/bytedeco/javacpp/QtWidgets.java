@@ -12,6 +12,101 @@ import static org.bytedeco.javacpp.QtGui.*;
 public class QtWidgets extends org.bytedeco.javacpp.helper.QtWidgets {
     static { Loader.load(); }
 
+// Parsed from QtWidgets/qboxlayout.h
+
+public static class QBoxLayout extends QLayout {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QBoxLayout(Pointer p) { super(p); }
+
+    /** enum QBoxLayout::Direction */
+    public static final int LeftToRight = 0, RightToLeft = 1, TopToBottom = 2, BottomToTop = 3,
+                     Down = TopToBottom, Up = BottomToTop;
+
+    public QBoxLayout(@Cast("QBoxLayout::Direction") int arg0, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(arg0, parent); }
+    private native void allocate(@Cast("QBoxLayout::Direction") int arg0, QWidget parent/*=nullptr*/);
+    public QBoxLayout(@Cast("QBoxLayout::Direction") int arg0) { super((Pointer)null); allocate(arg0); }
+    private native void allocate(@Cast("QBoxLayout::Direction") int arg0);
+
+    public native @Cast("QBoxLayout::Direction") int direction();
+    public native void setDirection(@Cast("QBoxLayout::Direction") int arg0);
+
+    public native void addSpacing(int size);
+    public native void addStretch(int stretch/*=0*/);
+    public native void addStretch();
+    public native void addWidget(QWidget arg0, int stretch/*=0*/, @ByVal(nullValue = "Qt::Alignment()") @Cast("Qt::Alignment") int alignment);
+    public native void addWidget(QWidget arg0);
+    public native void addLayout(QLayout layout, int stretch/*=0*/);
+    public native void addLayout(QLayout layout);
+    public native void addStrut(int arg0);
+    public native void addItem(QLayoutItem arg0);
+
+    public native void insertSpacing(int index, int size);
+    public native void insertStretch(int index, int stretch/*=0*/);
+    public native void insertStretch(int index);
+    public native void insertWidget(int index, QWidget widget, int stretch/*=0*/, @ByVal(nullValue = "Qt::Alignment()") @Cast("Qt::Alignment") int alignment);
+    public native void insertWidget(int index, QWidget widget);
+    public native void insertLayout(int index, QLayout layout, int stretch/*=0*/);
+    public native void insertLayout(int index, QLayout layout);
+    public native void insertItem(int index, QLayoutItem arg1);
+
+    public native int spacing();
+    public native void setSpacing(int spacing);
+
+    public native @Cast("bool") boolean setStretchFactor(QWidget w, int stretch);
+    public native @Cast("bool") boolean setStretchFactor(QLayout l, int stretch);
+    public native void setStretch(int index, int stretch);
+    public native int stretch(int index);
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSize();
+    public native @ByVal QSize maximumSize();
+
+    public native @Cast("bool") boolean hasHeightForWidth();
+    public native int heightForWidth(int arg0);
+    public native int minimumHeightForWidth(int arg0);
+    public native void invalidate();
+    public native QLayoutItem itemAt(int arg0);
+    public native QLayoutItem takeAt(int arg0);
+    public native int count();
+}
+
+public static class QHBoxLayout extends QBoxLayout {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QHBoxLayout(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QHBoxLayout(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QHBoxLayout position(long position) {
+        return (QHBoxLayout)super.position(position);
+    }
+
+    public QHBoxLayout() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QHBoxLayout(QWidget parent) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent);
+}
+
+public static class QVBoxLayout extends QBoxLayout {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QVBoxLayout(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QVBoxLayout(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QVBoxLayout position(long position) {
+        return (QVBoxLayout)super.position(position);
+    }
+
+    public QVBoxLayout() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QVBoxLayout(QWidget parent) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent);
+}
+
+
+
 // Parsed from QtWidgets/qabstractbutton.h
 
 public static class QAbstractButton extends QWidget {
@@ -22,6 +117,9 @@ public static class QAbstractButton extends QWidget {
 
     public native void setText(@Const @ByRef QString text);
     public native @ByVal QString text();
+
+    public native void setIcon(@Const @ByRef QIcon icon);
+    public native @ByVal QIcon icon();
 
     public native @ByVal QSize iconSize();
 
@@ -58,6 +156,263 @@ public static class QAbstractButton extends QWidget {
 }
 
 
+// Parsed from QtWidgets/qabstractscrollarea.h
+
+public static class QAbstractScrollArea extends QFrame {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QAbstractScrollArea(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QAbstractScrollArea(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QAbstractScrollArea position(long position) {
+        return (QAbstractScrollArea)super.position(position);
+    }
+
+    public QAbstractScrollArea(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QAbstractScrollArea() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** enum QAbstractScrollArea::SizeAdjustPolicy */
+    public static final int
+        AdjustIgnored = 0,
+        AdjustToContentsOnFirstShow = 1,
+        AdjustToContents = 2;
+    
+
+    public native @Cast("Qt::ScrollBarPolicy") int verticalScrollBarPolicy();
+    public native void setVerticalScrollBarPolicy(@Cast("Qt::ScrollBarPolicy") int arg0);
+
+    public native @Cast("Qt::ScrollBarPolicy") int horizontalScrollBarPolicy();
+    public native void setHorizontalScrollBarPolicy(@Cast("Qt::ScrollBarPolicy") int arg0);
+
+    public native QWidget cornerWidget();
+    public native void setCornerWidget(QWidget widget);
+
+    public native void addScrollBarWidget(QWidget widget, @ByVal @Cast("Qt::Alignment") int alignment);
+
+    public native QWidget viewport();
+    public native void setViewport(QWidget widget);
+    public native @ByVal QSize maximumViewportSize();
+
+    public native @ByVal QSize minimumSizeHint();
+
+    public native @ByVal QSize sizeHint();
+
+    public native void setupViewport(QWidget viewport);
+
+    public native @Cast("QAbstractScrollArea::SizeAdjustPolicy") int sizeAdjustPolicy();
+    public native void setSizeAdjustPolicy(@Cast("QAbstractScrollArea::SizeAdjustPolicy") int policy);
+}
+
+
+// Parsed from QtWidgets/qabstractspinbox.h
+
+public static class QAbstractSpinBox extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QAbstractSpinBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QAbstractSpinBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QAbstractSpinBox position(long position) {
+        return (QAbstractSpinBox)super.position(position);
+    }
+
+    public QAbstractSpinBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QAbstractSpinBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** enum QAbstractSpinBox::StepEnabledFlag */
+    public static final int StepNone = 0x00, StepUpEnabled = 0x01,
+                           StepDownEnabled = 0x02;
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(StepEnabled, StepEnabledFlag)
+
+    /** enum QAbstractSpinBox::ButtonSymbols */
+    public static final int UpDownArrows = 0, PlusMinus = 1, NoButtons = 2;
+    
+
+    public native @Cast("QAbstractSpinBox::ButtonSymbols") int buttonSymbols();
+    public native void setButtonSymbols(@Cast("QAbstractSpinBox::ButtonSymbols") int bs);
+
+    /** enum QAbstractSpinBox::CorrectionMode */
+    public static final int CorrectToPreviousValue = 0, CorrectToNearestValue = 1;
+    
+
+    public native void setCorrectionMode(@Cast("QAbstractSpinBox::CorrectionMode") int cm);
+    public native @Cast("QAbstractSpinBox::CorrectionMode") int correctionMode();
+
+    public native @Cast("bool") boolean hasAcceptableInput();
+    public native @ByVal QString text();
+
+    public native @ByVal QString specialValueText();
+    public native void setSpecialValueText(@Const @ByRef QString txt);
+
+    public native @Cast("bool") boolean wrapping();
+    public native void setWrapping(@Cast("bool") boolean w);
+
+    public native void setReadOnly(@Cast("bool") boolean r);
+    public native @Cast("bool") boolean isReadOnly();
+
+    public native void setKeyboardTracking(@Cast("bool") boolean kt);
+    public native @Cast("bool") boolean keyboardTracking();
+
+    public native void setAlignment(@ByVal @Cast("Qt::Alignment") int flag);
+    public native @ByVal @Cast("Qt::Alignment") int alignment();
+
+    public native void setFrame(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean hasFrame();
+
+    public native void setAccelerated(@Cast("bool") boolean on);
+    public native @Cast("bool") boolean isAccelerated();
+
+    public native void setGroupSeparatorShown(@Cast("bool") boolean shown);
+    public native @Cast("bool") boolean isGroupSeparatorShown();
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+    public native void interpretText();
+    public native @Cast("bool") boolean event(QEvent event);
+
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
+    public native void fixup(@ByRef QString input);
+
+    public native void stepBy(int steps);
+
+    public enum StepType {
+        DefaultStepType(0),
+        AdaptiveDecimalStepType(1);
+
+        public final int value;
+        private StepType(int v) { this.value = v; }
+        private StepType(StepType e) { this.value = e.value; }
+        public StepType intern() { for (StepType e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+    public native void stepUp();
+    public native void stepDown();
+    public native void selectAll();
+    public native void clear();
+}
+
+
+// Parsed from QtWidgets/qaction.h
+
+public static class QAction extends QObject {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QAction(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QAction(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QAction position(long position) {
+        return (QAction)super.position(position);
+    }
+
+    // note this is copied into qplatformmenu.h, which must stay in sync
+    /** enum QAction::MenuRole */
+    public static final int NoRole = 0, TextHeuristicRole = 1, ApplicationSpecificRole = 2, AboutQtRole = 3,
+                    AboutRole = 4, PreferencesRole = 5, QuitRole = 6;
+    
+    /** enum QAction::Priority */
+    public static final int LowPriority = 0,
+                    NormalPriority = 128,
+                    HighPriority = 256;
+    
+    public QAction(QObject parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QObject parent/*=nullptr*/);
+    public QAction() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QAction(@Const @ByRef QString text, QObject parent/*=nullptr*/) { super((Pointer)null); allocate(text, parent); }
+    private native void allocate(@Const @ByRef QString text, QObject parent/*=nullptr*/);
+    public QAction(@Const @ByRef QString text) { super((Pointer)null); allocate(text); }
+    private native void allocate(@Const @ByRef QString text);
+    public QAction(@Const @ByRef QIcon icon, @Const @ByRef QString text, QObject parent/*=nullptr*/) { super((Pointer)null); allocate(icon, text, parent); }
+    private native void allocate(@Const @ByRef QIcon icon, @Const @ByRef QString text, QObject parent/*=nullptr*/);
+    public QAction(@Const @ByRef QIcon icon, @Const @ByRef QString text) { super((Pointer)null); allocate(icon, text); }
+    private native void allocate(@Const @ByRef QIcon icon, @Const @ByRef QString text);
+    public native void setIcon(@Const @ByRef QIcon icon);
+    public native @ByVal QIcon icon();
+
+    public native void setText(@Const @ByRef QString text);
+    public native @ByVal QString text();
+
+    public native void setIconText(@Const @ByRef QString text);
+    public native @ByVal QString iconText();
+
+    public native void setToolTip(@Const @ByRef QString tip);
+    public native @ByVal QString toolTip();
+
+    public native void setStatusTip(@Const @ByRef QString statusTip);
+    public native @ByVal QString statusTip();
+
+    public native void setWhatsThis(@Const @ByRef QString what);
+    public native @ByVal QString whatsThis();
+
+    public native void setPriority(@Cast("QAction::Priority") int priority);
+    public native @Cast("QAction::Priority") int priority();
+
+// #if QT_CONFIG(menu)
+    public native QMenu menu();
+    public native void setMenu(QMenu menu);
+// #endif
+
+    public native void setSeparator(@Cast("bool") boolean b);
+    public native @Cast("bool") boolean isSeparator();
+
+// #ifndef QT_NO_SHORTCUT
+
+    public native void setShortcutContext(@Cast("Qt::ShortcutContext") int context);
+    public native @Cast("Qt::ShortcutContext") int shortcutContext();
+
+    public native void setAutoRepeat(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean autoRepeat();
+// #endif
+
+    public native void setFont(@Const @ByRef QFont font);
+    public native @ByVal QFont font();
+
+    public native void setCheckable(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean isCheckable();
+
+    public native @ByVal QVariant data();
+    public native void setData(@Const @ByRef QVariant var);
+
+    public native @Cast("bool") boolean isChecked();
+
+    public native @Cast("bool") boolean isEnabled();
+
+    public native @Cast("bool") boolean isVisible();
+
+    /** enum QAction::ActionEvent */
+    public static final int Trigger = 0, Hover = 1;
+    public native void activate(@Cast("QAction::ActionEvent") int event);
+    public native @Cast("bool") boolean showStatusText(QWidget widget/*=nullptr*/);
+    public native @Cast("bool") boolean showStatusText();
+
+    public native void setMenuRole(@Cast("QAction::MenuRole") int menuRole);
+    public native @Cast("QAction::MenuRole") int menuRole();
+
+    public native void setIconVisibleInMenu(@Cast("bool") boolean visible);
+    public native @Cast("bool") boolean isIconVisibleInMenu();
+
+    public native void setShortcutVisibleInContextMenu(@Cast("bool") boolean show);
+    public native @Cast("bool") boolean isShortcutVisibleInContextMenu();
+
+    public native QWidget parentWidget();
+// #if QT_CONFIG(graphicsview)
+    public native void trigger();
+    public native void hover();
+    public native void setChecked(@Cast("bool") boolean arg0);
+    public native void toggle();
+    public native void setEnabled(@Cast("bool") boolean arg0);
+    public native void setDisabled(@Cast("bool") boolean b);
+    public native void setVisible(@Cast("bool") boolean arg0);
+}
+
+
 // Parsed from QtWidgets/qapplication.h
 
 public static class QApplication extends QGuiApplication {
@@ -76,6 +431,10 @@ public static class QApplication extends QGuiApplication {
     private native void allocate(@ByRef int[] argc, @Cast("char**") @ByPtrPtr byte[] argv);
 // #else
 // #endif
+
+    public static native QStyle style();
+    public static native void setStyle(QStyle arg0);
+    public static native QStyle setStyle(@Const @ByRef QString arg0);
     /** enum QApplication::ColorSpec */
     public static final int NormalColor = 0, CustomColor = 1, ManyColor = 2;
 // #if QT_DEPRECATED_SINCE(5, 8)
@@ -139,6 +498,7 @@ public static class QApplication extends QGuiApplication {
 // #endif
 
     public static native int exec();
+    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
     public native @ByVal QString styleSheet();
 // #ifndef QT_NO_STYLE_STYLESHEET
     public native void setStyleSheet(@Const @ByRef QString sheet);
@@ -147,6 +507,284 @@ public static class QApplication extends QGuiApplication {
     public native @Cast("bool") boolean autoSipEnabled();
     public static native void closeAllWindows();
     public static native void aboutQt();
+}
+
+
+// Parsed from QtWidgets/qcheckbox.h
+
+public static class QCheckBox extends QAbstractButton {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QCheckBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QCheckBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QCheckBox position(long position) {
+        return (QCheckBox)super.position(position);
+    }
+
+    public QCheckBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QCheckBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QCheckBox(@Const @ByRef QString text, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(text, parent); }
+    private native void allocate(@Const @ByRef QString text, QWidget parent/*=nullptr*/);
+    public QCheckBox(@Const @ByRef QString text) { super((Pointer)null); allocate(text); }
+    private native void allocate(@Const @ByRef QString text);
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+
+    public native void setTristate(@Cast("bool") boolean y/*=true*/);
+    public native void setTristate();
+    public native @Cast("bool") boolean isTristate();
+
+    public native @Cast("Qt::CheckState") int checkState();
+    public native void setCheckState(@Cast("Qt::CheckState") int state);
+}
+
+
+// Parsed from QtWidgets/qcombobox.h
+
+public static class QComboBox extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QComboBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QComboBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QComboBox position(long position) {
+        return (QComboBox)super.position(position);
+    }
+
+    public QComboBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QComboBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native int maxVisibleItems();
+    public native void setMaxVisibleItems(int maxItems);
+
+    public native int count();
+    public native void setMaxCount(int max);
+    public native int maxCount();
+
+// #if QT_CONFIG(completer)
+    public native @Cast("bool") boolean autoCompletion();
+    public native void setAutoCompletion(@Cast("bool") boolean enable);
+
+    public native CaseSensitivity autoCompletionCaseSensitivity();
+    public native void setAutoCompletionCaseSensitivity(CaseSensitivity sensitivity);
+// #endif
+
+    public native @Cast("bool") boolean duplicatesEnabled();
+    public native void setDuplicatesEnabled(@Cast("bool") boolean enable);
+
+    public native void setFrame(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean hasFrame();
+
+    public native int findText(@Const @ByRef QString text,
+                            @ByVal(nullValue = "Qt::MatchFlags(static_cast<Qt::MatchFlags>(Qt::MatchExactly|Qt::MatchCaseSensitive))") @Cast("Qt::MatchFlags") int flags);
+    public native int findText(@Const @ByRef QString text);
+    public native int findData(@Const @ByRef QVariant data, int role/*=Qt::UserRole*/,
+                     @ByVal(nullValue = "Qt::MatchFlags(static_cast<Qt::MatchFlags>(Qt::MatchExactly|Qt::MatchCaseSensitive))") @Cast("Qt::MatchFlags") int flags);
+    public native int findData(@Const @ByRef QVariant data);
+
+    /** enum QComboBox::InsertPolicy */
+    public static final int
+        NoInsert = 0,
+        InsertAtTop = 1,
+        InsertAtCurrent = 2,
+        InsertAtBottom = 3,
+        InsertAfterCurrent = 4,
+        InsertBeforeCurrent = 5,
+        InsertAlphabetically = 6;
+    
+
+    public native @Cast("QComboBox::InsertPolicy") int insertPolicy();
+    public native void setInsertPolicy(@Cast("QComboBox::InsertPolicy") int policy);
+
+    /** enum QComboBox::SizeAdjustPolicy */
+    public static final int
+        AdjustToContents = 0,
+        AdjustToContentsOnFirstShow = 1,
+        AdjustToMinimumContentsLength = 2, // ### Qt 6: remove
+        AdjustToMinimumContentsLengthWithIcon = 3;
+    
+
+    public native @Cast("QComboBox::SizeAdjustPolicy") int sizeAdjustPolicy();
+    public native void setSizeAdjustPolicy(@Cast("QComboBox::SizeAdjustPolicy") int policy);
+    public native int minimumContentsLength();
+    public native void setMinimumContentsLength(int characters);
+    public native @ByVal QSize iconSize();
+    public native void setIconSize(@Const @ByRef QSize size);
+
+    public native @Cast("bool") boolean isEditable();
+    public native void setEditable(@Cast("bool") boolean editable);
+    public native void setLineEdit(QLineEdit edit);
+    public native QLineEdit lineEdit();
+// #ifndef QT_NO_VALIDATOR
+// #endif
+
+// #if QT_CONFIG(completer)
+// #endif
+
+    public native int modelColumn();
+    public native void setModelColumn(int visibleColumn);
+
+    public native int currentIndex();
+    public native @ByVal QString currentText();
+    public native @ByVal QVariant currentData(int role/*=Qt::UserRole*/);
+    public native @ByVal QVariant currentData();
+
+    public native @ByVal QString itemText(int index);
+    public native @ByVal QIcon itemIcon(int index);
+    public native @ByVal QVariant itemData(int index, int role/*=Qt::UserRole*/);
+    public native @ByVal QVariant itemData(int index);
+
+    public native void addItem(@Const @ByRef QString text, @Const @ByRef(nullValue = "QVariant()") QVariant userData);
+    public native void addItem(@Const @ByRef QString text);
+    public native void addItem(@Const @ByRef QIcon icon, @Const @ByRef QString text,
+                            @Const @ByRef(nullValue = "QVariant()") QVariant userData);
+    public native void addItem(@Const @ByRef QIcon icon, @Const @ByRef QString text);
+
+    public native void insertItem(int index, @Const @ByRef QString text, @Const @ByRef(nullValue = "QVariant()") QVariant userData);
+    public native void insertItem(int index, @Const @ByRef QString text);
+    public native void insertItem(int index, @Const @ByRef QIcon icon, @Const @ByRef QString text,
+                        @Const @ByRef(nullValue = "QVariant()") QVariant userData);
+    public native void insertItem(int index, @Const @ByRef QIcon icon, @Const @ByRef QString text);
+    public native void insertSeparator(int index);
+
+    public native void removeItem(int index);
+
+    public native void setItemText(int index, @Const @ByRef QString text);
+    public native void setItemIcon(int index, @Const @ByRef QIcon icon);
+    public native void setItemData(int index, @Const @ByRef QVariant value, int role/*=Qt::UserRole*/);
+    public native void setItemData(int index, @Const @ByRef QVariant value);
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+
+    public native void showPopup();
+    public native void hidePopup();
+
+    public native @Cast("bool") boolean event(QEvent event);
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int query, @Const @ByRef QVariant argument);
+    public native void clear();
+    public native void clearEditText();
+    public native void setEditText(@Const @ByRef QString text);
+    public native void setCurrentIndex(int index);
+    public native void setCurrentText(@Const @ByRef QString text);
+}
+
+
+// Parsed from QtWidgets/qdialog.h
+
+public static class QDialog extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QDialog(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QDialog(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QDialog position(long position) {
+        return (QDialog)super.position(position);
+    }
+
+    public QDialog(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
+    private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);
+    public QDialog() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** enum QDialog::DialogCode */
+    public static final int Rejected = 0, Accepted = 1;
+
+    public native int result();
+
+    public native void setVisible(@Cast("bool") boolean visible);
+
+    public native void setOrientation(Orientation orientation);
+    public native Orientation orientation();
+
+    public native void setExtension(QWidget extension);
+    public native QWidget extension();
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+
+    public native void setSizeGripEnabled(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean isSizeGripEnabled();
+
+    public native void setModal(@Cast("bool") boolean modal);
+    public native void setResult(int r);
+    public native void open();
+    public native int exec();
+    public native void done(int arg0);
+    public native void accept();
+    public native void reject();
+
+    public native void showExtension(@Cast("bool") boolean arg0);
+}
+
+
+// Parsed from QtWidgets/qframe.h
+
+public static class QFrame extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QFrame(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QFrame(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QFrame position(long position) {
+        return (QFrame)super.position(position);
+    }
+
+    public QFrame(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
+    private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);
+    public QFrame() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native int frameStyle();
+    public native void setFrameStyle(int arg0);
+
+    public native int frameWidth();
+
+    public native @ByVal QSize sizeHint();
+
+    /** enum QFrame::Shape */
+    public static final int
+        NoFrame  = 0, // no frame
+        Box = 0x0001, // rectangular box
+        Panel = 0x0002, // rectangular panel
+        WinPanel = 0x0003, // rectangular panel (Windows)
+        HLine = 0x0004, // horizontal line
+        VLine = 0x0005, // vertical line
+        StyledPanel = 0x0006; // rectangular panel depending on the GUI style
+    
+    /** enum QFrame::Shadow */
+    public static final int
+        Plain = 0x0010, // plain line
+        Raised = 0x0020, // raised shadow effect
+        Sunken = 0x0030; // sunken shadow effect
+    
+
+    /** enum QFrame::StyleMask */
+    public static final int
+        Shadow_Mask = 0x00f0, // mask for the shadow
+        Shape_Mask = 0x000f; // mask for the shape
+
+    public native @Cast("QFrame::Shape") int frameShape();
+    public native void setFrameShape(@Cast("QFrame::Shape") int arg0);
+    public native @Cast("QFrame::Shadow") int frameShadow();
+    public native void setFrameShadow(@Cast("QFrame::Shadow") int arg0);
+
+    public native int lineWidth();
+    public native void setLineWidth(int arg0);
+
+    public native int midLineWidth();
+    public native void setMidLineWidth(int arg0);
 }
 
 
@@ -223,6 +861,119 @@ public static class QGridLayout extends QLayout {
     public native void getItemPosition(int idx, IntBuffer row, IntBuffer column, IntBuffer rowSpan, IntBuffer columnSpan);
     public native void getItemPosition(int idx, int[] row, int[] column, int[] rowSpan, int[] columnSpan);
 
+}
+
+
+// Parsed from QtWidgets/qgroupbox.h
+
+public static class QGroupBox extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QGroupBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QGroupBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QGroupBox position(long position) {
+        return (QGroupBox)super.position(position);
+    }
+
+    public QGroupBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QGroupBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QGroupBox(@Const @ByRef QString title, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(title, parent); }
+    private native void allocate(@Const @ByRef QString title, QWidget parent/*=nullptr*/);
+    public QGroupBox(@Const @ByRef QString title) { super((Pointer)null); allocate(title); }
+    private native void allocate(@Const @ByRef QString title);
+
+    public native @ByVal QString title();
+    public native void setTitle(@Const @ByRef QString title);
+
+    public native @ByVal @Cast("Qt::Alignment") int alignment();
+    public native void setAlignment(int alignment);
+
+    public native @ByVal QSize minimumSizeHint();
+
+    public native @Cast("bool") boolean isFlat();
+    public native void setFlat(@Cast("bool") boolean flat);
+    public native @Cast("bool") boolean isCheckable();
+    public native void setCheckable(@Cast("bool") boolean checkable);
+    public native @Cast("bool") boolean isChecked();
+    public native void setChecked(@Cast("bool") boolean checked);
+}
+
+
+// Parsed from QtWidgets/qlabel.h
+
+public static class QLabel extends QFrame {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QLabel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QLabel(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QLabel position(long position) {
+        return (QLabel)super.position(position);
+    }
+
+    public QLabel(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(parent, f); }
+    private native void allocate(QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);
+    public QLabel() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QLabel(@Const @ByRef QString text, QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(text, parent, f); }
+    private native void allocate(@Const @ByRef QString text, QWidget parent/*=nullptr*/, @ByVal(nullValue = "Qt::WindowFlags()") @Cast("Qt::WindowFlags") int f);
+    public QLabel(@Const @ByRef QString text) { super((Pointer)null); allocate(text); }
+    private native void allocate(@Const @ByRef QString text);
+
+    public native @ByVal QString text();
+// #ifndef QT_NO_PICTURE
+// #endif
+// #if QT_CONFIG(movie)
+// #endif
+
+    public native @Cast("Qt::TextFormat") int textFormat();
+    public native void setTextFormat(@Cast("Qt::TextFormat") int arg0);
+
+    public native @ByVal @Cast("Qt::Alignment") int alignment();
+    public native void setAlignment(@ByVal @Cast("Qt::Alignment") int arg0);
+
+    public native void setWordWrap(@Cast("bool") boolean on);
+    public native @Cast("bool") boolean wordWrap();
+
+    public native int indent();
+    public native void setIndent(int arg0);
+
+    public native int margin();
+    public native void setMargin(int arg0);
+
+    public native @Cast("bool") boolean hasScaledContents();
+    public native void setScaledContents(@Cast("bool") boolean arg0);
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+// #ifndef QT_NO_SHORTCUT
+    public native void setBuddy(QWidget arg0);
+    public native QWidget buddy();
+// #endif
+    public native int heightForWidth(int arg0);
+
+    public native @Cast("bool") boolean openExternalLinks();
+    public native void setOpenExternalLinks(@Cast("bool") boolean open);
+
+    public native void setTextInteractionFlags(@ByVal @Cast("Qt::TextInteractionFlags") int flags);
+    public native @ByVal @Cast("Qt::TextInteractionFlags") int textInteractionFlags();
+
+    public native void setSelection(int arg0, int arg1);
+    public native @Cast("bool") boolean hasSelectedText();
+    public native @ByVal QString selectedText();
+    public native int selectionStart();
+    public native void setText(@Const @ByRef QString arg0);
+// #ifndef QT_NO_PICTURE
+// #endif
+// #if QT_CONFIG(movie)
+// #endif
+    public native void setNum(int arg0);
+    public native void setNum(double arg0);
+    public native void clear();
 }
 
 
@@ -419,6 +1170,392 @@ public static class QLineEdit extends QWidget {
     public native void deselect();
     public native void insert(@Const @ByRef QString arg0);
 // #ifndef QT_NO_CONTEXTMENU
+    public native QMenu createStandardContextMenu();
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int property, @ByVal QVariant argument);
+    public native @Cast("bool") boolean event(QEvent arg0);
+}
+
+
+// Parsed from QtWidgets/qmenu.h
+
+public static class QMenu extends QWidget {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QMenu(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QMenu(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QMenu position(long position) {
+        return (QMenu)super.position(position);
+    }
+
+    public QMenu(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QMenu() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QMenu(@Const @ByRef QString title, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(title, parent); }
+    private native void allocate(@Const @ByRef QString title, QWidget parent/*=nullptr*/);
+    public QMenu(@Const @ByRef QString title) { super((Pointer)null); allocate(title); }
+    private native void allocate(@Const @ByRef QString title);
+    public native QAction addAction(@Const @ByRef QString text);
+    public native QAction addAction(@Const @ByRef QIcon icon, @Const @ByRef QString text);
+    public native QAction addAction(@Const @ByRef QString text, @Const QObject receiver, @Cast("const char*") BytePointer member);
+    public native QAction addAction(@Const @ByRef QString text, @Const QObject receiver, String member);
+    public native QAction addAction(@Const @ByRef QIcon icon, @Const @ByRef QString text, @Const QObject receiver, @Cast("const char*") BytePointer member);
+    public native QAction addAction(@Const @ByRef QIcon icon, @Const @ByRef QString text, @Const QObject receiver, String member);
+
+// #ifdef Q_CLANG_QDOC
+// #else
+// #endif // !Q_CLANG_QDOC
+
+    public native QAction addMenu(QMenu menu);
+    public native QMenu addMenu(@Const @ByRef QString title);
+    public native QMenu addMenu(@Const @ByRef QIcon icon, @Const @ByRef QString title);
+
+    public native QAction addSeparator();
+
+    public native QAction addSection(@Const @ByRef QString text);
+    public native QAction addSection(@Const @ByRef QIcon icon, @Const @ByRef QString text);
+
+    public native QAction insertMenu(QAction before, QMenu menu);
+    public native QAction insertSeparator(QAction before);
+    public native QAction insertSection(QAction before, @Const @ByRef QString text);
+    public native QAction insertSection(QAction before, @Const @ByRef QIcon icon, @Const @ByRef QString text);
+
+    public native @Cast("bool") boolean isEmpty();
+    public native void clear();
+
+    public native void setTearOffEnabled(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean isTearOffEnabled();
+
+    public native @Cast("bool") boolean isTearOffMenuVisible();
+    public native void showTearOffMenu();
+    public native void hideTearOffMenu();
+
+    public native void setDefaultAction(QAction arg0);
+    public native QAction defaultAction();
+
+    public native void setActiveAction(QAction act);
+    public native QAction activeAction();
+    public native QAction exec();
+
+// #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+// #else
+// #endif
+
+    public native @ByVal QSize sizeHint();
+
+    public native QAction menuAction();
+
+    public native @ByVal QString title();
+    public native void setTitle(@Const @ByRef QString title);
+
+    public native @ByVal QIcon icon();
+    public native void setIcon(@Const @ByRef QIcon icon);
+
+    public native void setNoReplayFor(QWidget widget);
+
+// #if defined(Q_OS_MACOS) || defined(Q_CLANG_QDOC)
+    public native void setAsDockMenu();
+// #endif
+
+    public native @Cast("bool") boolean separatorsCollapsible();
+    public native void setSeparatorsCollapsible(@Cast("bool") boolean collapse);
+
+    public native @Cast("bool") boolean toolTipsVisible();
+    public native void setToolTipsVisible(@Cast("bool") boolean visible);
+}
+
+
+// Parsed from QtWidgets/qmessagebox.h
+
+public static class QMessageBox extends QDialog {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QMessageBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QMessageBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QMessageBox position(long position) {
+        return (QMessageBox)super.position(position);
+    }
+
+    /** enum QMessageBox::Icon */
+    public static final int
+        // keep this in sync with QMessageDialogOptions::Icon
+        NoIcon = 0,
+        Information = 1,
+        Warning = 2,
+        Critical = 3,
+        Question = 4;
+    
+
+    /** enum QMessageBox::ButtonRole */
+    public static final int
+        // keep this in sync with QDialogButtonBox::ButtonRole and QPlatformDialogHelper::ButtonRole
+        InvalidRole = -1,
+        AcceptRole = 0,
+        RejectRole = 1,
+        DestructiveRole = 2,
+        ActionRole = 3,
+        HelpRole = 4,
+        YesRole = 5,
+        NoRole = 6,
+        ResetRole = 7,
+        ApplyRole = 8,
+
+        NRoles = 9;
+
+    /** enum QMessageBox::StandardButton */
+    public static final int
+        // keep this in sync with QDialogButtonBox::StandardButton and QPlatformDialogHelper::StandardButton
+        NoButton           = 0x00000000,
+        Ok                 = 0x00000400,
+        Save               = 0x00000800,
+        SaveAll            = 0x00001000,
+        Open               = 0x00002000,
+        Yes                = 0x00004000,
+        YesToAll           = 0x00008000,
+        No                 = 0x00010000,
+        NoToAll            = 0x00020000,
+        Abort              = 0x00040000,
+        Retry              = 0x00080000,
+        Ignore             = 0x00100000,
+        Close              = 0x00200000,
+        Cancel             = 0x00400000,
+        Discard            = 0x00800000,
+        Help               = 0x01000000,
+        Apply              = 0x02000000,
+        Reset              = 0x04000000,
+        RestoreDefaults    = 0x08000000,
+
+        FirstButton        = Ok,                // internal
+        LastButton         = RestoreDefaults,   // internal
+
+        YesAll             = YesToAll,          // obsolete
+        NoAll              = NoToAll,           // obsolete
+
+        Default            = 0x00000100,        // obsolete
+        Escape             = 0x00000200,        // obsolete
+        FlagMask           = 0x00000300,        // obsolete
+        ButtonMask         = ~FlagMask;          // obsolete  // obsolete
+
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(StandardButtons, StandardButton)
+    
+
+    public QMessageBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QMessageBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QMessageBox(@Cast("QMessageBox::Icon") int icon, @Const @ByRef QString title, @Const @ByRef QString text,
+                    @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::NoButton)") @Cast("QMessageBox::StandardButtons") int buttons, QWidget parent/*=nullptr*/,
+                    @ByVal(nullValue = "Qt::WindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint)") @Cast("Qt::WindowFlags") int flags) { super((Pointer)null); allocate(icon, title, text, buttons, parent, flags); }
+    private native void allocate(@Cast("QMessageBox::Icon") int icon, @Const @ByRef QString title, @Const @ByRef QString text,
+                    @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::NoButton)") @Cast("QMessageBox::StandardButtons") int buttons, QWidget parent/*=nullptr*/,
+                    @ByVal(nullValue = "Qt::WindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint)") @Cast("Qt::WindowFlags") int flags);
+    public QMessageBox(@Cast("QMessageBox::Icon") int icon, @Const @ByRef QString title, @Const @ByRef QString text) { super((Pointer)null); allocate(icon, title, text); }
+    private native void allocate(@Cast("QMessageBox::Icon") int icon, @Const @ByRef QString title, @Const @ByRef QString text);
+
+    public native void addButton(QAbstractButton button, @Cast("QMessageBox::ButtonRole") int role);
+    public native QPushButton addButton(@Const @ByRef QString text, @Cast("QMessageBox::ButtonRole") int role);
+    public native QPushButton addButton(@Cast("QMessageBox::StandardButton") int button);
+    public native void removeButton(QAbstractButton button);
+    public native void open(QObject receiver, @Cast("const char*") BytePointer member);
+    public native void open(QObject receiver, String member);
+    public native @Cast("QMessageBox::ButtonRole") int buttonRole(QAbstractButton button);
+
+    public native void setStandardButtons(@ByVal @Cast("QMessageBox::StandardButtons") int buttons);
+    public native @ByVal @Cast("QMessageBox::StandardButtons") int standardButtons();
+    public native @Cast("QMessageBox::StandardButton") int standardButton(QAbstractButton button);
+    public native QAbstractButton button(@Cast("QMessageBox::StandardButton") int which);
+
+    public native QPushButton defaultButton();
+    public native void setDefaultButton(QPushButton button);
+    public native void setDefaultButton(@Cast("QMessageBox::StandardButton") int button);
+
+    public native QAbstractButton escapeButton();
+    public native void setEscapeButton(QAbstractButton button);
+    public native void setEscapeButton(@Cast("QMessageBox::StandardButton") int button);
+
+    public native QAbstractButton clickedButton();
+
+    public native @ByVal QString text();
+    public native void setText(@Const @ByRef QString text);
+
+    public native @Cast("QMessageBox::Icon") int icon();
+    public native void setIcon(@Cast("QMessageBox::Icon") int arg0);
+
+    public native @Cast("Qt::TextFormat") int textFormat();
+    public native void setTextFormat(@Cast("Qt::TextFormat") int format);
+
+    public native void setTextInteractionFlags(@ByVal @Cast("Qt::TextInteractionFlags") int flags);
+    public native @ByVal @Cast("Qt::TextInteractionFlags") int textInteractionFlags();
+
+    public native void setCheckBox(QCheckBox cb);
+    public native QCheckBox checkBox();
+
+    public static native @Cast("QMessageBox::StandardButton") int information(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text, @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::Ok)") @Cast("QMessageBox::StandardButtons") int buttons,
+             @Cast("QMessageBox::StandardButton") int defaultButton/*=QMessageBox::NoButton*/);
+    public static native @Cast("QMessageBox::StandardButton") int information(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text);
+    public static native @Cast("QMessageBox::StandardButton") int question(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text, @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No)") @Cast("QMessageBox::StandardButtons") int buttons,
+             @Cast("QMessageBox::StandardButton") int defaultButton/*=QMessageBox::NoButton*/);
+    public static native @Cast("QMessageBox::StandardButton") int question(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text);
+    public static native @Cast("QMessageBox::StandardButton") int warning(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text, @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::Ok)") @Cast("QMessageBox::StandardButtons") int buttons,
+             @Cast("QMessageBox::StandardButton") int defaultButton/*=QMessageBox::NoButton*/);
+    public static native @Cast("QMessageBox::StandardButton") int warning(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text);
+    public static native @Cast("QMessageBox::StandardButton") int critical(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text, @ByVal(nullValue = "QMessageBox::StandardButtons(QMessageBox::Ok)") @Cast("QMessageBox::StandardButtons") int buttons,
+             @Cast("QMessageBox::StandardButton") int defaultButton/*=QMessageBox::NoButton*/);
+    public static native @Cast("QMessageBox::StandardButton") int critical(QWidget parent, @Const @ByRef QString title,
+             @Const @ByRef QString text);
+    public static native void about(QWidget parent, @Const @ByRef QString title, @Const @ByRef QString text);
+    public static native void aboutQt(QWidget parent, @Const @ByRef(nullValue = "QString()") QString title);
+    public static native void aboutQt(QWidget parent);
+
+    // the following functions are obsolete:
+
+    public QMessageBox(@Const @ByRef QString title, @Const @ByRef QString text, @Cast("QMessageBox::Icon") int icon,
+                      int button0, int button1, int button2,
+                      QWidget parent/*=nullptr*/,
+                      @ByVal(nullValue = "Qt::WindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint)") @Cast("Qt::WindowFlags") int f) { super((Pointer)null); allocate(title, text, icon, button0, button1, button2, parent, f); }
+    private native void allocate(@Const @ByRef QString title, @Const @ByRef QString text, @Cast("QMessageBox::Icon") int icon,
+                      int button0, int button1, int button2,
+                      QWidget parent/*=nullptr*/,
+                      @ByVal(nullValue = "Qt::WindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint)") @Cast("Qt::WindowFlags") int f);
+    public QMessageBox(@Const @ByRef QString title, @Const @ByRef QString text, @Cast("QMessageBox::Icon") int icon,
+                      int button0, int button1, int button2) { super((Pointer)null); allocate(title, text, icon, button0, button1, button2); }
+    private native void allocate(@Const @ByRef QString title, @Const @ByRef QString text, @Cast("QMessageBox::Icon") int icon,
+                      int button0, int button1, int button2);
+
+    public static native int information(QWidget parent, @Const @ByRef QString title,
+                               @Const @ByRef QString text,
+                               int button0, int button1/*=0*/, int button2/*=0*/);
+    public static native int information(QWidget parent, @Const @ByRef QString title,
+                               @Const @ByRef QString text,
+                               int button0);
+    public static native int information(QWidget parent, @Const @ByRef QString title,
+                               @Const @ByRef QString text,
+                               @Const @ByRef QString button0Text,
+                               @Const @ByRef(nullValue = "QString()") QString button1Text,
+                               @Const @ByRef(nullValue = "QString()") QString button2Text,
+                               int defaultButtonNumber/*=0*/,
+                               int escapeButtonNumber/*=-1*/);
+    public static native int information(QWidget parent, @Const @ByRef QString title,
+                               @Const @ByRef QString text,
+                               @Const @ByRef QString button0Text);
+
+    public static native int question(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            int button0, int button1/*=0*/, int button2/*=0*/);
+    public static native int question(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            int button0);
+    public static native int question(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            @Const @ByRef QString button0Text,
+                            @Const @ByRef(nullValue = "QString()") QString button1Text,
+                            @Const @ByRef(nullValue = "QString()") QString button2Text,
+                            int defaultButtonNumber/*=0*/,
+                            int escapeButtonNumber/*=-1*/);
+    public static native int question(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            @Const @ByRef QString button0Text);
+
+    public static native int warning(QWidget parent, @Const @ByRef QString title,
+                           @Const @ByRef QString text,
+                           int button0, int button1, int button2/*=0*/);
+    public static native int warning(QWidget parent, @Const @ByRef QString title,
+                           @Const @ByRef QString text,
+                           @Const @ByRef QString button0Text,
+                           @Const @ByRef(nullValue = "QString()") QString button1Text,
+                           @Const @ByRef(nullValue = "QString()") QString button2Text,
+                           int defaultButtonNumber/*=0*/,
+                           int escapeButtonNumber/*=-1*/);
+    public static native int warning(QWidget parent, @Const @ByRef QString title,
+                           @Const @ByRef QString text,
+                           @Const @ByRef QString button0Text);
+
+    public static native int critical(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            int button0, int button1, int button2/*=0*/);
+    public static native int critical(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            @Const @ByRef QString button0Text,
+                            @Const @ByRef(nullValue = "QString()") QString button1Text,
+                            @Const @ByRef(nullValue = "QString()") QString button2Text,
+                            int defaultButtonNumber/*=0*/,
+                            int escapeButtonNumber/*=-1*/);
+    public static native int critical(QWidget parent, @Const @ByRef QString title,
+                            @Const @ByRef QString text,
+                            @Const @ByRef QString button0Text);
+
+    public native @ByVal QString buttonText(int button);
+    public native void setButtonText(int button, @Const @ByRef QString text);
+
+    public native @ByVal QString informativeText();
+    public native void setInformativeText(@Const @ByRef QString text);
+
+// #if QT_CONFIG(textedit)
+    public native @ByVal QString detailedText();
+    public native void setDetailedText(@Const @ByRef QString text);
+// #endif
+
+    public native void setWindowTitle(@Const @ByRef QString title);
+    public native void setWindowModality(@Cast("Qt::WindowModality") int windowModality);
+    public native int exec();
+}
+
+
+// Parsed from QtWidgets/qpushbutton.h
+
+public static class QPushButton extends QAbstractButton {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QPushButton(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QPushButton(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QPushButton position(long position) {
+        return (QPushButton)super.position(position);
+    }
+
+    public QPushButton(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QPushButton() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QPushButton(@Const @ByRef QString text, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(text, parent); }
+    private native void allocate(@Const @ByRef QString text, QWidget parent/*=nullptr*/);
+    public QPushButton(@Const @ByRef QString text) { super((Pointer)null); allocate(text); }
+    private native void allocate(@Const @ByRef QString text);
+    public QPushButton(@Const @ByRef QIcon icon, @Const @ByRef QString text, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(icon, text, parent); }
+    private native void allocate(@Const @ByRef QIcon icon, @Const @ByRef QString text, QWidget parent/*=nullptr*/);
+    public QPushButton(@Const @ByRef QIcon icon, @Const @ByRef QString text) { super((Pointer)null); allocate(icon, text); }
+    private native void allocate(@Const @ByRef QIcon icon, @Const @ByRef QString text);
+
+    public native @ByVal QSize sizeHint();
+    public native @ByVal QSize minimumSizeHint();
+
+    public native @Cast("bool") boolean autoDefault();
+    public native void setAutoDefault(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean isDefault();
+    public native void setDefault(@Cast("bool") boolean arg0);
+
+// #if QT_CONFIG(menu)
+    public native void setMenu(QMenu menu);
+    public native QMenu menu();
+// #endif
+
+    public native void setFlat(@Cast("bool") boolean arg0);
+    public native @Cast("bool") boolean isFlat();
+// #if QT_CONFIG(menu)
+    public native void showMenu();
 }
 
 
@@ -509,6 +1646,8 @@ private native void allocate();
 
     
 
+    public native @ByVal @Name("operator QVariant") QVariant asQVariant();
+
      public native int horizontalStretch();
      public native int verticalStretch();
      public native void setHorizontalStretch(int stretchFactor);
@@ -522,6 +1661,1033 @@ private native void allocate();
 // #ifndef Q_QDOC
 // #endif
     public native @ByVal QSizePolicy transposed();
+}
+
+
+// Parsed from QtWidgets/qspinbox.h
+
+public static class QSpinBox extends QAbstractSpinBox {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QSpinBox(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QSpinBox(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QSpinBox position(long position) {
+        return (QSpinBox)super.position(position);
+    }
+
+    public QSpinBox(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QSpinBox() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public native int value();
+
+    public native @ByVal QString prefix();
+    public native void setPrefix(@Const @ByRef QString prefix);
+
+    public native @ByVal QString suffix();
+    public native void setSuffix(@Const @ByRef QString suffix);
+
+    public native @ByVal QString cleanText();
+
+    public native int singleStep();
+    public native void setSingleStep(int val);
+
+    public native int minimum();
+    public native void setMinimum(int min);
+
+    public native int maximum();
+    public native void setMaximum(int max);
+
+    public native void setRange(int min, int max);
+
+    public native @ByVal StepType stepType();
+    public native void setStepType(@ByVal StepType stepType);
+
+    public native int displayIntegerBase();
+    public native void setDisplayIntegerBase(int base);
+    public native void setValue(int val);
+}
+
+
+// Parsed from QtWidgets/qstyle.h
+
+public static class QStyle extends QObject {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QStyle(Pointer p) { super(p); }
+
+
+    public native void polish(QWidget widget);
+    public native void unpolish(QWidget widget);
+
+    public native void polish(QApplication application);
+    public native void unpolish(QApplication application);
+
+    /** enum QStyle::StateFlag */
+    public static final int
+        State_None =                0x00000000,
+        State_Enabled =             0x00000001,
+        State_Raised =              0x00000002,
+        State_Sunken =              0x00000004,
+        State_Off =                 0x00000008,
+        State_NoChange =            0x00000010,
+        State_On =                  0x00000020,
+        State_DownArrow =           0x00000040,
+        State_Horizontal =          0x00000080,
+        State_HasFocus =            0x00000100,
+        State_Top =                 0x00000200,
+        State_Bottom =              0x00000400,
+        State_FocusAtBorder =       0x00000800,
+        State_AutoRaise =           0x00001000,
+        State_MouseOver =           0x00002000,
+        State_UpArrow =             0x00004000,
+        State_Selected =            0x00008000,
+        State_Active =              0x00010000,
+        State_Window =              0x00020000,
+        State_Open =                0x00040000,
+        State_Children =            0x00080000,
+        State_Item =                0x00100000,
+        State_Sibling =             0x00200000,
+        State_Editing =             0x00400000,
+        State_KeyboardFocusChange = 0x00800000,
+// #ifdef QT_KEYPAD_NAVIGATION
+// #endif
+        State_ReadOnly =            0x02000000,
+        State_Small =               0x04000000,
+        State_Mini =                0x08000000;
+    
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(State, StateFlag)
+
+
+    /** enum QStyle::PrimitiveElement */
+    public static final int
+        PE_Frame = 0,
+        PE_FrameDefaultButton = 1,
+        PE_FrameDockWidget = 2,
+        PE_FrameFocusRect = 3,
+        PE_FrameGroupBox = 4,
+        PE_FrameLineEdit = 5,
+        PE_FrameMenu = 6,
+        PE_FrameStatusBar = 7, // ### Qt 6: remove
+        PE_FrameStatusBarItem = PE_FrameStatusBar,
+        PE_FrameTabWidget = PE_FrameStatusBar + 1,
+        PE_FrameWindow = PE_FrameStatusBar + 2,
+        PE_FrameButtonBevel = PE_FrameStatusBar + 3,
+        PE_FrameButtonTool = PE_FrameStatusBar + 4,
+        PE_FrameTabBarBase = PE_FrameStatusBar + 5,
+
+        PE_PanelButtonCommand = PE_FrameStatusBar + 6,
+        PE_PanelButtonBevel = PE_FrameStatusBar + 7,
+        PE_PanelButtonTool = PE_FrameStatusBar + 8,
+        PE_PanelMenuBar = PE_FrameStatusBar + 9,
+        PE_PanelToolBar = PE_FrameStatusBar + 10,
+        PE_PanelLineEdit = PE_FrameStatusBar + 11,
+
+        PE_IndicatorArrowDown = PE_FrameStatusBar + 12,
+        PE_IndicatorArrowLeft = PE_FrameStatusBar + 13,
+        PE_IndicatorArrowRight = PE_FrameStatusBar + 14,
+        PE_IndicatorArrowUp = PE_FrameStatusBar + 15,
+        PE_IndicatorBranch = PE_FrameStatusBar + 16,
+        PE_IndicatorButtonDropDown = PE_FrameStatusBar + 17,
+        PE_IndicatorViewItemCheck = PE_FrameStatusBar + 18, // ### Qt 6: remove
+        PE_IndicatorItemViewItemCheck = PE_IndicatorViewItemCheck,
+        PE_IndicatorCheckBox = PE_IndicatorViewItemCheck + 1,
+        PE_IndicatorDockWidgetResizeHandle = PE_IndicatorViewItemCheck + 2,
+        PE_IndicatorHeaderArrow = PE_IndicatorViewItemCheck + 3,
+        PE_IndicatorMenuCheckMark = PE_IndicatorViewItemCheck + 4,
+        PE_IndicatorProgressChunk = PE_IndicatorViewItemCheck + 5,
+        PE_IndicatorRadioButton = PE_IndicatorViewItemCheck + 6,
+        PE_IndicatorSpinDown = PE_IndicatorViewItemCheck + 7,
+        PE_IndicatorSpinMinus = PE_IndicatorViewItemCheck + 8,
+        PE_IndicatorSpinPlus = PE_IndicatorViewItemCheck + 9,
+        PE_IndicatorSpinUp = PE_IndicatorViewItemCheck + 10,
+        PE_IndicatorToolBarHandle = PE_IndicatorViewItemCheck + 11,
+        PE_IndicatorToolBarSeparator = PE_IndicatorViewItemCheck + 12,
+        PE_PanelTipLabel = PE_IndicatorViewItemCheck + 13,
+        PE_IndicatorTabTear = PE_IndicatorViewItemCheck + 14,
+        PE_IndicatorTabTearLeft = PE_IndicatorTabTear,
+        PE_PanelScrollAreaCorner = PE_IndicatorTabTear + 1,
+
+        PE_Widget = PE_IndicatorTabTear + 2,
+
+        PE_IndicatorColumnViewArrow = PE_IndicatorTabTear + 3,
+        PE_IndicatorItemViewItemDrop = PE_IndicatorTabTear + 4,
+
+        PE_PanelItemViewItem = PE_IndicatorTabTear + 5,
+        PE_PanelItemViewRow = PE_IndicatorTabTear + 6, // ### Qt 6: remove
+
+        PE_PanelStatusBar = PE_IndicatorTabTear + 7,
+
+        PE_IndicatorTabClose = PE_IndicatorTabTear + 8,
+        PE_PanelMenu = PE_IndicatorTabTear + 9,
+
+        PE_IndicatorTabTearRight = PE_IndicatorTabTear + 10,
+
+        // do not add any values below/greater this
+        PE_CustomBase = 0xf000000;
+    
+    /** enum QStyle::ControlElement */
+    public static final int
+        CE_PushButton = 0,
+        CE_PushButtonBevel = 1,
+        CE_PushButtonLabel = 2,
+
+        CE_CheckBox = 3,
+        CE_CheckBoxLabel = 4,
+
+        CE_RadioButton = 5,
+        CE_RadioButtonLabel = 6,
+
+        CE_TabBarTab = 7,
+        CE_TabBarTabShape = 8,
+        CE_TabBarTabLabel = 9,
+
+        CE_ProgressBar = 10,
+        CE_ProgressBarGroove = 11,
+        CE_ProgressBarContents = 12,
+        CE_ProgressBarLabel = 13,
+
+        CE_MenuItem = 14,
+        CE_MenuScroller = 15,
+        CE_MenuVMargin = 16,
+        CE_MenuHMargin = 17,
+        CE_MenuTearoff = 18,
+        CE_MenuEmptyArea = 19,
+
+        CE_MenuBarItem = 20,
+        CE_MenuBarEmptyArea = 21,
+
+        CE_ToolButtonLabel = 22,
+
+        CE_Header = 23,
+        CE_HeaderSection = 24,
+        CE_HeaderLabel = 25,
+
+        CE_ToolBoxTab = 26,
+        CE_SizeGrip = 27,
+        CE_Splitter = 28,
+        CE_RubberBand = 29,
+        CE_DockWidgetTitle = 30,
+
+        CE_ScrollBarAddLine = 31,
+        CE_ScrollBarSubLine = 32,
+        CE_ScrollBarAddPage = 33,
+        CE_ScrollBarSubPage = 34,
+        CE_ScrollBarSlider = 35,
+        CE_ScrollBarFirst = 36,
+        CE_ScrollBarLast = 37,
+
+        CE_FocusFrame = 38,
+        CE_ComboBoxLabel = 39,
+
+        CE_ToolBar = 40,
+        CE_ToolBoxTabShape = 41,
+        CE_ToolBoxTabLabel = 42,
+        CE_HeaderEmptyArea = 43,
+
+        CE_ColumnViewGrip = 44,
+
+        CE_ItemViewItem = 45,
+
+        CE_ShapedFrame = 46,
+
+        // do not add any values below/greater than this
+        CE_CustomBase = 0xf0000000;
+    
+
+    /** enum QStyle::SubElement */
+    public static final int
+        SE_PushButtonContents = 0,
+        SE_PushButtonFocusRect = 1,
+
+        SE_CheckBoxIndicator = 2,
+        SE_CheckBoxContents = 3,
+        SE_CheckBoxFocusRect = 4,
+        SE_CheckBoxClickRect = 5,
+
+        SE_RadioButtonIndicator = 6,
+        SE_RadioButtonContents = 7,
+        SE_RadioButtonFocusRect = 8,
+        SE_RadioButtonClickRect = 9,
+
+        SE_ComboBoxFocusRect = 10,
+
+        SE_SliderFocusRect = 11,
+
+        SE_ProgressBarGroove = 12,
+        SE_ProgressBarContents = 13,
+        SE_ProgressBarLabel = 14,
+
+        SE_ToolBoxTabContents = 15,
+
+        SE_HeaderLabel = 16,
+        SE_HeaderArrow = 17,
+
+        SE_TabWidgetTabBar = 18,
+        SE_TabWidgetTabPane = 19,
+        SE_TabWidgetTabContents = 20,
+        SE_TabWidgetLeftCorner = 21,
+        SE_TabWidgetRightCorner = 22,
+
+        SE_ViewItemCheckIndicator = 23, // ### Qt 6: remove
+        SE_ItemViewItemCheckIndicator = SE_ViewItemCheckIndicator,
+
+        SE_TabBarTearIndicator = SE_ViewItemCheckIndicator + 1,
+        SE_TabBarTearIndicatorLeft = SE_TabBarTearIndicator,
+
+        SE_TreeViewDisclosureItem = SE_TabBarTearIndicator + 1,
+
+        SE_LineEditContents = SE_TabBarTearIndicator + 2,
+        SE_FrameContents = SE_TabBarTearIndicator + 3,
+
+        SE_DockWidgetCloseButton = SE_TabBarTearIndicator + 4,
+        SE_DockWidgetFloatButton = SE_TabBarTearIndicator + 5,
+        SE_DockWidgetTitleBarText = SE_TabBarTearIndicator + 6,
+        SE_DockWidgetIcon = SE_TabBarTearIndicator + 7,
+
+        SE_CheckBoxLayoutItem = SE_TabBarTearIndicator + 8,
+        SE_ComboBoxLayoutItem = SE_TabBarTearIndicator + 9,
+        SE_DateTimeEditLayoutItem = SE_TabBarTearIndicator + 10,
+        SE_DialogButtonBoxLayoutItem = SE_TabBarTearIndicator + 11, // ### Qt 6: remove
+        SE_LabelLayoutItem = SE_TabBarTearIndicator + 12,
+        SE_ProgressBarLayoutItem = SE_TabBarTearIndicator + 13,
+        SE_PushButtonLayoutItem = SE_TabBarTearIndicator + 14,
+        SE_RadioButtonLayoutItem = SE_TabBarTearIndicator + 15,
+        SE_SliderLayoutItem = SE_TabBarTearIndicator + 16,
+        SE_SpinBoxLayoutItem = SE_TabBarTearIndicator + 17,
+        SE_ToolButtonLayoutItem = SE_TabBarTearIndicator + 18,
+
+        SE_FrameLayoutItem = SE_TabBarTearIndicator + 19,
+        SE_GroupBoxLayoutItem = SE_TabBarTearIndicator + 20,
+        SE_TabWidgetLayoutItem = SE_TabBarTearIndicator + 21,
+
+        SE_ItemViewItemDecoration = SE_TabBarTearIndicator + 22,
+        SE_ItemViewItemText = SE_TabBarTearIndicator + 23,
+        SE_ItemViewItemFocusRect = SE_TabBarTearIndicator + 24,
+
+        SE_TabBarTabLeftButton = SE_TabBarTearIndicator + 25,
+        SE_TabBarTabRightButton = SE_TabBarTearIndicator + 26,
+        SE_TabBarTabText = SE_TabBarTearIndicator + 27,
+
+        SE_ShapedFrameContents = SE_TabBarTearIndicator + 28,
+
+        SE_ToolBarHandle = SE_TabBarTearIndicator + 29,
+
+        SE_TabBarScrollLeftButton = SE_TabBarTearIndicator + 30,
+        SE_TabBarScrollRightButton = SE_TabBarTearIndicator + 31,
+        SE_TabBarTearIndicatorRight = SE_TabBarTearIndicator + 32,
+
+        // do not add any values below/greater than this
+        SE_CustomBase = 0xf0000000;
+    
+
+
+    /** enum QStyle::ComplexControl */
+    public static final int
+        CC_SpinBox = 0,
+        CC_ComboBox = 1,
+        CC_ScrollBar = 2,
+        CC_Slider = 3,
+        CC_ToolButton = 4,
+        CC_TitleBar = 5,
+        CC_Dial = 6,
+        CC_GroupBox = 7,
+        CC_MdiControls = 8,
+
+        // do not add any values below/greater than this
+        CC_CustomBase = 0xf0000000;
+    
+
+    /** enum QStyle::SubControl */
+    public static final int
+        SC_None =                  0x00000000,
+
+        SC_ScrollBarAddLine =      0x00000001,
+        SC_ScrollBarSubLine =      0x00000002,
+        SC_ScrollBarAddPage =      0x00000004,
+        SC_ScrollBarSubPage =      0x00000008,
+        SC_ScrollBarFirst =        0x00000010,
+        SC_ScrollBarLast =         0x00000020,
+        SC_ScrollBarSlider =       0x00000040,
+        SC_ScrollBarGroove =       0x00000080,
+
+        SC_SpinBoxUp =             0x00000001,
+        SC_SpinBoxDown =           0x00000002,
+        SC_SpinBoxFrame =          0x00000004,
+        SC_SpinBoxEditField =      0x00000008,
+
+        SC_ComboBoxFrame =         0x00000001,
+        SC_ComboBoxEditField =     0x00000002,
+        SC_ComboBoxArrow =         0x00000004,
+        SC_ComboBoxListBoxPopup =  0x00000008,
+
+        SC_SliderGroove =          0x00000001,
+        SC_SliderHandle =          0x00000002,
+        SC_SliderTickmarks =       0x00000004,
+
+        SC_ToolButton =            0x00000001,
+        SC_ToolButtonMenu =        0x00000002,
+
+        SC_TitleBarSysMenu =       0x00000001,
+        SC_TitleBarMinButton =     0x00000002,
+        SC_TitleBarMaxButton =     0x00000004,
+        SC_TitleBarCloseButton =   0x00000008,
+        SC_TitleBarNormalButton =  0x00000010,
+        SC_TitleBarShadeButton =   0x00000020,
+        SC_TitleBarUnshadeButton = 0x00000040,
+        SC_TitleBarContextHelpButton = 0x00000080,
+        SC_TitleBarLabel =         0x00000100,
+
+        SC_DialGroove =            0x00000001,
+        SC_DialHandle =            0x00000002,
+        SC_DialTickmarks =         0x00000004,
+
+        SC_GroupBoxCheckBox =      0x00000001,
+        SC_GroupBoxLabel =         0x00000002,
+        SC_GroupBoxContents =      0x00000004,
+        SC_GroupBoxFrame =         0x00000008,
+
+        SC_MdiMinButton     =      0x00000001,
+        SC_MdiNormalButton  =      0x00000002,
+        SC_MdiCloseButton   =      0x00000004,
+
+        SC_CustomBase =            0xf0000000,
+        SC_All =                   0xffffffff;
+    
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(SubControls, SubControl)
+
+    /** enum QStyle::PixelMetric */
+    public static final int
+        PM_ButtonMargin = 0,
+        PM_ButtonDefaultIndicator = 1,
+        PM_MenuButtonIndicator = 2,
+        PM_ButtonShiftHorizontal = 3,
+        PM_ButtonShiftVertical = 4,
+
+        PM_DefaultFrameWidth = 5,
+        PM_SpinBoxFrameWidth = 6,
+        PM_ComboBoxFrameWidth = 7,
+
+        PM_MaximumDragDistance = 8,
+
+        PM_ScrollBarExtent = 9,
+        PM_ScrollBarSliderMin = 10,
+
+        PM_SliderThickness = 11,             // total slider thickness
+        PM_SliderControlThickness = 12,      // thickness of the business part
+        PM_SliderLength = 13,                // total length of slider
+        PM_SliderTickmarkOffset = 14,        //
+        PM_SliderSpaceAvailable = 15,        // available space for slider to move
+
+        PM_DockWidgetSeparatorExtent = 16,
+        PM_DockWidgetHandleExtent = 17,
+        PM_DockWidgetFrameWidth = 18,
+
+        PM_TabBarTabOverlap = 19,
+        PM_TabBarTabHSpace = 20,
+        PM_TabBarTabVSpace = 21,
+        PM_TabBarBaseHeight = 22,
+        PM_TabBarBaseOverlap = 23,
+
+        PM_ProgressBarChunkWidth = 24,
+
+        PM_SplitterWidth = 25,
+        PM_TitleBarHeight = 26,
+
+        PM_MenuScrollerHeight = 27,
+        PM_MenuHMargin = 28,
+        PM_MenuVMargin = 29,
+        PM_MenuPanelWidth = 30,
+        PM_MenuTearoffHeight = 31,
+        PM_MenuDesktopFrameWidth = 32,
+
+        PM_MenuBarPanelWidth = 33,
+        PM_MenuBarItemSpacing = 34,
+        PM_MenuBarVMargin = 35,
+        PM_MenuBarHMargin = 36,
+
+        PM_IndicatorWidth = 37,
+        PM_IndicatorHeight = 38,
+        PM_ExclusiveIndicatorWidth = 39,
+        PM_ExclusiveIndicatorHeight = 40,
+
+        PM_DialogButtonsSeparator = 41,
+        PM_DialogButtonsButtonWidth = 42,
+        PM_DialogButtonsButtonHeight = 43,
+
+        PM_MdiSubWindowFrameWidth = 44,
+        PM_MDIFrameWidth = PM_MdiSubWindowFrameWidth,         // ### Qt 6: remove
+        PM_MdiSubWindowMinimizedWidth = PM_MdiSubWindowFrameWidth + 1,
+        PM_MDIMinimizedWidth = PM_MdiSubWindowMinimizedWidth, // ### Qt 6: remove
+
+        PM_HeaderMargin = PM_MdiSubWindowMinimizedWidth + 1,
+        PM_HeaderMarkSize = PM_MdiSubWindowMinimizedWidth + 2,
+        PM_HeaderGripMargin = PM_MdiSubWindowMinimizedWidth + 3,
+        PM_TabBarTabShiftHorizontal = PM_MdiSubWindowMinimizedWidth + 4,
+        PM_TabBarTabShiftVertical = PM_MdiSubWindowMinimizedWidth + 5,
+        PM_TabBarScrollButtonWidth = PM_MdiSubWindowMinimizedWidth + 6,
+
+        PM_ToolBarFrameWidth = PM_MdiSubWindowMinimizedWidth + 7,
+        PM_ToolBarHandleExtent = PM_MdiSubWindowMinimizedWidth + 8,
+        PM_ToolBarItemSpacing = PM_MdiSubWindowMinimizedWidth + 9,
+        PM_ToolBarItemMargin = PM_MdiSubWindowMinimizedWidth + 10,
+        PM_ToolBarSeparatorExtent = PM_MdiSubWindowMinimizedWidth + 11,
+        PM_ToolBarExtensionExtent = PM_MdiSubWindowMinimizedWidth + 12,
+
+        PM_SpinBoxSliderHeight = PM_MdiSubWindowMinimizedWidth + 13,
+
+        PM_DefaultTopLevelMargin = PM_MdiSubWindowMinimizedWidth + 14, // ### Qt 6: remove
+        PM_DefaultChildMargin = PM_MdiSubWindowMinimizedWidth + 15,    // ### Qt 6: remove
+        PM_DefaultLayoutSpacing = PM_MdiSubWindowMinimizedWidth + 16,  // ### Qt 6: remove
+
+        PM_ToolBarIconSize = PM_MdiSubWindowMinimizedWidth + 17,
+        PM_ListViewIconSize = PM_MdiSubWindowMinimizedWidth + 18,
+        PM_IconViewIconSize = PM_MdiSubWindowMinimizedWidth + 19,
+        PM_SmallIconSize = PM_MdiSubWindowMinimizedWidth + 20,
+        PM_LargeIconSize = PM_MdiSubWindowMinimizedWidth + 21,
+
+        PM_FocusFrameVMargin = PM_MdiSubWindowMinimizedWidth + 22,
+        PM_FocusFrameHMargin = PM_MdiSubWindowMinimizedWidth + 23,
+
+        PM_ToolTipLabelFrameWidth = PM_MdiSubWindowMinimizedWidth + 24,
+        PM_CheckBoxLabelSpacing = PM_MdiSubWindowMinimizedWidth + 25,
+        PM_TabBarIconSize = PM_MdiSubWindowMinimizedWidth + 26,
+        PM_SizeGripSize = PM_MdiSubWindowMinimizedWidth + 27,
+        PM_DockWidgetTitleMargin = PM_MdiSubWindowMinimizedWidth + 28,
+        PM_MessageBoxIconSize = PM_MdiSubWindowMinimizedWidth + 29,
+        PM_ButtonIconSize = PM_MdiSubWindowMinimizedWidth + 30,
+
+        PM_DockWidgetTitleBarButtonMargin = PM_MdiSubWindowMinimizedWidth + 31,
+
+        PM_RadioButtonLabelSpacing = PM_MdiSubWindowMinimizedWidth + 32,
+        PM_LayoutLeftMargin = PM_MdiSubWindowMinimizedWidth + 33,
+        PM_LayoutTopMargin = PM_MdiSubWindowMinimizedWidth + 34,
+        PM_LayoutRightMargin = PM_MdiSubWindowMinimizedWidth + 35,
+        PM_LayoutBottomMargin = PM_MdiSubWindowMinimizedWidth + 36,
+        PM_LayoutHorizontalSpacing = PM_MdiSubWindowMinimizedWidth + 37,
+        PM_LayoutVerticalSpacing = PM_MdiSubWindowMinimizedWidth + 38,
+        PM_TabBar_ScrollButtonOverlap = PM_MdiSubWindowMinimizedWidth + 39,
+
+        PM_TextCursorWidth = PM_MdiSubWindowMinimizedWidth + 40,
+
+        PM_TabCloseIndicatorWidth = PM_MdiSubWindowMinimizedWidth + 41,
+        PM_TabCloseIndicatorHeight = PM_MdiSubWindowMinimizedWidth + 42,
+
+        PM_ScrollView_ScrollBarSpacing = PM_MdiSubWindowMinimizedWidth + 43,
+        PM_ScrollView_ScrollBarOverlap = PM_MdiSubWindowMinimizedWidth + 44,
+        PM_SubMenuOverlap = PM_MdiSubWindowMinimizedWidth + 45,
+        PM_TreeViewIndentation = PM_MdiSubWindowMinimizedWidth + 46,
+
+        PM_HeaderDefaultSectionSizeHorizontal = PM_MdiSubWindowMinimizedWidth + 47,
+        PM_HeaderDefaultSectionSizeVertical = PM_MdiSubWindowMinimizedWidth + 48,
+
+        PM_TitleBarButtonIconSize = PM_MdiSubWindowMinimizedWidth + 49,
+        PM_TitleBarButtonSize = PM_MdiSubWindowMinimizedWidth + 50,
+
+        // do not add any values below/greater than this
+        PM_CustomBase = 0xf0000000;
+    
+
+    public native int pixelMetric(@Cast("QStyle::PixelMetric") int metric);
+
+    /** enum QStyle::ContentsType */
+    public static final int
+        CT_PushButton = 0,
+        CT_CheckBox = 1,
+        CT_RadioButton = 2,
+        CT_ToolButton = 3,
+        CT_ComboBox = 4,
+        CT_Splitter = 5,
+        CT_ProgressBar = 6,
+        CT_MenuItem = 7,
+        CT_MenuBarItem = 8,
+        CT_MenuBar = 9,
+        CT_Menu = 10,
+        CT_TabBarTab = 11,
+        CT_Slider = 12,
+        CT_ScrollBar = 13,
+        CT_LineEdit = 14,
+        CT_SpinBox = 15,
+        CT_SizeGrip = 16,
+        CT_TabWidget = 17,
+        CT_DialogButtons = 18,
+        CT_HeaderSection = 19,
+        CT_GroupBox = 20,
+        CT_MdiControls = 21,
+        CT_ItemViewItem = 22,
+        // do not add any values below/greater than this
+        CT_CustomBase = 0xf0000000;
+    
+
+    /** enum QStyle::RequestSoftwareInputPanel */
+    public static final int
+        RSIP_OnMouseClickAndAlreadyFocused = 0,
+        RSIP_OnMouseClick = 1;
+    
+
+    /** enum QStyle::StyleHint */
+    public static final int
+        SH_EtchDisabledText = 0,
+        SH_DitherDisabledText = 1,
+        SH_ScrollBar_MiddleClickAbsolutePosition = 2,
+        SH_ScrollBar_ScrollWhenPointerLeavesControl = 3,
+        SH_TabBar_SelectMouseType = 4,
+        SH_TabBar_Alignment = 5,
+        SH_Header_ArrowAlignment = 6,
+        SH_Slider_SnapToValue = 7,
+        SH_Slider_SloppyKeyEvents = 8,
+        SH_ProgressDialog_CenterCancelButton = 9,
+        SH_ProgressDialog_TextLabelAlignment = 10,
+        SH_PrintDialog_RightAlignButtons = 11,
+        SH_MainWindow_SpaceBelowMenuBar = 12,
+        SH_FontDialog_SelectAssociatedText = 13,
+        SH_Menu_AllowActiveAndDisabled = 14,
+        SH_Menu_SpaceActivatesItem = 15,
+        SH_Menu_SubMenuPopupDelay = 16,
+        SH_ScrollView_FrameOnlyAroundContents = 17,
+        SH_MenuBar_AltKeyNavigation = 18,
+        SH_ComboBox_ListMouseTracking = 19,
+        SH_Menu_MouseTracking = 20,
+        SH_MenuBar_MouseTracking = 21,
+        SH_ItemView_ChangeHighlightOnFocus = 22,
+        SH_Widget_ShareActivation = 23,
+        SH_Workspace_FillSpaceOnMaximize = 24,
+        SH_ComboBox_Popup = 25,
+        SH_TitleBar_NoBorder = 26,
+        SH_Slider_StopMouseOverSlider = 27,
+        SH_ScrollBar_StopMouseOverSlider = SH_Slider_StopMouseOverSlider, // ### Qt 6: remove
+        SH_BlinkCursorWhenTextSelected = SH_Slider_StopMouseOverSlider + 1,
+        SH_RichText_FullWidthSelection = SH_Slider_StopMouseOverSlider + 2,
+        SH_Menu_Scrollable = SH_Slider_StopMouseOverSlider + 3,
+        SH_GroupBox_TextLabelVerticalAlignment = SH_Slider_StopMouseOverSlider + 4,
+        SH_GroupBox_TextLabelColor = SH_Slider_StopMouseOverSlider + 5,
+        SH_Menu_SloppySubMenus = SH_Slider_StopMouseOverSlider + 6,
+        SH_Table_GridLineColor = SH_Slider_StopMouseOverSlider + 7,
+        SH_LineEdit_PasswordCharacter = SH_Slider_StopMouseOverSlider + 8,
+        SH_DialogButtons_DefaultButton = SH_Slider_StopMouseOverSlider + 9,
+        SH_ToolBox_SelectedPageTitleBold = SH_Slider_StopMouseOverSlider + 10,
+        SH_TabBar_PreferNoArrows = SH_Slider_StopMouseOverSlider + 11,
+        SH_ScrollBar_LeftClickAbsolutePosition = SH_Slider_StopMouseOverSlider + 12,
+        SH_ListViewExpand_SelectMouseType = SH_Slider_StopMouseOverSlider + 13,
+        SH_UnderlineShortcut = SH_Slider_StopMouseOverSlider + 14,
+        SH_SpinBox_AnimateButton = SH_Slider_StopMouseOverSlider + 15,
+        SH_SpinBox_KeyPressAutoRepeatRate = SH_Slider_StopMouseOverSlider + 16,
+        SH_SpinBox_ClickAutoRepeatRate = SH_Slider_StopMouseOverSlider + 17,
+        SH_Menu_FillScreenWithScroll = SH_Slider_StopMouseOverSlider + 18,
+        SH_ToolTipLabel_Opacity = SH_Slider_StopMouseOverSlider + 19,
+        SH_DrawMenuBarSeparator = SH_Slider_StopMouseOverSlider + 20,
+        SH_TitleBar_ModifyNotification = SH_Slider_StopMouseOverSlider + 21,
+        SH_Button_FocusPolicy = SH_Slider_StopMouseOverSlider + 22,
+        SH_MessageBox_UseBorderForButtonSpacing = SH_Slider_StopMouseOverSlider + 23,
+        SH_TitleBar_AutoRaise = SH_Slider_StopMouseOverSlider + 24,
+        SH_ToolButton_PopupDelay = SH_Slider_StopMouseOverSlider + 25,
+        SH_FocusFrame_Mask = SH_Slider_StopMouseOverSlider + 26,
+        SH_RubberBand_Mask = SH_Slider_StopMouseOverSlider + 27,
+        SH_WindowFrame_Mask = SH_Slider_StopMouseOverSlider + 28,
+        SH_SpinControls_DisableOnBounds = SH_Slider_StopMouseOverSlider + 29,
+        SH_Dial_BackgroundRole = SH_Slider_StopMouseOverSlider + 30,
+        SH_ComboBox_LayoutDirection = SH_Slider_StopMouseOverSlider + 31,
+        SH_ItemView_EllipsisLocation = SH_Slider_StopMouseOverSlider + 32,
+        SH_ItemView_ShowDecorationSelected = SH_Slider_StopMouseOverSlider + 33,
+        SH_ItemView_ActivateItemOnSingleClick = SH_Slider_StopMouseOverSlider + 34,
+        SH_ScrollBar_ContextMenu = SH_Slider_StopMouseOverSlider + 35,
+        SH_ScrollBar_RollBetweenButtons = SH_Slider_StopMouseOverSlider + 36,
+        SH_Slider_AbsoluteSetButtons = SH_Slider_StopMouseOverSlider + 37,
+        SH_Slider_PageSetButtons = SH_Slider_StopMouseOverSlider + 38,
+        SH_Menu_KeyboardSearch = SH_Slider_StopMouseOverSlider + 39,
+        SH_TabBar_ElideMode = SH_Slider_StopMouseOverSlider + 40,
+        SH_DialogButtonLayout = SH_Slider_StopMouseOverSlider + 41,
+        SH_ComboBox_PopupFrameStyle = SH_Slider_StopMouseOverSlider + 42,
+        SH_MessageBox_TextInteractionFlags = SH_Slider_StopMouseOverSlider + 43,
+        SH_DialogButtonBox_ButtonsHaveIcons = SH_Slider_StopMouseOverSlider + 44,
+        SH_SpellCheckUnderlineStyle = SH_Slider_StopMouseOverSlider + 45,
+        SH_MessageBox_CenterButtons = SH_Slider_StopMouseOverSlider + 46,
+        SH_Menu_SelectionWrap = SH_Slider_StopMouseOverSlider + 47,
+        SH_ItemView_MovementWithoutUpdatingSelection = SH_Slider_StopMouseOverSlider + 48,
+        SH_ToolTip_Mask = SH_Slider_StopMouseOverSlider + 49,
+        SH_FocusFrame_AboveWidget = SH_Slider_StopMouseOverSlider + 50,
+        SH_TextControl_FocusIndicatorTextCharFormat = SH_Slider_StopMouseOverSlider + 51,
+        SH_WizardStyle = SH_Slider_StopMouseOverSlider + 52,
+        SH_ItemView_ArrowKeysNavigateIntoChildren = SH_Slider_StopMouseOverSlider + 53,
+        SH_Menu_Mask = SH_Slider_StopMouseOverSlider + 54,
+        SH_Menu_FlashTriggeredItem = SH_Slider_StopMouseOverSlider + 55,
+        SH_Menu_FadeOutOnHide = SH_Slider_StopMouseOverSlider + 56,
+        SH_SpinBox_ClickAutoRepeatThreshold = SH_Slider_StopMouseOverSlider + 57,
+        SH_ItemView_PaintAlternatingRowColorsForEmptyArea = SH_Slider_StopMouseOverSlider + 58,
+        SH_FormLayoutWrapPolicy = SH_Slider_StopMouseOverSlider + 59,
+        SH_TabWidget_DefaultTabPosition = SH_Slider_StopMouseOverSlider + 60,
+        SH_ToolBar_Movable = SH_Slider_StopMouseOverSlider + 61,
+        SH_FormLayoutFieldGrowthPolicy = SH_Slider_StopMouseOverSlider + 62,
+        SH_FormLayoutFormAlignment = SH_Slider_StopMouseOverSlider + 63,
+        SH_FormLayoutLabelAlignment = SH_Slider_StopMouseOverSlider + 64,
+        SH_ItemView_DrawDelegateFrame = SH_Slider_StopMouseOverSlider + 65,
+        SH_TabBar_CloseButtonPosition = SH_Slider_StopMouseOverSlider + 66,
+        SH_DockWidget_ButtonsHaveFrame = SH_Slider_StopMouseOverSlider + 67,
+        SH_ToolButtonStyle = SH_Slider_StopMouseOverSlider + 68,
+        SH_RequestSoftwareInputPanel = SH_Slider_StopMouseOverSlider + 69,
+        SH_ScrollBar_Transient = SH_Slider_StopMouseOverSlider + 70,
+        SH_Menu_SupportsSections = SH_Slider_StopMouseOverSlider + 71,
+        SH_ToolTip_WakeUpDelay = SH_Slider_StopMouseOverSlider + 72,
+        SH_ToolTip_FallAsleepDelay = SH_Slider_StopMouseOverSlider + 73,
+        SH_Widget_Animate = SH_Slider_StopMouseOverSlider + 74,
+        SH_Splitter_OpaqueResize = SH_Slider_StopMouseOverSlider + 75,
+        // Whether we should use a native popup.
+        // Only supported for non-editable combo boxes on Mac OS X so far.
+        SH_ComboBox_UseNativePopup = SH_Slider_StopMouseOverSlider + 76,
+        SH_LineEdit_PasswordMaskDelay = SH_Slider_StopMouseOverSlider + 77,
+        SH_TabBar_ChangeCurrentDelay = SH_Slider_StopMouseOverSlider + 78,
+        SH_Menu_SubMenuUniDirection = SH_Slider_StopMouseOverSlider + 79,
+        SH_Menu_SubMenuUniDirectionFailCount = SH_Slider_StopMouseOverSlider + 80,
+        SH_Menu_SubMenuSloppySelectOtherActions = SH_Slider_StopMouseOverSlider + 81,
+        SH_Menu_SubMenuSloppyCloseTimeout = SH_Slider_StopMouseOverSlider + 82,
+        SH_Menu_SubMenuResetWhenReenteringParent = SH_Slider_StopMouseOverSlider + 83,
+        SH_Menu_SubMenuDontStartSloppyOnLeave = SH_Slider_StopMouseOverSlider + 84,
+        SH_ItemView_ScrollMode = SH_Slider_StopMouseOverSlider + 85,
+        SH_TitleBar_ShowToolTipsOnButtons = SH_Slider_StopMouseOverSlider + 86,
+        SH_Widget_Animation_Duration = SH_Slider_StopMouseOverSlider + 87,
+        SH_ComboBox_AllowWheelScrolling = SH_Slider_StopMouseOverSlider + 88,
+        SH_SpinBox_ButtonsInsideFrame = SH_Slider_StopMouseOverSlider + 89,
+        SH_SpinBox_StepModifier = SH_Slider_StopMouseOverSlider + 90,
+        // Add new style hint values here
+
+        SH_CustomBase = 0xf0000000;
+    
+
+    public native int styleHint(@Cast("QStyle::StyleHint") int stylehint);
+
+    /** enum QStyle::StandardPixmap */
+    public static final int
+        SP_TitleBarMenuButton = 0,
+        SP_TitleBarMinButton = 1,
+        SP_TitleBarMaxButton = 2,
+        SP_TitleBarCloseButton = 3,
+        SP_TitleBarNormalButton = 4,
+        SP_TitleBarShadeButton = 5,
+        SP_TitleBarUnshadeButton = 6,
+        SP_TitleBarContextHelpButton = 7,
+        SP_DockWidgetCloseButton = 8,
+        SP_MessageBoxInformation = 9,
+        SP_MessageBoxWarning = 10,
+        SP_MessageBoxCritical = 11,
+        SP_MessageBoxQuestion = 12,
+        SP_DesktopIcon = 13,
+        SP_TrashIcon = 14,
+        SP_ComputerIcon = 15,
+        SP_DriveFDIcon = 16,
+        SP_DriveHDIcon = 17,
+        SP_DriveCDIcon = 18,
+        SP_DriveDVDIcon = 19,
+        SP_DriveNetIcon = 20,
+        SP_DirOpenIcon = 21,
+        SP_DirClosedIcon = 22,
+        SP_DirLinkIcon = 23,
+        SP_DirLinkOpenIcon = 24,
+        SP_FileIcon = 25,
+        SP_FileLinkIcon = 26,
+        SP_ToolBarHorizontalExtensionButton = 27,
+        SP_ToolBarVerticalExtensionButton = 28,
+        SP_FileDialogStart = 29,
+        SP_FileDialogEnd = 30,
+        SP_FileDialogToParent = 31,
+        SP_FileDialogNewFolder = 32,
+        SP_FileDialogDetailedView = 33,
+        SP_FileDialogInfoView = 34,
+        SP_FileDialogContentsView = 35,
+        SP_FileDialogListView = 36,
+        SP_FileDialogBack = 37,
+        SP_DirIcon = 38,
+        SP_DialogOkButton = 39,
+        SP_DialogCancelButton = 40,
+        SP_DialogHelpButton = 41,
+        SP_DialogOpenButton = 42,
+        SP_DialogSaveButton = 43,
+        SP_DialogCloseButton = 44,
+        SP_DialogApplyButton = 45,
+        SP_DialogResetButton = 46,
+        SP_DialogDiscardButton = 47,
+        SP_DialogYesButton = 48,
+        SP_DialogNoButton = 49,
+        SP_ArrowUp = 50,
+        SP_ArrowDown = 51,
+        SP_ArrowLeft = 52,
+        SP_ArrowRight = 53,
+        SP_ArrowBack = 54,
+        SP_ArrowForward = 55,
+        SP_DirHomeIcon = 56,
+        SP_CommandLink = 57,
+        SP_VistaShield = 58,
+        SP_BrowserReload = 59,
+        SP_BrowserStop = 60,
+        SP_MediaPlay = 61,
+        SP_MediaStop = 62,
+        SP_MediaPause = 63,
+        SP_MediaSkipForward = 64,
+        SP_MediaSkipBackward = 65,
+        SP_MediaSeekForward = 66,
+        SP_MediaSeekBackward = 67,
+        SP_MediaVolume = 68,
+        SP_MediaVolumeMuted = 69,
+        SP_LineEditClearButton = 70,
+        // do not add any values below/greater than this
+        SP_CustomBase = 0xf0000000;
+    
+
+    public native @ByVal QIcon standardIcon(@Cast("QStyle::StandardPixmap") int standardIcon);
+    public static native int sliderPositionFromValue(int min, int max, int val, int space,
+                                           @Cast("bool") boolean upsideDown/*=false*/);
+    public static native int sliderPositionFromValue(int min, int max, int val, int space);
+    public static native int sliderValueFromPosition(int min, int max, int pos, int space,
+                                           @Cast("bool") boolean upsideDown/*=false*/);
+    public static native int sliderValueFromPosition(int min, int max, int pos, int space);
+    public static native @ByVal @Cast("Qt::Alignment") int visualAlignment(@Cast("Qt::LayoutDirection") int direction, @ByVal @Cast("Qt::Alignment") int alignment);
+
+    public native int layoutSpacing(QSizePolicy.ControlType control1,
+                                  QSizePolicy.ControlType control2, Orientation orientation);
+
+    public native @Const QStyle proxy();
+}
+
+
+// Parsed from QtWidgets/qsystemtrayicon.h
+
+public static class QSystemTrayIcon extends QObject {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QSystemTrayIcon(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QSystemTrayIcon(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QSystemTrayIcon position(long position) {
+        return (QSystemTrayIcon)super.position(position);
+    }
+
+    public QSystemTrayIcon(QObject parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QObject parent/*=nullptr*/);
+    public QSystemTrayIcon() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QSystemTrayIcon(@Const @ByRef QIcon icon, QObject parent/*=nullptr*/) { super((Pointer)null); allocate(icon, parent); }
+    private native void allocate(@Const @ByRef QIcon icon, QObject parent/*=nullptr*/);
+    public QSystemTrayIcon(@Const @ByRef QIcon icon) { super((Pointer)null); allocate(icon); }
+    private native void allocate(@Const @ByRef QIcon icon);
+
+    public enum ActivationReason {
+        Unknown(0),
+        Context(1),
+        DoubleClick(2),
+        Trigger(3),
+        MiddleClick(4);
+
+        public final int value;
+        private ActivationReason(int v) { this.value = v; }
+        private ActivationReason(ActivationReason e) { this.value = e.value; }
+        public ActivationReason intern() { for (ActivationReason e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+// #if QT_CONFIG(menu)
+    public native void setContextMenu(QMenu menu);
+    public native QMenu contextMenu();
+// #endif
+
+    public native @ByVal QIcon icon();
+    public native void setIcon(@Const @ByRef QIcon icon);
+
+    public native @ByVal QString toolTip();
+    public native void setToolTip(@Const @ByRef QString tip);
+
+    public static native @Cast("bool") boolean isSystemTrayAvailable();
+    public static native @Cast("bool") boolean supportsMessages();
+
+    public enum MessageIcon { NoIcon(0), Information(1), Warning(2), Critical(3);
+
+        public final int value;
+        private MessageIcon(int v) { this.value = v; }
+        private MessageIcon(MessageIcon e) { this.value = e.value; }
+        public MessageIcon intern() { for (MessageIcon e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+    public native @Cast("bool") boolean isVisible();
+    public native void setVisible(@Cast("bool") boolean visible);
+    public native void show();
+    public native void hide();
+    public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg, @Const @ByRef QIcon icon, int msecs/*=10000*/);
+    public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg, @Const @ByRef QIcon icon);
+    public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg,
+                         MessageIcon icon/*=QSystemTrayIcon::Information*/, int msecs/*=10000*/);
+    public native void showMessage(@Const @ByRef QString title, @Const @ByRef QString msg);
+}
+
+
+// Parsed from QtWidgets/qtextedit.h
+
+public static class QTextEdit extends QAbstractScrollArea {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QTextEdit(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QTextEdit(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QTextEdit position(long position) {
+        return (QTextEdit)super.position(position);
+    }
+
+    /** enum QTextEdit::LineWrapMode */
+    public static final int
+        NoWrap = 0,
+        WidgetWidth = 1,
+        FixedPixelWidth = 2,
+        FixedColumnWidth = 3;
+    
+
+    public enum AutoFormattingFlag {
+        AutoNone(0),
+        AutoBulletList(0x00000001),
+        AutoAll(0xffffffff);
+
+        public final int value;
+        private AutoFormattingFlag(int v) { this.value = v; }
+        private AutoFormattingFlag(AutoFormattingFlag e) { this.value = e.value; }
+        public AutoFormattingFlag intern() { for (AutoFormattingFlag e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(AutoFormatting, AutoFormattingFlag)
+    
+
+    public QTextEdit(QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(parent); }
+    private native void allocate(QWidget parent/*=nullptr*/);
+    public QTextEdit() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QTextEdit(@Const @ByRef QString text, QWidget parent/*=nullptr*/) { super((Pointer)null); allocate(text, parent); }
+    private native void allocate(@Const @ByRef QString text, QWidget parent/*=nullptr*/);
+    public QTextEdit(@Const @ByRef QString text) { super((Pointer)null); allocate(text); }
+    private native void allocate(@Const @ByRef QString text);
+
+    public native void setPlaceholderText(@Const @ByRef QString placeholderText);
+    public native @ByVal QString placeholderText();
+
+    public native @Cast("bool") boolean isReadOnly();
+    public native void setReadOnly(@Cast("bool") boolean ro);
+
+    public native void setTextInteractionFlags(@ByVal @Cast("Qt::TextInteractionFlags") int flags);
+    public native @ByVal @Cast("Qt::TextInteractionFlags") int textInteractionFlags();
+
+    public native double fontPointSize();
+    public native @ByVal QString fontFamily();
+    public native int fontWeight();
+    public native @Cast("bool") boolean fontUnderline();
+    public native @Cast("bool") boolean fontItalic();
+    public native @ByVal QFont currentFont();
+    public native @ByVal @Cast("Qt::Alignment") int alignment();
+
+    public native @Cast("bool") boolean tabChangesFocus();
+    public native void setTabChangesFocus(@Cast("bool") boolean b);
+
+    public native void setDocumentTitle(@Const @ByRef QString title);
+    public native @ByVal QString documentTitle();
+
+    public native @Cast("bool") boolean isUndoRedoEnabled();
+    public native void setUndoRedoEnabled(@Cast("bool") boolean enable);
+
+    public native @Cast("QTextEdit::LineWrapMode") int lineWrapMode();
+    public native void setLineWrapMode(@Cast("QTextEdit::LineWrapMode") int mode);
+
+    public native int lineWrapColumnOrWidth();
+    public native void setLineWrapColumnOrWidth(int w);
+
+    public native @Cast("bool") boolean find(@Const @ByRef QString exp);
+// #ifndef QT_NO_REGEXP
+// #endif
+
+    public native @ByVal QString toPlainText();
+// #ifndef QT_NO_TEXTHTMLPARSER
+    public native @ByVal QString toHtml();
+// #endif
+
+    public native void ensureCursorVisible();
+// #ifndef QT_NO_CONTEXTMENU
+    public native QMenu createStandardContextMenu();
+// #endif
+
+    public native @Cast("bool") boolean overwriteMode();
+    public native void setOverwriteMode(@Cast("bool") boolean overwrite);
+
+// #if QT_DEPRECATED_SINCE(5, 10)
+    public native @Deprecated int tabStopWidth();
+    public native @Deprecated void setTabStopWidth(int width);
+// #endif
+
+    public native double tabStopDistance();
+    public native void setTabStopDistance(double distance);
+
+    public native int cursorWidth();
+    public native void setCursorWidth(int width);
+
+    public native @Cast("bool") boolean acceptRichText();
+    public native void setAcceptRichText(@Cast("bool") boolean accept);
+
+    public static class ExtraSelection extends Pointer {
+        static { Loader.load(); }
+        /** Default native constructor. */
+        public ExtraSelection() { super((Pointer)null); allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ExtraSelection(long size) { super((Pointer)null); allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public ExtraSelection(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(long size);
+        @Override public ExtraSelection position(long position) {
+            return (ExtraSelection)super.position(position);
+        }
+    
+    }
+
+    public native @Cast("bool") boolean canPaste();
+
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int property);
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int query, @ByVal QVariant argument);
+    public native void setFontPointSize(double s);
+    public native void setFontFamily(@Const @ByRef QString fontFamily);
+    public native void setFontWeight(int w);
+    public native void setFontUnderline(@Cast("bool") boolean b);
+    public native void setFontItalic(@Cast("bool") boolean b);
+    public native void setCurrentFont(@Const @ByRef QFont f);
+    public native void setAlignment(@ByVal @Cast("Qt::Alignment") int a);
+
+    public native void setPlainText(@Const @ByRef QString text);
+// #ifndef QT_NO_TEXTHTMLPARSER
+    public native void setHtml(@Const @ByRef QString text);
+// #endif
+    public native void setText(@Const @ByRef QString text);
+
+// #ifndef QT_NO_CLIPBOARD
+    public native void cut();
+    public native void copy();
+    public native void paste();
+// #endif
+
+    public native void undo();
+    public native void redo();
+
+    public native void clear();
+    public native void selectAll();
+
+    public native void insertPlainText(@Const @ByRef QString text);
+// #ifndef QT_NO_TEXTHTMLPARSER
+    public native void insertHtml(@Const @ByRef QString text);
+// #endif // QT_NO_TEXTHTMLPARSER
+
+    public native void append(@Const @ByRef QString text);
+
+    public native void scrollToAnchor(@Const @ByRef QString name);
+
+    public native void zoomIn(int range/*=1*/);
+    public native void zoomIn();
+    public native void zoomOut(int range/*=1*/);
+    public native void zoomOut();
 }
 
 
@@ -559,10 +2725,14 @@ public static class QToolButton extends QAbstractButton {
     public native void setArrowType(@Cast("Qt::ArrowType") int type);
 
 // #if QT_CONFIG(menu)
+    public native void setMenu(QMenu menu);
+    public native QMenu menu();
 
     public native void setPopupMode(@Cast("QToolButton::ToolButtonPopupMode") int mode);
     public native @Cast("QToolButton::ToolButtonPopupMode") int popupMode();
 // #endif
+
+    public native QAction defaultAction();
 
     public native void setAutoRaise(@Cast("bool") boolean enable);
     public native @Cast("bool") boolean autoRaise();
@@ -570,6 +2740,7 @@ public static class QToolButton extends QAbstractButton {
     public native void showMenu();
 // #endif
     public native void setToolButtonStyle(@Cast("Qt::ToolButtonStyle") int style);
+    public native void setDefaultAction(QAction arg0);
 
 }
 
@@ -609,6 +2780,8 @@ public static class QToolButton extends QAbstractButton {
     public native @Cast("size_t") long effectiveWinId();
 
     // GUI style setting
+    public native QStyle style();
+    public native void setStyle(QStyle arg0);
     // Widget types and states
 
     public native @Cast("bool") boolean isTopLevel();
@@ -701,6 +2874,8 @@ public static class QToolButton extends QAbstractButton {
     public native @ByVal QString styleSheet();
 // #endif
     public native @ByVal QString windowTitle();
+    public native void setWindowIcon(@Const @ByRef QIcon icon);
+    public native @ByVal QIcon windowIcon();
     public native void setWindowIconText(@Const @ByRef QString arg0);
     public native @ByVal QString windowIconText();
     public native void setWindowRole(@Const @ByRef QString arg0);
@@ -802,6 +2977,8 @@ public static class QToolButton extends QAbstractButton {
     public native void resize(int w, int h);
     public native void resize(@Const @ByRef QSize arg0);
     public native void setGeometry(int x, int y, int w, int h);
+    public native @ByVal QByteArray saveGeometry();
+    public native @Cast("bool") boolean restoreGeometry(@Const @ByRef QByteArray geometry);
     public native void adjustSize();
     public native @Cast("bool") boolean isVisible();
     public native @Cast("bool") boolean isVisibleTo(@Const QWidget arg0);
@@ -845,9 +3022,12 @@ public static class QToolButton extends QAbstractButton {
 
 // #ifndef QT_NO_ACTION
     //actions
+    public native void addAction(QAction action);
 // #if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
 // #else
 // #endif
+    public native void insertAction(QAction before, QAction action);
+    public native void removeAction(QAction action);
 // #endif
 
     public native QWidget parentWidget();
@@ -876,6 +3056,7 @@ public static class QToolButton extends QAbstractButton {
 
     public native @Cast("bool") boolean autoFillBackground();
     public native void setAutoFillBackground(@Cast("bool") boolean enabled);
+    public native @ByVal QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
 }
 
 

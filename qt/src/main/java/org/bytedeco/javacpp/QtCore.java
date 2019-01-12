@@ -9,6 +9,330 @@ import org.bytedeco.javacpp.annotation.*;
 public class QtCore extends org.bytedeco.javacpp.helper.QtCore {
     static { Loader.load(); }
 
+// Parsed from QtCore/qcoreevent.h
+
+@NoOffset public static class QEvent extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QEvent(Pointer p) { super(p); }
+
+    public enum Type {
+        /*
+          If you get a strange compiler error on the line with None,
+          it's probably because you're also including X11 headers,
+          which #define the symbol None. Put the X11 includes after
+          the Qt includes to solve this problem.
+        */
+        None(0),                               // invalid event
+        Timer(1),                              // timer event
+        MouseButtonPress(2),                   // mouse button pressed
+        MouseButtonRelease(3),                 // mouse button released
+        MouseButtonDblClick(4),                // mouse button double click
+        MouseMove(5),                          // mouse move
+        KeyPress(6),                           // key pressed
+        KeyRelease(7),                         // key released
+        FocusIn(8),                            // keyboard focus received
+        FocusOut(9),                           // keyboard focus lost
+        FocusAboutToChange(23),                // keyboard focus is about to be lost
+        Enter(10),                             // mouse enters widget
+        Leave(11),                             // mouse leaves widget
+        Paint(12),                             // paint widget
+        Move(13),                              // move widget
+        Resize(14),                            // resize widget
+        Create(15),                            // after widget creation
+        Destroy(16),                           // during widget destruction
+        Show(17),                              // widget is shown
+        Hide(18),                              // widget is hidden
+        Close(19),                             // request to close widget
+        Quit(20),                              // request to quit application
+        ParentChange(21),                      // widget has been reparented
+        ParentAboutToChange(131),              // sent just before the parent change is done
+        ThreadChange(22),                      // object has changed threads
+        WindowActivate(24),                    // window was activated
+        WindowDeactivate(25),                  // window was deactivated
+        ShowToParent(26),                      // widget is shown to parent
+        HideToParent(27),                      // widget is hidden to parent
+        Wheel(31),                             // wheel event
+        WindowTitleChange(33),                 // window title changed
+        WindowIconChange(34),                  // icon changed
+        ApplicationWindowIconChange(35),       // application icon changed
+        ApplicationFontChange(36),             // application font changed
+        ApplicationLayoutDirectionChange(37),  // application layout direction changed
+        ApplicationPaletteChange(38),          // application palette changed
+        PaletteChange(39),                     // widget palette changed
+        Clipboard(40),                         // internal clipboard event
+        Speech(42),                            // reserved for speech input
+        MetaCall(43),                         // meta call event
+        SockAct(50),                           // socket activation
+        WinEventAct(132),                      // win event activation
+        DeferredDelete(52),                    // deferred delete event
+        DragEnter(60),                         // drag moves into widget
+        DragMove(61),                          // drag moves in widget
+        DragLeave(62),                         // drag leaves or is cancelled
+        Drop(63),                              // actual drop
+        DragResponse(64),                      // drag accepted/rejected
+        ChildAdded(68),                        // new child widget
+        ChildPolished(69),                     // polished child widget
+        ChildRemoved(71),                      // deleted child widget
+        ShowWindowRequest(73),                 // widget's window should be mapped
+        PolishRequest(74),                     // widget should be polished
+        Polish(75),                            // widget is polished
+        LayoutRequest(76),                     // widget should be relayouted
+        UpdateRequest(77),                     // widget should be repainted
+        UpdateLater(78),                       // request update() later
+
+        EmbeddingControl(79),                  // ActiveX embedding
+        ActivateControl(80),                   // ActiveX activation
+        DeactivateControl(81),                 // ActiveX deactivation
+        ContextMenu(82),                       // context popup menu
+        InputMethod(83),                       // input method
+        TabletMove(87),                        // Wacom tablet event
+        LocaleChange(88),                      // the system locale changed
+        LanguageChange(89),                    // the application language changed
+        LayoutDirectionChange(90),             // the layout direction changed
+        Style(91),                             // internal style event
+        TabletPress(92),                       // tablet press
+        TabletRelease(93),                     // tablet release
+        OkRequest(94),                         // CE (Ok) button pressed
+        HelpRequest(95),                       // CE (?)  button pressed
+
+        IconDrag(96),                          // proxy icon dragged
+
+        FontChange(97),                        // font has changed
+        EnabledChange(98),                     // enabled state has changed
+        ActivationChange(99),                  // window activation has changed
+        StyleChange(100),                      // style has changed
+        IconTextChange(101),                   // icon text has changed.  Deprecated.
+        ModifiedChange(102),                   // modified state has changed
+        MouseTrackingChange(109),              // mouse tracking state has changed
+
+        WindowBlocked(103),                    // window is about to be blocked modally
+        WindowUnblocked(104),                  // windows modal blocking has ended
+        WindowStateChange(105),
+
+        ReadOnlyChange(106),                   // readonly state has changed
+
+        ToolTip(110),
+        WhatsThis(111),
+        StatusTip(112),
+
+        ActionChanged(113),
+        ActionAdded(114),
+        ActionRemoved(115),
+
+        FileOpen(116),                         // file open request
+
+        Shortcut(117),                         // shortcut triggered
+        ShortcutOverride(51),                  // shortcut override request
+
+        WhatsThisClicked(118),
+
+        ToolBarChange(120),                    // toolbar visibility toggled
+
+        ApplicationActivate(121),              // deprecated. Use ApplicationStateChange instead.
+        ApplicationActivated(ApplicationActivate), // deprecated
+        ApplicationDeactivate(122),            // deprecated. Use ApplicationStateChange instead.
+        ApplicationDeactivated(ApplicationDeactivate), // deprecated
+
+        QueryWhatsThis(123),                   // query what's this widget help
+        EnterWhatsThisMode(124),
+        LeaveWhatsThisMode(125),
+
+        ZOrderChange(126),                     // child widget has had its z-order changed
+
+        HoverEnter(127),                       // mouse cursor enters a hover widget
+        HoverLeave(128),                       // mouse cursor leaves a hover widget
+        HoverMove(129),                        // mouse cursor move inside a hover widget
+
+        // last event id used = 132
+
+// #ifdef QT_KEYPAD_NAVIGATION
+        EnterEditFocus(150),                   // enter edit mode in keypad navigation
+        LeaveEditFocus(151),                   // enter edit mode in keypad navigation
+// #endif
+        AcceptDropsChange(152),
+
+        ZeroTimerEvent(154),                   // Used for Windows Zero timer events
+
+        GraphicsSceneMouseMove(155),           // GraphicsView
+        GraphicsSceneMousePress(156),
+        GraphicsSceneMouseRelease(157),
+        GraphicsSceneMouseDoubleClick(158),
+        GraphicsSceneContextMenu(159),
+        GraphicsSceneHoverEnter(160),
+        GraphicsSceneHoverMove(161),
+        GraphicsSceneHoverLeave(162),
+        GraphicsSceneHelp(163),
+        GraphicsSceneDragEnter(164),
+        GraphicsSceneDragMove(165),
+        GraphicsSceneDragLeave(166),
+        GraphicsSceneDrop(167),
+        GraphicsSceneWheel(168),
+
+        KeyboardLayoutChange(169),             // keyboard layout changed
+
+        DynamicPropertyChange(170),            // A dynamic property was changed through setProperty/property
+
+        TabletEnterProximity(171),
+        TabletLeaveProximity(172),
+
+        NonClientAreaMouseMove(173),
+        NonClientAreaMouseButtonPress(174),
+        NonClientAreaMouseButtonRelease(175),
+        NonClientAreaMouseButtonDblClick(176),
+
+        MacSizeChange(177),                    // when the Qt::WA_Mac{Normal,Small,Mini}Size changes
+
+        ContentsRectChange(178),               // sent by QWidget::setContentsMargins (internal)
+
+        MacGLWindowChange(179),                // Internal! the window of the GLWidget has changed
+
+        FutureCallOut(180),
+
+        GraphicsSceneResize (181),
+        GraphicsSceneMove (182),
+
+        CursorChange(183),
+        ToolTipChange(184),
+
+        NetworkReplyUpdated(185),              // Internal for QNetworkReply
+
+        GrabMouse(186),
+        UngrabMouse(187),
+        GrabKeyboard(188),
+        UngrabKeyboard(189),
+        MacGLClearDrawable(191),               // Internal Cocoa, the window has changed, so we must clear
+
+        StateMachineSignal(192),
+        StateMachineWrapped(193),
+
+        TouchBegin(194),
+        TouchUpdate(195),
+        TouchEnd(196),
+
+// #ifndef QT_NO_GESTURES
+        NativeGesture(197),                    // QtGui native gesture
+// #endif
+        RequestSoftwareInputPanel(199),
+        CloseSoftwareInputPanel(200),
+
+        WinIdChange(203),
+// #ifndef QT_NO_GESTURES
+        Gesture(198),
+        GestureOverride(202),
+// #endif
+        ScrollPrepare(204),
+        Scroll(205),
+
+        Expose(206),
+
+        InputMethodQuery(207),
+        OrientationChange(208),                // Screen orientation has changed
+
+        TouchCancel(209),
+
+        ThemeChange(210),
+
+        SockClose(211),                        // socket closed
+
+        PlatformPanel(212),
+
+        StyleAnimationUpdate(213),             // style animation target should be updated
+        ApplicationStateChange(214),
+
+        WindowChangeInternal(215),             // internal for QQuickWidget
+        ScreenChangeInternal(216),
+
+        PlatformSurface(217),                  // Platform surface created or about to be destroyed
+
+        Pointer(218),                          // QQuickPointerEvent; ### Qt 6: QPointerEvent
+
+        TabletTrackingChange(219),             // tablet tracking state has changed
+
+        // 512 reserved for Qt Jambi's MetaCall event
+        // 513 reserved for Qt Jambi's DeleteOnMainThread event
+
+        User(1000),                            // first user event id
+        MaxUser(65535);                        // last user event id
+
+        public final int value;
+        private Type(int v) { this.value = v; }
+        private Type(Type e) { this.value = e.value; }
+        public Type intern() { for (Type e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+    
+
+    public QEvent(Type type) { super((Pointer)null); allocate(type); }
+    private native void allocate(Type type);
+    public QEvent(@Const @ByRef QEvent other) { super((Pointer)null); allocate(other); }
+    private native void allocate(@Const @ByRef QEvent other);
+    public native @ByRef @Name("operator =") QEvent put(@Const @ByRef QEvent other);
+    public native Type type();
+    public native @Cast("bool") boolean spontaneous();
+
+    public native void setAccepted(@Cast("bool") boolean accepted);
+    public native @Cast("bool") boolean isAccepted();
+
+    public native void accept();
+    public native void ignore();
+
+    public static native int registerEventType(int hint/*=-1*/);
+    public static native int registerEventType();
+}
+
+@NoOffset public static class QTimerEvent extends QEvent {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QTimerEvent(Pointer p) { super(p); }
+
+    public QTimerEvent( int timerId ) { super((Pointer)null); allocate(timerId); }
+    private native void allocate( int timerId );
+    public native int timerId();
+}
+
+@NoOffset public static class QChildEvent extends QEvent {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QChildEvent(Pointer p) { super(p); }
+
+    public QChildEvent( @ByVal Type type, QObject child ) { super((Pointer)null); allocate(type, child); }
+    private native void allocate( @ByVal Type type, QObject child );
+    public native QObject child();
+    public native @Cast("bool") boolean added();
+    public native @Cast("bool") boolean polished();
+    public native @Cast("bool") boolean removed();
+}
+
+@NoOffset public static class QDynamicPropertyChangeEvent extends QEvent {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QDynamicPropertyChangeEvent(Pointer p) { super(p); }
+
+    public QDynamicPropertyChangeEvent(@Const @ByRef QByteArray name) { super((Pointer)null); allocate(name); }
+    private native void allocate(@Const @ByRef QByteArray name);
+
+    public native @ByVal QByteArray propertyName();
+}
+
+@NoOffset public static class QDeferredDeleteEvent extends QEvent {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QDeferredDeleteEvent(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QDeferredDeleteEvent(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QDeferredDeleteEvent position(long position) {
+        return (QDeferredDeleteEvent)super.position(position);
+    }
+
+    public QDeferredDeleteEvent() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public native int loopLevel();
+}
+
+
+
 // Parsed from QtCore/qlogging.h
 
 public enum QtMsgType { QtDebugMsg(0), QtWarningMsg(1), QtCriticalMsg(2), QtFatalMsg(3), QtInfoMsg(4), QtSystemMsg(QtCriticalMsg);
@@ -1846,6 +2170,313 @@ public static class QAbstractEventDispatcher extends QObject {
 
     public native void startingUp();
     public native void closingDown();
+    public native @Cast("bool") boolean filterNativeEvent(@Const @ByRef QByteArray eventType, Pointer message, CLongPointer result);
+}
+
+
+// Parsed from QtCore/qbytearray.h
+
+@NoOffset public static class QByteArray extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QByteArray(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QByteArray(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public QByteArray position(long position) {
+        return (QByteArray)super.position(position);
+    }
+
+    public enum Base64Option {
+        Base64Encoding(0),
+        Base64UrlEncoding(1),
+
+        KeepTrailingEquals(0),
+        OmitTrailingEquals(2);
+
+        public final int value;
+        private Base64Option(int v) { this.value = v; }
+        private Base64Option(Base64Option e) { this.value = e.value; }
+        public Base64Option intern() { for (Base64Option e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(Base64Options, Base64Option)
+
+    public QByteArray() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QByteArray(@Cast("const char*") BytePointer arg0, int size/*=-1*/) { super((Pointer)null); allocate(arg0, size); }
+    private native void allocate(@Cast("const char*") BytePointer arg0, int size/*=-1*/);
+    public QByteArray(@Cast("const char*") BytePointer arg0) { super((Pointer)null); allocate(arg0); }
+    private native void allocate(@Cast("const char*") BytePointer arg0);
+    public QByteArray(String arg0, int size/*=-1*/) { super((Pointer)null); allocate(arg0, size); }
+    private native void allocate(String arg0, int size/*=-1*/);
+    public QByteArray(String arg0) { super((Pointer)null); allocate(arg0); }
+    private native void allocate(String arg0);
+    public QByteArray(int size, @Cast("char") byte c) { super((Pointer)null); allocate(size, c); }
+    private native void allocate(int size, @Cast("char") byte c);
+    public QByteArray(int size, @Cast("Qt::Initialization") int arg1) { super((Pointer)null); allocate(size, arg1); }
+    private native void allocate(int size, @Cast("Qt::Initialization") int arg1);
+    public QByteArray(@Const @ByRef QByteArray arg0) { super((Pointer)null); allocate(arg0); }
+    private native void allocate(@Const @ByRef QByteArray arg0);
+
+    public native @ByRef @Name("operator =") QByteArray put(@Const @ByRef QByteArray arg0);
+    public native @ByRef @Name("operator =") QByteArray put(@Cast("const char*") BytePointer str);
+    public native @ByRef @Name("operator =") QByteArray put(String str);
+// #ifdef Q_COMPILER_RVALUE_REFS
+// #endif
+
+    public native void swap(@ByRef QByteArray other);
+
+    public native int size();
+    public native @Cast("bool") boolean isEmpty();
+    public native void resize(int size);
+
+    public native @ByRef @Name("fill") QByteArray _fill(@Cast("char") byte c, int size/*=-1*/);
+    public native @ByRef @Name("fill") QByteArray _fill(@Cast("char") byte c);
+
+    public native @Name("capacity") int _capacity();
+    public native void reserve(int size);
+    public native void squeeze();
+
+// #ifndef QT_NO_CAST_FROM_BYTEARRAY
+    public native @Const @Name("operator const char*") @Cast("const char*") BytePointer asBytePointer();
+    public native @Const @Name("operator const void*") Pointer asPointer();
+// #endif
+    public native @Cast("char*") BytePointer data();
+    public native @Cast("const char*") BytePointer constData();
+    public native void detach();
+    public native @Cast("bool") boolean isDetached();
+    public native @Cast("bool") boolean isSharedWith(@Const @ByRef QByteArray other);
+    public native void clear();
+
+    public native @Cast("char") byte at(int i);
+    public native @Cast("char") @Name("operator []") byte get(int i);
+     public native @Cast("char") byte front();
+    
+     public native @Cast("char") byte back();
+    
+
+    public native int indexOf(@Cast("char") byte c, int from/*=0*/);
+    public native int indexOf(@Cast("char") byte c);
+    public native int indexOf(@Cast("const char*") BytePointer c, int from/*=0*/);
+    public native int indexOf(@Cast("const char*") BytePointer c);
+    public native int indexOf(String c, int from/*=0*/);
+    public native int indexOf(String c);
+    public native int indexOf(@Const @ByRef QByteArray a, int from/*=0*/);
+    public native int indexOf(@Const @ByRef QByteArray a);
+    public native int lastIndexOf(@Cast("char") byte c, int from/*=-1*/);
+    public native int lastIndexOf(@Cast("char") byte c);
+    public native int lastIndexOf(@Cast("const char*") BytePointer c, int from/*=-1*/);
+    public native int lastIndexOf(@Cast("const char*") BytePointer c);
+    public native int lastIndexOf(String c, int from/*=-1*/);
+    public native int lastIndexOf(String c);
+    public native int lastIndexOf(@Const @ByRef QByteArray a, int from/*=-1*/);
+    public native int lastIndexOf(@Const @ByRef QByteArray a);
+
+    public native @Cast("bool") boolean contains(@Cast("char") byte c);
+    public native @Cast("bool") boolean contains(@Cast("const char*") BytePointer a);
+    public native @Cast("bool") boolean contains(String a);
+    public native @Cast("bool") boolean contains(@Const @ByRef QByteArray a);
+    public native int count(@Cast("char") byte c);
+    public native int count(@Cast("const char*") BytePointer a);
+    public native int count(String a);
+    public native int count(@Const @ByRef QByteArray a);
+
+    public native int compare(@Cast("const char*") BytePointer c, CaseSensitivity cs/*=Qt::CaseSensitive*/);
+    public native int compare(@Cast("const char*") BytePointer c);
+    public native int compare(String c, CaseSensitivity cs/*=Qt::CaseSensitive*/);
+    public native int compare(String c);
+    public native int compare(@Const @ByRef QByteArray a, CaseSensitivity cs/*=Qt::CaseSensitive*/);
+    public native int compare(@Const @ByRef QByteArray a);
+
+     public native @ByVal QByteArray left(int len);
+     public native @ByVal QByteArray right(int len);
+     public native @ByVal QByteArray mid(int index, int len/*=-1*/);
+public native @ByVal QByteArray mid(int index);
+     public native @ByVal QByteArray chopped(int len);
+
+    public native @Cast("bool") boolean startsWith(@Const @ByRef QByteArray a);
+    public native @Cast("bool") boolean startsWith(@Cast("char") byte c);
+    public native @Cast("bool") boolean startsWith(@Cast("const char*") BytePointer c);
+    public native @Cast("bool") boolean startsWith(String c);
+
+    public native @Cast("bool") boolean endsWith(@Const @ByRef QByteArray a);
+    public native @Cast("bool") boolean endsWith(@Cast("char") byte c);
+    public native @Cast("bool") boolean endsWith(@Cast("const char*") BytePointer c);
+    public native @Cast("bool") boolean endsWith(String c);
+
+    public native @Cast("bool") boolean isUpper();
+    public native @Cast("bool") boolean isLower();
+
+    public native void truncate(int pos);
+    public native void chop(int n);
+
+// #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QSTRING_COMPAT_CPP) && !defined(Q_CLANG_QDOC)
+// #else
+     public native @ByVal QByteArray toLower();
+     public native @ByVal QByteArray toUpper();
+     public native @ByVal QByteArray trimmed();
+     public native @ByVal QByteArray simplified();
+// #endif
+
+     public native @ByVal QByteArray leftJustified(int width, @Cast("char") byte fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
+public native @ByVal QByteArray leftJustified(int width);
+     public native @ByVal QByteArray rightJustified(int width, @Cast("char") byte fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
+public native @ByVal QByteArray rightJustified(int width);
+
+    public native @ByRef QByteArray prepend(@Cast("char") byte c);
+    public native @ByRef QByteArray prepend(int count, @Cast("char") byte c);
+    public native @ByRef QByteArray prepend(@Cast("const char*") BytePointer s);
+    public native @ByRef QByteArray prepend(String s);
+    public native @ByRef QByteArray prepend(@Cast("const char*") BytePointer s, int len);
+    public native @ByRef QByteArray prepend(String s, int len);
+    public native @ByRef QByteArray prepend(@Const @ByRef QByteArray a);
+    public native @ByRef QByteArray append(@Cast("char") byte c);
+    public native @ByRef QByteArray append(int count, @Cast("char") byte c);
+    public native @ByRef QByteArray append(@Cast("const char*") BytePointer s);
+    public native @ByRef QByteArray append(String s);
+    public native @ByRef QByteArray append(@Cast("const char*") BytePointer s, int len);
+    public native @ByRef QByteArray append(String s, int len);
+    public native @ByRef QByteArray append(@Const @ByRef QByteArray a);
+    public native @ByRef QByteArray insert(int i, @Cast("char") byte c);
+    public native @ByRef QByteArray insert(int i, int count, @Cast("char") byte c);
+    public native @ByRef QByteArray insert(int i, @Cast("const char*") BytePointer s);
+    public native @ByRef QByteArray insert(int i, String s);
+    public native @ByRef QByteArray insert(int i, @Cast("const char*") BytePointer s, int len);
+    public native @ByRef QByteArray insert(int i, String s, int len);
+    public native @ByRef QByteArray insert(int i, @Const @ByRef QByteArray a);
+    public native @ByRef QByteArray remove(int index, int len);
+    public native @ByRef QByteArray replace(int index, int len, @Cast("const char*") BytePointer s);
+    public native @ByRef QByteArray replace(int index, int len, String s);
+    public native @ByRef QByteArray replace(int index, int len, @Cast("const char*") BytePointer s, int alen);
+    public native @ByRef QByteArray replace(int index, int len, String s, int alen);
+    public native @ByRef QByteArray replace(int index, int len, @Const @ByRef QByteArray s);
+    public native @ByRef QByteArray replace(@Cast("char") byte before, @Cast("const char*") BytePointer after);
+    public native @ByRef QByteArray replace(@Cast("char") byte before, String after);
+    public native @ByRef QByteArray replace(@Cast("char") byte before, @Const @ByRef QByteArray after);
+    public native @ByRef QByteArray replace(@Cast("const char*") BytePointer before, @Cast("const char*") BytePointer after);
+    public native @ByRef QByteArray replace(String before, String after);
+    public native @ByRef QByteArray replace(@Cast("const char*") BytePointer before, int bsize, @Cast("const char*") BytePointer after, int asize);
+    public native @ByRef QByteArray replace(String before, int bsize, String after, int asize);
+    public native @ByRef QByteArray replace(@Const @ByRef QByteArray before, @Const @ByRef QByteArray after);
+    public native @ByRef QByteArray replace(@Const @ByRef QByteArray before, @Cast("const char*") BytePointer after);
+    public native @ByRef QByteArray replace(@Const @ByRef QByteArray before, String after);
+    public native @ByRef QByteArray replace(@Cast("const char*") BytePointer before, @Const @ByRef QByteArray after);
+    public native @ByRef QByteArray replace(String before, @Const @ByRef QByteArray after);
+    public native @ByRef QByteArray replace(@Cast("char") byte before, @Cast("char") byte after);
+    public native @ByRef @Name("operator +=") QByteArray addPut(@Cast("char") byte c);
+    public native @ByRef @Name("operator +=") QByteArray addPut(@Cast("const char*") BytePointer s);
+    public native @ByRef @Name("operator +=") QByteArray addPut(String s);
+    public native @ByRef @Name("operator +=") QByteArray addPut(@Const @ByRef QByteArray a);
+
+     public native @ByVal QByteArray repeated(int times);
+
+// #ifndef QT_NO_CAST_TO_ASCII
+    public native @Deprecated @ByRef QByteArray append(@Const @ByRef QString s);
+    public native @Deprecated @ByRef QByteArray insert(int i, @Const @ByRef QString s);
+    public native @Deprecated @ByRef QByteArray replace(@Const @ByRef QString before, @Cast("const char*") BytePointer after);
+    public native @Deprecated @ByRef QByteArray replace(@Const @ByRef QString before, String after);
+    public native @Deprecated @ByRef QByteArray replace(@Cast("char") byte c, @Const @ByRef QString after);
+    public native @Deprecated @ByRef QByteArray replace(@Const @ByRef QString before, @Const @ByRef QByteArray after);
+
+    public native @Deprecated @ByRef @Name("operator +=") QByteArray addPut(@Const @ByRef QString s);
+    public native @Deprecated int indexOf(@Const @ByRef QString s, int from/*=0*/);
+    public native @Deprecated int indexOf(@Const @ByRef QString s);
+    public native @Deprecated int lastIndexOf(@Const @ByRef QString s, int from/*=-1*/);
+    public native @Deprecated int lastIndexOf(@Const @ByRef QString s);
+// #endif
+// #if !defined(QT_NO_CAST_FROM_ASCII) && !defined(QT_RESTRICTED_CAST_FROM_ASCII)
+// #endif
+
+    public native short toShort(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native short toShort();
+    public native short toShort(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned short") short toUShort(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned short") short toUShort();
+    public native @Cast("unsigned short") short toUShort(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native int toInt(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native int toInt();
+    public native int toInt(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned int") int toUInt(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned int") int toUInt();
+    public native @Cast("unsigned int") int toUInt(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native long toLong(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native long toLong();
+    public native long toLong(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned long") long toULong(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned long") long toULong();
+    public native @Cast("unsigned long") long toULong(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native long toLongLong(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native long toLongLong();
+    public native long toLongLong(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned long long") long toULongLong(@Cast("bool*") BoolPointer ok/*=nullptr*/, int base/*=10*/);
+    public native @Cast("unsigned long long") long toULongLong();
+    public native @Cast("unsigned long long") long toULongLong(@Cast("bool*") boolean[] ok/*=nullptr*/, int base/*=10*/);
+    public native float toFloat(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native float toFloat();
+    public native float toFloat(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native double toDouble(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native double toDouble();
+    public native double toDouble(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native @ByVal QByteArray toBase64(); // ### Qt6 merge with previous
+    public native @ByVal QByteArray toHex();
+    public native @ByVal QByteArray toHex(@Cast("char") byte separator); // ### Qt6 merge with previous
+    public native @ByVal QByteArray toPercentEncoding(@Const @ByRef(nullValue = "QByteArray()") QByteArray exclude,
+                                     @Const @ByRef(nullValue = "QByteArray()") QByteArray include,
+                                     @Cast("char") byte percent/*='%'*/);
+    public native @ByVal QByteArray toPercentEncoding();
+
+    public native @ByRef QByteArray setNum(short arg0, int base/*=10*/);
+    public native @ByRef QByteArray setNum(short arg0);
+    public native @ByRef QByteArray setNum(int arg0, int base/*=10*/);
+    public native @ByRef QByteArray setNum(int arg0);
+    public native @ByRef QByteArray setNum(long arg0, int base/*=10*/);
+    public native @ByRef QByteArray setNum(long arg0);
+    public native @ByRef QByteArray setNum(float arg0, @Cast("char") byte f/*='g'*/, int prec/*=6*/);
+    public native @ByRef QByteArray setNum(float arg0);
+    public native @ByRef QByteArray setNum(double arg0, @Cast("char") byte f/*='g'*/, int prec/*=6*/);
+    public native @ByRef QByteArray setNum(double arg0);
+    public native @ByRef QByteArray setRawData(@Cast("const char*") BytePointer a, @Cast("unsigned int") int n);
+    public native @ByRef QByteArray setRawData(String a, @Cast("unsigned int") int n); // ### Qt 6: use an int
+
+     public static native @ByVal QByteArray number(int arg0, int base/*=10*/);
+public static native @ByVal QByteArray number(int arg0);
+    
+     public static native @ByVal QByteArray number(long arg0, int base/*=10*/);
+public static native @ByVal QByteArray number(long arg0);
+    
+     public static native @ByVal QByteArray number(double arg0, @Cast("char") byte f/*='g'*/, int prec/*=6*/);
+public static native @ByVal QByteArray number(double arg0);
+     public static native @ByVal QByteArray fromRawData(@Cast("const char*") BytePointer arg0, int size);
+public static native @ByVal QByteArray fromRawData(String arg0, int size);
+    
+     public static native @ByVal QByteArray fromBase64(@Const @ByRef QByteArray base64); // ### Qt6 merge with previous
+     public static native @ByVal QByteArray fromHex(@Const @ByRef QByteArray hexEncoded);
+     public static native @ByVal QByteArray fromPercentEncoding(@Const @ByRef QByteArray pctEncoded, @Cast("char") byte percent/*='%'*/);
+public static native @ByVal QByteArray fromPercentEncoding(@Const @ByRef QByteArray pctEncoded);
+
+// #if defined(Q_OS_DARWIN) || defined(Q_QDOC)
+// #endif
+
+    // stl compatibility
+    public native void push_back(@Cast("char") byte c);
+    public native void push_back(@Cast("const char*") BytePointer c);
+    public native void push_back(String c);
+    public native void push_back(@Const @ByRef QByteArray a);
+    public native void push_front(@Cast("char") byte c);
+    public native void push_front(@Cast("const char*") BytePointer c);
+    public native void push_front(String c);
+    public native void push_front(@Const @ByRef QByteArray a);
+    public native void shrink_to_fit();
+
+    public static native @ByVal QByteArray fromStdString(@StdString BytePointer s);
+    public static native @ByVal QByteArray fromStdString(@StdString String s);
+    public native @StdString BytePointer toStdString();
+
+    public native int count();
+    public native int length();
+    public native @Cast("bool") boolean isNull();
+    public native @Cast("QByteArray::DataPtr*") @ByRef PointerPointer data_ptr();
 }
 
 
@@ -1899,6 +2530,10 @@ public static class QAbstractEventDispatcher extends QObject {
     public static native void processEvents();
     public static native void exit(int retcode/*=0*/);
     public static native void exit();
+
+    public static native @Cast("bool") boolean sendEvent(QObject receiver, QEvent event);
+    public static native void postEvent(QObject receiver, QEvent event, int priority/*=Qt::NormalEventPriority*/);
+    public static native void postEvent(QObject receiver, QEvent event);
     public static native void sendPostedEvents(QObject receiver/*=nullptr*/, int event_type/*=0*/);
     public static native void sendPostedEvents();
     public static native void removePostedEvents(QObject receiver, int eventType/*=0*/);
@@ -1908,6 +2543,8 @@ public static class QAbstractEventDispatcher extends QObject {
 // #endif
     public static native QAbstractEventDispatcher eventDispatcher();
     public static native void setEventDispatcher(QAbstractEventDispatcher eventDispatcher);
+
+    public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
 
     public static native @Cast("bool") boolean startingUp();
     public static native @Cast("bool") boolean closingDown();
@@ -1954,6 +2591,8 @@ public static class QAbstractEventDispatcher extends QObject {
 
 
 
+
+
 // Parsed from QtCore/qeventloop.h
 
 public static class QEventLoop extends QObject {
@@ -1997,6 +2636,8 @@ public static class QEventLoop extends QObject {
     public native @Cast("bool") boolean isRunning();
 
     public native void wakeUp();
+
+    public native @Cast("bool") boolean event(QEvent event);
     public native void quit();
 }
 
@@ -2018,6 +2659,9 @@ public static class QEventLoop extends QObject {
     private native void allocate(QObject parent/*=nullptr*/);
     public QObject() { super((Pointer)null); allocate(); }
     private native void allocate();
+
+    public native @Cast("bool") boolean event(QEvent event);
+    public native @Cast("bool") boolean eventFilter(QObject watched, QEvent event);
 
 // #if defined(QT_NO_TRANSLATION)
     public static native @ByVal QString tr(@Cast("const char*") BytePointer sourceText, @Cast("const char*") BytePointer arg1/*=nullptr*/, int arg2/*=-1*/);
@@ -2081,6 +2725,8 @@ public static class QEventLoop extends QObject {
     public native void dumpObjectInfo();
 
 // #ifndef QT_NO_PROPERTIES
+    public native @Cast("bool") boolean setProperty(@Cast("const char*") BytePointer name, @Const @ByRef QVariant value);
+    public native @Cast("bool") boolean setProperty(String name, @Const @ByRef QVariant value);
     
 // #endif // QT_NO_PROPERTIES
 
@@ -2354,9 +3000,9 @@ public native @ByVal QString mid(int position);
 
 // #if defined(Q_COMPILER_REF_QUALIFIERS) && !defined(QT_COMPILING_QSTRING_COMPAT_CPP) && !defined(Q_CLANG_QDOC)
 // #else
-    
-    
-    
+     public native @ByVal QByteArray toLatin1();
+     public native @ByVal QByteArray toUtf8();
+     public native @ByVal QByteArray toLocal8Bit();
 // #endif
     
 
@@ -2373,6 +3019,9 @@ public native @ByVal QString mid(int position);
     public static native @ByVal QString fromLocal8Bit(@Cast("const char*") BytePointer str);
     public static native @ByVal QString fromLocal8Bit(String str, int size/*=-1*/);
     public static native @ByVal QString fromLocal8Bit(String str);
+    public static native @ByVal QString fromLatin1(@Const @ByRef QByteArray str);
+    public static native @ByVal QString fromUtf8(@Const @ByRef QByteArray str);
+    public static native @ByVal QString fromLocal8Bit(@Const @ByRef QByteArray str);
     public static native @ByVal QString fromUtf16(@Cast("const unsigned short*") ShortPointer arg0, int size/*=-1*/);
     public static native @ByVal QString fromUtf16(@Cast("const unsigned short*") ShortPointer arg0);
     public static native @ByVal QString fromUtf16(@Cast("const unsigned short*") ShortBuffer arg0, int size/*=-1*/);
@@ -2520,6 +3169,125 @@ public static native @ByVal QString fromWCharArray(@Cast("const wchar_t*") IntPo
 // Parsed from QtCore/qthread.h
 
 
+
+
+// Parsed from QtCore/qvariant.h
+
+public static class QVariant extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QVariant(Pointer p) { super(p); }
+
+    
+
+    public QVariant() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public QVariant(int typeId, @Const Pointer copy) { super((Pointer)null); allocate(typeId, copy); }
+    private native void allocate(int typeId, @Const Pointer copy);
+    public QVariant(int typeId, @Const Pointer copy, @Cast("unsigned int") int flags) { super((Pointer)null); allocate(typeId, copy, flags); }
+    private native void allocate(int typeId, @Const Pointer copy, @Cast("unsigned int") int flags);
+    public QVariant(@Const @ByRef QVariant other) { super((Pointer)null); allocate(other); }
+    private native void allocate(@Const @ByRef QVariant other);
+
+// #ifndef QT_NO_DATASTREAM
+// #endif
+
+    public QVariant(int i) { super((Pointer)null); allocate(i); }
+    private native void allocate(int i);
+    public QVariant(long ll) { super((Pointer)null); allocate(ll); }
+    private native void allocate(long ll);
+    public QVariant(@Cast("bool") boolean b) { super((Pointer)null); allocate(b); }
+    private native void allocate(@Cast("bool") boolean b);
+    public QVariant(double d) { super((Pointer)null); allocate(d); }
+    private native void allocate(double d);
+    public QVariant(float f) { super((Pointer)null); allocate(f); }
+    private native void allocate(float f);
+// #ifndef QT_NO_CAST_FROM_ASCII
+    public QVariant(@Cast("const char*") BytePointer str) { super((Pointer)null); allocate(str); }
+    private native @Deprecated void allocate(@Cast("const char*") BytePointer str);
+    public QVariant(String str) { super((Pointer)null); allocate(str); }
+    private native @Deprecated void allocate(String str);
+// #endif
+
+    public QVariant(@Const @ByRef QByteArray bytearray) { super((Pointer)null); allocate(bytearray); }
+    private native void allocate(@Const @ByRef QByteArray bytearray);
+    public QVariant(@Const @ByRef QString string) { super((Pointer)null); allocate(string); }
+    private native void allocate(@Const @ByRef QString string);
+// #ifndef QT_NO_GEOM_VARIANT
+    public QVariant(@Const @ByRef QSize size) { super((Pointer)null); allocate(size); }
+    private native void allocate(@Const @ByRef QSize size);
+// #endif
+// #ifndef QT_NO_REGEXP
+// #endif // QT_NO_REGEXP
+// #if QT_CONFIG(regularexpression)
+// #endif // QT_CONFIG(regularexpression)
+// #ifndef QT_BOOTSTRAPPED
+// #endif // QT_BOOTSTRAPPED
+// #if QT_CONFIG(itemmodel)
+// #endif
+
+    public native @ByRef @Name("operator =") QVariant put(@Const @ByRef QVariant other);
+// #ifdef Q_COMPILER_RVALUE_REFS
+// #endif
+
+    public native void swap(@ByRef QVariant other);
+    public native int userType();
+    public native @Cast("const char*") BytePointer typeName();
+
+    public native @Cast("bool") boolean canConvert(int targetTypeId);
+    public native @Cast("bool") boolean convert(int targetTypeId);
+
+    public native @Cast("bool") boolean isValid();
+    public native @Cast("bool") boolean isNull();
+
+    public native void clear();
+
+    public native void detach();
+    public native @Cast("bool") boolean isDetached();
+
+    public native int toInt(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native int toInt();
+    public native int toInt(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native @Cast("unsigned int") int toUInt(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native @Cast("unsigned int") int toUInt();
+    public native @Cast("unsigned int") int toUInt(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native long toLongLong(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native long toLongLong();
+    public native long toLongLong(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native @Cast("unsigned long long") long toULongLong(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native @Cast("unsigned long long") long toULongLong();
+    public native @Cast("unsigned long long") long toULongLong(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native @Cast("bool") boolean toBool();
+    public native double toDouble(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native double toDouble();
+    public native double toDouble(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native float toFloat(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native float toFloat();
+    public native float toFloat(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native double toReal(@Cast("bool*") BoolPointer ok/*=nullptr*/);
+    public native double toReal();
+    public native double toReal(@Cast("bool*") boolean[] ok/*=nullptr*/);
+    public native @ByVal QByteArray toByteArray();
+    public native @ByVal @Name("toString") QString toQString();
+
+// #ifndef QT_NO_GEOM_VARIANT
+    public native @ByVal QSize toSize();
+// #endif
+// #ifndef QT_NO_REGEXP
+// #endif // QT_NO_REGEXP
+// #if QT_CONFIG(regularexpression)
+// #endif // QT_CONFIG(regularexpression)
+// #ifndef QT_BOOTSTRAPPED
+// #endif // QT_BOOTSTRAPPED
+// #if QT_CONFIG(itemmodel)
+// #endif
+
+// #ifndef QT_NO_DATASTREAM
+// #endif
+    
+    
+    
+}
 
 
 }

@@ -13,9 +13,11 @@ import org.bytedeco.javacpp.tools.InfoMap;
     value = {
         @Platform(
             include = {
+                "qcoreevent.h",
                 "qlogging.h",
                 "qnamespace.h",
                 "QAbstractEventDispatcher",
+                "QByteArray",
                 "QCoreApplication",
                 "QCoreEvent",
                 "QEventLoop",
@@ -23,7 +25,8 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QSize",
                 "QString",
                 "QStringList",
-                "QThread"
+                "QThread",
+                "QVariant"
             }
         ),
         @Platform(
@@ -39,7 +42,7 @@ public class QtCore extends AbstractQtPreset {
     super.map(infoMap);
     infoMap
         .put(new Info("Q_CORE_EXPORT", "Q_INVOKABLE").cppTypes().annotations())
-        .put(new Info("QT_DEPRECATED").cppTypes().annotations("@Deprecated"))
+        .put(new Info("QT_ASCII_CAST_WARN", "QT_DEPRECATED").cppTypes().annotations("@Deprecated"))
 
         // Helper classes
         .put(new Info("QString").base("AbstractQString"))
@@ -48,10 +51,11 @@ public class QtCore extends AbstractQtPreset {
         .put(new Info("qabstracteventdispatcher.h").linePatterns(
             matchClass("QAbstractEventDispatcher"), matchEnd()
         ))
+        .put(new Info("qbytearray.h").linePatterns(matchClass("QByteArray"), matchEnd()))
         .put(new Info("qcoreapplication.h").linePatterns(
             matchClass("QCoreApplication"), matchEnd()
         ))
-        .put(new Info("qcoreevent.h").linePatterns(matchClass("QEvent"), matchEnd()))
+        .put(new Info("qcoreevent.h").linePatterns("class Q_CORE_EXPORT .*", "QT_END_NAMESPACE"))
         .put(new Info("qeventloop.h").linePatterns(matchClass("QEventLoop"), matchEnd()))
         .put(new Info("qlogging.h").linePatterns(
             matchEnum("QtMsgType"), "",
@@ -68,6 +72,12 @@ public class QtCore extends AbstractQtPreset {
         ))
         .put(new Info("qstringlist.h").linePatterns("#ifdef Q_QDOC", matchEnd()))
         .put(new Info("qthread.h").linePatterns(matchClass("QThread"), matchEnd()))
+        .put(new Info("qvariant.h").linePatterns(
+            matchClass("QVariant"), ".*\\*typeToName\\(.*",
+            " *typedef Private DataPtr;", matchEnd()))
+
+        // Members
+        .put(new Info("QVariant::toString").javaNames("toQString"))
 
         // Methods
         .put(new Info("QString::toStdString")
@@ -110,6 +120,8 @@ public class QtCore extends AbstractQtPreset {
   @Override
   protected String[] enums() {
     return new String[]{
+        "QByteArray::Base64Option",
+        "QEvent::Type",
         "QEventLoop::ProcessEventsFlag",
         "QSizePolicy::ControlType",
         "QString::SectionFlag",
@@ -128,6 +140,7 @@ public class QtCore extends AbstractQtPreset {
   @Override
   protected Map<String, String> flags() {
     Map<String, String> flags = new HashMap<>();
+    flags.put("QByteArray::Base64Options", "QByteArray::Base64Option");
     flags.put("QEventLoop::ProcessEventsFlags", "QEventLoop::ProcessEventsFlag");
     flags.put("QSizePolicy::ControlTypes", "QSizePolicy::ControlType");
     flags.put("QString::SectionFlags", "QString::SectionFlag");
@@ -145,6 +158,8 @@ public class QtCore extends AbstractQtPreset {
     return new String[]{
         "Qt::AlignmentFlag",
         "Qt::KeyboardModifier",
+        "Qt::MatchFlag",
+        "Qt::TextInteractionFlag",
         "Qt::WindowType",
         "QSizePolicy::Policy"
     };
@@ -155,6 +170,8 @@ public class QtCore extends AbstractQtPreset {
     return new String[]{
         "Qt::Alignment",
         "Qt::KeyboardModifiers",
+        "Qt::MatchFlags",
+        "Qt::TextInteractionFlags",
         "Qt::WindowFlags"
     };
   }
@@ -187,6 +204,7 @@ public class QtCore extends AbstractQtPreset {
     macros.put("Q_DECL_COLD_FUNCTION", "");
     macros.put("Q_DECL_CONSTEXPR", "");
     macros.put("Q_DECL_DEPRECATED", "");
+    macros.put("Q_DECL_NOEXCEPT", "");
     macros.put("Q_DECL_NOTHROW", "");
     macros.put("Q_DECL_RELAXED_CONSTEXPR", "");
     macros.put("Q_DECL_UNUSED", "");
@@ -217,47 +235,78 @@ public class QtCore extends AbstractQtPreset {
   protected String[] skip() {
     return new String[]{
         // Classes
+        "QAbstractItemModel",
         "QAbstractNativeEventFilter",
-        "QByteArray",
+        "QAtomicInt",
+        "QBitArray",
+        "QByteArrayDataPtr",
+        "QByteRef",
         "QChar",
         "QCharRef",
-        "QEvent",
+        "QDataStream",
+        "QDate",
+        "QDateTime",
+        "QEasingCurve",
+        "QFunctionPointer",
+        "QHash",
+        "QJsonArray",
+        "QJsonDocument",
+        "QJsonObject",
+        "QJsonValue",
         "QLatin1String",
+        "QLine",
+        "QLineF",
         "QList",
         "QLocale",
         "QLoggingCategory",
+        "QMap",
         "QMargins",
         "QMetaMethod",
         "QMetaObject::Connection",
+        "QModelIndex",
         "QObjectList",
         "QObjectUserData",
+        "QPersistentModelIndex",
         "QPoint",
+        "QPointF",
         "QRect",
+        "QRectF",
         "QRegExp",
         "QRegularExpression",
         "QRegularExpressionMatch",
+        "QSizeF",
         "QSocketNotifier",
         "QStringDataPtr",
         "QStringList",
         "QStringRef",
         "QStringView",
         "QThread",
+        "QTime",
         "QTranslator",
-        "QVariant",
+        "QUrl",
+        "QUuid",
         "QVector",
         "QWinEventNotifier",
 
         // Enums
         "QChar::SpecialCharacter",
         "QChar::UnicodeVersion",
+        "QVariant::Type",
 
         // Methods
         "QObject::property",
+        "QVariant::typeToName",
+        "QVariant::data_ptr",
 
         // Types
         "const_iterator",
         "const_reverse_iterator",
         "iterator",
+        "QByteArray::const_iterator",
+        "QByteArray::iterator",
+        "QVariant::Handler",
+        "QVariant::Private",
+        "QVariant::PrivateShared",
         "reverse_iterator",
         "std::reverse_iterator"
     };

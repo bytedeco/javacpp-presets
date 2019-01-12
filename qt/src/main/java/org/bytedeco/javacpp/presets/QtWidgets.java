@@ -14,12 +14,29 @@ import org.bytedeco.javacpp.tools.InfoMap;
     value = {
         @Platform(
             include = {
+                "qboxlayout.h",
                 "QAbstractButton",
+                "QAbstractScrollArea",
+                "QAbstractSpinBox",
+                "QAction",
                 "QApplication",
+                "QCheckBox",
+                "QComboBox",
+                "QDialog",
+                "QFrame",
                 "QGridLayout",
+                "QGroupBox",
+                "QLabel",
                 "QLayout",
                 "QLineEdit",
+                "QMenu",
+                "QMessageBox",
+                "QPushButton",
                 "QSizePolicy",
+                "QSpinBox",
+                "QStyle",
+                "QSystemTrayIcon",
+                "QTextEdit",
                 "QToolButton",
                 "QWidget"
             }
@@ -40,13 +57,33 @@ public class QtWidgets extends AbstractQtPreset {
 
         // Line patterns
         .put(new Info("qabstractbutton.h").linePatterns(matchClass("QAbstractButton"), matchEnd()))
+        .put(new Info("qabstractscrollarea.h").linePatterns(
+            matchClass("QAbstractScrollArea"), matchEnd()))
+        .put(new Info("qabstractspinbox.h").linePatterns(
+            matchClass("QAbstractSpinBox"), matchEnd()))
+        .put(new Info("qaction.h").linePatterns(matchClass("QAction"), matchEnd()))
         .put(new Info("qapplication.h").linePatterns(matchClass("QApplication"), matchEnd()))
+        .put(new Info("qboxlayout.h").linePatterns(
+            "class Q_WIDGETS_EXPORT .*", "QT_END_NAMESPACE"))
+        .put(new Info("qcheckbox.h").linePatterns(matchClass("QCheckBox"), matchEnd()))
+        .put(new Info("qcombobox.h").linePatterns(matchClass("QComboBox"), matchEnd()))
+        .put(new Info("qdialog.h").linePatterns(matchClass("QDialog"), matchEnd()))
+        .put(new Info("qframe.h").linePatterns(matchClass("QFrame"), matchEnd()))
         .put(new Info("qgridlayout.h").linePatterns(matchClass("QGridLayout"), matchEnd()))
+        .put(new Info("qgroupbox.h").linePatterns(matchClass("QGroupBox"), matchEnd()))
+        .put(new Info("qlabel.h").linePatterns(matchClass("QLabel"), matchEnd()))
         .put(new Info("qlayout.h").linePatterns(matchClass("QLayout"), matchEnd()))
         .put(new Info("qlineedit.h").linePatterns(
             matchClass("QLineEdit"), "#if QT_CONFIG\\(action\\)",
             "#endif", matchEnd()))
+        .put(new Info("qmenu.h").linePatterns(matchClass("QMenu"), matchEnd()))
+        .put(new Info("qmessagebox.h").linePatterns(matchClass("QMessageBox"), matchEnd()))
+        .put(new Info("qpushbutton.h").linePatterns(matchClass("QPushButton"), matchEnd()))
         .put(new Info("qsizepolicy.h").linePatterns(matchClass("QSizePolicy"), matchEnd()))
+        .put(new Info("qspinbox.h").linePatterns(matchClass("QSpinBox"), matchEnd()))
+        .put(new Info("qstyle.h").linePatterns(matchClass("QStyle"), matchEnd()))
+        .put(new Info("qsystemtrayicon.h").linePatterns(matchClass("QSystemTrayIcon"), matchEnd()))
+        .put(new Info("qtextedit.h").linePatterns(matchClass("QTextEdit"), matchEnd()))
         .put(new Info("qtoolbutton.h").linePatterns(matchClass("QToolButton"), matchEnd()))
         .put(new Info("qwidget.h").linePatterns(matchClass("QWidget"), matchEnd()));
   }
@@ -63,6 +100,37 @@ public class QtWidgets extends AbstractQtPreset {
   }
 
   @Override
+  protected String[] enums() {
+    return new String[]{
+        "QAbstractSpinBox::StepType",
+        "QSystemTrayIcon::ActivationReason",
+        "QSystemTrayIcon::MessageIcon",
+        "QTextEdit::AutoFormattingFlag"
+    };
+  }
+
+  @Override
+  protected Map<String, String> flags() {
+    Map<String, String> flags = new HashMap<>();
+    flags.put("QTextEdit::AutoFormatting", "QTextEdit::AutoFormattingFlag");
+    return flags;
+  }
+
+  @Override
+  protected String[] intEnums() {
+    return new String[]{
+        "QMessageBox::StandardButton"
+    };
+  }
+
+  @Override
+  protected String[] intFlags() {
+    return new String[]{
+        "QMessageBox::StandardButtons"
+    };
+  }
+
+  @Override
   protected Map<String, String> macros() {
     Map<String, String> macros = new HashMap<>();
     macros.put("QT_SIZEPOLICY_CONSTEXPR", "");
@@ -73,18 +141,26 @@ public class QtWidgets extends AbstractQtPreset {
   protected String[] skip() {
     return new String[]{
         // Classes
-        "QAction",
+        "QAbstractItemDelegate",
+        "QAbstractItemView",
+        "QActionGroup",
         "QButtonGroup",
         "QCompleter",
         "QDesktopWidget",
         "QGraphicsEffect",
         "QGraphicsProxyWidget",
-        "QMenu",
-        "QStyle",
+        "QPlatformMenu",
+        "QScrollBar",
+        "QSpacerItem",
+        "QStyleHintReturn",
+        "QStyleOption",
         "QWidgetList",
 
         // Members
-        "QWidget::setupUi"
+        "QWidget::setupUi",
+
+        // Types
+        "NSMenu"
     };
   }
 }

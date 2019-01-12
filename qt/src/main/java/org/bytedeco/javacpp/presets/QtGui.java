@@ -14,7 +14,9 @@ import org.bytedeco.javacpp.tools.InfoMap;
     value = {
         @Platform(
             include = {
+                "qevent.h",
                 "QFont",
+                "QIcon",
                 "QGuiApplication"
             }
         ),
@@ -33,7 +35,10 @@ public class QtGui extends AbstractQtPreset {
         .put(new Info("Q_GUI_EXPORT").cppTypes().annotations())
 
         // Line patterns
+        .put(new Info("qevent.h").linePatterns(
+            matchClass("QCloseEvent"), matchEnd()))
         .put(new Info("qfont.h").linePatterns(matchClass("QFont"), matchEnd()))
+        .put(new Info("qicon.h").linePatterns(matchClass("QIcon"), matchEnd()))
         .put(new Info("qguiapplication.h").linePatterns(matchClass("QGuiApplication"), matchEnd()))
 
         // Members
@@ -65,7 +70,7 @@ public class QtGui extends AbstractQtPreset {
         "QBackingStore",
         "QBitmap",
         "QClipboard",
-        "QCloseEvent",
+        "QColor",
         "QContextMenuEvent",
         "QCursor",
         "QDragEnterEvent",
@@ -76,16 +81,19 @@ public class QtGui extends AbstractQtPreset {
         "QFontInfo",
         "QFontMetrics",
         "QHideEvent",
-        "QIcon",
+        "QIconEngine",
         "QInputMethod",
         "QInputMethodEvent",
         "QKeyEvent",
         "QKeySequence",
         "QMouseEvent",
         "QMoveEvent",
+        "QMovie",
+        "QPagedPaintDevice",
         "QPaintEngine",
         "QPainter",
         "QPalette",
+        "QPicture",
         "QPixmap",
         "QPlatformNativeInterface",
         "QRegion",
@@ -94,13 +102,22 @@ public class QtGui extends AbstractQtPreset {
         "QShowEvent",
         "QStyleHints",
         "QTabletEvent",
+        "QTextCharFormat",
+        "QTextDocument",
+        "QTextCursor",
         "QValidator",
         "QWheelEvent",
         "QWindow",
         "QWindowList",
 
         // Enums
+        "QKeySequence::StandardKey",
         "QPalette::ColorRole",
+        "QTextCursor::MoveMode",
+        "QTextCursor::MoveOperation",
+        "QTextDocument::FindFlags",
+        "QTextOption::WrapMode",
+        "QValidator::State",
 
         // Members
         "QFont::resolve"
