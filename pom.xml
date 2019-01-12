@@ -143,26 +143,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-          </execution>
-        </executions>
-            <configuration>
-              <sources>
-                <source>${project.basedir}/src/gen/java</source>
-                <source>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</source>
-              </sources>
-            </configuration>
-      </plugin>
-      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
         <configuration>
@@ -184,6 +164,26 @@
                 <include>org/bytedeco/javacpp/**/*_presets.java</include>
               </includes>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <sources>
+            <source>${project.basedir}/src/gen/java</source>
+            <source>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</source>
+          </sources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
