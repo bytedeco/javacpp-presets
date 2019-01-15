@@ -101,7 +101,8 @@ import java.lang.annotation.Target;
                   .put(new Info("ngraph::element::from<uint32_t>").javaNames("fromUInt32t"))
                   .put(new Info("ngraph::element::from<uint64_t>").javaNames("fromUInt64t"))
                   .put(new Info("ngraph::element::from<ngraph::bfloat16>").javaNames("fromNGraphBFloat16"))
-                  .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
+
+		  .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
                   .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
 		  //		  .put(new Info("ngraph::Node").purify(false).virtualize())
 		  .put(new Info("std::shared_ptr<const Node>", "std::shared_ptr<ngraph::Node>").annotations("@SharedPtr").pointerTypes("Node"))
