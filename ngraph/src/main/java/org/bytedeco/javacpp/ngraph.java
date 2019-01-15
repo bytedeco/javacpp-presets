@@ -2034,6 +2034,106 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
 
 
+// Parsed from ngraph/op/constant.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstring>
+// #include <sstream>
+
+// #include "ngraph/log.hpp"
+// #include "ngraph/node.hpp"
+// #include "ngraph/type/bfloat16.hpp"
+// #include "ngraph/type/element_type.hpp"
+// #include "ngraph/util.hpp"
+        /** \brief Class for constants. */
+        @Namespace("ngraph::op") @NoOffset public static class Constant extends Node {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Constant(Pointer p) { super(p); }
+        
+            /** \brief Constructs a tensor constant.
+             * 
+             *  @param type The element type of the tensor constant.
+             *  @param shape The shape of the tensor constant.
+             *  @param values A vector of literals for initializing the tensor constant. The size
+             *         of values must match the size of the shape. */
+
+            /** \brief Constructs a tensor constant
+             *         This constructor is mainly to support deserialization of constants.
+             * 
+             *  @param type The element type of the tensor constant.
+             *  @param shape The shape of the tensor constant.
+             *  @param values A list of string values to use as the constant data. */
+            
+            ///
+            public Constant(@Const @ByRef Type type, @ByVal Shape shape, @Const @ByRef StringVector values) { super((Pointer)null); allocate(type, shape, values); }
+            private native void allocate(@Const @ByRef Type type, @ByVal Shape shape, @Const @ByRef StringVector values);
+
+            /** \brief Constructs a tensor constant with the same initialization value copied across */
+            //         the tensor. This constructor is to support deserialization of constants.
+            /**
+            /** @param type The element type of the tensor constant.
+            /** @param shape The shape of the tensor constant.
+            /** @param data A void* to constant data. */
+            public Constant(@Const @ByRef Type type, @Const @ByRef Shape shape, @Const Pointer data) { super((Pointer)null); allocate(type, shape, data); }
+            private native void allocate(@Const @ByRef Type type, @Const @ByRef Shape shape, @Const Pointer data);
+
+            
+            ///
+            public native void validate_and_infer_types();
+
+            /** \brief Wrapper around constructing a shared_ptr of a Constant
+             * 
+             *  @param type The element type of the tensor constant.
+             *  @param shape The shape of the tensor constant.
+             *  @param values A vector of values to use as the constant data. */
+
+            /** \brief Wrapper around constructing a shared_ptr of a Constant
+             * 
+             *  @param type The element type of the tensor constant.
+             *  @param shape The shape of the tensor constant.
+             *  @param values An initializer_list of values to use as the constant data. */
+
+            public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+
+            /** @return The initialization literals for the tensor constant. */
+            public native @ByVal StringVector get_value_strings();
+
+            public native @Const Pointer get_data_ptr();
+
+            public native @Cast("bool") boolean is_constant();
+        }
+
+        @Namespace("ngraph::op") public static class ScalarConstantLikeBase extends Constant {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public ScalarConstantLikeBase(Pointer p) { super(p); }
+        
+            public native @SharedPtr Constant as_constant();
+        }
+
+        /** \brief A scalar constant whose element type is the same as like. */
+    
+
+
+
 // Parsed from ngraph/result_vector.hpp
 
 //*****************************************************************************
@@ -4621,6 +4721,121 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 // #endif
 
 // #endif /* !defined(ONNXIFI_H) */
+
+
+// Parsed from ngraph/frontend/onnx_import/core/weight.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/runtime/tensor.hpp"
+        /** \brief Weight for an input */
+        @Namespace("ngraph::onnx_import") @NoOffset public static class Weight extends Pointer {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Weight(Pointer p) { super(p); }
+        
+            public Weight(@Const @ByRef Weight arg0) { super((Pointer)null); allocate(arg0); }
+            private native void allocate(@Const @ByRef Weight arg0);
+            
+
+            
+            
+
+            public Weight(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector BytePointer data) { super((Pointer)null); allocate(type, shape, data); }
+            private native void allocate(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector BytePointer data);
+            public Weight(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector ByteBuffer data) { super((Pointer)null); allocate(type, shape, data); }
+            private native void allocate(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector ByteBuffer data);
+            public Weight(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector byte[] data) { super((Pointer)null); allocate(type, shape, data); }
+            private native void allocate(@Const @ByRef Type type, @Const @ByRef Shape shape, @Cast("char*") @StdVector byte[] data);
+
+            public native @Const @ByRef Shape shape();
+            public native @Cast("std::size_t") long size();
+            public native @Const @ByRef Type type();
+            public native @SharedPtr @ByVal Tensor to_tensor(@ByRef Backend backend);
+
+            public native @Const Pointer data();
+        }
+    
+
+
+
+// Parsed from ngraph/frontend/onnx_import/onnx.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <iostream>
+// #include <string>
+
+// #include "core/operator_set.hpp"
+// #include "core/weight.hpp"
+// #include "ngraph/function.hpp"
+        /** \brief Registers ONNX custom operator
+         *  Performs the registration of external ONNX operator. This means the code
+         *  of the operator is not part of ONNX importer. The operator shall be registered
+         *  before calling {@code load_onnx_model()} or {@code import_onnx_function()} functions.
+         *  @param name    name of the operator,
+         *  @param version  version of the operator (opset),
+         *  @param domain  domain the operator belongs to,
+         *  @param fn       function providing the implementation of the operator. */
+        
+
+        /** \brief Convert an ONNX model to nGraph functions
+         *  The function translated serialized ONNX model to nGraph functions. The serialized
+         *  ONNX model is read from input stream.
+         *  @param sin       input stream (e.g. file stream, memory stream, etc),
+         *  @param weights  weights associated with the model. If weights are embedded into
+         *                    the model this parameter shall be empty. Having weights in a model
+         *                    and providing through this parameters is invalid (the weights from
+         *                    the model  will take precedence).
+         *  @return The function returns a vector of nGraph functions. The number of functions
+         *           depends on number of outputs from ONNX graph. */
+        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString BytePointer data,
+                                                                       @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
+        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString BytePointer data);
+        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString String data,
+                                                                       @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
+        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString String data);
+
+     // namespace onnx_import
+
+ // namespace ngraph
 
 
 }

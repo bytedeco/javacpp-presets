@@ -1,0 +1,70 @@
+--- onnx.cpp.ORIG	2019-01-15 13:26:42.108157168 -0500
++++ onnx.cpp	2019-01-15 13:41:27.859816460 -0500
+@@ -31,18 +31,10 @@
+         {
+             namespace error
+             {
+-                struct file_open : ngraph_error
++                struct data_parse : ngraph_error
+                 {
+-                    explicit file_open(const std::string& path)
+-                        : ngraph_error{"failure opening file:" + path}
+-                    {
+-                    }
+-                };
+-
+-                struct stream_parse : ngraph_error
+-                {
+-                    explicit stream_parse(std::istream&)
+-                        : ngraph_error{"failure parsing data from the stream"}
++                    explicit data_parse(const std::string& data)
++                        : ngraph_error{"failure parsing data from the string"}
+                     {
+                     }
+                 };
+@@ -50,13 +42,13 @@
+             } // namespace error
+         }     // namespace detail
+ 
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(std::istream& sin,
++        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& data,
+                                                                const Weights& weights)
+         {
+             onnx::ModelProto model_proto;
+-            if (!model_proto.ParseFromIstream(&sin))
++            if (!model_proto.ParseFromString(data))
+             {
+-                throw detail::error::stream_parse{sin};
++                throw detail::error::data_parse{data};
+             }
+             std::vector<std::shared_ptr<Function>> output_functions;
+             Model model{model_proto};
+@@ -69,28 +61,6 @@
+             return output_functions;
+         }
+ 
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& path,
+-                                                               const Weights& weights)
+-        {
+-            std::ifstream ifs{path, std::ios::in | std::ios::binary};
+-            if (!ifs.is_open())
+-            {
+-                throw detail::error::file_open{path};
+-            }
+-            return load_onnx_model(ifs, weights);
+-        }
+-
+-        std::shared_ptr<Function> import_onnx_function(std::istream& sin, const Weights& weights)
+-        {
+-            return load_onnx_model(sin, weights).front();
+-        }
+-
+-        std::shared_ptr<Function> import_onnx_function(const std::string& path,
+-                                                       const Weights& weights)
+-        {
+-            return load_onnx_model(path, weights).front();
+-        }
+-
+         void register_operator(const std::string& name,
+                                std::int64_t version,
+                                const std::string& domain,
