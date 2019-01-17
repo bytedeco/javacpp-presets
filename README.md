@@ -122,7 +122,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MKL 2019.1  https://software.intel.com/intel-mkl
  * MKL-DNN 0.17.2  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.5  http://www.openblas.net/
- * ARPACK-NG 3.6.3  https://github.com/opencollab/arpack-ng
+ * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
