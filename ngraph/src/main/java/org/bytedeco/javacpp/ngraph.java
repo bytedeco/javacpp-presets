@@ -678,16 +678,18 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         
 
         /** \brief Compile-time descriptor of a first-class value that is a tensor. */
-        @Name("ngraph::descriptor::Tensor") public static class DescriptorTensor extends Pointer {
+        @Name("ngraph::descriptor::Tensor") @NoOffset public static class DescriptorTensor extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public DescriptorTensor(Pointer p) { super(p); }
         
 
             public native @StdString BytePointer get_name();
+            public native void set_tensor_type(@Const @ByRef Type element_type, @Const @ByRef PartialShape pshape);
 
             public native @Const @ByRef Type get_element_type();
             public native @Const @ByRef Shape get_shape();
+            public native @Const @ByRef PartialShape get_partial_shape();
             public native @SharedPtr TensorLayout get_tensor_layout();
 
             
@@ -1359,6 +1361,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Const @ByRef Shape get_output_shape(@Cast("size_t") long i);
 
         /** Return the partial shape of element i */
+        public native @Const @ByRef PartialShape get_output_partial_shape(@Cast("size_t") long i);
 
         /** Return the function parameters */
         public native @Const @ByRef ParameterVector get_parameters();
@@ -1823,6 +1826,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public native @Const @ByRef Shape get_shape();
 
             /** @return the partial shape of the connected output */
+            public native @Const @ByRef PartialShape get_partial_shape();
 
             /** @return the element type of the connected output */
             public native @Const @ByRef Type get_element_type();
@@ -1885,6 +1889,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             public native @Const @ByRef Shape get_shape();
 
             /** @return the partial shape of the output */
+            public native @Const @ByRef PartialShape get_partial_shape();
 
             /** @return the element type of the output */
             public native @Const @ByRef Type get_element_type();
@@ -2017,6 +2022,16 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *  @param element_type The element type of the parameter.
              *  @param pshape The partial shape of the parameter.
              *  @param cacheable True if the parameter is not expected to be frequently updated. */
+            public Parameter(@Const @ByRef Type element_type,
+                                  @Const @ByRef PartialShape pshape,
+                                  @Cast("const bool") boolean cacheable/*=false*/) { super((Pointer)null); allocate(element_type, pshape, cacheable); }
+            private native void allocate(@Const @ByRef Type element_type,
+                                  @Const @ByRef PartialShape pshape,
+                                  @Cast("const bool") boolean cacheable/*=false*/);
+            public Parameter(@Const @ByRef Type element_type,
+                                  @Const @ByRef PartialShape pshape) { super((Pointer)null); allocate(element_type, pshape); }
+            private native void allocate(@Const @ByRef Type element_type,
+                                  @Const @ByRef PartialShape pshape);
 
             public native void validate_and_infer_types();
 
@@ -2124,6 +2139,157 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
         /** \brief A scalar constant whose element type is the same as like. */
     
+
+
+
+// Parsed from ngraph/op/util/binary_elementwise_arithmetic.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/op/op.hpp"
+            /** \brief Abstract base class for elementwise binary arithmetic operations, i.e., operations where the same
+             *         scalar binary arithmetic operation is applied to each corresponding pair of elements in two same-shaped
+             *         input tensors.
+             * 
+             *  For example, if the underlying arithmetic operation (determined by the subclass) is \f$\mathit{op}(x,y)\f$, the input tensors
+             *  \f$[[x_0,y_0],[z_0,w_0]]\f$ and \f$[[x_1,y_1],[z_1,w_1]]\f$ will be mapped to \f$[[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]\f$.
+             * 
+             *  ## Inputs
+             * 
+             *  |        | Type                              | Description                                                              |
+             *  | ------ | --------------------------------- | ------------------------------------------------------------------------ |
+             *  | {@code arg0} | \f$N[d_1,\dots,d_n]~(n \geq 0)\f$ | A tensor of any shape. The element type \f$N\f$ may be any numeric type. |
+             *  | {@code arg1} | \f$N[d_1,\dots,d_n]~(n \geq 0)\f$ | A tensor of the same shape and element type as {@code arg0}.                   |
+             * 
+             *  ## Output
+             * 
+             *  | Type                   | Description                                                                                                                                                                                            |
+             *  | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+             *  | \f$N[d_1,\dots,d_n]\f$ | The tensor \f$T\f$, where \f$T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])\f$. This will always have the same shape and element type as the input tensors. | */
+            @Namespace("ngraph::op::util") public static class BinaryElementwiseArithmetic extends Op {
+                static { Loader.load(); }
+                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+                public BinaryElementwiseArithmetic(Pointer p) { super(p); }
+            
+                /** \brief Constructs a binary elementwise arithmetic operation.
+                 * 
+                 *  @param arg0 Node that produces the first input tensor.
+                 *  @param arg1 Node that produces the second input tensor. */
+
+                public native void validate_and_infer_types();
+            }
+        
+    
+
+
+
+// Parsed from ngraph/op/add.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
+        /** \brief Elementwise addition operation.
+         *  */
+        @Namespace("ngraph::op") public static class Add extends BinaryElementwiseArithmetic {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Add(Pointer p) { super(p); }
+        
+            /** \brief Constructs an addition operation.
+             * 
+             *  @param arg0 Node that produces the first input tensor.<br>
+             *  {@code [d0, ...]}
+             *  @param arg1 Node that produces the second input tensor.<br>
+             *  {@code [d0, ...]}
+             * 
+             *  Output {@code [d0, ...]}
+             *  */
+            public Add(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
+            private native void allocate(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1);
+
+            public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+        }
+    
+
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByVal Node arg0,
+                                                @Const @SharedPtr @ByVal Node arg1);
+
+
+
+// Parsed from ngraph/op/multiply.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
+        /** \brief Elementwise multiplication operation. */
+        @Namespace("ngraph::op") public static class Multiply extends BinaryElementwiseArithmetic {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public Multiply(Pointer p) { super(p); }
+        
+            /** \brief Constructs a multiplication operation.
+             * 
+             *  @param arg0 Node that produces the first input tensor.
+             *  @param arg1 Node that produces the second input tensor. */
+            public Multiply(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
+            private native void allocate(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1);
+
+            public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+        }
+    
+
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator *") Node multiply(@Const @SharedPtr @ByVal Node arg0,
+                                                @Const @SharedPtr @ByVal Node arg1);
 
 
 
@@ -2340,6 +2506,474 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
 
 
+// Parsed from ngraph/dimension.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <limits>
+// #include <stddef.h>
+// #include <stdexcept>
+    /** \brief Class representing a dimension, which may be dynamic (undetermined until runtime),
+     *         in a shape or shape-like object.
+     * 
+     *  Static dimensions may be implicitly converted from size_t. A dynamic dimension is
+     *  constructed with Dimension() or Dimension::dynamic().
+     * 
+     *  XXX: THIS CLASS IS NOT IN USE YET AND THE ENTIRE DESIGN IS SUBJECT TO CHANGE. */
+    @Namespace("ngraph") @NoOffset public static class Dimension extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public Dimension(Pointer p) { super(p); }
+    
+        /** \brief Construct a static dimension.
+         *  @param dimension Value of the dimension. Must not be equal to
+         *                   Dimension::s_dynamic_val.
+         *  @throws std::invalid_argument If {@code dimension} == Dimension::s_dynamic_val. */
+        public Dimension(@Cast("size_t") long dimension) { super((Pointer)null); allocate(dimension); }
+        private native void allocate(@Cast("size_t") long dimension);
+
+        /** \brief Construct a dynamic dimension. */
+        public Dimension() { super((Pointer)null); allocate(); }
+        private native void allocate();
+        /** \brief Check whether this dimension is static.
+         *  @return {@code true} if the dimension is static, else {@code false}. */
+        public native @Cast("bool") boolean is_static();
+        /** \brief Check whether this dimension is dynamic.
+         *  @return {@code false} if the dimension is static, else {@code true}. */
+        public native @Cast("bool") boolean is_dynamic();
+        /** \brief Convert this dimension to {@code size_t}. This dimension must be static.
+         *  @throws std::invalid_argument If this dimension is dynamic. */
+        public native @Cast("size_t") @Name("operator size_t") long asLong();
+        /** \brief Convert this dimension to {@code ptrdiff_t}. This dimension must be static.
+         *  @throws std::invalid_argument If this dimension is dynamic. */
+
+        /** \brief Check whether this dimension represents the same scheme as the argument (both
+         *         dynamic, or equal).
+         *  @param dim The other dimension to compare this dimension to.
+         *  @return {@code true} if this dimension and {@code dim} are both dynamic, or if they are both
+         *          static and equal; otherwise, {@code false}. */
+        
+        ///
+        public native @Cast("bool") boolean same_scheme(@Const @ByRef Dimension dim);
+
+        /** \brief Try to merge two Dimension objects together.
+         *  @param [out] dst Reference to write the merged Dimension into.
+         *  @param d1 First dimension to merge.
+         *  @param d2 Second dimension to merge.
+         *  @return {@code true} if merging succeeds, else {@code false}.
+         * 
+         *  \li If {@code d1} is dynamic, writes {@code d2} to {@code dst} and returns {@code true}.
+         *  \li If {@code d2} is dynamic, writes {@code d1} to {@code dst} and returns {@code true}.
+         *  \li If {@code d1} and {@code d2} are static and equal, writes {@code d1} to {@code dst} and returns {@code true}.
+         *  \li If {@code d1} and {@code d2} are both static and unequal, leaves {@code dst} unchanged and
+         *      returns {@code false}. */
+        
+        ///
+        public static native @Cast("bool") boolean merge(@ByRef Dimension dst, @Const @ByVal Dimension d1, @Const @ByVal Dimension d2);
+
+        /** \brief Check whether this dimension is capable of being merged with the argument
+         *         dimension.
+         *  @param d The dimension to compare this dimension with.
+         *  @return {@code true} if this dimension is compatible with {@code d}, else {@code false}.
+         * 
+         *  Two dimensions are considered compatible if it is possible to merge them. (See
+         *  Dimension::merge.) */
+        
+        ///
+        ///
+        public native @Cast("bool") boolean compatible(@Const @ByRef Dimension d);
+
+        /** \brief Check whether this dimension is a relaxation of the argument.
+         *  @param d The dimension to compare this dimension with.
+         *  @return {@code true} if this dimension relaxes {@code d}, else {@code false}.
+         * 
+         *  A dimension {@code d1} _relaxes_ (or _is a relaxation of_) {@code d2} if {@code d1} and {@code d2} are static
+         *  and equal, or {@code d1} is dynamic.
+         * 
+         *  {@code d1.relaxes(d2)} is equivalent to {@code d2.refines(d1)}. */
+        
+        ///
+        ///
+        public native @Cast("bool") boolean relaxes(@Const @ByRef Dimension d);
+
+        /** \brief Check whether this dimension is a refinement of the argument.
+         *  @param d The dimension to compare this dimension with.
+         *  @return {@code true} if this dimension relaxes {@code d}, else {@code false}.
+         * 
+         *  A dimension {@code d2} _refines_ (or _is a refinement of_) {@code d1} if {@code d1} and {@code d2} are static
+         *  and equal, or {@code d2} is dynamic.
+         * 
+         *  {@code d1.refines(d2)} is equivalent to {@code d2.relaxes(d1)}. */
+        public native @Cast("bool") boolean refines(@Const @ByRef Dimension d);
+
+        /** \brief Create a dynamic dimension.
+         *  @return A dynamic dimension. */
+        public static native @ByVal Dimension dynamic();
+        /** \brief Constant for the value used internally to represent a dynamic dimension. */
+        @MemberGetter public static native @Cast("const size_t") long s_dynamic_val();
+        public static final long s_dynamic_val = s_dynamic_val();
+
+        /** \brief Addition operator for Dimension.
+         *  @param dim Right operand for addition.
+         *  @return Dimension::dynamic() if either of {@code *this} or {@code dim} is dynamic; else, a static
+         *          dimension with value {@code size_t(*this)+size_t(dim)}. */
+        public native @ByVal @Name("operator +") Dimension add(@Const @ByRef Dimension dim);
+
+        /** \brief Subtraction operator for Dimension.
+         *  @param dim Right operand for subtraction.
+         *  @return Dimension::dynamic() if either of {@code *this} or {@code dim} is dynamic; else, a static
+         *          dimension with value {@code size_t(*this)-size_t(dim)}. */
+        public native @ByVal @Name("operator -") Dimension subtract(@Const @ByRef Dimension dim);
+
+        /** \brief Multiplication operator for Dimension.
+         *  @param dim Right operand for multiplicaiton.
+         *  @return 0 if either of {@code *this} or {@code dim} is static and 0; else, Dimension::dynamic() if
+         *          either of {@code *this} or {@code dim} is dynamic; else, a static dimension with value
+         *          {@code size_t(*this)*size_t(dim)}. */
+        public native @ByVal @Name("operator *") Dimension multiply(@Const @ByRef Dimension dim);
+
+        /** \brief Add-into operator for Dimension.
+         *  @param dim Right operand for addition.
+         *  @return A reference to {@code *this}, after updating {@code *this} to the value {@code *this + dim}. */
+        public native @ByRef @Name("operator +=") Dimension addPut(@Const @ByRef Dimension dim);
+        /** \brief Multiply-into operator for Dimension.
+         *  @param dim Right operand for multiplication.
+         *  @return A reference to {@code *this}, after updating {@code *this} to the value {@code *this * dim}. */
+        public native @ByRef @Name("operator *=") Dimension multiplyPut(@Const @ByRef Dimension dim);
+    }
+
+    /** \brief Insert a human-readable representation of a dimension into an output stream.
+     *  @param str The output stream targeted for insertion.
+     *  @param dimension The dimension to be inserted into {@code str}.
+     *  @return A reference to {@code str} after insertion.
+     * 
+     *  Inserts the string {@code ?} if {@code dimension} is dynamic; else inserts {@code size_t(dimension)}. */
+    @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer str, @Const @ByRef Dimension dimension);
+
+
+
+// Parsed from ngraph/rank.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/dimension.hpp"
+    /** \brief Alias for Dimension, used when the value represents the number of axes in a shape,
+     *         rather than the size of one dimension in a shape.
+     * 
+     *  XXX: THIS TYPE IS EXPERIMENTAL AND THE ENTIRE DESIGN IS SUBJECT TO CHANGE. */
+
+
+
+// Parsed from ngraph/partial_shape.hpp
+
+//*****************************************************************************
+// Copyright 2017-2018 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <stddef.h>
+
+// #include "ngraph/dimension.hpp"
+// #include "ngraph/rank.hpp"
+// #include "ngraph/shape.hpp"
+    /** \brief Class representing a shape that may be partially or totally dynamic.
+     * 
+     *  XXX: THIS CLASS IS EXPERIMENTAL AND THE ENTIRE DESIGN IS SUBJECT TO CHANGE.
+     * 
+     *  A PartialShape may have:
+     * 
+     *  \li Dynamic rank. (Informal notation: {@code ?})
+     *  \li Static rank, but dynamic dimensions on some or all axes.
+     *      (Informal notation examples: {@code {1,2,?,4}}, {@code {?,?,?}})
+     *  \li Static rank, and dynamic dimensions on all axes.
+     *      (Informal notation examples: {@code {1,2,3,4}}, {@code {6}}, {@code {}}) */
+    @Namespace("ngraph") @NoOffset public static class PartialShape extends Pointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public PartialShape(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PartialShape(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PartialShape position(long position) {
+            return (PartialShape)super.position(position);
+        }
+    
+        /** \brief Constructs a shape with static rank from an initializer list of Dimension.
+         *  @param init The Dimension values for the constructed shape.
+         * 
+         *  Examples:
+         * 
+         *  <pre>{@code {.cpp}
+         *  PartialShape s{2,3,4};                     // rank=3, all dimensions static
+         *  PartialShape s{};                          // rank=0
+         *  PartialShape s{2,Dimension::dynamic(),3};  // rank=2, dimension 1 dynamic
+         *  }</pre> */
+
+        /** \brief Constructs a PartialShape with static rank from a vector of Dimension.
+         *  @param dimensions The Dimension values for the constructed shape. */
+        public PartialShape(@StdVector Dimension dimensions) { super((Pointer)null); allocate(dimensions); }
+        private native void allocate(@StdVector Dimension dimensions);
+
+        /** \brief Constructs a static PartialShape with zero rank (the shape of a scalar). */
+        public PartialShape() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        /** \brief Constructs a static PartialShape from a Shape.
+         *  @param shape The Shape to convert into PartialShape. */
+        
+        ///
+        public PartialShape(@Const @ByRef Shape shape) { super((Pointer)null); allocate(shape); }
+        private native void allocate(@Const @ByRef Shape shape);
+
+        /** \brief Check if this shape is static.
+         *  @return {@code true} if this shape is static, else {@code false}.
+         * 
+         *  A shape is considered static if it has static rank, and all dimensions of the shape
+         *  are static. */
+        
+        ///
+        public native @Cast("bool") boolean is_static();
+
+        /** \brief Check if this shape is dynamic.
+         *  @return {@code false} if this shape is static, else {@code true}.
+         * 
+         *  A shape is considered static if it has static rank, and all dimensions of the shape
+         *  are static. */
+        public native @Cast("bool") boolean is_dynamic();
+        /** \brief Get the rank of the shape.
+         *  @return The rank of the shape. This will be Rank::dynamic() if the rank of
+         *          the shape is dynamic. */
+        public native @ByVal @Cast("ngraph::Rank*") Dimension rank();
+        /** \brief Construct a PartialShape with the given rank and all dimensions (if any) dynamic.
+         *  @return A PartialShape with the given rank, and all dimensions (if any) dynamic. */
+        
+        ///
+        public static native @ByVal PartialShape dynamic(@ByVal(nullValue = "ngraph::Rank::dynamic()") @Cast("ngraph::Rank*") Dimension r);
+        public static native @ByVal PartialShape dynamic();
+        /** \brief Check whether this shape is compatible with the argument, i.e., whether it is
+         *         possible to merge them.
+         *  @param s The shape to be checked for compatibility with this shape.
+         *  @return {@code true} if this shape is compatible with {@code s}, else {@code false}.
+         * 
+         *  Two shapes are compatible if
+         *  \li one or both of them has dynamic rank, or
+         *  \li both shapes have dynamic and equal rank, and their dimensions are elementwise
+         *      compatible (see Dimension::compatible()). */
+        
+        ///
+        public native @Cast("bool") boolean compatible(@Const @ByRef PartialShape s);
+
+        /** \brief Check whether this shape represents the same scheme as the argument.
+         *  @param s The shape whose scheme is being compared with this shape.
+         *  @return {@code true} if this shape represents the same scheme as {@code s}, else {@code false}.
+         * 
+         *  Two shapes {@code s1} and {@code s2} represent the same scheme if
+         *  \li they both have dynamic rank, or
+         *  \li they both have static and equal rank {@code r}, and for every {@code i} from {@code 0} to {@code r-1},
+         *      {@code s1[i]} represents the same scheme as {@code s2[i]} (see Dimension::same_scheme()). */
+        
+        ///
+        ///
+        ///
+        public native @Cast("bool") boolean same_scheme(@Const @ByRef PartialShape s);
+
+        /** \brief Check whether this shape is a relaxation of the argument.
+         *  @param s The shape which is being compared against this shape.
+         *  @return {@code true} if this shape relaxes {@code s}, else {@code false}.
+         * 
+         *  Intuitively, a PartialShape {@code s1} is said to _relax_ {@code s2} (or _is a
+         *  relaxation_ of {@code s2}) if it is "more permissive" than {@code s2}. In other
+         *  words, {@code s1} is a relaxation of {@code s2} if anything you can form by
+         *  plugging things into the dynamic dimensions of {@code s2} is also
+         *  something you can form by plugging things into the dynamic
+         *  dimensions of {@code s1}, but not necessarily the other way around.
+         * 
+         *  {@code s1.relaxes(s2)} is equivalent to {@code s2.refines(s1)}.
+         * 
+         *  Formally, PartialShape {@code s1} is said to _relax_ PartialShape {@code s2}
+         *  if:
+         *  \li {@code s1} has dynamic rank, or
+         *  \li {@code s1} and {@code s2} both have static rank {@code r}, and for every {@code i} from {@code 0} to {@code r-1},
+         *       either {@code s1[i]} is dynamic, or {@code s1[i]} == {@code s2[i]}. */
+        
+        ///
+        ///
+        ///
+        public native @Cast("bool") boolean relaxes(@Const @ByRef PartialShape s);
+
+        /** \brief Check whether this shape is a refinement of the argument.
+         *  @param s The shape which is being compared against this shape.
+         *  @return {@code true} if this shape refines {@code s}, else {@code false}.
+         * 
+         *  Intuitively, a PartialShape {@code s1} is said to _relax_ {@code s2} (or _is a
+         *  relaxation_ of {@code s2}) if it is "less permissive" than {@code s2}. In other
+         *  words, {@code s1} is a relaxation of {@code s2} if anything you can form by
+         *  plugging things into the dynamic dimensions of {@code s1} is also
+         *  something you can form by plugging things into the dynamic
+         *  dimensions of {@code s2}, but not necessarily the other way around.
+         * 
+         *  {@code s1.refines(s2)} is equivalent to {@code s2.relaxes(s1)}.
+         * 
+         *  Formally, PartialShape {@code s1} is said to _refine_ PartialShape {@code s2}
+         *  if:
+         *  \li {@code s2} has dynamic rank, or
+         *  \li {@code s1} and {@code s2} both have static rank {@code r}, and for every {@code i} from {@code 0} to {@code r-1},
+         *       either {@code s2[i]} is dynamic, or {@code s1[i]} == {@code s2[i]}. */
+        public native @Cast("bool") boolean refines(@Const @ByRef PartialShape s);
+
+        /** \brief Checks that this shape's rank is compatible with {@code r}, and, if this shape's
+         *         rank is dynamic and {@code r} is static, updates this shape to have a rank of {@code r}
+         *         with dimensions all dynamic.
+         *  @return {@code true} if this shape's rank is compatible with {@code r}, else {@code false}. */
+        public native @Cast("bool") boolean merge_rank(@ByVal @Cast("ngraph::Rank*") Dimension r);
+
+        /** \brief Convert a static PartialShape to a Shape.
+         *  @return A new Shape {@code s} where {@code s[i] = size_t((*this)[i])}.
+         *  @throws std::invalid_argument If this PartialShape is dynamic. */
+        public native @ByVal Shape to_shape();
+
+        /** \brief Index operator for PartialShape.
+         *  @param i The index of the dimension being selected.
+         *  @return A reference to the {@code i}th Dimension of this shape. */
+        /** \brief Index operator for PartialShape.
+         *  @param i The index of the dimension being selected.
+         *  @return A reference to the {@code i}th Dimension of this shape. */
+        public native @ByRef @Name("operator []") Dimension get(@Cast("size_t") long i);
+        
+        
+
+        /** \brief Try to merge one shape into another.
+         *  @param [in,out] dst The shape that {@code src} will be merged into.
+         *  @param src The shape that will be merged into {@code dst}.
+         *  @return {@code true} if merging succeeds, else {@code false}.
+         * 
+         *  Merges {@code src} into {@code dst}, returning {@code true} on success and {@code false} on failure. If
+         *  {@code false} is returned, the effect on {@code dst} is unspecified.
+         * 
+         *  To merge two partial shapes {@code s1} and {@code s2} is to find the most permissive partial shape
+         *  {@code s} that is no more permissive than {@code s1} or {@code s2}, if {@code s} exists. For example:
+         * 
+         *  <pre>{@code
+         *         merge(?,?) -> ?
+         *         merge(?,{?,?}) -> {?,?}
+         *         merge({?,?},{?,?}) -> {?,?}
+         *         merge({1,2,3,4},?) -> {1,2,3,4}
+         *         merge({1,2},{1,?}) -> {1,2}
+         *         merge({1,2,?,?},{1,?,3,?}) -> {1,2,3,?}
+         *         merge({1,2,3},{1,2,3}) -> {1,2,3}
+         * 
+         *         merge({1,?},{2,?}) fails [dimension 0 constraints are inconsistent]
+         *         merge({?,?},{?,?,?}) fails [ranks are inconsistent]
+         *  }</pre>
+         * 
+         *  This function (merge_into) performs the "merge" operation described above on {@code dst} and
+         *  {@code src}, but overwrites {@code dst} with the result and returns {@code true} if merging is
+         *  successful; if merging is unsuccessful, the function returns {@code false} and may make
+         *  unspecified changes to {@code dst}. */
+        public static native @Cast("bool") boolean merge_into(@ByRef PartialShape dst, @Const @ByRef PartialShape src);
+    }
+
+    /** \brief Elementwise addition of two PartialShape objects.
+     *  @param s1 Left operand for addition.
+     *  @param s2 Right operand for addition.
+     *  @return The result of elementwise adding {@code s1} to {@code s2} (see description).
+     *  @throws std::invalid_argument If {@code s1} and {@code s2} have inconsistent ranks.
+     * 
+     *  \li If {@code s1} or {@code s2} has dynamic rank, returns PartialShape::dynamic().
+     *  \li If {@code s1 and }s2{@code  both have static rank, and their ranks are unequal, throws
+     *      std::invalid_argument.
+     *  \li If }s1{@code  and }s2{@code  both have static rank, and their ranks are equal,
+     *      returns a new shape whose }i{@code th dimension is }s1[i] + s2[i]{@code . */
+    
+    ///
+    ///
+    ///
+    ///
+    ///
+    ///
+    @Namespace("ngraph") public static native @ByVal @Name("operator +") PartialShape add(@Const @ByRef PartialShape s1, @Const @ByRef PartialShape s2);
+
+    /** \brief Inserts a human-readable representation of a PartialShape into an output stream.
+     *  @param str The output stream targeted for insertion.
+     *  @param shape The shape to be inserted into {@code str}.
+     *  @return A reference to {@code str} after insertion.
+     * 
+     *  The output to the stream is in "informal" notation. In other words:
+     * 
+     *  \li If {@code shape} has dynamic rank, inserts the string {@code ?}.
+     *  \li If {@code shape} has static rank, inserts the string {@code {}, then inserts each dimension
+     *      of {@code shape} into the output stream separated by commas, then inserts {@code }}.
+     * 
+     *  Example:
+     * 
+     *  <pre>{@code {.cpp}
+     *  PartialShape s1{PartialShape::dynamic())};
+     *  PartialShape s2{};
+     *  PartialShape s3{1,Dimension::dynamic(),2,3};
+     *  PartialShape s4{2,3,4};
+     *  std::cout << s1 << std::endl
+     *            << s2 << std::endl
+     *            << s3 << std::endl
+     *            << s4 << std::endl;
+     *  }</pre>
+     * 
+     *  Output:
+     * 
+     *  <pre>{@code
+     *  ?
+     *  {}
+     *  {1,?,2,3}
+     *  {2,3,4}
+     *  }</pre> */
+    @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer str, @Const @ByRef PartialShape shape);
+
+
+
 // Parsed from ngraph/node.hpp
 
 //*****************************************************************************
@@ -2424,6 +3058,10 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
          *  graph against the graph. */
         public native @Cast("bool") boolean is_same_op_type(@Const @SharedPtr @ByRef Node node);
 
+        public native void set_output_type(@Cast("size_t") long i,
+                                     @Const @ByRef Type element_type,
+                                     @Const @ByRef PartialShape pshape);
+
         public native @Cast("bool") boolean is_parameter();
         public native @Cast("bool") boolean is_output();
         public native @Cast("bool") boolean is_constant();
@@ -2459,6 +3097,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Const @ByRef Shape get_output_shape(@Cast("size_t") long i);
 
         /** Returns the partial shape for output i */
+        public native @Const @ByRef PartialShape get_output_partial_shape(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its shape */
         public native @Const @ByRef Shape get_shape();
@@ -2487,6 +3126,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Const @ByRef Shape get_input_shape(@Cast("size_t") long i);
 
         /** Returns the partial shape of input i */
+        public native @Const @ByRef PartialShape get_input_partial_shape(@Cast("size_t") long i);
 
         public native @ByVal NodeVector get_arguments();
 

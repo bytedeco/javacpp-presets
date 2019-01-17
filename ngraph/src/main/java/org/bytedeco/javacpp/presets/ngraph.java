@@ -62,10 +62,15 @@ import java.lang.annotation.Target;
         "ngraph/parameter_vector.hpp",
         "ngraph/op/parameter.hpp",
         "ngraph/op/constant.hpp",
+        "ngraph/op/util/binary_elementwise_arithmetic.hpp",
+        "ngraph/op/add.hpp",
+        "ngraph/op/multiply.hpp",
         "ngraph/result_vector.hpp",
         "ngraph/op/util/op_annotations.hpp",
         "ngraph/autodiff/adjoints.hpp",
-//        "ngraph/partial_shape.hpp",
+        "ngraph/dimension.hpp",
+        "ngraph/rank.hpp",
+        "ngraph/partial_shape.hpp",
         "ngraph/node.hpp",
         "ngraph/frontend/onnxifi/onnxifi.h",
 //        "core/node.hpp",
@@ -86,7 +91,6 @@ public class ngraph implements InfoMapper {
                .put(new Info("ngraph::runtime::Tensor").purify(true)) //.purify(false).virtualize())
                .put(new Info("ngraph::onnxifi::Backend").purify(true).pointerTypes("NgraphONNXIFIBackend"))
                .put(new Info("ngraph::onnxifi::Backend::operator =").skip())
-               .put(new Info("ngraph::op::Parameter").purify(true))
                .put(new Info("ngraph::element::from<char>").javaNames("fromChar"))
                .put(new Info("ngraph::element::from<bool>").javaNames("fromBool"))
                .put(new Info("ngraph::element::from<float>").javaNames("fromFloat"))
@@ -101,6 +105,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("ngraph::element::from<uint64_t>").javaNames("fromUInt64t"))
                .put(new Info("ngraph::element::from<ngraph::bfloat16>").javaNames("fromNGraphBFloat16"))
 
+               .put(new Info("ngraph::op::util::BinaryElementwiseArithmetic").purify(true))
                .put(new Info("std::shared_ptr<ngraph::op::Result>","std::shared_ptr<op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
                .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
 //               .put(new Info("ngraph::Node").purify(false).virtualize())
@@ -110,7 +115,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::size_t", "size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::enable_shared_from_this<ngraph::Node>", "std::enable_shared_from_this<Node>", "std::enable_shared_from_this<ngraph::runtime::cpu::CPU_ExternalFunction>").pointerTypes("Pointer"))
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
-               .put(new Info("std::list<std::shared_ptr<Node> >", "PartialShape", "std::pair<std::shared_ptr<ngraph::op::Result>,std::shared_ptr<ngraph::op::Parameter> >", "std::deque<ngraph::Node::descriptor::Input>", "std::deque<descriptor::Output>", "std::set<ngraph::Node::descriptor::Input*>", "std::unordered_set<descriptor::Tensor*>", "std::stringstream", "size_t", "ngraph::Node::has_same_type", "ngraph::descriptor::Tensor::set_tensor_layout", "ngraph::runtime::cpu::CPU_ExternalFunction::get_executor", "ngraph::runtime::cpu::CPU_ExternalFunction::get_callees", "ngraph::runtime::cpu::CPU_ExternalFunction::get_halide_functions", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_params", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_sizes", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_ptrs", "ngraph::runtime::cpu::CPU_ExternalFunction::get_parameter_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_result_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_mkldnn_emitter", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::get_functors", "ngraph::runtime::cpu::CPU_Backend::make_call_frame", "ngraph::onnxifi::BackendManager::unregister", "ngraph::onnxifi::BackendManager::get", "ngraph::onnx_import::register_operator").skip())
+               .put(new Info("std::list<std::shared_ptr<Node> >", "std::pair<std::shared_ptr<ngraph::op::Result>,std::shared_ptr<ngraph::op::Parameter> >", "std::deque<ngraph::Node::descriptor::Input>", "std::deque<descriptor::Output>", "std::set<ngraph::Node::descriptor::Input*>", "std::unordered_set<descriptor::Tensor*>", "std::stringstream", "size_t", "ngraph::Node::has_same_type", "ngraph::descriptor::Tensor::set_tensor_layout", "ngraph::runtime::cpu::CPU_ExternalFunction::get_executor", "ngraph::runtime::cpu::CPU_ExternalFunction::get_callees", "ngraph::runtime::cpu::CPU_ExternalFunction::get_halide_functions", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_params", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_sizes", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_ptrs", "ngraph::runtime::cpu::CPU_ExternalFunction::get_parameter_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_result_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_mkldnn_emitter", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::get_functors", "ngraph::runtime::cpu::CPU_Backend::make_call_frame", "ngraph::onnxifi::BackendManager::unregister", "ngraph::onnxifi::BackendManager::get", "ngraph::onnx_import::register_operator").skip())
                .put(new Info("ONNXIFI_ABI", "ONNXIFI_PUBLIC", "ONNXIFI_CHECK_RESULT").cppTypes().annotations())
                .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>",
                              "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
