@@ -572,7 +572,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             
 
             public native @StdString BytePointer get_type();
-            public native @Cast("bool") boolean compile(@Const @SharedPtr @ByRef Function function);
+            public native @SharedPtr @ByVal Function compile(@Const @SharedPtr @ByRef Function function);
 
             public native @Cast("bool") boolean call(@Const @SharedPtr @ByRef Function function,
                                   @Const @ByRef NgraphTensorVector outputs,
@@ -881,8 +881,8 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
     /** \brief Compiles a Function.
      *  @param func The function to compile
-     *  @return true if compile is successful, false otherwise */
-    public native @Cast("bool") boolean compile(@SharedPtr @ByVal Function func);
+     *  @return compiled function or nullptr on failure */
+    public native @SharedPtr @ByVal Function compile(@SharedPtr @ByVal Function func);
 
     /** \brief Executes a single iteration of a Function. If func is not compiled the call will
      *      compile it.
@@ -982,7 +982,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
                 public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
                                                   @Const @ByRef Shape shape);
 
-                public native @Cast("bool") boolean compile(@SharedPtr @ByVal Function func);
+                public native @SharedPtr @ByVal Function compile(@SharedPtr @ByVal Function func);
 
                 public native @Cast("bool") boolean call(@SharedPtr @ByVal Function func,
                                           @Const @ByRef NgraphTensorVector outputs,
@@ -1930,6 +1930,8 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         
             public native void set_op_annotations(@SharedPtr OpAnnotations op_annotations);
             public native @SharedPtr OpAnnotations get_op_annotations();
+
+            public native @Cast("bool") boolean is_op();
         }
     
 
@@ -3065,6 +3067,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Cast("bool") boolean is_parameter();
         public native @Cast("bool") boolean is_output();
         public native @Cast("bool") boolean is_constant();
+        public native @Cast("bool") boolean is_op();
         public native @Cast("bool") boolean is_commutative();
         public native @Cast("size_t") long get_instance_id();
         

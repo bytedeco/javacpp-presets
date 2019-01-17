@@ -1,5 +1,5 @@
 
- * Add presets for nGraph 0.10.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642))
+ * Add presets for nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642))
 
 ### January 11, 2019 version 1.4.4
  * Bundle the full version of MKL now that its new license permits it ([issue #601](https://github.com/bytedeco/javacpp-presets/issues/601))

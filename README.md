@@ -139,7 +139,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 5.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.3.0  https://github.com/onnx/onnx
- * nGraph 0.10.1  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.11.1  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Skia  https://skia.org
  * System APIs of the build environments:

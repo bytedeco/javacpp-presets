@@ -223,7 +223,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>ngraph-platform</artifactId>
-      <version>0.10.1-${project.version}</version>
+      <version>0.11.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

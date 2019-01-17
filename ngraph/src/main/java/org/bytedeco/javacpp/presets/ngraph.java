@@ -90,6 +90,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("ngraph::descriptor::Tensor").purify(true).pointerTypes("DescriptorTensor"))
                .put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("DescriptorTensor"))
                .put(new Info("ngraph::runtime::Tensor").purify(true)) //.purify(false).virtualize())
+               .put(new Info("runtime::Handle").annotations("@SharedPtr").pointerTypes("Function"))
                .put(new Info("ngraph::onnxifi::Backend").purify(true).pointerTypes("NgraphONNXIFIBackend"))
                .put(new Info("ngraph::onnxifi::Backend::operator =").skip())
                .put(new Info("ngraph::element::from<char>").javaNames("fromChar"))

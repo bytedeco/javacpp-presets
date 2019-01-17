@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * nGraph 0.10.1  https://ai.intel.com/intel-ngraph/
+ * nGraph 0.11.1  https://ai.intel.com/intel-ngraph/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.10.1-1.4.5-SNAPSHOT</version>
+            <version>0.11.1-1.4.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
@@ -105,6 +105,7 @@ public class ABC {
         t_c.write(new FloatPointer(v_c), 0, v_c.length * 4);
 
         // Invoke the function
+        backend.compile(f);
         backend.call(f, new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
 
         // Get the result
