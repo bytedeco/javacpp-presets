@@ -1243,7 +1243,6 @@
         <module>tensorflow</module>
         <module>ale</module>
         <module>onnx</module>
-        <module>ngraph</module>
         <module>liquidfun</module>
         <module>skia</module>
         <module>systems</module>
