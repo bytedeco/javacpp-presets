@@ -1,5 +1,7 @@
 
  * Add presets for nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642))
+ * Upgrade presets for ARPACK-NG 3.7.0
+ * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
 ### January 11, 2019 version 1.4.4
  * Bundle the full version of MKL now that its new license permits it ([issue #601](https://github.com/bytedeco/javacpp-presets/issues/601))
