@@ -35,7 +35,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.skia</groupId>
     <artifactId>skiacexample</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <properties>
         <exec.mainClass>SkiaCExample</exec.mainClass>
     </properties>
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>20170511-53d6729-1.4.3</version>
+            <version>20170511-53d6729-1.4.4</version>
         </dependency>
     </dependencies>
 </project>

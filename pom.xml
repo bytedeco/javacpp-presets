@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.4.4-SNAPSHOT</version>
+  <version>1.4.5-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -393,7 +393,7 @@
               <minmemory>128m</minmemory>
               <maxmemory>1024m</maxmemory>
               <links>
-                <link>http://bytedeco.org/javacpp/apidocs/</link>
+                <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
             </configuration>
           </execution>

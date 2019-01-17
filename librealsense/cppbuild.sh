@@ -21,7 +21,7 @@ tar --totals -xzf ../librealsense-$LIBREALSENSE_VERSION.tar.gz
 tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
 cd librealsense-$LIBREALSENSE_VERSION
-patch -Np1 < ../../../librealsense.patch
+patch -Np1 < ../../../librealsense.patch || true
 
 case $PLATFORM in
     linux-x86)
