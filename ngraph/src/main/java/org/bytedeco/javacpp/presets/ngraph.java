@@ -80,7 +80,8 @@ import java.lang.annotation.Target;
 //        "core/tensor.hpp",
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
-    link = {"onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend", "codegen", "tbb@.2"}
+    preload = {"iomp5", "mklml", "mklml_intel"},
+    link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend", "codegen", "tbb@.2"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
 public class ngraph implements InfoMapper {
