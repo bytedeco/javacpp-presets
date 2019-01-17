@@ -80,3 +80,47 @@ public class BasicExample {
     }
 }
 ```
+
+### The `src/main/java/GetComponentImagesExample.java` source file
+```java
+import org.bytedeco.javacpp.*;
+import static org.bytedeco.javacpp.lept.*;
+import static org.bytedeco.javacpp.tesseract.*;
+
+public class GetComponentImagesExample {
+    public static void main(String[] args) {
+        BytePointer outText;
+
+        TessBaseAPI api = new TessBaseAPI();
+        // Initialize tesseract-ocr with English, without specifying tessdata path
+        if (api.Init(null, "eng") != 0) {
+            System.err.println("Could not initialize tesseract.");
+            System.exit(1);
+        }
+
+        // Open input image with leptonica library
+        PIX image = pixRead("/usr/src/tesseract/testing/phototest.tif");
+        api.SetImage(image);
+
+        int[] blockIds = {};
+        BOXA boxes = api.GetComponentImages(RIL_TEXTLINE, true, null, blockIds);
+
+        for (int i = 0; i < boxes.n(); i++) {
+            BOX box = boxes.box(i);
+            api.SetRectangle(box.x(), box.y(), box.w(), box.h());
+            outText = api.GetUTF8Text();
+            String ocrResult = outText.getString();
+            int conf = api.MeanTextConf();
+
+            String boxInformation = String.format("Box[%d]: x=%d, y=%d, w=%d, h=%d, confidence: %d, text: %s", i, box.x(), box.y(), box.w(), box.h(), conf, ocrResult);
+            System.out.println(boxInformation);
+
+            outText.deallocate();
+        }
+
+        // Destroy used object and release memory
+        api.End();
+        pixDestroy(image);
+    }
+}
+```
