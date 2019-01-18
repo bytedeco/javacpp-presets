@@ -2,6 +2,8 @@ package org.bytedeco.javacpp.samples.qt;
 
 import static org.bytedeco.javacpp.helper.QtWidgets.*;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.PointerPointer;
@@ -158,20 +160,32 @@ public class SystemTrayIconExample {
               "Maybe you should try asking a human?"));
     }
 
+    private QHBoxLayout iconLayout;
+
     private void createIconGroupBox() {
       iconGroupBox = new QGroupBox(tr("Tray Icon"));
 
       iconLabel = new QLabel(QString.fromStdString("Icon:"));
 
       iconComboBox = new QComboBox();
-      iconComboBox.addItem(new QIcon(QString.fromStdString("qt/src/main/resources/org/bytedeco/javacpp/samples/qt/bad.png")), tr("Bad"));
-      iconComboBox.addItem(new QIcon(QString.fromStdString("qt/src/main/resources/org/bytedeco/javacpp/samples/qt/heart.png")), tr("Heart"));
-      iconComboBox.addItem(new QIcon(QString.fromStdString("qt/src/main/resources/org/bytedeco/javacpp/samples/qt/trash.png")), tr("Trash"));
+      try {
+        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
+            "/org/bytedeco/javacpp/samples/qt/bad.png").toURI()).getAbsolutePath())),
+            tr("Bad"));
+        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
+            "/org/bytedeco/javacpp/samples/qt/heart.png").toURI()).getAbsolutePath())),
+            tr("Heart"));
+        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
+            "/org/bytedeco/javacpp/samples/qt/trash.png").toURI()).getAbsolutePath())),
+            tr("Trash"));
+      } catch (URISyntaxException e) {
+        e.printStackTrace();
+      }
 
       showIconCheckBox = new QCheckBox(tr("Show icon"));
       showIconCheckBox.setChecked(true);
 
-      QHBoxLayout iconLayout = new QHBoxLayout();
+      iconLayout = new QHBoxLayout();
       iconLayout.addWidget(iconLabel);
       iconLayout.addWidget(iconComboBox);
       iconLayout.addStretch();

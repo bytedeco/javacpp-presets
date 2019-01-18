@@ -163,4 +163,11 @@ public class QtWidgets extends AbstractQtPreset {
         "NSMenu"
     };
   }
+
+  @Override
+  protected String[] virtual() {
+    return new String[]{
+        "QWidget"
+    };
+  }
 }

@@ -62,12 +62,7 @@ public class QtWidgets extends org.bytedeco.javacpp.presets.QtWidgets {
     public int id;
     public final void call(int target, @Cast("bool") final boolean checked) {
       final ToggledCallback cb = cbs.get(target);
-      new Thread(new Runnable() {
-        @Override
-        public void run() {
-          if (cb != null) cb.toggled(checked);
-        }
-      }).start();
+      cb.toggled(checked);
     }
     public void toggled(boolean checked) {}
   }
