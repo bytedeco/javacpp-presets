@@ -1,0 +1,120 @@
+diff -ruN ngraph-0.10.1/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.10.1-patch/src/ngraph/frontend/onnx_import/onnx.cpp
+--- ngraph-0.10.1/src/ngraph/frontend/onnx_import/onnx.cpp	2018-12-01 06:15:38.000000000 +0900
++++ ngraph-0.10.1-patch/src/ngraph/frontend/onnx_import/onnx.cpp	2019-01-17 14:46:29.457762809 +0900
+@@ -31,18 +31,10 @@
+         {
+             namespace error
+             {
+-                struct file_open : ngraph_error
++                struct data_parse : ngraph_error
+                 {
+-                    explicit file_open(const std::string& path)
+-                        : ngraph_error{"failure opening file:" + path}
+-                    {
+-                    }
+-                };
+-
+-                struct stream_parse : ngraph_error
+-                {
+-                    explicit stream_parse(std::istream&)
+-                        : ngraph_error{"failure parsing data from the stream"}
++                    explicit data_parse(const std::string& data)
++                        : ngraph_error{"failure parsing data from the string"}
+                     {
+                     }
+                 };
+@@ -50,13 +42,13 @@
+             } // namespace error
+         }     // namespace detail
+ 
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(std::istream& sin,
++        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& data,
+                                                                const Weights& weights)
+         {
+             onnx::ModelProto model_proto;
+-            if (!model_proto.ParseFromIstream(&sin))
++            if (!model_proto.ParseFromString(data))
+             {
+-                throw detail::error::stream_parse{sin};
++                throw detail::error::data_parse{data};
+             }
+             std::vector<std::shared_ptr<Function>> output_functions;
+             Model model{model_proto};
+@@ -69,28 +61,6 @@
+             return output_functions;
+         }
+ 
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& path,
+-                                                               const Weights& weights)
+-        {
+-            std::ifstream ifs{path, std::ios::in | std::ios::binary};
+-            if (!ifs.is_open())
+-            {
+-                throw detail::error::file_open{path};
+-            }
+-            return load_onnx_model(ifs, weights);
+-        }
+-
+-        std::shared_ptr<Function> import_onnx_function(std::istream& sin, const Weights& weights)
+-        {
+-            return load_onnx_model(sin, weights).front();
+-        }
+-
+-        std::shared_ptr<Function> import_onnx_function(const std::string& path,
+-                                                       const Weights& weights)
+-        {
+-            return load_onnx_model(path, weights).front();
+-        }
+-
+         void register_operator(const std::string& name,
+                                std::int64_t version,
+                                const std::string& domain,
+diff -ruN ngraph-0.10.1/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.10.1-patch/src/ngraph/frontend/onnx_import/onnx.hpp
+--- ngraph-0.10.1/src/ngraph/frontend/onnx_import/onnx.hpp	2018-12-01 06:15:38.000000000 +0900
++++ ngraph-0.10.1-patch/src/ngraph/frontend/onnx_import/onnx.hpp	2019-01-17 14:46:37.347755661 +0900
+@@ -50,44 +50,8 @@
+         ///                   the model  will take precedence).
+         /// \return The function returns a vector of nGraph functions. The number of functions
+         ///          depends on number of outputs from ONNX graph.
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(std::istream& sin,
++        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& data,
+                                                                const Weights& weights = {});
+-        /// \brief Convert an ONNX model to nGraph functions
+-        /// The function translated serialized ONNX model to nGraph functions. The ONNX model
+-        /// is read from ONNX file.
+-        /// \param filename  file name (relative or absolute path name),
+-        /// \param weights  weights associated with the model. If weights are embedded into
+-        ///                   the model this parameter shall be empty. Having weights in a model
+-        ///                   and providing through this parameters is invalid (the weights from
+-        ///                   the model  will take precedence).
+-        /// \return The function returns a vector of nGraph functions. The number of functions
+-        ///          depends on number of outputs from ONNX graph.
+-        std::vector<std::shared_ptr<Function>> load_onnx_model(const std::string& filename,
+-                                                               const Weights& weights = {});
+-
+-        /// \brief Convert an ONNX model to nGraph function
+-        /// The function translated serialized ONNX model to nGraph function. The serialized
+-        /// ONNX model is read from input stream.
+-        /// \param sin       input stream (e.g. file stream, memory stream, etc),
+-        /// \param weights  weights associated with the model. If weights are embedded into
+-        ///                   the model this parameter shall be empty. Having weights in a model
+-        ///                   and providing through this parameters is invalid (the weights from
+-        ///                   the model  will take precedence).
+-        /// \return The function returns a nGraph function representing single output from graph.
+-        std::shared_ptr<Function> import_onnx_function(std::istream& sin,
+-                                                       const Weights& weights = {});
+-
+-        /// \brief Convert an ONNX model to nGraph functions
+-        /// The function translated serialized ONNX model to nGraph functions. The ONNX model
+-        /// is read from ONNX file.
+-        /// \param filename  file name (relative or absolute path name),
+-        /// \param weights  weights associated with the model. If weights are embedded into
+-        ///                   the model this parameter shall be empty. Having weights in a model
+-        ///                   and providing through this parameters is invalid (the weights from
+-        ///                   the model  will take precedence).
+-        /// \return The function returns a nGraph function representing single output from graph.
+-        std::shared_ptr<Function> import_onnx_function(const std::string& filename,
+-                                                       const Weights& weights = {});
+ 
+     } // namespace onnx_import
+ 
