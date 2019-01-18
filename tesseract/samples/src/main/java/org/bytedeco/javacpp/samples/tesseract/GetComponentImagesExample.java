@@ -1,0 +1,54 @@
+
+package org.bytedeco.javacpp.samples.tesseract;
+
+import org.bytedeco.javacpp.*;
+import static org.bytedeco.javacpp.lept.*;
+import static org.bytedeco.javacpp.tesseract.*;
+
+/**
+ * To run this program, you need to configure:
+ * <ul>
+ *     <li>A java property pointing to the JNI libraries
+ *     -Djava.library.path="~/javacpp-presets/tesseract/target/classes/org/bytedeco/javacpp/linux-x86_64/:~/javacpp-presets/leptonica/target/classes/org/bytedeco/javacpp/linux-x86_64"</li>
+ *     <li>An environment variable pointing to the dictionaries installed on the system
+ *     TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00</li>
+ * </ul>
+ */
+public class GetComponentImagesExample {
+    public static void main(String[] args) {
+        BytePointer outText;
+
+        TessBaseAPI api = new TessBaseAPI();
+        // Initialize tesseract-ocr with English, intializing tessdata path with the standard ENV variable
+        if (api.Init(System.getenv("TESSDATA_PREFIX") + "/tessdata", "eng") != 0) {
+            System.err.println("Could not initialize tesseract.");
+            System.exit(1);
+        }
+
+        // Open input image with leptonica library
+        PIX image = pixRead("src/main/resources/org/bytedeco/javacpp/samples/tesseract/Wikipedia-Computer_modern_sample.png");
+        api.SetImage(image);
+
+        // Lookup all component images
+        int[] blockIds = {};
+        BOXA boxes = api.GetComponentImages(RIL_TEXTLINE, true, null, blockIds);
+
+        for (int i = 0; i < boxes.n(); i++) {
+            // For each image box, OCR within its area
+            BOX box = boxes.box(i);
+            api.SetRectangle(box.x(), box.y(), box.w(), box.h());
+            outText = api.GetUTF8Text();
+            String ocrResult = outText.getString();
+            int conf = api.MeanTextConf();
+
+            String boxInformation = String.format("Box[%d]: x=%d, y=%d, w=%d, h=%d, confidence: %d, text: %s", i, box.x(), box.y(), box.w(), box.h(), conf, ocrResult);
+            System.out.println(boxInformation);
+
+            outText.deallocate();
+        }
+
+        // Destroy used object and release memory
+        api.End();
+        pixDestroy(image);
+    }
+}
