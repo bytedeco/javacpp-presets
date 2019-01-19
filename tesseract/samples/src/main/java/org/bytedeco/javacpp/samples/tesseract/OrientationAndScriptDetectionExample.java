@@ -4,7 +4,11 @@ package org.bytedeco.javacpp.samples.tesseract;
 import static org.bytedeco.javacpp.lept.*;
 import static org.bytedeco.javacpp.tesseract.*;
 
+import java.io.File;
+import java.net.URL;
+
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.tesseract;
 
 /**
@@ -17,7 +21,7 @@ import org.bytedeco.javacpp.tesseract;
  * </ul>
  */
 public class OrientationAndScriptDetectionExample {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         BytePointer outText;
 
         TessBaseAPI api = new TessBaseAPI();
@@ -28,7 +32,9 @@ public class OrientationAndScriptDetectionExample {
         }
 
         // Open input image with leptonica library
-        PIX image = pixRead("src/main/resources/org/bytedeco/javacpp/samples/tesseract/Wikipedia-Computer_modern_sample.png");
+        URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Computer_modern_sample.svg/1920px-Computer_modern_sample.svg.png");
+        File file = Loader.cacheResource(url);
+        PIX image = pixRead(file.getAbsolutePath());
         api.SetPageSegMode(PSM_AUTO_OSD);
         api.SetImage(image);
         tesseract.ETEXT_DESC reco = TessMonitorCreate();
