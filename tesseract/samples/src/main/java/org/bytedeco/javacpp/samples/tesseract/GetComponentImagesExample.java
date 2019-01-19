@@ -8,8 +8,6 @@ import static org.bytedeco.javacpp.tesseract.*;
 /**
  * To run this program, you need to configure:
  * <ul>
- *     <li>A java property pointing to the JNI libraries
- *     -Djava.library.path="~/javacpp-presets/tesseract/target/classes/org/bytedeco/javacpp/linux-x86_64/:~/javacpp-presets/leptonica/target/classes/org/bytedeco/javacpp/linux-x86_64"</li>
  *     <li>An environment variable pointing to the dictionaries installed on the system
  *     TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00</li>
  * </ul>
