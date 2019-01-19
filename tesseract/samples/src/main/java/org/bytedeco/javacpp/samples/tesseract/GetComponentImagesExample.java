@@ -1,6 +1,8 @@
 
 package org.bytedeco.javacpp.samples.tesseract;
 
+import java.io.File;
+import java.net.URL;
 import org.bytedeco.javacpp.*;
 import static org.bytedeco.javacpp.lept.*;
 import static org.bytedeco.javacpp.tesseract.*;
@@ -11,9 +13,11 @@ import static org.bytedeco.javacpp.tesseract.*;
  *     <li>An environment variable pointing to the dictionaries installed on the system
  *     TESSDATA_PREFIX=/usr/share/tesseract-ocr/4.00</li>
  * </ul>
+ *
+ * @author Arnaud Jeansen
  */
 public class GetComponentImagesExample {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         BytePointer outText;
 
         TessBaseAPI api = new TessBaseAPI();
@@ -24,7 +28,9 @@ public class GetComponentImagesExample {
         }
 
         // Open input image with leptonica library
-        PIX image = pixRead("src/main/resources/org/bytedeco/javacpp/samples/tesseract/Wikipedia-Computer_modern_sample.png");
+        URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Computer_modern_sample.svg/1920px-Computer_modern_sample.svg.png");
+        File file = Loader.cacheResource(url);
+        PIX image = pixRead(file.getAbsolutePath());
         api.SetImage(image);
 
         // Lookup all component images

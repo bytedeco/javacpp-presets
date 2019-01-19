@@ -1,4 +1,5 @@
 
+ * Add `GetComponentImagesExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673))
  * Upgrade presets for ARPACK-NG 3.7.0
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
