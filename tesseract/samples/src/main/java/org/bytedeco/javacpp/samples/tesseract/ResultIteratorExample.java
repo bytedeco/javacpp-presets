@@ -19,6 +19,8 @@ import org.bytedeco.javacpp.tesseract;
  * <li>An environment variable to tweak the Locale
  * LC_ALL=C</li>
  * </ul>
+ *
+ * @author Arnaud Jeansen
  */
 public class ResultIteratorExample {
     public static void main(String[] args) throws Exception {
