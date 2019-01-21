@@ -13,6 +13,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
     value = {
         @Platform(
             include = {
+                "./qtcore.h",
                 "qcoreevent.h",
                 "qlogging.h",
                 "qnamespace.h",
@@ -28,10 +29,6 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QThread",
                 "QVariant"
             }
-        ),
-        @Platform(
-            includepath = "/usr/local/Cellar/qt/5.12.0/include",
-            value = "macosx-x86_64"
         )
     }
 )
@@ -292,6 +289,9 @@ public class QtCore extends AbstractQtPreset {
         "QChar::SpecialCharacter",
         "QChar::UnicodeVersion",
         "QVariant::Type",
+
+        // Files
+        "qtcore.h",
 
         // Methods
         "QObject::property",

@@ -6,6 +6,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.javacpp.QtCore;
 import org.bytedeco.javacpp.QtCore.*;
@@ -23,7 +24,7 @@ public class SystemTrayIconExample {
   private static Window window;
 
   public static void main(String[] args) {
-    new QtCore();
+    Loader.load(QtCore.class);
     argc = new IntPointer(new int[]{0});
     argv = new PointerPointer<>("systray", null);
 

@@ -1,17 +1,30 @@
 package org.bytedeco.javacpp.helper;
 
 import java.io.File;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.QtCore.QString;
 
 public class QtCore extends org.bytedeco.javacpp.presets.QtCore {
 
   static {
+    // Load macOS framework
     File framework = new File("/usr/local/Cellar/qt/5.12.0/lib/QtCore.framework/QtCore");
     if (framework.exists()) {
       System.load(framework.getAbsolutePath());
     }
+
+    // Load preset
+    Loader.load(org.bytedeco.javacpp.QtCore.class);
+
+    // Set main thread
+    QtCore_verifyMainThread();
   }
+
+  /**
+   * Sets the main Qt thread to the current Java thread
+   */
+  public static native void QtCore_verifyMainThread();
 
   public abstract static class AbstractQString extends Pointer {
 

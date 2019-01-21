@@ -2959,7 +2959,7 @@ public static class QToolButton extends QAbstractButton {
     public native void repaint(int x, int y, int w, int h);
     // Widget management functions
 
-//    @Virtual public native void setVisible(@Cast("bool") boolean visible);
+    
     public native void setHidden(@Cast("bool") boolean hidden);
     public native void show();
     public native void hide();
@@ -2988,14 +2988,14 @@ public static class QToolButton extends QAbstractButton {
     public native @Cast("bool") boolean isMaximized();
     public native @Cast("bool") boolean isFullScreen();
 
-//    @Virtual public native @ByVal @Const({false, false, true}) QSize sizeHint();
-//    @Virtual public native @ByVal @Const({false, false, true}) QSize minimumSizeHint();
+    
+    
 
     public native @ByVal QSizePolicy sizePolicy();
     public native void setSizePolicy(@ByVal QSizePolicy arg0);
     public native void setSizePolicy(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical);
-//    @Virtual public native @Const({false, false, true}) int heightForWidth(int arg0);
-//    @Virtual public native @Cast("bool") @Const({false, false, true}) boolean hasHeightForWidth();
+    
+    
 
     public native void setContentsMargins(int left, int top, int right, int bottom);
     public native void getContentsMargins(IntPointer left, IntPointer top, IntPointer right, IntPointer bottom);
@@ -3056,14 +3056,8 @@ public static class QToolButton extends QAbstractButton {
 
     public native @Cast("bool") boolean autoFillBackground();
     public native void setAutoFillBackground(@Cast("bool") boolean enabled);
-//    @Virtual protected native void enterEvent(QEvent event);
-//    @Virtual protected native void leaveEvent(QEvent event);
-//    @Virtual protected native void paintEvent(QPaintEvent event);
     @Virtual protected native void closeEvent(QCloseEvent event);
-//    @Virtual protected native @Cast("bool") boolean nativeEvent(@Const @ByRef QByteArray eventType, Pointer message, CLongPointer result);
-//    @Virtual protected native void changeEvent(QEvent arg0);
-//    @Virtual public native @ByVal @Const({false, false, true}) QVariant inputMethodQuery(@Cast("Qt::InputMethodQuery") int arg0);
-//    @Virtual protected native @Cast("bool") boolean focusNextPrevChild(@Cast("bool") boolean next);
+    
 }
 
 

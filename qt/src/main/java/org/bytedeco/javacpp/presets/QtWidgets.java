@@ -157,7 +157,19 @@ public class QtWidgets extends AbstractQtPreset {
         "QWidgetList",
 
         // Members
+        "QWidget::changeEvent",
+        "QWidget::enterEvent",
+        "QWidget::focusNextPrevChild",
+        "QWidget::hasHeightForWidth",
+        "QWidget::heightForWidth",
+        "QWidget::inputMethodQuery",
+        "QWidget::leaveEvent",
+        "QWidget::minimumSizeHint",
+        "QWidget::nativeEvent",
+        "QWidget::paintEvent",
         "QWidget::setupUi",
+        "QWidget::setVisible",
+        "QWidget::sizeHint",
 
         // Types
         "NSMenu"

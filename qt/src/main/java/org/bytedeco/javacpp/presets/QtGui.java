@@ -19,10 +19,6 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QIcon",
                 "QGuiApplication"
             }
-        ),
-        @Platform(
-            includepath = "/usr/local/Cellar/qt/5.12.0/include",
-            value = "macosx-x86_64"
         )
     }
 )
