@@ -93,12 +93,13 @@ public class onnx implements InfoMapper {
                              "graph_node_list_iterator", "reverse_iterator", "std::vector<onnx::Tensor>::const_iterator",
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer", 
-			     "BuildFunction", "onnx::FunctionBuilder", "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass",
+			     "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass",
 			     "onnx::optimization::ImmutablePass", "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto",
 			     "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "google::protobuf::FindAllExtensions").skip())
                .put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
-               .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>").skip())
+               .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>"
+				       ).skip())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
 	       .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
@@ -125,7 +126,8 @@ public class onnx implements InfoMapper {
 			     "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
                              "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",
-                             "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_", "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_",
+                             "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_", 
+			     "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
                              "onnx::_AttributeProto_default_instance_", "google::protobuf::UnknownField::LengthDelimited", "google::protobuf::internal::empty_string_once_init_",
 			     "google::protobuf::SourceLocation::leading_detached_comments").skip())

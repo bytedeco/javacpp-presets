@@ -14151,6 +14151,27 @@ public static final int
 // #include "onnx/common/status.h"
 // #include "onnx/onnx-operators_pb.h"
 
+@Namespace("onnx") public static class FunctionBuilder extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public FunctionBuilder() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionBuilder(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FunctionBuilder(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public FunctionBuilder position(long position) {
+        return (FunctionBuilder)super.position(position);
+    }
+
+  public native @ByRef FunctionBuilder SetDomain(@StdString BytePointer domain);
+  public native @ByRef FunctionBuilder SetDomain(@StdString String domain);
+  public native @StdString BytePointer GetDomain();
+  public native @ByRef FunctionBuilder SetBuildFunction(@Cast("onnx::BuildFunction") Status build_func);
+  public native @Cast("onnx::BuildFunction") Status GetBuildFunction();
+}
+
 @Namespace("onnx") public static class IFunctionBuilderRegistry extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -14186,6 +14207,8 @@ public static final int
 
   public FunctionBuilderRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  public native @ByVal Status Register(@Const @ByRef FunctionBuilder function_builder);
 
   // Get functions for specific domain.
 
@@ -14230,6 +14253,8 @@ public static final int
 // #define ONNX_FUNCTION_UNIQ(counter, function_builder)
 //   static Common::Status function_builder_##counter##_status =
 //       FunctionBuilderRegistry::OnnxInstance().Register(function_builder);
+
+
 
 // Registers all function builder of a given operator set
 
