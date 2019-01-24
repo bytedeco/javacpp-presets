@@ -49,7 +49,7 @@ import java.lang.annotation.Target;
         "google/protobuf/arena.h",
         "google/protobuf/message_lite.h",
         "google/protobuf/unknown_field_set.h",
-	"google/protobuf/descriptor.h",
+        "google/protobuf/descriptor.h",
         "onnx/proto_utils.h",
 //        "onnx/string_utils.h",
         "onnx/checker.h",
@@ -57,7 +57,7 @@ import java.lang.annotation.Target;
         "onnx/onnxifi.h",
         "onnx/common/tensor.h",
         "onnx/common/array_ref.h",
-	"onnx/common/status.h",
+        "onnx/common/status.h",
 //        "onnx/common/graph_node_list.h",
         "onnx/common/stl_backports.h",
         "onnx/common/ir.h",
@@ -65,18 +65,17 @@ import java.lang.annotation.Target;
         "onnx/version_converter/adapters/adapter.h",
         "onnx/version_converter/helper.h",
         "onnx/version_converter/BaseConverter.h",
-	"onnx/version_converter/convert.h",
+        "onnx/version_converter/convert.h",
         "onnx/optimizer/pass_registry.h",
-	"onnx/optimizer/pass.h",
-	"onnx/defs/function.h",
-	//        "onnx/optimizer/passes/optimize_pass.h",
+        "onnx/optimizer/pass.h",
+        "onnx/defs/function.h",
         "onnx/optimizer/optimize.h",
     },
     link = {"onnx_proto", "onnx", "onnxifi"}),
 @Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 public class onnx implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx")) 
+        infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
                .put(new Info("LIBPROTOBUF_EXPORT","PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE",
                              "ONNX_UNUSED", "ONNX_API", "ONNXIFI_ABI", "ONNXIFI_CHECK_RESULT", "ONNXIFI_PUBLIC", "ONNX_IMPORT", "ONNX_EXPORT").cppTypes().annotations())
                .put(new Info("onnx::AttributeProto::AttributeType", "onnx::TensorProto::DataType", "onnx::TensorProto_DataType",
@@ -92,16 +91,15 @@ public class onnx implements InfoMapper {
                              "generic_graph_node_list_iterator", "NodeKind", "graph_node_list",
                              "graph_node_list_iterator", "reverse_iterator", "std::vector<onnx::Tensor>::const_iterator",
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
-                             "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer", 
-			     "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass",
-			     "onnx::optimization::ImmutablePass", "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto",
-			     "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "google::protobuf::FindAllExtensions").skip())
+                             "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer",
+                             "onnx::shape_inference::GraphInferenceContext", "onnx::optimization::FullGraphBasedPass",
+                             "onnx::optimization::ImmutablePass", "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2dml_2eproto",
+                             "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "google::protobuf::FindAllExtensions").skip())
                .put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
-               .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>"
-				       ).skip())
+               .put(new Info("std::map<std::string,std::unique_ptr<onnx::optimization::OptimizePass> >", "std::unique_ptr<onnx::optimization::OptimizePass>").skip())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
-	       .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
+               .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
                .put(new Info("onnx::optimization::OptimizePass").purify())
                .put(new Info("onnx::version_conversion::BaseVersionConverter::registerAdapter").skip())
@@ -122,15 +120,15 @@ public class onnx implements InfoMapper {
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",
-                             "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_", 
-			     "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_",
+                             "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_",
+                             "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
                              "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",
-                             "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_", 
-			     "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
+                             "onnx::_NodeProto_default_instance_", "onnx::_GraphProto_default_instance_", "onnx::_FunctionProto_default_instance_",
+                             "onnx::_ModelProto_default_instance_", "onnx::_OperatorSetProto_default_instance_", "onnx::RegisterOneFunctionBuilder", "BuildFunction",
                              "onnx::_OperatorSetIdProto_default_instance_", "onnx::_StringStringEntryProto_default_instance_", "onnx::_OperatorProto_default_instance_",
                              "onnx::_AttributeProto_default_instance_", "google::protobuf::UnknownField::LengthDelimited", "google::protobuf::internal::empty_string_once_init_",
-			     "google::protobuf::SourceLocation::leading_detached_comments").skip())
+                             "google::protobuf::SourceLocation::leading_detached_comments").skip())
 
                .put(new Info("onnx::DataType").annotations("@StdString").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("onnx::OpSchema::Attribute").pointerTypes("OpSchema.Attribute"))
