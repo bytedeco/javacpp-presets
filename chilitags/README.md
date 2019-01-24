@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.chilitags</groupId>
     <artifactId>detectlive</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <properties>
         <exec.mainClass>DetectLive</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>chilitags-platform</artifactId>
-            <version>master-1.4.3</version>
+            <version>master-1.4.4</version>
         </dependency>
     </dependencies>
 </project>

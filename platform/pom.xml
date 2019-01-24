@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.4.4-SNAPSHOT</version>
+    <version>1.4.5-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -47,6 +47,7 @@
     <module>../tensorrt/platform</module>
     <module>../ale/platform</module>
     <module>../onnx/platform</module>
+    <module>../ngraph/platform</module>
     <module>../liquidfun/platform</module>
     <module>../skia/platform</module>
     <module>../systems/platform</module>
@@ -142,7 +143,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>arpack-ng-platform</artifactId>
-      <version>3.6.3-${project.version}</version>
+      <version>3.7.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -218,6 +219,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>onnx-platform</artifactId>
       <version>1.3.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>ngraph-platform</artifactId>
+      <version>0.11.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

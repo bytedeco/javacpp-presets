@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,13 +36,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     inherit = openblas.class,
     value = @Platform(
-        include = {"arpack/arpack.h", "arpack/arpack.hpp", "arpack/debug_c.hpp", "arpack/stat_c.hpp"},
+        include = {"arpack/arpackdef.h", "arpack/arpack.h", "arpack/arpack.hpp", "arpack/debug_c.hpp", "arpack/stat_c.hpp"},
         link = "arpack@.2",
         preload = "libarpack-2"),
     target = "org.bytedeco.javacpp.arpack")
 @NoException
 public class arpack implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("const char").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"));
+        infoMap.put(new Info("INTERFACE64").define(false))
+               .put(new Info("a_int", "a_uint").cppTypes())
+               .put(new Info("const char").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"));
     }
 }
