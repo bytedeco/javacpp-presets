@@ -15,6 +15,9 @@ import org.bytedeco.javacpp.QtGui.*;
 import org.bytedeco.javacpp.QtWidgets.*;
 import org.bytedeco.javacpp.helper.QtWidgets.ClickedCallback;
 
+/**
+ * @author Greg Hart
+ */
 public class CalculatorExample {
 
   private static IntPointer argc;
@@ -23,11 +26,7 @@ public class CalculatorExample {
   private static Calculator calc;
 
   public static void main(String[] args) {
-    Loader.load(QtCore.class);
-    argc = new IntPointer(new int[]{0});
-    argv = new PointerPointer<>("calc", null);
-
-    app = new QApplication(argc, argv);
+    app = new QApplication(new int[]{0}, null);
     calc = new Calculator();
     calc.show();
     System.exit(QApplication.exec());

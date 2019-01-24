@@ -5,7 +5,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>qt-samples</artifactId>
-  <version>5.1.2-1.4.4-SNAPSHOT</version>
+  <version>5.12-1.4.5-SNAPSHOT</version>
   <name>JavaCPP Presets Samples for Qt</name>
 
   <properties>

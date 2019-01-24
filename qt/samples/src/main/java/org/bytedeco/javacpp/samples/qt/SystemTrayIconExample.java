@@ -3,7 +3,8 @@ package org.bytedeco.javacpp.samples.qt;
 import static org.bytedeco.javacpp.helper.QtWidgets.*;
 
 import java.io.File;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.net.URL;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.IntPointer;
 import org.bytedeco.javacpp.Loader;
@@ -16,6 +17,9 @@ import org.bytedeco.javacpp.QtWidgets.QSystemTrayIcon.ActivationReason;
 import org.bytedeco.javacpp.QtWidgets.QSystemTrayIcon.MessageIcon;
 import org.bytedeco.javacpp.helper.QtWidgets.*;
 
+/**
+ * @author Greg Hart
+ */
 public class SystemTrayIconExample {
 
   private static IntPointer argc;
@@ -24,11 +28,7 @@ public class SystemTrayIconExample {
   private static Window window;
 
   public static void main(String[] args) {
-    Loader.load(QtCore.class);
-    argc = new IntPointer(new int[]{0});
-    argv = new PointerPointer<>("systray", null);
-
-    app = new QApplication(argc, argv);
+    app = new QApplication(new int[]{0}, null);
 
     if (!QSystemTrayIcon.isSystemTrayAvailable()) {
       QMessageBox.critical(null, QObject.tr("Systray"),
@@ -170,16 +170,16 @@ public class SystemTrayIconExample {
 
       iconComboBox = new QComboBox();
       try {
-        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
-            "/org/bytedeco/javacpp/samples/qt/bad.png").toURI()).getAbsolutePath())),
+        iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
+            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/bad.png")).getAbsolutePath())),
             tr("Bad"));
-        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
-            "/org/bytedeco/javacpp/samples/qt/heart.png").toURI()).getAbsolutePath())),
+        iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
+            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/heart.png")).getAbsolutePath())),
             tr("Heart"));
-        iconComboBox.addItem(new QIcon(QString.fromStdString(new File(getClass().getResource(
-            "/org/bytedeco/javacpp/samples/qt/trash.png").toURI()).getAbsolutePath())),
+        iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
+            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/trash.png")).getAbsolutePath())),
             tr("Trash"));
-      } catch (URISyntaxException e) {
+      } catch (IOException e) {
         e.printStackTrace();
       }
 

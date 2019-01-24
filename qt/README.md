@@ -16,7 +16,6 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/qt/apidocs/
 
-&lowast; Call `Loader.load(QtCore.class)` before using this API.  
 &lowast; Java must be started with the '-XstartOnFirstThread' command-line option on macOS.
 
 

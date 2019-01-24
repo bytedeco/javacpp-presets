@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2019 Greg Hart
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.bytedeco.javacpp.presets;
 
 import java.util.HashMap;
@@ -8,8 +30,8 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 
 @Properties(
-    helper = "org.bytedeco.javacpp.helper.QtWidgets",
     inherit = QtGui.class,
+    helper = "org.bytedeco.javacpp.helper.QtWidgets",
     target = "org.bytedeco.javacpp.QtWidgets",
     value = {
         @Platform(
@@ -39,11 +61,12 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QTextEdit",
                 "QToolButton",
                 "QWidget"
-            }
+            },
+            link = "Qt5Widgets@.5"
         )
     }
 )
-public class QtWidgets extends AbstractQtPreset {
+public class QtWidgets extends QtInfoMapper {
 
   @Override
   public void map(InfoMap infoMap) {
@@ -54,6 +77,8 @@ public class QtWidgets extends AbstractQtPreset {
         // Java methods
         .put(new Info("QToolButton::sizeHint").javaText(
             "@Virtual public native @ByVal @Const({false, false, true}) QSize sizeHint();"))
+
+        .put(new Info("QMenu::setAsDockMenu").annotations("@Platform(\"macosx\")"))
 
         // Line patterns
         .put(new Info("qabstractbutton.h").linePatterns(matchClass("QAbstractButton"), matchEnd()))

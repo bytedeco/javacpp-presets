@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2019 Greg Hart
+ *
+ * Licensed either under the Apache License, Version 2.0, or (at your option)
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (subject to the "Classpath" exception),
+ * either version 2, or any later version (collectively, the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.gnu.org/licenses/
+ *     http://www.gnu.org/software/classpath/license.html
+ *
+ * or as provided in the LICENSE.txt file that accompanied this code.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.bytedeco.javacpp.helper;
 
 import java.io.File;
@@ -17,12 +39,12 @@ import org.bytedeco.javacpp.annotation.Opaque;
 
 public class QtWidgets extends org.bytedeco.javacpp.presets.QtWidgets {
 
-  static {
-    File framework = new File("/usr/local/Cellar/qt/5.12.0/lib/QtWidgets.framework/QtWidgets");
-    if (framework.exists()) {
-      System.load(framework.getAbsolutePath());
-    }
-  }
+//  static {
+//    File framework = new File("/usr/local/Cellar/qt/5.12.0/lib/QtWidgets.framework/QtWidgets");
+//    if (framework.exists()) {
+//      System.load(framework.getAbsolutePath());
+//    }
+//  }
 
   @Name("[=](const QAbstractButton *sender, const QObject *context, void (*functor)(int, bool), int target){QObject::connect(sender, &QAbstractButton::clicked, context, [functor,target](bool checked){functor(target, checked);});}")
   public native static void QAbstractButton_clicked(@Const QAbstractButton sender, @Const QObject context, ClickedCallback functor, int target);
