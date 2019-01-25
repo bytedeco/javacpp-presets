@@ -141,6 +141,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.4.0  https://github.com/onnx/onnx
  * nGraph 0.11.1  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
+ * Qt 5.12  https://www.qt.io/download
  * Skia  https://skia.org
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/

@@ -49,6 +49,7 @@
     <module>../onnx/platform</module>
     <module>../ngraph/platform</module>
     <module>../liquidfun/platform</module>
+    <module>../qt/platform</module>
     <module>../skia/platform</module>
     <module>../systems/platform</module>
   </modules>
@@ -229,6 +230,11 @@
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>liquidfun-platform</artifactId>
       <version>20170717-43d53e0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>qt-platform</artifactId>
+      <version>5.12-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
