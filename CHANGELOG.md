@@ -1,6 +1,6 @@
 
  * Add `GetComponentImagesExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673))
- * Add presets for nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642))
+ * Add presets for nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))
  * Upgrade presets for ARPACK-NG 3.7.0
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
