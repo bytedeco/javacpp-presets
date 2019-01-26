@@ -94,6 +94,8 @@ import java.util.List;
                         "tensorflow/core/public/session_options.h",
                         "tensorflow/core/lib/core/threadpool.h",
                         "tensorflow/core/framework/allocation_description.pb.h",
+                        "tensorflow/core/platform/default/string_coding.h",
+                        "tensorflow/core/framework/resource_handle.h",
                         "tensorflow/core/framework/allocator.h",
                         "tensorflow/core/framework/tensor_shape.pb.h",
                         "tensorflow/core/framework/types.pb.h",
@@ -130,6 +132,8 @@ import java.util.List;
                         "tensorflow/core/util/tensor_slice_util.h",
                         "tensorflow/core/util/tensor_slice_reader.h",
                         "tensorflow/core/util/tensor_bundle/tensor_bundle.h",
+                        "tensorflow/core/protobuf/tensorflow_server.pb.h",
+                        "tensorflow/core/distributed_runtime/server_lib.h",
                         "tensorflow/c/tf_status_helper.h",
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
@@ -279,6 +283,8 @@ import java.util.List;
                         "tensorflow/core/public/session_options.h",
                         "tensorflow/core/lib/core/threadpool.h",
                         "tensorflow/core/framework/allocation_description.pb.h",
+                        "tensorflow/core/platform/default/string_coding.h",
+                        "tensorflow/core/framework/resource_handle.h",
                         "tensorflow/core/framework/allocator.h",
                         "tensorflow/core/framework/tensor_shape.pb.h",
                         "tensorflow/core/framework/types.pb.h",
@@ -416,9 +422,11 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
                .put(new Info("Eigen::NumTraits<tensorflow::bfloat16>").pointerTypes("bfloat16NumTraits"))
-               .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
-               .put(new Info("short", "tensorflow::int16", "tensorflow::uint16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
-               .put(new Info("int", "int32", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("Eigen::QInt8", "Eigen::QUInt8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte..."))
+               .put(new Info("Eigen::QInt16", "Eigen::QUInt16", "uint16", "tensorflow::uint16", "Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
+               .put(new Info("Eigen::QInt32", "Eigen::QUInt32", "uint32", "tensorflow::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("short", "tensorflow::int16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
+               .put(new Info("int", "int32", "tensorflow::int32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("long long", "tensorflow::int64", "tensorflow::uint64", "std::size_t",
                              "tensorflow::Microseconds", "tensorflow::Nanoseconds", "tensorflow::Bytes").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
@@ -432,8 +440,9 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::unordered_set<tensorflow::string>").pointerTypes("StringUnorderedSet").define())
                .put(new Info("std::vector<tensorflow::StringPiece>").pointerTypes("StringPieceVector").define())
                .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<std::pair<unsigned,unsigned> >").pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
-               .put(new Info("std::condition_variable", "std::mutex", "std::type_info", "std::unique_lock<std::mutex>",
+               .put(new Info("std::condition_variable", "std::mutex", "std::type_info", "std::unique_lock<std::mutex>", "Eigen::Allocator",
                              "tensorflow::condition_variable", "tensorflow::mutex", "tensorflow::mutex_lock").cast().pointerTypes("Pointer"))
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
@@ -520,7 +529,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::RewriterConfig_CustomGraphOptimizerDefaultTypeInternal", "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUseDefaultTypeInternal",
                              "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntryDefaultTypeInternal", "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal",
                              "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal",
-                             "tensorflow::KernelDefDefaultTypeInternal", "tensorflow::KernelListDefaultTypeInternal", "tensorflow::KernelDef_AttrConstraintDefaultTypeInternal").skip())
+                             "tensorflow::KernelDefDefaultTypeInternal", "tensorflow::KernelListDefaultTypeInternal", "tensorflow::KernelDef_AttrConstraintDefaultTypeInternal",
+                             "tensorflow::NodeDef_ExperimentalDebugInfoDefaultTypeInternal", "tensorflow::ServerDefDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -535,6 +545,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("std::pair<tensorflow::Allocator*,tensorflow::TrackingAllocator*>").pointerTypes("WrappedAllocator").define())
                .put(new Info("std::tuple<size_t,size_t,size_t>").cast().pointerTypes("SizeTPointer"))
+               .put(new Info("std::unique_ptr<tensorflow::Device>").valueTypes("@MoveUniquePtr Device").pointerTypes("@UniquePtr Device"))
+               .put(new Info("std::unique_ptr<tensorflow::ServerInterface>").valueTypes("@MoveUniquePtr ServerInterface").pointerTypes("@UniquePtr ServerInterface"))
+               .put(new Info("std::unique_ptr<tensorflow::kernel_factory::OpKernelFactory>").valueTypes("@MoveUniquePtr OpKernelFactory").pointerTypes("@UniquePtr OpKernelFactory"))
+               .put(new Info("std::unique_ptr<tensorflow::port::StringListDecoder>").valueTypes("@MoveUniquePtr StringListDecoder").pointerTypes("@UniquePtr StringListDecoder"))
+               .put(new Info("std::unique_ptr<tensorflow::port::StringListEncoder>").valueTypes("@MoveUniquePtr StringListEncoder").pointerTypes("@UniquePtr StringListEncoder"))
+               .put(new Info("std::vector<std::unique_ptr<tensorflow::Device> >").skip())
                .put(new Info("std::vector<tensorflow::Device*>").pointerTypes("DeviceVector").define())
                .put(new Info("std::vector<tensorflow::DeviceContext*>").pointerTypes("DeviceContextVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::AllocatorAttributes,4>").pointerTypes("AllocatorAttributesVector").define())
@@ -551,13 +567,14 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::OpArgIterator", "tensorflow::OpInputList::Iterator",
                              "tensorflow::OpMutableInputList::Iterator", "tensorflow::OpOutputList::Iterator").skip())
                .put(new Info("tensorflow::Tensor").base("AbstractTensor").pointerTypes("Tensor"))
+               .put(new Info("tensorflow::Tensor::HostScalarTensorBufferBase").skip())
                .put(new Info("tensorflow::TensorBuffer").virtualize())
                .put(new Info("tensorflow::Tensor(tensorflow::DataType, tensorflow::TensorShape&, tensorflow::TensorBuffer*)").javaText(
                        "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }\n"
                      + "private native void allocate(@Cast(\"tensorflow::DataType\") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);\n"
                      + "private TensorBuffer buffer; // a reference to prevent deallocation\n"
                      + "public Tensor(@Cast(\"tensorflow::DataType\") int type, TensorShape shape, final Pointer data) {\n"
-                     + "    this(type, shape, new TensorBuffer() {\n"
+                     + "    this(type, shape, new TensorBuffer(data) {\n"
                      + "        @Override public Pointer data() { return data; }\n"
                      + "        @Override public long size() { return data.limit(); }\n"
                      + "        @Override public TensorBuffer root_buffer() { return this; }\n"
@@ -842,4 +859,11 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
     @Target({ElementType.METHOD, ElementType.PARAMETER})
     @Cast("tensorflow::StringPiece&") @Adapter("StringPieceAdapter")
     public @interface StringPiece { }
+
+    @Documented @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @Cast({"std::unique_ptr", "&&"}) @Adapter("UniquePtrAdapter")
+    public @interface MoveUniquePtr {
+        String value() default "";
+    }
 }

@@ -1,7 +1,7 @@
 
- * Add `GetComponentImagesExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673))
+ * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))
  * Add presets for nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))
- * Upgrade presets for ARPACK-NG 3.7.0, ONNX 1.4.0 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676))
+ * Upgrade presets for ARPACK-NG 3.7.0, TensorFlow 1.13.0-rc0, ONNX 1.4.0 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676))
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
 ### January 11, 2019 version 1.4.4

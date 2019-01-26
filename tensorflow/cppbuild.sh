@@ -41,7 +41,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.12.0
+TENSORFLOW_VERSION=1.13.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -115,7 +115,7 @@ case $PLATFORM in
         # BoringSSL doesn't build on linux-x86, so disable secure grpc and leave undefined symbols
         patch -Np1 < ../../../tensorflow-unsecure.patch
         sedinplace '/-z defs/d' tensorflow/BUILD
-        sedinplace "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/jpeg.BUILD
+        sedinplace "/        \":k8\": \[\":simd_x86_64\"\],/c\        \":k8\": \[\":simd_none\"\]," third_party/jpeg/BUILD.bazel
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32 --linkopt=-s"
         ;;
     linux-x86_64)
@@ -216,7 +216,7 @@ mkdir -p ../java
 cp -r tensorflow/java/src/gen/java/* ../java
 cp -r tensorflow/java/src/main/java/* ../java
 cp -r tensorflow/contrib/android/java/* ../java
-cp -r tensorflow/contrib/lite/java/src/main/java/* ../java
+cp -r tensorflow/lite/java/src/main/java/* ../java
 cp -r bazel-genfiles/tensorflow/java/ops/src/main/java/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 # remove lines that require the Android SDK to compile
