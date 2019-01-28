@@ -11,7 +11,7 @@ ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.3
 LIBPNG=libpng-1.6.34
-LIBTIFF=tiff-4.0.9
+LIBTIFF=tiff-4.0.10
 LIBWEBP=libwebp-1.0.0
 LEPTONICA_VERSION=1.77.0
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz

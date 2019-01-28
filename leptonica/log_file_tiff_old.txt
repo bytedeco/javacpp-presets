@@ -1,0 +1,1027 @@
+~/Documents/Git/javacpp-presets ~/Documents/Git/javacpp-presets/leptonica
+Detected platform "linux-arm64"
+Building for platform "linux-arm64"
+Installing "leptonica"
+~/Documents/Git/javacpp-presets/leptonica/cppbuild ~/Documents/Git/javacpp-presets
+Decompressing archives...
+Building static library libz.a version 1.2.11 with aarch64-linux-gnu-gcc -fPIC.
+Checking for size_t... Yes.
+Checking for off64_t... Yes.
+Checking for fseeko... Yes.
+Checking for strerror... Yes.
+Checking for unistd.h... Yes.
+Checking for stdarg.h... Yes.
+Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+Checking for vsnprintf() in stdio.h... Yes.
+Checking for return value of vsnprintf()... Yes.
+Checking for attribute(visibility) support... Yes.
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o example.o test/example.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o adler32.o adler32.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o crc32.o crc32.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o deflate.o deflate.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o infback.o infback.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inffast.o inffast.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inflate.o inflate.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inftrees.o inftrees.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o trees.o trees.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o zutil.o zutil.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o compress.o compress.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o uncompr.o uncompr.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzclose.o gzclose.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzlib.o gzlib.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzread.o gzread.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzwrite.o gzwrite.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o minigzip.o test/minigzip.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o example64.o test/example.c
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o minigzip64.o test/minigzip.c
+ar rc libz.a adler32.o crc32.o deflate.o infback.o inffast.o inflate.o inftrees.o trees.o zutil.o compress.o uncompr.o gzclose.o gzlib.o gzread.o gzwrite.o 
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example example.o -L. libz.a
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip minigzip.o -L. libz.a
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip64 minigzip64.o -L. libz.a
+aarch64-linux-gnu-gcc -fPIC -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example64 example64.o -L. libz.a
+rm -f /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libz.a
+cp libz.a /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libz.a
+rm -f /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man3/zlib.3
+cp zlib.3 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man3
+chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man3/zlib.3
+rm -f /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig/zlib.pc
+cp zlib.pc /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig
+chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig/zlib.pc
+rm -f /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/zlib.h /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/zconf.h
+cp zlib.h zconf.h /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include
+chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/zlib.h /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/zconf.h
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for aarch64-linux-gnu-strip... aarch64-linux-gnu-strip
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether make supports nested variables... (cached) yes
+checking for style of include used by make... GNU
+checking for aarch64-linux-gnu-gcc... aarch64-linux-gnu-gcc -fPIC
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether aarch64-linux-gnu-gcc -fPIC accepts -g... yes
+checking for aarch64-linux-gnu-gcc -fPIC option to accept ISO C89... none needed
+checking whether aarch64-linux-gnu-gcc -fPIC understands -c and -o together... yes
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... gcc3
+checking for aarch64-linux-gnu-ar... aarch64-linux-gnu-ar
+checking the archiver (aarch64-linux-gnu-ar) interface... ar
+checking build system type... aarch64-unknown-linux-gnu
+checking host system type... aarch64-unknown-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by aarch64-linux-gnu-gcc -fPIC... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking how to convert aarch64-unknown-linux-gnu file names to aarch64-unknown-linux-gnu format... func_convert_file_noop
+checking how to convert aarch64-unknown-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for aarch64-linux-gnu-objdump... aarch64-linux-gnu-objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-linux-gnu-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-linux-gnu-ar... (cached) aarch64-linux-gnu-ar
+checking for archiver @FILE support... @
+checking for aarch64-linux-gnu-strip... (cached) aarch64-linux-gnu-strip
+checking for aarch64-linux-gnu-ranlib... aarch64-linux-gnu-ranlib
+checking command to parse /usr/bin/nm -B output from aarch64-linux-gnu-gcc -fPIC object... ok
+checking for sysroot... no
+checking for aarch64-linux-gnu-mt... no
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking how to run the C preprocessor... aarch64-linux-gnu-gcc -fPIC -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if aarch64-linux-gnu-gcc -fPIC supports -fno-rtti -fno-exceptions... no
+checking for aarch64-linux-gnu-gcc -fPIC option to produce PIC... -fPIC -DPIC
+checking if aarch64-linux-gnu-gcc -fPIC PIC flag -fPIC -DPIC works... yes
+checking if aarch64-linux-gnu-gcc -fPIC static flag -static works... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... (cached) yes
+checking whether the aarch64-linux-gnu-gcc -fPIC linker (/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking for aarch64-linux-gnu-gcc... (cached) aarch64-linux-gnu-gcc -fPIC
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether aarch64-linux-gnu-gcc -fPIC accepts -g... (cached) yes
+checking for aarch64-linux-gnu-gcc -fPIC option to accept ISO C89... (cached) none needed
+checking whether aarch64-linux-gnu-gcc -fPIC understands -c and -o together... (cached) yes
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... (cached) gcc3
+checking how to run the C preprocessor... aarch64-linux-gnu-gcc -fPIC -E
+checking whether ln -s works... yes
+checking whether make sets $(MAKE)... (cached) yes
+checking for xmlto... yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking fcntl.h usability... yes
+checking fcntl.h presence... yes
+checking for fcntl.h... yes
+checking for stdint.h... (cached) yes
+checking stdarg.h usability... yes
+checking stdarg.h presence... yes
+checking for stdarg.h... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating util/Makefile
+config.status: creating lib/Makefile
+config.status: creating Makefile
+config.status: creating doc/Makefile
+config.status: creating pic/Makefile
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+make  all-recursive
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+Making all in lib
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+  CC       dgif_lib.lo
+  CC       egif_lib.lo
+  CC       gif_hash.lo
+  CC       gif_font.lo
+  CC       gifalloc.lo
+  CC       openbsd-reallocarray.lo
+  CC       gif_err.lo
+  CC       quantize.lo
+  CCLD     libgif.la
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+Making all in util
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+  CC       getarg.o
+  CC       qprintf.o
+  CC       gif2rgb.o
+  CC       gifbuild.o
+  CC       gifecho.o
+  CC       giffix.o
+  CC       gifinto.o
+  CC       giftext.o
+  CC       giftool.o
+  CC       gifclrmp.o
+  CC       gifbg.o
+  CC       gifcolor.o
+  CC       giffilter.o
+  CC       gifhisto.o
+  CC       gifsponge.o
+  CC       gifwedge.o
+  AR       libgetarg.a
+  CCLD     gif2rgb
+  CCLD     gifbuild
+  CCLD     giffix
+  CCLD     gifecho
+  CCLD     gifinto
+  CCLD     giftext
+  CCLD     giftool
+  CCLD     gifclrmp
+  CCLD     gifbg
+  CCLD     gifcolor
+  CCLD     giffilter
+  CCLD     gifhisto
+  CCLD     gifsponge
+  CCLD     gifwedge
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+Making all in pic
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+Making all in doc
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+xmlto xhtml-nochunks gif2rgb.xml
+xmlto xhtml-nochunks gifbuild.xml
+xmlto xhtml-nochunks gifclrmp.xml
+xmlto xhtml-nochunks gifecho.xml
+xmlto xhtml-nochunks giffix.xml
+xmlto xhtml-nochunks gifinto.xml
+xmlto xhtml-nochunks giflib.xml
+xmlto xhtml-nochunks giftext.xml
+xmlto xhtml-nochunks giftool.xml
+xmlto xhtml-nochunks gifbg.xml
+xmlto xhtml-nochunks gifcolor.xml
+xmlto xhtml-nochunks gifhisto.xml
+xmlto xhtml-nochunks gifwedge.xml
+xmlto xhtml-nochunks intro.xml
+xmlto xhtml-nochunks gif_lib.xml
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+Making install in lib
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+ /bin/bash ../libtool   --mode=install /usr/bin/install -c   libgif.la '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+libtool: install: /usr/bin/install -c .libs/libgif.lai /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libgif.la
+libtool: install: /usr/bin/install -c .libs/libgif.a /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libgif.a
+libtool: install: chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libgif.a
+libtool: install: aarch64-linux-gnu-ranlib /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libgif.a
+libtool: finish: PATH="/usr/local/cuda-9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/sbin" ldconfig -n /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+ /usr/bin/install -c -m 644 gif_lib.h '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/lib'
+Making install in util
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+  /bin/bash ../libtool   --mode=install /usr/bin/install -c gif2rgb gifbuild gifecho giffix gifinto giftext giftool gifclrmp '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+libtool: install: /usr/bin/install -c gif2rgb /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/gif2rgb
+libtool: install: /usr/bin/install -c gifbuild /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/gifbuild
+libtool: install: /usr/bin/install -c gifecho /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/gifecho
+libtool: install: /usr/bin/install -c giffix /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/giffix
+libtool: install: /usr/bin/install -c gifinto /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/gifinto
+libtool: install: /usr/bin/install -c giftext /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/giftext
+libtool: install: /usr/bin/install -c giftool /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/giftool
+libtool: install: /usr/bin/install -c gifclrmp /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/gifclrmp
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/util'
+Making install in pic
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/pic'
+Making install in doc
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+make[2]: Nothing to be done for 'install-exec-am'.
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man1'
+ /usr/bin/install -c -m 644 gif2rgb.1 gifbuild.1 gifclrmp.1 gifecho.1 giffix.1 gifinto.1 giflib.1 giftext.1 giftool.1 '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man1'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4/doc'
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/giflib-5.1.4'
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for aarch64-linux-gnu-strip... aarch64-linux-gnu-strip
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether make supports nested variables... (cached) yes
+checking for style of include used by make... GNU
+checking for aarch64-linux-gnu-gcc... aarch64-linux-gnu-gcc -fPIC
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether aarch64-linux-gnu-gcc -fPIC accepts -g... yes
+checking for aarch64-linux-gnu-gcc -fPIC option to accept ISO C89... none needed
+checking whether aarch64-linux-gnu-gcc -fPIC understands -c and -o together... yes
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... gcc3
+checking how to run the C preprocessor... aarch64-linux-gnu-gcc -fPIC -E
+checking for aarch64-linux-gnu-gcc... (cached) aarch64-linux-gnu-gcc -fPIC
+checking whether we are using the GNU C compiler... (cached) yes
+checking whether aarch64-linux-gnu-gcc -fPIC accepts -g... (cached) yes
+checking for aarch64-linux-gnu-gcc -fPIC option to accept ISO C89... (cached) none needed
+checking whether aarch64-linux-gnu-gcc -fPIC understands -c and -o together... (cached) yes
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... (cached) gcc3
+checking for aarch64-linux-gnu-ar... aarch64-linux-gnu-ar
+checking the archiver (aarch64-linux-gnu-ar) interface... ar
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... gcc3
+checking build system type... aarch64-unknown-linux-gnu
+checking host system type... aarch64-unknown-linux-gnu
+checking how to print strings... printf
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking for ld used by aarch64-linux-gnu-gcc -fPIC... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/aarch64-linux-gnu-nm -B
+checking the name lister (/usr/bin/aarch64-linux-gnu-nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking how to convert aarch64-unknown-linux-gnu file names to aarch64-unknown-linux-gnu format... func_convert_file_noop
+checking how to convert aarch64-unknown-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for aarch64-linux-gnu-objdump... aarch64-linux-gnu-objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-linux-gnu-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-linux-gnu-ar... (cached) aarch64-linux-gnu-ar
+checking for archiver @FILE support... @
+checking for aarch64-linux-gnu-strip... (cached) aarch64-linux-gnu-strip
+checking for aarch64-linux-gnu-ranlib... aarch64-linux-gnu-ranlib
+checking command to parse /usr/bin/aarch64-linux-gnu-nm -B output from aarch64-linux-gnu-gcc -fPIC object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for aarch64-linux-gnu-mt... no
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if aarch64-linux-gnu-gcc -fPIC supports -fno-rtti -fno-exceptions... no
+checking for aarch64-linux-gnu-gcc -fPIC option to produce PIC... -fPIC -DPIC
+checking if aarch64-linux-gnu-gcc -fPIC PIC flag -fPIC -DPIC works... yes
+checking if aarch64-linux-gnu-gcc -fPIC static flag -static works... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... (cached) yes
+checking whether the aarch64-linux-gnu-gcc -fPIC linker (/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking whether ln -s works... yes
+checking size of size_t... 8
+checking whether compiler supports pointers to undefined structures... yes
+checking whether __SUNPRO_C is declared... no
+checking for ANSI C header files... (cached) yes
+checking stddef.h usability... yes
+checking stddef.h presence... yes
+checking for stddef.h... yes
+checking for stdlib.h... (cached) yes
+checking locale.h usability... yes
+checking locale.h presence... yes
+checking for locale.h... yes
+checking for string.h... (cached) yes
+checking for sys/types.h... (cached) yes
+checking for an ANSI C-conforming const... yes
+checking whether char is unsigned... yes
+checking for inline... inline
+checking for size_t... yes
+checking for unsigned char... yes
+checking for unsigned short... yes
+checking if right shift is signed... yes
+checking for memset... yes
+checking for memcpy... yes
+checking libjpeg API version... 6.2
+checking whether to include in-memory source/destination managers... yes
+checking libjpeg shared library version... 62.2.0
+checking whether the linker supports version scripts... yes (GNU style)
+checking whether to use version script when building libjpeg-turbo... yes
+checking for inline... inline __attribute__((always_inline))
+checking whether to include arithmetic encoding support... yes
+checking whether to include arithmetic decoding support... yes
+checking whether to use 12-bit samples... no
+checking whether to build TurboJPEG C wrapper... yes
+checking whether to build TurboJPEG Java wrapper... no
+checking if we have SIMD optimisations for cpu type... yes (arm64)
+checking if the assembler is GNU-compatible and can be used... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating pkgscripts/libjpeg-turbo.spec.tmpl
+config.status: creating pkgscripts/makecygwinpkg.tmpl
+config.status: creating pkgscripts/makedpkg.tmpl
+config.status: creating pkgscripts/makemacpkg.tmpl
+config.status: creating pkgscripts/uninstall.tmpl
+config.status: creating pkgscripts/libjpeg.pc
+config.status: creating pkgscripts/libturbojpeg.pc
+config.status: creating tjbenchtest
+config.status: creating libjpeg.map
+config.status: creating Makefile
+config.status: creating simd/Makefile
+config.status: creating java/Makefile
+config.status: creating md5/Makefile
+config.status: creating config.h
+config.status: creating jconfig.h
+config.status: creating jconfigint.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+make  all-recursive
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+Making all in java
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+echo timestamp > classnoinst.stamp
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+Making all in simd
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+  GEN      jsimdcfg.inc
+make  all-am
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+  CC       jsimd_arm64.lo
+  CPPAS    jsimd_arm64_neon.lo
+  CCLD     libsimd.la
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+Making all in md5
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+  CC       md5cmp-md5.o
+  CC       md5cmp-md5cmp.o
+  CC       md5cmp-md5hl.o
+  CCLD     md5cmp
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+  CC       jcapimin.lo
+  CC       jcapistd.lo
+  CC       jccoefct.lo
+  CC       jccolor.lo
+  CC       jcdctmgr.lo
+  CC       jchuff.lo
+  CC       jcinit.lo
+  CC       jcmainct.lo
+  CC       jcmarker.lo
+  CC       jcmaster.lo
+  CC       jcomapi.lo
+  CC       jcparam.lo
+  CC       jcphuff.lo
+  CC       jcprepct.lo
+  CC       jcsample.lo
+  CC       jctrans.lo
+  CC       jdapimin.lo
+  CC       jdapistd.lo
+  CC       jdatadst.lo
+  CC       jdatasrc.lo
+  CC       jdcoefct.lo
+  CC       jdcolor.lo
+  CC       jddctmgr.lo
+  CC       jdhuff.lo
+  CC       jdinput.lo
+  CC       jdmainct.lo
+  CC       jdmarker.lo
+  CC       jdmaster.lo
+  CC       jdmerge.lo
+  CC       jdphuff.lo
+  CC       jdpostct.lo
+  CC       jdsample.lo
+  CC       jdtrans.lo
+  CC       jerror.lo
+  CC       jfdctflt.lo
+  CC       jfdctfst.lo
+  CC       jfdctint.lo
+  CC       jidctflt.lo
+  CC       jidctfst.lo
+  CC       jidctint.lo
+  CC       jidctred.lo
+  CC       jquant1.lo
+  CC       jquant2.lo
+  CC       jutils.lo
+  CC       jmemmgr.lo
+  CC       jmemnobs.lo
+  CC       jaricom.lo
+  CC       jcarith.lo
+  CC       jdarith.lo
+  CC       libturbojpeg_la-jcapimin.lo
+  CC       libturbojpeg_la-jcapistd.lo
+  CC       libturbojpeg_la-jccoefct.lo
+  CC       libturbojpeg_la-jccolor.lo
+  CC       libturbojpeg_la-jcdctmgr.lo
+  CC       libturbojpeg_la-jchuff.lo
+  CC       libturbojpeg_la-jcinit.lo
+  CC       libturbojpeg_la-jcmainct.lo
+  CC       libturbojpeg_la-jcmarker.lo
+  CC       libturbojpeg_la-jcmaster.lo
+  CC       libturbojpeg_la-jcomapi.lo
+  CC       libturbojpeg_la-jcparam.lo
+  CC       libturbojpeg_la-jcphuff.lo
+  CC       libturbojpeg_la-jcprepct.lo
+  CC       libturbojpeg_la-jcsample.lo
+  CC       libturbojpeg_la-jctrans.lo
+  CC       libturbojpeg_la-jdapimin.lo
+  CC       libturbojpeg_la-jdapistd.lo
+  CC       libturbojpeg_la-jdatadst.lo
+  CC       libturbojpeg_la-jdatasrc.lo
+  CC       libturbojpeg_la-jdcoefct.lo
+  CC       libturbojpeg_la-jdcolor.lo
+  CC       libturbojpeg_la-jddctmgr.lo
+  CC       libturbojpeg_la-jdhuff.lo
+  CC       libturbojpeg_la-jdinput.lo
+  CC       libturbojpeg_la-jdmainct.lo
+  CC       libturbojpeg_la-jdmarker.lo
+  CC       libturbojpeg_la-jdmaster.lo
+  CC       libturbojpeg_la-jdmerge.lo
+  CC       libturbojpeg_la-jdphuff.lo
+  CC       libturbojpeg_la-jdpostct.lo
+  CC       libturbojpeg_la-jdsample.lo
+  CC       libturbojpeg_la-jdtrans.lo
+  CC       libturbojpeg_la-jerror.lo
+  CC       libturbojpeg_la-jfdctflt.lo
+  CC       libturbojpeg_la-jfdctfst.lo
+  CC       libturbojpeg_la-jfdctint.lo
+  CC       libturbojpeg_la-jidctflt.lo
+  CC       libturbojpeg_la-jidctfst.lo
+  CC       libturbojpeg_la-jidctint.lo
+  CC       libturbojpeg_la-jidctred.lo
+  CC       libturbojpeg_la-jquant1.lo
+  CC       libturbojpeg_la-jquant2.lo
+  CC       libturbojpeg_la-jutils.lo
+  CC       libturbojpeg_la-jmemmgr.lo
+  CC       libturbojpeg_la-jmemnobs.lo
+  CC       libturbojpeg_la-jaricom.lo
+  CC       libturbojpeg_la-jcarith.lo
+  CC       libturbojpeg_la-jdarith.lo
+  CC       libturbojpeg_la-turbojpeg.lo
+  CC       libturbojpeg_la-transupp.lo
+  CC       libturbojpeg_la-jdatadst-tj.lo
+  CC       libturbojpeg_la-jdatasrc-tj.lo
+  CC       cjpeg-cdjpeg.o
+  CC       cjpeg-cjpeg.o
+  CC       cjpeg-rdgif.o
+  CC       cjpeg-rdppm.o
+  CC       cjpeg-rdswitch.o
+  CC       cjpeg-rdbmp.o
+  CC       cjpeg-rdtarga.o
+  CC       djpeg-cdjpeg.o
+  CC       djpeg-djpeg.o
+  CC       djpeg-rdcolmap.o
+  CC       djpeg-rdswitch.o
+  CC       djpeg-wrgif.o
+  CC       djpeg-wrppm.o
+  CC       djpeg-wrbmp.o
+  CC       djpeg-wrtarga.o
+  CC       jpegtran.o
+  CC       rdswitch.o
+  CC       cdjpeg.o
+  CC       transupp.o
+  CC       rdjpgcom.o
+  CC       wrjpgcom.o
+  CC       tjbench-tjbench.o
+  CC       tjbench-bmp.o
+  CC       tjbench-tjutil.o
+  CC       tjbench-rdbmp.o
+  CC       tjbench-rdppm.o
+  CC       tjbench-wrbmp.o
+  CC       tjbench-wrppm.o
+  CC       jcstest.o
+  CC       tjunittest.o
+  CC       tjutil.o
+  CCLD     libjpeg.la
+  CCLD     libturbojpeg.la
+  CCLD     djpeg
+  CCLD     cjpeg
+  CCLD     jpegtran
+  CCLD     rdjpgcom
+  CCLD     wrjpgcom
+  CCLD     tjbench
+  CCLD     jcstest
+  CCLD     tjunittest
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+Making install in java
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/java'
+Making install in simd
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make  install-am
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make[3]: Nothing to be done for 'install-exec-am'.
+make[3]: Nothing to be done for 'install-data-am'.
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/simd'
+Making install in md5
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3/md5'
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+ /bin/bash ./libtool   --mode=install /usr/bin/install -c   libjpeg.la libturbojpeg.la '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+libtool: install: /usr/bin/install -c .libs/libjpeg.lai /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libjpeg.la
+libtool: install: /usr/bin/install -c .libs/libturbojpeg.lai /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libturbojpeg.la
+libtool: install: /usr/bin/install -c .libs/libjpeg.a /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libjpeg.a
+libtool: install: chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libjpeg.a
+libtool: install: aarch64-linux-gnu-ranlib /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libjpeg.a
+libtool: install: /usr/bin/install -c .libs/libturbojpeg.a /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libturbojpeg.a
+libtool: install: chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libturbojpeg.a
+libtool: install: aarch64-linux-gnu-ranlib /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libturbojpeg.a
+libtool: finish: PATH="/usr/local/cuda-9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/sbin" ldconfig -n /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+  /bin/bash ./libtool   --mode=install /usr/bin/install -c cjpeg djpeg jpegtran rdjpgcom wrjpgcom tjbench '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+libtool: install: /usr/bin/install -c cjpeg /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/cjpeg
+libtool: install: /usr/bin/install -c djpeg /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/djpeg
+libtool: install: /usr/bin/install -c jpegtran /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/jpegtran
+libtool: install: /usr/bin/install -c rdjpgcom /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/rdjpgcom
+libtool: install: /usr/bin/install -c wrjpgcom /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/wrjpgcom
+libtool: install: /usr/bin/install -c tjbench /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/tjbench
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/doc/libjpeg-turbo'
+ /usr/bin/install -c -m 644 README.ijg README.md libjpeg.txt structure.txt usage.txt wizard.txt LICENSE.md '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/doc/libjpeg-turbo'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/doc/libjpeg-turbo'
+ /usr/bin/install -c -m 644 example.c '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/doc/libjpeg-turbo'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+ /usr/bin/install -c -m 644 jerror.h jmorecfg.h jpeglib.h turbojpeg.h '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man1'
+ /usr/bin/install -c -m 644 cjpeg.1 djpeg.1 jpegtran.1 rdjpgcom.1 wrjpgcom.1 '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man1'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+ /usr/bin/install -c -m 644 jconfig.h '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig'
+ /usr/bin/install -c -m 644 pkgscripts/libjpeg.pc pkgscripts/libturbojpeg.pc '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libjpeg-turbo-1.5.3'
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for aarch64-linux-gnu-strip... aarch64-linux-gnu-strip
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for aarch64-linux-gnu-gcc... aarch64-linux-gnu-gcc -fPIC
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether aarch64-linux-gnu-gcc -fPIC accepts -g... yes
+checking for aarch64-linux-gnu-gcc -fPIC option to accept ISO C89... none needed
+checking whether aarch64-linux-gnu-gcc -fPIC understands -c and -o together... yes
+checking for style of include used by make... GNU
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... gcc3
+checking dependency style of aarch64-linux-gnu-gcc -fPIC... gcc3
+checking build system type... aarch64-unknown-linux-gnu
+checking host system type... aarch64-unknown-linux-gnu
+checking for a sed that does not truncate output... /bin/sed
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for fgrep... /bin/grep -F
+checking how to print strings... printf
+checking for ld used by aarch64-linux-gnu-gcc -fPIC... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking how to run the C preprocessor... aarch64-linux-gnu-gcc -fPIC -E
+checking for gawk... (cached) mawk
+checking whether ln -s works... yes
+checking whether make sets $(MAKE)... (cached) yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/aarch64-linux-gnu-nm -B
+checking the name lister (/usr/bin/aarch64-linux-gnu-nm -B) interface... BSD nm
+checking the maximum length of command line arguments... 1572864
+checking how to convert aarch64-unknown-linux-gnu file names to aarch64-unknown-linux-gnu format... func_convert_file_noop
+checking how to convert aarch64-unknown-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for aarch64-linux-gnu-objdump... aarch64-linux-gnu-objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-linux-gnu-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-linux-gnu-ar... aarch64-linux-gnu-ar
+checking for archiver @FILE support... @
+checking for aarch64-linux-gnu-strip... (cached) aarch64-linux-gnu-strip
+checking for aarch64-linux-gnu-ranlib... aarch64-linux-gnu-ranlib
+checking command to parse /usr/bin/aarch64-linux-gnu-nm -B output from aarch64-linux-gnu-gcc -fPIC object... ok
+checking for sysroot... no
+checking for a working dd... /bin/dd
+checking how to truncate binary pipes... /bin/dd bs=4096 count=1
+checking for aarch64-linux-gnu-mt... no
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if aarch64-linux-gnu-gcc -fPIC supports -fno-rtti -fno-exceptions... no
+checking for aarch64-linux-gnu-gcc -fPIC option to produce PIC... -fPIC -DPIC
+checking if aarch64-linux-gnu-gcc -fPIC PIC flag -fPIC -DPIC works... yes
+checking if aarch64-linux-gnu-gcc -fPIC static flag -static works... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... yes
+checking if aarch64-linux-gnu-gcc -fPIC supports -c -o file.o... (cached) yes
+checking whether the aarch64-linux-gnu-gcc -fPIC linker (/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... no
+checking whether to build static libraries... yes
+checking that AWK works... ok
+checking if we need to force back C standard to C89... no
+checking for ANSI C header files... (cached) yes
+checking for an ANSI C-conforming const... yes
+checking for size_t... yes
+checking whether struct tm is in sys/time.h or time.h... time.h
+checking for C/C++ restrict keyword... __restrict
+checking for working strtod... yes
+checking for memset... yes
+checking for pow... no
+checking for pow in -lm... yes
+checking for clock_gettime... yes
+checking for zlibVersion in -lz... yes
+checking for feenableexcept in -lm... yes
+checking for feenableexcept... yes
+checking if using Solaris linker... no
+checking if libraries can be versioned... yes
+checking for symbol prefix... 
+configure: pkgconfig directory is ${libdir}/pkgconfig
+configure: Extra options for compiler: 
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating libpng.pc
+config.status: creating libpng-config
+config.status: creating config.h
+config.status: executing depfiles commands
+config.status: executing libtool commands
+rm -f pnglibconf.c pnglibconf.tf[45]
+mawk -f ./scripts/options.awk out=pnglibconf.tf4 version=search\
+    ./pngconf.h ./scripts/pnglibconf.dfa\
+    ./pngusr.dfa  1>&2
+mawk -f ./scripts/options.awk out=pnglibconf.tf5 pnglibconf.tf4 1>&2
+rm pnglibconf.tf4
+mv pnglibconf.tf5 pnglibconf.c
+rm -f pnglibconf.out pnglibconf.tf[12]
+test -d scripts || mkdir scripts || test -d scripts
+aarch64-linux-gnu-gcc -fPIC -E -DHAVE_CONFIG_H -I. \
+    -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.34' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE  pnglibconf.c > pnglibconf.tf1
+mawk -f "./scripts/dfn.awk" out="pnglibconf.tf2" pnglibconf.tf1 1>&2
+rm -f pnglibconf.tf1
+mv pnglibconf.tf2 pnglibconf.out
+rm -f pnglibconf.h
+cp pnglibconf.out pnglibconf.h
+make  all-am
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+:>pngprefix.h
+rm -f scripts/vers.out scripts/vers.tf[12]
+test -d scripts || mkdir scripts || test -d scripts
+cp libpng-config libpng16-config
+aarch64-linux-gnu-gcc -fPIC -E -DHAVE_CONFIG_H -I. \
+    -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.34' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE  scripts/vers.c > scripts/vers.tf1
+cp libpng.pc libpng16.pc
+depbase=`echo pngtest.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngtest.o -MD -MP -MF $depbase.Tpo -c -o pngtest.o pngtest.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/tools/pngcp.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/tools/pngcp.o -MD -MP -MF $depbase.Tpo -c -o contrib/tools/pngcp.o contrib/tools/pngcp.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo png.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT png.lo -MD -MP -MF $depbase.Tpo -c -o png.lo png.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+mawk -f "./scripts/dfn.awk" out="scripts/vers.tf2" scripts/vers.tf1 1>&2
+rm -f scripts/vers.tf1
+mv scripts/vers.tf2 scripts/vers.out
+depbase=`echo pngerror.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngerror.lo -MD -MP -MF $depbase.Tpo -c -o pngerror.lo pngerror.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT png.lo -MD -MP -MF .deps/png.Tpo -c png.c  -fPIC -DPIC -o png.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c pngerror.c  -fPIC -DPIC -o pngerror.o
+depbase=`echo pngget.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngget.lo -MD -MP -MF $depbase.Tpo -c -o pngget.lo pngget.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngmem.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngmem.lo -MD -MP -MF $depbase.Tpo -c -o pngmem.lo pngmem.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngpread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngpread.lo -MD -MP -MF $depbase.Tpo -c -o pngpread.lo pngpread.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c pngget.c  -fPIC -DPIC -o pngget.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngmem.lo -MD -MP -MF .deps/pngmem.Tpo -c pngmem.c  -fPIC -DPIC -o pngmem.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngpread.lo -MD -MP -MF .deps/pngpread.Tpo -c pngpread.c  -fPIC -DPIC -o pngpread.o
+depbase=`echo pngread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngread.lo -MD -MP -MF $depbase.Tpo -c -o pngread.lo pngread.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngrio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrio.lo -MD -MP -MF $depbase.Tpo -c -o pngrio.lo pngrio.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngrtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrtran.lo -MD -MP -MF $depbase.Tpo -c -o pngrtran.lo pngrtran.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngread.lo -MD -MP -MF .deps/pngread.Tpo -c pngread.c  -fPIC -DPIC -o pngread.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrio.lo -MD -MP -MF .deps/pngrio.Tpo -c pngrio.c  -fPIC -DPIC -o pngrio.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrtran.lo -MD -MP -MF .deps/pngrtran.Tpo -c pngrtran.c  -fPIC -DPIC -o pngrtran.o
+depbase=`echo pngrutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrutil.lo -MD -MP -MF $depbase.Tpo -c -o pngrutil.lo pngrutil.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngset.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngset.lo -MD -MP -MF $depbase.Tpo -c -o pngset.lo pngset.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngrutil.lo -MD -MP -MF .deps/pngrutil.Tpo -c pngrutil.c  -fPIC -DPIC -o pngrutil.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngset.lo -MD -MP -MF .deps/pngset.Tpo -c pngset.c  -fPIC -DPIC -o pngset.o
+depbase=`echo pngtrans.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngtrans.lo -MD -MP -MF $depbase.Tpo -c -o pngtrans.lo pngtrans.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngtrans.lo -MD -MP -MF .deps/pngtrans.Tpo -c pngtrans.c  -fPIC -DPIC -o pngtrans.o
+depbase=`echo pngwio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwio.lo -MD -MP -MF $depbase.Tpo -c -o pngwio.lo pngwio.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngwrite.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwrite.lo -MD -MP -MF $depbase.Tpo -c -o pngwrite.lo pngwrite.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwio.lo -MD -MP -MF .deps/pngwio.Tpo -c pngwio.c  -fPIC -DPIC -o pngwio.o
+depbase=`echo pngwtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwtran.lo -MD -MP -MF $depbase.Tpo -c -o pngwtran.lo pngwtran.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo pngwutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwutil.lo -MD -MP -MF $depbase.Tpo -c -o pngwutil.lo pngwutil.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwrite.lo -MD -MP -MF .deps/pngwrite.Tpo -c pngwrite.c  -fPIC -DPIC -o pngwrite.o
+depbase=`echo arm/arm_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/arm_init.lo -MD -MP -MF $depbase.Tpo -c -o arm/arm_init.lo arm/arm_init.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwtran.lo -MD -MP -MF .deps/pngwtran.Tpo -c pngwtran.c  -fPIC -DPIC -o pngwtran.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT pngwutil.lo -MD -MP -MF .deps/pngwutil.Tpo -c pngwutil.c  -fPIC -DPIC -o pngwutil.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/arm_init.lo -MD -MP -MF arm/.deps/arm_init.Tpo -c arm/arm_init.c  -fPIC -DPIC -o arm/arm_init.o
+depbase=`echo arm/filter_neon.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool    --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/filter_neon.lo -MD -MP -MF $depbase.Tpo -c -o arm/filter_neon.lo arm/filter_neon.S &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo arm/filter_neon_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/filter_neon_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o arm/filter_neon_intrinsics.lo arm/filter_neon_intrinsics.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/filter_neon.lo -MD -MP -MF arm/.deps/filter_neon.Tpo -c arm/filter_neon.S  -fPIC -DPIC -o arm/filter_neon.o
+depbase=`echo mips/mips_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT mips/mips_init.lo -MD -MP -MF $depbase.Tpo -c -o mips/mips_init.lo mips/mips_init.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+depbase=`echo mips/filter_msa_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT mips/filter_msa_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o mips/filter_msa_intrinsics.lo mips/filter_msa_intrinsics.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT arm/filter_neon_intrinsics.lo -MD -MP -MF arm/.deps/filter_neon_intrinsics.Tpo -c arm/filter_neon_intrinsics.c  -fPIC -DPIC -o arm/filter_neon_intrinsics.o
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT mips/mips_init.lo -MD -MP -MF mips/.deps/mips_init.Tpo -c mips/mips_init.c  -fPIC -DPIC -o mips/mips_init.o
+depbase=`echo powerpc/powerpc_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT powerpc/powerpc_init.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/powerpc_init.lo powerpc/powerpc_init.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT mips/filter_msa_intrinsics.lo -MD -MP -MF mips/.deps/filter_msa_intrinsics.Tpo -c mips/filter_msa_intrinsics.c  -fPIC -DPIC -o mips/filter_msa_intrinsics.o
+depbase=`echo powerpc/filter_vsx_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+/bin/bash ./libtool  --tag=CC   --mode=compile aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/filter_vsx_intrinsics.lo powerpc/filter_vsx_intrinsics.c &&\
+mv -f $depbase.Tpo $depbase.Plo
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT powerpc/powerpc_init.lo -MD -MP -MF powerpc/.deps/powerpc_init.Tpo -c powerpc/powerpc_init.c  -fPIC -DPIC -o powerpc/powerpc_init.o
+rm -f libpng.vers
+cp scripts/vers.out libpng.vers
+depbase=`echo contrib/tools/pngfix.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/tools/pngfix.o -MD -MP -MF $depbase.Tpo -c -o contrib/tools/pngfix.o contrib/tools/pngfix.c &&\
+mv -f $depbase.Tpo $depbase.Po
+libtool: compile:  aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I. -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF powerpc/.deps/filter_vsx_intrinsics.Tpo -c powerpc/filter_vsx_intrinsics.c  -fPIC -DPIC -o powerpc/filter_vsx_intrinsics.o
+depbase=`echo contrib/tools/png-fix-itxt.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/tools/png-fix-itxt.o -MD -MP -MF $depbase.Tpo -c -o contrib/tools/png-fix-itxt.o contrib/tools/png-fix-itxt.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/libtests/pngunknown.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/libtests/pngunknown.o -MD -MP -MF $depbase.Tpo -c -o contrib/libtests/pngunknown.o contrib/libtests/pngunknown.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/libtests/pngstest.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/libtests/pngstest.o -MD -MP -MF $depbase.Tpo -c -o contrib/libtests/pngstest.o contrib/libtests/pngstest.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/libtests/pngvalid.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/libtests/pngvalid.o -MD -MP -MF $depbase.Tpo -c -o contrib/libtests/pngvalid.o contrib/libtests/pngvalid.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/libtests/pngimage.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/libtests/pngimage.o -MD -MP -MF $depbase.Tpo -c -o contrib/libtests/pngimage.o contrib/libtests/pngimage.c &&\
+mv -f $depbase.Tpo $depbase.Po
+depbase=`echo contrib/libtests/timepng.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+aarch64-linux-gnu-gcc -fPIC -DHAVE_CONFIG_H -I.   -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -MT contrib/libtests/timepng.o -MD -MP -MF $depbase.Tpo -c -o contrib/libtests/timepng.o contrib/libtests/timepng.c &&\
+mv -f $depbase.Tpo $depbase.Po
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -no-undefined -export-dynamic -version-number 16:34:0  -Wl,--version-script=libpng.vers  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o libpng16.la -rpath /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib png.lo pngerror.lo pngget.lo pngmem.lo pngpread.lo pngread.lo pngrio.lo pngrtran.lo pngrutil.lo pngset.lo pngtrans.lo pngwio.lo pngwrite.lo pngwtran.lo pngwutil.lo arm/arm_init.lo arm/filter_neon.lo arm/filter_neon_intrinsics.lo mips/mips_init.lo mips/filter_msa_intrinsics.lo  powerpc/powerpc_init.lo powerpc/filter_vsx_intrinsics.lo   -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o png-fix-itxt contrib/tools/png-fix-itxt.o  -lm -lz -lm 
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o png-fix-itxt contrib/tools/png-fix-itxt.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-ar cru .libs/libpng16.a  png.o pngerror.o pngget.o pngmem.o pngpread.o pngread.o pngrio.o pngrtran.o pngrutil.o pngset.o pngtrans.o pngwio.o pngwrite.o pngwtran.o pngwutil.o arm/arm_init.o arm/filter_neon.o arm/filter_neon_intrinsics.o mips/mips_init.o mips/filter_msa_intrinsics.o powerpc/powerpc_init.o powerpc/filter_vsx_intrinsics.o
+libtool: link: aarch64-linux-gnu-ranlib .libs/libpng16.a
+libtool: link: ( cd ".libs" && rm -f "libpng16.la" && ln -s "../libpng16.la" "libpng16.la" )
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngfix contrib/tools/pngfix.o libpng16.la -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngtest pngtest.o libpng16.la -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngunknown contrib/libtests/pngunknown.o libpng16.la -lm -lz -lm 
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngfix contrib/tools/pngfix.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngunknown contrib/libtests/pngunknown.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngtest pngtest.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngstest contrib/libtests/pngstest.o libpng16.la -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngimage contrib/libtests/pngimage.o libpng16.la -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngcp contrib/tools/pngcp.o libpng16.la -lm -lz -lm 
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngcp contrib/tools/pngcp.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngimage contrib/libtests/pngimage.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngstest contrib/libtests/pngstest.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o timepng contrib/libtests/timepng.o libpng16.la -lm -lz -lm 
+/bin/bash ./libtool  --tag=CC   --mode=link aarch64-linux-gnu-gcc -fPIC  -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ -o pngvalid contrib/libtests/pngvalid.o libpng16.la -lm -lz -lm 
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o timepng contrib/libtests/timepng.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+libtool: link: aarch64-linux-gnu-gcc -fPIC -pthread -I/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/ -o pngvalid contrib/libtests/pngvalid.o  -L/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/ ./.libs/libpng16.a -lz -lm -pthread
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make  install-am
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+ /bin/bash ./libtool   --mode=install /usr/bin/install -c   libpng16.la '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib'
+libtool: install: /usr/bin/install -c .libs/libpng16.lai /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libpng16.la
+libtool: install: /usr/bin/install -c .libs/libpng16.a /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libpng16.a
+libtool: install: chmod 644 /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libpng16.a
+libtool: install: aarch64-linux-gnu-ranlib /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/libpng16.a
+libtool: finish: PATH="/usr/local/cuda-9.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/sbin" ldconfig -n /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+  /bin/bash ./libtool   --mode=install /usr/bin/install -c pngfix png-fix-itxt '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+libtool: install: /usr/bin/install -c pngfix /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/pngfix
+libtool: install: /usr/bin/install -c png-fix-itxt /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin/png-fix-itxt
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+ /usr/bin/install -c libpng16-config '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/bin'
+make  install-exec-hook
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man3'
+ /usr/bin/install -c -m 644 libpng.3 libpngpf.3 '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man3'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man5'
+ /usr/bin/install -c -m 644 png.5 '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/share/man/man5'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/libpng16'
+ /usr/bin/install -c -m 644 pnglibconf.h '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/libpng16'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig'
+ /usr/bin/install -c -m 644 libpng16.pc '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/pkgconfig'
+ /bin/mkdir -p '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/libpng16'
+ /usr/bin/install -c -m 644 png.h pngconf.h '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/include/libpng16'
+make  install-data-hook
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/libpng-1.6.34'
+checking build system type... ~/Documents/Git/javacpp-presets/leptonica

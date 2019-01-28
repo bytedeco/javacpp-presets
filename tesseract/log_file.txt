@@ -1,0 +1,450 @@
+~/Documents/Git/javacpp-presets ~/Documents/Git/javacpp-presets/tesseract
+Detected platform "linux-arm64"
+Building for platform "linux-arm64"
+Installing "tesseract"
+~/Documents/Git/javacpp-presets/tesseract/cppbuild ~/Documents/Git/javacpp-presets
+Decompressing archives...
+The next patch would create the file Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file aclocal.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/config.guess,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/config.h.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/config.sub,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/depcomp,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/install-sh,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/ltmain.sh,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/missing,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file config/test-driver,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file configure,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file doc/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/com/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/com/google/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/com/google/scrollview/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/com/google/scrollview/events/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file java/com/google/scrollview/ui/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file langtests/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file m4/libtool.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file m4/ltoptions.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file m4/ltsugar.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file m4/ltversion.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file m4/lt~obsolete.m4,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+patching file src/api/Makefile.am
+The next patch would create the file src/api/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+patching file src/api/baseapi.cpp
+Hunk #1 succeeded at 206 (offset 6 lines).
+The next patch would create the file src/arch/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/ccmain/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/ccstruct/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/ccutil/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/classify/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/cutil/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/dict/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/lstm/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/opencl/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/textord/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/training/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/viewer/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file src/wordrec/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file tessdata/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file tessdata/configs/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file tessdata/tessconfigs/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file unittest/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+The next patch would create the file unlvtests/Makefile.in,
+which already exists!  Skipping patch.
+1 out of 1 hunk ignored
+checking whether the C++ compiler works... yes
+checking for C++ compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C++ compiler... yes
+checking whether aarch64-linux-gnu-g++ accepts -g... yes
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking for style of include used by make... GNU
+checking whether make supports nested variables... yes
+checking dependency style of aarch64-linux-gnu-g++... gcc3
+checking for a sed that does not truncate output... /bin/sed
+checking Major version... 4
+checking Minor version... 0
+checking Point version... 0-rc3
+checking build system type... aarch64-unknown-linux-gnu
+checking host system type... aarch64-unknown-linux-gnu
+checking whether C++ compiler accepts -mavx... no
+checking whether C++ compiler accepts -mavx2... no
+checking whether C++ compiler accepts -msse4.1... no
+checking --enable-graphics argument... 
+checking --enable-legacy argument... 
+checking --enable-embedded argument... 
+checking for aarch64-linux-gnu-g++ option to support OpenMP... -fopenmp
+checking how to run the C++ preprocessor... aarch64-linux-gnu-g++ -E
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking tiffio.h usability... yes
+checking tiffio.h presence... yes
+checking for tiffio.h... yes
+checking --enable-opencl argument... 
+checking --enable-visibility argument... 
+checking whether to use tessdata-prefix... yes
+checking whether to enable debugging... 
+checking whether byte ordering is bigendian... no
+checking how to print strings... printf
+checking for aarch64-linux-gnu-gcc... aarch64-linux-gnu-gcc
+checking whether we are using the GNU C compiler... yes
+checking whether aarch64-linux-gnu-gcc accepts -g... yes
+checking for aarch64-linux-gnu-gcc option to accept ISO C89... none needed
+checking dependency style of aarch64-linux-gnu-gcc... gcc3
+checking for a sed that does not truncate output... (cached) /bin/sed
+checking for fgrep... /bin/grep -F
+checking for ld used by aarch64-linux-gnu-gcc... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+checking the name lister (/usr/bin/nm -B) interface... BSD nm
+checking whether ln -s works... yes
+checking the maximum length of command line arguments... 1572864
+checking whether the shell understands some XSI constructs... yes
+checking whether the shell understands "+="... yes
+checking how to convert aarch64-unknown-linux-gnu file names to aarch64-unknown-linux-gnu format... func_convert_file_noop
+checking how to convert aarch64-unknown-linux-gnu file names to toolchain format... func_convert_file_noop
+checking for /usr/bin/ld option to reload object files... -r
+checking for aarch64-linux-gnu-objdump... aarch64-linux-gnu-objdump
+checking how to recognize dependent libraries... pass_all
+checking for aarch64-linux-gnu-dlltool... no
+checking for dlltool... no
+checking how to associate runtime and link libraries... printf %s\n
+checking for aarch64-linux-gnu-ar... aarch64-linux-gnu-ar
+checking for archiver @FILE support... @
+checking for aarch64-linux-gnu-strip... aarch64-linux-gnu-strip
+checking for aarch64-linux-gnu-ranlib... aarch64-linux-gnu-ranlib
+checking command to parse /usr/bin/nm -B output from aarch64-linux-gnu-gcc object... ok
+checking for sysroot... no
+checking for aarch64-linux-gnu-mt... no
+checking for mt... mt
+checking if mt is a manifest tool... no
+checking for dlfcn.h... yes
+checking for objdir... .libs
+checking if aarch64-linux-gnu-gcc supports -fno-rtti -fno-exceptions... no
+checking for aarch64-linux-gnu-gcc option to produce PIC... -fPIC -DPIC
+checking if aarch64-linux-gnu-gcc PIC flag -fPIC -DPIC works... yes
+checking if aarch64-linux-gnu-gcc static flag -static works... yes
+checking if aarch64-linux-gnu-gcc supports -c -o file.o... yes
+checking if aarch64-linux-gnu-gcc supports -c -o file.o... (cached) yes
+checking whether the aarch64-linux-gnu-gcc linker (/usr/bin/ld) supports shared libraries... yes
+checking whether -lc should be explicitly linked in... no
+checking dynamic linker characteristics... GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking whether stripping libraries is possible... yes
+checking if libtool supports shared libraries... yes
+checking whether to build shared libraries... yes
+checking whether to build static libraries... yes
+checking how to run the C++ preprocessor... aarch64-linux-gnu-g++ -E
+checking for ld used by aarch64-linux-gnu-g++... /usr/bin/ld
+checking if the linker (/usr/bin/ld) is GNU ld... yes
+checking whether the aarch64-linux-gnu-g++ linker (/usr/bin/ld) supports shared libraries... yes
+checking for aarch64-linux-gnu-g++ option to produce PIC... -fPIC -DPIC
+checking if aarch64-linux-gnu-g++ PIC flag -fPIC -DPIC works... yes
+checking if aarch64-linux-gnu-g++ static flag -static works... yes
+checking if aarch64-linux-gnu-g++ supports -c -o file.o... yes
+checking if aarch64-linux-gnu-g++ supports -c -o file.o... (cached) yes
+checking whether the aarch64-linux-gnu-g++ linker (/usr/bin/ld) supports shared libraries... yes
+checking dynamic linker characteristics... (cached) GNU/Linux ld.so
+checking how to hardcode library paths into programs... immediate
+checking if compiling with clang... no
+checking whether compiler supports C++11... yes
+checking for snprintf... yes
+checking for library containing sem_init... -lpthread
+checking for ANSI C header files... (cached) yes
+checking whether time.h and sys/time.h may both be included... yes
+checking for sys/wait.h that is POSIX.1 compatible... yes
+checking sys/ipc.h usability... yes
+checking sys/ipc.h presence... yes
+checking for sys/ipc.h... yes
+checking sys/shm.h usability... yes
+checking sys/shm.h presence... yes
+checking for sys/shm.h... yes
+checking limits.h usability... yes
+checking limits.h presence... yes
+checking for limits.h... yes
+checking malloc.h usability... yes
+checking malloc.h presence... yes
+checking for malloc.h... yes
+checking for stdbool.h that conforms to C99... no
+checking for _Bool... no
+checking for asciidoc... true
+checking for wchar_t... yes
+checking for long long int... yes
+checking for off_t... yes
+checking for mbstate_t... yes
+checking for aarch64-linux-gnu-pkg-config... /usr/bin/aarch64-linux-gnu-pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for LEPTONICA... yes
+checking for ICU_UC... yes
+checking for ICU_I18N... yes
+checking for pango... yes
+checking for cairo... yes
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating tesseract.pc
+config.status: creating langtests/Makefile
+config.status: creating src/api/Makefile
+config.status: creating src/api/tess_version.h
+config.status: creating src/arch/Makefile
+config.status: creating src/ccmain/Makefile
+config.status: creating src/opencl/Makefile
+config.status: creating src/ccstruct/Makefile
+config.status: creating src/ccutil/Makefile
+config.status: creating src/classify/Makefile
+config.status: creating src/cutil/Makefile
+config.status: creating src/dict/Makefile
+config.status: creating src/lstm/Makefile
+config.status: creating src/textord/Makefile
+config.status: creating src/viewer/Makefile
+config.status: creating src/wordrec/Makefile
+config.status: creating tessdata/Makefile
+config.status: creating tessdata/configs/Makefile
+config.status: creating tessdata/tessconfigs/Makefile
+config.status: creating unlvtests/Makefile
+config.status: creating unittest/Makefile
+config.status: creating java/Makefile
+config.status: creating java/com/Makefile
+config.status: creating java/com/google/Makefile
+config.status: creating java/com/google/scrollview/Makefile
+config.status: creating java/com/google/scrollview/events/Makefile
+config.status: creating java/com/google/scrollview/ui/Makefile
+config.status: creating doc/Makefile
+config.status: creating src/training/Makefile
+config.status: creating config_auto.h
+config.status: config_auto.h is unchanged
+config.status: executing depfiles commands
+config.status: executing libtool commands
+
+Configuration is done.
+You can now build and install tesseract by running:
+
+$ make
+$ sudo make install
+$ sudo ldconfig
+
+This will also build the documentation.
+
+Training tools can be built and installed with:
+
+$ make training
+$ sudo make training-install
+
+ cd . && : --foreign
+make  all-recursive
+make[1]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0'
+ cd . && : --foreign
+Making all in src/arch
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/arch'
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/arch'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/arch'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/arch'
+Making all in src/ccutil
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccutil'
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccutil'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccutil'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccutil'
+Making all in src/viewer
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/viewer'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/viewer'
+Making all in src/cutil
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/cutil'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/cutil'
+Making all in src/opencl
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/opencl'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/opencl'
+Making all in src/ccstruct
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccstruct'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccstruct'
+Making all in src/dict
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/dict'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/dict'
+Making all in src/classify
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/classify'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/classify'
+Making all in src/wordrec
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/wordrec'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/wordrec'
+Making all in src/textord
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/textord'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/textord'
+Making all in src/lstm
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/lstm'
+make[3]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/lstm'
+make[3]: Nothing to be done for 'all-am'.
+make[3]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/lstm'
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/lstm'
+Making all in src/ccmain
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccmain'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/ccmain'
+Making all in src/api
+make[2]: Entering directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api'
+ cd ../.. && : --foreign src/api/Makefile
+/bin/bash ../../libtool  --tag=CXX   --mode=compile aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../..  -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api     -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -g -O2 -std=c++11 -MT libtesseract_api_la-baseapi.lo -MD -MP -MF .deps/libtesseract_api_la-baseapi.Tpo -c -o libtesseract_api_la-baseapi.lo `test -f 'baseapi.cpp' || echo './'`baseapi.cpp
+/bin/bash ../../libtool  --tag=CXX   --mode=compile aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../..  -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api     -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -g -O2 -std=c++11 -MT libtesseract_api_la-capi.lo -MD -MP -MF .deps/libtesseract_api_la-capi.Tpo -c -o libtesseract_api_la-capi.lo `test -f 'capi.cpp' || echo './'`capi.cpp
+/bin/bash ../../libtool  --tag=CXX   --mode=compile aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../..  -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api     -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -g -O2 -std=c++11 -MT libtesseract_api_la-renderer.lo -MD -MP -MF .deps/libtesseract_api_la-renderer.Tpo -c -o libtesseract_api_la-renderer.lo `test -f 'renderer.cpp' || echo './'`renderer.cpp
+/bin/bash ../../libtool  --tag=CXX   --mode=compile aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../..  -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api     -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -g -O2 -std=c++11 -MT libtesseract_api_la-pdfrenderer.lo -MD -MP -MF .deps/libtesseract_api_la-pdfrenderer.Tpo -c -o libtesseract_api_la-pdfrenderer.lo `test -f 'pdfrenderer.cpp' || echo './'`pdfrenderer.cpp
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-renderer.lo -MD -MP -MF .deps/libtesseract_api_la-renderer.Tpo -c renderer.cpp  -fPIC -DPIC -o .libs/libtesseract_api_la-renderer.o
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-baseapi.lo -MD -MP -MF .deps/libtesseract_api_la-baseapi.Tpo -c baseapi.cpp  -fPIC -DPIC -o .libs/libtesseract_api_la-baseapi.o
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-capi.lo -MD -MP -MF .deps/libtesseract_api_la-capi.Tpo -c capi.cpp  -fPIC -DPIC -o .libs/libtesseract_api_la-capi.o
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-pdfrenderer.lo -MD -MP -MF .deps/libtesseract_api_la-pdfrenderer.Tpo -c pdfrenderer.cpp  -fPIC -DPIC -o .libs/libtesseract_api_la-pdfrenderer.o
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-renderer.lo -MD -MP -MF .deps/libtesseract_api_la-renderer.Tpo -c renderer.cpp -o libtesseract_api_la-renderer.o >/dev/null 2>&1
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-capi.lo -MD -MP -MF .deps/libtesseract_api_la-capi.Tpo -c capi.cpp -o libtesseract_api_la-capi.o >/dev/null 2>&1
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-pdfrenderer.lo -MD -MP -MF .deps/libtesseract_api_la-pdfrenderer.Tpo -c pdfrenderer.cpp -o libtesseract_api_la-pdfrenderer.o >/dev/null 2>&1
+mv -f .deps/libtesseract_api_la-renderer.Tpo .deps/libtesseract_api_la-renderer.Plo
+aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../..  -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api     -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12  -g -O2 -std=c++11 -MT tesseract-tesseractmain.o -MD -MP -MF .deps/tesseract-tesseractmain.Tpo -c -o tesseract-tesseractmain.o `test -f 'tesseractmain.cpp' || echo './'`tesseractmain.cpp
+mv -f .deps/libtesseract_api_la-capi.Tpo .deps/libtesseract_api_la-capi.Plo
+mv -f .deps/libtesseract_api_la-pdfrenderer.Tpo .deps/libtesseract_api_la-pdfrenderer.Plo
+mv -f .deps/tesseract-tesseractmain.Tpo .deps/tesseract-tesseractmain.Po
+libtool: compile:  aarch64-linux-gnu-g++ -DHAVE_CONFIG_H -I. -I../.. -DNDEBUG -DLOCALEDIR=\"/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/share/locale\" -I../../src/arch -I../../src/lstm -I../../src/ccutil -I../../src/ccstruct -I../../src/viewer -I../../src/textord -I../../src/dict -I../../src/classify -I../../src/ccmain -I../../src/wordrec -I../../src/cutil -I../../src/opencl -I../../api -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/ -I/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//include/leptonica/ -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/aarch64-linux-gnu/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12 -g -O2 -std=c++11 -MT libtesseract_api_la-baseapi.lo -MD -MP -MF .deps/libtesseract_api_la-baseapi.Tpo -c baseapi.cpp -o libtesseract_api_la-baseapi.o >/dev/null 2>&1
+mv -f .deps/libtesseract_api_la-baseapi.Tpo .deps/libtesseract_api_la-baseapi.Plo
+/bin/bash ../../libtool  --tag=CXX   --mode=link aarch64-linux-gnu-g++  -g -O2 -std=c++11  -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -Wl,-rpath,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -o libtesseract_api.la  libtesseract_api_la-baseapi.lo libtesseract_api_la-capi.lo libtesseract_api_la-renderer.lo libtesseract_api_la-pdfrenderer.lo  -lpthread -llept
+libtool: link: rm -fr  .libs/libtesseract_api.a .libs/libtesseract_api.la
+libtool: link: aarch64-linux-gnu-ar cru .libs/libtesseract_api.a .libs/libtesseract_api_la-baseapi.o .libs/libtesseract_api_la-capi.o .libs/libtesseract_api_la-renderer.o .libs/libtesseract_api_la-pdfrenderer.o 
+libtool: link: aarch64-linux-gnu-ranlib .libs/libtesseract_api.a
+libtool: link: ( cd ".libs" && rm -f "libtesseract_api.la" && ln -s "../libtesseract_api.la" "libtesseract_api.la" )
+/bin/bash ../../libtool  --tag=CXX   --mode=link aarch64-linux-gnu-g++  -g -O2 -std=c++11 -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -llept  -version-info 4:0 -no-undefined  -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -Wl,-rpath,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -o libtesseract.la -rpath /home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/lib  libtesseract_api.la ../ccmain/libtesseract_main.la ../textord/libtesseract_textord.la ../wordrec/libtesseract_wordrec.la ../classify/libtesseract_classify.la ../dict/libtesseract_dict.la ../arch/libtesseract_arch.la ../arch/libtesseract_avx.la ../arch/libtesseract_avx2.la ../arch/libtesseract_sse.la ../lstm/libtesseract_lstm.la ../ccstruct/libtesseract_ccstruct.la ../cutil/libtesseract_cutil.la ../viewer/libtesseract_viewer.la ../ccutil/libtesseract_ccutil.la ../opencl/libtesseract_opencl.la -lpthread -llept
+libtool: link: rm -fr  .libs/libtesseract.a .libs/libtesseract.la .libs/libtesseract.lai .libs/libtesseract.so .libs/libtesseract.so.4 .libs/libtesseract.so.4.0.0
+libtool: link: aarch64-linux-gnu-g++  -fPIC -DPIC -shared -nostdlib /usr/lib/gcc/aarch64-linux-gnu/5/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/5/crtbeginS.o  -Wl,--whole-archive ./.libs/libtesseract_api.a ../ccmain/.libs/libtesseract_main.a ../textord/.libs/libtesseract_textord.a ../wordrec/.libs/libtesseract_wordrec.a ../classify/.libs/libtesseract_classify.a ../dict/.libs/libtesseract_dict.a ../arch/.libs/libtesseract_arch.a ../arch/.libs/libtesseract_avx.a ../arch/.libs/libtesseract_avx2.a ../arch/.libs/libtesseract_sse.a ../lstm/.libs/libtesseract_lstm.a ../ccstruct/.libs/libtesseract_ccstruct.a ../cutil/.libs/libtesseract_cutil.a ../viewer/.libs/libtesseract_viewer.a ../ccutil/.libs/libtesseract_ccutil.a ../opencl/.libs/libtesseract_opencl.a -Wl,--no-whole-archive  -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/liblept.so -lpthread -L/usr/lib/gcc/aarch64-linux-gnu/5 -L/usr/lib/gcc/aarch64-linux-gnu/5/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/5/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/5/../../.. -lstdc++ -lm -lc -lgcc_s /usr/lib/gcc/aarch64-linux-gnu/5/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/5/../../../aarch64-linux-gnu/crtn.o  -O2 -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/   -pthread -fopenmp -Wl,-soname -Wl,libtesseract.so.4 -o .libs/libtesseract.so.4.0.0
+libtool: link: (cd ".libs" && rm -f "libtesseract.so.4" && ln -s "libtesseract.so.4.0.0" "libtesseract.so.4")
+libtool: link: (cd ".libs" && rm -f "libtesseract.so" && ln -s "libtesseract.so.4.0.0" "libtesseract.so")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_api.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/./.libs/libtesseract_api.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_main.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../ccmain/.libs/libtesseract_main.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_textord.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../textord/.libs/libtesseract_textord.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_wordrec.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../wordrec/.libs/libtesseract_wordrec.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_classify.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../classify/.libs/libtesseract_classify.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_dict.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../dict/.libs/libtesseract_dict.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_arch.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../arch/.libs/libtesseract_arch.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_avx.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../arch/.libs/libtesseract_avx.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_avx2.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../arch/.libs/libtesseract_avx2.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_sse.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../arch/.libs/libtesseract_sse.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_lstm.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../lstm/.libs/libtesseract_lstm.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_ccstruct.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../ccstruct/.libs/libtesseract_ccstruct.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_cutil.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../cutil/.libs/libtesseract_cutil.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_viewer.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../viewer/.libs/libtesseract_viewer.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_ccutil.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../ccutil/.libs/libtesseract_ccutil.a")
+libtool: link: (cd .libs/libtesseract.lax/libtesseract_opencl.a && aarch64-linux-gnu-ar x "/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api/../opencl/.libs/libtesseract_opencl.a")
+libtool: link: aarch64-linux-gnu-ar cru .libs/libtesseract.a   .libs/libtesseract.lax/libtesseract_api.a/libtesseract_api_la-baseapi.o .libs/libtesseract.lax/libtesseract_api.a/libtesseract_api_la-capi.o .libs/libtesseract.lax/libtesseract_api.a/libtesseract_api_la-pdfrenderer.o .libs/libtesseract.lax/libtesseract_api.a/libtesseract_api_la-renderer.o  .libs/libtesseract.lax/libtesseract_main.a/adaptions.o .libs/libtesseract.lax/libtesseract_main.a/applybox.o .libs/libtesseract.lax/libtesseract_main.a/control.o .libs/libtesseract.lax/libtesseract_main.a/docqual.o .libs/libtesseract.lax/libtesseract_main.a/equationdetect.o .libs/libtesseract.lax/libtesseract_main.a/fixspace.o .libs/libtesseract.lax/libtesseract_main.a/fixxht.o .libs/libtesseract.lax/libtesseract_main.a/linerec.o .libs/libtesseract.lax/libtesseract_main.a/ltrresultiterator.o .libs/libtesseract.lax/libtesseract_main.a/mutableiterator.o .libs/libtesseract.lax/libtesseract_main.a/osdetect.o .libs/libtesseract.lax/libtesseract_main.a/output.o .libs/libtesseract.lax/libtesseract_main.a/pageiterator.o .libs/libtesseract.lax/libtesseract_main.a/pagesegmain.o .libs/libtesseract.lax/libtesseract_main.a/pagewalk.o .libs/libtesseract.lax/libtesseract_main.a/par_control.o .libs/libtesseract.lax/libtesseract_main.a/paragraphs.o .libs/libtesseract.lax/libtesseract_main.a/paramsd.o .libs/libtesseract.lax/libtesseract_main.a/pgedit.o .libs/libtesseract.lax/libtesseract_main.a/recogtraining.o .libs/libtesseract.lax/libtesseract_main.a/reject.o .libs/libtesseract.lax/libtesseract_main.a/resultiterator.o .libs/libtesseract.lax/libtesseract_main.a/superscript.o .libs/libtesseract.lax/libtesseract_main.a/tessbox.o .libs/libtesseract.lax/libtesseract_main.a/tessedit.o .libs/libtesseract.lax/libtesseract_main.a/tesseractclass.o .libs/libtesseract.lax/libtesseract_main.a/tessvars.o .libs/libtesseract.lax/libtesseract_main.a/tfacepp.o .libs/libtesseract.lax/libtesseract_main.a/thresholder.o .libs/libtesseract.lax/libtesseract_main.a/werdit.o  .libs/libtesseract.lax/libtesseract_textord.a/alignedblob.o .libs/libtesseract.lax/libtesseract_textord.a/baselinedetect.o .libs/libtesseract.lax/libtesseract_textord.a/bbgrid.o .libs/libtesseract.lax/libtesseract_textord.a/blkocc.o .libs/libtesseract.lax/libtesseract_textord.a/blobgrid.o .libs/libtesseract.lax/libtesseract_textord.a/ccnontextdetect.o .libs/libtesseract.lax/libtesseract_textord.a/cjkpitch.o .libs/libtesseract.lax/libtesseract_textord.a/colfind.o .libs/libtesseract.lax/libtesseract_textord.a/colpartition.o .libs/libtesseract.lax/libtesseract_textord.a/colpartitiongrid.o .libs/libtesseract.lax/libtesseract_textord.a/colpartitionset.o .libs/libtesseract.lax/libtesseract_textord.a/devanagari_processing.o .libs/libtesseract.lax/libtesseract_textord.a/drawedg.o .libs/libtesseract.lax/libtesseract_textord.a/drawtord.o .libs/libtesseract.lax/libtesseract_textord.a/edgblob.o .libs/libtesseract.lax/libtesseract_textord.a/edgloop.o .libs/libtesseract.lax/libtesseract_textord.a/equationdetectbase.o .libs/libtesseract.lax/libtesseract_textord.a/fpchop.o .libs/libtesseract.lax/libtesseract_textord.a/gap_map.o .libs/libtesseract.lax/libtesseract_textord.a/imagefind.o .libs/libtesseract.lax/libtesseract_textord.a/linefind.o .libs/libtesseract.lax/libtesseract_textord.a/makerow.o .libs/libtesseract.lax/libtesseract_textord.a/oldbasel.o .libs/libtesseract.lax/libtesseract_textord.a/pithsync.o .libs/libtesseract.lax/libtesseract_textord.a/pitsync1.o .libs/libtesseract.lax/libtesseract_textord.a/scanedg.o .libs/libtesseract.lax/libtesseract_textord.a/sortflts.o .libs/libtesseract.lax/libtesseract_textord.a/strokewidth.o .libs/libtesseract.lax/libtesseract_textord.a/tabfind.o .libs/libtesseract.lax/libtesseract_textord.a/tablefind.o .libs/libtesseract.lax/libtesseract_textord.a/tablerecog.o .libs/libtesseract.lax/libtesseract_textord.a/tabvector.o .libs/libtesseract.lax/libtesseract_textord.a/textlineprojection.o .libs/libtesseract.lax/libtesseract_textord.a/textord.o .libs/libtesseract.lax/libtesseract_textord.a/topitch.o .libs/libtesseract.lax/libtesseract_textord.a/tordmain.o .libs/libtesseract.lax/libtesseract_textord.a/tospace.o .libs/libtesseract.lax/libtesseract_textord.a/tovars.o .libs/libtesseract.lax/libtesseract_textord.a/underlin.o .libs/libtesseract.lax/libtesseract_textord.a/wordseg.o .libs/libtesseract.lax/libtesseract_textord.a/workingpartset.o  .libs/libtesseract.lax/libtesseract_wordrec.a/associate.o .libs/libtesseract.lax/libtesseract_wordrec.a/chop.o .libs/libtesseract.lax/libtesseract_wordrec.a/chopper.o .libs/libtesseract.lax/libtesseract_wordrec.a/drawfx.o .libs/libtesseract.lax/libtesseract_wordrec.a/findseam.o .libs/libtesseract.lax/libtesseract_wordrec.a/gradechop.o .libs/libtesseract.lax/libtesseract_wordrec.a/language_model.o .libs/libtesseract.lax/libtesseract_wordrec.a/lm_consistency.o .libs/libtesseract.lax/libtesseract_wordrec.a/lm_pain_points.o .libs/libtesseract.lax/libtesseract_wordrec.a/lm_state.o .libs/libtesseract.lax/libtesseract_wordrec.a/outlines.o .libs/libtesseract.lax/libtesseract_wordrec.a/params_model.o .libs/libtesseract.lax/libtesseract_wordrec.a/pieces.o .libs/libtesseract.lax/libtesseract_wordrec.a/plotedges.o .libs/libtesseract.lax/libtesseract_wordrec.a/render.o .libs/libtesseract.lax/libtesseract_wordrec.a/segsearch.o .libs/libtesseract.lax/libtesseract_wordrec.a/tface.o .libs/libtesseract.lax/libtesseract_wordrec.a/wordclass.o .libs/libtesseract.lax/libtesseract_wordrec.a/wordrec.o  .libs/libtesseract.lax/libtesseract_classify.a/adaptive.o .libs/libtesseract.lax/libtesseract_classify.a/adaptmatch.o .libs/libtesseract.lax/libtesseract_classify.a/blobclass.o .libs/libtesseract.lax/libtesseract_classify.a/classify.o .libs/libtesseract.lax/libtesseract_classify.a/cluster.o .libs/libtesseract.lax/libtesseract_classify.a/clusttool.o .libs/libtesseract.lax/libtesseract_classify.a/cutoffs.o .libs/libtesseract.lax/libtesseract_classify.a/errorcounter.o .libs/libtesseract.lax/libtesseract_classify.a/featdefs.o .libs/libtesseract.lax/libtesseract_classify.a/float2int.o .libs/libtesseract.lax/libtesseract_classify.a/fpoint.o .libs/libtesseract.lax/libtesseract_classify.a/intfeaturedist.o .libs/libtesseract.lax/libtesseract_classify.a/intfeaturemap.o .libs/libtesseract.lax/libtesseract_classify.a/intfeaturespace.o .libs/libtesseract.lax/libtesseract_classify.a/intfx.o .libs/libtesseract.lax/libtesseract_classify.a/intmatcher.o .libs/libtesseract.lax/libtesseract_classify.a/intproto.o .libs/libtesseract.lax/libtesseract_classify.a/kdtree.o .libs/libtesseract.lax/libtesseract_classify.a/mastertrainer.o .libs/libtesseract.lax/libtesseract_classify.a/mf.o .libs/libtesseract.lax/libtesseract_classify.a/mfdefs.o .libs/libtesseract.lax/libtesseract_classify.a/mfoutline.o .libs/libtesseract.lax/libtesseract_classify.a/mfx.o .libs/libtesseract.lax/libtesseract_classify.a/normfeat.o .libs/libtesseract.lax/libtesseract_classify.a/normmatch.o .libs/libtesseract.lax/libtesseract_classify.a/ocrfeatures.o .libs/libtesseract.lax/libtesseract_classify.a/outfeat.o .libs/libtesseract.lax/libtesseract_classify.a/picofeat.o .libs/libtesseract.lax/libtesseract_classify.a/protos.o .libs/libtesseract.lax/libtesseract_classify.a/sampleiterator.o .libs/libtesseract.lax/libtesseract_classify.a/shapeclassifier.o .libs/libtesseract.lax/libtesseract_classify.a/shapetable.o .libs/libtesseract.lax/libtesseract_classify.a/tessclassifier.o .libs/libtesseract.lax/libtesseract_classify.a/trainingsample.o .libs/libtesseract.lax/libtesseract_classify.a/trainingsampleset.o  .libs/libtesseract.lax/libtesseract_dict.a/context.o .libs/libtesseract.lax/libtesseract_dict.a/dawg.o .libs/libtesseract.lax/libtesseract_dict.a/dawg_cache.o .libs/libtesseract.lax/libtesseract_dict.a/dict.o .libs/libtesseract.lax/libtesseract_dict.a/hyphen.o .libs/libtesseract.lax/libtesseract_dict.a/permdawg.o .libs/libtesseract.lax/libtesseract_dict.a/stopper.o .libs/libtesseract.lax/libtesseract_dict.a/trie.o  .libs/libtesseract.lax/libtesseract_arch.a/intsimdmatrix.o .libs/libtesseract.lax/libtesseract_arch.a/simddetect.o  .libs/libtesseract.lax/libtesseract_avx.a/libtesseract_avx_la-dotproductavx.o  .libs/libtesseract.lax/libtesseract_avx2.a/libtesseract_avx2_la-intsimdmatrixavx2.o  .libs/libtesseract.lax/libtesseract_sse.a/libtesseract_sse_la-dotproductsse.o .libs/libtesseract.lax/libtesseract_sse.a/libtesseract_sse_la-intsimdmatrixsse.o  .libs/libtesseract.lax/libtesseract_lstm.a/convolve.o .libs/libtesseract.lax/libtesseract_lstm.a/ctc.o .libs/libtesseract.lax/libtesseract_lstm.a/fullyconnected.o .libs/libtesseract.lax/libtesseract_lstm.a/functions.o .libs/libtesseract.lax/libtesseract_lstm.a/input.o .libs/libtesseract.lax/libtesseract_lstm.a/lstm.o .libs/libtesseract.lax/libtesseract_lstm.a/lstmrecognizer.o .libs/libtesseract.lax/libtesseract_lstm.a/lstmtrainer.o .libs/libtesseract.lax/libtesseract_lstm.a/maxpool.o .libs/libtesseract.lax/libtesseract_lstm.a/network.o .libs/libtesseract.lax/libtesseract_lstm.a/networkbuilder.o .libs/libtesseract.lax/libtesseract_lstm.a/networkio.o .libs/libtesseract.lax/libtesseract_lstm.a/parallel.o .libs/libtesseract.lax/libtesseract_lstm.a/plumbing.o .libs/libtesseract.lax/libtesseract_lstm.a/recodebeam.o .libs/libtesseract.lax/libtesseract_lstm.a/reconfig.o .libs/libtesseract.lax/libtesseract_lstm.a/reversed.o .libs/libtesseract.lax/libtesseract_lstm.a/series.o .libs/libtesseract.lax/libtesseract_lstm.a/stridemap.o .libs/libtesseract.lax/libtesseract_lstm.a/tfnetwork.o .libs/libtesseract.lax/libtesseract_lstm.a/weightmatrix.o  .libs/libtesseract.lax/libtesseract_ccstruct.a/blamer.o .libs/libtesseract.lax/libtesseract_ccstruct.a/blobbox.o .libs/libtesseract.lax/libtesseract_ccstruct.a/blobs.o .libs/libtesseract.lax/libtesseract_ccstruct.a/blread.o .libs/libtesseract.lax/libtesseract_ccstruct.a/boxread.o .libs/libtesseract.lax/libtesseract_ccstruct.a/boxword.o .libs/libtesseract.lax/libtesseract_ccstruct.a/ccstruct.o .libs/libtesseract.lax/libtesseract_ccstruct.a/coutln.o .libs/libtesseract.lax/libtesseract_ccstruct.a/detlinefit.o .libs/libtesseract.lax/libtesseract_ccstruct.a/dppoint.o .libs/libtesseract.lax/libtesseract_ccstruct.a/fontinfo.o .libs/libtesseract.lax/libtesseract_ccstruct.a/imagedata.o .libs/libtesseract.lax/libtesseract_ccstruct.a/linlsq.o .libs/libtesseract.lax/libtesseract_ccstruct.a/matrix.o .libs/libtesseract.lax/libtesseract_ccstruct.a/mod128.o .libs/libtesseract.lax/libtesseract_ccstruct.a/normalis.o .libs/libtesseract.lax/libtesseract_ccstruct.a/ocrblock.o .libs/libtesseract.lax/libtesseract_ccstruct.a/ocrpara.o .libs/libtesseract.lax/libtesseract_ccstruct.a/ocrrow.o .libs/libtesseract.lax/libtesseract_ccstruct.a/otsuthr.o .libs/libtesseract.lax/libtesseract_ccstruct.a/pageres.o .libs/libtesseract.lax/libtesseract_ccstruct.a/params_training_featdef.o .libs/libtesseract.lax/libtesseract_ccstruct.a/pdblock.o .libs/libtesseract.lax/libtesseract_ccstruct.a/points.o .libs/libtesseract.lax/libtesseract_ccstruct.a/polyaprx.o .libs/libtesseract.lax/libtesseract_ccstruct.a/polyblk.o .libs/libtesseract.lax/libtesseract_ccstruct.a/publictypes.o .libs/libtesseract.lax/libtesseract_ccstruct.a/quadlsq.o .libs/libtesseract.lax/libtesseract_ccstruct.a/quspline.o .libs/libtesseract.lax/libtesseract_ccstruct.a/ratngs.o .libs/libtesseract.lax/libtesseract_ccstruct.a/rect.o .libs/libtesseract.lax/libtesseract_ccstruct.a/rejctmap.o .libs/libtesseract.lax/libtesseract_ccstruct.a/seam.o .libs/libtesseract.lax/libtesseract_ccstruct.a/split.o .libs/libtesseract.lax/libtesseract_ccstruct.a/statistc.o .libs/libtesseract.lax/libtesseract_ccstruct.a/stepblob.o .libs/libtesseract.lax/libtesseract_ccstruct.a/vecfuncs.o .libs/libtesseract.lax/libtesseract_ccstruct.a/werd.o  .libs/libtesseract.lax/libtesseract_cutil.a/bitvec.o .libs/libtesseract.lax/libtesseract_cutil.a/callcpp.o .libs/libtesseract.lax/libtesseract_cutil.a/cutil_class.o .libs/libtesseract.lax/libtesseract_cutil.a/emalloc.o .libs/libtesseract.lax/libtesseract_cutil.a/oldlist.o .libs/libtesseract.lax/libtesseract_cutil.a/structures.o  .libs/libtesseract.lax/libtesseract_viewer.a/scrollview.o .libs/libtesseract.lax/libtesseract_viewer.a/svmnode.o .libs/libtesseract.lax/libtesseract_viewer.a/svpaint.o .libs/libtesseract.lax/libtesseract_viewer.a/svutil.o  .libs/libtesseract.lax/libtesseract_ccutil.a/ambigs.o .libs/libtesseract.lax/libtesseract_ccutil.a/basedir.o .libs/libtesseract.lax/libtesseract_ccutil.a/bitvector.o .libs/libtesseract.lax/libtesseract_ccutil.a/ccutil.o .libs/libtesseract.lax/libtesseract_ccutil.a/clst.o .libs/libtesseract.lax/libtesseract_ccutil.a/elst.o .libs/libtesseract.lax/libtesseract_ccutil.a/elst2.o .libs/libtesseract.lax/libtesseract_ccutil.a/errcode.o .libs/libtesseract.lax/libtesseract_ccutil.a/fileio.o .libs/libtesseract.lax/libtesseract_ccutil.a/globaloc.o .libs/libtesseract.lax/libtesseract_ccutil.a/indexmapbidi.o .libs/libtesseract.lax/libtesseract_ccutil.a/mainblk.o .libs/libtesseract.lax/libtesseract_ccutil.a/params.o .libs/libtesseract.lax/libtesseract_ccutil.a/scanutils.o .libs/libtesseract.lax/libtesseract_ccutil.a/serialis.o .libs/libtesseract.lax/libtesseract_ccutil.a/strngs.o .libs/libtesseract.lax/libtesseract_ccutil.a/tessdatamanager.o .libs/libtesseract.lax/libtesseract_ccutil.a/tprintf.o .libs/libtesseract.lax/libtesseract_ccutil.a/unichar.o .libs/libtesseract.lax/libtesseract_ccutil.a/unicharcompress.o .libs/libtesseract.lax/libtesseract_ccutil.a/unicharmap.o .libs/libtesseract.lax/libtesseract_ccutil.a/unicharset.o .libs/libtesseract.lax/libtesseract_ccutil.a/unicodes.o .libs/libtesseract.lax/libtesseract_ccutil.a/universalambigs.o  .libs/libtesseract.lax/libtesseract_opencl.a/openclwrapper.o 
+libtool: link: aarch64-linux-gnu-ranlib .libs/libtesseract.a
+libtool: link: rm -fr .libs/libtesseract.lax
+libtool: link: ( cd ".libs" && rm -f "libtesseract.la" && ln -s "../libtesseract.la" "libtesseract.la" )
+/bin/bash ../../libtool  --tag=CXX   --mode=link aarch64-linux-gnu-g++  -g -O2 -std=c++11  -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -Wl,-rpath,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -o tesseract tesseract-tesseractmain.o libtesseract.la -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -llept -fopenmp  -lrt -lpthread -llept
+libtool: link: aarch64-linux-gnu-g++ -g -O2 -std=c++11 -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ -o .libs/tesseract tesseract-tesseractmain.o -fopenmp  -L/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/../../../leptonica/cppbuild/linux-arm64//lib/ ./.libs/libtesseract.so -lrt /home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib/liblept.so -lpthread -pthread -fopenmp -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/lib -Wl,-rpath -Wl,/home/nvidia/Documents/Git/javacpp-presets/leptonica/cppbuild/linux-arm64/lib
+Makefile:568: recipe for target 'tesseract' failed
+make[2]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0/src/api'
+Makefile:482: recipe for target 'all-recursive' failed
+make[1]: Leaving directory '/home/nvidia/Documents/Git/javacpp-presets/tesseract/cppbuild/linux-arm64/tesseract-4.0.0'
+Makefile:390: recipe for target 'all' failed
+~/Documents/Git/javacpp-presets/tesseract
