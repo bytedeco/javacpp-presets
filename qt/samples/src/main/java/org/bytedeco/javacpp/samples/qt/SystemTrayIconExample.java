@@ -28,7 +28,11 @@ public class SystemTrayIconExample {
   private static Window window;
 
   public static void main(String[] args) {
-    app = new QApplication(new int[]{0}, null);
+    String path = Loader.load(QtCore.class);
+    argc = new IntPointer(new int[]{3});
+    argv = new PointerPointer<BytePointer>("systray", "-platformpluginpath", new File(path).getParent(), null);
+
+    app = new QApplication(argc, argv);
 
     if (!QSystemTrayIcon.isSystemTrayAvailable()) {
       QMessageBox.critical(null, QObject.tr("Systray"),

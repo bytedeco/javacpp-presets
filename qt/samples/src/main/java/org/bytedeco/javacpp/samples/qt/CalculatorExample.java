@@ -3,6 +3,7 @@ package org.bytedeco.javacpp.samples.qt;
 import static org.bytedeco.javacpp.QtCore.*;
 import static org.bytedeco.javacpp.helper.QtWidgets.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.bytedeco.javacpp.BytePointer;
@@ -26,7 +27,11 @@ public class CalculatorExample {
   private static Calculator calc;
 
   public static void main(String[] args) {
-    app = new QApplication(new int[]{0}, null);
+    String path = Loader.load(QtCore.class);
+    argc = new IntPointer(new int[]{3});
+    argv = new PointerPointer<BytePointer>("calc", "-platformpluginpath", new File(path).getParent(), null);
+
+    app = new QApplication(argc, argv);
     calc = new Calculator();
     calc.show();
     System.exit(QApplication.exec());

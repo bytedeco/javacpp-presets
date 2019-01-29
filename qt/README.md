@@ -16,6 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/qt/apidocs/
 
+&lowast; Call `Loader.load(QtCore.class)` to get the path for [`-platformpluginpath`](http://doc.qt.io/qt-5/qguiapplication.html#QGuiApplication) before using this API.  
 &lowast; Java must be started with the '-XstartOnFirstThread' command-line option on macOS.
 
 

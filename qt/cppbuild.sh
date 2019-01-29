@@ -36,4 +36,6 @@ case $PLATFORM in
         ;;
 esac
 
+for f in `find ../plugins`; do cp -a $f ../lib; done
+
 cd ../..
