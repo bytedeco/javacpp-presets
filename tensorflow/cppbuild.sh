@@ -32,11 +32,12 @@ export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=10.0
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=1.3
+export TF_NCCL_VERSION=2.3
 export TF_TENSORRT_VERSION=5.0.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
+export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
@@ -54,6 +55,9 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
 
+# https://github.com/tensorflow/tensorflow/issues/23191
+sedinplace "/distinct_host_configuration=false/d" configure.py
+
 # Stop complaining about possibly incompatible CUDA versions
 sedinplace "s/return (cudnn == cudnn_ver) and (cudart == cuda_ver)/return True/g" configure.py
 
@@ -63,9 +67,8 @@ sed -i="" "s/return has_any_rule/return True/g" configure.py
 # Allow using std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>
 sed -i="" "s/const string tag/string tag/g" tensorflow/core/util/tensor_slice_set.h
 
-# https://github.com/tensorflow/tensorflow/issues/15389
-sed -i="" "s/c2947c341c68/034b6c3e1017/g" tensorflow/workspace.bzl
-sed -i="" "s/f21f8ab8a8dbcb91cd0deeade19a043f47708d0da7a4000164cdf203b4a71e34/0a8ac1e83ef9c26c0e362bd7968650b710ce54e2d883f0df84e5e45a3abe842a/g" tensorflow/workspace.bzl
+# Remove comment lines containing characters that lead to encoding errors
+sedinplace '/\(foo\|bar\|ops.withSubScope\)/d' tensorflow/java/src/gen/java/org/tensorflow/processor/OperatorProcessor.java
 
 export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
@@ -132,10 +135,8 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-java.patch
         # allows us to use ccache with Bazel
         export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
-        # no longer needed? https://github.com/tensorflow/tensorflow/issues/19676
-        # patch -Np1 < ../../../tensorflow-macosx.patch || true
         export TF_NEED_MKL=1
-        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
+        export BUILDFLAGS="--config=mkl --config=nonccl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
@@ -194,7 +195,7 @@ bash configure
 bazel build -c opt $BUILDTARGETS --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
 
 if [[ "$PLATFORM" == windows* ]]; then
-    cd bazel-tensorflow-$TENSORFLOW_VERSION
+    cd bazel-tensorflow-$TENSORFLOW_VERSION/bazel-out/x64_windows-opt/
     # we need /WHOLEARCHIVE for .lib files, but link.exe crashes with it, so use .obj files instead
     # (CUDA builds produce mostly files with .a and .o extensions instead of .lib and .obj)
     find -L `pwd` -iname *.obj -o -iname *.o > objs
@@ -208,7 +209,7 @@ if [[ "$PLATFORM" == windows* ]]; then
     sedinplace '/grpc_cpp_plugin.o/d' objs
     # convert to DOS paths with short names to prevent exceeding MAX_PATH
     cygpath -d -f objs > objs.dos
-    cd ..
+    cd ../../..
 fi
 
 # copy/adjust Java source files and work around loader bug in NativeLibrary.java

@@ -168,7 +168,7 @@ import java.util.List;
                         "tensorflow/cc/framework/scope.h",
                         "tensorflow/cc/framework/ops.h",
                         "tensorflow/core/framework/op_gen_lib.h",
-                        "tensorflow/cc/framework/cc_op_gen.h",
+//                        "tensorflow/cc/framework/cc_op_gen.h",
                         "tensorflow/cc/framework/gradients.h",
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",

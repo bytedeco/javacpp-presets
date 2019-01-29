@@ -11,6 +11,9 @@ To view the license for the CUDA Toolkit included in these archives, click [here
 ### CUDA Deep Neural Network library (cuDNN)
 To view the license for cuDNN included in these archives, click [here](https://developer.nvidia.com/cudnn/license_agreement)
 
+### NVIDIA Collective Communications Library (NCCL)
+To view the license for NCCL included in these archives, click [here](https://github.com/NVIDIA/nccl/blob/master/LICENSE.txt)
+
 
 Introduction
 ------------
@@ -18,6 +21,7 @@ This directory contains the JavaCPP Presets module for:
 
  * CUDA 10.0  https://developer.nvidia.com/cuda-zone
  * cuDNN 7.4  https://developer.nvidia.com/cudnn
+ * NCCL 2.3  https://developer.nvidia.com/nccl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -48,7 +52,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
@@ -56,32 +60,32 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>linux-ppc64le-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

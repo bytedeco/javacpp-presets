@@ -133,7 +133,7 @@ if [ "$PROJ" == "tensorflow" ]; then
        unzip -o swigwin-3.0.12.zip -d /c/
 
        echo "adding bazel for tensorflow"
-       curl -L https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
        if [ "$CURL_STATUS" != "0" ]; then
          echo "Download failed here, so can't proceed with the build.. Failing.."
          exit 1

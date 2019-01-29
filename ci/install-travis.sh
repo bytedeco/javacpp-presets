@@ -127,7 +127,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -135,6 +135,12 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
         export TEST_TMPDIR=$HOME/.cache/bazel
         echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
+  fi
+  if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
+        echo "installing nccl.."
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1rFLXh1uiuYgcR2xV30kSkIN7ak1v1S9M $HOME/downloads/nccl_x86_64.txz
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
   if [ "$PROJ" == "tensorrt" ]; then
         python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
@@ -277,7 +283,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.21.0/bazel-0.21.0-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1
