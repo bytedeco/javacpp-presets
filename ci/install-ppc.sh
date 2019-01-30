@@ -75,8 +75,8 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda-10.0 /usr/local/cuda"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/libcuda.so"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/cuda/lib64/stubs/libnvidia-ml.so /usr/local/cuda/lib64/libnvidia-ml.so"
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/cudnn-10.0-linux-ppc64le-v7.4.1.5.tgz -C /usr/local/"
-   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar xvf $HOME/nccl_ppc64le.txz --strip-components=1 -C /usr/local/cuda/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-10.0-linux-ppc64le-v7.4.1.5.tgz -C /usr/local/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_ppc64le.txz --strip-components=1 -C /usr/local/cuda/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
 fi
 

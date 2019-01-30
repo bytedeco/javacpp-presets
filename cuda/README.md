@@ -63,7 +63,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>10.0-7.4-1.4.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
