@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet 1.4.0.rc0  http://mxnet.incubator.apache.org/
+ * MXNet 1.4.0.rc2  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -51,46 +51,46 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.4.0.rc0-1.4.4</version>
+            <version>1.4.0.rc2-1.4.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc0-1.4.4</version>
+            <version>1.4.0.rc2-1.4.5-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc0-1.4.4</version>
+            <version>1.4.0.rc2-1.4.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc0-1.4.4</version>
+            <version>1.4.0.rc2-1.4.5-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

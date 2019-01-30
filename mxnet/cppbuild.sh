@@ -13,16 +13,20 @@ export USE_OPENMP=1
 export CUDA_ARCH=-arch=sm_30
 export USE_CUDA=0
 export USE_CUDNN=0
+export USE_NCCL=0
 export USE_CUDA_PATH=
 export USE_MKLDNN=1
 if [[ "$EXTENSION" == *gpu ]]; then
     export ADD_CFLAGS="$ADD_CFLAGS -DMXNET_USE_CUDA=1"
     export USE_CUDA=1
     export USE_CUDNN=1
+    if [[ "$PLATFORM" == linux* ]]; then
+        export USE_NCCL=1
+    fi
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.4.0.rc0
+MXNET_VERSION=1.4.0.rc2
 download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -123,7 +127,7 @@ if [[ ! "$PLATFORM" == windows* ]]; then
 
     sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
     sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
-    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
     cp -r include lib 3rdparty/dmlc-core/include ..
     cp -r 3rdparty/mshadow/mshadow ../include
     unset CC

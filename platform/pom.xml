@@ -199,7 +199,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.4.0.rc0-${project.version}</version>
+      <version>1.4.0.rc2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

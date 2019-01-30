@@ -69,12 +69,12 @@ public class mxnet implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn", "nvrtc"};
+        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvrtc"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : "@.10.0";
                     break;
                 case "windows-x86_64":
                     lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_100_0" : "64_100";
