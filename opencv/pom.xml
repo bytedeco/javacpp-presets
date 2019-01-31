@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>opencv</artifactId>
   <version>4.0.1-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
@@ -43,24 +43,14 @@
         <configuration>
           <encoding>ISO-8859-1</encoding>
         </configuration>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <configuration>
-              <includes>
-                <include>org/opencv/**/*.java</include>
-                <include>org/bytedeco/javacpp/*.java</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -70,9 +60,7 @@
             <configuration>
               <includes>
                 <include>org/opencv/**</include>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/opencv/**</include>
               </includes>
             </configuration>
           </execution>
@@ -115,6 +103,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
