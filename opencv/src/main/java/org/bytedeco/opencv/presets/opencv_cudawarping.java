@@ -42,7 +42,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             extension = "-gpu"
         )
     },
-    target = "org.bytedeco.opencv.opencv_cudawarping",
     global = "org.bytedeco.opencv.global.opencv_cudawarping"
 )
 public class opencv_cudawarping implements InfoMapper {
