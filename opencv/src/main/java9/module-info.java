@@ -9,13 +9,12 @@ module org.bytedeco.opencv {
   exports org.bytedeco.opencv.opencv_calib3d;
   exports org.bytedeco.opencv.opencv_core;
 
-  /* comment out cuda exports if building on a system with cuda installed */
+  /* comment out cuda exports if building on a system without cuda installed */
   exports org.bytedeco.opencv.opencv_cudaarithm;
   exports org.bytedeco.opencv.opencv_cudafilters;
   exports org.bytedeco.opencv.opencv_cudaimgproc;
   exports org.bytedeco.opencv.opencv_cudaobjdetect;
   exports org.bytedeco.opencv.opencv_cudaoptflow;
-  exports org.bytedeco.opencv.opencv_cudawarping;
 
   exports org.bytedeco.opencv.opencv_dnn;
   exports org.bytedeco.opencv.opencv_face;
