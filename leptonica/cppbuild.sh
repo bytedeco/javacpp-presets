@@ -10,14 +10,14 @@ fi
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.3
-LIBPNG=libpng-1.6.34
+LIBPNG=libpng-1.5.30 # libpng16 doesn't work on CentOS 6 for some reason
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-1.0.0
 LEPTONICA_VERSION=1.77.0
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
-download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.34/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng15/1.5.30/$LIBPNG.tar.gz $LIBPNG.tar.gz
 download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
 download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
 download https://github.com/DanBloomberg/leptonica/releases/download/$LEPTONICA_VERSION/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
@@ -54,7 +54,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        rm contrib/arm-neon/android-ndk.c
+        rm contrib/arm-neon/android-ndk.c || true
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-arm-neon
         make -j $MAKEJ
         make install
@@ -93,7 +93,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        rm contrib/arm-neon/android-ndk.c
+        rm contrib/arm-neon/android-ndk.c || true
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux --with-sysroot="$ANDROID_ROOT" --disable-arm-neon
         make -j $MAKEJ
         make install
@@ -132,7 +132,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        rm contrib/arm-neon/android-ndk.c
+        rm contrib/arm-neon/android-ndk.c || true
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install
@@ -170,7 +170,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        rm contrib/arm-neon/android-ndk.c
+        rm contrib/arm-neon/android-ndk.c || true
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT"
         make -j $MAKEJ
         make install
@@ -279,7 +279,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-        rm contrib/arm-neon/android-ndk.c
+        rm contrib/arm-neon/android-ndk.c || true
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-arm-neon
         make -j $MAKEJ
         make install
