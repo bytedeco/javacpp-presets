@@ -176,11 +176,12 @@ pacman -U --noconfirm *.pkg.tar.xz
 
 # get rid of some stuff we don't use to avoid running out of disk space and that may actually interfere with our builds
 rm -Rf /c/go*
-rm -Rf /c/qt*
-rm -Rf /c/ruby*
+rm -Rf /c/Qt*
+#rm -Rf /c/Ruby*
 rm -Rf /c/cygwin*
-rm -Rf /c/miniconda*
-rm -Rf /c/libraries/llvm*
+#rm -Rf /c/Miniconda*
+#rm -Rf /c/Libraries/boost*
+rm -Rf /c/Libraries/llvm*
 rm -Rf /c/Program\ Files/LLVM*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
