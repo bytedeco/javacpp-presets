@@ -142,7 +142,7 @@
             <configuration>
               <resources>
                 <resource>
-                  <directory>src/main/resources/org/bytedeco/javacpp/include</directory>
+                  <directory>src/main/resources/org/bytedeco/${project.artifactId}/include</directory>
                 </resource>
               </resources>
               <outputDirectory>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}/include</outputDirectory>
@@ -368,9 +368,9 @@
               </archive>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <excludes>
-                <exclude>org/bytedeco/javacpp/windows-*/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/windows-*/*.obj</exclude>
+                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>
