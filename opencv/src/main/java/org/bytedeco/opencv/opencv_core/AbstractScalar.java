@@ -1,12 +1,13 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.DoublePointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.opencv.helper.opencv_core;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 
+import static org.bytedeco.opencv.global.opencv_core.*;
+
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractScalar extends DoublePointer {
-    //static { Loader.load(); }
+    static { Loader.load(); }
     public AbstractScalar(Pointer p) { super(p); }
 
     public void scale(double s) {
@@ -53,13 +54,13 @@ public abstract class AbstractScalar extends DoublePointer {
             ALPHA1  = new Scalar(0.0, 0.0, 0.0, 1.0),
             ALPHA255= new Scalar(0.0, 0.0, 0.0, 255.0),
 
-            WHITE   = opencv_core.RGB(255, 255, 255),
-            GRAY    = opencv_core.RGB(128, 128, 128),
-            BLACK   = opencv_core.RGB(  0,   0,   0),
-            RED     = opencv_core.RGB(255,   0,   0),
-            GREEN   = opencv_core.RGB(  0, 255,   0),
-            BLUE    = opencv_core.RGB(  0,   0, 255),
-            CYAN    = opencv_core.RGB(  0, 255, 255),
-            MAGENTA = opencv_core.RGB(255,   0, 255),
-            YELLOW  = opencv_core.RGB(255, 255,   0);
+            WHITE   = RGB(255, 255, 255),
+            GRAY    = RGB(128, 128, 128),
+            BLACK   = RGB(  0,   0,   0),
+            RED     = RGB(255,   0,   0),
+            GREEN   = RGB(  0, 255,   0),
+            BLUE    = RGB(  0,   0, 255),
+            CYAN    = RGB(  0, 255, 255),
+            MAGENTA = RGB(255,   0, 255),
+            YELLOW  = RGB(255, 255,   0);
 }

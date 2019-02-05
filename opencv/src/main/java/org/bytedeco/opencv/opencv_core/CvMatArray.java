@@ -1,6 +1,6 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.annotation.ValueGetter;
@@ -19,8 +19,7 @@ public class CvMatArray extends CvArrArray {
     @Override public CvMatArray put(CvArr ... array) {
         return (CvMatArray)super.put(array);
     }
-    @Override @ValueGetter
-    public native CvMat get();
+    @Override @ValueGetter public native CvMat get();
     @Override public CvMatArray put(CvArr p) {
         if (p instanceof CvMat) {
             return (CvMatArray)super.put(p);

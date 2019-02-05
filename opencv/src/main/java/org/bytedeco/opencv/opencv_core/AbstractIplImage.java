@@ -1,10 +1,11 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractIplImage extends CvArr {
     protected BytePointer pointer; // a reference to prevent deallocation
 

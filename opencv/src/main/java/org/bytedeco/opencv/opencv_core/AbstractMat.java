@@ -1,10 +1,12 @@
 package org.bytedeco.opencv.opencv_core;
 
 import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.indexer.*;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 
-
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractMat extends AbstractArray {
     public AbstractMat(Pointer p) { super(p); }
 
@@ -68,13 +70,13 @@ public abstract class AbstractMat extends AbstractArray {
         strides[dims] = 1;
         switch (depth) {
             case CV_8U:
-                return (I) UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
             case CV_8S:
-                return (I) ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
             case CV_16U:
-                return (I) UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
             case CV_16S:
-                return (I) ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
             case CV_32S:
                 return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
             case CV_32F:

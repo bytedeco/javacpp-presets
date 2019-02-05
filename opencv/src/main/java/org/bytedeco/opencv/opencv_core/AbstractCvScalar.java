@@ -1,18 +1,18 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.DoublePointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.LongPointer;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.opencv.helper.opencv_core;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 
+import static org.bytedeco.opencv.global.opencv_core.*;
+
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractCvScalar extends DoublePointer {
-    //static { Loader.load(); }
+    static { Loader.load(); }
     public AbstractCvScalar(Pointer p) { super(p); }
 
-//        public CvScalar(double val0, double val1, double val2, double val3) {
-//            allocate(); val(0, val0).val(1, val1).val(2, val2).val(3, val3);
-//        }
+//    public CvScalar(double val0, double val1, double val2, double val3) {
+//        allocate(); val(0, val0).val(1, val1).val(2, val2).val(3, val3);
+//    }
 
     public abstract double/*[4]*/ val(int i); public abstract CvScalar val(int i, double val);
     public double getVal(int i)               { return val(i);      }
@@ -66,13 +66,13 @@ public abstract class AbstractCvScalar extends DoublePointer {
             ALPHA1  = new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 1.0),
             ALPHA255= new CvScalar().val(0, 0.0).val(1, 0.0).val(2, 0.0).val(3, 255.0),
 
-            WHITE   = opencv_core.CV_RGB(255, 255, 255),
-            GRAY    = opencv_core.CV_RGB(128, 128, 128),
-            BLACK   = opencv_core.CV_RGB(  0,   0,   0),
-            RED     = opencv_core.CV_RGB(255,   0,   0),
-            GREEN   = opencv_core.CV_RGB(  0, 255,   0),
-            BLUE    = opencv_core.CV_RGB(  0,   0, 255),
-            CYAN    = opencv_core.CV_RGB(  0, 255, 255),
-            MAGENTA = opencv_core.CV_RGB(255,   0, 255),
-            YELLOW  = opencv_core.CV_RGB(255, 255,   0);
+            WHITE   = CV_RGB(255, 255, 255),
+            GRAY    = CV_RGB(128, 128, 128),
+            BLACK   = CV_RGB(  0,   0,   0),
+            RED     = CV_RGB(255,   0,   0),
+            GREEN   = CV_RGB(  0, 255,   0),
+            BLUE    = CV_RGB(  0,   0, 255),
+            CYAN    = CV_RGB(  0, 255, 255),
+            MAGENTA = CV_RGB(255,   0, 255),
+            YELLOW  = CV_RGB(255, 255,   0);
 }

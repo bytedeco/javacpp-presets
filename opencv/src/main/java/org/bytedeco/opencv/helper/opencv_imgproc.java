@@ -22,13 +22,10 @@
 
 package org.bytedeco.opencv.helper;
 
-import org.bytedeco.javacpp.FloatPointer;
-import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.PointerPointer;
-
-// required by javac to resolve circular dependencies
+import org.bytedeco.javacpp.*;
 import org.bytedeco.opencv.opencv_core.*;
-
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
 
 public class opencv_imgproc extends org.bytedeco.opencv.presets.opencv_imgproc {
 
@@ -36,7 +33,8 @@ public class opencv_imgproc extends org.bytedeco.opencv.presets.opencv_imgproc {
             int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
         return org.bytedeco.opencv.global.opencv_imgproc.cvFindContours(image, storage, first_contour, header_size, mode, method, CvPoint.ZERO);
     }
-    public static org.bytedeco.opencv.opencv_imgproc.CvContourScanner cvStartFindContours(CvArr image, CvMemStorage storage,
+
+    public static CvContourScanner cvStartFindContours(CvArr image, CvMemStorage storage,
             int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
         return org.bytedeco.opencv.global.opencv_imgproc.cvStartFindContours(image, storage, header_size, mode, method, CvPoint.ZERO);
     }

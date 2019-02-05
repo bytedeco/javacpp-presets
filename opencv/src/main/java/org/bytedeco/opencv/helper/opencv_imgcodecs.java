@@ -22,21 +22,11 @@
 
 package org.bytedeco.opencv.helper;
 
-// required by javac to resolve circular dependencies
+import org.bytedeco.javacpp.*;
 import org.bytedeco.opencv.opencv_core.*;
-import static org.bytedeco.opencv.global.opencv_core.cvarrToMat;
-import static org.bytedeco.opencv.global.opencv_core.cvClone;
-import static org.bytedeco.opencv.global.opencv_core.cvCreateImage;
-import static org.bytedeco.opencv.global.opencv_core.cvGetSize;
-import static org.bytedeco.opencv.global.opencv_core.cvIplImage;
-import static org.bytedeco.opencv.global.opencv_core.cvReleaseImage;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.IMREAD_COLOR;
-//import static org.bytedeco.opencv.global.opencv_imgcodecs.cvLoadImage;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
-import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
-import static org.bytedeco.opencv.global.opencv_imgproc.CV_BGR2BGRA;
-import static org.bytedeco.opencv.global.opencv_imgproc.CV_BGR2RGBA;
-import static org.bytedeco.opencv.global.opencv_imgproc.cvCvtColor;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
 
 public class opencv_imgcodecs extends org.bytedeco.opencv.presets.opencv_imgcodecs {
 

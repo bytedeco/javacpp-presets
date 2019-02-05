@@ -27,6 +27,8 @@ import org.bytedeco.javacpp.annotation.Properties;
 
 import org.bytedeco.javacpp.Loader;
 
+import org.bytedeco.opencv.presets.*;
+
 /**
  * This is only a placeholder to facilitate loading the {@code opencv_java} module with JavaCPP.
  * <p>
@@ -36,17 +38,17 @@ import org.bytedeco.javacpp.Loader;
  */
 @Properties(
     inherit = {
-        org.bytedeco.opencv.global.opencv_aruco.class,
-        org.bytedeco.opencv.global.opencv_bgsegm.class,
-        org.bytedeco.opencv.global.opencv_bioinspired.class,
-        org.bytedeco.opencv.global.opencv_face.class,
-        org.bytedeco.opencv.global.opencv_img_hash.class,
-        org.bytedeco.opencv.global.opencv_structured_light.class,
-        org.bytedeco.opencv.global.opencv_text.class,
-        org.bytedeco.opencv.global.opencv_tracking.class,
-        org.bytedeco.opencv.global.opencv_xfeatures2d.class,
-        org.bytedeco.opencv.global.opencv_ximgproc.class,
-        org.bytedeco.opencv.global.opencv_xphoto.class,
+        opencv_aruco.class,
+        opencv_bgsegm.class,
+        opencv_bioinspired.class,
+        opencv_face.class,
+        opencv_img_hash.class,
+        opencv_structured_light.class,
+        opencv_text.class,
+        opencv_tracking.class,
+        opencv_xfeatures2d.class,
+        opencv_ximgproc.class,
+        opencv_xphoto.class,
     },
     value = {
         @Platform(preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0", "opencv_cudafilters@.4.0", "opencv_cudaimgproc@.4.0", "opencv_java"}),

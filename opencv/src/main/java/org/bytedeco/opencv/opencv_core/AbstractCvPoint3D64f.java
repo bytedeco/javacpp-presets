@@ -1,30 +1,30 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.DoublePointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractCvPoint3D64f extends DoublePointer {
-    //static { Loader.load(); }
+    static { Loader.load(); }
     public AbstractCvPoint3D64f(Pointer p) { super(p); }
 
-//        public CvPoint3D64f(double[] pts, int offset, int length) {
-//            this(length/3);
-//            put(pts, offset, length);
-//        }
-//        public CvPoint3D64f(double ... pts) {
-//            this(pts, 0, pts.length);
-//        }
+//    public CvPoint3D64f(double[] pts, int offset, int length) {
+//        this(length/3);
+//        put(pts, offset, length);
+//    }
+//    public CvPoint3D64f(double ... pts) {
+//        this(pts, 0, pts.length);
+//    }
 
     public abstract double x(); public abstract CvPoint3D64f x(double x);
     public abstract double y(); public abstract CvPoint3D64f y(double y);
     public abstract double z(); public abstract CvPoint3D64f z(double z);
 
-//        public double[] get() {
-//            double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
-//            get(pts);
-//            return pts;
-//        }
+//    public double[] get() {
+//        double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
+//        get(pts);
+//        return pts;
+//    }
     public CvPoint3D64f get(double[] pts) {
         return get(pts, 0, pts.length);
     }

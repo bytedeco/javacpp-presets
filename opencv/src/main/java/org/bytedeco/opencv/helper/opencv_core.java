@@ -22,7 +22,7 @@
 
 package org.bytedeco.opencv.helper;
 
-import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.opencv.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 
@@ -32,7 +32,7 @@ public class opencv_core extends org.bytedeco.opencv.presets.opencv_core {
         return cvScalar(b, g, r, 0);
     }
 
-    //    public static abstract class AbstractCvFileStorage extends Pointer {
+//    public static abstract class AbstractCvFileStorage extends Pointer {
 //        public AbstractCvFileStorage(Pointer p) { super(p); }
 //
 //        /**

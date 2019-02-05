@@ -1,8 +1,11 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractCvSparseMat extends CvArr {
     public AbstractCvSparseMat(Pointer p) { super(p); }
 

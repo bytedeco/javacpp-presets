@@ -42,7 +42,7 @@ import static org.bytedeco.javacpp.Loader.*;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=org.bytedeco.opencv.global.opencv_core.class, value={
+@Properties(inherit=org.bytedeco.opencv.presets.opencv_core.class, value={
     @Platform(define={"MAX_SIZE 16", "CV_INLINE static inline"}, include="cvkernels.h", compiler="fastfpu") })
 public class cvkernels {
     static { load(); }

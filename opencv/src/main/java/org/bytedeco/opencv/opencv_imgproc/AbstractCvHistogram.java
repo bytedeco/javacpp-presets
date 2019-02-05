@@ -1,11 +1,13 @@
 package org.bytedeco.opencv.opencv_imgproc;
 
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.opencv.global.opencv_imgproc;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.opencv.opencv_core.CvHistogram;
 
-import static org.bytedeco.opencv.global.opencv_imgproc.cvReleaseHist;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_imgproc.class)
 public abstract class AbstractCvHistogram extends Pointer {
     public AbstractCvHistogram(Pointer p) { super(p); }
 
@@ -14,8 +16,8 @@ public abstract class AbstractCvHistogram extends Pointer {
      * @return CvHistogram created. Do not call cvReleaseHist() on it.
      */
     public static CvHistogram create(int dims, int[] sizes, int type,
-                                     float[][] ranges/*=null*/, int uniform/*=1*/) {
-        CvHistogram h = opencv_imgproc.cvCreateHist(dims, sizes, type, ranges, uniform);
+            float[][] ranges/*=null*/, int uniform/*=1*/) {
+        CvHistogram h = cvCreateHist(dims, sizes, type, ranges, uniform);
         if (h != null) {
             h.deallocator(new ReleaseDeallocator(h));
         }

@@ -1,16 +1,16 @@
 package org.bytedeco.opencv.opencv_core;
 
-import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractCvSize extends IntPointer {
-    //static { Loader.load(); }
+    static { Loader.load(); }
     public AbstractCvSize(Pointer p) { super(p); }
 
-//        public CvSize(int width, int height) {
-//            allocate(); width(width).height(height);
-//        }
+//    public CvSize(int width, int height) {
+//        allocate(); width(width).height(height);
+//    }
 
     public abstract int width();  public abstract CvSize width(int width);
     public abstract int height(); public abstract CvSize height(int height);

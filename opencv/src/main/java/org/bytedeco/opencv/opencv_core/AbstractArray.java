@@ -1,13 +1,21 @@
 package org.bytedeco.opencv.opencv_core;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
+
 import org.bytedeco.javacpp.*;
+import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.indexer.*;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 
-import java.nio.*;
-
+@Properties(inherit = org.bytedeco.opencv.presets.opencv_core.class)
 public abstract class AbstractArray extends Pointer implements Indexable {
-    //static { Loader.load(); }
+    static { Loader.load(); }
     public AbstractArray(Pointer p) { super(p); }
 
     public abstract int arrayChannels();
@@ -22,11 +30,11 @@ public abstract class AbstractArray extends Pointer implements Indexable {
     public abstract int arrayStep();
 
     /** @return {@code createBuffer(0)} */
-    public <B extends java.nio.Buffer> B createBuffer() {
+    public <B extends Buffer> B createBuffer() {
         return (B)createBuffer(0);
     }
     /** @return {@link #arrayData()} wrapped in a {@link Buffer} of appropriate type starting at given index */
-    public <B extends java.nio.Buffer> B createBuffer(int index) {
+    public <B extends Buffer> B createBuffer(int index) {
         BytePointer ptr = arrayData();
         int size = arraySize();
         switch (arrayDepth()) {
@@ -54,12 +62,12 @@ public abstract class AbstractArray extends Pointer implements Indexable {
         long[] strides = { arrayStep(), arrayChannels(), 1 };
         switch (arrayDepth()) {
             case IPL_DEPTH_8U:
-                return (I) UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
             case IPL_DEPTH_8S:
-                return (I) ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
+                return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
             case IPL_DEPTH_16U:
                 strides[0] /= 2;
-                return (I) UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
+                return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
             case IPL_DEPTH_16S:
                 strides[0] /= 2;
                 return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
@@ -97,13 +105,13 @@ public abstract class AbstractArray extends Pointer implements Indexable {
     public CvSize cvSize() { return org.bytedeco.opencv.global.opencv_core.cvSize(arrayWidth(), arrayHeight()); }
 
     /** @see #createBuffer(int) */
-    @Deprecated public ByteBuffer getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize()).asByteBuffer(); }
+    @Deprecated public ByteBuffer   getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize()).asByteBuffer(); }
     /** @see #createBuffer(int) */
-    @Deprecated public ShortBuffer getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
+    @Deprecated public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
     /** @see #createBuffer(int) */
-    @Deprecated public IntBuffer getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
+    @Deprecated public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
     /** @see #createBuffer(int) */
-    @Deprecated public FloatBuffer getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
+    @Deprecated public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
     /** @see #createBuffer(int) */
     @Deprecated public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
     /** @see #createBuffer() */
