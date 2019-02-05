@@ -43,6 +43,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("av_device_capabilities").skip());
+        infoMap.putFirst(new Info("AVDeviceInfoList").pointerTypes("AVDeviceInfoList"))
+               .putFirst(new Info("AVDeviceCapabilitiesQuery").pointerTypes("AVDeviceCapabilitiesQuery"))
+               .put(new Info("av_device_capabilities").skip());
     }
 }

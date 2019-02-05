@@ -32,17 +32,17 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.ffmpeg</groupId>
+    <groupId>org.bytedeco.ffmpeg</groupId>
     <artifactId>readfewframe</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ReadFewFrame</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>4.1-1.4.4</version>
+            <version>4.1-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

@@ -194,41 +194,41 @@ public class AVOutputFormat extends Pointer {
      * Returns device list with it properties.
      * @see avdevice_list_devices() for more details.
      */
-    public static class Get_device_list_AVFormatContext_AVDeviceInfoList extends FunctionPointer {
+    public static class Get_device_list_AVFormatContext_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Get_device_list_AVFormatContext_AVDeviceInfoList(Pointer p) { super(p); }
-        protected Get_device_list_AVFormatContext_AVDeviceInfoList() { allocate(); }
+        public    Get_device_list_AVFormatContext_Pointer(Pointer p) { super(p); }
+        protected Get_device_list_AVFormatContext_Pointer() { allocate(); }
         private native void allocate();
-        public native int call(AVFormatContext s, AVDeviceInfoList device_list);
+        public native int call(AVFormatContext s, @Cast("AVDeviceInfoList*") Pointer device_list);
     }
-    public native Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list(); public native AVOutputFormat get_device_list(Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list);
+    public native Get_device_list_AVFormatContext_Pointer get_device_list(); public native AVOutputFormat get_device_list(Get_device_list_AVFormatContext_Pointer get_device_list);
     /**
      * Initialize device capabilities submodule.
      * @see avdevice_capabilities_create() for more details.
      */
-    public static class Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+    public static class Create_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
-        protected Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        public    Create_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
+        protected Create_device_capabilities_AVFormatContext_Pointer() { allocate(); }
         private native void allocate();
-        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
     }
-    public native Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities(); public native AVOutputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities);
+    public native Create_device_capabilities_AVFormatContext_Pointer create_device_capabilities(); public native AVOutputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_Pointer create_device_capabilities);
     /**
      * Free device capabilities submodule.
      * @see avdevice_capabilities_free() for more details.
      */
-    public static class Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+    public static class Free_device_capabilities_AVFormatContext_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
-        protected Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        public    Free_device_capabilities_AVFormatContext_Pointer(Pointer p) { super(p); }
+        protected Free_device_capabilities_AVFormatContext_Pointer() { allocate(); }
         private native void allocate();
-        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+        public native int call(AVFormatContext s, @Cast("AVDeviceCapabilitiesQuery*") Pointer caps);
     }
-    public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVOutputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
+    public native Free_device_capabilities_AVFormatContext_Pointer free_device_capabilities(); public native AVOutputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_Pointer free_device_capabilities);
     /** default data codec */
     public native @Cast("AVCodecID") int data_codec(); public native AVOutputFormat data_codec(int data_codec);
     /**

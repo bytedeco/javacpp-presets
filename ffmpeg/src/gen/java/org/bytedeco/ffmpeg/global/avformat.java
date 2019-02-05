@@ -657,9 +657,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  */
 @NoException public static native @Cast("int64_t") long avio_seek_time(AVIOContext h, int stream_index,
                        @Cast("int64_t") long timestamp, int flags);
-// Targeting ../avformat/AVBPrint.java
 
-
+/* Avoid a warning. The header can not be included because it breaks c++. */
 
 /**
  * Read contents of h into print buffer, up to max_size bytes, or up to EOF.
@@ -667,7 +666,7 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * @return 0 for success (max_size bytes read or EOF reached), negative error
  * code otherwise
  */
-@NoException public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("size_t") long max_size);
+@NoException public static native int avio_read_to_bprint(AVIOContext h, @Cast("AVBPrint*") Pointer pb, @Cast("size_t") long max_size);
 
 /**
  * Accept and allocate a client context on a server context.
@@ -1028,12 +1027,6 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
 
 // #include "avio.h"
 // #include "libavformat/version.h"
-// Targeting ../avformat/AVDeviceInfoList.java
-
-
-// Targeting ../avformat/AVDeviceCapabilitiesQuery.java
-
-
 
 /**
  * \defgroup metadata_api Public Metadata API
