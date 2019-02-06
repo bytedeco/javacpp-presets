@@ -47,7 +47,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>1.13.0-rc0-1.4.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies required to use CUDA and cuDNN -->
+        <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
@@ -67,7 +67,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>

@@ -382,12 +382,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn"};
+        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : "@.10.0";
                     break;
                 case "windows-x86_64":
                     lib += lib.equals("cudnn") ? "64_7" : "64_100";

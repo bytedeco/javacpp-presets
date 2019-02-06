@@ -534,7 +534,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/frontend/onnxifi/backend.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -592,7 +592,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/frontend/onnxifi/backend_manager.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -645,7 +645,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/descriptor/tensor.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -708,7 +708,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/runtime/tensor.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -730,6 +730,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
 // #include "ngraph/descriptor/layout/tensor_layout.hpp"
 // #include "ngraph/descriptor/tensor.hpp"
+// #include "ngraph/runtime/backend.hpp"
 // #include "ngraph/shape.hpp"
 // #include "ngraph/strides.hpp"
 // #include "ngraph/type/element_type.hpp"
@@ -799,6 +800,12 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
              *  @param n Number of bytes to read, must be integral number of elements. */
             public native void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+
+            /** \brief copy bytes directly from source to this tensor
+             *  @param source The source tensor */
+            public native void copy_from(@Const @ByRef Tensor source);
+
+            public native @Const Backend get_parent();
         }
     
 
@@ -807,7 +814,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/runtime/backend.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -919,13 +926,26 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
      *  @param node is the op to test.
      *  @return true if the op is supported, false otherwise. */
     public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
+
+    /** \brief A set of properties supported by a backend */
+    /** enum class ngraph::runtime::Backend::Property */
+    public static final int
+        memory_attach = 0; /** New tensor can use attached memory */
+
+    /** \brief Test if a backend particular property is supported
+     *  @param prop is the feature to test.
+     *  @return true if the property is supported, false otherwise. */
+    public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::Backend::Property") int prop);
+    public native void validate(@Cast("const ngraph::Function*") @SharedPtr @ByVal Function func,
+                      @Const @ByRef NgraphTensorVector outputs,
+                      @Const @ByRef NgraphTensorVector inputs);
 }
 
 
 // Parsed from ngraph/runtime/cpu/cpu_backend.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -945,6 +965,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include <map>
 // #include <memory>
 
+// #include "cpu_backend_visibility.h"
 // #include "ngraph/runtime/backend.hpp"
             @Namespace("ngraph::runtime::cpu") @Opaque public static class CPU_ExternalFunction extends Pointer {
                 /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -993,6 +1014,9 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
                 public native void enable_performance_data(@SharedPtr @ByVal Function func, @Cast("bool") boolean enable);
                 public native @StdVector PerformanceCounter get_performance_data(@SharedPtr @ByVal Function func);
+
+                public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
+                public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::cpu::CPU_Backend::Property") int prop);
             }
         
     
@@ -1002,7 +1026,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/runtime/performance_counter.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1045,7 +1069,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/type/element_type.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1067,26 +1091,30 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #pragma once
 
 // #include <iostream>
+// #include <limits>
 // #include <memory>
 // #include <string>
 // #include <vector>
 
 // #include "ngraph/except.hpp"
+// #include "ngraph/ngraph_visibility.hpp"
 // #include "ngraph/type/bfloat16.hpp"
-
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type dynamic();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef @Name("boolean") Type _boolean();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type bf16();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f32();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f64();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i8();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i16();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i32();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i64();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u8();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u16();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u32();
-        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u64();
+        /** enum class ngraph::element::Type_t */
+        public static final int
+            undefined = 0,
+            dynamic = 1,
+            boolean_type = 2,
+            bf16 = 3,
+            f32 = 4,
+            f64 = 5,
+            i8 = 6,
+            i16 = 7,
+            i32 = 8,
+            i64 = 9,
+            u8 = 10,
+            u16 = 11,
+            u32 = 12,
+            u64 = 13;
 
         @Namespace("ngraph::element") @NoOffset public static class Type extends Pointer {
             static { Loader.load(); }
@@ -1103,6 +1131,8 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             private native void allocate();
             public Type(@Const @ByRef Type arg0) { super((Pointer)null); allocate(arg0); }
             private native void allocate(@Const @ByRef Type arg0);
+            public Type(@Cast("const ngraph::element::Type_t") int t) { super((Pointer)null); allocate(t); }
+            private native void allocate(@Cast("const ngraph::element::Type_t") int t);
             public Type(@Cast("size_t") long bitwidth,
                              @Cast("bool") boolean is_real,
                              @Cast("bool") boolean is_signed,
@@ -1124,6 +1154,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
                              @Cast("bool") boolean is_quantized,
                              @StdString String cname);
             public native @ByRef @Name("operator =") Type put(@Const @ByRef Type arg0);
+            public native @Cast("ngraph::element::Type_t") int get_type_enum();
             public native @StdString BytePointer c_type_string();
             public native @Cast("size_t") long size();
             public native @Cast("size_t") long hash();
@@ -1139,8 +1170,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             
             public static native @Cast("const ngraph::element::Type**") @StdVector PointerPointer get_known_types();
 
-            /** Returns true if the type is floating point, else false. */
-            public native @Cast("bool") boolean get_is_real();
             /** \brief Checks whether this element type is merge-compatible with {@code t}.
              *  @param t The element type to compare this element type to.
              *  @return {@code true} if this element type is compatible with {@code t}, else {@code false}. */
@@ -1150,7 +1179,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
             ///
             ///
             ///
-            public native @Cast("bool") boolean compatible(@ByVal Type t);
+            public native @Cast("bool") boolean compatible(@Const @ByRef Type t);
 
             /** \brief Merges two element types t1 and t2, writing the result into dst and
              *         returning true if successful, else returning false.
@@ -1172,6 +1201,20 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *               does nothing to dst, and returns false */
             public static native @Cast("bool") boolean merge(@ByRef Type dst, @Const @ByRef Type t1, @Const @ByRef Type t2);
         }
+
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type dynamic();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef @Name("boolean") Type _boolean();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type bf16();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f32();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f64();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i8();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i16();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i32();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i64();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u8();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u16();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u32();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u64();
 
         @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<char>") Type fromChar();
 
@@ -1207,7 +1250,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/shape.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1263,7 +1306,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/function.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1372,8 +1415,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
         public native @StdString BytePointer get_friendly_name();
         public native @StdString BytePointer get_name();
-        // so we can use `dynamic_cast` in FunctionCall to double check if we are dealing with
-        //  an XLA or regular function
         public native void set_name(@StdString BytePointer name);
         public native void set_name(@StdString String name);
         
@@ -1384,6 +1425,11 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native void replace_node(@SharedPtr @ByVal Node old, @SharedPtr @ByVal Node repl);
 
         public native void validate_nodes_and_infer_types();
+
+        /** \brief Returns the sum of the size of all nodes in the graph plus the size of
+         *  all constant data. This has little value beyond comparing the relative size of
+         *  graphs and should not be considered the actual memory consumption of a graph. */
+        public native @Cast("size_t") long get_graph_size();
     }
 
 
@@ -1391,7 +1437,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/node_vector.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1445,7 +1491,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/assertion.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1574,7 +1620,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/except.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1621,7 +1667,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/placement.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1645,8 +1691,6 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // #include <vector>
 
 // #include "ngraph/log.hpp"
-    
-
     /** enum class ngraph::Placement */
     public static final int
         DEFAULT = 0,
@@ -1658,16 +1702,12 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 
     @Namespace("ngraph") public static native @StdString BytePointer placement_to_string(@Cast("ngraph::Placement") int placement);
 
-    // Split function to function(s) with unique placement
-
-    // Split function to function(s) with unique placement
-
 
 
 // Parsed from ngraph/coordinate.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1722,7 +1762,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/strides.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1772,7 +1812,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/descriptor/input.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1838,7 +1878,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/descriptor/output.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1901,7 +1941,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/op.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1940,7 +1980,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/parameter_vector.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1991,7 +2031,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/parameter.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2047,7 +2087,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/constant.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2140,6 +2180,21 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         }
 
         /** \brief A scalar constant whose element type is the same as like. */
+        @Namespace("ngraph::op") @NoOffset public static class ScalarConstantLike extends ScalarConstantLikeBase {
+            static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+            public ScalarConstantLike(Pointer p) { super(p); }
+        
+            /** \brief A scalar constant whose element type is the same as like.
+             * 
+             *  Once the element type is known, the dependency on like will be removed and
+             *  this node will be replaced with an equivalent constant.
+             * 
+             *  @param like A tensor that will supply the element type.
+             *  @param value The value of the scalar. */
+
+            public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+        }
     
 
 
@@ -2147,7 +2202,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/util/binary_elementwise_arithmetic.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2169,21 +2224,21 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
              *         scalar binary arithmetic operation is applied to each corresponding pair of elements in two same-shaped
              *         input tensors.
              * 
-             *  For example, if the underlying arithmetic operation (determined by the subclass) is \f$\mathit{op}(x,y)\f$, the input tensors
-             *  \f$[[x_0,y_0],[z_0,w_0]]\f$ and \f$[[x_1,y_1],[z_1,w_1]]\f$ will be mapped to \f$[[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]\f$.
+             *  For example, if the underlying arithmetic operation (determined by the subclass) is {@code \mathit{op}(x,y)}, the input tensors
+             *  {@code [[x_0,y_0],[z_0,w_0]]} and {@code [[x_1,y_1],[z_1,w_1]]} will be mapped to {@code [[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]}.
              * 
              *  ## Inputs
              * 
              *  |        | Type                              | Description                                                              |
              *  | ------ | --------------------------------- | ------------------------------------------------------------------------ |
-             *  | {@code arg0} | \f$N[d_1,\dots,d_n]~(n \geq 0)\f$ | A tensor of any shape. The element type \f$N\f$ may be any numeric type. |
-             *  | {@code arg1} | \f$N[d_1,\dots,d_n]~(n \geq 0)\f$ | A tensor of the same shape and element type as {@code arg0}.                   |
+             *  | {@code arg0} | {@code N[d_1,\dots,d_n]~(n \geq 0)} | A tensor of any shape. The element type {@code N} may be any numeric type. |
+             *  | {@code arg1} | {@code N[d_1,\dots,d_n]~(n \geq 0)} | A tensor of the same shape and element type as {@code arg0}.                   |
              * 
              *  ## Output
              * 
              *  | Type                   | Description                                                                                                                                                                                            |
              *  | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-             *  | \f$N[d_1,\dots,d_n]\f$ | The tensor \f$T\f$, where \f$T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])\f$. This will always have the same shape and element type as the input tensors. | */
+             *  | {@code N[d_1,\dots,d_n]} | The tensor {@code T}, where {@code T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])}. This will always have the same shape and element type as the input tensors. | */
             @Namespace("ngraph::op::util") public static class BinaryElementwiseArithmetic extends Op {
                 static { Loader.load(); }
                 /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -2204,7 +2259,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/add.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2255,7 +2310,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/multiply.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2298,7 +2353,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/result_vector.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2345,7 +2400,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/op/util/op_annotations.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2413,7 +2468,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/autodiff/adjoints.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2511,7 +2566,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/dimension.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2575,7 +2630,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @Cast("bool") boolean same_scheme(@Const @ByRef Dimension dim);
 
         /** \brief Try to merge two Dimension objects together.
-         *  @param [out] dst Reference to write the merged Dimension into.
+         *  @param dst [out] Reference to write the merged Dimension into.
          *  @param d1 First dimension to merge.
          *  @param d2 Second dimension to merge.
          *  @return {@code true} if merging succeeds, else {@code false}.
@@ -2673,7 +2728,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/rank.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2701,7 +2756,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/partial_shape.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -2890,7 +2945,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         
 
         /** \brief Try to merge one shape into another.
-         *  @param [in,out] dst The shape that {@code src} will be merged into.
+         *  @param dst [in,out] The shape that {@code src} will be merged into.
          *  @param src The shape that will be merged into {@code dst}.
          *  @return {@code true} if merging succeeds, else {@code false}.
          * 
@@ -2979,7 +3034,7 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
 // Parsed from ngraph/node.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -3149,10 +3204,10 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native void set_placement(@Cast("ngraph::Placement") int placement);
 
         /** Get device placement */
-        public native @Cast("size_t") long get_placement_size();
+        public native @Cast("size_t") long get_placement_index();
 
         /** Set device placement */
-        public native void set_placement(@Cast("size_t") long placement);
+        public native void set_placement_index(@Cast("size_t") long placement);
 
         /** Get input descriptor that is connected to src */
         public native Input get_input_from(@Const @SharedPtr @ByRef Node src);
@@ -3167,6 +3222,8 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
         public native @SharedPtr @ByVal Node get_default_value();
         /** Use instance ids for comparison instead of memory addresses to improve determinism */
         public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Node other);
+        @MemberGetter public static native @Cast("const size_t") long placement_invalid();
+        public static final long placement_invalid = placement_invalid();
     }
 
     @Namespace("ngraph") public static class NodeValidationError extends AssertionFailure {
@@ -4553,7 +4610,7 @@ public static native @Cast("onnxStatus") int onnxGetBackendInfo(
  * @param backend - ID of the backend to query.
  * @param onnxModelSize - size of the serialized ONNX ModelProto message,
  *                        in bytes.
- * @param [in] onnxModel - pointer to serialized ONNX ModelProto message
+ * @param onnxModel [in] - pointer to serialized ONNX ModelProto message
  *                        representing the model graph.
  *
  * \retval ONNXIFI_STATUS_SUCCESS The function call succeeded and the model
@@ -4655,11 +4712,11 @@ public static native @Cast("onnxStatus") int onnxGetBackendCompatibility(
  * for GPU and another for CPU, both implemented in the same software).
  *
  * @param backendID - ID of the backend to initialize.
- * @param [in] auxPropertiesList - optional list of backend initialization
+ * @param auxPropertiesList [in] - optional list of backend initialization
  *                                properties, terminated by
  *                                ONNXIFI_BACKEND_PROPERTY_NONE entry. Can be
  *                                NULL or empty.
- * @param [out] backend - pointer to an opaque handle for the initialized ONNXIFI
+ * @param backend [out] - pointer to an opaque handle for the initialized ONNXIFI
  *                       backend. If the function fails, the handle is
  *                       initialized to NULL.
  *
@@ -4739,7 +4796,7 @@ public static native @Cast("onnxStatus") int onnxReleaseBackend(
  *
  * @param backend - backend handle created by onnxInitBackend. This backend
  *                  would be used to initialize the event.
- * @param [out] event - pointer to the opaque handle for the created ONNXIFI
+ * @param event [out] - pointer to the opaque handle for the created ONNXIFI
  *                     event. If the function fails, the handle is initialized
  *                     to NULL.
  *
@@ -4805,7 +4862,7 @@ public static native @Cast("onnxStatus") int onnxSignalEvent(
  * @param event - event handle created by onnxRunGraph. While it is technically
  *                possible to use this function to events created by
  *                onnxInitEvent, this is not the intended use-case.
- * @param [out] state - pointer to the variable that will store the state of the
+ * @param state [out] - pointer to the variable that will store the state of the
  *                     event. If the function fails, the variable is initialized
  *                     to ONNXIFI_EVENT_STATE_INVALID.
  *
@@ -4897,13 +4954,13 @@ public static native @Cast("onnxStatus") int onnxReleaseEvent(
  *
  * @param backend - backend handle created by onnxInitBackend. This backend
  *                  would be used to setup and run the model graph.
- * @param [in] auxPropertiesList - optional list of graph initialization
+ * @param auxPropertiesList [in] - optional list of graph initialization
  *                                properties, terminated by
  *                                ONNXIFI_GRAPH_PROPERTY_NONE entry. Can be
  *                                NULL or empty.
  * @param onnxModelSize - size of the serialized ONNX ModelProto message,
  *                        in bytes.
- * @param [in] onnxModel - pointer to serialized ONNX ModelProto message
+ * @param onnxModel [in] - pointer to serialized ONNX ModelProto message
  *                        representing the model graph. The backend MUST not
  *                        assume that the serialized ModelProto message is
  *                        present at this address after the function returns.
@@ -4912,7 +4969,7 @@ public static native @Cast("onnxStatus") int onnxReleaseEvent(
  *                       can be specified in ModelProto.graph.initializer.
  *                       If weightsCount is non-zero, weightDescriptors must be
  *                       non-NULL.
- * @param [in] weightDescriptors - descriptors of static input tensors for the
+ * @param weightDescriptors [in] - descriptors of static input tensors for the
  *                                graph. Elements of this array provide location
  *                                for blobs identified by ValueInfoProto.name
  *                                listed in ModelProto.graph.input of the ONNX
@@ -4926,7 +4983,7 @@ public static native @Cast("onnxStatus") int onnxReleaseEvent(
  *                                tensors and all metadata, including shape,
  *                                into its own memory before the function
  *                                returns.
- * @param [out] graph - pointer to the opaque handle for the created ONNXIFI
+ * @param graph [out] - pointer to the opaque handle for the created ONNXIFI
  *                     graph. If the function fails, and this pointer is
  *                     non-NULL, the handle is initialized to NULL.
  *
@@ -5116,7 +5173,7 @@ public static native @Cast("onnxStatus") int onnxInitGraph(
  *
  * @param graph - graph handle created by onnxInitGraph.
  * @param inputsCount - number of elements in the inputDescriptors array.
- * @param [in] inputDescriptors - descriptors of input tensors for the graph.
+ * @param inputDescriptors [in] - descriptors of input tensors for the graph.
  *                               Elements of this array must provide a location
  *                               for each ValueInfoProto.name listed in
  *                               ModelProto.graph.input of the ONNX graph.
@@ -5124,7 +5181,7 @@ public static native @Cast("onnxStatus") int onnxInitGraph(
  *                               pointer must be non-NULL.
  * @param outputsCount - number of elements in the outputDescriptors array.
  *                       Must be greater than zero.
- * @param [in] outputDescriptors - descriptors of output tensors for the graph.
+ * @param outputDescriptors [in] - descriptors of output tensors for the graph.
  *                                outputDescriptors pointer must be non-NULL.
  *                                Elements of this array must provide a location
  *                                for each ValueInfoProto.name listed in
@@ -5256,11 +5313,11 @@ public static native @Cast("onnxStatus") int onnxSetGraphIO(
  * for the graph through onnxSetGraphIO before calling this function.
  *
  * @param graph - graph handle created by onnxInitGraph.
- * @param [in] inputFence - synchronization primitive that signals when graph
+ * @param inputFence [in] - synchronization primitive that signals when graph
  *                         inputs are ready to use by the backend. The
  *                         synchronization primitive always must be initialized
  *                         by the caller.
- * @param [out] outputFence - synchronization primitive that signals when graph
+ * @param outputFence [out] - synchronization primitive that signals when graph
  *                           outputs are ready to use by the caller. The type
  *                           of the synchronization primitive always must be
  *                           initialized by the caller. The type of the
@@ -5362,7 +5419,7 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 // Parsed from ngraph/frontend/onnx_import/core/weight.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -5419,7 +5476,7 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 // Parsed from ngraph/frontend/onnx_import/onnx.hpp
 
 //*****************************************************************************
-// Copyright 2017-2018 Intel Corporation
+// Copyright 2017-2019 Intel Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -5436,7 +5493,9 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
 
 // #pragma once
 
+// #include <cstdint>
 // #include <iostream>
+// #include <set>
 // #include <string>
 
 // #include "core/operator_set.hpp"
@@ -5452,22 +5511,46 @@ public static native @Cast("onnxStatus") int onnxReleaseGraph(
          *  @param fn       function providing the implementation of the operator. */
         
 
-        /** \brief Convert an ONNX model to nGraph functions
-         *  The function translated serialized ONNX model to nGraph functions. The serialized
+        /** \brief      Return the set of names of supported operators.
+         * 
+         *  @param version [in]  The requested version of ONNX operators set.
+         *  @param domain [in]   The requested domain the operators where registered for.
+         * 
+         *  @return     The set containing names of supported operators.
+         *  */
+
+        /** \brief      Determines whether ONNX operator is supported.
+         * 
+         *  @param op_name [in]  The ONNX operator name.
+         *  @param version [in]  The ONNX operator set version.
+         *  @param domain [in]   The domain the ONNX operator is registered to.
+         * 
+         *  @return     True if operator is supported, False otherwise.
+         *  */
+        @Namespace("ngraph::onnx_import") public static native @Cast("bool") boolean is_operator_supported(@StdString BytePointer op_name,
+                                           @Cast("std::int64_t") long version,
+                                           @StdString BytePointer domain/*="ai.onnx"*/);
+        @Namespace("ngraph::onnx_import") public static native @Cast("bool") boolean is_operator_supported(@StdString BytePointer op_name,
+                                           @Cast("std::int64_t") long version);
+        @Namespace("ngraph::onnx_import") public static native @Cast("bool") boolean is_operator_supported(@StdString String op_name,
+                                           @Cast("std::int64_t") long version,
+                                           @StdString String domain/*="ai.onnx"*/);
+        @Namespace("ngraph::onnx_import") public static native @Cast("bool") boolean is_operator_supported(@StdString String op_name,
+                                           @Cast("std::int64_t") long version);
+
+        /** \brief Convert an ONNX model to nGraph function
+         *  The function translated serialized ONNX model to nGraph function. The serialized
          *  ONNX model is read from input stream.
          *  @param sin       input stream (e.g. file stream, memory stream, etc),
          *  @param weights  weights associated with the model. If weights are embedded into
          *                    the model this parameter shall be empty. Having weights in a model
          *                    and providing through this parameters is invalid (the weights from
          *                    the model  will take precedence).
-         *  @return The function returns a vector of nGraph functions. The number of functions
-         *           depends on number of outputs from ONNX graph. */
-        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString BytePointer data,
-                                                                       @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
-        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString BytePointer data);
-        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString String data,
-                                                                       @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
-        @Namespace("ngraph::onnx_import") public static native @ByVal NgraphFunctionVector load_onnx_model(@StdString String data);
+         *  @return The function returns a nGraph function representing single output from graph. */
+        @Namespace("ngraph::onnx_import") public static native @SharedPtr @ByVal Function import_onnx_model(@StdString BytePointer data, @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
+        @Namespace("ngraph::onnx_import") public static native @SharedPtr @ByVal Function import_onnx_model(@StdString BytePointer data);
+        @Namespace("ngraph::onnx_import") public static native @SharedPtr @ByVal Function import_onnx_model(@StdString String data, @Cast("const ngraph::onnx_import::Weights*") @ByRef(nullValue = "ngraph::onnx_import::Weights({})") StringVoidMap weights);
+        @Namespace("ngraph::onnx_import") public static native @SharedPtr @ByVal Function import_onnx_model(@StdString String data);
 
      // namespace onnx_import
 

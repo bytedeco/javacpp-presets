@@ -1,8 +1,8 @@
 
  * Fix crash in Leptonica on CentOS 6 by downgrading to libpng 1.5.30 ([issue #680](https://github.com/bytedeco/javacpp-presets/issues/680))
  * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))
- * Add presets for NCCL 2.3.7, nGraph 0.11.1 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))
- * Upgrade presets for ARPACK-NG 3.7.0, MXNet 1.4.0.rc2, TensorFlow 1.13.0-rc0, ONNX 1.4.0 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676)), and their dependencies including NCCL
+ * Add presets for NCCL 2.3.7, nGraph 0.13.0 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))
+ * Upgrade presets for MKL-DNN 0.17.3, ARPACK-NG 3.7.0, MXNet 1.4.0.rc2, TensorFlow 1.13.0-rc0, ONNX 1.4.1 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676)), and their dependencies including NCCL
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
 ### January 11, 2019 version 1.4.4

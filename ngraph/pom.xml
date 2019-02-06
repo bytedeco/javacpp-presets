@@ -11,14 +11,14 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>ngraph</artifactId>
-  <version>0.11.1-${project.parent.version}</version>
+  <version>0.13.0-${project.parent.version}</version>
   <name>JavaCPP Presets for nGraph</name>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.17.2-${project.parent.version}</version>
+      <version>0.17.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

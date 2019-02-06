@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL-DNN 0.17.2  https://01.org/mkl-dnn
+ * MKL-DNN 0.17.3  https://01.org/mkl-dnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mkl-dnn</groupId>
     <artifactId>mkl-dnn</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SimpleNetInt8</exec.mainClass>
     </properties>
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.17.2-1.4.4</version>
+            <version>0.17.3-1.4.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4</version>
+            <version>2019.1-1.4.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4</version>
+            <version>2019.1-1.4.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.4</version>
+            <version>2019.1-1.4.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
