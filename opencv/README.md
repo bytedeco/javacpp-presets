@@ -136,9 +136,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 //M*/
 
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-import static org.bytedeco.javacpp.opencv_stitching.*;
+import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgcodecs.*;
+import org.bytedeco.opencv.opencv_stitching.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
+import static org.bytedeco.opencv.global.opencv_stitching.*;
 
 public class Stitching {
     static boolean try_use_gpu = false;
