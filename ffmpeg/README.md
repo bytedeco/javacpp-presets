@@ -23,7 +23,7 @@ Here is a simple example of FFmpeg ported to Java from this C source file:
 
  * https://github.com/monday0rsunday/ffmpeg-tutorial/blob/master/002_read_few_frame.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ReadFewFrame.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ReadFewFrame.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="myvideofile.mpg"
 ```
@@ -32,30 +32,37 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.ffmpeg</groupId>
+    <groupId>org.bytedeco.ffmpeg</groupId>
     <artifactId>readfewframe</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ReadFewFrame</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>ffmpeg-platform</artifactId>
-            <version>4.1.1-1.4.5-SNAPSHOT</version>
+            <version>4.1.1-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/ReadFewFrame.java` source file
+### The `ReadFewFrame.java` source file
 ```java
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.avcodec.*;
-import static org.bytedeco.javacpp.avformat.*;
-import static org.bytedeco.javacpp.avutil.*;
-import static org.bytedeco.javacpp.swscale.*;
+import org.bytedeco.ffmpeg.avcodec.*;
+import org.bytedeco.ffmpeg.avformat.*;
+import org.bytedeco.ffmpeg.avutil.*;
+import org.bytedeco.ffmpeg.swscale.*;
+import static org.bytedeco.ffmpeg.global.avcodec.*;
+import static org.bytedeco.ffmpeg.global.avformat.*;
+import static org.bytedeco.ffmpeg.global.avutil.*;
+import static org.bytedeco.ffmpeg.global.swscale.*;
 
 public class ReadFewFrame {
     /**

@@ -25,7 +25,7 @@ Here is a simple example of OpenCV ported to Java from this C++ source file:
 
  * https://github.com/Itseez/opencv/blob/3.0.0/samples/cpp/stitching.cpp
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Stitching.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Stitching.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="img1 img2 [...imgN]"
 ```
@@ -34,64 +34,67 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.opencv</groupId>
+    <groupId>org.bytedeco.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.0.1-1.4.4</version>
+            <version>4.0.1-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.0.1-1.4.4</version>
+            <version>4.0.1-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.0.1-1.4.4</version>
+            <version>4.0.1-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.0.1-1.4.4</version>
+            <version>4.0.1-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Stitching.java` source file
+### The `Stitching.java` source file
 ```java
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -136,9 +139,11 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 //M*/
 
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-import static org.bytedeco.javacpp.opencv_stitching.*;
+import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.opencv.opencv_stitching.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
+import static org.bytedeco.opencv.global.opencv_stitching.*;
 
 public class Stitching {
     static boolean try_use_gpu = false;

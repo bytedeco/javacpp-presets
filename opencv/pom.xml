@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>opencv</artifactId>
   <version>4.0.1-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenCV</name>
@@ -43,24 +43,14 @@
         <configuration>
           <encoding>ISO-8859-1</encoding>
         </configuration>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <configuration>
-              <includes>
-                <include>org/opencv/**/*.java</include>
-                <include>org/bytedeco/javacpp/*.java</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -70,9 +60,7 @@
             <configuration>
               <includes>
                 <include>org/opencv/**</include>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/opencv/**</include>
               </includes>
             </configuration>
           </execution>
@@ -85,30 +73,34 @@
                 <exclude>${javacpp.platform.library.path}/sdk/**/*.so*</exclude>
                 <exclude>${javacpp.platform.library.path}/sdk/native/jni/include/**</exclude>
                 <exclude>${javacpp.platform.library.path}/**/*cascade*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/bin/*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/share/**/*.so*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.dll</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.exe</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.dll</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.exe</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/**/*cascade*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/bin/*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.a</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.dylib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.so*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/share/**/*.a</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/share/**/*.dylib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/share/**/*.so*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.lib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.dll</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x86/**/*.exe</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.lib</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.dll</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.exe</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/**/*cascade*</exclude>
               </excludes>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

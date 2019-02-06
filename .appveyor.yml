@@ -8,81 +8,85 @@ cache:
 
 environment:
   matrix:
-    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
+    - PROJ: "opencv"
       OS: windows-x86
+#    - PROJ: "artoolkitplus,chilitags,flandmark"
+#      OS: windows-x86
     - PROJ: "ffmpeg"
       OS: windows-x86
-    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
-      OS: windows-x86
-    - PROJ: "hdf5"
-      OS: windows-x86
-    - PROJ: "mkl"
-      OS: windows-x86
-    - PROJ: "openblas"
-      OS: windows-x86
-    - PROJ: "arpack-ng,cminpack,fftw,gsl"
-      OS: windows-x86
-    - PROJ: "llvm"
-      OS: windows-x86
-    - PROJ: "leptonica,tesseract"
-      OS: windows-x86
-    - PROJ: "ale"
-      OS: windows-x86
-    - PROJ: "liquidfun"
-      OS: windows-x86
-    - PROJ: "systems"
-      OS: windows-x86
+#    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
+#      OS: windows-x86
+#    - PROJ: "hdf5"
+#      OS: windows-x86
+#    - PROJ: "mkl"
+#      OS: windows-x86
+#    - PROJ: "openblas"
+#      OS: windows-x86
+#    - PROJ: "arpack-ng,cminpack,fftw,gsl"
+#      OS: windows-x86
+#    - PROJ: "llvm"
+#      OS: windows-x86
+#    - PROJ: "leptonica,tesseract"
+#      OS: windows-x86
+#    - PROJ: "ale"
+#      OS: windows-x86
+#    - PROJ: "liquidfun"
+#      OS: windows-x86
+#    - PROJ: "systems"
+#      OS: windows-x86
 
-    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
+    - PROJ: "opencv"
       OS: windows-x86_64
+#    - PROJ: "artoolkitplus,chilitags,flandmark"
+#      OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
-    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
-      OS: windows-x86_64
-    - PROJ: "hdf5"
-      OS: windows-x86_64
-    - PROJ: "mkl"
-      OS: windows-x86_64
-    - PROJ: "mkl-dnn"
-      OS: windows-x86_64
-    - PROJ: "openblas"
-      OS: windows-x86_64
-    - PROJ: "arpack-ng,cminpack,fftw,gsl"
-      OS: windows-x86_64
-    - PROJ: "cpython"
-      OS: windows-x86_64
-    - PROJ: "llvm"
-      OS: windows-x86_64
-    - PROJ: "libpostal"
-      OS: windows-x86_64
-    - PROJ: "leptonica,tesseract"
-      OS: windows-x86_64
-    - PROJ: "cuda"
-      OS: windows-x86_64
-    - PROJ: "mxnet"
-      OS: windows-x86_64
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-    - PROJ: "ale"
-      OS: windows-x86_64
-    - PROJ: "liquidfun"
-      OS: windows-x86_64
-    - PROJ: "systems"
-      OS: windows-x86_64
+#    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
+#      OS: windows-x86_64
+#    - PROJ: "hdf5"
+#      OS: windows-x86_64
+#    - PROJ: "mkl"
+#      OS: windows-x86_64
+#    - PROJ: "mkl-dnn"
+#      OS: windows-x86_64
+#    - PROJ: "openblas"
+#      OS: windows-x86_64
+#    - PROJ: "arpack-ng,cminpack,fftw,gsl"
+#      OS: windows-x86_64
+#    - PROJ: "cpython"
+#      OS: windows-x86_64
+#    - PROJ: "llvm"
+#      OS: windows-x86_64
+#    - PROJ: "libpostal"
+#      OS: windows-x86_64
+#    - PROJ: "leptonica,tesseract"
+#      OS: windows-x86_64
+#    - PROJ: "cuda"
+#      OS: windows-x86_64
+#    - PROJ: "mxnet"
+#      OS: windows-x86_64
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#    - PROJ: "ale"
+#      OS: windows-x86_64
+#    - PROJ: "liquidfun"
+#      OS: windows-x86_64
+#    - PROJ: "systems"
+#      OS: windows-x86_64
 
     - PROJ: "opencv"
       OS: windows-x86_64
       EXT: -gpu
-    - PROJ: "mxnet"
-      OS: windows-x86_64
-      EXT: -gpu
+#    - PROJ: "mxnet"
+#      OS: windows-x86_64
+#      EXT: -gpu
+##    - PROJ: "tensorflow"
+##      OS: windows-x86_64
+##      EXT: -gpu
+##      PARTIAL_CPPBUILD: "1"
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -gpu
-#      PARTIAL_CPPBUILD: "1"
-    - PROJ: "tensorflow"
-      OS: windows-x86_64
-      EXT: -gpu
 
 for:
 -
