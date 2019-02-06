@@ -137,16 +137,8 @@
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
-              <goal>copy-resources</goal>
+              <goal>resources</goal>
             </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>src/main/resources/org/bytedeco/${project.artifactId}/include</directory>
-                </resource>
-              </resources>
-              <outputDirectory>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}/include</outputDirectory>
-            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -218,7 +210,7 @@
           <classPath>${project.build.outputDirectory}</classPath>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
-            <includePath>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${project.artifactId}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
@@ -226,7 +218,7 @@
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
-            <resourcePath>${basedir}/target/classes/org/bytedeco/javacpp/</resourcePath>
+            <resourcePath>${basedir}/target/classes/org/bytedeco/${project.artifactId}/</resourcePath>
           </resourcePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
@@ -249,6 +241,13 @@
           </linkResources>
         </configuration>
         <executions>
+          <execution>
+            <id>javacpp.validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
           <execution>
             <id>javacpp.cppbuild.install</id>
             <phase>generate-sources</phase>
@@ -347,6 +346,9 @@
               <includes>
                 <include>org/bytedeco/${project.artifactId}/**</include>
               </includes>
+              <excludes>
+                <exclude>org/bytedeco/${project.artifactId}/include/</exclude>
+              </excludes>
             </configuration>
           </execution>
           <execution>
