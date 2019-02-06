@@ -240,6 +240,10 @@ case $PLATFORM in
     macosx-*)
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/HAVE_GCD/d' CMakeLists.txt
+        # remove spurious "lib" lib
+        sedinplace '/if(HAVE_CUDA)/a\
+            list(REMOVE_ITEM CUDA_LIBRARIES lib)\
+            ' CMakeLists.txt
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
