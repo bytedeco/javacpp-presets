@@ -9,14 +9,14 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>chilitags</artifactId>
   <version>master-${project.parent.version}</version>
   <name>JavaCPP Presets for Chilitags</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
       <version>4.0.1-${project.parent.version}</version>
     </dependency>
@@ -35,16 +35,20 @@
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <dependencies>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
             <version>4.0.1-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
             <version>4.0.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
@@ -59,8 +63,7 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/include/</includePath>
-            <includePath>${basedir}/../opencv/src/main/resources/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../opencv/src/main/resources/org/bytedeco/opencv/include/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
@@ -73,24 +76,43 @@
             <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/opencv/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/opencv/include/</includeResource>
+            <includeResource>/org/bytedeco/opencv/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/opencv/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/opencv/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>
             <id>javacpp.parser</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.presets.chilitags</classOrPackageName>
+              <classOrPackageName>org.bytedeco.chilitags.presets.chilitags</classOrPackageName>
             </configuration>
           </execution>
           <execution>
             <id>javacpp.compiler</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.chilitags</classOrPackageName>
+              <classOrPackageName>org.bytedeco.chilitags.**</classOrPackageName>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

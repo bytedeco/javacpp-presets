@@ -1,59 +1,3 @@
-JavaCPP Presets for flandmark
-=============================
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/flandmark/apidocs/
-
-
-Sample Usage
-------------
-Here is a simple example of flandmark ported to Java from this C++ source file and for this data:
-
- * https://github.com/uricamic/flandmark/blob/master/examples/simple_example.cpp
- * https://github.com/uricamic/flandmark/tree/master/data
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleExample.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java -Dexec.args="<path_to_input_image> <face_bbox - 4int> [<path_to_output_image>]"
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.flandmark</groupId>
-    <artifactId>simpleexample</artifactId>
-    <version>1.5-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>SimpleExample</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>flandmark-platform</artifactId>
-            <version>1.07-1.5-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `SimpleExample.java` source file
-```java
 /*
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,4 +105,3 @@ public class SimpleExample {
         flandmark_free(model);
     }
 }
-```

@@ -8,10 +8,8 @@ cache:
 
 environment:
   matrix:
-    - PROJ: "opencv"
+    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86
-#    - PROJ: "artoolkitplus,chilitags,flandmark"
-#      OS: windows-x86
     - PROJ: "ffmpeg"
       OS: windows-x86
 #    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
@@ -35,10 +33,8 @@ environment:
 #    - PROJ: "systems"
 #      OS: windows-x86
 
-    - PROJ: "opencv"
+    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86_64
-#    - PROJ: "artoolkitplus,chilitags,flandmark"
-#      OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
 #    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"

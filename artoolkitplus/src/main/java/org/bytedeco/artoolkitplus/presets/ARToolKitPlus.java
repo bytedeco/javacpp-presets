@@ -24,7 +24,7 @@
  * If your program uses this class, it will become bound to that license.
  */
 
-package org.bytedeco.javacpp.presets;
+package org.bytedeco.artoolkitplus.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target="org.bytedeco.javacpp.ARToolKitPlus", value={
+@Properties(target="org.bytedeco.artoolkitplus.ARToolKitPlus", global="org.bytedeco.artoolkitplus.global.ARToolKitPlus", value={
     @Platform(include={"ARToolKitPlus_plus.h", "<ARToolKitPlus/ARToolKitPlus.h>", "<ARToolKitPlus/config.h>", "<ARToolKitPlus/ar.h>",
         "<ARToolKitPlus/arMulti.h>", "<ARToolKitPlus/matrix.h>", "<ARToolKitPlus/vector.h>", "<ARToolKitPlus/Camera.h>",
         "<ARToolKitPlus/extra/BCH.h>", "<ARToolKitPlus/extra/Hull.h>", "<ARToolKitPlus/extra/rpp.h>",

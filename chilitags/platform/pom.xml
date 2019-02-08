@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>chilitags-platform</artifactId>
   <version>master-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Chilitags</name>
@@ -21,7 +21,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
       <version>4.0.1-${project.parent.version}</version>
     </dependency>

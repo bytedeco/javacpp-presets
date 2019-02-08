@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package org.bytedeco.javacpp.presets;
+package org.bytedeco.flandmark.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -28,12 +28,14 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.opencv.presets.opencv_imgproc;
+
 /**
  * @author Jarek Sacha
  */
 @Properties(value = @Platform(define = "FLANDMAR_MSVC_COMPAT", include = {"flandmark_detector.h", "liblbp.h"},
                               link = "flandmark_static"/*, resource = {"include", "lib"}*/, compiler = "cpp11"),
-    inherit = opencv_imgproc.class, target = "org.bytedeco.javacpp.flandmark")
+    inherit = opencv_imgproc.class, target = "org.bytedeco.flandmark", global = "org.bytedeco.flandmark.global.flandmark")
 public class flandmark implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

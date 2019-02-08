@@ -39,12 +39,12 @@ case $PLATFORM in
         make install
         ;;
     linux-x86)
-        CC="gcc -m32" CXX="gcc -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         make -j4
         make install
         ;;
     linux-x86_64)
-        CC="gcc -m64" CXX="gcc -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         make -j4
         make install
         ;;
@@ -56,7 +56,7 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="gcc -m64" CXX="gcc -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+          CC="gcc -m64" CXX="g++ -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         else
           CC=powerpc64le-linux-gnu-gcc CXX=powerpc64le-linux-gnu-g++ CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_SYSTEM_PROCESSOR=powerpc -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         fi
@@ -64,7 +64,7 @@ case $PLATFORM in
         make install
         ;;
     linux-mips64el)
-        CC="gcc -mabi=64" CXX="gcc -mabi=64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        CC="gcc -mabi=64" CXX="g++ -mabi=64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         make -j4
         make install
         ;;
