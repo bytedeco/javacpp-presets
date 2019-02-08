@@ -1419,6 +1419,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
 
   public native @StdString BytePointer domain();
 
+  public native @Const @ByRef StringAttributeMap attributes();
+
   // Get input formal parameters.
   public native @Const @ByRef FormalParameterVector inputs();
 
@@ -13939,25 +13941,6 @@ public static final int
 // #include <vector>
 
 // Registry containing all passes available in ONNX.
-@Namespace("onnx::optimization") public static class GlobalPassRegistry extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public GlobalPassRegistry(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GlobalPassRegistry(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public GlobalPassRegistry position(long position) {
-        return (GlobalPassRegistry)super.position(position);
-    }
-
-
-  public GlobalPassRegistry() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  public native @SharedPtr Pass find(@StdString BytePointer pass_name);
-  public native @SharedPtr Pass find(@StdString String pass_name);
-  public native @Const @ByVal StringVector GetAvailablePasses();
-}
  // namespace optimization
  // namespace ONNX_NAMESPACE
 
@@ -14322,7 +14305,6 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Optimizer(Pointer p) { super(p); }
 
-  public static native @ByRef GlobalPassRegistry passes(); public static native void passes(GlobalPassRegistry passes);
   public Optimizer(@Const @ByRef StringVector names, @Cast("const bool") boolean fixed_point) { super((Pointer)null); allocate(names, fixed_point); }
   private native void allocate(@Const @ByRef StringVector names, @Cast("const bool") boolean fixed_point);
 
