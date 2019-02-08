@@ -1,59 +1,3 @@
-JavaCPP Presets for ARToolKitPlus
-=================================
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/artoolkitplus/apidocs/
-
-
-Sample Usage
-------------
-Here is a simple example of ARToolKitPlus ported to Java from this C++ source file and for this data:
-
- * http://bazaar.launchpad.net/~rojtberg/artoolkitplus/trunk/view/head:/sample/multi/main.cpp
- * http://bazaar.launchpad.net/~rojtberg/artoolkitplus/trunk/files/head:/sample/data/
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `MultiMain.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.artoolkitplus</groupId>
-    <artifactId>multimain</artifactId>
-    <version>1.5-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>MultiMain</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>artoolkitplus-platform</artifactId>
-            <version>2.3.1-1.5-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `MultiMain.java` source file
-```java
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
  *
@@ -183,4 +127,3 @@ public class MultiMain {
         }
     }
 }
-```

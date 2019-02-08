@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package org.bytedeco.javacpp.presets;
+package org.bytedeco.chilitags.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -28,12 +28,16 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import org.bytedeco.opencv.presets.opencv_calib3d;
+import org.bytedeco.opencv.presets.opencv_video;
+
 /**
  * @author Samuel Audet
  */
 @Properties(value = @Platform(define = "CHILITAGS_STATIC_DEFINE", include = "chilitags/chilitags.hpp",
                               link = "chilitags_static"/*, resource = {"include", "lib"}*/, compiler = "cpp11"),
-    inherit = {opencv_calib3d.class, opencv_video.class}, target = "org.bytedeco.javacpp.chilitags")
+    inherit = {opencv_calib3d.class, opencv_video.class}, target = "org.bytedeco.chilitags",
+                                                          global = "org.bytedeco.chilitags.global.chilitags")
 public class chilitags implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))

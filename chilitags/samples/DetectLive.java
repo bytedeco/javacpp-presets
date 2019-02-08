@@ -1,58 +1,3 @@
-JavaCPP Presets for Chilitags
-=============================
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * Chilitags  http://chili.epfl.ch/software
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/chilitags/apidocs/
-
-
-Sample Usage
-------------
-Here is the live detection sample of Chilitags ported to Java from this C++ source file:
-
- * https://github.com/chili-epfl/chilitags/blob/master/samples/detection/detect-live.cpp
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `DetectLive.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java -Dexec.args="[xRes] [yRes] [cameraIndex]"
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.chilitags</groupId>
-    <artifactId>detectlive</artifactId>
-    <version>1.5-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>DetectLive</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>chilitags-platform</artifactId>
-            <version>master-1.5-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `DetectLive.java` source file
-```java
 /*******************************************************************************
 *   Copyright 2013-2014 EPFL                                                   *
 *   Copyright 2013-2014 Quentin Bonnard                                        *
@@ -206,4 +151,3 @@ public class DetectLive {
         capture.release();
     }
 }
-```
