@@ -35,6 +35,33 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >") public static class StringPassMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringPassMap(Pointer p) { super(p); }
+    public StringPassMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringPassMap put(@ByRef StringPassMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @SharedPtr OptimizationPass get(@StdString BytePointer i);
+    public native StringPassMap put(@StdString BytePointer i, OptimizationPass value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @SharedPtr @Const OptimizationPass second();
+    }
+}
+
 @Name("std::set<int>") public static class IntSet extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -13941,6 +13968,26 @@ public static final int
 // #include <vector>
 
 // Registry containing all passes available in ONNX.
+@Namespace("onnx::optimization") @NoOffset public static class GlobalPassRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GlobalPassRegistry(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GlobalPassRegistry(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GlobalPassRegistry position(long position) {
+        return (GlobalPassRegistry)super.position(position);
+    }
+
+  public native @ByRef StringPassMap passes(); public native GlobalPassRegistry passes(StringPassMap passes);
+
+  public GlobalPassRegistry() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @SharedPtr @ByVal OptimizationPass find(@StdString BytePointer pass_name);
+  public native @SharedPtr @ByVal OptimizationPass find(@StdString String pass_name);
+  public native @Const @ByVal StringVector GetAvailablePasses();
+}
  // namespace optimization
  // namespace ONNX_NAMESPACE
 
@@ -14035,10 +14082,10 @@ public static final int
 // initialize and finalize it's pass. Each pass must have a unique name that
 // pass managers/registry will use as identification. Finally the pass
 // implements runPass which completes the pass inplace.
-@Namespace("onnx::optimization") @NoOffset public static class Pass extends Pointer {
+@Name("onnx::optimization::Pass") @NoOffset public static class OptimizationPass extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Pass(Pointer p) { super(p); }
+    public OptimizationPass(Pointer p) { super(p); }
 
 
   public native @Cast("onnx::optimization::PassType") int getPassType();
@@ -14063,17 +14110,17 @@ public static final int
   // but this complicates the memory model. Also since all passes come from
   // GlobalPassRegistry which already utilizes smart pointers we don't have to
   // worry about memory leaks from passes.
-  public native Pass pass(); public native CountBasedPassAnalysis pass(Pass pass);
+  public native OptimizationPass pass(); public native CountBasedPassAnalysis pass(OptimizationPass pass);
   public native @Cast("unsigned int") int num_positive_transforms(); public native CountBasedPassAnalysis num_positive_transforms(int num_positive_transforms);
   public native @Cast("bool") boolean initialization_done(); public native CountBasedPassAnalysis initialization_done(boolean initialization_done);
   public native @Cast("bool") boolean finalization_done(); public native CountBasedPassAnalysis finalization_done(boolean finalization_done);
   public CountBasedPassAnalysis(
-        Pass pass,
+        OptimizationPass pass,
         @Cast("unsigned int") int num_positive_transforms,
         @Cast("bool") boolean initialization_done,
         @Cast("bool") boolean finalization_done) { super((Pointer)null); allocate(pass, num_positive_transforms, initialization_done, finalization_done); }
   private native void allocate(
-        Pass pass,
+        OptimizationPass pass,
         @Cast("unsigned int") int num_positive_transforms,
         @Cast("bool") boolean initialization_done,
         @Cast("bool") boolean finalization_done);
@@ -14091,7 +14138,7 @@ public static final int
 // optimization pass. Lastly the runTransform method must also be implemented
 // which simply implements the pass on any node which passes
 // patternMatchPredicate.
-@Namespace("onnx::optimization") public static class PredicateBasedPass extends Pass {
+@Namespace("onnx::optimization") public static class PredicateBasedPass extends OptimizationPass {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PredicateBasedPass(Pointer p) { super(p); }
@@ -14305,6 +14352,7 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Optimizer(Pointer p) { super(p); }
 
+  public static native @ByRef GlobalPassRegistry passes(); public static native void passes(GlobalPassRegistry passes);
   public Optimizer(@Const @ByRef StringVector names, @Cast("const bool") boolean fixed_point) { super((Pointer)null); allocate(names, fixed_point); }
   private native void allocate(@Const @ByRef StringVector names, @Cast("const bool") boolean fixed_point);
 
