@@ -138,7 +138,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1rFLXh1uiuYgcR2xV30kSkIN7ak1v1S9M $HOME/downloads/nccl_x86_64.txz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1WLAS3nBPtooo43xvXrJedeNHjA6cQ4Rg $HOME/downloads/nccl_x86_64.txz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi

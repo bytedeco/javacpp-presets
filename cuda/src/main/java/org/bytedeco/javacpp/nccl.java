@@ -26,11 +26,11 @@ public class nccl extends org.bytedeco.javacpp.presets.nccl {
 // #include <cuda_fp16.h>
 
 public static final int NCCL_MAJOR = 2;
-public static final int NCCL_MINOR = 3;
-public static final int NCCL_PATCH = 7;
+public static final int NCCL_MINOR = 4;
+public static final int NCCL_PATCH = 2;
 public static final String NCCL_SUFFIX = "";
 
-public static final int NCCL_VERSION_CODE = 2307;
+public static final int NCCL_VERSION_CODE = 2402;
 // #define NCCL_VERSION(X,Y,Z) ((X) * 1000 + (Y) * 100 + (Z))
 
 // #ifdef __cplusplus
@@ -118,13 +118,27 @@ public static native @Cast("ncclResult_t") int pncclCommInitAll(@Cast("ncclComm*
 public static native @Cast("ncclResult_t") int pncclCommInitAll(@ByPtrPtr ncclComm comm, int ndev, @Const IntBuffer devlist);
 public static native @Cast("ncclResult_t") int pncclCommInitAll(@Cast("ncclComm**") PointerPointer comm, int ndev, @Const int[] devlist);
 
-/* Frees resources associated with communicator object. */
+/* Frees resources associated with communicator object, but waits for any operations
+ * that might still be running on the device. */
 public static native @Cast("ncclResult_t") int ncclCommDestroy(ncclComm comm);
 public static native @Cast("ncclResult_t") int pncclCommDestroy(ncclComm comm);
+
+/* Frees resources associated with communicator object and aborts any operations
+ * that might still be running on the device. */
+public static native @Cast("ncclResult_t") int ncclCommAbort(ncclComm comm);
+public static native @Cast("ncclResult_t") int pncclCommAbort(ncclComm comm);
 
 /* Returns a human-readable error message. */
 public static native @Cast("const char*") BytePointer ncclGetErrorString(@Cast("ncclResult_t") int result);
 public static native @Cast("const char*") BytePointer pncclGetErrorString(@Cast("ncclResult_t") int result);
+
+/* Checks whether the comm has encountered any asynchronous errors */
+public static native @Cast("ncclResult_t") int ncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") IntPointer asyncError);
+public static native @Cast("ncclResult_t") int ncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") IntBuffer asyncError);
+public static native @Cast("ncclResult_t") int ncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") int[] asyncError);
+public static native @Cast("ncclResult_t") int pncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") IntPointer asyncError);
+public static native @Cast("ncclResult_t") int pncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") IntBuffer asyncError);
+public static native @Cast("ncclResult_t") int pncclCommGetAsyncError(ncclComm comm, @Cast("ncclResult_t*") int[] asyncError);
 
 /* Gets the number of ranks in the communicator clique. */
 public static native @Cast("ncclResult_t") int ncclCommCount(ncclComm comm, IntPointer count);

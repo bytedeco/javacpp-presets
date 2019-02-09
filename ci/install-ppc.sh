@@ -64,7 +64,7 @@ if [[ "$PROJ" =~ cuda ]]; then
    cd $HOME/
    curl -L https://developer.nvidia.com/compute/cuda/10.0/Prod/local_installers/cuda-repo-ubuntu1804-10-0-local-10.0.130-410.48_1.0-1_ppc64el -o $HOME/cuda-repo-ubuntu1804-10-0-local-10.0.130-410.48_1.0-1_ppc64el.deb
    curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.4.1/cudnn-10.0-linux-ppc64le-v7.4.1.5.tgz -o $HOME/cudnn-10.0-linux-ppc64le-v7.4.1.5.tgz
-   python $TRAVIS_BUILD_DIR/ci/gDownload.py 117dF-fNlOyaYdbJK9U3zWcTAOpjKkBD6 $HOME/nccl_ppc64le.txz
+   python $TRAVIS_BUILD_DIR/ci/gDownload.py 1tASGpJH8YYlqznP67zMQmR7Jgozx9MBr $HOME/nccl_ppc64le.txz
    ar vx $HOME/cuda-repo-ubuntu1804-10-0-local-10.0.130-410.48_1.0-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS

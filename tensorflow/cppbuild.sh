@@ -32,7 +32,7 @@ export TF_CUDA_CLANG=0
 export TF_CUDA_VERSION=10.0
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
-export TF_NCCL_VERSION=2.3
+export TF_NCCL_VERSION=2.4
 export TF_TENSORRT_VERSION=5.0.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
@@ -42,7 +42,7 @@ export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
 
-TENSORFLOW_VERSION=1.13.0-rc0
+TENSORFLOW_VERSION=1.13.0-rc1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
