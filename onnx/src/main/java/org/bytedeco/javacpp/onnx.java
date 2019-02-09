@@ -35,6 +35,33 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     }
 }
 
+@Name("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >") public static class StringPassMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringPassMap(Pointer p) { super(p); }
+    public StringPassMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringPassMap put(@ByRef StringPassMap x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+
+    @Index public native @SharedPtr Pass get(@StdString BytePointer i);
+    public native StringPassMap put(@StdString BytePointer i, Pass value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @SharedPtr @Const Pass second();
+    }
+}
+
 @Name("std::set<int>") public static class IntSet extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1418,6 +1445,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
   
 
   public native @StdString BytePointer domain();
+
+  public native @Const @ByRef StringAttributeMap attributes();
 
   // Get input formal parameters.
   public native @Const @ByRef FormalParameterVector inputs();
@@ -13939,7 +13968,7 @@ public static final int
 // #include <vector>
 
 // Registry containing all passes available in ONNX.
-@Namespace("onnx::optimization") public static class GlobalPassRegistry extends Pointer {
+@Namespace("onnx::optimization") @NoOffset public static class GlobalPassRegistry extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GlobalPassRegistry(Pointer p) { super(p); }
@@ -13950,12 +13979,13 @@ public static final int
         return (GlobalPassRegistry)super.position(position);
     }
 
+  public native @ByRef StringPassMap passes(); public native GlobalPassRegistry passes(StringPassMap passes);
 
   public GlobalPassRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native @SharedPtr Pass find(@StdString BytePointer pass_name);
-  public native @SharedPtr Pass find(@StdString String pass_name);
+  public native @SharedPtr @ByVal Pass find(@StdString BytePointer pass_name);
+  public native @SharedPtr @ByVal Pass find(@StdString String pass_name);
   public native @Const @ByVal StringVector GetAvailablePasses();
 }
  // namespace optimization
