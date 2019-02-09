@@ -87,8 +87,7 @@ public class onnx implements InfoMapper {
                .put(new Info("std::vector<int64_t>").pointerTypes("LongVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("onnx::Dimension").pointerTypes("DimensionIR").define())
-               .put(new Info("std::initializer_list", "std::function<void(OpSchema&&)>",
-                             "NodeKind", "graph_node_list",
+               .put(new Info("std::initializer_list", "std::function<void(OpSchema&&)>", "NodeKind", "graph_node_list",
                              "graph_node_list_iterator", "std::vector<onnx::Tensor>::const_iterator",
                              "onnx::Attributes<onnx::Node>", "Symbol", "std::reverse_iterator<onnx::ArrayRef<onnx::Node::Value*>::iterator>",
                              "const_graph_node_list_iterator", "const_graph_node_list", "onnx::toString", "onnx::ResourceGuard", "onnx::GraphInferencer",
@@ -97,9 +96,9 @@ public class onnx implements InfoMapper {
                              "PROTOBUF_INTERNAL_EXPORT_protobuf_onnx_2fonnx_2doperators_2dml_2eproto", "google::protobuf::FindAllExtensions").skip())
                .put(new Info("onnx::shape_inference::InferenceContextImpl").skip())
                .put(new Info("std::set<int>").pointerTypes("IntSet").define())
-	       .put(new Info("onnx::optimization::Pass").purify(true).pointerTypes("OptimizationPass"))
-	       .put(new Info("std::shared_ptr<onnx::optimization::Pass>").annotations("@SharedPtr").pointerTypes("OptimizationPass"))
-	       .put(new Info("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >").pointerTypes("StringPassMap").define())
+               .put(new Info("onnx::optimization::Pass").purify(true))
+               .put(new Info("std::shared_ptr<onnx::optimization::Pass>").annotations("@SharedPtr").pointerTypes("Pass"))
+               .put(new Info("std::map<std::string,std::shared_ptr<onnx::optimization::Pass> >").pointerTypes("StringPassMap").define())
                .put(new Info("std::unordered_set<std::string>").pointerTypes("UnorderedStringSet").define())
                .put(new Info("std::multimap<std::string,const onnx::FunctionProto*>").skip())
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))

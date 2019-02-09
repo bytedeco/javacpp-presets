@@ -46,8 +46,8 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native @SharedPtr OptimizationPass get(@StdString BytePointer i);
-    public native StringPassMap put(@StdString BytePointer i, OptimizationPass value);
+    @Index public native @SharedPtr Pass get(@StdString BytePointer i);
+    public native StringPassMap put(@StdString BytePointer i, Pass value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -58,7 +58,7 @@ public class onnx extends org.bytedeco.javacpp.presets.onnx {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @SharedPtr @Const OptimizationPass second();
+        public native @Name("operator*().second") @MemberGetter @SharedPtr @Const Pass second();
     }
 }
 
@@ -13984,8 +13984,8 @@ public static final int
   public GlobalPassRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native @SharedPtr @ByVal OptimizationPass find(@StdString BytePointer pass_name);
-  public native @SharedPtr @ByVal OptimizationPass find(@StdString String pass_name);
+  public native @SharedPtr @ByVal Pass find(@StdString BytePointer pass_name);
+  public native @SharedPtr @ByVal Pass find(@StdString String pass_name);
   public native @Const @ByVal StringVector GetAvailablePasses();
 }
  // namespace optimization
@@ -14082,10 +14082,10 @@ public static final int
 // initialize and finalize it's pass. Each pass must have a unique name that
 // pass managers/registry will use as identification. Finally the pass
 // implements runPass which completes the pass inplace.
-@Name("onnx::optimization::Pass") @NoOffset public static class OptimizationPass extends Pointer {
+@Namespace("onnx::optimization") @NoOffset public static class Pass extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OptimizationPass(Pointer p) { super(p); }
+    public Pass(Pointer p) { super(p); }
 
 
   public native @Cast("onnx::optimization::PassType") int getPassType();
@@ -14110,17 +14110,17 @@ public static final int
   // but this complicates the memory model. Also since all passes come from
   // GlobalPassRegistry which already utilizes smart pointers we don't have to
   // worry about memory leaks from passes.
-  public native OptimizationPass pass(); public native CountBasedPassAnalysis pass(OptimizationPass pass);
+  public native Pass pass(); public native CountBasedPassAnalysis pass(Pass pass);
   public native @Cast("unsigned int") int num_positive_transforms(); public native CountBasedPassAnalysis num_positive_transforms(int num_positive_transforms);
   public native @Cast("bool") boolean initialization_done(); public native CountBasedPassAnalysis initialization_done(boolean initialization_done);
   public native @Cast("bool") boolean finalization_done(); public native CountBasedPassAnalysis finalization_done(boolean finalization_done);
   public CountBasedPassAnalysis(
-        OptimizationPass pass,
+        Pass pass,
         @Cast("unsigned int") int num_positive_transforms,
         @Cast("bool") boolean initialization_done,
         @Cast("bool") boolean finalization_done) { super((Pointer)null); allocate(pass, num_positive_transforms, initialization_done, finalization_done); }
   private native void allocate(
-        OptimizationPass pass,
+        Pass pass,
         @Cast("unsigned int") int num_positive_transforms,
         @Cast("bool") boolean initialization_done,
         @Cast("bool") boolean finalization_done);
@@ -14138,7 +14138,7 @@ public static final int
 // optimization pass. Lastly the runTransform method must also be implemented
 // which simply implements the pass on any node which passes
 // patternMatchPredicate.
-@Namespace("onnx::optimization") public static class PredicateBasedPass extends OptimizationPass {
+@Namespace("onnx::optimization") public static class PredicateBasedPass extends Pass {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PredicateBasedPass(Pointer p) { super(p); }
