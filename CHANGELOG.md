@@ -1,4 +1,5 @@
 
+ * Add basic mapping of stdio streams to presets for GSL since it relies on them for serialization
  * Fix crash in Leptonica on CentOS 6 by downgrading to libpng 1.5.30 ([issue #680](https://github.com/bytedeco/javacpp-presets/issues/680))
  * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))
  * Add presets for NCCL 2.4.2, nGraph 0.13.0 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))

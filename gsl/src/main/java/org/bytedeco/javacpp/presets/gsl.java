@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,9 +22,13 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Const;
+import org.bytedeco.javacpp.annotation.MemberGetter;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.annotation.Opaque;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -104,6 +108,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
+               .put(new Info("FILE").pointerTypes("FILE"))
                .put(new Info("INFINITY", "defined(HUGE_VAL)", "NAN", "defined(INFINITY)").define(false))
                .put(new Info("GSL_VAR", "__BEGIN_DECLS", "__END_DECLS", "INLINE_DECL", "INLINE_FUN", "GSL_RANGE_CHECK", "CBLAS_INDEX").cppTypes().annotations())
                .put(new Info("gsl_complex_packed_array", "gsl_complex_packed_ptr").cast().valueTypes("DoublePointer", "DoubleBuffer", "double[]"))
@@ -149,4 +154,21 @@ public class gsl implements InfoMapper {
                              "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
                              "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e").skip());
     }
+
+    @Opaque public static class FILE extends Pointer {
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public FILE() { super((Pointer)null); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public FILE(Pointer p) { super(p); }
+    }
+
+    public static native int fclose(FILE stream);
+    public static native FILE fopen(String pathname, String mode);
+    public static native int fread(Pointer ptr, long size, long nmemb, FILE stream);
+    public static native int fwrite(@Const Pointer ptr, long size, long nmemb, FILE stream);
+    public static native int fprintf(FILE stream, String format);
+    public static native int fscanf(FILE stream, String format, Pointer p);
+    public static native @MemberGetter FILE stdin();
+    public static native @MemberGetter FILE stdout();
+    public static native @MemberGetter FILE stderr();
 }
