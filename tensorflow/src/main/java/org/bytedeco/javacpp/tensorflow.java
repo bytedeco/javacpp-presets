@@ -35434,6 +35434,8 @@ limitations under the License.
 
   /** Return a new scope. All ops created within the returned scope will have
    *  names of the form {@code name/StrCat(fragments...)[_suffix]} */
+  public native @ByVal Scope WithOpName(@StdString BytePointer op_name);
+  public native @ByVal Scope WithOpName(@StdString String op_name);
 
   /** Return a new scope. All ops created within the returned scope will have as
    *  control dependencies the union of operations in the control_deps vector

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -730,6 +730,10 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TF_Operation::node").javaText("public native @MemberGetter @ByRef Node node();"))
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));
+
+        infoMap.put(new Info("tensorflow::Scope::WithOpName<std::string>").javaNames("WithOpName").javaText(
+                        "public native @ByVal Scope WithOpName(@StdString BytePointer op_name);\n"
+                      + "public native @ByVal Scope WithOpName(@StdString String op_name);"));
 
         infoMap.put(new Info("std::vector<tensorflow::OpDef>").pointerTypes("OpDefVector").define());
         if (!android) {
