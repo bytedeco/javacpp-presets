@@ -42,19 +42,19 @@ case $PLATFORM in
 #        make install-strip
 #        ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32" CXX="$OLDCXX -m32" --enable-cxx
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" --enable-cxx
         make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx
         make -j $MAKEJ
         make install-strip
         ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" --enable-cxx
+          ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" --enable-cxx
           make -j $MAKEJ
           make install-strip
         else
@@ -62,7 +62,7 @@ case $PLATFORM in
           patch -Np1 < ../../../hdf5-linux-ppc64le.patch || true
           #need this to run twice, first run fails so we fake the exit code too
           for x in 1 2; do
-              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" || true
+              "$CMAKE" -DCMAKE_TOOLCHAIN_FILE=ppc.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE" -DCMAKE_C_FLAGS="-D_GNU_SOURCE" . || true
           done
           make -j $MAKEJ
           make install
@@ -75,22 +75,22 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-	mkdir -p build
-	cd build
+        mkdir -p build
+        cd build
         "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON ..
-	sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
+        sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-	cp bin/Release/zlib* ../../lib/
-	cd ..
+        cp bin/Release/zlib* ../../lib/
+        cd ..
         ;;
     windows-x86_64)
-	mkdir -p build
-	cd build
+        mkdir -p build
+        cd build
         "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBUILD_TESTING=false -DHDF5_BUILD_EXAMPLES=false -DHDF5_BUILD_TOOLS=false -DHDF5_ALLOW_EXTERNAL_SUPPORT:STRING="TGZ" -DZLIB_TGZ_NAME:STRING="$ZLIB.tar.gz" -DTGZPATH:STRING="$INSTALL_PATH/.." -DHDF5_ENABLE_Z_LIB_SUPPORT=ON ..
-	sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
+        sedinplace 's/libzlib.lib/zlibstatic.lib/g' src/hdf5-shared.vcxproj
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-	cp bin/Release/zlib* ../../lib/
-	cd ..
+        cp bin/Release/zlib* ../../lib/
+        cd ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

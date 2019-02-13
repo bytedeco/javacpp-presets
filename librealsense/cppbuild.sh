@@ -30,7 +30,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE_VERSION
-        CC="gcc -m32" CXX="g++ -m32 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF
+        CC="gcc -m32" CXX="g++ -m32 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -40,23 +40,23 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../librealsense-$LIBREALSENSE_VERSION
-        CC="gcc -m64" CXX="g++ -m64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF
+        CC="gcc -m64" CXX="g++ -m64 --std=c++11" LDFLAGS="-lstdc++" "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DLIBUSB1_INCLUDE_DIRS=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB1_LIBRARY_DIRS=$INSTALL_PATH/lib/ -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     macosx-x86_64)
-        "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF
+        "$CMAKE" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_MACOSX_RPATH=ON -DBUILD_UNIT_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF
+        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF
+        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/
