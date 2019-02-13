@@ -19,56 +19,63 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is the full code of the example found in the [`example/`](example/) folder.
+Here is the full code of the example found in the [`samples/`](samples/) folder.
 
-### The `pom.xml` file
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `TestConnection.java` source files below, simply execute on the command line:
+```bash
+ $ mvn compile exec:java
+```
 
+### The `pom.xml` build file
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
+    <groupId>org.bytedeco.libfreenect</groupId>
     <artifactId>freenect2Example</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>freenect2Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>libfreenect2-platform</artifactId>
-            <version>0.2.0-1.4.4</version>
+            <version>0.2.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/freenect2Example.java` file
-
+### The `freenect2Example.java` source file
 ```java
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.freenect2;
-import org.bytedeco.javacpp.freenect2.CpuPacketPipeline;
-import org.bytedeco.javacpp.freenect2.FrameMap;
-import org.bytedeco.javacpp.freenect2.Freenect2;
-import org.bytedeco.javacpp.freenect2.Freenect2Device;
-import org.bytedeco.javacpp.freenect2.PacketPipeline;
-import org.bytedeco.javacpp.freenect2.SyncMultiFrameListener;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.libfreenect2.*;
+import static org.bytedeco.libfreenect2.global.freenect2.*;
 
+/**
+ *
+ * @author Jeremy Laviole
+ */
 public class freenect2Example {
     public static void main(String[] args) {
         Freenect2 freenect2Context;
         try {
-            Loader.load(org.bytedeco.javacpp.freenect2.class);
+            Loader.load(org.bytedeco.libfreenect2.global.freenect2.class);
+            // Context is shared accross cameras.
             freenect2Context = new Freenect2();
         } catch (Exception e) {
             System.out.println("Exception in the TryLoad !" + e);
+            e.printStackTrace();
             return;
         }
         Freenect2Device device = null;
         PacketPipeline pipeline = null;
         String serial = "";
 
-	// Only CPU pipeline tested.
+        // Only CPU pipeline tested.
         pipeline = new CpuPacketPipeline();
 //        pipeline = new libfreenect2::OpenGLPacketPipeline();
 //        pipeline = new libfreenect2::OpenCLPacketPipeline(deviceId);
@@ -82,10 +89,10 @@ public class freenect2Example {
         device = freenect2Context.openDevice(serial, pipeline);
         // [listeners]
         int types = 0;
-        types |= freenect2.Frame.Color;
-        types |= freenect2.Frame.Ir | freenect2.Frame.Depth;
+        types |= Frame.Color;
+        types |= Frame.Ir | Frame.Depth;
 
-        SyncMultiFrameListener listener = new freenect2.SyncMultiFrameListener(types);
+        SyncMultiFrameListener listener = new SyncMultiFrameListener(types);
 
         device.setColorFrameListener(listener);
         device.setIrAndDepthFrameListener(listener);
@@ -94,9 +101,10 @@ public class freenect2Example {
 
         System.out.println("Serial: " + device.getSerialNumber().getString());
         System.out.println("Firmware: " + device.getFirmwareVersion().getString());
+/// [start]
 
         FrameMap frames = new FrameMap();
-
+        // Fetch 100 frames.
         int frameCount = 0;
         for (int i = 0; i < 100; i++) {
             System.out.println("getting frame " + frameCount);
@@ -106,10 +114,10 @@ public class freenect2Example {
                 return;
             }
 
-            freenect2.Frame rgb = frames.get(freenect2.Frame.Color);
-            freenect2.Frame ir = frames.get(freenect2.Frame.Ir);
-            freenect2.Frame depth = frames.get(freenect2.Frame.Depth);
-
+            Frame rgb = frames.get(Frame.Color);
+            Frame ir = frames.get(Frame.Ir);
+            Frame depth = frames.get(Frame.Depth);
+/// [loop start]
             System.out.println("RGB image, w:" + rgb.width() + " " + rgb.height());
             byte[] imgData = new byte[1000];
             rgb.data().get(imgData);

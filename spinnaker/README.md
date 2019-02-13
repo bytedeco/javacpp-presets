@@ -1,29 +1,29 @@
-JavaCPP presets for Flir's Spinnaker 
-====================================
+JavaCPP Presets for Spinnaker
+=============================
 
 Introduction
 ------------
-
 This directory contains the JavaCPP Presets module for:
 
  * Spinnaker 1.19.0.22  https://www.ptgrey.com/spinnaker-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
-The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is FLIR's next generation GenICam3 API library built for machine vision developers. The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is compatible with Flir's/PointGrey's Oryx, Blackfly S, and all USB3 Vision camera models.
+The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is FLIR's next generation GenICam3 API library built for machine vision developers. The [Spinnaker SDK](https://www.ptgrey.com/spinnaker-sdk) is compatible with Oryx, Blackfly S, and all USB3 Vision camera models.
+
 
 Documentation
 -------------
 Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/spinnaker/apidocs/
+
  
 Sample Usage
 ------------
+Here is a simple example of Spinnaker C API code ported to Java from the `Acquisition_C.cpp` example distributed with Spinnaker SDK.
 
-Here is a simple example of Spinnaker C API code ported to Java from this C source file `Acquisition_C.cpp` distributed with Spinnaker SDK. 
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Acquisition_C.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Acquisition_C.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,26 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.flycapture</groupId>
-    <artifactId>spinnater_test</artifactId>
-    <version>1.4.4</version>
+    <groupId>org.bytedeco.spinnaker</groupId>
+    <artifactId>acquisition_c</artifactId>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Acquisition_C</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>spinnaker-platform</artifactId>
-            <version>1.19.0.22-1.4.4</version>
+            <version>1.19.0.22-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Acquisition_C.java` source file
-
-Example based on the `Acquisition_C.cpp` example provided in Spinnaker SDK.
-
+### The `Acquisition_C.java` source file
 ```java
 //=============================================================================
 // Copyright © 2018 FLIR Integrated Imaging Solutions, Inc. All Rights Reserved.
@@ -70,12 +70,11 @@ Example based on the `Acquisition_C.cpp` example provided in Spinnaker SDK.
 // THIS SOFTWARE OR ITS DERIVATIVES.
 //=============================================================================*/
 
-import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.Spinnaker_C.*;
-
 import java.io.File;
 
-import static org.bytedeco.javacpp.Spinnaker_C.*;
+import org.bytedeco.javacpp.*;
+import org.bytedeco.spinnaker.Spinnaker_C.*;
+import static org.bytedeco.spinnaker.global.Spinnaker_C.*;
 
 /**
  * Example how to enumerate cameras, start acquisition, and grab images.
@@ -592,7 +591,7 @@ public class Acquisition_C {
         exitOnError(err, "Unable to retrieve system instance.");
 
         // Retrieve list of cameras from the system
-        Spinnaker_C.spinCameraList hCameraList = new Spinnaker_C.spinCameraList();
+        spinCameraList hCameraList = new spinCameraList();
         err = spinCameraListCreateEmpty(hCameraList);
         exitOnError(err, "Unable to create camera list.");
 
@@ -601,7 +600,7 @@ public class Acquisition_C {
 
         // Retrieve number of cameras
         SizeTPointer numCameras = new SizeTPointer(1);
-        err = Spinnaker_C.spinCameraListGetSize(hCameraList, numCameras);
+        err = spinCameraListGetSize(hCameraList, numCameras);
         exitOnError(err, "Unable to retrieve number of cameras.");
         System.out.println("Number of cameras detected: " + numCameras.get() + "\n");
         // Finish if there are no cameras
@@ -651,6 +650,6 @@ public class Acquisition_C {
 }
 ```
 
-### Additional Examples of Using the Spinnaker Wrapper.
+### Additional examples of using the Spinnaker wrapper
 
-You can find demo illustrating use of the presets in the [JavaCV Examples](https://github.com/bytedeco/javacv-examples) project under `Spinnaker-demo` (initial development is on branch `spinnaker`).
+You can find demo illustrating use of the presets in the [JavaCV Examples](https://github.com/bytedeco/javacv-examples) project under `Spinnaker-demo`.

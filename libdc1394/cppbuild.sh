@@ -28,12 +28,12 @@ cd libdc1394-$LIBDC1394_VERSION
 
 case $PLATFORM in
     linux-x86)
-        CC="$OLDCC -m32" ./configure --prefix=$INSTALL_PATH --disable-sdltest
+        CC="gcc -m32" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         make -j4
         make install-strip
         ;;
     linux-x86_64)
-        CC="$OLDCC -m64" ./configure --prefix=$INSTALL_PATH --disable-sdltest
+        CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         make -j4
         make install-strip
         ;;
@@ -46,7 +46,7 @@ case $PLATFORM in
         MACHINE_TYPE=$( uname -m )
         sed -i s/elf64ppc/elf64lppc/ configure
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          CC="$OLDCC -m64" ./configure --prefix=$INSTALL_PATH --disable-sdltest
+          CC="gcc -m64" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         else
           CC="powerpc64le-linux-gnu-gcc -m64" ./configure --host=powerpc64le-linux-gnu --build=ppc64le-linux --prefix=$INSTALL_PATH --disable-sdltest
         fi

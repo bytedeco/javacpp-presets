@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>spinnaker</artifactId>
   <version>1.19.0.22-${project.parent.version}</version>
   <name>JavaCPP Presets for Spinnaker</name>
@@ -40,7 +40,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>javacpp.compiler</id>
+            <id>javacpp-compiler</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>
@@ -53,6 +53,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

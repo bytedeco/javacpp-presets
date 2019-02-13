@@ -23,7 +23,7 @@ Here is a simple example of FlyCapture ported to Java from this C++ source file:
 
  * http://www.ptgrey.com/products/flycapture2/examples/FlyCapture2Test.zip
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/FlyCapture2Test.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `FlyCapture2Test.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.flycapture</groupId>
+    <groupId>org.bytedeco.flycapture</groupId>
     <artifactId>flycapture2test</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>FlyCapture2Test</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>flycapture-platform</artifactId>
-            <version>2.13.3.31-1.4.4</version>
+            <version>2.13.3.31-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/FlyCapture2Test.java` source file
+### The `FlyCapture2Test.java` source file
 ```java
 //=============================================================================
 // Copyright © 2008 Point Grey Research, Inc. All Rights Reserved.
@@ -72,8 +75,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.javacpp.FlyCapture2.Error;
-import static org.bytedeco.javacpp.FlyCapture2.*;
+import org.bytedeco.flycapture.FlyCapture2.*;
+import org.bytedeco.flycapture.FlyCapture2.Error;
+import static org.bytedeco.flycapture.global.FlyCapture2.*;
 
 public class FlyCapture2Test {
     static void PrintBuildInfo() {
@@ -84,7 +88,7 @@ public class FlyCapture2Test {
                 + fc2Version.type() + "." + fc2Version.build());
 
         System.out.println("JavaCPP Presets version: "
-                + FlyCapture2.class.getPackage().getImplementationVersion());
+                + org.bytedeco.flycapture.global.FlyCapture2.class.getPackage().getImplementationVersion());
     }
 
     static void PrintCameraInfo(CameraInfo pCamInfo) {
