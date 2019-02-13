@@ -1,10 +1,10 @@
-diff -ruN libvpx-1.7.0/vp8/common/rtcd_defs.pl libvpx-1.7.0-linux-arm/vp8/common/rtcd_defs.pl
---- libvpx-1.7.0/vp8/common/rtcd_defs.pl	2018-01-25 07:25:44.000000000 +0900
-+++ libvpx-1.7.0-linux-arm/vp8/common/rtcd_defs.pl	2018-07-14 17:33:51.630592973 +0900
+diff -ruN libvpx-1.8.0/vp8/common/rtcd_defs.pl libvpx-1.8.0-linux-arm/vp8/common/rtcd_defs.pl
+--- libvpx-1.8.0/vp8/common/rtcd_defs.pl	2019-02-05 02:02:33.000000000 +0900
++++ libvpx-1.8.0-linux-arm/vp8/common/rtcd_defs.pl	2019-02-13 21:18:34.683076018 +0900
 @@ -60,10 +60,9 @@
  
  
- add_proto qw/void vp8_loop_filter_simple_mbv/, "unsigned char *y, int ystride, const unsigned char *blimit";
+ add_proto qw/void vp8_loop_filter_simple_mbv/, "unsigned char *y_ptr, int y_stride, const unsigned char *blimit";
 -specialize qw/vp8_loop_filter_simple_mbv sse2 neon msa mmi/;
 +specialize qw/vp8_loop_filter_simple_mbv sse2 msa mmi/;
  $vp8_loop_filter_simple_mbv_c=vp8_loop_filter_simple_vertical_edge_c;
@@ -16,7 +16,7 @@ diff -ruN libvpx-1.7.0/vp8/common/rtcd_defs.pl libvpx-1.7.0-linux-arm/vp8/common
 @@ -76,10 +75,9 @@
  $vp8_loop_filter_simple_mbh_mmi=vp8_loop_filter_simple_horizontal_edge_mmi;
  
- add_proto qw/void vp8_loop_filter_simple_bv/, "unsigned char *y, int ystride, const unsigned char *blimit";
+ add_proto qw/void vp8_loop_filter_simple_bv/, "unsigned char *y_ptr, int y_stride, const unsigned char *blimit";
 -specialize qw/vp8_loop_filter_simple_bv sse2 neon msa mmi/;
 +specialize qw/vp8_loop_filter_simple_bv sse2 msa mmi/;
  $vp8_loop_filter_simple_bv_c=vp8_loop_filter_bvs_c;
@@ -25,10 +25,10 @@ diff -ruN libvpx-1.7.0/vp8/common/rtcd_defs.pl libvpx-1.7.0-linux-arm/vp8/common
  $vp8_loop_filter_simple_bv_msa=vp8_loop_filter_bvs_msa;
  $vp8_loop_filter_simple_bv_mmi=vp8_loop_filter_bvs_mmi;
  
-diff -ruN libvpx-1.7.0/vp8/vp8_common.mk libvpx-1.7.0-linux-arm/vp8/vp8_common.mk
---- libvpx-1.7.0/vp8/vp8_common.mk	2018-01-25 07:25:44.000000000 +0900
-+++ libvpx-1.7.0-linux-arm/vp8/vp8_common.mk	2018-07-14 17:31:10.564587864 +0900
-@@ -141,7 +141,7 @@
+diff -ruN libvpx-1.8.0/vp8/vp8_common.mk libvpx-1.8.0-linux-arm/vp8/vp8_common.mk
+--- libvpx-1.8.0/vp8/vp8_common.mk	2019-02-05 02:02:33.000000000 +0900
++++ libvpx-1.8.0-linux-arm/vp8/vp8_common.mk	2019-02-13 21:17:29.114192724 +0900
+@@ -138,7 +138,7 @@
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/iwalsh_neon.c
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/vp8_loopfilter_neon.c
  VP8_COMMON_SRCS-$(HAVE_NEON)  += common/arm/neon/loopfiltersimplehorizontaledge_neon.c

@@ -1,7 +1,7 @@
-diff -ruN libvpx-1.7.0/build/make/configure.sh libvpx-1.7.0-android/build/make/configure.sh
---- libvpx-1.7.0/build/make/configure.sh	2018-01-25 07:25:44.000000000 +0900
-+++ libvpx-1.7.0-android/build/make/configure.sh	2018-12-12 16:37:30.534315950 +0900
-@@ -1021,45 +1021,24 @@
+diff -ruN libvpx-1.8.0/build/make/configure.sh libvpx-1.8.0-android/build/make/configure.sh
+--- libvpx-1.8.0/build/make/configure.sh	2019-02-05 02:02:33.000000000 +0900
++++ libvpx-1.8.0-android/build/make/configure.sh	2019-02-13 21:25:00.403389514 +0900
+@@ -1105,45 +1105,24 @@
            ;;
  
          android*)
@@ -53,11 +53,13 @@ diff -ruN libvpx-1.7.0/build/make/configure.sh libvpx-1.7.0-android/build/make/c
            else
              echo "Assuming standalone build with NDK toolchain."
              echo "See build/make/Android.mk for details."
-@@ -1202,6 +1181,32 @@
+@@ -1298,8 +1277,32 @@
        ;;
      x86*)
        case  ${tgt_os} in
+-        android)
 +        android*)
+           soft_enable realtime_only
 +          if [ -n "${ANDROID_NDK}" ]; then
 +            TOOLCHAIN_PATH=${ANDROID_PREFIX}-
 +            CC=${ANDROID_CC}
@@ -82,7 +84,6 @@ diff -ruN libvpx-1.7.0/build/make/configure.sh libvpx-1.7.0-android/build/make/c
 +            check_add_ldflags -static
 +            soft_enable unit_tests
 +          fi
-+          ;;
+           ;;
          win*)
            enabled gcc && add_cflags -fno-common
-           ;;

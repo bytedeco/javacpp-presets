@@ -14,22 +14,22 @@ ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable
 # DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl2 --disable-bzlib --disable-lzma --disable-linux-perf --disable-everything"
 # ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-NASM_VERSION=2.13.03
+NASM_VERSION=2.14
 ZLIB=zlib-1.2.11
 LAME=lame-3.100
 SPEEX=speex-1.2.0
 OPUS=opus-1.3
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.1
+OPENSSL=openssl-1.1.1a
 OPENH264_VERSION=1.8.0
-X265=2.9
-VPX_VERSION=1.7.0
-ALSA_VERSION=1.1.6
+X265=3.0
+VPX_VERSION=1.8.0
+ALSA_VERSION=1.1.8
 FREETYPE_VERSION=2.9.1
 MFX_VERSION=1.25
-NVCODEC_VERSION=8.2.15.5
-FFMPEG_VERSION=4.1
+NVCODEC_VERSION=8.2.15.7
+FFMPEG_VERSION=4.1.1
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -84,6 +84,7 @@ export PATH=$INSTALL_PATH/bin:$PATH
 cd ..
 
 patch -Np1 -d $LAME < ../../lame.patch
+patch -Np1 -d $OPENSSL < ../../openssl-android.patch
 patch -Np1 -d ffmpeg-$FFMPEG_VERSION < ../../ffmpeg.patch
 sedinplace 's/bool bEnableavx512/bool bEnableavx512 = false/g' x265-*/source/common/param.h
 sedinplace 's/detect512()/false/g' x265-*/source/common/quant.cpp
@@ -186,6 +187,10 @@ EOF
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        make -j $MAKEJ || true
+        sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
+        sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
+        sedinplace 's/vp8_loop_filter_mbvs_c/vp8_loop_filter_simple_vertical_edge_c/g' vp8_rtcd.h
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -295,6 +300,10 @@ EOF
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
         CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        make -j $MAKEJ || true
+        sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
+        sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
+        sedinplace 's/vp8_loop_filter_mbvs_c/vp8_loop_filter_simple_vertical_edge_c/g' vp8_rtcd.h
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
