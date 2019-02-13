@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>videoinput-platform</artifactId>
   <version>0.200-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for videoInput</name>

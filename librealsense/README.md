@@ -19,38 +19,42 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a very simple example that check if you can load the library,
-and connect to a camera.
+Here is a very simple example that check if you can load the library, and connect to a camera.
 
-### The `pom.xml`
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `TestConnection.java` source files below, simply execute on the command line:
+```bash
+ $ mvn compile exec:java
+```
 
-
-``` xml
+### The `pom.xml` build file
+```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.librealsense</groupId>
+    <groupId>org.bytedeco.librealsense</groupId>
     <artifactId>TestConnection</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>TestConnection</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>librealsense-platform</artifactId>
-            <version>1.12.1-1.4.4</version>
+            <version>1.12.1-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
+### The `TestConnection.java` source file
 
-### The `src/main/java/TestConnection.java`
-
-``` java
-import org.bytedeco.javacpp.RealSense;
-import org.bytedeco.javacpp.RealSense.context;
-import org.bytedeco.javacpp.RealSense.device;
+```java
+import org.bytedeco.javacpp.*;
+import org.bytedeco.librealsense.RealSense.*;
+import static org.bytedeco.librealsense.global.RealSense.*;
 
 public class TestConnection {
 
@@ -62,5 +66,4 @@ public class TestConnection {
         System.out.println("Using device 0, an " + device.get_name());
     }
 }
-
 ```

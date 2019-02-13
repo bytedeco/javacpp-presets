@@ -23,7 +23,7 @@ Here is a simple example of libdc1394 ported to Java from this C source file:
 
  * http://sourceforge.net/p/libdc1394/code/ci/V_2_2_2/tree/libdc1394/examples/grab_color_image.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/GrabColorImage.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `GrabColorImage.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.libdc1394</groupId>
+    <groupId>org.bytedeco.libdc1394</groupId>
     <artifactId>grabcolorimage</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>GrabColorImage</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>libdc1394-platform</artifactId>
-            <version>2.2.5-1.4.4</version>
+            <version>2.2.5-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/GrabColorImage.java` source file
+### The `GrabColorImage.java` source file
 ```java
 /*
  * Get one image using libdc1394 and store it as portable pix map
@@ -73,7 +76,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.dc1394.*;
+import org.bytedeco.libdc1394.dc1394.*;
+import static org.bytedeco.libdc1394.global.dc1394.*;
 
 public class GrabColorImage {
     static final String IMAGE_FILE_NAME = "image.ppm";

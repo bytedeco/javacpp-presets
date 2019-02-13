@@ -158,10 +158,10 @@ matrix:
         env: PROJ=ffmpeg OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=flycapture,libdc1394,libfreenect OS=linux-armhf
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=flycapture,libdc1394,libfreenect OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=openblas OS=linux-armhf
 #        install: true
@@ -187,10 +187,10 @@ matrix:
         env: PROJ=ffmpeg OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
-#      - os: linux
-#        env: PROJ=libdc1394,libfreenect OS=linux-ppc64le
-#        install: true
-#        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=libdc1394,libfreenect OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
 #      - os: linux
 #        env: PROJ=hdf5 OS=linux-ppc64le
 #        install: true
@@ -224,10 +224,10 @@ matrix:
         env: PROJ=ffmpeg OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=flycapture,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=flycapture,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=hdf5 OS=linux-x86
 #        install: true
@@ -289,10 +289,10 @@ matrix:
         env: PROJ=ffmpeg OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=hdf5 OS=linux-x86_64
 #        install: true
@@ -388,11 +388,11 @@ matrix:
         env: PROJ=ffmpeg OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode7.3
-#        env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: osx
 #        osx_image: xcode7.3
 #        env: PROJ=hdf5 OS=macosx-x86_64

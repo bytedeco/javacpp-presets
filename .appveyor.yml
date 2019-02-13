@@ -12,8 +12,8 @@ environment:
       OS: windows-x86
     - PROJ: "ffmpeg"
       OS: windows-x86
-#    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
-#      OS: windows-x86
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
+      OS: windows-x86
 #    - PROJ: "hdf5"
 #      OS: windows-x86
 #    - PROJ: "mkl"
@@ -37,8 +37,8 @@ environment:
       OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
-#    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
-#      OS: windows-x86_64
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
+      OS: windows-x86_64
 #    - PROJ: "hdf5"
 #      OS: windows-x86_64
 #    - PROJ: "mkl"

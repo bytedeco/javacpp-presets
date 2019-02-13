@@ -23,7 +23,7 @@ Here is a simple example of videoInput ported to Java from the "Example Usage" i
 
  * https://github.com/ofTheo/videoInput/blob/update2013/videoInputSrcAndDemos/libs/videoInput/videoInput.h
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleUsage.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ExampleUsage.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,26 +32,30 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.videoinput</groupId>
+    <groupId>org.bytedeco.videoinput</groupId>
     <artifactId>exampleusage</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleUsage</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>videoinput-platform</artifactId>
-            <version>0.200-1.4.4</version>
+            <version>0.200-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/ExampleUsage.java` source file
+### The `ExampleUsage.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.videoInputLib.*;
+import org.bytedeco.videoinput.videoInputLib.*;
+import static org.bytedeco.videoinput.global.videoInputLib.*;
 
 public class ExampleUsage {
     public static void main(String[] args) {

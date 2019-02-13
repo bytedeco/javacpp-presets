@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>libdc1394-platform</artifactId>
   <version>2.2.5-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for libdc1394</name>
