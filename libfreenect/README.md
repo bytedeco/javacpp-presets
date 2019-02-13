@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * libfreenect 0.5.3  http://openkinect.org/
+ * libfreenect 0.5.7  http://openkinect.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
     <artifactId>glpclview</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>GLPCLView</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libfreenect-platform</artifactId>
-            <version>0.5.3-1.4.4</version>
+            <version>0.5.7-1.4.5-SNAPSHOT</version>
         </dependency>
         <dependency>
           <groupId>org.jogamp.gluegen</groupId>

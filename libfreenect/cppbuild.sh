@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBFREENECT_VERSION=0.5.3
+LIBFREENECT_VERSION=0.5.7
 LIBUSB_VERSION=1.0.21
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.tar.gz libfreenect-$LIBFREENECT_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
@@ -26,7 +26,7 @@ if [[ $PLATFORM == windows* ]]; then
 
     unzip -o libusb-win32-bin-1.2.6.0.zip
     unzip -o pthreads-w32-2-9-1-release.zip -d pthreads-w32-2-9-1-release/
-    patch -Np1 -d libfreenect-$LIBFREENECT_VERSION < ../../libfreenect-$LIBFREENECT_VERSION-windows.patch
+    patch -Np1 -d libfreenect-$LIBFREENECT_VERSION < ../../libfreenect-windows.patch
 fi
 
 cd libfreenect-$LIBFREENECT_VERSION
@@ -82,7 +82,7 @@ case $PLATFORM in
         make install
         ;;
     macosx-*)
-        patch -Np1 < ../../../libfreenect-$LIBFREENECT_VERSION-macosx.patch
+        patch -Np1 < ../../../libfreenect-macosx.patch
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. .
         make -j $MAKEJ
         make install

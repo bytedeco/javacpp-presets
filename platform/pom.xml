@@ -89,7 +89,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>libfreenect-platform</artifactId>
-      <version>0.5.3-${project.version}</version>
+      <version>0.5.7-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
