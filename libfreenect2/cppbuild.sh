@@ -7,10 +7,12 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+NASM_VERSION=2.14
 LIBUSB_VERSION=1.0.21
 GLFW_VERSION=3.2.1
 LIBJPEG=libjpeg-turbo-1.5.3
 LIBFREENECT2_VERSION=0.2.0
+download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 download https://github.com/glfw/glfw/archive/$GLFW_VERSION.tar.gz glfw-$GLFW_VERSION.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
@@ -21,6 +23,7 @@ cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 mkdir -p include lib bin
+tar --totals -xzf ../nasm-$NASM_VERSION.tar.gz
 tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 tar --totals -xzf ../glfw-$GLFW_VERSION.tar.gz
 tar --totals -xzf ../$LIBJPEG.tar.gz
@@ -31,6 +34,15 @@ if [[ $PLATFORM == windows* ]]; then
 
     unzip -o libfreenect2-$LIBFREENECT2_VERSION-usbdk-vs2015-x64.zip
 fi
+
+cd nasm-$NASM_VERSION
+# fix for build with GCC 8.x
+sedinplace 's/void pure_func/void/g' include/nasmlib.h
+./configure --prefix=$INSTALL_PATH
+make -j $MAKEJ V=0
+make install
+export PATH=$INSTALL_PATH/bin:$PATH
+cd ..
 
 case $PLATFORM in
     linux-x86)

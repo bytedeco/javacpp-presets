@@ -179,7 +179,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade maven
-   brew install ccache swig autoconf-archive libtool libusb nasm yasm xz sdl gpg1
+   brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 nasm yasm
 
    # Try to use ccache to speed up the build
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH

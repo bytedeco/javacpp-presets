@@ -7,6 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+NASM_VERSION=2.14
 ZLIB=zlib-1.2.11
 GIFLIB=giflib-5.1.4
 LIBJPEG=libjpeg-turbo-1.5.3
@@ -14,6 +15,7 @@ LIBPNG=libpng-1.5.30 # libpng16 doesn't work on CentOS 6 for some reason
 LIBTIFF=tiff-4.0.9
 LIBWEBP=libwebp-1.0.0
 LEPTONICA_VERSION=1.77.0
+download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
 download http://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
@@ -26,6 +28,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
+tar --totals -xzf ../nasm-$NASM_VERSION.tar.gz
 tar --totals -xzf ../$ZLIB.tar.gz
 tar --totals -xzf ../$GIFLIB.tar.gz
 tar --totals -xzf ../$LIBJPEG.tar.gz
@@ -33,6 +36,15 @@ tar --totals -xzf ../$LIBPNG.tar.gz
 tar --totals -xzf ../$LIBTIFF.tar.gz
 tar --totals -xzf ../$LIBWEBP.tar.gz
 tar --totals -xzf ../leptonica-$LEPTONICA_VERSION.tar.gz
+
+cd nasm-$NASM_VERSION
+# fix for build with GCC 8.x
+sedinplace 's/void pure_func/void/g' include/nasmlib.h
+./configure --prefix=$INSTALL_PATH
+make -j $MAKEJ V=0
+make install
+export PATH=$INSTALL_PATH/bin:$PATH
+cd ..
 
 case $PLATFORM in
     android-arm)
@@ -392,8 +404,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-        [[ $ARCH == x86_64 ]] && BUILD=--build=x86_64-darwin || BUILD=
-        NASM=yasm ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BUILD
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
