@@ -18,7 +18,7 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.17.3-${project.parent.version}</version>
+      <version>0.17.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
