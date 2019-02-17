@@ -12,7 +12,7 @@ public class mklml extends org.bytedeco.javacpp.presets.mklml {
 // Parsed from mkl.h
 
 /*******************************************************************************
-* Copyright (c) 2018, Intel Corporation
+* Copyright (c) 2018-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -71,13 +71,13 @@ public class mklml extends org.bytedeco.javacpp.presets.mklml {
 // #ifndef _MKL_VERSION_H_
 // #define _MKL_VERSION_H_
 
-public static final int __INTEL_MKL_BUILD_DATE = 20180928;
+public static final int __INTEL_MKL_BUILD_DATE = 20190125;
 
 public static final int __INTEL_MKL__ = 2019;
 public static final int __INTEL_MKL_MINOR__ = 0;
-public static final int __INTEL_MKL_UPDATE__ = 1;
+public static final int __INTEL_MKL_UPDATE__ = 3;
 
-public static final int INTEL_MKL_VERSION = 20190001;
+public static final int INTEL_MKL_VERSION = 20190003;
 
 // #endif
 
@@ -85,7 +85,7 @@ public static final int INTEL_MKL_VERSION = 20190001;
 // Parsed from mkl_types.h
 
 /*******************************************************************************
-* Copyright (c) 1999-2018, Intel Corporation
+* Copyright (c) 1999-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -236,24 +236,26 @@ public static class MKLVersion extends Pointer {
 //     #define MKL_INT32 int
 // #endif
 
-/* Intel(R) MKL threading stuff. Intel(R) MKL Domain names */
+/* Intel(R) MKL domain names */
 public static final int MKL_DOMAIN_ALL =      0;
 public static final int MKL_DOMAIN_BLAS =     1;
 public static final int MKL_DOMAIN_FFT =      2;
 public static final int MKL_DOMAIN_VML =      3;
 public static final int MKL_DOMAIN_PARDISO =  4;
 
-/* Intel(R) MKL CBWR stuff */
+/* Intel(R) MKL CBWR */
 
-/* options */
+/* mkl_cbwr_get options */
 public static final int MKL_CBWR_BRANCH = 1;
 public static final int MKL_CBWR_ALL =   ~0;
 
-/* common settings */
-public static final int MKL_CBWR_UNSET_ALL = 0;
-public static final int MKL_CBWR_OFF =       0;
+/* flag specific values */
+public static final int MKL_CBWR_STRICT =    0x10000;
 
 /* branch specific values */
+public static native @MemberGetter int MKL_CBWR_UNSET_ALL();
+public static final int MKL_CBWR_UNSET_ALL = MKL_CBWR_UNSET_ALL();
+public static final int MKL_CBWR_OFF =            0;
 public static final int MKL_CBWR_BRANCH_OFF =     1;
 public static final int MKL_CBWR_AUTO =           2;
 public static final int MKL_CBWR_COMPATIBLE =     3;
@@ -276,7 +278,7 @@ public static final int MKL_CBWR_ERR_UNSUPPORTED_BRANCH =   -3;
 public static final int MKL_CBWR_ERR_UNKNOWN_BRANCH =       -4;
 public static final int MKL_CBWR_ERR_MODE_CHANGE_FAILURE =  -8;
 
-/* Obsolete */
+/* obsolete */
 public static final int MKL_CBWR_SSE3 =           5;
 
 /** enum MKL_LAYOUT */
@@ -317,7 +319,7 @@ public static class sgemm_jit_kernel_t extends FunctionPointer {
     public    sgemm_jit_kernel_t(Pointer p) { super(p); }
     protected sgemm_jit_kernel_t() { allocate(); }
     private native void allocate();
-    public native void call(Pointer arg0, FloatPointer arg1,FloatPointer arg2,FloatPointer arg3);
+    public native void call(Pointer arg0, FloatPointer arg1,         FloatPointer arg2,         FloatPointer arg3);
 }
 public static class dgemm_jit_kernel_t extends FunctionPointer {
     static { Loader.load(); }
@@ -325,7 +327,23 @@ public static class dgemm_jit_kernel_t extends FunctionPointer {
     public    dgemm_jit_kernel_t(Pointer p) { super(p); }
     protected dgemm_jit_kernel_t() { allocate(); }
     private native void allocate();
-    public native void call(Pointer arg0,DoublePointer arg1,DoublePointer arg2,DoublePointer arg3);
+    public native void call(Pointer arg0, DoublePointer arg1,        DoublePointer arg2,        DoublePointer arg3);
+}
+public static class cgemm_jit_kernel_t extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    cgemm_jit_kernel_t(Pointer p) { super(p); }
+    protected cgemm_jit_kernel_t() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer arg0, MKL_Complex8 arg1,  MKL_Complex8 arg2,  MKL_Complex8 arg3);
+}
+public static class zgemm_jit_kernel_t extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    zgemm_jit_kernel_t(Pointer p) { super(p); }
+    protected zgemm_jit_kernel_t() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer arg0, MKL_Complex16 arg1, MKL_Complex16 arg2, MKL_Complex16 arg3);
 }
 
 /** enum mkl_jit_status_t */
@@ -343,7 +361,7 @@ public static final int
 // Parsed from mkl_trans.h
 
 /*******************************************************************************
-* Copyright (c) 2007-2018, Intel Corporation
+* Copyright (c) 2007-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -494,7 +512,7 @@ public static native void MKL_Zomatcopy(
 // Parsed from mkl_cblas.h
 
 /*******************************************************************************
-* Copyright (c) 1999-2018, Intel Corporation
+* Copyright (c) 1999-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -531,6 +549,20 @@ public static native void MKL_Zomatcopy(
 // #include <stddef.h>
 
 // #include "mkl_types.h"
+
+
+// #ifdef __GNUC__
+// #define MKL_DEPRECATED_C __attribute__((deprecated))
+// #elif defined(_MSC_VER)
+// #ifdef _WIN32
+// #define MKL_DEPRECATED_C __declspec(deprecated, dllexport)
+// #else
+// #define MKL_DEPRECATED_C __declspec(deprecated)
+// #endif
+// #else
+// #pragma message("WARNING: MKL {S,D}GEMM_ALLOC and {S,D}GEMM_FREE were declared deprecated. Use MKL {S,D}GEMM_PACK_GET_SIZE, MKL_MALLOC and MKL_FREE instead")
+// #define MKL_DEPRECATED_C
+// #endif
 
 // #ifdef __cplusplus            /* Assume C declarations for C++ */
 // #endif /* __cplusplus */
@@ -1944,7 +1976,7 @@ public static native void cblas_zher2k(@Cast("const CBLAS_LAYOUT") int Layout, @
 /*
  * Routines with prefixes S and D only
  */
-public static native FloatPointer cblas_sgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
+public static native @Deprecated FloatPointer cblas_sgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
                  int M, int N, int K);
 
 public static native void cblas_sgemm_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
@@ -1974,10 +2006,10 @@ public static native void cblas_sgemm_compute(@Cast("const CBLAS_LAYOUT") int La
                  int K, @Const float[] A,
                  int lda, @Const float[] B, int ldb,
                  float beta, float[] C, int ldc);
-public static native void cblas_sgemm_free(FloatPointer dest);
-public static native void cblas_sgemm_free(FloatBuffer dest);
-public static native void cblas_sgemm_free(float[] dest);
-public static native DoublePointer cblas_dgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
+public static native @Deprecated void cblas_sgemm_free(FloatPointer dest);
+public static native @Deprecated void cblas_sgemm_free(FloatBuffer dest);
+public static native @Deprecated void cblas_sgemm_free(float[] dest);
+public static native @Deprecated DoublePointer cblas_dgemm_alloc(@Cast("const CBLAS_IDENTIFIER") int identifier,
                  int M, int N, int K);
 
 public static native void cblas_dgemm_pack(@Cast("const CBLAS_LAYOUT") int Layout, @Cast("const CBLAS_IDENTIFIER") int identifier,
@@ -2007,9 +2039,9 @@ public static native void cblas_dgemm_compute(@Cast("const CBLAS_LAYOUT") int La
                  int K, @Const double[] A,
                  int lda, @Const double[] B, int ldb,
                  double beta, double[] C, int ldc);
-public static native void cblas_dgemm_free(DoublePointer dest);
-public static native void cblas_dgemm_free(DoubleBuffer dest);
-public static native void cblas_dgemm_free(double[] dest);
+public static native @Deprecated void cblas_dgemm_free(DoublePointer dest);
+public static native @Deprecated void cblas_dgemm_free(DoubleBuffer dest);
+public static native @Deprecated void cblas_dgemm_free(double[] dest);
 
 /*
  * Integer Routines
@@ -2067,9 +2099,22 @@ public static native void cblas_gemm_s8u8s32(@Cast("const CBLAS_LAYOUT") int Lay
 // #define mkl_jit_create_dgemm mkl_cblas_jit_create_dgemm
 // #endif
 
+
 // #ifndef mkl_jit_create_sgemm
 // #define mkl_jit_create_sgemm mkl_cblas_jit_create_sgemm
 // #endif
+
+// #ifndef mkl_jit_create_cgemm
+// #define mkl_jit_create_cgemm mkl_cblas_jit_create_cgemm
+// #endif
+
+
+// #ifndef mkl_jit_create_zgemm
+// #define mkl_jit_create_zgemm mkl_cblas_jit_create_zgemm
+// #endif
+
+
+
 
 
 
@@ -2087,7 +2132,7 @@ public static native void cblas_gemm_s8u8s32(@Cast("const CBLAS_LAYOUT") int Lay
 // Parsed from mkl_dnn_types.h
 
 /*******************************************************************************
-* Copyright (c) 2015-2018, Intel Corporation
+* Copyright (c) 2015-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -2209,7 +2254,7 @@ public static final int
 // Parsed from mkl_dnn.h
 
 /*******************************************************************************
-* Copyright (c) 2015-2018, Intel Corporation
+* Copyright (c) 2015-2019, Intel Corporation
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without

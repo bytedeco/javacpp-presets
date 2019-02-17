@@ -129,12 +129,12 @@
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-platform</artifactId>
-      <version>2019.1-${project.version}</version>
+      <version>2019.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.17.4-${project.version}</version>
+      <version>0.18-rc-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>

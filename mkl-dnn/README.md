@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MKL-DNN 0.17.4  https://01.org/mkl-dnn
+ * MKL-DNN 0.18-rc  https://01.org/mkl-dnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.17.4-1.4.5-SNAPSHOT</version>
+            <version>0.18-rc-1.4.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.4.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.4.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.1-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.4.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
