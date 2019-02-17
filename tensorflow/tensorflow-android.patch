@@ -1,7 +1,16 @@
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-android/tensorflow/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/BUILD	2018-10-20 23:50:28.032692484 +0900
-@@ -448,29 +448,26 @@
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/BUILD tensorflow-1.13.0-rc2-android/tensorflow/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/BUILD	2019-02-17 19:31:28.282746058 +0900
+@@ -2,7 +2,7 @@
+ # TensorFlow is a computational framework, primarily for use in machine
+ # learning applications.
+ 
+-package(default_visibility = [":internal"])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
+@@ -488,29 +488,36 @@
  
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
@@ -36,65 +45,753 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-android/t
 +    linkstatic = 1,
      visibility = ["//visibility:public"],
      deps = [
--        "//tensorflow:tf_exported_symbols.lds",
--        "//tensorflow:tf_version_script.lds",
--        "//tensorflow/c:c_api",
--        "//tensorflow/c/eager:c_api",
--        "//tensorflow/cc:cc_ops",
--        "//tensorflow/cc:client_session",
--        "//tensorflow/cc:scope",
--        "//tensorflow/cc/profiler",
--        "//tensorflow/core:tensorflow",
-+        "//tensorflow/core:android_tensorflow_lib",
+         "//tensorflow:tf_exported_symbols.lds",
+         "//tensorflow:tf_version_script.lds",
+         "//tensorflow/c:c_api",
++        "//tensorflow/c:python_api",
+         "//tensorflow/c/eager:c_api",
+         "//tensorflow/cc:cc_ops",
+         "//tensorflow/cc:client_session",
+         "//tensorflow/cc:scope",
+         "//tensorflow/cc/profiler",
+         "//tensorflow/core:tensorflow",
++        "//tensorflow/java/src/main/native:native",
      ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/c/BUILD tensorflow-1.12.0-rc0-android/tensorflow/c/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/c/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/c/BUILD	2018-10-20 23:50:28.032692484 +0900
-@@ -145,6 +145,22 @@
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/c/BUILD tensorflow-1.13.0-rc2-android/tensorflow/c/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/c/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/c/BUILD	2019-02-17 19:31:28.282746058 +0900
+@@ -52,9 +52,6 @@
+         "//tensorflow/c:__subpackages__",
+     ],
+     deps = select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu",
+             "//tensorflow/core:framework",
+@@ -77,10 +74,6 @@
+     copts = tf_copts(),
      visibility = ["//visibility:public"],
+     deps = select({
+-        "//tensorflow:android": [
+-            ":c_api_internal",
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             ":c_api_internal",
+             "//tensorflow/cc/saved_model:loader",
+@@ -186,13 +179,6 @@
+     copts = tf_copts(),
+     visibility = ["//visibility:public"],
+     deps = select({
+-        "//tensorflow:android": [
+-            ":c_api",
+-            ":tf_status_helper",
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-            "//tensorflow/core:platform_env",
+-            "//tensorflow/core:lib",
+-        ],
+         "//conditions:default": [
+             ":c_api",
+             ":tf_status_helper",
+@@ -214,12 +200,6 @@
+     copts = tf_copts(),
+     visibility = ["//visibility:public"],
+     deps = select({
+-        "//tensorflow:android": [
+-            ":c_api",
+-            ":c_api_internal",
+-            ":tf_status_helper",
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             ":c_api",
+             ":c_api_internal",
+@@ -414,7 +394,7 @@
+     name = "python_api",
+     srcs = ["python_api.cc"],
+     hdrs = ["python_api.h"],
+-    visibility = ["//tensorflow/python:__pkg__"],
++    visibility = ["//visibility:public"],
+     deps = [
+         ":c_api",
+         ":c_api_internal",
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/c/c_api.cc tensorflow-1.13.0-rc2-android/tensorflow/c/c_api.cc
+--- tensorflow-1.13.0-rc2/tensorflow/c/c_api.cc	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/c/c_api.cc	2019-02-17 19:31:28.283746046 +0900
+@@ -20,14 +20,12 @@
+ #include <memory>
+ #include <vector>
+ 
+-#ifndef __ANDROID__
+ #include "tensorflow/cc/framework/gradients.h"
+ #include "tensorflow/cc/framework/ops.h"
+ #include "tensorflow/cc/framework/scope_internal.h"
+ #include "tensorflow/cc/ops/while_loop.h"
+ #include "tensorflow/cc/saved_model/loader.h"
+ #include "tensorflow/core/framework/op_gen_lib.h"
+-#endif
+ #include "tensorflow/c/c_api_internal.h"
+ #include "tensorflow/core/common_runtime/device_mgr.h"
+ #include "tensorflow/core/common_runtime/eval_const_tensor.h"
+@@ -1010,7 +1008,6 @@
+   return TensorId(output.oper->node.name(), output.index);
+ }
+ 
+-#ifndef __ANDROID__
+ std::vector<tensorflow::Output> OutputsFromTFOutputs(TF_Output* tf_outputs,
+                                                      int n) {
+   std::vector<tensorflow::Output> outputs(n);
+@@ -1028,7 +1025,6 @@
+     tf_outputs[i].index = outputs[i].index();
+   }
+ }
+-#endif  // __ANDROID__
+ 
+ }  // namespace
+ 
+@@ -2143,7 +2139,6 @@
+ 
+ namespace {
+ 
+-#ifndef __ANDROID__
+ 
+ // Creates a placeholder representing an input to the cond or body graph.
+ // TODO(skyewm): remove these from final graph
+@@ -2237,8 +2232,6 @@
+   return true;
+ }
+ 
+-#endif  // __ANDROID__
+-
+ void FreeWhileResources(const TF_WhileParams* params) {
+   TF_DeleteGraph(params->cond_graph);
+   TF_DeleteGraph(params->body_graph);
+@@ -2256,13 +2249,6 @@
+ 
+ TF_WhileParams TF_NewWhile(TF_Graph* g, TF_Output* inputs, int ninputs,
+                            TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Creating while loops is not supported in Android. File a bug at "
+-      "https://github.com/tensorflow/tensorflow/issues if this feature is "
+-      "important to you");
+-  return EmptyWhileParams();
+-#else
+   if (ninputs == 0) {
+     status->status =
+         InvalidArgument("TF_NewWhile() must be passed at least one input");
+@@ -2303,10 +2289,8 @@
+     return EmptyWhileParams();
+   }
+   return params;
+-#endif  // __ANDROID__
+ }
+ 
+-#ifndef __ANDROID__
+ namespace {
+ 
+ // TODO(skyewm): make nodes in while loop unfetchable like in Python version
+@@ -2381,21 +2365,13 @@
+ }
+ 
+ }  // namespace
+-#endif  // __ANDROID__
+ 
+ void TF_FinishWhile(const TF_WhileParams* params, TF_Status* status,
+                     TF_Output* outputs) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Creating while loops is not supported in Android. File a bug at "
+-      "https://github.com/tensorflow/tensorflow/issues if this feature is "
+-      "important to you");
+-#else
+   // If it appears the caller created or modified `params`, don't free resources
+   if (!ValidateConstWhileParams(*params, status)) return;
+   TF_FinishWhileHelper(params, status, outputs);
+   FreeWhileResources(params);
+-#endif  // __ANDROID__
+ }
+ 
+ void TF_AbortWhile(const TF_WhileParams* params) { FreeWhileResources(params); }
+@@ -2408,12 +2384,6 @@
+ void TF_AddGradientsWithPrefix(TF_Graph* g, const char* prefix, TF_Output* y,
+                                int ny, TF_Output* x, int nx, TF_Output* dx,
+                                TF_Status* status, TF_Output* dy) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Adding gradients is not supported in Android. File a bug at "
+-      "https://github.com/tensorflow/tensorflow/issues if this feature is "
+-      "important to you");
+-#else
+   std::vector<tensorflow::Output> y_arg = OutputsFromTFOutputs(y, ny);
+   std::vector<tensorflow::Output> x_arg = OutputsFromTFOutputs(x, nx);
+   std::vector<tensorflow::Output> dy_arg;
+@@ -2490,7 +2460,6 @@
+ 
+   // Unpack the results from grad_outputs_arg.
+   TFOutputsFromOutputs(dy_arg, dy);
+-#endif  // __ANDROID__
+ }
+ 
+ // TF_Session functions ----------------------------------------------
+@@ -2519,15 +2488,6 @@
+     const TF_SessionOptions* session_options, const TF_Buffer* run_options,
+     const char* export_dir, const char* const* tags, int tags_len,
+     TF_Graph* graph, TF_Buffer* meta_graph_def, TF_Status* status) {
+-// TODO(ashankar): Remove the __ANDROID__ guard. This will require ensuring that
+-// the tensorflow/cc/saved_model:loader build target is Android friendly.
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Loading a SavedModel is not supported in Android. File a bug at "
+-      "https://github.com/tensorflow/tensorflow/issues if this feature is "
+-      "important to you");
+-  return nullptr;
+-#else
+   mutex_lock l(graph->mu);
+   if (!graph->name_map.empty()) {
+     status->status = InvalidArgument("Graph is non-empty.");
+@@ -2575,7 +2535,6 @@
+   graph->sessions[session] = "";
+   session->last_num_graph_nodes = graph->graph.num_node_ids();
+   return session;
+-#endif  // __ANDROID__
+ }
+ 
+ void TF_CloseSession(TF_Session* s, TF_Status* status) {
+@@ -2750,10 +2709,6 @@
+ 
+ void TF_ApiDefMapPut(TF_ApiDefMap* api_def_map, const char* text,
+                      size_t text_len, TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "ApiDefMap is not supported in Android.");
+-#else
+   mutex_lock l(api_def_map->lock);
+   if (api_def_map->update_docs_called) {
+     status->status = FailedPrecondition(
+@@ -2763,16 +2718,10 @@
+   }
+   string api_def_text(text, text_len);
+   status->status = api_def_map->api_def_map.LoadApiDef(api_def_text);
+-#endif  // __ANDROID__
+ }
+ 
+ TF_Buffer* TF_ApiDefMapGet(TF_ApiDefMap* api_def_map, const char* name,
+                            size_t name_len, TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "ApiDefMap is not supported in Android.");
+-  return nullptr;
+-#else
+   mutex_lock l(api_def_map->lock);
+   if (!api_def_map->update_docs_called) {
+     api_def_map->api_def_map.UpdateDocs();
+@@ -2791,7 +2740,6 @@
+     return nullptr;
+   }
+   return ret;
+-#endif  // __ANDROID__
+ }
+ 
+ TF_Buffer* TF_GetAllRegisteredKernels(TF_Status* status) {
+@@ -2819,18 +2767,11 @@
+ 
+ // TF_Server functions ----------------------------------------------
+ 
+-#ifndef __ANDROID__
+ TF_Server::TF_Server(std::unique_ptr<tensorflow::ServerInterface> server)
+     : target(server->target()), server(std::move(server)) {}
+-#endif  // __ANDROID__
+ 
+ TF_Server* TF_NewServer(const void* proto, size_t proto_len,
+                         TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Server functionality is not supported in Android");
+-  return nullptr;
+-#else
+   tensorflow::ServerDef server_def;
+   if (!server_def.ParseFromArray(proto, static_cast<int>(proto_len))) {
+     status->status = InvalidArgument(
+@@ -2843,42 +2784,22 @@
+   if (!status->status.ok()) return nullptr;
+ 
+   return new TF_Server(std::move(out_server));
+-#endif
+ }
+ 
+ void TF_ServerStart(TF_Server* server, TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Server functionality is not supported in Android");
+-#else
+   status->status = server->server->Start();
+-#endif
+ }
+ 
+ void TF_ServerStop(TF_Server* server, TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Server functionality is not supported in Android");
+-#else
+   status->status = server->server->Stop();
+-#endif
+ }
+ 
+ void TF_ServerJoin(TF_Server* server, TF_Status* status) {
+-#ifdef __ANDROID__
+-  status->status = tensorflow::errors::Unimplemented(
+-      "Server functionality is not supported in Android");
+-#else
+   status->status = server->server->Join();
+-#endif
+ }
+ 
+ const char* TF_ServerTarget(TF_Server* server) {
+-#ifdef __ANDROID__
+-  return nullptr;
+-#else
+   return server->target.c_str();
+-#endif
+ }
+ 
+ void TF_DeleteServer(TF_Server* server) { delete server; }
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/c/c_api_internal.h tensorflow-1.13.0-rc2-android/tensorflow/c/c_api_internal.h
+--- tensorflow-1.13.0-rc2/tensorflow/c/c_api_internal.h	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/c/c_api_internal.h	2019-02-17 19:31:28.283746046 +0900
+@@ -24,10 +24,8 @@
+ #include <unordered_map>
+ #include <vector>
+ 
+-#ifndef __ANDROID__
+ #include "tensorflow/core/distributed_runtime/server_lib.h"
+ #include "tensorflow/core/framework/op_gen_lib.h"
+-#endif
+ #include "tensorflow/core/common_runtime/shape_refiner.h"
+ #include "tensorflow/core/framework/tensor.h"
+ #include "tensorflow/core/framework/tensor_shape.h"
+@@ -167,27 +165,21 @@
+ struct TF_ApiDefMap {
+   explicit TF_ApiDefMap(const tensorflow::OpList& op_list)
+       :
+-#ifndef __ANDROID__
+         api_def_map(op_list),
+-#endif
+         update_docs_called(false) {
+   }
+ 
+-#ifndef __ANDROID__
+   tensorflow::ApiDefMap api_def_map GUARDED_BY(lock);
+-#endif
+   bool update_docs_called GUARDED_BY(lock);
+   tensorflow::mutex lock;
+ };
+ 
+-#ifndef __ANDROID__
+ struct TF_Server {
+   TF_Server(std::unique_ptr<tensorflow::ServerInterface> server);
+ 
+   const tensorflow::string target;
+   std::unique_ptr<tensorflow::ServerInterface> server;
+ };
+-#endif
+ 
+ namespace tensorflow {
+ 
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/c/eager/BUILD tensorflow-1.13.0-rc2-android/tensorflow/c/eager/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/c/eager/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/c/eager/BUILD	2019-02-17 19:31:28.283746046 +0900
+@@ -21,9 +21,6 @@
+     copts = tf_copts() + tfe_xla_copts(),
+     visibility = ["//visibility:public"],
+     deps = select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/c:c_api",
+             "//tensorflow/c:c_api_internal",
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/cc/BUILD tensorflow-1.13.0-rc2-android/tensorflow/cc/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/cc/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/cc/BUILD	2019-02-17 19:33:09.898467258 +0900
+@@ -144,14 +144,14 @@
+     name = "ops",
+     srcs = ["framework/ops.cc"],
+     hdrs = ["framework/ops.h"],
+-    android_deps = ["//tensorflow/core:android_tensorflow_lib"],
+-    deps = [
++    common_deps = [
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:framework",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:lib_internal",
+         "//tensorflow/core:protos_all_cc",
+     ],
++    deps = [],
  )
  
-+filegroup(
-+    name = "c_api_files",
-+    srcs = glob(
-+        ["**/*"],
-+        exclude = [
-+            "**/METADATA",
-+            "**/OWNERS",
-+            "**/*test*.cc",
-+            "**/python_api.cc",
-+            "c_api_experimental.cc",
-+            "c_api_experimental.h",
-+        ],
-+    ),
-+    visibility = ["//visibility:public"],
-+)
-+
- tf_cuda_library(
-     name = "tf_status_helper",
-     srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/BUILD tensorflow-1.12.0-rc0-android/tensorflow/core/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/core/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/core/BUILD	2018-10-20 23:50:28.033692483 +0900
-@@ -1704,7 +1704,11 @@
- # binary size (by packaging a reduced operator set) is a concern.
- cc_library(
-     name = "android_tensorflow_lib",
--    srcs = if_android([":android_op_registrations_and_gradients"]),
-+    srcs = if_android([
-+        ":android_op_registrations_and_gradients",
-+        "//tensorflow/c:c_api_files",
-+        "//tensorflow/java/src/main/native:java_api_files",
-+    ]),
+ cc_library_with_android_deps(
+@@ -161,17 +161,15 @@
+         "framework/scope_internal.h",
+     ],
+     hdrs = ["framework/scope.h"],
+-    android_deps = ["//tensorflow/core:android_tensorflow_lib"],
+     common_deps = [
+         ":ops",
+-    ],
+-    deps = [
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:framework",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:protos_all_cc",
+         "@com_google_absl//absl/strings",
+     ],
++    deps = [],
+ )
+ 
+ cc_library_with_android_deps(
+@@ -200,16 +198,14 @@
+     name = "client_session",
+     srcs = ["client/client_session.cc"],
+     hdrs = ["client/client_session.h"],
+-    android_deps = ["//tensorflow/core:android_tensorflow_lib"],
+     common_deps = [
+         ":ops",
+         ":scope",
+-    ],
+-    deps = [
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:protos_all_cc",
+     ],
++    deps = [],
+ )
+ 
+ tf_cc_test(
+@@ -233,17 +229,13 @@
+     name = "const_op",
+     srcs = ["ops/const_op.cc"],
+     hdrs = ["ops/const_op.h"],
+-    android_deps = [
+-        "//tensorflow/core:android_tensorflow_lib",
+-    ],
+     common_deps = [
+         ":ops",
+         ":scope",
+-    ],
+-    deps = [
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:framework",
+     ],
++    deps = [],
+ )
+ 
+ tf_cc_test(
+@@ -262,20 +254,16 @@
+     name = "while_loop",
+     srcs = ["ops/while_loop.cc"],
+     hdrs = ["ops/while_loop.h"],
+-    android_deps = [
+-        "//tensorflow/core:android_tensorflow_lib",
+-    ],
+     common_deps = [
+         ":cc_ops",
+         ":cc_ops_internal",
+         ":ops",
+         ":scope",
+         ":scope_internal",
+-    ],
+-    deps = [
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:framework",
+     ],
++    deps = [],
+ )
+ 
+ tf_cc_test(
+@@ -593,14 +581,11 @@
+         "framework/cc_op_gen.h",
+         "framework/cc_op_gen_main.cc",
+     ],
+-    android_deps = [
+-        "//tensorflow/core:android_tensorflow_lib",
+-    ],
      copts = tf_copts(),
-     tags = [
-         "manual",
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.12.0-rc0-android/tensorflow/core/framework/tensor.h
---- tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/core/framework/tensor.h	2018-10-20 23:50:28.033692483 +0900
-@@ -118,6 +118,11 @@
+     data = [
+         "//tensorflow/core/api_def:base_api_def",
+     ],
+-    deps = [
++    common_deps = [
+         "//tensorflow/core:framework_headers_lib",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:lib_internal",
+@@ -608,6 +593,7 @@
+         "//tensorflow/core:proto_text",
+         "//tensorflow/core:protos_all_cc",
+     ],
++    deps = [],
+ )
+ 
+ tf_cc_test(
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/cc/saved_model/BUILD tensorflow-1.13.0-rc2-android/tensorflow/cc/saved_model/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/cc/saved_model/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/cc/saved_model/BUILD	2019-02-17 19:31:28.284746035 +0900
+@@ -39,20 +39,9 @@
+     hdrs = ["reader.h"],
+     deps = [
+         ":constants",
+-    ] + if_not_mobile([
+-        # TODO(b/111634734): :lib and :protos_all contain dependencies that
+-        # cannot be built on mobile platforms. Instead, include the appropriate
+-        # tf_lib depending on the build platform.
+         "//tensorflow/core:lib",
+         "//tensorflow/core:protos_all_cc",
+-    ]) + if_mobile([
+-        # Mobile-friendly SavedModel proto. See go/portable-proto for more info.
+-        "//tensorflow/core:saved_model_portable_proto",
+-    ]) + if_android([
+-        "//tensorflow/core:android_tensorflow_lib",
+-    ]) + if_ios([
+-        "//tensorflow/core:ios_tensorflow_lib",
+-    ]),
++    ],
+ )
+ 
+ tf_cc_test(
+@@ -78,14 +67,11 @@
+     hdrs = ["loader.h"],
+     deps = [
+         ":loader_lite",
+-    ] + if_not_mobile([
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:protos_all_cc",
+         "//tensorflow/core:tensorflow",
+-    ]) + if_android([
+-        "//tensorflow/core:android_tensorflow_lib",
+-    ]),
++    ],
+ )
+ 
+ cc_library(
+@@ -95,15 +81,13 @@
+     deps = [
+         ":constants",
+         ":reader",
+-    ] + if_not_mobile([
+         "//tensorflow/core:core_cpu",
+         "//tensorflow/core:framework",
+         "//tensorflow/core:lib",
+         "//tensorflow/core:lib_internal",
+         "//tensorflow/core:protos_all_cc",
+         "//tensorflow/core/util/tensor_bundle:naming",
+-        # mobile not supported yet
+-    ]),
++    ],
+ )
+ 
+ tf_cc_test(
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/BUILD tensorflow-1.13.0-rc2-android/tensorflow/core/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/core/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/BUILD	2019-02-17 19:31:28.285746023 +0900
+@@ -63,10 +63,7 @@
+ # //tensorflow/tensorflow.bzl) will include the necessary symbols in binary
+ # build targets.
+ 
+-package(default_visibility = [
+-    "//tensorflow:internal",
+-    "//tensorflow_models:__subpackages__",
+-])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
+@@ -2620,6 +2617,7 @@
+ 
+ tf_cuda_library(
+     name = "framework_internal_impl",
++    visibility = ["//visibility:public"],
+     srcs = FRAMEWORK_INTERNAL_PRIVATE_HEADERS + glob(
+         [
+             "example/**/*.cc",
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/BUILD tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/BUILD	2019-02-17 19:31:28.285746023 +0900
+@@ -23,9 +23,6 @@
+     ],
+     visibility = ["//tensorflow:internal"],
+     deps = select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu_lib",
+             "//tensorflow/core:framework",
+@@ -50,9 +47,6 @@
+         ":eager_executor",
+         ":kernel_and_device",
+     ] + select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu_lib",
+             "//tensorflow/core:framework",
+@@ -98,9 +92,6 @@
+         ":eager_executor",
+         ":kernel_and_device",
+     ] + select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu_lib",
+             "//tensorflow/core:framework",
+@@ -151,9 +142,6 @@
+         ":attr_builder",
+         "@farmhash_archive//:farmhash",
+     ] + select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu_lib",
+             "//tensorflow/core:framework",
+@@ -200,9 +188,6 @@
+         ":kernel_and_device",
+         ":tensor_handle",
+     ] + select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu_lib",
+             "//tensorflow/core:framework",
+@@ -226,9 +211,6 @@
+         # TODO(b/113535673): Break this dependency and avoid the C header completely.
+         "//tensorflow/c:c_api_headers",
+     ] + select({
+-        "//tensorflow:android": [
+-            "//tensorflow/core:android_tensorflow_lib_lite",
+-        ],
+         "//conditions:default": [
+             "//tensorflow/core:core_cpu",
+             "//tensorflow/core:core_cpu_internal",
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/context.cc tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/context.cc
+--- tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/context.cc	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/context.cc	2019-02-17 19:31:28.285746023 +0900
+@@ -151,7 +151,6 @@
+   return policy_;
+ }
+ 
+-#ifndef __ANDROID__
+ void EagerContext::CloseRemoteContexts() {
+   // Close all remote contexts.
+   std::vector<eager::CloseContextRequest> requests(remote_contexts_.size());
+@@ -180,10 +179,8 @@
+ 
+   counter.Wait();
+ }
+-#endif
+ 
+ EagerContext::~EagerContext() {
+-#ifndef __ANDROID__
+   if (server_) {
+     // TODO(nareshmodi): Fix this.
+     LOG(WARNING) << "Unable to destroy server_ object, so releasing instead. "
+@@ -199,7 +196,6 @@
+   keep_alive_thread_.reset();
+ 
+   CloseRemoteContexts();
+-#endif
+ 
+   executor_.WaitForAllPendingNodes().IgnoreError();
+   ClearCaches();
+@@ -262,7 +258,6 @@
+ 
+ Status EagerContext::MaybeRegisterFunctionRemotely(const FunctionDef& fdef) {
+   if (remote_device_manager_ == nullptr) return Status::OK();
+-#ifndef __ANDROID__
+   BlockingCounter blocking_counter(static_cast<int>(remote_contexts_.size()));
+ 
+   std::vector<eager::RegisterFunctionRequest> requests(remote_contexts_.size());
+@@ -292,7 +287,6 @@
+   for (int i = 0; i < remote_contexts_.size(); i++) {
+     TF_RETURN_IF_ERROR(statuses[i]);
+   }
+-#endif
+   return Status::OK();
+ }
+ 
+@@ -333,7 +327,6 @@
+ }
+ }  // namespace
+ 
+-#ifndef __ANDROID__
+ Status EagerContext::GetClientAndContextID(Device* device,
+                                            eager::EagerClient** client,
+                                            uint64* context_id) {
+@@ -462,6 +455,5 @@
+         }));
+   }
+ }
+-#endif
+ 
+ }  // namespace tensorflow
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/context.h tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/context.h
+--- tensorflow-1.13.0-rc2/tensorflow/core/common_runtime/eager/context.h	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/common_runtime/eager/context.h	2019-02-17 19:31:28.285746023 +0900
+@@ -29,10 +29,8 @@
+ #include "tensorflow/core/common_runtime/eager/kernel_and_device.h"
+ #include "tensorflow/core/common_runtime/function.h"
+ #include "tensorflow/core/common_runtime/rendezvous_mgr.h"
+-#ifndef __ANDROID__
+ #include "tensorflow/core/distributed_runtime/eager/eager_client.h"
+ #include "tensorflow/core/distributed_runtime/server_lib.h"
+-#endif
+ #include "tensorflow/core/framework/collective.h"
+ #include "tensorflow/core/framework/log_memory.h"
+ #include "tensorflow/core/framework/rendezvous.h"
+@@ -177,7 +175,6 @@
+ 
+   FunctionLibraryDefinition* FuncLibDef() { return &func_lib_def_; }
+ 
+-#ifndef __ANDROID__
+   Status GetClientAndContextID(Device* device, eager::EagerClient** client,
+                                uint64* context_id);
+ 
+@@ -204,7 +201,6 @@
+     return active_remote_contexts_.find(context_id) !=
+            active_remote_contexts_.end();
+   }
+-#endif
+ 
+   // If true, then tensors should be shipped across processes via the
+   // EagerService.SendTensor RPC. If false, _Send/_Recv ops should be used
+@@ -281,7 +277,6 @@
+ 
+   std::unique_ptr<CollectiveExecutorMgrInterface> collective_executor_mgr_;
+ 
+-#ifndef __ANDROID__
+   void CloseRemoteContexts();
+ 
+   // The server_ is not const since we release it when the context is destroyed.
+@@ -304,7 +299,6 @@
+   mutex keep_alive_thread_shutdown_mu_;
+   condition_variable keep_alive_thread_cv_;
+   bool shutting_down_ GUARDED_BY(keep_alive_thread_shutdown_mu_) = false;
+-#endif
+ 
+   bool use_send_tensor_rpc_;
+   const bool pin_small_ops_to_cpu_;
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/framework/tensor.h tensorflow-1.13.0-rc2-android/tensorflow/core/framework/tensor.h
+--- tensorflow-1.13.0-rc2/tensorflow/core/framework/tensor.h	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/framework/tensor.h	2019-02-17 19:31:28.286746012 +0900
+@@ -192,6 +192,11 @@
    /// are not valid.
    Tensor(Tensor&& other);
  
@@ -106,7 +803,7 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    ~Tensor();
  
    /// Returns the data type.
-@@ -523,11 +528,6 @@
+@@ -602,11 +607,6 @@
    friend class NumpyTensorBuffer;  // For access to the private constructor
                                     // taking the buffer.
  
@@ -118,10 +815,10 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    bool CanUseDMA() const;
  
    // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.12.0-rc0-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/core/kernels/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/core/kernels/BUILD	2018-10-20 23:50:28.034692482 +0900
-@@ -5206,6 +5206,7 @@
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/kernels/BUILD tensorflow-1.13.0-rc2-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/core/kernels/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/kernels/BUILD	2019-02-17 19:31:28.287746000 +0900
+@@ -5454,6 +5454,7 @@
          "transpose_op.h",
          "where_op.h",
          "xent_op.h",
@@ -129,9 +826,29 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.12.0-
      ],
  )
  
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/BUILD tensorflow-1.12.0-rc0-android/tensorflow/java/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/java/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/java/BUILD	2018-10-20 23:50:42.181675353 +0900
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/core/kernels/concat_lib_cpu.cc tensorflow-1.13.0-rc2-android/tensorflow/core/kernels/concat_lib_cpu.cc
+--- tensorflow-1.13.0-rc2/tensorflow/core/kernels/concat_lib_cpu.cc	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/core/kernels/concat_lib_cpu.cc	2019-02-17 19:31:28.287746000 +0900
+@@ -73,6 +73,7 @@
+ REGISTER(quint16)
+ REGISTER(qint16)
+ REGISTER(qint32)
++REGISTER(bfloat16)
+ 
+ #if defined(IS_MOBILE_PLATFORM) && !defined(SUPPORT_SELECTIVE_REGISTRATION) && \
+     !defined(__ANDROID_TYPES_FULL__)
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/java/BUILD tensorflow-1.13.0-rc2-android/tensorflow/java/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/java/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/java/BUILD	2019-02-17 19:31:28.287746000 +0900
+@@ -1,7 +1,7 @@
+ # Description:
+ # TensorFlow Java API.
+ 
+-package(default_visibility = ["//visibility:private"])
++package(default_visibility = ["//visibility:public"])
+ 
+ licenses(["notice"])  # Apache 2.0
+ 
 @@ -23,7 +23,6 @@
          ":java_op_sources",
          ":java_sources",
@@ -140,29 +857,21 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/BUILD tensorflow-1.12.0-rc0-andr
      javacopts = JAVACOPTS,
      plugins = [":processor"],
      visibility = ["//visibility:public"],
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.12.0-rc0-android/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/java/src/main/native/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/java/src/main/native/BUILD	2018-10-20 23:50:28.034692482 +0900
-@@ -86,3 +86,15 @@
-     ),
-     visibility = ["//tensorflow:__subpackages__"],
- )
-+
-+filegroup(
-+    name = "java_api_files",
-+    srcs = glob(
-+        ["**/*"],
-+        exclude = [
-+            "**/METADATA",
-+            "**/OWNERS",
-+        ],
-+    ),
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/java/src/main/native/BUILD tensorflow-1.13.0-rc2-android/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.13.0-rc2/tensorflow/java/src/main/native/BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/java/src/main/native/BUILD	2019-02-17 19:31:28.287746000 +0900
+@@ -29,6 +29,7 @@
+     }),
+     hdrs = glob(["*.h"]),
+     copts = tf_copts(),
 +    visibility = ["//visibility:public"],
-+)
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.12.0-rc0-android/tensorflow/tensorflow.bzl
---- tensorflow-1.12.0-rc0/tensorflow/tensorflow.bzl	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/tensorflow/tensorflow.bzl	2018-10-20 23:50:28.035692480 +0900
-@@ -230,7 +230,7 @@
+     includes = select({
+         "//tensorflow:android": [],
+         "//conditions:default": ["."],
+diff -ruN tensorflow-1.13.0-rc2/tensorflow/tensorflow.bzl tensorflow-1.13.0-rc2-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.13.0-rc2/tensorflow/tensorflow.bzl	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/tensorflow/tensorflow.bzl	2019-02-17 19:31:28.288745989 +0900
+@@ -240,7 +240,7 @@
      # to be used, pass android_optimization_level_override=None
      android_copts = [
          "-std=c++11",
@@ -171,10 +880,33 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.12.0-rc0-
          "-Wno-narrowing",
          "-fomit-frame-pointer",
      ]
-diff -ruN tensorflow-1.12.0-rc0/WORKSPACE tensorflow-1.12.0-rc0-android/WORKSPACE
---- tensorflow-1.12.0-rc0/WORKSPACE	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-android/WORKSPACE	2018-10-20 23:50:28.035692480 +0900
-@@ -27,6 +27,16 @@
+diff -ruN tensorflow-1.13.0-rc2/third_party/lmdb.BUILD tensorflow-1.13.0-rc2-android/third_party/lmdb.BUILD
+--- tensorflow-1.13.0-rc2/third_party/lmdb.BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/third_party/lmdb.BUILD	2019-02-17 19:31:28.288745989 +0900
+@@ -20,7 +20,7 @@
+     ],
+     linkopts = select({
+         ":windows": ["-DEFAULTLIB:advapi32.lib"],  # InitializeSecurityDescriptor, SetSecurityDescriptorDacl
+-        "//conditions:default": ["-lpthread"],
++        "//conditions:default": [],
+     }),
+     visibility = ["//visibility:public"],
+ )
+diff -ruN tensorflow-1.13.0-rc2/third_party/sqlite.BUILD tensorflow-1.13.0-rc2-android/third_party/sqlite.BUILD
+--- tensorflow-1.13.0-rc2/third_party/sqlite.BUILD	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/third_party/sqlite.BUILD	2019-02-17 19:31:28.288745989 +0900
+@@ -49,7 +49,6 @@
+         "@org_tensorflow//tensorflow:windows": [],
+         "//conditions:default": [
+             "-ldl",
+-            "-lpthread",
+         ],
+     }),
+     visibility = ["//visibility:public"],
+diff -ruN tensorflow-1.13.0-rc2/WORKSPACE tensorflow-1.13.0-rc2-android/WORKSPACE
+--- tensorflow-1.13.0-rc2/WORKSPACE	2019-02-15 09:42:33.000000000 +0900
++++ tensorflow-1.13.0-rc2-android/WORKSPACE	2019-02-17 19:31:28.288745989 +0900
+@@ -53,6 +53,16 @@
  load("@local_config_android//:android.bzl", "android_workspace")
  android_workspace()
  
@@ -186,7 +918,7 @@ diff -ruN tensorflow-1.12.0-rc0/WORKSPACE tensorflow-1.12.0-rc0-android/WORKSPAC
 +    # archtectures or the Android NDK will automatically select biggest
 +    # API level that it supports without notice.
 +    # Note that the NDK version is not the API level.
-+    api_level=14)
++    api_level=21)
 +
  # Please add all new TensorFlow dependencies in workspace.bzl.
  tf_workspace()

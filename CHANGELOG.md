@@ -1,4 +1,5 @@
 
+ * Build TensorFlow for Android with all features, including support for SavedModel, distributed computing, and access to all Java and C++ ops
  * Add basic mapping of stdio streams to presets for GSL since it relies on them for serialization
  * Fix crash in Leptonica on CentOS 6 by downgrading to libpng 1.5.30 ([issue #680](https://github.com/bytedeco/javacpp-presets/issues/680))
  * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))

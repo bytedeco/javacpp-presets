@@ -29335,31 +29335,31 @@ public static native TF_Session TF_NewSession(TF_Graph graph,
 //
 // If successful, populates `graph` with the contents of the Graph and
 // `meta_graph_def` with the MetaGraphDef of the loaded model.
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     @Cast("const char*") BytePointer export_dir, @Cast("const char*const*") PointerPointer tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     @Cast("const char*") BytePointer export_dir, @Cast("const char*const*") @ByPtrPtr BytePointer tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     String export_dir, @Cast("const char*const*") @ByPtrPtr ByteBuffer tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     @Cast("const char*") BytePointer export_dir, @Cast("const char*const*") @ByPtrPtr byte[] tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     String export_dir, @Cast("const char*const*") @ByPtrPtr BytePointer tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     @Cast("const char*") BytePointer export_dir, @Cast("const char*const*") @ByPtrPtr ByteBuffer tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
-public static native @Platform(not="android") TF_Session TF_LoadSessionFromSavedModel(
+public static native TF_Session TF_LoadSessionFromSavedModel(
     @Const TF_SessionOptions session_options, @Const TF_Buffer run_options,
     String export_dir, @Cast("const char*const*") @ByPtrPtr byte[] tags, int tags_len,
     TF_Graph graph, TF_Buffer meta_graph_def, TF_Status status);
@@ -35747,8 +35747,8 @@ limitations under the License.
   private native void allocate(short init);
   public Input(int init) { super((Pointer)null); allocate(init); }
   private native void allocate(int init);
-  public Input(long init) { super((Pointer)null); allocate(init); }
-  private native void allocate(long init);
+  public Input(@Cast("long long") long init) { super((Pointer)null); allocate(init); }
+  private native void allocate(@Cast("long long") long init);
   public Input(float init) { super((Pointer)null); allocate(init); }
   private native void allocate(float init);
   public Input(double init) { super((Pointer)null); allocate(init); }
@@ -38486,7 +38486,7 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, byte val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, short val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, int val);
-@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, long val);
+@Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, @Cast("long long") long val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, float val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, double val);
 @Namespace("tensorflow::ops") public static native @ByVal Output Const(@Const @ByRef Scope scope, boolean val);

@@ -92,26 +92,22 @@ case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DANDROID --copt=-fPIC --copt=-Wno-c++11-narrowing --linkopt=-Wl,-z,muldefs --linkopt=-Wl,-Bsymbolic --linkopt=-s"
         ;;
     android-arm64)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DANDROID --copt=-fPIC --copt=-Wno-c++11-narrowing --linkopt=-Wl,-z,muldefs --linkopt=-Wl,-Bsymbolic --linkopt=-s"
         ;;
     android-x86)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DANDROID --copt=-fPIC --copt=-Wno-c++11-narrowing --linkopt=-Wl,-z,muldefs --linkopt=-Wl,-Bsymbolic --linkopt=-s"
         ;;
     android-x86_64)
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
-        sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
-        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
+        export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86_64 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --copt=-DANDROID --copt=-fPIC --copt=-Wno-c++11-narrowing --linkopt=-Wl,-z,muldefs --linkopt=-Wl,-Bsymbolic --linkopt=-s"
         ;;
     linux-x86)
         patch -Np1 < ../../../tensorflow-java.patch

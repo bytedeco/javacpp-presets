@@ -223,12 +223,16 @@ if [[ "$OS" =~ android ]]; then
 
    unzip -qq $HOME/ndk.zip -d $HOME/
    ln -sf $HOME/android-ndk-r18b $HOME/android-ndk
+   # hack to have it use ccache, -resource-dir is the magic option that makes Clang work with ccache under Bazel
+   mv $HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang $HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/realclang
+   echo 'CCACHE_CC=$(pwd)/$(dirname "$0")/realclang ccache compiler -resource-dir $(dirname "$0")/../lib64/clang/*/ "$@"' > $HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+   chmod 755 $HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
    echo "Android NDK setup done"
    echo "export ANDROID_NDK=$HOME/android-ndk/" | tee --append $HOME/vars.list
-   cat $HOME/vars.list
    echo "export BUILD_COMPILER=-Djavacpp.platform.compiler=$HOME/android-ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++" | tee --append $HOME/vars.list
    echo "export BUILD_OPTIONS=-Djava.library.path=" | tee --append $HOME/vars.list
    echo "export BUILD_ROOT=-Djavacpp.platform.root=$HOME/android-ndk/" | tee --append $HOME/vars.list
+   cat $HOME/vars.list
 fi
 
 

@@ -54,7 +54,7 @@ import java.util.List;
  */
 @Properties(value = {
         @Platform(
-                value = {"linux-x86", "macosx", "windows"},
+                value = {"android", "linux-x86", "macosx", "windows"},
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
@@ -242,119 +242,6 @@ import java.util.List;
                 includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
                 linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/",
                                "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/extras/CUPTI/libx64/"}),
-        @Platform(
-                value = {"android"},
-                compiler = {"cpp11"},
-                define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
-                include = {
-                        "google/protobuf/arena.h",
-                        "google/protobuf/message_lite.h",
-                        "google/protobuf/unknown_field_set.h",
-                        "tensorflow/core/platform/default/integral_types.h",
-                        "tensorflow/core/lib/bfloat16/bfloat16.h",
-                        "tensorflow/core/framework/numeric_types.h",
-                        "tensorflow/core/platform/init_main.h",
-                        "tensorflow/core/platform/types.h",
-                        "tensorflow/core/platform/mutex.h",
-                        "tensorflow/core/platform/macros.h",
-                        "tensorflow/core/util/port.h",
-                        "tensorflow/core/lib/core/error_codes.pb.h",
-                        "tensorflow/core/platform/logging.h",
-                        "tensorflow/core/lib/core/status.h",
-                        "tensorflow/core/lib/io/zlib_compression_options.h",
-                        "tensorflow/core/lib/io/zlib_outputbuffer.h",
-                        "tensorflow/core/lib/io/inputstream_interface.h",
-                        "tensorflow/core/lib/io/record_reader.h",
-                        "tensorflow/core/lib/io/record_writer.h",
-                        "tensorflow/core/platform/protobuf.h",
-                        "tensorflow/core/platform/file_system.h",
-                        "tensorflow/core/platform/file_statistics.h",
-                        "tensorflow/core/platform/env.h",
-//                        "tensorflow/core/graph/dot.h",
-                        "tensorflow/core/example/feature.pb.h",
-                        "tensorflow/core/example/example.pb.h",
-                        "tensorflow/core/protobuf/debug.pb.h",
-                        "tensorflow/core/protobuf/cluster.pb.h",
-                        "tensorflow/core/protobuf/rewriter_config.pb.h",
-                        "tensorflow/core/protobuf/config.pb.h",
-                        "tensorflow/core/framework/cost_graph.pb.h",
-                        "tensorflow/core/framework/step_stats.pb.h",
-                        "tensorflow/core/framework/versions.pb.h",
-                        "tensorflow/core/public/session_options.h",
-                        "tensorflow/core/lib/core/threadpool.h",
-                        "tensorflow/core/framework/allocation_description.pb.h",
-                        "tensorflow/core/platform/default/string_coding.h",
-                        "tensorflow/core/framework/resource_handle.h",
-                        "tensorflow/core/framework/allocator.h",
-                        "tensorflow/core/framework/tensor_shape.pb.h",
-                        "tensorflow/core/framework/types.pb.h",
-                        "tensorflow/core/framework/resource_handle.pb.h",
-                        "tensorflow/core/framework/tensor.pb.h",
-                        "tensorflow/core/framework/tensor_description.pb.h",
-                        "tensorflow/core/framework/tensor_types.h",
-                        "tensorflow/core/framework/tensor_shape.h",
-                        //        "tensorflow/core/framework/tensor_slice.h",
-                        "tensorflow/core/framework/tensor_util.h",
-                        "tensorflow/core/framework/tensor_reference.h",
-                        "tensorflow/core/framework/tensor.h",
-                        "tensorflow/core/framework/attr_value.pb.h",
-                        "tensorflow/core/framework/node_def.pb.h",
-                        "tensorflow/core/framework/api_def.pb.h",
-                        "tensorflow/core/framework/op_def.pb.h",
-                        "tensorflow/core/framework/function.pb.h",
-                        "tensorflow/core/framework/graph.pb.h",
-                        "tensorflow/core/framework/session_state.h",
-                        "tensorflow/core/framework/types.h",
-                        "tensorflow/core/framework/control_flow.h",
-                        "tensorflow/core/framework/kernel_def.pb.h",
-                        "tensorflow/core/framework/kernel_def_builder.h",
-                        "tensorflow/core/framework/tracking_allocator.h",
-                        "tensorflow/core/framework/op_kernel.h",
-                        "tensorflow/core/framework/op_segment.h",
-                        "tensorflow/core/framework/shape_inference.h",
-                        "tensorflow/core/framework/partial_tensor_shape.h",
-                        "tensorflow/core/framework/device_attributes.pb.h",
-                        "tensorflow/core/public/session.h",
-                        "tensorflow/core/framework/tensor_slice.pb.h",
-                        "tensorflow/core/framework/tensor_slice.h",
-                        "tensorflow/core/util/tensor_slice_set.h",
-                        "tensorflow/core/util/tensor_slice_util.h",
-                        "tensorflow/core/util/tensor_slice_reader.h",
-                        "tensorflow/core/util/tensor_bundle/tensor_bundle.h",
-                        "tensorflow/c/tf_status_helper.h",
-                        "tensorflow/c/checkpoint_reader.h",
-                        "tensorflow/c/c_api.h",
-                        "tensorflow/c/c_api_internal.h",
-                        "tensorflow/core/framework/op_def_builder.h",
-                        "tensorflow/core/framework/op_def_util.h",
-                        "tensorflow/core/framework/op.h",
-                        "tensorflow/core/framework/types.h",
-                        "tensorflow/core/graph/edgeset.h",
-                        "tensorflow/core/lib/gtl/iterator_range.h",
-                        //        "tensorflow/core/lib/gtl/inlined_vector.h",
-                        "tensorflow/core/framework/function.h",
-                        "tensorflow/core/util/device_name_utils.h",
-                        "tensorflow/core/framework/device_attributes.pb.h",
-                        "tensorflow/core/framework/device_base.h",
-                        "tensorflow/core/common_runtime/device.h",
-                        "tensorflow/core/common_runtime/device_mgr.h",
-                        "tensorflow/core/common_runtime/process_function_library_runtime.h",
-                        "tensorflow/core/graph/graph.h",
-                        "tensorflow/core/graph/tensor_id.h",
-                        "tensorflow/core/common_runtime/graph_runner.h",
-                        "tensorflow/core/common_runtime/shape_refiner.h",
-                        "tensorflow/core/framework/node_def_builder.h",
-                        "tensorflow/core/framework/node_def_util.h",
-                        "tensorflow/core/framework/selective_registration.h",
-                        "tensorflow/core/graph/node_builder.h",
-                        "tensorflow/core/graph/graph_def_builder.h",
-                        "tensorflow/core/graph/default_device.h",
-                        "tensorflow/core/graph/graph_constructor.h",
-                        "tensorflow/core/graph/gradients.h",
-                        "tensorflow/core/protobuf/saver.pb.h",
-                        "tensorflow/core/protobuf/meta_graph.pb.h",
-                        "tensorflow_adapters.h"},
-                link = "tensorflow_cc", preload = "tensorflow_framework"),
         },
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
@@ -362,14 +249,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
     private Logger logger;
     private java.util.Properties properties;
     private String encoding;
-    private boolean android;
 
     @Override
     public void init(Logger logger, java.util.Properties properties, String encoding) {
         this.logger = logger;
         this.properties = properties;
         this.encoding = encoding;
-        this.android = properties.getProperty("platform").startsWith("android-");
     }
 
     @Override public void init(ClassProperties properties) {
@@ -417,7 +302,6 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("GOOGLE_PROTOBUF_DEPRECATED_ATTR").cppText("#define GOOGLE_PROTOBUF_DEPRECATED_ATTR deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
-               .put(new Info("__ANDROID__").define(android))
                .put(new Info("SWIG", "TENSORFLOW_LITE_PROTOS").define(true))
                .put(new Info("TENSORFLOW_USE_SYCL", "defined(PLATFORM_GOOGLE)").define(false))
                .put(new Info("std::hash<Eigen::half>").pointerTypes("HalfHash"))
@@ -667,8 +551,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::ImportGraphDefResults::Index").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("std::pair<tensorflow::Node*,tensorflow::ImportGraphDefResults::Index>").pointerTypes("NodeIndexPair").define())
                .put(new Info("TF_WhileParams").purify())
-               .put(new Info("TF_LoadSessionFromSavedModel").annotations("@Platform(not=\"android\")").javaNames("TF_LoadSessionFromSavedModel"))
-               .put(new Info("TF_GraphImportGraphDefOptionsRemapControlDependency").annotations("@Platform(not=\"android\")").javaNames("TF_GraphImportGraphDefOptionsRemapControlDependency"))
+               .put(new Info("TF_LoadSessionFromSavedModel").javaNames("TF_LoadSessionFromSavedModel"))
+               .put(new Info("TF_GraphImportGraphDefOptionsRemapControlDependency").javaNames("TF_GraphImportGraphDefOptionsRemapControlDependency"))
                .put(new Info("tensorflow::SavedModelBundle::session").javaText("public native @MemberGetter @UniquePtr Session session();"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
@@ -715,7 +599,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         infoMap.put(new Info("tensorflow::gtl::ArraySlice").annotations("@ArraySlice"))
                .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"StringPiece*\"}) BytePointer"))
                .put(new Info("tensorflow::Input::Initializer").pointerTypes("Input.Initializer").valueTypes("@Const @ByRef Input.Initializer",
-                             "@ByRef Tensor", "byte", "short", "int", "long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
+                             "@ByRef Tensor", "byte", "short", "int", "@Cast(\"long long\") long", "float", "double", "boolean", "@StdString String", "@StdString BytePointer"));
 
         infoMap.put(new Info("TF_Buffer::data").javaText("public native @Const Pointer data(); public native TF_Buffer data(Pointer data);"))
                .put(new Info("TF_Status").pointerTypes("TF_Status").base("org.bytedeco.javacpp.helper.tensorflow.AbstractTF_Status"))
@@ -736,9 +620,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                       + "public native @ByVal Scope WithOpName(@StdString String op_name);"));
 
         infoMap.put(new Info("std::vector<tensorflow::OpDef>").pointerTypes("OpDefVector").define());
-        if (!android) {
-            infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
-        }
+        infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
 
         String[] consts = {"unsigned char", "short", "int", "long long", "float", "double", "bool", "std::string", "tensorflow::StringPiece"};
         for (int i = 0; i < consts.length; i++) {
