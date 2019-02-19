@@ -168,26 +168,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <sources>
-            <source>${project.basedir}/src/gen/java</source>
-            <source>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</source>
-          </sources>
-        </configuration>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>process-sources</phase>
-            <goals>
-              <goal>add-source</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <version>${project.parent.version}</version>
@@ -247,6 +227,12 @@
             <goals>
               <goal>build</goal>
             </goals>
+            <configuration>
+              <targetDirectories>
+                <targetDirectory>${project.basedir}/src/gen/java</targetDirectory>
+                <targetDirectory>${project.basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
+              </targetDirectories>
+            </configuration>
           </execution>
           <execution>
             <id>javacpp.cppbuild.install</id>
