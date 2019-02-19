@@ -27,7 +27,7 @@ Here is a simple example of LAPACK ported to Java from this C source file:
 
  * https://github.com/bitfusionio/OpenBLAS/blob/master/lapack-netlib/lapacke/example/example_DGELS_rowmajor.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleDGELSrowmajor.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ExampleDGELSrowmajor.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -36,23 +36,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.openblas</groupId>
+    <groupId>org.bytedeco.openblas</groupId>
     <artifactId>openblas</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ExampleDGELSrowmajor</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>openblas-platform</artifactId>
-            <version>0.3.5-1.4.4</version>
+            <version>0.3.5-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/ExampleDGELSrowmajor.java` source file
+### The `ExampleDGELSrowmajor.java` source file
 ```java
 /*
    LAPACKE Example : Calling DGELS using row-major order
@@ -114,7 +117,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 /* Calling DGELS using row-major order */
 
 /* Includes */
-import static org.bytedeco.javacpp.openblas.*;
+import static org.bytedeco.openblas.global.openblas.*;
 
 public class ExampleDGELSrowmajor {
     /* Auxiliary routine: printing a matrix */

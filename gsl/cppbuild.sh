@@ -80,12 +80,12 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32"
         make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64"
         make -j $MAKEJ V=0
         make install-strip
         ;;
@@ -99,7 +99,7 @@ case $PLATFORM in
         sed -i s/elf64ppc/elf64lppc/ configure
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+          ./configure --prefix=$INSTALL_PATH CC="gcc -m64"
         else
           ./configure --prefix=$INSTALL_PATH --host=powerpc64le-linux-gnu --build=ppc64le-linux CC="powerpc64le-linux-gnu-gcc -m64"
         fi

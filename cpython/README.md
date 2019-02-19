@@ -23,7 +23,7 @@ Here is a simple example of CPython ported to Java from this C source file:
 
  * https://docs.python.org/3/extending/embedding.html#very-high-level-embedding
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Simple.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Simple.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,26 +32,30 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.cpython</groupId>
+    <groupId>org.bytedeco.cpython</groupId>
     <artifactId>simple</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.6-1.4.4</version>
+            <version>3.6-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Simple.java` source file
+### The `Simple.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.python.*;
+import org.bytedeco.cpython.python.*;
+import static org.bytedeco.cpython.global.python.*;
 
 public class Simple {
     public static void main(String[] args) {

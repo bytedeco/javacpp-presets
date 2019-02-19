@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>openblas-platform</artifactId>
   <version>0.3.5-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for OpenBLAS</name>

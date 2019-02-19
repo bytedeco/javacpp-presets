@@ -23,7 +23,7 @@ Here is a simple example of GSL ported to Java from this demo.c source file:
 
  * https://www.gnu.org/software/gsl/manual/html_node/Random-Number-Distribution-Examples.html
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Demo.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Demo.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,26 +32,30 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.gsl</groupId>
+    <groupId>org.bytedeco.gsl</groupId>
     <artifactId>demo</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Demo</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.5-1.4.4</version>
+            <version>2.5-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Demo.java` source file
+### The `Demo.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.gsl.*;
+import org.bytedeco.gsl.*;
+import static org.bytedeco.gsl.global.gsl.*;
 
 public class Demo {
     public static void main(String[] args) {

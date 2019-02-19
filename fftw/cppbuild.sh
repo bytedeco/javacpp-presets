@@ -75,18 +75,18 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32"
         make -j $MAKEJ V=0
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m32" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --enable-float
         make -j $MAKEJ V=0
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64"
         make -j $MAKEJ V=0
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="$OLDCC -m64" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m64" --enable-float
         make -j $MAKEJ V=0
         make install-strip
         ;;
@@ -101,10 +101,10 @@ case $PLATFORM in
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
+          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="gcc -m64"
           make -j $MAKEJ V=0
           make install-strip
-          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
+          ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="gcc -m64" --enable-float
           make -j $MAKEJ V=0
           make install-strip
         else
@@ -117,10 +117,10 @@ case $PLATFORM in
         fi
         ;;
     linux-mips64el)
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -mabi=64"
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="gcc -mabi=64"
         make -j $MAKEJ V=0
         make install-strip
-        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -mabi=64" --enable-float
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads CC="gcc -mabi=64" --enable-float
         make -j $MAKEJ V=0
         make install-strip
         ;;

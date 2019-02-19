@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mkl</artifactId>
   <version>2019.2-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL</name>
@@ -45,7 +45,7 @@
             <configuration>
               <classifier>${javacpp.platform}</classifier>
               <includes>
-                <include>org/bytedeco/javacpp/${javacpp.platform}/*jni*</include>
+                <include>org/bytedeco/mkl/${javacpp.platform}/*jni*</include>
               </includes>
             </configuration>
           </execution>
@@ -57,15 +57,20 @@
             </goals>
             <configuration>
               <classifier>${javacpp.platform}-redist</classifier>
+              <classesDirectory>${project.build.directory}/native</classesDirectory>
               <includes>
-                <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
+                <include>org/bytedeco/mkl/${javacpp.platform}/</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*jni*</exclude>
+                <exclude>org/bytedeco/mkl/${javacpp.platform}/*jni*</exclude>
               </excludes>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

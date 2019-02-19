@@ -65,7 +65,8 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
-    <javacpp.platform.nativeOutputPath>org/bytedeco/${project.artifactId}/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
+    <javacpp.packageName>${project.artifactId}</javacpp.packageName>
+    <javacpp.platform.nativeOutputPath>org/bytedeco/${javacpp.packageName}/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
     <javacpp.platform.root></javacpp.platform.root>
     <javacpp.platform.compiler></javacpp.platform.compiler>
     <javacpp.platform.extension></javacpp.platform.extension>
@@ -161,7 +162,7 @@
             </goals>
             <configuration>
               <includes>
-                <include>org/bytedeco/${project.artifactId}/presets/*.java</include>
+                <include>org/bytedeco/${javacpp.packageName}/presets/*.java</include>
               </includes>
             </configuration>
           </execution>
@@ -190,7 +191,7 @@
           <classPath>${project.build.outputDirectory}</classPath>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
-            <includePath>${basedir}/target/classes/org/bytedeco/${project.artifactId}/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
@@ -198,7 +199,7 @@
           <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           <resourcePaths>
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
-            <resourcePath>${basedir}/target/classes/org/bytedeco/${project.artifactId}/</resourcePath>
+            <resourcePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/</resourcePath>
           </resourcePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
@@ -282,7 +283,7 @@
             <configuration>
               <skip>${javacpp.parser.skip}</skip>
               <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
-              <classOrPackageName>org.bytedeco.${project.artifactId}.presets.*</classOrPackageName>
+              <classOrPackageName>org.bytedeco.${javacpp.packageName}.presets.*</classOrPackageName>
             </configuration>
           </execution>
           <execution>
@@ -294,7 +295,7 @@
             <configuration>
               <outputDirectory>${project.build.directory}/native/${javacpp.platform.nativeOutputPath}</outputDirectory>
               <skip>${javacpp.compiler.skip}</skip>
-              <classOrPackageName>org.bytedeco.${project.artifactId}.**</classOrPackageName>
+              <classOrPackageName>org.bytedeco.${javacpp.packageName}.**</classOrPackageName>
               <copyLibs>true</copyLibs>
               <copyResources>true</copyResources>
             </configuration>
@@ -330,10 +331,10 @@
                 </manifestEntries>
               </archive>
               <includes>
-                <include>org/bytedeco/${project.artifactId}/**</include>
+                <include>org/bytedeco/${javacpp.packageName}/**</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/${project.artifactId}/include/</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/include/</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -356,9 +357,9 @@
               </archive>
               <classesDirectory>${project.build.directory}/native</classesDirectory>
               <excludes>
-                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.exp</exclude>
-                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.lib</exclude>
-                <exclude>org/bytedeco/${project.artifactId}/windows-*/*.obj</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/windows-*/*.exp</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/windows-*/*.lib</exclude>
+                <exclude>org/bytedeco/${javacpp.packageName}/windows-*/*.obj</exclude>
               </excludes>
             </configuration>
           </execution>
@@ -396,8 +397,8 @@
                     <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
                   </artifact>
                   <moduleInfoSource>
-                    open module org.bytedeco.${project.artifactId}.${os.name}.${os.arch} {
-                      requires transitive org.bytedeco.${project.artifactId};
+                    open module org.bytedeco.${javacpp.packageName}.${os.name}.${os.arch} {
+                      requires transitive org.bytedeco.${javacpp.packageName};
                     }
                   </moduleInfoSource>
                 </module>

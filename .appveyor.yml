@@ -14,14 +14,14 @@ environment:
       OS: windows-x86
     - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
       OS: windows-x86
-#    - PROJ: "hdf5"
-#      OS: windows-x86
-#    - PROJ: "mkl"
-#      OS: windows-x86
-#    - PROJ: "openblas"
-#      OS: windows-x86
-#    - PROJ: "arpack-ng,cminpack,fftw,gsl"
-#      OS: windows-x86
+    - PROJ: "hdf5"
+      OS: windows-x86
+    - PROJ: "mkl"
+      OS: windows-x86
+    - PROJ: "openblas"
+      OS: windows-x86
+    - PROJ: "arpack-ng,cminpack,fftw,gsl"
+      OS: windows-x86
 #    - PROJ: "llvm"
 #      OS: windows-x86
 #    - PROJ: "leptonica,tesseract"
@@ -39,18 +39,18 @@ environment:
       OS: windows-x86_64
     - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
       OS: windows-x86_64
-#    - PROJ: "hdf5"
-#      OS: windows-x86_64
-#    - PROJ: "mkl"
-#      OS: windows-x86_64
-#    - PROJ: "mkl-dnn"
-#      OS: windows-x86_64
-#    - PROJ: "openblas"
-#      OS: windows-x86_64
-#    - PROJ: "arpack-ng,cminpack,fftw,gsl"
-#      OS: windows-x86_64
-#    - PROJ: "cpython"
-#      OS: windows-x86_64
+    - PROJ: "hdf5"
+      OS: windows-x86_64
+    - PROJ: "mkl"
+      OS: windows-x86_64
+    - PROJ: "mkl-dnn"
+      OS: windows-x86_64
+    - PROJ: "openblas"
+      OS: windows-x86_64
+    - PROJ: "arpack-ng,cminpack,fftw,gsl"
+      OS: windows-x86_64
+    - PROJ: "cpython"
+      OS: windows-x86_64
 #    - PROJ: "llvm"
 #      OS: windows-x86_64
 #    - PROJ: "libpostal"

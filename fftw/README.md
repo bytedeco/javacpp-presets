@@ -23,7 +23,7 @@ Here is a simple example of FFTW ported to Java from this C source file:
 
  * https://github.com/undees/fftw-example/blob/master/fftw_example.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Example.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Example.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,29 +32,32 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.fftw</groupId>
+    <groupId>org.bytedeco.fftw</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>fftw-platform</artifactId>
-            <version>3.3.8-1.4.4</version>
+            <version>3.3.8-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Example.java` source file
+### The `Example.java` source file
 ```java
 /* Start reading here */
 
 import org.bytedeco.javacpp.*;
 import static java.lang.Math.*;
-import static org.bytedeco.javacpp.fftw3.*;
+import static org.bytedeco.fftw.global.fftw3.*;
 
 public class Example {
 
@@ -97,7 +100,7 @@ public class Example {
     /* Resume reading here */
 
     public static void main(String args[]) {
-        Loader.load(fftw3.class);
+        Loader.load(org.bytedeco.fftw.global.fftw3.class);
 
         DoublePointer signal = new DoublePointer(2 * NUM_POINTS);
         DoublePointer result = new DoublePointer(2 * NUM_POINTS);

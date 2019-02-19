@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.fftw</groupId>
+    <artifactId>example</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>Example</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>fftw-platform</artifactId>
+            <version>3.3.8-1.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

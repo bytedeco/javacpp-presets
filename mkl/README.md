@@ -25,7 +25,7 @@ Here is a simple example of MKL ported to Java from the `dgemm_example.c` sample
 
  * https://software.intel.com/product-code-samples
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/DGEMMExample.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `DGEMMExample.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -34,56 +34,59 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.mkl</groupId>
+    <groupId>org.bytedeco.mkl</groupId>
     <artifactId>mkl</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>DGEMMExample</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>linux-x86-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>windows-x86-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/DGEMMExample.java` source file
+### The `DGEMMExample.java` source file
 ```java
 //==============================================================
 //
@@ -110,7 +113,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.*;
 
-import static org.bytedeco.javacpp.mkl_rt.*;
+import static org.bytedeco.mkl.global.mkl_rt.*;
 
 public class DGEMMExample {
     public static void main(String[] args) throws Exception {
