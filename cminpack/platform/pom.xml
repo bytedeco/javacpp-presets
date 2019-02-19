@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>cminpack-platform</artifactId>
   <version>1.3.6-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for CMINPACK</name>
@@ -21,7 +21,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
       <version>0.3.5-${project.parent.version}</version>
     </dependency>

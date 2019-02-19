@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/mkl-dnn/apidocs/
 
-&lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.javacpp.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system, unless the `-redist` artifacts listed below are in the class path.
+&lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system, unless the `-redist` artifacts listed below are in the class path.
 
 
 Sample Usage
@@ -25,7 +25,7 @@ Here is a simple example of MKL-DNN ported to Java from this C++ source file:
 
 * https://github.com/intel/mkl-dnn/blob/master/examples/simple_net_int8.cpp
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SimpleNetInt8.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SimpleNetInt8.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -34,44 +34,47 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.mkl-dnn</groupId>
+    <groupId>org.bytedeco.mkl-dnn</groupId>
     <artifactId>mkl-dnn</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SimpleNetInt8</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.18-rc-1.4.5-SNAPSHOT</version>
+            <version>0.18-rc-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.2-1.4.5-SNAPSHOT</version>
+            <version>2019.2-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/SimpleNetInt8.java` source file
+### The `SimpleNetInt8.java` source file
 ```java
 /*******************************************************************************
 * Copyright 2018 Intel Corporation
@@ -91,7 +94,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import org.bytedeco.javacpp.*;
 
-import static org.bytedeco.javacpp.mkldnn.*;
+import org.bytedeco.mkldnn.*;
+import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 public class SimpleNetInt8 {
 

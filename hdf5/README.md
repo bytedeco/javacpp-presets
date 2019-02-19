@@ -23,7 +23,7 @@ Here is a simple example of HDF5 ported to Java from this C++ source file:
 
 * https://support.hdfgroup.org/ftp/HDF5/current/src/unpacked/c++/examples/h5tutr_cmprss.cpp
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/H5tutrCmprss.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `H5tutrCmprss.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.hdf5</groupId>
+    <groupId>org.bytedeco.hdf5</groupId>
     <artifactId>H5tutrCmprss</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>H5tutrCmprss</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>hdf5-platform</artifactId>
-            <version>1.10.4-1.4.4</version>
+            <version>1.10.4-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/H5tutrCmprss.java` source file
+### The `H5tutrCmprss.java` source file
 ```java
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Copyright by The HDF Group.                                               *
@@ -72,7 +75,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.hdf5.*;
+import org.bytedeco.hdf5.*;
+import static org.bytedeco.hdf5.global.hdf5.*;
 
 public class H5tutrCmprss {
     static final String FILE_NAME = "h5tutr_cmprss.h5";
@@ -89,7 +93,7 @@ public class H5tutrCmprss {
         try {
             // Turn off the auto-printing when failure occurs so that we can
             // handle the errors appropriately
-            org.bytedeco.javacpp.hdf5.Exception.dontPrint();
+            org.bytedeco.hdf5.Exception.dontPrint();
 
             // Create a new file using the default property lists.
             H5File file = new H5File(FILE_NAME, H5F_ACC_TRUNC);

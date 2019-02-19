@@ -136,14 +136,14 @@ case $PLATFORM in
         export NO_SHARED=1
         ;;
     linux-x86)
-        export CC="$OLDCC -m32"
-        export FC="$OLDFC -m32"
+        export CC="gcc -m32"
+        export FC="gfortran -m32"
         export BINARY=32
         export DYNAMIC_ARCH=1
         ;;
     linux-x86_64)
-        export CC="$OLDCC -m64"
-        export FC="$OLDFC -m64"
+        export CC="gcc -m64"
+        export FC="gfortran -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
         ;;
@@ -153,8 +153,8 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-linux-ppc64le.patch
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          export CC="$OLDCC -m64"
-          export FC="$OLDFC -m64"
+          export CC="gcc -m64"
+          export FC="gfortran -m64"
         else
           export CC="powerpc64le-linux-gnu-gcc"
           export FC="powerpc64le-linux-gnu-gfortran"
@@ -164,8 +164,8 @@ case $PLATFORM in
         export TARGET=POWER5
         ;;
     linux-mips64el)
-        export CC="$OLDCC -mabi=64"
-        export FC="$OLDFC -mabi=64"
+        export CC="gcc -mabi=64"
+        export FC="gfortran -mabi=64"
         export LDFLAGS="-Wl,-z,noexecstack"
         export BINARY=64
         export TARGET=MIPS
@@ -188,15 +188,15 @@ case $PLATFORM in
         export NO_AVX512=1
         ;;
     windows-x86)
-        export CC="$OLDCC -m32"
-        export FC="$OLDFC -m32"
+        export CC="gcc -m32"
+        export FC="gfortran -m32"
         export BINARY=32
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"
         ;;
     windows-x86_64)
-        export CC="$OLDCC -m64"
-        export FC="$OLDFC -m64"
+        export CC="gcc -m64"
+        export FC="gfortran -m64"
         export BINARY=64
         export DYNAMIC_ARCH=1
         export LDFLAGS="-static-libgcc -static-libgfortran -Wl,-Bstatic -lgfortran -lgcc -lgcc_eh -lpthread"

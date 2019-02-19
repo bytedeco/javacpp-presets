@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mkl-platform</artifactId>
   <version>2019.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MKL</name>

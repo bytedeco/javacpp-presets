@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>fftw-platform</artifactId>
   <version>3.3.8-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for FFTW</name>

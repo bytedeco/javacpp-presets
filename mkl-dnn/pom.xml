@@ -9,10 +9,14 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mkl-dnn</artifactId>
   <version>0.18-rc-${project.parent.version}</version>
   <name>JavaCPP Presets for MKL-DNN</name>
+
+  <properties>
+    <javacpp.packageName>mkldnn</javacpp.packageName>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -34,7 +38,7 @@
         <artifactId>javacpp</artifactId>
         <executions>
           <execution>
-            <id>javacpp.postbuild</id>
+            <id>javacpp-postbuild</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>
@@ -54,21 +58,25 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <id>${javacpp.platform}</id>
+            <id>javacpp-${javacpp.platform}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dll</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/*.obj</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/lib/*.dll</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/mkldnn/${javacpp.platform}/lib/*.so*</exclude>
               </excludes>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

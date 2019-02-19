@@ -23,7 +23,7 @@ Here is a simple example of CMINPACK ported to Java from this C source file:
 
  * https://github.com/devernay/cminpack/blob/master/examples/tlmdifc.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Tlmdif1c.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Tlmdif1c.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.cminpack</groupId>
+    <groupId>org.bytedeco.cminpack</groupId>
     <artifactId>tlmdif1c</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Tlmdif1c</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cminpack-platform</artifactId>
-            <version>1.3.6-1.4.4</version>
+            <version>1.3.6-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Tlmdif1c.java` source file
+### The `Tlmdif1c.java` source file
 ```java
 /*     driver for lmdif1 example. */
 
@@ -56,12 +59,12 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.indexer.*;
 
 import static java.lang.Math.*;
-import static org.bytedeco.javacpp.cminpack.*;
+import static org.bytedeco.cminpack.global.cminpack.*;
 
 public class Tlmdif1c {
   public static void main(String[] args)
   {
-    Loader.load(cminpack.class);
+    Loader.load(org.bytedeco.cminpack.global.cminpack.class);
 
     int info, lwa, iwa[] = new int[3];
     double tol, fnorm, x[] = new double[3], fvec[] = new double[15], wa[] = new double[75];

@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mkl-dnn-platform</artifactId>
   <version>0.18-rc-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MKL-DNN</name>

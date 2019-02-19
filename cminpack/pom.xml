@@ -9,14 +9,14 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>cminpack</artifactId>
   <version>1.3.6-${project.parent.version}</version>
   <name>JavaCPP Presets for CMINPACK</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
       <version>0.3.5-${project.parent.version}</version>
     </dependency>
@@ -39,12 +39,12 @@
         <artifactId>javacpp</artifactId>
         <dependencies>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
             <version>0.3.5-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
             <version>0.3.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
@@ -56,8 +56,8 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/include/</includePath>
-            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/openblas/include/</includePath>
+            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           </includePaths>
@@ -69,25 +69,40 @@
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>
-            <id>javacpp.parser</id>
+            <id>javacpp-parser</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.presets.cminpack</classOrPackageName>
+              <classOrPackageName>org.bytedeco.cminpack.presets.cminpack</classOrPackageName>
               <classOrPackageNames>
-                <classOrPackageName>org.bytedeco.javacpp.presets.cminpackl</classOrPackageName>
-                <classOrPackageName>org.bytedeco.javacpp.presets.cminpacks</classOrPackageName>
+                <classOrPackageName>org.bytedeco.cminpack.presets.cminpackl</classOrPackageName>
+                <classOrPackageName>org.bytedeco.cminpack.presets.cminpacks</classOrPackageName>
               </classOrPackageNames>
             </configuration>
           </execution>
           <execution>
-            <id>javacpp.compiler</id>
+            <id>javacpp-compiler</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.cminpack</classOrPackageName>
+              <classOrPackageName>org.bytedeco.cminpack.global.cminpack</classOrPackageName>
               <classOrPackageNames>
-                <classOrPackageName>org.bytedeco.javacpp.cminpackl</classOrPackageName>
-                <classOrPackageName>org.bytedeco.javacpp.cminpacks</classOrPackageName>
+                <classOrPackageName>org.bytedeco.cminpack.global.cminpackl</classOrPackageName>
+                <classOrPackageName>org.bytedeco.cminpack.global.cminpacks</classOrPackageName>
               </classOrPackageNames>
             </configuration>
           </execution>
@@ -95,6 +110,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

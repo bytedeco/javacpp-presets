@@ -9,13 +9,12 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
   <version>0.3.5-${project.parent.version}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
     <javacpp.compiler.option>-O3</javacpp.compiler.option>
   </properties>
 
@@ -35,7 +34,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <executions>
           <execution>
-            <id>javacpp.parser.package</id>
+            <id>javacpp-parser-package</id>
             <phase>prepare-package</phase>
             <goals>
               <goal>compile</goal>
@@ -46,22 +45,10 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
-        </configuration>
         <!-- Execute parser again to get full LAPACK bindings even with Android and iOS -->
         <executions>
           <execution>
-            <id>javacpp.parser.package</id>
+            <id>javacpp-parser-package</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>
@@ -69,8 +56,8 @@
             <configuration>
               <properties>${os.name}-${os.arch}</properties>
               <skip>${javacpp.parser.skip}</skip>
-              <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
-              <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
+              <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
+              <classOrPackageName>org.bytedeco.openblas.presets.*</classOrPackageName>
             </configuration>
           </execution>
         </executions>
@@ -79,15 +66,15 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <id>${javacpp.platform}</id>
+            <id>javacpp-${javacpp.platform}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*mkl*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*omp*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/*libopenblas_nolapack*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*openblas*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*libopenblas*</exclude>
+                <exclude>org/bytedeco/openblas/${javacpp.platform}/*mkl*</exclude>
+                <exclude>org/bytedeco/openblas/${javacpp.platform}/*omp*</exclude>
+                <exclude>org/bytedeco/openblas/${javacpp.platform}/*libopenblas_nolapack*</exclude>
+                <exclude>org/bytedeco/openblas/${javacpp.platform}/bin/*openblas*</exclude>
+                <exclude>org/bytedeco/openblas/${javacpp.platform}/lib/*libopenblas*</exclude>
                 <exclude>${javacpp.platform.library.path}/*libopenblas_nolapack*</exclude>
                 <exclude>${javacpp.platform.library.path}/lib/*openblas*</exclude>
               </excludes>

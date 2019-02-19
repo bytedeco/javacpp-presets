@@ -23,7 +23,7 @@ Here is a simple example of ARPACK-NG ported to Java from this C source file:
 
  * https://github.com/opencollab/arpack-ng/blob/3.6.3/TESTS/icb_arpack_c.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/IcbArpackC.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `IcbArpackC.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.arpack</groupId>
+    <groupId>org.bytedeco.arpack</groupId>
     <artifactId>icbarpackc</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>IcbArpackC</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>arpack-ng-platform</artifactId>
-            <version>3.7.0-1.4.5-SNAPSHOT</version>
+            <version>3.7.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/IcbArpackC.java` source file
+### The `IcbArpackC.java` source file
 ```java
 /*
  * This example demonstrates the use of ISO_C_BINDING to call arpack (portability).
@@ -58,7 +61,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  */
 
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.arpack.*;
+import static org.bytedeco.arpackng.global.arpack.*;
 
 /* test program to solve for the 9 largest eigenvalues of
  * A*x = lambda*x where A is the diagonal matrix
