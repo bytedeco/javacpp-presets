@@ -23,7 +23,7 @@ Here is a simple example of Leptonica ported to Java from this C source file:
 
  * http://tpgit.github.io/Leptonica/sudokutest_8c_source.html
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SudokuTest.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SudokuTest.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="[filein]"
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.leptonica</groupId>
+    <groupId>org.bytedeco.leptonica</groupId>
     <artifactId>sudokutest</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SudokuTest</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>leptonica-platform</artifactId>
-            <version>1.77.0-1.4.4</version>
+            <version>1.77.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/SudokuTest.java` source file
+### The `SudokuTest.java` source file
 ```java
 /*====================================================================*
  -  Copyright (C) 2001 Leptonica.  All rights reserved.
@@ -83,7 +86,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  */
 
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.lept.*;
+import org.bytedeco.leptonica.*;
+import static org.bytedeco.leptonica.global.lept.*;
 
 public class SudokuTest {
     static final String startsol = "3 8 7 2 6 4 1 9 5 "
@@ -97,7 +101,7 @@ public class SudokuTest {
                                  + "6 5 8 4 2 3 9 7 1";
 
     public static void main(String[] args) {
-        Loader.load(lept.class);
+        Loader.load(org.bytedeco.leptonica.global.lept.class);
 
         IntPointer   unique = new IntPointer(1);
         IntPointer   array;

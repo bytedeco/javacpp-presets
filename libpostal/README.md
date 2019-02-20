@@ -34,7 +34,7 @@ Sample Usage
 Here is a simple example of the libpostal parser and normalization functionality.
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries.
-To run this sample code, after creating the `pom.xml` and `src/main/java/Example.java` source files below, simply execute on the command line:
+To run this sample code, after creating the `pom.xml` and `Example.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="/PATH_TO_LIBPOSTAL_TRAINING_DATA_DIRECTORY"
 ```
@@ -43,28 +43,30 @@ To run this sample code, after creating the `pom.xml` and `src/main/java/Example
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.libpostal</groupId>
+    <groupId>org.bytedeco.libpostal</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>libpostal-platform</artifactId>
-            <version>1.1-alpha-1.4.4</version>
+            <version>1.1-alpha-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Example.java` source file
+### The `Example.java` source file
 ```java
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.libpostal.*;
+import org.bytedeco.libpostal.*;
+import static org.bytedeco.libpostal.global.postal.*;
 
 public class Example {
     public static void main(String[] args) throws Exception {
@@ -74,7 +76,7 @@ public class Example {
         boolean setup3 = libpostal_setup_language_classifier_datadir(dataDir);
         if (setup1 && setup2 && setup3) {
             libpostal_address_parser_options_t options = libpostal_get_address_parser_default_options();
-            BytePointer address = new BytePointer("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", StandardCharsets.UTF_8.name());
+            BytePointer address = new BytePointer("781 Franklin Ave Crown Heights Brooklyn NYC NY 11216 USA", "UTF-8");
             libpostal_address_parser_response_t response = libpostal_parse_address(address, options);
             long count = response.num_components();
             for (int i = 0; i < count; i++) {
@@ -82,7 +84,7 @@ public class Example {
             }
             libpostal_normalize_options_t normalizeOptions = libpostal_get_default_options();
             SizeTPointer sizeTPointer = new SizeTPointer(0);
-            address = new BytePointer("Quatre vingt douze Ave des Champs-Élysées", StandardCharsets.UTF_8.name());
+            address = new BytePointer("Quatre vingt douze Ave des Champs-Élysées", "UTF-8");
             PointerPointer result = libpostal_expand_address(address, normalizeOptions, sizeTPointer);
             long t_size = sizeTPointer.get(0);
             for (long i = 0; i < t_size; i++) {

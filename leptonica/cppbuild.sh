@@ -206,7 +206,7 @@ case $PLATFORM in
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"
-        export CC="$OLDCC -m32 -fPIC"
+        export CC="gcc -m32 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
@@ -241,7 +241,7 @@ case $PLATFORM in
         export CXXFLAGS="$CFLAGS"
         export CPPFLAGS="$CFLAGS"
         export LDFLAGS="-L$INSTALL_PATH/lib/"
-        export CC="$OLDCC -m64 -fPIC"
+        export CC="gcc -m64 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ
@@ -352,7 +352,7 @@ case $PLATFORM in
         export LDFLAGS="-L$INSTALL_PATH/lib/"
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          export CC="$OLDCC -m64 -fPIC"
+          export CC="gcc -m64 -fPIC"
           export BFLAGS="--build=ppc64le-linux"
         else
           export CC="powerpc64le-linux-gnu-gcc"

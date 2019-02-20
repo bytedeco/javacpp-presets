@@ -41,7 +41,7 @@ Here is a simple example of cuDNN ported to Java from the `mnistCUDNN.cpp` sampl
 
  * https://developer.nvidia.com/cudnn
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/MNISTCUDNN.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `MNISTCUDNN.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -50,50 +50,53 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
+    <groupId>org.bytedeco.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>MNISTCUDNN</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>linux-ppc64le-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/MNISTCUDNN.java` source file
+### The `MNISTCUDNN.java` source file
 ```java
 /**
 * Copyright 2014 NVIDIA Corporation.  All rights reserved.
@@ -118,10 +121,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-
-import static org.bytedeco.javacpp.cublas.*;
-import static org.bytedeco.javacpp.cuda.*;
-import static org.bytedeco.javacpp.cudnn.*;
+import org.bytedeco.cuda.cublas.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.cuda.cudnn.*;
+import static org.bytedeco.cuda.global.cublas.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import static org.bytedeco.cuda.global.cudnn.*;
 
 public class MNISTCUDNN {
     static final int IMAGE_H = 28;

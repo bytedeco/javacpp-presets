@@ -9,18 +9,14 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>tesseract</artifactId>
   <version>4.0.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
 
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
-
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>leptonica</artifactId>
       <version>1.77.0-${project.parent.version}</version>
     </dependency>
@@ -43,30 +39,20 @@
         <artifactId>javacpp</artifactId>
         <dependencies>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>leptonica</artifactId>
             <version>1.77.0-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>leptonica</artifactId>
             <version>1.77.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
         <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
           <classPaths>
-            <classPath>${basedir}/../leptonica/target/classes/include/</classPath>
+            <classPath>${basedir}/../leptonica/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
@@ -81,24 +67,42 @@
             <preloadPath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/leptonica/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/leptonica/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/leptonica/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/leptonica/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>
-            <id>javacpp.parser</id>
+            <id>javacpp-parser</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.presets.tesseract</classOrPackageName>
+              <classOrPackageName>org.bytedeco.tesseract.presets.tesseract</classOrPackageName>
             </configuration>
           </execution>
           <execution>
-            <id>javacpp.compiler</id>
+            <id>javacpp-compiler</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.tesseract</classOrPackageName>
+              <classOrPackageName>org.bytedeco.tesseract.**</classOrPackageName>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

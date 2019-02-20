@@ -9,14 +9,10 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>leptonica</artifactId>
   <version>1.77.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Leptonica</name>
-
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -36,37 +32,25 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <id>${javacpp.platform}</id>
+            <id>javacpp-${javacpp.platform}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/bin/*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libg*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libj*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/liblept.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libp*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libt*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libw*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/libz*.a</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.dylib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/bin/*</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libg*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libj*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/liblept.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libp*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libt*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libw*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/libz*.a</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/*.dylib</exclude>
+                <exclude>org/bytedeco/leptonica/${javacpp.platform}/lib/*.so*</exclude>
                 <exclude>${javacpp.platform.library.path}/lib/*.a</exclude>
                 <exclude>${javacpp.platform.library.path}/lib/*.dylib</exclude>
                 <exclude>${javacpp.platform.library.path}/lib/*.so*</exclude>
@@ -74,6 +58,10 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

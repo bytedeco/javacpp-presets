@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>caffe-platform</artifactId>
   <version>1.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Caffe</name>
@@ -21,17 +21,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
       <version>4.0.1-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
       <version>1.10.4-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
       <version>0.3.5-${project.parent.version}</version>
     </dependency>
