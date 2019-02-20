@@ -1,5 +1,5 @@
 import org.bytedeco.javacpp.*;
-import org.bytedeco.librealsense.RealSense.*;
+import org.bytedeco.librealsense.*;
 import static org.bytedeco.librealsense.global.RealSense.*;
 
 public class TestConnection {

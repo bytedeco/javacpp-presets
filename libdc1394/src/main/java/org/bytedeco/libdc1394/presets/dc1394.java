@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.libdc1394.dc1394", global = "org.bytedeco.libdc1394.global.dc1394", value = {
+@Properties(target = "org.bytedeco.libdc1394", global = "org.bytedeco.libdc1394.global.dc1394", value = {
     @Platform(not = "android", include = {"<poll.h>", "<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
         "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link = "dc1394@.22"),

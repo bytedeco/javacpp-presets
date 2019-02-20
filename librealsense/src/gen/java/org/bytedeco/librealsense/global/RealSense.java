@@ -2,7 +2,7 @@
 
 package org.bytedeco.librealsense.global;
 
-import org.bytedeco.librealsense.RealSense.*;
+import org.bytedeco.librealsense.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -441,40 +441,40 @@ public static final int
     /** Frame timestamp was measured in relation to the microcontroller clock */
     RS_TIMESTAMP_DOMAIN_MICROCONTROLLER = 1,
     RS_TIMESTAMP_DOMAIN_COUNT = 2;
-// Targeting ../RealSense/rs_intrinsics.java
+// Targeting ../rs_intrinsics.java
 
 
-// Targeting ../RealSense/rs_motion_device_intrinsic.java
+// Targeting ../rs_motion_device_intrinsic.java
 
 
-// Targeting ../RealSense/rs_motion_intrinsics.java
+// Targeting ../rs_motion_intrinsics.java
 
 
-// Targeting ../RealSense/rs_extrinsics.java
+// Targeting ../rs_extrinsics.java
 
 
-// Targeting ../RealSense/rs_timestamp_data.java
+// Targeting ../rs_timestamp_data.java
 
 
-// Targeting ../RealSense/rs_motion_data.java
+// Targeting ../rs_motion_data.java
 
 
-// Targeting ../RealSense/rs_error.java
+// Targeting ../rs_error.java
 
 
-// Targeting ../RealSense/rs_frameset.java
+// Targeting ../rs_frameset.java
 
 
-// Targeting ../RealSense/rs_frame_callback_ptr.java
+// Targeting ../rs_frame_callback_ptr.java
 
 
-// Targeting ../RealSense/rs_motion_callback_ptr.java
+// Targeting ../rs_motion_callback_ptr.java
 
 
-// Targeting ../RealSense/rs_timestamp_callback_ptr.java
+// Targeting ../rs_timestamp_callback_ptr.java
 
 
-// Targeting ../RealSense/rs_log_callback_ptr.java
+// Targeting ../rs_log_callback_ptr.java
 
 
 
@@ -1552,46 +1552,46 @@ public static native void rs_log_to_callback(@Cast("rs_log_severity") int min_se
         camera = 0,
         /** Frame timestamp was measured in relation to the microcontroller clock */
         microcontroller = 1;
-// Targeting ../RealSense/float2.java
+// Targeting ../float2.java
 
 
-// Targeting ../RealSense/float3.java
+// Targeting ../float3.java
 
 
-// Targeting ../RealSense/intrinsics.java
+// Targeting ../intrinsics.java
 
 
-// Targeting ../RealSense/motion_intrinsics.java
+// Targeting ../motion_intrinsics.java
 
 
-// Targeting ../RealSense/extrinsics.java
+// Targeting ../extrinsics.java
 
 
-// Targeting ../RealSense/timestamp_data.java
+// Targeting ../timestamp_data.java
 
 
-// Targeting ../RealSense/motion_data.java
+// Targeting ../motion_data.java
 
 
-// Targeting ../RealSense/error.java
+// Targeting ../error.java
 
 
-// Targeting ../RealSense/context.java
+// Targeting ../context.java
 
 
-// Targeting ../RealSense/motion_callback.java
+// Targeting ../motion_callback.java
 
 
-// Targeting ../RealSense/timestamp_callback.java
+// Targeting ../timestamp_callback.java
 
 
-// Targeting ../RealSense/frame.java
+// Targeting ../frame.java
 
 
-// Targeting ../RealSense/frame_callback.java
+// Targeting ../frame_callback.java
 
 
-// Targeting ../RealSense/device.java
+// Targeting ../device.java
 
 
 
@@ -1613,7 +1613,7 @@ public static native void rs_log_to_callback(@Cast("rs_log_severity") int min_se
         fatal = 4,
         /** No logging will occur */
         log_none  = 5;
-// Targeting ../RealSense/log_callback.java
+// Targeting ../log_callback.java
 
 
 
@@ -1643,28 +1643,28 @@ public static native void rs_log_to_callback(@Cast("rs_log_severity") int min_se
 // #include <cstdint>
 // #include <cstddef>
 // #include <mutex>
-// Targeting ../RealSense/rs_stream_interface.java
+// Targeting ../rs_stream_interface.java
 
 
-// Targeting ../RealSense/rs_frame_ref.java
+// Targeting ../rs_frame_ref.java
 
 
-// Targeting ../RealSense/rs_device.java
+// Targeting ../rs_device.java
 
 
-// Targeting ../RealSense/rs_context.java
+// Targeting ../rs_context.java
 
 
-// Targeting ../RealSense/rs_motion_callback.java
+// Targeting ../rs_motion_callback.java
 
 
-// Targeting ../RealSense/rs_frame_callback.java
+// Targeting ../rs_frame_callback.java
 
 
-// Targeting ../RealSense/rs_timestamp_callback.java
+// Targeting ../rs_timestamp_callback.java
 
 
-// Targeting ../RealSense/rs_log_callback.java
+// Targeting ../rs_log_callback.java
 
 
 

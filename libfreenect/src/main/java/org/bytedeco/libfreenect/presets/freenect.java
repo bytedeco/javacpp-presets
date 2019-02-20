@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(target = "org.bytedeco.libfreenect.freenect", global = "org.bytedeco.libfreenect.global.freenect", value = {
+@Properties(target = "org.bytedeco.libfreenect", global = "org.bytedeco.libfreenect.global.freenect", value = {
     @Platform(not = "android", include = {"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>",
                                         /*"<libfreenect/libfreenect_audio.h>",*/ "<libfreenect/libfreenect_sync.h>"},
         link = {"freenect@0.5", "freenect_sync@0.5"}),

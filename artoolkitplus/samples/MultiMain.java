@@ -25,7 +25,7 @@
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.artoolkitplus.ARToolKitPlus.*;
+import org.bytedeco.artoolkitplus.*;
 import static org.bytedeco.artoolkitplus.global.ARToolKitPlus.*;
 
 public class MultiMain {

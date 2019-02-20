@@ -2,7 +2,7 @@
 
 package org.bytedeco.libdc1394.global;
 
-import org.bytedeco.libdc1394.dc1394.*;
+import org.bytedeco.libdc1394.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -203,10 +203,10 @@ public static final int
 public static final int DC1394_BYTE_ORDER_MIN =        DC1394_BYTE_ORDER_UYVY;
 public static final int DC1394_BYTE_ORDER_MAX =        DC1394_BYTE_ORDER_YUYV;
 public static final int DC1394_BYTE_ORDER_NUM =       (DC1394_BYTE_ORDER_MAX - DC1394_BYTE_ORDER_MIN + 1);
-// Targeting ../dc1394/dc1394color_codings_t.java
+// Targeting ../dc1394color_codings_t.java
 
 
-// Targeting ../dc1394/dc1394video_modes_t.java
+// Targeting ../dc1394video_modes_t.java
 
 
 
@@ -433,11 +433,11 @@ public static final int DC1394_LOG_NUM =              (DC1394_LOG_MAX - DC1394_L
 // #endif /* _MSC_VER */
 
 // #ifdef __cplusplus
-// Targeting ../dc1394/Log_handler_int_BytePointer_Pointer.java
+// Targeting ../Log_handler_int_BytePointer_Pointer.java
 
 
 public static native @Cast("dc1394error_t") int dc1394_log_register_handler(@Cast("dc1394log_t") int type, Log_handler_int_BytePointer_Pointer log_handler, Pointer user);
-// Targeting ../dc1394/Log_handler_int_String_Pointer.java
+// Targeting ../Log_handler_int_String_Pointer.java
 
 
 public static native @Cast("dc1394error_t") int dc1394_log_register_handler(@Cast("dc1394log_t") int type, Log_handler_int_String_Pointer log_handler, Pointer user);
@@ -580,16 +580,16 @@ public static final int
 public static final int DC1394_PHY_DELAY_MIN =         DC1394_PHY_DELAY_MAX_144_NS;
 public static final int DC1394_PHY_DELAY_MAX =         DC1394_PHY_DELAY_UNKNOWN_0;
 public static final int DC1394_PHY_DELAY_NUM =        (DC1394_PHY_DELAY_MAX - DC1394_PHY_DELAY_MIN + 1);
-// Targeting ../dc1394/dc1394camera_t.java
+// Targeting ../dc1394camera_t.java
 
 
-// Targeting ../dc1394/dc1394camera_id_t.java
+// Targeting ../dc1394camera_id_t.java
 
 
-// Targeting ../dc1394/dc1394camera_list_t.java
+// Targeting ../dc1394camera_list_t.java
 
 
-// Targeting ../dc1394/dc1394_t.java
+// Targeting ../dc1394_t.java
 
 
 
@@ -825,19 +825,19 @@ public static final int
 public static final int DC1394_FEATURE_MODE_MIN =      DC1394_FEATURE_MODE_MANUAL;
 public static final int DC1394_FEATURE_MODE_MAX =      DC1394_FEATURE_MODE_ONE_PUSH_AUTO;
 public static final int DC1394_FEATURE_MODE_NUM =     (DC1394_FEATURE_MODE_MAX - DC1394_FEATURE_MODE_MIN + 1);
-// Targeting ../dc1394/dc1394feature_modes_t.java
+// Targeting ../dc1394feature_modes_t.java
 
 
-// Targeting ../dc1394/dc1394trigger_modes_t.java
+// Targeting ../dc1394trigger_modes_t.java
 
 
-// Targeting ../dc1394/dc1394trigger_sources_t.java
+// Targeting ../dc1394trigger_sources_t.java
 
 
-// Targeting ../dc1394/dc1394feature_info_t.java
+// Targeting ../dc1394feature_info_t.java
 
 
-// Targeting ../dc1394/dc1394featureset_t.java
+// Targeting ../dc1394featureset_t.java
 
 
 
@@ -1193,7 +1193,7 @@ public static final int
 public static final int DC1394_CAPTURE_POLICY_MIN =    DC1394_CAPTURE_POLICY_WAIT;
 public static final int DC1394_CAPTURE_POLICY_MAX =    DC1394_CAPTURE_POLICY_POLL;
 public static final int DC1394_CAPTURE_POLICY_NUM =   (DC1394_CAPTURE_POLICY_MAX - DC1394_CAPTURE_POLICY_MIN + 1);
-// Targeting ../dc1394/dc1394capture_callback_t.java
+// Targeting ../dc1394capture_callback_t.java
 
 
 
@@ -1518,10 +1518,10 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 
 // #ifndef __DC1394_FORMAT7_H__
 // #define __DC1394_FORMAT7_H__
-// Targeting ../dc1394/dc1394format7mode_t.java
+// Targeting ../dc1394format7mode_t.java
 
 
-// Targeting ../dc1394/dc1394format7modeset_t.java
+// Targeting ../dc1394format7modeset_t.java
 
 
 
@@ -2214,10 +2214,10 @@ public static final int
 public static final int DC1394_OPERATION_MODE_MIN =    DC1394_OPERATION_MODE_LEGACY;
 public static final int DC1394_OPERATION_MODE_MAX =    DC1394_OPERATION_MODE_1394B;
 public static final int DC1394_OPERATION_MODE_NUM =   (DC1394_OPERATION_MODE_MAX - DC1394_OPERATION_MODE_MIN + 1);
-// Targeting ../dc1394/dc1394framerates_t.java
+// Targeting ../dc1394framerates_t.java
 
 
-// Targeting ../dc1394/dc1394video_frame_t.java
+// Targeting ../dc1394video_frame_t.java
 
 
 

@@ -102,8 +102,8 @@ import java.awt.event.*;
 import java.nio.*;
 import javax.swing.*;
 import org.bytedeco.javacpp.*;
+import org.bytedeco.libfreenect.*;
 import static java.lang.Math.*;
-import org.bytedeco.libfreenect.freenect.*;
 import static org.bytedeco.libfreenect.global.freenect.*;
 
 public class GLPCLView {

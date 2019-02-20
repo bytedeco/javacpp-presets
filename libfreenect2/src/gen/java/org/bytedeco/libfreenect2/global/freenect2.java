@@ -2,7 +2,7 @@
 
 package org.bytedeco.libfreenect2.global;
 
-import org.bytedeco.libfreenect2.freenect2.*;
+import org.bytedeco.libfreenect2.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -11,7 +11,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
     static { Loader.load(); }
 
-// Targeting ../freenect2/FrameMap.java
+// Targeting ../FrameMap.java
 
 
 // Parsed from <libfreenect2/libfreenect2.hpp>
@@ -51,13 +51,13 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
 // #include <libfreenect2/frame_listener.hpp>
 // #include <libfreenect2/packet_pipeline.h>
 // #include <string>
-// Targeting ../freenect2/Freenect2Device.java
+// Targeting ../Freenect2Device.java
 
 
-// Targeting ../freenect2/Freenect2Impl.java
+// Targeting ../Freenect2Impl.java
 
 
-// Targeting ../freenect2/Freenect2.java
+// Targeting ../Freenect2.java
 
 
 
@@ -102,10 +102,10 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
 // #include <cstddef>
 // #include <stdint.h>
 // #include <libfreenect2/config.h>
-// Targeting ../freenect2/Frame.java
+// Targeting ../Frame.java
 
 
-// Targeting ../freenect2/FrameListener.java
+// Targeting ../FrameListener.java
 
 
 
@@ -154,10 +154,10 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
  * \{
 <p>
 /** Storage of multiple different types of frames. */
-// Targeting ../freenect2/SyncMultiFrameListenerImpl.java
+// Targeting ../SyncMultiFrameListenerImpl.java
 
 
-// Targeting ../freenect2/SyncMultiFrameListener.java
+// Targeting ../SyncMultiFrameListener.java
 
 
 
@@ -202,7 +202,7 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
 // #include <string>
 
 // #include <libfreenect2/config.h>
-// Targeting ../freenect2/Logger.java
+// Targeting ../Logger.java
 
 
 
@@ -263,28 +263,28 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
 // #include <libfreenect2/config.h>
 
 // #include <stdlib.h>
-// Targeting ../freenect2/DataCallback.java
+// Targeting ../DataCallback.java
 
 
-// Targeting ../freenect2/RgbPacketProcessor.java
+// Targeting ../RgbPacketProcessor.java
 
 
-// Targeting ../freenect2/DepthPacketProcessor.java
+// Targeting ../DepthPacketProcessor.java
 
 
-// Targeting ../freenect2/PacketPipelineComponents.java
+// Targeting ../PacketPipelineComponents.java
 
 
-// Targeting ../freenect2/PacketPipeline.java
+// Targeting ../PacketPipeline.java
 
 
-// Targeting ../freenect2/DumpPacketPipeline.java
+// Targeting ../DumpPacketPipeline.java
 
 
-// Targeting ../freenect2/CpuPacketPipeline.java
+// Targeting ../CpuPacketPipeline.java
 
 
-// Targeting ../freenect2/OpenGLPacketPipeline.java
+// Targeting ../OpenGLPacketPipeline.java
 
 
 // #endif // LIBFREENECT2_WITH_OPENGL_SUPPORT
@@ -337,10 +337,10 @@ public class freenect2 extends org.bytedeco.libfreenect2.presets.freenect2 {
 // #include <libfreenect2/config.h>
 // #include <libfreenect2/libfreenect2.hpp>
 // #include <libfreenect2/frame_listener.hpp>
-// Targeting ../freenect2/RegistrationImpl.java
+// Targeting ../RegistrationImpl.java
 
 
-// Targeting ../freenect2/Registration.java
+// Targeting ../Registration.java
 
 
 

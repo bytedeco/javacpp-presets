@@ -53,7 +53,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 ```java
 import org.bytedeco.javacpp.*;
-import org.bytedeco.librealsense.RealSense.*;
+import org.bytedeco.librealsense.*;
 import static org.bytedeco.librealsense.global.RealSense.*;
 
 public class TestConnection {

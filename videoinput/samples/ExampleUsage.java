@@ -1,5 +1,5 @@
 import org.bytedeco.javacpp.*;
-import org.bytedeco.videoinput.videoInputLib.*;
+import org.bytedeco.videoinput.*;
 import static org.bytedeco.videoinput.global.videoInputLib.*;
 
 public class ExampleUsage {

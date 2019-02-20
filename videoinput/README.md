@@ -54,7 +54,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ### The `ExampleUsage.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import org.bytedeco.videoinput.videoInputLib.*;
+import org.bytedeco.videoinput.*;
 import static org.bytedeco.videoinput.global.videoInputLib.*;
 
 public class ExampleUsage {

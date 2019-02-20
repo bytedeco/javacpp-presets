@@ -2,7 +2,7 @@
 
 package org.bytedeco.libfreenect.global;
 
-import org.bytedeco.libfreenect.freenect.*;
+import org.bytedeco.libfreenect.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -75,7 +75,7 @@ public static final int
 	FREENECT_DEVICE_MOTOR  = 0x01,
 	FREENECT_DEVICE_CAMERA = 0x02,
 	FREENECT_DEVICE_AUDIO  = 0x04;
-// Targeting ../freenect/freenect_device_attributes.java
+// Targeting ../freenect_device_attributes.java
 
 
 
@@ -151,7 +151,7 @@ public static final int
 public static final int
 	FREENECT_OFF = 0,
 	FREENECT_ON  = 1;
-// Targeting ../freenect/freenect_frame_mode.java
+// Targeting ../freenect_frame_mode.java
 
 
 
@@ -183,22 +183,22 @@ public static final int
 	TILT_STATUS_LIMIT   = 0x01,
 	/** Tilt motor is currently moving to new position */
 	TILT_STATUS_MOVING  = 0x04;
-// Targeting ../freenect/freenect_raw_tilt_state.java
+// Targeting ../freenect_raw_tilt_state.java
 
 
-// Targeting ../freenect/_freenect_context.java
+// Targeting ../_freenect_context.java
 
 
-// Targeting ../freenect/freenect_context.java
+// Targeting ../freenect_context.java
 
 
-// Targeting ../freenect/_freenect_device.java
+// Targeting ../_freenect_device.java
 
 
-// Targeting ../freenect/freenect_device.java
+// Targeting ../freenect_device.java
 
 
-// Targeting ../freenect/freenect_usb_context.java
+// Targeting ../freenect_usb_context.java
 
 
 //
@@ -258,7 +258,7 @@ public static native int freenect_init(@ByPtrPtr freenect_context ctx, freenect_
  * @return 0 on success
  */
 public static native int freenect_shutdown(freenect_context ctx);
-// Targeting ../freenect/freenect_log_cb.java
+// Targeting ../freenect_log_cb.java
 
 
 
@@ -415,13 +415,13 @@ public static native void freenect_set_user(freenect_device dev, Pointer user);
  * @return Pointer to user data
  */
 public static native Pointer freenect_get_user(freenect_device dev);
-// Targeting ../freenect/freenect_depth_cb.java
+// Targeting ../freenect_depth_cb.java
 
 
-// Targeting ../freenect/freenect_video_cb.java
+// Targeting ../freenect_video_cb.java
 
 
-// Targeting ../freenect/freenect_chunk_cb.java
+// Targeting ../freenect_chunk_cb.java
 
 
 
@@ -788,16 +788,16 @@ public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cas
 // #include <stdint.h>
 
 // #ifdef __cplusplus
-// Targeting ../freenect/freenect_reg_info.java
+// Targeting ../freenect_reg_info.java
 
 
-// Targeting ../freenect/freenect_reg_pad_info.java
+// Targeting ../freenect_reg_pad_info.java
 
 
-// Targeting ../freenect/freenect_zero_plane_info.java
+// Targeting ../freenect_zero_plane_info.java
 
 
-// Targeting ../freenect/freenect_registration.java
+// Targeting ../freenect_registration.java
 
 
 

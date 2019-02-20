@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Jeremy Laviole
  */
-@Properties(target = "org.bytedeco.libfreenect2.freenect2", global = "org.bytedeco.libfreenect2.global.freenect2", value = {
+@Properties(target = "org.bytedeco.libfreenect2", global = "org.bytedeco.libfreenect2.global.freenect2", value = {
     @Platform(value = {"linux-x86", "macosx-x86_64", "windows-x86_64"}, include = {"<libfreenect2/libfreenect2.hpp>",
                 "<libfreenect2/frame_listener.hpp>", "<libfreenect2/frame_listener_impl.h>", "<libfreenect2/logger.h>",
                 "<libfreenect2/packet_pipeline.h>", "<libfreenect2/registration.h>", "<libfreenect2/config.h>"},

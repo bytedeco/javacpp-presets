@@ -2,7 +2,7 @@
 
 package org.bytedeco.videoinput.global;
 
-import org.bytedeco.videoinput.videoInputLib.*;
+import org.bytedeco.videoinput.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -11,7 +11,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class videoInputLib extends org.bytedeco.videoinput.presets.videoInputLib {
     static { Loader.load(); }
 
-// Targeting ..\videoInputLib\StringVector.java
+// Targeting ../StringVector.java
 
 
 // Parsed from <videoInput.h>
@@ -187,44 +187,44 @@ public static final int VI_MEDIASUBTYPE_Y800 =    15;
 public static final int VI_MEDIASUBTYPE_Y8 =      16;
 public static final int VI_MEDIASUBTYPE_GREY =    17;
 public static final int VI_MEDIASUBTYPE_MJPG =    18;
-// Targeting ..\videoInputLib\ICaptureGraphBuilder2.java
+// Targeting ../ICaptureGraphBuilder2.java
 
 
-// Targeting ..\videoInputLib\IGraphBuilder.java
+// Targeting ../IGraphBuilder.java
 
 
-// Targeting ..\videoInputLib\IBaseFilter.java
+// Targeting ../IBaseFilter.java
 
 
-// Targeting ..\videoInputLib\IAMCrossbar.java
+// Targeting ../IAMCrossbar.java
 
 
-// Targeting ..\videoInputLib\IMediaControl.java
+// Targeting ../IMediaControl.java
 
 
-// Targeting ..\videoInputLib\ISampleGrabber.java
+// Targeting ../ISampleGrabber.java
 
 
-// Targeting ..\videoInputLib\IMediaEventEx.java
+// Targeting ../IMediaEventEx.java
 
 
-// Targeting ..\videoInputLib\IAMStreamConfig.java
+// Targeting ../IAMStreamConfig.java
 
 
-// Targeting ..\videoInputLib\_AMMediaType.java
+// Targeting ../_AMMediaType.java
 
 
-// Targeting ..\videoInputLib\SampleGrabberCallback.java
+// Targeting ../SampleGrabberCallback.java
 
 
 
 //keeps track of how many instances of VI are being used
 //don't touch
 public static native int comInitCount(); public static native void comInitCount(int comInitCount);
-// Targeting ..\videoInputLib\videoDevice.java
+// Targeting ../videoDevice.java
 
 
-// Targeting ..\videoInputLib\videoInput.java
+// Targeting ../videoInput.java
 
 
 

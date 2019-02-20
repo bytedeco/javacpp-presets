@@ -2,7 +2,7 @@
 
 package org.bytedeco.artoolkitplus.global;
 
-import org.bytedeco.artoolkitplus.ARToolKitPlus.*;
+import org.bytedeco.artoolkitplus.*;
 
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -31,10 +31,10 @@ public class ARToolKitPlus extends org.bytedeco.artoolkitplus.presets.ARToolKitP
 @Namespace("ARToolKitPlus") public static native void createImagePatternSimple(int nID, @Cast("uint8_t*") byte[] dataPtr);
 
 public static final int MAX_PATTERNS = 256;
-// Targeting ../ARToolKitPlus/SingleTracker.java
+// Targeting ../SingleTracker.java
 
 
-// Targeting ../ARToolKitPlus/MultiTracker.java
+// Targeting ../MultiTracker.java
 
 
 
@@ -108,7 +108,7 @@ public static final int
     POSE_ESTIMATOR_ORIGINAL = 0, // original "normal" pose estimator
     POSE_ESTIMATOR_ORIGINAL_CONT = 1, // original "cont" pose estimator
     POSE_ESTIMATOR_RPP = 2; // new "Robust Planar Pose" estimator
-// Targeting ../ARToolKitPlus/CornerPoint.java
+// Targeting ../CornerPoint.java
 
 
 
@@ -285,13 +285,13 @@ public static final int P_MAX =       500;
 // #define arMalloc(V,T,S)
 // { if( ((V) = (T *)malloc( sizeof(T) * (S) )) == 0 )
 // {printf("malloc error!!\n"); exit(1);} }
-// Targeting ../ARToolKitPlus/ARMarkerInfo.java
+// Targeting ../ARMarkerInfo.java
 
 
-// Targeting ../ARToolKitPlus/ARMarkerInfo2.java
+// Targeting ../ARMarkerInfo2.java
 
 
-// Targeting ../ARToolKitPlus/arPrevInfo.java
+// Targeting ../arPrevInfo.java
 
 
 
@@ -329,10 +329,10 @@ public static final int P_MAX =       500;
 // #define __ARTOOLKITMULTI_HEADERFILE__
 
 // #include <ARToolKitPlus/config.h>
-// Targeting ../ARToolKitPlus/ARMultiEachMarkerInfoT.java
+// Targeting ../ARMultiEachMarkerInfoT.java
 
 
-// Targeting ../ARToolKitPlus/ARMultiMarkerInfoT.java
+// Targeting ../ARMultiMarkerInfoT.java
 
 
 
@@ -369,7 +369,7 @@ public static final int P_MAX =       500;
 // #define __ARTOOLKITMATRIX_HEADERFILE__
 
 // #include <ARToolKitPlus/config.h>
-// Targeting ../ARToolKitPlus/ARMat.java
+// Targeting ../ARMat.java
 
 
 
@@ -422,7 +422,7 @@ public static final int P_MAX =       500;
 // #define __ARTOOLKITVECTOR_HEADERFILE__
 
 // #include <ARToolKitPlus/config.h>
-// Targeting ../ARToolKitPlus/ARVec.java
+// Targeting ../ARVec.java
 
 
 @Namespace("ARToolKitPlus::Vector") public static native ARVec alloc(int clm);
@@ -465,7 +465,7 @@ public static final int P_MAX =       500;
 
 // #include <string>
 // #include <ARToolKitPlus/config.h>
-// Targeting ../ARToolKitPlus/Camera.java
+// Targeting ../Camera.java
 
 
 
@@ -520,7 +520,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // have to use unsigned long long othersie...
 // #if defined(_MSC_VER) || defined(_WIN32_WCE)
 // #else
-// Targeting ../ARToolKitPlus/BCH.java
+// Targeting ../BCH.java
 
 
 
@@ -559,7 +559,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // #include <ARToolKitPlus/config.h>
 
 @Namespace("ARToolKitPlus") @MemberGetter public static native int MAX_HULL_POINTS();
-// Targeting ../ARToolKitPlus/MarkerPoint.java
+// Targeting ../MarkerPoint.java
 
 
 
@@ -672,7 +672,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 
 // #include <algorithm>
 // #include <vector>
-// Targeting ../ARToolKitPlus/Tracker.java
+// Targeting ../Tracker.java
 
 
 
@@ -707,7 +707,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #pragma once
 
 // #include <ARToolKitPlus/Tracker.h>
-// Targeting ../ARToolKitPlus/TrackerMultiMarker.java
+// Targeting ../TrackerMultiMarker.java
 
 
 
@@ -740,7 +740,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #pragma once
 
 // #include <ARToolKitPlus/Tracker.h>
-// Targeting ../ARToolKitPlus/TrackerSingleMarker.java
+// Targeting ../TrackerSingleMarker.java
 
 
 

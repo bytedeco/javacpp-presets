@@ -76,7 +76,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import java.io.*;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.libdc1394.dc1394.*;
+import org.bytedeco.libdc1394.*;
 import static org.bytedeco.libdc1394.global.dc1394.*;
 
 public class GrabColorImage {

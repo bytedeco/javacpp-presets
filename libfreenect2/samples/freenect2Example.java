@@ -1,5 +1,5 @@
 import org.bytedeco.javacpp.*;
-import org.bytedeco.libfreenect2.freenect2.*;
+import org.bytedeco.libfreenect2.*;
 import static org.bytedeco.libfreenect2.global.freenect2.*;
 
 /**
