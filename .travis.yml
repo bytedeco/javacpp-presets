@@ -34,10 +34,10 @@ matrix:
         env: PROJ=fftw,gsl OS=android-arm
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=android-arm
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=tensorflow OS=android-arm
 #        install: true
@@ -59,10 +59,10 @@ matrix:
         env: PROJ=fftw,gsl OS=android-arm64
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=android-arm64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=tensorflow OS=android-arm64
 #        install: true
@@ -84,10 +84,10 @@ matrix:
         env: PROJ=fftw,gsl OS=android-x86
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=android-x86
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=tensorflow OS=android-x86
 #        install: true
@@ -109,10 +109,10 @@ matrix:
         env: PROJ=fftw,gsl OS=android-x86_64
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=android-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=tensorflow OS=android-x86_64
 #        install: true
@@ -170,10 +170,10 @@ matrix:
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=linux-armhf
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=systems OS=linux-armhf
 #        install: true
@@ -203,14 +203,14 @@ matrix:
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=linux-ppc64le
-#        install: true
-#        script: ./ci/install-ppc.sh
-#      - os: linux
-#        env: PROJ=cuda OS=linux-ppc64le
-#        install: true
-#        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=cuda OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
 #      - os: linux
 #        env: PROJ=systems OS=linux-ppc64le
 #        install: true
@@ -244,18 +244,18 @@ matrix:
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=llvm OS=linux-x86
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=linux-x86
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=caffe OS=linux-x86
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=llvm OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=caffe OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=mxnet OS=linux-x86
 #        install: true
@@ -317,26 +317,26 @@ matrix:
         env: PROJ=cpython OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=llvm OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=libpostal OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=leptonica,tesseract OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=caffe OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=cuda OS=linux-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=llvm OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=libpostal OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=caffe OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cuda OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=mxnet OS=linux-x86_64
 #        install: true
@@ -423,31 +423,31 @@ matrix:
         env: PROJ=cpython OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode7.3
-#        env: PROJ=llvm OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode7.3
-#        env: PROJ=libpostal OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode7.3
-#        env: PROJ=leptonica,tesseract OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode8.3
-#        env: PROJ=caffe OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode8.3
-#        env: PROJ=cuda OS=macosx-x86_64
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=llvm OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=libpostal OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode7.3
+        env: PROJ=leptonica,tesseract OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=caffe OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=cuda OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: osx
 #        osx_image: xcode8.3
 #        env: PROJ=mxnet OS=macosx-x86_64
@@ -493,10 +493,10 @@ matrix:
         env: PROJ=opencv OS=linux-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
-#      - os: linux
-#        env: PROJ=caffe OS=linux-x86_64 EXT=-gpu
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=caffe OS=linux-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: linux
 #        env: PROJ=mxnet OS=linux-x86_64 EXT=-gpu
 #        install: true
@@ -511,11 +511,11 @@ matrix:
         env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
-#      - os: osx
-#        osx_image: xcode8.3
-#        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
-#        install: true
-#        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=caffe OS=macosx-x86_64 EXT=-gpu
+        install: true
+        script: ./ci/install-travis.sh
 #      - os: osx
 #        osx_image: xcode8.3
 #        env: PROJ=mxnet OS=macosx-x86_64 EXT=-gpu
