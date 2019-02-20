@@ -1,24 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project>
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.bytedeco.javacpp-presets</groupId>
-    <artifactId>tesseract-samples</artifactId>
-    <version>4.0.0-1.4.4</version>
-    <name>JavaCPP Presets Samples for Tesseract</name>
-
+    <groupId>org.bytedeco.tesseract</groupId>
+    <artifactId>BasicExample</artifactId>
+    <version>1.5-SNAPSHOT</version>
     <properties>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <maven.compiler.source>1.7</maven.compiler.source>
+        <exec.mainClass>BasicExample</exec.mainClass>
     </properties>
-
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>${project.version}</version>
+            <version>4.0.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>

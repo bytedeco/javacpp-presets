@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.leptonica</groupId>
+    <artifactId>sudokutest</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>SudokuTest</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>leptonica-platform</artifactId>
+            <version>1.77.0-1.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

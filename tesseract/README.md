@@ -24,7 +24,7 @@ Here is a simple example of Tesseract ported to Java from this C++ source file a
  * https://github.com/tesseract-ocr/tesseract/wiki/APIExample
  * https://github.com/tesseract-ocr/tessdata
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/BasicExample.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `BasicExample.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="path/to/image/file"
 ```
@@ -33,27 +33,32 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.tesseract</groupId>
+    <groupId>org.bytedeco.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>BasicExample</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>tesseract-platform</artifactId>
-            <version>4.0.0-1.4.4</version>
+            <version>4.0.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/BasicExample.java` source file
+### The `BasicExample.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.lept.*;
-import static org.bytedeco.javacpp.tesseract.*;
+import org.bytedeco.leptonica.*;
+import org.bytedeco.tesseract.*;
+import static org.bytedeco.leptonica.global.lept.*;
+import static org.bytedeco.tesseract.global.tesseract.*;
 
 public class BasicExample {
     public static void main(String[] args) {

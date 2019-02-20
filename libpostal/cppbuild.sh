@@ -16,7 +16,10 @@ INSTALL_PATH=$(pwd)
 
 echo "Decompressing archives..."
 tar --totals -xf ../libpostal-$LIBPOSTAL_VERSION.tar.gz
-cd libpostal-*
+cd libpostal-$LIBPOSTAL_VERSION
+if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
+    export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
+fi
 
 case $PLATFORM in
     linux-x86_64)
@@ -36,13 +39,12 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         cp -rf windows/* ./
-        SOURCE_PATH=$(pwd)
         CC="gcc -m64 -Duint=int -static-libgcc"
-        bash -lc "cd $SOURCE_PATH && ./bootstrap.sh"
-        bash -lc "cd $SOURCE_PATH && ./configure --prefix=$INSTALL_PATH --disable-data-download"
-        #bash -lc "cd $SOURCE_PATH && ./configure --prefix=$INSTALL_PATH --datadir=/c/[...some dir with a few GB of space...]"
-        bash -lc "cd $SOURCE_PATH && make -j $MAKEJ V=0"
-        bash -lc "cd $SOURCE_PATH && make install"
+        ./bootstrap.sh
+        ./configure --prefix=$INSTALL_PATH --disable-data-download
+        #./configure --prefix=$INSTALL_PATH --datadir=/c/[...some dir with a few GB of space...]
+        make -j $MAKEJ V=0
+        make install
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

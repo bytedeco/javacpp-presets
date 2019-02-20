@@ -25,7 +25,7 @@ Here is a simple example of LLVM ported to Java from this C source file:
 
  * https://github.com/wickedchicken/llvm-c-example/blob/master/fac.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Fac.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Fac.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -36,29 +36,33 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.llvm</groupId>
+    <groupId>org.bytedeco.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Fac</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>7.0.1-1.4.4</version>
+            <version>7.0.1-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Fac.java` source file
+### The `Fac.java` source file
 ```java
 // General stuff
 import org.bytedeco.javacpp.*;
 
 // Headers required by LLVM
-import static org.bytedeco.javacpp.LLVM.*;
+import org.bytedeco.llvm.LLVM.*;
+import static org.bytedeco.llvm.global.LLVM.*;
 
 public class Fac {
     public static void main (String[] args) {
