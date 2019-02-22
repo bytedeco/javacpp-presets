@@ -1430,6 +1430,9 @@ public class ngraph extends org.bytedeco.javacpp.presets.ngraph {
          *  all constant data. This has little value beyond comparing the relative size of
          *  graphs and should not be considered the actual memory consumption of a graph. */
         public native @Cast("size_t") long get_graph_size();
+
+        public native @Cast("size_t") long get_placement();
+        public native void set_placement(@Cast("size_t") long placement);
     }
 
 
