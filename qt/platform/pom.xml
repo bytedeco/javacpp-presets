@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>qt-platform</artifactId>
   <version>5.12-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Qt</name>

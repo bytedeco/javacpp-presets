@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of LiquidFun ported to Java.
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Example.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Example.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -30,26 +30,30 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.liquidfun</groupId>
+    <groupId>org.bytedeco.liquidfun</groupId>
     <artifactId>example</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>liquidfun-platform</artifactId>
-            <version>20170717-43d53e0-1.4.4</version>
+            <version>20170717-43d53e0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/Example.java` source file
+### The `Example.java` source file
 ```java
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.liquidfun.*;
+import org.bytedeco.liquidfun.*;
+import static org.bytedeco.liquidfun.global.liquidfun.*;
 
 public class Example {
   public static void main(String[] args) {

@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mxnet</artifactId>
   <version>1.4.0.rc3-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
@@ -20,17 +20,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
       <version>4.0.1-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
       <version>0.3.5-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
       <version>0.18-rc-${project.parent.version}</version>
     </dependency>
@@ -81,34 +81,34 @@
         <artifactId>javacpp</artifactId>
         <dependencies>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
             <version>4.0.1-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
             <version>0.3.5-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
             <version>0.18-rc-${project.parent.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
             <version>4.0.1-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
             <version>0.3.5-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
             <version>0.18-rc-${project.parent.version}</version>
             <classifier>${javacpp.mkldnn.platform}</classifier>
@@ -132,12 +132,12 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/include/</includePath>
-            <includePath>${basedir}/../opencv/src/main/resources/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/opencv/include/</includePath>
+            <includePath>${basedir}/../opencv/src/main/resources/org/bytedeco/opencv/include/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
-            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/javacpp/include/</includePath>
-            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/openblas/include/</includePath>
+            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
           </includePaths>
@@ -151,18 +151,38 @@
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/opencv/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/opencv/include/</includeResource>
+            <includeResource>/org/bytedeco/opencv/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/opencv/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/opencv/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>
-            <id>javacpp.parser</id>
+            <id>javacpp-parser</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.presets.mxnet</classOrPackageName>
+              <classOrPackageName>org.bytedeco.mxnet.presets.mxnet</classOrPackageName>
             </configuration>
           </execution>
           <execution>
-            <id>javacpp.compiler</id>
+            <id>javacpp-compiler</id>
             <configuration>
-              <classOrPackageName>org.bytedeco.javacpp.mxnet</classOrPackageName>
+              <classOrPackageName>org.bytedeco.mxnet.**</classOrPackageName>
             </configuration>
           </execution>
         </executions>
@@ -184,7 +204,7 @@
 <!--        <displayCmd>true</displayCmd>-->
           <jvmArgs>
             <arg>-cp</arg>
-            <arg>${javacpp.platform.artifacts}</arg>
+            <arg>${project.build.directory}/native${path.separator}${javacpp.platform.artifacts}</arg>
 <!--          <arg>-verbose</arg>-->
             <arg>-Dorg.bytedeco.javacpp.logger.debug=true</arg>
           </jvmArgs>
@@ -244,26 +264,28 @@
             <configuration>
               <includes>
                 <include>org/apache/mxnet/**</include>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/mxnet/**</include>
               </includes>
             </configuration>
           </execution>
           <execution>
-            <id>${javacpp.platform}${javacpp.platform.extension}</id>
+            <id>javacpp-${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*omp*</exclude>
+                <exclude>org/bytedeco/mxnet/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/mxnet/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/mxnet/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/mxnet/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
+                <exclude>org/bytedeco/mxnet/${javacpp.platform}${javacpp.platform.extension}/*omp*</exclude>
               </excludes>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -297,19 +319,19 @@
             <artifactId>javacpp</artifactId>
             <dependencies>
               <dependency>
-                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <groupId>org.bytedeco</groupId>
                 <artifactId>opencv</artifactId>
                 <version>4.0.1-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>
-                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <groupId>org.bytedeco</groupId>
                 <artifactId>openblas</artifactId>
                 <version>0.3.5-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>
-                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <groupId>org.bytedeco</groupId>
                 <artifactId>mxnet</artifactId>
                 <version>${project.version}</version>
                 <classifier>linux-x86_64</classifier>
@@ -334,7 +356,7 @@
             <artifactId>javacpp</artifactId>
             <dependencies>
               <dependency>
-                <groupId>org.bytedeco.javacpp-presets</groupId>
+                <groupId>org.bytedeco</groupId>
                 <artifactId>mxnet</artifactId>
                 <version>${project.version}</version>
                 <classifier>${javacpp.platform}<!-- no -gpu --></classifier>

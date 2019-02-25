@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>skia-platform</artifactId>
   <version>20170511-53d6729-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Skia</name>

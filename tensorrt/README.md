@@ -23,7 +23,7 @@ Here is a simple example of TensorRT ported to Java from the `sampleGoogleNet.cp
 
  * https://developer.nvidia.com/nvidia-tensorrt-download
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SampleGoogleNet.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SampleGoogleNet.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,40 +32,46 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
+    <groupId>org.bytedeco.tensorrt</groupId>
     <artifactId>samplegooglenet</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SampleGoogleNet</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>5.0-1.4.4</version>
+            <version>5.0-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.4</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/SampleGoogleNet.java` source file
+### The `SampleGoogleNet.java` source file
 ```java
 import java.io.*;
 import java.util.*;
 import org.bytedeco.javacpp.*;
 
-import static org.bytedeco.javacpp.cuda.*;
-import static org.bytedeco.javacpp.nvinfer.*;
-import static org.bytedeco.javacpp.nvparsers.*;
+import org.bytedeco.cuda.cudart.*;
+import org.bytedeco.tensorrt.nvinfer.*;
+import org.bytedeco.tensorrt.nvparsers.*;
+import static org.bytedeco.cuda.global.cudart.*;
+import static org.bytedeco.tensorrt.global.nvinfer.*;
+import static org.bytedeco.tensorrt.global.nvparsers.*;
 
 public class SampleGoogleNet {
     static void CHECK(int status)

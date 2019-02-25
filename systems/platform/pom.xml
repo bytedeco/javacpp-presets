@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>systems-platform</artifactId>
   <version>${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Systems</name>

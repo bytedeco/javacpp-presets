@@ -1,0 +1,28 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.tensorrt</groupId>
+    <artifactId>samplegooglenet</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>SampleGoogleNet</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorrt-platform</artifactId>
+            <version>5.0-1.5-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>liquidfun-platform</artifactId>
   <version>20170717-43d53e0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for LiquidFun</name>

@@ -24,7 +24,7 @@ Here is a simple example of Skia ported to Java from this C source file:
 
  * https://github.com/mono/skia/blob/update-master/experimental/c-api-example/skia-c-example.c
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SkiaCExample.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SkiaCExample.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -33,30 +33,34 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.skia</groupId>
+    <groupId>org.bytedeco.skia</groupId>
     <artifactId>skiacexample</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SkiaCExample</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>20170511-53d6729-1.4.4</version>
+            <version>20170511-53d6729-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/SkiaCExample.java` source file
+### The `SkiaCExample.java` source file
 ```java
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.bytedeco.javacpp.*;
 
-import static org.bytedeco.javacpp.Skia.*;
+import org.bytedeco.skia.*;
+import static org.bytedeco.skia.global.Skia.*;
 
 public class SkiaCExample {
     private static sk_surface_t makeSurface(int w, int h) {

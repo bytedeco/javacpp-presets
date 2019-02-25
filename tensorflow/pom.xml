@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow</artifactId>
   <version>${tensorflow.version}-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorFlow</name>
@@ -21,7 +21,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
       <version>0.18-rc-${project.parent.version}</version>
     </dependency>
@@ -74,17 +74,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <configuration>
-              <includes>
-                <include>org/tensorflow/**/*.java</include>
-                <include>org/bytedeco/javacpp/*.java</include>
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
@@ -106,7 +95,7 @@
             <includePath>${tensorflow.path}/../build/nsync/src/nsync/public/</includePath>
             <includePath>${tensorflow.path}/../build/protobuf/src/protobuf/src/</includePath>
             <includePath>${tensorflow.path}/../build/eigen/src/eigen/</includePath>
-            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/tensorflow/include/</includePath>
           </includePaths>
           <linkPaths>
              <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
@@ -135,8 +124,15 @@
              <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
              <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
           </linkPaths>
-          <targetDirectory>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/java/</targetDirectory>
         </configuration>
+        <executions>
+          <execution>
+            <id>javacpp-parser</id>
+            <configuration>
+              <clean>true</clean>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -146,26 +142,28 @@
             <configuration>
               <includes>
                 <include>org/tensorflow/**</include>
-                <include>org/bytedeco/javacpp/*</include>
-                <include>org/bytedeco/javacpp/helper/*</include>
-                <include>org/bytedeco/javacpp/presets/*</include>
+                <include>org/bytedeco/tensorflow/**</include>
               </includes>
             </configuration>
           </execution>
           <execution>
-            <id>${javacpp.platform}${javacpp.platform.extension}</id>
+            <id>javacpp-${javacpp.platform}${javacpp.platform.extension}</id>
             <phase>package</phase>
             <configuration>
               <excludes>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
-                <exclude>org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
               </excludes>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

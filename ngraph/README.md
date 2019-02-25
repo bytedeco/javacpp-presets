@@ -23,7 +23,7 @@ Here is a simple example of nGraph ported to Java from the C++ source file at:
 
  * https://ngraph.nervanasys.com/docs/latest/howto/execute.html
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ABC.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ABC.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -32,23 +32,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.ngraph</groupId>
+    <groupId>org.bytedeco.ngraph</groupId>
     <artifactId>abc</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ABC</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.14.0-1.4.5-SNAPSHOT</version>
+            <version>0.14.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/ABC.java` source file
+### The `ABC.java` source file
 ```java
 //*****************************************************************************
 // Copyright 2017-2019 Intel Corporation
@@ -68,7 +71,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 import org.bytedeco.javacpp.*;
 
-import static org.bytedeco.javacpp.ngraph.*;
+import org.bytedeco.ngraph.*;
+import static org.bytedeco.ngraph.global.ngraph.*;
 
 public class ABC {
     public static void main(String[] args) {

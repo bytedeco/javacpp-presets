@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>onnx-platform</artifactId>
   <version>1.4.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ONNX</name>

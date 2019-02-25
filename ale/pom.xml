@@ -9,7 +9,7 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>ale</artifactId>
   <version>0.6.0-${project.parent.version}</version>
   <name>JavaCPP Presets for ALE</name>
@@ -35,6 +35,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

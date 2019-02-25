@@ -1,24 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>org.bytedeco.javacpp-presets</groupId>
-  <artifactId>qt-samples</artifactId>
-  <version>5.12-1.4.5-SNAPSHOT</version>
-  <name>JavaCPP Presets Samples for Qt</name>
-
-  <properties>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <maven.compiler.source>1.7</maven.compiler.source>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>qt-platform</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
-
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.qt</groupId>
+    <artifactId>gettingstarted</artifactId>
+    <version>1.5-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>GettingStarted</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>qt-platform</artifactId>
+            <version>5.12-1.5-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>

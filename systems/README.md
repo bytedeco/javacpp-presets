@@ -27,7 +27,7 @@ Here is a simple example to detect some AVX capabilities by using CPUID function
 
  * https://en.wikipedia.org/wiki/CPUID
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/TestAVX.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `TestAVX.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -36,25 +36,29 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.systems</groupId>
+    <groupId>org.bytedeco.systems</groupId>
     <artifactId>testavx</artifactId>
-    <version>1.4.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>TestAVX</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>systems-platform</artifactId>
-            <version>1.4.4</version>
+            <version>1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/TestAVX.java` source file
+### The `TestAVX.java` source file
 ```java
 import org.bytedeco.javacpp.*;
+import org.bytedeco.systems.global.*;
 
 public class TestAVX {
     public static void main(String[] args) {

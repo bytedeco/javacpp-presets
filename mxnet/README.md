@@ -22,7 +22,7 @@ Scala API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/mxnet/scaladocs/
 
-&lowast; Call `Loader.load(org.bytedeco.javacpp.mxnet.class)` before using the API in the `org.apache.mxnet` package.
+&lowast; Call `Loader.load(org.bytedeco.mxnet.presets.mxnet.class)` before using the API in the `org.apache.mxnet` package.
 
 
 Sample Usage
@@ -32,7 +32,7 @@ Here is a simple example of the predict API of MXNet ported to Java from this C+
  * https://github.com/dmlc/mxnet/blob/v0.8.0/example/image-classification/predict-cpp/image-classification-predict.cc
  * http://data.dmlc.ml/mxnet/models/imagenet/inception-bn.tar.gz
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ImageClassificationPredict.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ImageClassificationPredict.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java -Dexec.args="apple.jpg"
 ```
@@ -41,64 +41,67 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
+    <groupId>org.bytedeco.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.4.0.rc3-1.4.5-SNAPSHOT</version>
+            <version>1.4.0.rc3-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc3-1.4.5-SNAPSHOT</version>
+            <version>1.4.0.rc3-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc3-1.4.5-SNAPSHOT</version>
+            <version>1.4.0.rc3-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0.rc3-1.4.5-SNAPSHOT</version>
+            <version>1.4.0.rc3-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.4.5-SNAPSHOT</version>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/ImageClassificationPredict.java` source file
+### The `ImageClassificationPredict.java` source file
 ```java
 /*!
  *  Copyright (c) 2015 by Xiao Liu, pertusa, caprice-j
@@ -126,18 +129,17 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.FloatPointer;
-import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.javacpp.*;
 
 // Path for c_predict_api
-import static org.bytedeco.javacpp.mxnet.*;
+import org.bytedeco.mxnet.*;
+import static org.bytedeco.mxnet.global.mxnet.*;
 
-import static org.bytedeco.javacpp.opencv_core.*;
-import static org.bytedeco.javacpp.opencv_imgcodecs.*;
-import static org.bytedeco.javacpp.opencv_imgproc.*;
+import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.opencv.opencv_imgproc.*;
+import static org.bytedeco.opencv.global.opencv_core.*;
+import static org.bytedeco.opencv.global.opencv_imgcodecs.*;
+import static org.bytedeco.opencv.global.opencv_imgproc.*;
 
 public class ImageClassificationPredict {
 
@@ -254,7 +256,7 @@ public class ImageClassificationPredict {
 
     public static void main(String[] args) {
         // Preload required by JavaCPP
-        Loader.load(org.bytedeco.javacpp.mxnet.class);
+        Loader.load(org.bytedeco.mxnet.global.mxnet.class);
 
         if (args.length < 1) {
             System.out.println("No test image here.");

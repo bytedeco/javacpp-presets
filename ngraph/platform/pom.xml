@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>ngraph-platform</artifactId>
   <version>0.14.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for nGraph</name>
@@ -21,7 +21,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
       <version>0.18-rc-${project.parent.version}</version>
     </dependency>

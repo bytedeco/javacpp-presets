@@ -24,7 +24,7 @@ Here is a simple example of ONNX ported to Java from this C++ source file and fo
  * https://github.com/onnx/onnx/issues/418#issuecomment-357596638
  * https://github.com/onnx/onnx/blob/master/onnx/examples/resources/single_relu.onnx
 
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/LoadModel.java` source files below, simply execute on the command line:
+We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `LoadModel.java` source files below, simply execute on the command line:
 ```bash
  $ mvn compile exec:java
 ```
@@ -33,27 +33,31 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.javacpp-presets.onnx</groupId>
+    <groupId>org.bytedeco.onnx</groupId>
     <artifactId>loadmodel</artifactId>
-    <version>1.4.5-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <exec.mainClass>LoadModel</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.4.1-1.4.5-SNAPSHOT</version>
+            <version>1.4.1-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>
 ```
 
-### The `src/main/java/LoadModel.java` source file
+### The `LoadModel.java` source file
 ```java
 import java.nio.file.*;
 import org.bytedeco.javacpp.*;
-import static org.bytedeco.javacpp.onnx.*;
+import org.bytedeco.onnx.*;
+import static org.bytedeco.onnx.global.onnx.*;
 
 public class LoadModel {
     public static void main(String[] args) throws Exception {

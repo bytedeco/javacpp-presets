@@ -1,24 +1,62 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project>
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>org.bytedeco.javacpp-presets</groupId>
-    <artifactId>tensorflow-samples</artifactId>
-    <version>1.12.0-1.4.4</version>
-    <name>JavaCPP Presets Samples for TensorFlow</name>
-
+    <groupId>org.bytedeco.tensorflow</groupId>
+    <artifactId>exampletrainer</artifactId>
+    <version>1.5-SNAPSHOT</version>
     <properties>
+        <exec.mainClass>ExampleTrainer</exec.mainClass>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
-
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>${project.version}</version>
+            <version>1.13.0-rc2-1.5-SNAPSHOT</version>
         </dependency>
-    </dependencies>
 
+        <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.13.0-rc2-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.13.0-rc2-1.5-SNAPSHOT</version>
+            <classifier>macosx-x86_64-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.13.0-rc2-1.5-SNAPSHOT</version>
+            <classifier>windows-x86_64-gpu</classifier>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>cuda</artifactId>
+            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
 </project>

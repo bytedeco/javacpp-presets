@@ -9,14 +9,10 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>systems</artifactId>
   <version>${project.parent.version}</version>
   <name>JavaCPP Presets for Systems</name>
-
-  <properties>
-    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -37,16 +33,6 @@
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <configuration>
-          <propertyKeysAndValues>
-            <property>
-              <name>platform.root</name>
-              <value>${javacpp.platform.root}</value>
-            </property>
-            <property>
-              <name>platform.compiler</name>
-              <value>${javacpp.platform.oldcompiler}</value>
-            </property>
-          </propertyKeysAndValues>
           <includePaths>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
@@ -54,12 +40,12 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/powerpc64le-linux-gnu/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/i386-linux-gnu/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/x86_64-linux-gnu/</includePath>
-            <includePath>${basedir}/target/classes/org/bytedeco/javacpp/include/</includePath>
+            <includePath>${basedir}/target/classes/org/bytedeco/systems/include/</includePath>
           </includePaths>
         </configuration>
         <executions>
           <execution>
-            <id>javacpp.compiler</id>
+            <id>javacpp-compiler</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>
@@ -72,6 +58,10 @@
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>

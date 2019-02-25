@@ -151,8 +151,8 @@ cp -r scala-package/macros/src/main/scala/* ../scala/init
 cp -r scala-package/core/src/main/scala/* ../scala/core
 cp -r scala-package/infer/src/main/scala/* ../scala/core
 cp -r scala-package/spark/src/main/scala/* ../scala/core
-sedinplace 's/  tryLoadInitLibrary()/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.javacpp.mxnet])/g' ../scala/init/org/apache/mxnet/init/Base.scala
-sedinplace 's/  tryLoadLibraryOS("mxnet-scala")/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.javacpp.mxnet])/g' ../scala/core/org/apache/mxnet/Base.scala
+sedinplace 's/  tryLoadInitLibrary()/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.mxnet.presets.mxnet])/g' ../scala/init/org/apache/mxnet/init/Base.scala
+sedinplace 's/  tryLoadLibraryOS("mxnet-scala")/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.mxnet.presets.mxnet])/g' ../scala/core/org/apache/mxnet/Base.scala
 
 # fix library with correct rpath on Mac
 case $PLATFORM in
