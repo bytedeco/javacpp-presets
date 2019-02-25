@@ -369,6 +369,11 @@
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
         <version>1.0.0.Beta2</version>
+        <configuration>
+          <jvmVersion>9</jvmVersion>
+          <overwriteExistingFiles>true</overwriteExistingFiles>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+        </configuration>
         <executions>
           <execution>
             <id>add-module-infos</id>
@@ -377,9 +382,6 @@
               <goal>add-module-info</goal>
             </goals>
             <configuration>
-              <jvmVersion>9</jvmVersion>
-              <overwriteExistingFiles>true</overwriteExistingFiles>
-              <outputDirectory>${project.build.directory}</outputDirectory>
               <modules>
                 <module>
                   <artifact>
@@ -397,7 +399,7 @@
                     <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
                   </artifact>
                   <moduleInfoSource>
-                    open module org.bytedeco.${javacpp.packageName}.${os.name}.${os.arch} {
+                    open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module} {
                       requires transitive org.bytedeco.${javacpp.packageName};
                     }
                   </moduleInfoSource>
