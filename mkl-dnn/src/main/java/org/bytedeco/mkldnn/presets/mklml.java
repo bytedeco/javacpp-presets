@@ -66,6 +66,7 @@ public class mklml implements LoadEnabled, InfoMapper {
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
         List<String> preloads = properties.get("platform.preload");
+        List<String> resources = properties.get("platform.preloadresource");
 
         // Only apply this at load time
         if (!Loader.isLoadLibraries()) {
@@ -83,6 +84,7 @@ public class mklml implements LoadEnabled, InfoMapper {
                 preloads.add(i, libs[i] + "#" + libs[i]);
             }
             lib = "mkl_rt";
+            resources.add("/org/bytedeco/mkl/");
         }
 
         if (lib.length() > 0) {

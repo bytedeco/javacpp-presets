@@ -65,6 +65,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
         List<String> preloads = properties.get("platform.preload");
+        List<String> resources = properties.get("platform.preloadresource");
         String className = getClass().getSimpleName(); // "openblas_nolapack" or "openblas"
 
         // Only apply this at load time for this class only, without inheriting, since MKLML,
@@ -88,6 +89,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                     preloads.add(i, libs[i] + "#" + libs[i]);
                 }
                 lib = platform.startsWith("linux") ? "mklml_intel" : "mklml";
+                resources.add("/org/bytedeco/mkldnn/");
             } else if (lib.equals("mkl") || lib.equals("mkl_rt")) {
                 String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
                                  "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt"};
@@ -95,6 +97,7 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
                     preloads.add(i, libs[i] + "#" + libs[i]);
                 }
                 lib = "mkl_rt";
+                resources.add("/org/bytedeco/mkl/");
             }
         }
 

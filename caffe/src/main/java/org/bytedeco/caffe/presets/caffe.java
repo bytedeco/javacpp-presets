@@ -72,6 +72,7 @@ public class caffe implements LoadEnabled, InfoMapper {
         String platform = properties.getProperty("platform");
         String extension = properties.getProperty("platform.extension");
         List<String> preloads = properties.get("platform.preload");
+        List<String> resources = properties.get("platform.preloadresource");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
@@ -94,6 +95,9 @@ public class caffe implements LoadEnabled, InfoMapper {
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }
+        }
+        if (i > 0) {
+            resources.add("/org/bytedeco/cuda/");
         }
     }
 
