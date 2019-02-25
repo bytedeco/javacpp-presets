@@ -347,11 +347,12 @@
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <skipIfEmpty>true</skipIfEmpty>
-              <!--
-              <includes>
+              <includes> 
+                <!-- In case of successive builds for multiple platforms
+                     without cleaning, ensures we only include files for
+                     this platform. -->
                 <include>${javacpp.platform.nativeOutputPath}/</include>
               </includes>
-              -->
               <archive>
                 <manifestEntries>
                   <Multi-Release>true</Multi-Release>
