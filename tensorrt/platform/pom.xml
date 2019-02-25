@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt-platform</artifactId>
   <version>5.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for TensorRT</name>
@@ -21,7 +21,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
       <version>10.0-7.4-${project.parent.version}</version>
     </dependency>

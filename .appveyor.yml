@@ -26,12 +26,12 @@ environment:
       OS: windows-x86
     - PROJ: "leptonica,tesseract"
       OS: windows-x86
-#    - PROJ: "ale"
-#      OS: windows-x86
-#    - PROJ: "liquidfun"
-#      OS: windows-x86
-#    - PROJ: "systems"
-#      OS: windows-x86
+    - PROJ: "ale"
+      OS: windows-x86
+    - PROJ: "liquidfun"
+      OS: windows-x86
+    - PROJ: "systems"
+      OS: windows-x86
 
     - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86_64
@@ -59,30 +59,30 @@ environment:
       OS: windows-x86_64
     - PROJ: "cuda"
       OS: windows-x86_64
-#    - PROJ: "mxnet"
-#      OS: windows-x86_64
-#    - PROJ: "tensorflow"
-#      OS: windows-x86_64
-#    - PROJ: "ale"
-#      OS: windows-x86_64
-#    - PROJ: "liquidfun"
-#      OS: windows-x86_64
-#    - PROJ: "systems"
-#      OS: windows-x86_64
+    - PROJ: "mxnet"
+      OS: windows-x86_64
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+    - PROJ: "ale"
+      OS: windows-x86_64
+    - PROJ: "liquidfun"
+      OS: windows-x86_64
+    - PROJ: "systems"
+      OS: windows-x86_64
 
     - PROJ: "opencv"
       OS: windows-x86_64
       EXT: -gpu
-#    - PROJ: "mxnet"
-#      OS: windows-x86_64
-#      EXT: -gpu
-##    - PROJ: "tensorflow"
-##      OS: windows-x86_64
-##      EXT: -gpu
-##      PARTIAL_CPPBUILD: "1"
+    - PROJ: "mxnet"
+      OS: windows-x86_64
+      EXT: -gpu
 #    - PROJ: "tensorflow"
 #      OS: windows-x86_64
 #      EXT: -gpu
+#      PARTIAL_CPPBUILD: "1"
+    - PROJ: "tensorflow"
+      OS: windows-x86_64
+      EXT: -gpu
 
 for:
 -

@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>mxnet-platform</artifactId>
   <version>1.4.0.rc3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MXNet</name>
@@ -21,17 +21,17 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>opencv-platform</artifactId>
       <version>4.0.1-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
       <version>0.3.5-${project.parent.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
       <version>0.18-rc-${project.parent.version}</version>
     </dependency>
