@@ -71,6 +71,27 @@
       <plugin>
         <groupId>org.moditect</groupId>
         <artifactId>moditect-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-module-info-redist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}-redist.jar</file>
+                  <moduleInfoSource>
+                    open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module}.redist {
+                      requires transitive org.bytedeco.${javacpp.packageName};
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
