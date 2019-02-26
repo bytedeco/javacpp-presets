@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "bits/siginfo.h", "bits/sigset.h", "bits/signum.h", "bits/sigaction.h", "bits/sigcontext.h", "bits/sigstack.h", "signal.h",
                "sys/ucontext.h", "ucontext.h", "bits/sched.h", "sched.h", "spawn.h", "bits/posix_opt.h", "bits/confname.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "bits/resource.h", "sys/resource.h", "sys/sysctl.h", "bits/waitflags.h", "sys/wait.h"},
-    link = "dl")}, target = "org.bytedeco.systems.linux", target = "org.bytedeco.systems.global.linux")
+    link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
 
@@ -149,7 +149,8 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("off64_t", "rlim64_t", "__off64_t", "__rlim64_t", "__blkcnt64_t", "greg_t", "__ino64_t", "__u64", "__uint64_t")
                        .cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
-               .put(new Info("__locale_data", "__spawn_action", "timex", "pt_regs").cast().pointerTypes("Pointer"))
+               .put(new Info("__locale_data", "module", "sigcontext", "__spawn_action", "timex", "pt_regs",
+                             "_fpreg", "_fpstate", "_fpxreg", "_libc_fpstate", "_libc_fpxreg", "_libc_xmmreg", "_xmmreg").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
                .put(new Info("gregset_t").cppTypes("const long long*"))
                .put(new Info("fpregset_t").cppTypes("const void*"))

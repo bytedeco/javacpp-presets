@@ -50,7 +50,7 @@ import org.bytedeco.javacpp.tools.Logger;
     includepath = {"C:/Program Files (x86)/Windows Kits/8.1/Include/shared/",
                    "C:/Program Files (x86)/Windows Kits/8.1/Include/um/"},
     link = {"ntdll", "AdvAPI32", "mincore", "synchronization", "User32", "Psapi"})},
-        target = "org.bytedeco.systems.windows", target = "org.bytedeco.systems.global.windows")
+        target = "org.bytedeco.systems.windows", global = "org.bytedeco.systems.global.windows")
 @NoException
 public class windows implements BuildEnabled, InfoMapper {
 
@@ -174,8 +174,7 @@ public class windows implements BuildEnabled, InfoMapper {
                .put(new Info("PDWORD_PTR", "PULONG_PTR", "PSIZE_T")
                        .cast().valueTypes("SizeTPointer").pointerTypes("PointerPointer"))
 
-               .put(new Info("DWORD64", "LONG64", "ULONG64", "DWORDLONG", "LONGLONG", "ULONGLONG",
-                             "SYSTEM_PROCESSOR_CYCLE_TIME_INFORMATION")
+               .put(new Info("DWORD64", "LONG64", "ULONG64", "DWORDLONG", "LONGLONG", "ULONGLONG")
                        .cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 
                .put(new Info("PDWORD64", "PLONG64", "PULONG64", "PDWORDLONG", "PLONGLONG", "PULONGLONG", "PLUID",
