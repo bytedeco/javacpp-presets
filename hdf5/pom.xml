@@ -41,6 +41,9 @@
             <phase>package</phase>
             <configuration>
               <excludes>
+                <exclude>org/bytedeco/hdf5/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/hdf5/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/hdf5/${javacpp.platform}/*.obj</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/bin/*</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.a</exclude>
                 <exclude>org/bytedeco/hdf5/${javacpp.platform}/lib/*.la</exclude>
