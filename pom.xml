@@ -347,7 +347,10 @@
             <configuration>
               <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
               <skipIfEmpty>true</skipIfEmpty>
-              <includes>
+              <includes> 
+                <!-- In case of successive builds for multiple platforms
+                     without cleaning, ensures we only include files for
+                     this platform. -->
                 <include>${javacpp.platform.nativeOutputPath}/</include>
               </includes>
               <archive>
@@ -384,20 +387,11 @@
             <configuration>
               <modules>
                 <module>
-                  <artifact>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>${project.artifactId}</artifactId>
-                    <version>${project.version}</version>
-                  </artifact>
+                  <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoFile>${project.basedir}/src/main/java9/module-info.java</moduleInfoFile>
                 </module>
                 <module>
-                  <artifact>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>${project.artifactId}</artifactId>
-                    <version>${project.version}</version>
-                    <classifier>${javacpp.platform}${javacpp.platform.extension}</classifier>
-                  </artifact>
+                  <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}${javacpp.platform.extension}.jar</file>
                   <moduleInfoSource>
                     open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module} {
                       requires transitive org.bytedeco.${javacpp.packageName};

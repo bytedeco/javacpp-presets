@@ -81,12 +81,7 @@
             <configuration>
               <modules>
                 <module>
-                  <artifact>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>${project.artifactId}</artifactId>
-                    <version>${project.version}</version>
-                    <classifier>${javacpp.platform}-redist</classifier>
-                  </artifact>
+                  <file>${project.build.directory}/${project.artifactId}-${javacpp.platform}-redist.jar</file>
                   <moduleInfoSource>
                     open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module}.redist {
                       requires transitive org.bytedeco.${javacpp.packageName};
