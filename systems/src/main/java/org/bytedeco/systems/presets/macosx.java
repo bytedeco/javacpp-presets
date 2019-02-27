@@ -48,7 +48,7 @@ import org.bytedeco.javacpp.tools.Logger;
                "sys/_types/_sigaltstack.h", "sys/signal.h", "signal.h", /*"sys/_types/_ucontext.h", "sys/ucontext.h", "ucontext.h",*/
                "sched.h", "mach/machine.h", "spawn.h", "sys/_types/_seek_set.h", "sys/unistd.h", "unistd.h",
                "sys/poll.h", "sys/reboot.h", "sys/resource.h", "sys/sysctl.h", "sys/wait.h"},
-    includepath = "/usr/include")}, target = "org.bytedeco.systems.macosx", target = "org.bytedeco.systems.global.macosx")
+    includepath = "/usr/include")}, target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
 @NoException
 public class macosx implements BuildEnabled, InfoMapper {
 

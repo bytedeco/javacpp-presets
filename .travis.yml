@@ -119,33 +119,33 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=opencv OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=openblas OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=skia OS=ios-arm64
         install: true
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=opencv OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=openblas OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=skia OS=ios-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -379,22 +379,22 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=ffmpeg OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=hdf5 OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -404,37 +404,37 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=mkl-dnn OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=openblas OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=cpython OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=llvm OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=libpostal OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=leptonica,tesseract OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -459,7 +459,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=ale OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -469,12 +469,12 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=liquidfun OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=skia OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -484,7 +484,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=systems OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -507,7 +507,7 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: osx
-        osx_image: xcode7.3
+        osx_image: xcode8.3
         env: PROJ=opencv OS=macosx-x86_64 EXT=-gpu
         install: true
         script: ./ci/install-travis.sh
