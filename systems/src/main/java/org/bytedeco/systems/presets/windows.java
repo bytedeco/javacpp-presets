@@ -201,7 +201,12 @@ public class windows implements BuildEnabled, InfoMapper {
                .put(new Info("LPTOP_LEVEL_EXCEPTION_FILTER").valueTypes("PTOP_LEVEL_EXCEPTION_FILTER"))
                .put(new Info("LPPROC_THREAD_ATTRIBUTE_LIST").valueTypes("_PROC_THREAD_ATTRIBUTE_LIST"))
                .put(new Info("PBAD_MEMORY_CALLBACK_ROUTINE").valueTypes("BAD_MEMORY_CALLBACK_ROUTINE"))
-               .put(new Info("_ACTIVATION_CONTEXT", "_TEB").cast().pointerTypes("Pointer"))
+               .put(new Info("_ACTIVATION_CONTEXT", "DISPATCHER_CONTEXT", "GET_RUNTIME_FUNCTION_CALLBACK", "FLOATING_SAVE_AREA",
+                             "KNONVOLATILE_CONTEXT_POINTERS", "PKNONVOLATILE_CONTEXT_POINTERS", "OUT_OF_PROCESS_FUNCTION_TABLE_CALLBACK",
+                             "PEXCEPTION_FILTER", "PTERMINATION_HANDLER", "RUNTIME_FUNCTION", "UMS_COMPLETION_LIST", "PUMS_COMPLETION_LIST",
+                             "UMS_CONTEXT", "PUMS_CONTEXT", "UMS_SCHEDULER_STARTUP_INFO", "PUMS_SCHEDULER_STARTUP_INFO",
+                             "UMS_SYSTEM_THREAD_INFORMATION", "PUMS_SYSTEM_THREAD_INFORMATION", "UNWIND_HISTORY_TABLE",
+                             "PUNWIND_HISTORY_TABLE", "UNWIND_HISTORY_TABLE_ENTRY", "_TEB").cast().pointerTypes("Pointer"))
                .put(new Info("UOW")./*cast().*/pointerTypes("GUID"))
 
                .put(new Info("IID_NULL", "CLSID_NULL", "FMTID_NULL").cppTypes("GUID").translate(false))

@@ -3521,9 +3521,11 @@ public static final int INITIAL_FPCSR = 0x027f;            // initial FPCSR valu
 // Targeting ..\windows\CONTEXT.java
 
 
-// Targeting ..\windows\RUNTIME_FUNCTION.java
 
-
+// end_ntoshvp
+//
+// Select platform-specific definitions
+//
 
 public static final int RUNTIME_FUNCTION_INDIRECT = 0x1;
 
@@ -3543,33 +3545,26 @@ public static final long UNW_FLAG_NO_EPILOGUE =    0x80000000L;    // Software o
 //
 
 public static final int UNWIND_HISTORY_TABLE_SIZE = 12;
-// Targeting ..\windows\UNWIND_HISTORY_TABLE_ENTRY.java
 
-
-// Targeting ..\windows\UNWIND_HISTORY_TABLE.java
-
-
-// Targeting ..\windows\GET_RUNTIME_FUNCTION_CALLBACK.java
-
-
-// Targeting ..\windows\OUT_OF_PROCESS_FUNCTION_TABLE_CALLBACK.java
-
-
+//
+// Define dynamic function table entry.
+//
 
 public static final String OUT_OF_PROCESS_FUNCTION_TABLE_CALLBACK_EXPORT_NAME = 
     "OutOfProcessFunctionTableCallback";
-// Targeting ..\windows\DISPATCHER_CONTEXT.java
+
+//
+// Define exception dispatch context structure.
+//
+
+//
+// Define exception filter and termination handler function types.
+//
 
 
-// Targeting ..\windows\PEXCEPTION_FILTER.java
-
-
-// Targeting ..\windows\PTERMINATION_HANDLER.java
-
-
-// Targeting ..\windows\KNONVOLATILE_CONTEXT_POINTERS.java
-
-
+//
+// Nonvolatile context pointer record.
+//
 // Targeting ..\windows\SCOPE_TABLE_ARM.java
 
 
@@ -9687,14 +9682,14 @@ public static native void RtlUnwind(
 // #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
 
 public static native @Cast("BOOLEAN") boolean RtlAddFunctionTable(
-    @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION FunctionTable,
+    @Cast("PRUNTIME_FUNCTION") Pointer FunctionTable,
     @Cast("DWORD") int EntryCount,
     @Cast("DWORD64") long BaseAddress
     );
 
 
 public static native @Cast("BOOLEAN") boolean RtlDeleteFunctionTable(
-    @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION FunctionTable
+    @Cast("PRUNTIME_FUNCTION") Pointer FunctionTable
     );
 
 
@@ -9702,7 +9697,7 @@ public static native @Cast("BOOLEAN") boolean RtlInstallFunctionTableCallback(
     @Cast("DWORD64") long TableIdentifier,
     @Cast("DWORD64") long BaseAddress,
     @Cast("DWORD") int Length,
-    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") GET_RUNTIME_FUNCTION_CALLBACK Callback,
+    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") Pointer Callback,
     @Cast("PVOID") Pointer Context,
     @Cast("PCWSTR") CharPointer OutOfProcessCallbackDll
     );
@@ -9710,7 +9705,7 @@ public static native @Cast("BOOLEAN") boolean RtlInstallFunctionTableCallback(
     @Cast("DWORD64") long TableIdentifier,
     @Cast("DWORD64") long BaseAddress,
     @Cast("DWORD") int Length,
-    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") GET_RUNTIME_FUNCTION_CALLBACK Callback,
+    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") Pointer Callback,
     @Cast("PVOID") Pointer Context,
     @Cast("PCWSTR") CharBuffer OutOfProcessCallbackDll
     );
@@ -9718,7 +9713,7 @@ public static native @Cast("BOOLEAN") boolean RtlInstallFunctionTableCallback(
     @Cast("DWORD64") long TableIdentifier,
     @Cast("DWORD64") long BaseAddress,
     @Cast("DWORD") int Length,
-    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") GET_RUNTIME_FUNCTION_CALLBACK Callback,
+    @Cast("PGET_RUNTIME_FUNCTION_CALLBACK") Pointer Callback,
     @Cast("PVOID") Pointer Context,
     @Cast("PCWSTR") char[] OutOfProcessCallbackDll
     );
@@ -9741,20 +9736,20 @@ public static native @Cast("BOOLEAN") boolean RtlInstallFunctionTableCallback(
 
 // #if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_APP)
 
-public static native @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION RtlLookupFunctionEntry(
+public static native @Cast("PRUNTIME_FUNCTION") Pointer RtlLookupFunctionEntry(
     @Cast("DWORD64") long ControlPc,
     @Cast("PDWORD64") LongPointer ImageBase,
-    @Cast("PUNWIND_HISTORY_TABLE") UNWIND_HISTORY_TABLE HistoryTable
+    @ByVal @Cast("PUNWIND_HISTORY_TABLE*") Pointer HistoryTable
     );
-public static native @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION RtlLookupFunctionEntry(
+public static native @Cast("PRUNTIME_FUNCTION") Pointer RtlLookupFunctionEntry(
     @Cast("DWORD64") long ControlPc,
     @Cast("PDWORD64") LongBuffer ImageBase,
-    @Cast("PUNWIND_HISTORY_TABLE") UNWIND_HISTORY_TABLE HistoryTable
+    @ByVal @Cast("PUNWIND_HISTORY_TABLE*") Pointer HistoryTable
     );
-public static native @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION RtlLookupFunctionEntry(
+public static native @Cast("PRUNTIME_FUNCTION") Pointer RtlLookupFunctionEntry(
     @Cast("DWORD64") long ControlPc,
     @Cast("PDWORD64") long[] ImageBase,
-    @Cast("PUNWIND_HISTORY_TABLE") UNWIND_HISTORY_TABLE HistoryTable
+    @ByVal @Cast("PUNWIND_HISTORY_TABLE*") Pointer HistoryTable
     );
 
 
@@ -9784,7 +9779,7 @@ public static native void RtlUnwindEx(
     @Cast("PEXCEPTION_RECORD") EXCEPTION_RECORD ExceptionRecord,
     @Cast("PVOID") Pointer ReturnValue,
     @Cast("PCONTEXT") CONTEXT ContextRecord,
-    @Cast("PUNWIND_HISTORY_TABLE") UNWIND_HISTORY_TABLE HistoryTable
+    @ByVal @Cast("PUNWIND_HISTORY_TABLE*") Pointer HistoryTable
     );
 
 
@@ -9799,31 +9794,31 @@ public static native @Cast("PEXCEPTION_ROUTINE") EXCEPTION_ROUTINE RtlVirtualUnw
     @Cast("DWORD") int HandlerType,
     @Cast("DWORD64") long ImageBase,
     @Cast("DWORD64") long ControlPc,
-    @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION FunctionEntry,
+    @Cast("PRUNTIME_FUNCTION") Pointer FunctionEntry,
     @Cast("PCONTEXT") CONTEXT ContextRecord,
     @Cast("PVOID*") PointerPointer HandlerData,
     @Cast("PDWORD64") LongPointer EstablisherFrame,
-    @Cast("PKNONVOLATILE_CONTEXT_POINTERS") KNONVOLATILE_CONTEXT_POINTERS ContextPointers
+    @ByVal @Cast("PKNONVOLATILE_CONTEXT_POINTERS*") Pointer ContextPointers
     );
 public static native @Cast("PEXCEPTION_ROUTINE") EXCEPTION_ROUTINE RtlVirtualUnwind(
     @Cast("DWORD") int HandlerType,
     @Cast("DWORD64") long ImageBase,
     @Cast("DWORD64") long ControlPc,
-    @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION FunctionEntry,
+    @Cast("PRUNTIME_FUNCTION") Pointer FunctionEntry,
     @Cast("PCONTEXT") CONTEXT ContextRecord,
     @Cast("PVOID*") PointerPointer HandlerData,
     @Cast("PDWORD64") LongBuffer EstablisherFrame,
-    @Cast("PKNONVOLATILE_CONTEXT_POINTERS") KNONVOLATILE_CONTEXT_POINTERS ContextPointers
+    @ByVal @Cast("PKNONVOLATILE_CONTEXT_POINTERS*") Pointer ContextPointers
     );
 public static native @Cast("PEXCEPTION_ROUTINE") EXCEPTION_ROUTINE RtlVirtualUnwind(
     @Cast("DWORD") int HandlerType,
     @Cast("DWORD64") long ImageBase,
     @Cast("DWORD64") long ControlPc,
-    @Cast("PRUNTIME_FUNCTION") RUNTIME_FUNCTION FunctionEntry,
+    @Cast("PRUNTIME_FUNCTION") Pointer FunctionEntry,
     @Cast("PCONTEXT") CONTEXT ContextRecord,
     @Cast("PVOID*") PointerPointer HandlerData,
     @Cast("PDWORD64") long[] EstablisherFrame,
-    @Cast("PKNONVOLATILE_CONTEXT_POINTERS") KNONVOLATILE_CONTEXT_POINTERS ContextPointers
+    @ByVal @Cast("PKNONVOLATILE_CONTEXT_POINTERS*") Pointer ContextPointers
     );
 
 
@@ -23443,30 +23438,24 @@ public static final int UMS_VERSION = RTL_UMS_VERSION;
 // Targeting ..\windows\PUMS_COMPLETION_LIST.java
 
 
-// Targeting ..\windows\UMS_SCHEDULER_STARTUP_INFO.java
-
-
-// Targeting ..\windows\UMS_SYSTEM_THREAD_INFORMATION.java
-
-
 
 public static native @Cast("BOOL") boolean CreateUmsCompletionList(
-    @ByPtrPtr PUMS_COMPLETION_LIST UmsCompletionList
+    @Cast("PUMS_COMPLETION_LIST*") Pointer UmsCompletionList
     );
 
 public static native @Cast("BOOL") boolean DequeueUmsCompletionListItems(
-    PUMS_COMPLETION_LIST UmsCompletionList,
+    @ByVal @Cast("PUMS_COMPLETION_LIST*") Pointer UmsCompletionList,
     @Cast("DWORD") int WaitTimeOut,
-    @ByPtrPtr PUMS_CONTEXT UmsThreadList
+    @Cast("PUMS_CONTEXT*") Pointer UmsThreadList
     );
 
 public static native @Cast("BOOL") boolean GetUmsCompletionListEvent(
-    PUMS_COMPLETION_LIST UmsCompletionList,
+    @ByVal @Cast("PUMS_COMPLETION_LIST*") Pointer UmsCompletionList,
     @Cast("PHANDLE") PointerPointer UmsCompletionEvent
     );
 
 public static native @Cast("BOOL") boolean ExecuteUmsThread(
-    PUMS_CONTEXT UmsThread
+    @ByVal @Cast("PUMS_CONTEXT*") Pointer UmsThread
     );
 
 public static native @Cast("BOOL") boolean UmsThreadYield(
@@ -23474,18 +23463,18 @@ public static native @Cast("BOOL") boolean UmsThreadYield(
     );
 
 public static native @Cast("BOOL") boolean DeleteUmsCompletionList(
-    PUMS_COMPLETION_LIST UmsCompletionList
+    @ByVal @Cast("PUMS_COMPLETION_LIST*") Pointer UmsCompletionList
     );
 
-public static native PUMS_CONTEXT GetCurrentUmsThread(
+public static native @ByVal @Cast("PUMS_CONTEXT*") Pointer GetCurrentUmsThread(
     );
 
-public static native PUMS_CONTEXT GetNextUmsListItem(
-    PUMS_CONTEXT UmsContext
+public static native @ByVal @Cast("PUMS_CONTEXT*") Pointer GetNextUmsListItem(
+    @ByVal @Cast("PUMS_CONTEXT*") Pointer UmsContext
     );
 
 public static native @Cast("BOOL") boolean QueryUmsThreadInformation(
-    PUMS_CONTEXT UmsThread,
+    @ByVal @Cast("PUMS_CONTEXT*") Pointer UmsThread,
     @Cast("UMS_THREAD_INFO_CLASS") int UmsThreadInfoClass,
     @Cast("PVOID") Pointer UmsThreadInformation,
     @Cast("ULONG") long UmsThreadInformationLength,
@@ -23493,27 +23482,27 @@ public static native @Cast("BOOL") boolean QueryUmsThreadInformation(
     );
 
 public static native @Cast("BOOL") boolean SetUmsThreadInformation(
-    PUMS_CONTEXT UmsThread,
+    @ByVal @Cast("PUMS_CONTEXT*") Pointer UmsThread,
     @Cast("UMS_THREAD_INFO_CLASS") int UmsThreadInfoClass,
     @Cast("PVOID") Pointer UmsThreadInformation,
     @Cast("ULONG") long UmsThreadInformationLength
     );
 
 public static native @Cast("BOOL") boolean DeleteUmsThreadContext(
-    PUMS_CONTEXT UmsThread
+    @ByVal @Cast("PUMS_CONTEXT*") Pointer UmsThread
     );
 
 public static native @Cast("BOOL") boolean CreateUmsThreadContext(
-    @ByPtrPtr PUMS_CONTEXT lpUmsThread
+    @Cast("PUMS_CONTEXT*") Pointer lpUmsThread
     );
 
 public static native @Cast("BOOL") boolean EnterUmsSchedulingMode(
-    @Cast("PUMS_SCHEDULER_STARTUP_INFO") UMS_SCHEDULER_STARTUP_INFO SchedulerStartupInfo
+    @ByVal @Cast("PUMS_SCHEDULER_STARTUP_INFO*") Pointer SchedulerStartupInfo
     );
 
 public static native @Cast("BOOL") boolean GetUmsSystemThreadInformation(
     @Cast("HANDLE") Pointer ThreadHandle,
-    @Cast("PUMS_SYSTEM_THREAD_INFORMATION") UMS_SYSTEM_THREAD_INFORMATION SystemThreadInfo
+    @ByVal @Cast("PUMS_SYSTEM_THREAD_INFORMATION*") Pointer SystemThreadInfo
     );
 
 // #endif // (_WIN32_WINNT >= 0x0601) && !defined(MIDL_PASS)
