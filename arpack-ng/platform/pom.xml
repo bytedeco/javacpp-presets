@@ -17,6 +17,7 @@
 
   <properties>
     <javacpp.moduleId>arpack-ng</javacpp.moduleId>
+    <javacpp.packageName>arpackng</javacpp.packageName>
   </properties>
 
   <dependencies>
@@ -87,6 +88,42 @@
                   <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>add-platform-module-info</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}.jar</file>
+                  <moduleInfoSource>
+                    module org.bytedeco.${javacpp.packageName}.platform {
+                      requires org.bytedeco.${javacpp.packageName}.linux.x86;
+                      requires org.bytedeco.${javacpp.packageName}.linux.x86_64;
+                      requires org.bytedeco.${javacpp.packageName}.linux.armhf;
+                      requires org.bytedeco.${javacpp.packageName}.linux.ppc64le;
+                      requires org.bytedeco.${javacpp.packageName}.macosx.x86_64;
+                      requires org.bytedeco.${javacpp.packageName}.windows.x86;
+                      requires org.bytedeco.${javacpp.packageName}.windows.x86_64;
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
             </configuration>
           </execution>
         </executions>

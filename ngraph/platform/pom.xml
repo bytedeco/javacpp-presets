@@ -55,6 +55,35 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-module-infos</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>add-platform-module-info</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <modules>
+                <module>
+                  <file>${project.build.directory}/${project.artifactId}.jar</file>
+                  <moduleInfoSource>
+                    module org.bytedeco.${javacpp.moduleId}.platform {
+                      requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                    }
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
