@@ -1,4 +1,5 @@
 
+ * Rename `groupId` to "org.bytedeco" and use ModiTect to modularize all presets and comply with JPMS ([pull #681](https://github.com/bytedeco/javacpp-presets/pull/681))
  * Make `nvinfer1::Weights::values` settable in presets for TensorRT ([issue #698](https://github.com/bytedeco/javacpp-presets/issues/698))
  * Fix mapping of `HoughLines`, `HoughLinesP`, `HoughCircles`, and `Subdiv2D` from `opencv_imgproc` (issues [bytedeco/javacv#913](https://github.com/bytedeco/javacv/issues/913) and [bytedeco/javacv#1146](https://github.com/bytedeco/javacv/issues/1146))
  * Add basic mapping of stdio streams to presets for GSL since it relies on them for serialization
