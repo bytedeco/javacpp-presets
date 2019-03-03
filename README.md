@@ -6,7 +6,7 @@ JavaCPP Presets
 
 Introduction
 ------------
-The JavaCPP Presets module contains Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.javacpp.presets` package are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.javacpp` package, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
+The JavaCPP Presets modules contain Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.<moduleName>.presets` packages are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.<moduleName>` packages, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
 
 Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
 
@@ -22,7 +22,7 @@ We can also have everything downloaded and installed automatically with:
  * Maven (inside the `pom.xml` file)
 ```xml
   <dependency>
-    <groupId>org.bytedeco.javacpp-presets</groupId>
+    <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
     <version>${moduleVersion}-1.4.4</version>
   </dependency>
@@ -31,20 +31,20 @@ We can also have everything downloaded and installed automatically with:
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName + '-platform', version: moduleVersion + '-1.4.4'
+    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.4.4'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco.javacpp-presets/" moduleName "-platform")) ~(str moduleVersion "-1.4.4")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.4.4")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName + "-platform" % moduleVersion + "-1.4.4"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.4.4"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
@@ -61,7 +61,7 @@ To use the JavaCPP Presets, you will need to download and install the following 
 
 Further, in the case of Android, the JavaCPP Presets also rely on:
 
- * Android SDK API 14 or newer  http://developer.android.com/sdk/
+ * Android SDK API 21 or newer  http://developer.android.com/sdk/
 
 
 Manual Installation
@@ -78,14 +78,14 @@ Eclipse (Java SE 7 or newer):
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
 
-IntelliJ IDEA (Android 4.0 or newer):
+IntelliJ IDEA (Android 5.0 or newer):
 
  1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
  2. Copy all the JAR files into the `app/libs` subdirectory.
  3. Navigate to File > Project Structure > app > Dependencies, click `+`, and select "2 File dependency".
  4. Select all the JAR files from the `libs` subdirectory.
 
-After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `org.bytedeco.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
+After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `org.bytedeco.<moduleName>` packages. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
 
  * [OpenCV documentation](http://docs.opencv.org/master/)
  * [FFmpeg documentation](http://ffmpeg.org/doxygen/trunk/)
@@ -165,7 +165,7 @@ $ mvn install --projects ../opencv/platform,../ffmpeg/platform,etc. -Djavacpp.pl
 Running the scripts allows us to install easily the native libraries on multiple platforms, but additional software is required:
 
  * A recent version of Linux, Mac OS X, or Windows with MSYS and Visual Studio
- * Android NDK r7 or newer  http://developer.android.com/ndk/downloads/  (required only for Android builds)
+ * Android NDK r18 or newer  http://developer.android.com/ndk/downloads/  (required only for Android builds)
 
 With the above in working order, the scripts get launched automatically as part of the Maven build lifecycle, but we can also manually execute
 ```bash
