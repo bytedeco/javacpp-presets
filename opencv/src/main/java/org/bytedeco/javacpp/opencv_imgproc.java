@@ -11,6 +11,346 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class opencv_imgproc extends org.bytedeco.javacpp.helper.opencv_imgproc {
     static { Loader.load(); }
 
+@Name("std::vector<cv::Vec2f>") public static class Vec2fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Vec2fVector(Pointer p) { super(p); }
+    public Vec2fVector(FloatPointer value) { this(1); put(0, value); }
+    public Vec2fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec2fVector()       { allocate();  }
+    public Vec2fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Vec2fVector put(@ByRef Vec2fVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("cv::Vec2f*") @ByRef FloatPointer get(@Cast("size_t") long i);
+    public native Vec2fVector put(@Cast("size_t") long i, FloatPointer value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec2f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("cv::Vec2f*") @ByRef @Const FloatPointer get();
+    }
+
+    public FloatPointer[] get() {
+        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public FloatPointer pop_back() {
+        long size = size();
+        FloatPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Vec2fVector push_back(FloatPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Vec2fVector put(FloatPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Vec2fVector put(FloatPointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Vec3f>") public static class Vec3fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Vec3fVector(Pointer p) { super(p); }
+    public Vec3fVector(FloatPointer value) { this(1); put(0, value); }
+    public Vec3fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec3fVector()       { allocate();  }
+    public Vec3fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Vec3fVector put(@ByRef Vec3fVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("cv::Vec3f*") @ByRef FloatPointer get(@Cast("size_t") long i);
+    public native Vec3fVector put(@Cast("size_t") long i, FloatPointer value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec3f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("cv::Vec3f*") @ByRef @Const FloatPointer get();
+    }
+
+    public FloatPointer[] get() {
+        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public FloatPointer pop_back() {
+        long size = size();
+        FloatPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Vec3fVector push_back(FloatPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Vec3fVector put(FloatPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Vec3fVector put(FloatPointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Vec4f>") public static class Vec4fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Vec4fVector(Pointer p) { super(p); }
+    public Vec4fVector(FloatPointer value) { this(1); put(0, value); }
+    public Vec4fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec4fVector()       { allocate();  }
+    public Vec4fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Vec4fVector put(@ByRef Vec4fVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("cv::Vec4f*") @ByRef FloatPointer get(@Cast("size_t") long i);
+    public native Vec4fVector put(@Cast("size_t") long i, FloatPointer value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec4f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("cv::Vec4f*") @ByRef @Const FloatPointer get();
+    }
+
+    public FloatPointer[] get() {
+        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public FloatPointer pop_back() {
+        long size = size();
+        FloatPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Vec4fVector push_back(FloatPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Vec4fVector put(FloatPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Vec4fVector put(FloatPointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Vec4i>") public static class Vec4iVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Vec4iVector(Pointer p) { super(p); }
+    public Vec4iVector(FloatPointer value) { this(1); put(0, value); }
+    public Vec4iVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec4iVector()       { allocate();  }
+    public Vec4iVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Vec4iVector put(@ByRef Vec4iVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("cv::Vec4i*") @ByRef FloatPointer get(@Cast("size_t") long i);
+    public native Vec4iVector put(@Cast("size_t") long i, FloatPointer value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec4i*") @ByRef FloatPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("cv::Vec4i*") @ByRef @Const FloatPointer get();
+    }
+
+    public FloatPointer[] get() {
+        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public FloatPointer pop_back() {
+        long size = size();
+        FloatPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Vec4iVector push_back(FloatPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Vec4iVector put(FloatPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Vec4iVector put(FloatPointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Vec6f>") public static class Vec6fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Vec6fVector(Pointer p) { super(p); }
+    public Vec6fVector(FloatPointer value) { this(1); put(0, value); }
+    public Vec6fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec6fVector()       { allocate();  }
+    public Vec6fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Vec6fVector put(@ByRef Vec6fVector x);
+
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
+
+    @Index(function = "at") public native @Cast("cv::Vec6f*") @ByRef FloatPointer get(@Cast("size_t") long i);
+    public native Vec6fVector put(@Cast("size_t") long i, FloatPointer value);
+
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec6f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @Cast("cv::Vec6f*") @ByRef @Const FloatPointer get();
+    }
+
+    public FloatPointer[] get() {
+        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public FloatPointer pop_back() {
+        long size = size();
+        FloatPointer value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public Vec6fVector push_back(FloatPointer value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public Vec6fVector put(FloatPointer value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public Vec6fVector put(FloatPointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 // Parsed from <opencv2/imgproc/types_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -3656,7 +3996,7 @@ Detects position, translation and rotation \cite Guil1999 .
     The function gives each edge as a 4 numbers vector, where each two are one of the edge
     vertices. i.e. org_x = v[0], org_y = v[1], dst_x = v[2], dst_y = v[3].
      */
-    public native void getEdgeList(@Cast("cv::Vec4f*") @StdVector FloatPointer edgeList);
+    public native void getEdgeList(@ByRef Vec4fVector edgeList);
 
     /** \brief Returns a list of the leading edge ID connected to each triangle.
     <p>
@@ -3675,7 +4015,7 @@ Detects position, translation and rotation \cite Guil1999 .
     The function gives each triangle as a 6 numbers vector, where each two are one of the triangle
     vertices. i.e. p1_x = v[0], p1_y = v[1], p2_x = v[2], p2_y = v[3], p3_x = v[4], p3_y = v[5].
      */
-    public native void getTriangleList(@Cast("cv::Vec6f*") @StdVector FloatPointer triangleList);
+    public native void getTriangleList(@ByRef Vec6fVector triangleList);
 
     /** \brief Returns a list of all Voroni facets.
     <p>
@@ -4833,24 +5173,14 @@ Must fall between 0 and max_theta.
 @param max_theta For standard and multi-scale Hough transform, maximum angle to check for lines.
 Must fall between min_theta and CV_PI.
  */
-@Namespace("cv") public static native void HoughLines( @ByVal Mat image, @ByVal Mat lines,
+@Namespace("cv") public static native void HoughLines( @ByVal Mat image, @ByVal Vec2fVector lines,
                               double rho, double theta, int threshold,
                               double srn/*=0*/, double stn/*=0*/,
                               double min_theta/*=0*/, double max_theta/*=CV_PI*/ );
-@Namespace("cv") public static native void HoughLines( @ByVal Mat image, @ByVal Mat lines,
-                              double rho, double theta, int threshold );
-@Namespace("cv") public static native void HoughLines( @ByVal UMat image, @ByVal UMat lines,
+@Namespace("cv") public static native void HoughLines( @ByVal Mat image, @ByVal Vec3fVector lines,
                               double rho, double theta, int threshold,
                               double srn/*=0*/, double stn/*=0*/,
                               double min_theta/*=0*/, double max_theta/*=CV_PI*/ );
-@Namespace("cv") public static native void HoughLines( @ByVal UMat image, @ByVal UMat lines,
-                              double rho, double theta, int threshold );
-@Namespace("cv") public static native void HoughLines( @ByVal GpuMat image, @ByVal GpuMat lines,
-                              double rho, double theta, int threshold,
-                              double srn/*=0*/, double stn/*=0*/,
-                              double min_theta/*=0*/, double max_theta/*=CV_PI*/ );
-@Namespace("cv") public static native void HoughLines( @ByVal GpuMat image, @ByVal GpuMat lines,
-                              double rho, double theta, int threshold );
 
 /** \brief Finds line segments in a binary image using the probabilistic Hough transform.
 <p>
@@ -4880,21 +5210,9 @@ votes ( {@code >\texttt{threshold}} ).
 <p>
 @see LineSegmentDetector
  */
-@Namespace("cv") public static native void HoughLinesP( @ByVal Mat image, @ByVal Mat lines,
+@Namespace("cv") public static native void HoughLinesP( @ByVal Mat image, @ByVal Vec4iVector lines,
                                double rho, double theta, int threshold,
                                double minLineLength/*=0*/, double maxLineGap/*=0*/ );
-@Namespace("cv") public static native void HoughLinesP( @ByVal Mat image, @ByVal Mat lines,
-                               double rho, double theta, int threshold );
-@Namespace("cv") public static native void HoughLinesP( @ByVal UMat image, @ByVal UMat lines,
-                               double rho, double theta, int threshold,
-                               double minLineLength/*=0*/, double maxLineGap/*=0*/ );
-@Namespace("cv") public static native void HoughLinesP( @ByVal UMat image, @ByVal UMat lines,
-                               double rho, double theta, int threshold );
-@Namespace("cv") public static native void HoughLinesP( @ByVal GpuMat image, @ByVal GpuMat lines,
-                               double rho, double theta, int threshold,
-                               double minLineLength/*=0*/, double maxLineGap/*=0*/ );
-@Namespace("cv") public static native void HoughLinesP( @ByVal GpuMat image, @ByVal GpuMat lines,
-                               double rho, double theta, int threshold );
 
 /** \brief Finds lines in a set of points using the standard Hough transform.
 <p>
@@ -4961,24 +5279,14 @@ centers without finding the radius.
 <p>
 @see fitEllipse, minEnclosingCircle
  */
-@Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Mat circles,
+@Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Vec3fVector circles,
                                int method, double dp, double minDist,
                                double param1/*=100*/, double param2/*=100*/,
                                int minRadius/*=0*/, int maxRadius/*=0*/ );
-@Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Mat circles,
-                               int method, double dp, double minDist );
-@Namespace("cv") public static native void HoughCircles( @ByVal UMat image, @ByVal UMat circles,
+@Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Vec4fVector circles,
                                int method, double dp, double minDist,
                                double param1/*=100*/, double param2/*=100*/,
                                int minRadius/*=0*/, int maxRadius/*=0*/ );
-@Namespace("cv") public static native void HoughCircles( @ByVal UMat image, @ByVal UMat circles,
-                               int method, double dp, double minDist );
-@Namespace("cv") public static native void HoughCircles( @ByVal GpuMat image, @ByVal GpuMat circles,
-                               int method, double dp, double minDist,
-                               double param1/*=100*/, double param2/*=100*/,
-                               int minRadius/*=0*/, int maxRadius/*=0*/ );
-@Namespace("cv") public static native void HoughCircles( @ByVal GpuMat image, @ByVal GpuMat circles,
-                               int method, double dp, double minDist );
 
 /** \} imgproc_feature
  <p>
