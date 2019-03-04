@@ -73,6 +73,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::EnumMax").skip())
+               .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
                              "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
