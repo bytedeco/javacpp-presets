@@ -185,6 +185,7 @@ rm -Rf /c/Libraries/llvm*
 rm -Rf /c/Program\ Files/LLVM*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
+df -h
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
 #DOWNLOAD_FILE="$PROJ-cppbuild.zip"
