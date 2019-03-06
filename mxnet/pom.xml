@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mxnet</artifactId>
-  <version>1.4.0.rc3-${project.parent.version}</version>
+  <version>1.4.0-${project.parent.version}</version>
   <name>JavaCPP Presets for MXNet</name>
 
   <properties>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.18-rc-${project.parent.version}</version>
+      <version>0.18-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -93,7 +93,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.18-rc-${project.parent.version}</version>
+            <version>0.18-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -110,7 +110,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.18-rc-${project.parent.version}</version>
+            <version>0.18-${project.parent.version}</version>
             <classifier>${javacpp.mkldnn.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->

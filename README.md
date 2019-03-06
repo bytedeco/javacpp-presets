@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.4  https://www.hdfgroup.org/downloads/
  * MKL 2019.2  https://software.intel.com/intel-mkl
- * MKL-DNN 0.18-rc  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.18  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.5  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -135,8 +135,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 10.0  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.4  https://developer.nvidia.com/cudnn
    * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.4.0.rc3  https://github.com/dmlc/mxnet
- * TensorFlow 1.13.0-rc2  https://github.com/tensorflow/tensorflow
+ * MXNet 1.4.0  https://github.com/dmlc/mxnet
+ * TensorFlow 1.13.1  https://github.com/tensorflow/tensorflow
  * TensorRT 5.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.4.1  https://github.com/onnx/onnx
