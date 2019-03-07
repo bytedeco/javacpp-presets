@@ -13,7 +13,7 @@ public class SkiaCExample {
         info.height(h);
         info.colorType(sk_colortype_get_default_8888());
         info.alphaType(PREMUL_SK_ALPHATYPE);
-        return sk_surface_new_raster(info, null);
+        return sk_surface_new_raster(info, 0, null);
     }
 
     private static void emitPng(String path, sk_surface_t surface) throws IOException {

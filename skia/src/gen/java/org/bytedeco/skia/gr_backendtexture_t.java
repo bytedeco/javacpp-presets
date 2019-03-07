@@ -8,11 +8,10 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.skia.global.Skia.*;
 
-
 @Opaque @Properties(inherit = org.bytedeco.skia.presets.Skia.class)
-public class sk_surfaceprops_t extends Pointer {
+public class gr_backendtexture_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public sk_surfaceprops_t() { super((Pointer)null); }
+    public gr_backendtexture_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public sk_surfaceprops_t(Pointer p) { super(p); }
+    public gr_backendtexture_t(Pointer p) { super(p); }
 }

@@ -76,7 +76,7 @@ public static final double b2_pi =			3.14159265359f;
 // We expand the API so that other languages (e.g. Java) can call into
 // our C++ more easily. Only set if when the flag is not externally defined.
 // #if !defined(LIQUIDFUN_EXTERNAL_LANGUAGE_API)
-// #if SWIG || LIQUIDFUN_UNIT_TESTS
+// #if defined(SWIG) || defined(LIQUIDFUN_UNIT_TESTS)
 public static final int LIQUIDFUN_EXTERNAL_LANGUAGE_API = 1;
 // #else
 // #endif
@@ -2374,7 +2374,7 @@ public static final int
 // #include <Box2D/Particle/b2Particle.h>
 // #include <Box2D/Dynamics/b2TimeStep.h>
 
-// #if LIQUIDFUN_UNIT_TESTS
+// #ifdef LIQUIDFUN_UNIT_TESTS
 // #include <gtest/gtest.h>
 // #endif // LIQUIDFUN_UNIT_TESTS
 

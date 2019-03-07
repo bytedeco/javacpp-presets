@@ -28,4 +28,5 @@ public class sk_codec_frameinfo_t extends Pointer {
     public native int fDuration(); public native sk_codec_frameinfo_t fDuration(int fDuration);
     public native @Cast("bool") boolean fFullyReceived(); public native sk_codec_frameinfo_t fFullyReceived(boolean fFullyReceived);
     public native @Cast("sk_alphatype_t") int fAlphaType(); public native sk_codec_frameinfo_t fAlphaType(int fAlphaType);
+    public native @Cast("sk_codecanimation_disposalmethod_t") int fDisposalMethod(); public native sk_codec_frameinfo_t fDisposalMethod(int fDisposalMethod);
 }

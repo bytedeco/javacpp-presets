@@ -32,4 +32,7 @@ public class sk_document_pdf_metadata_t extends Pointer {
     public native sk_string_t fProducer(); public native sk_document_pdf_metadata_t fProducer(sk_string_t fProducer);
     public native sk_time_datetime_t fCreation(); public native sk_document_pdf_metadata_t fCreation(sk_time_datetime_t fCreation);
     public native sk_time_datetime_t fModified(); public native sk_document_pdf_metadata_t fModified(sk_time_datetime_t fModified);
+    public native float fRasterDPI(); public native sk_document_pdf_metadata_t fRasterDPI(float fRasterDPI);
+    public native @Cast("bool") boolean fPDFA(); public native sk_document_pdf_metadata_t fPDFA(boolean fPDFA);
+    public native int fEncodingQuality(); public native sk_document_pdf_metadata_t fEncodingQuality(int fEncodingQuality);
 }

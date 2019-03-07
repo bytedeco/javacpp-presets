@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIQUIDFUN_VERSION=43d53e063cd349f7d09ee9dd37842afcc0247f44 # 20170717
+LIQUIDFUN_VERSION=master
 download https://github.com/google/liquidfun/archive/$LIQUIDFUN_VERSION.tar.gz liquidfun-$LIQUIDFUN_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -48,9 +48,8 @@ case $PLATFORM in
         cp Box2D/Release/*.dll $INSTALL_PATH/bin
         ;;
     macosx-*)
-        patch -Np1 <$INSTALL_PATH/../../liquidfun-macosx.patch
         cd liquidfun/Box2D
-        $CMAKE -G "Xcode" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
+        $CMAKE -G "Xcode" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF -DCMAKE_MACOSX_RPATH=ON .
         xcodebuild -project Box2D.xcodeproj -configuration Release -target install
         ;;
     *)

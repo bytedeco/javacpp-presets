@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>liquidfun-platform</artifactId>
-            <version>20170717-43d53e0-1.5-SNAPSHOT</version>
+            <version>master-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

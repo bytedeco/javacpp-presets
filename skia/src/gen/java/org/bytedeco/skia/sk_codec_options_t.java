@@ -27,6 +27,6 @@ public class sk_codec_options_t extends Pointer {
     public native @Cast("sk_codec_zero_initialized_t") int fZeroInitialized(); public native sk_codec_options_t fZeroInitialized(int fZeroInitialized);
     public native sk_irect_t fSubset(); public native sk_codec_options_t fSubset(sk_irect_t fSubset);
     public native int fFrameIndex(); public native sk_codec_options_t fFrameIndex(int fFrameIndex);
-    public native @Cast("bool") boolean fHasPriorFrame(); public native sk_codec_options_t fHasPriorFrame(boolean fHasPriorFrame);
+    public native int fPriorFrame(); public native sk_codec_options_t fPriorFrame(int fPriorFrame);
     public native @Cast("sk_transfer_function_behavior_t") int fPremulBehavior(); public native sk_codec_options_t fPremulBehavior(int fPremulBehavior);
 }

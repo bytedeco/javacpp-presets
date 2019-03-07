@@ -31,6 +31,10 @@ public static final String H5_DEFAULT_PLUGINDIR = "/usr/local/hdf5/lib/plugin";
 /* Define if dev_t is a scalar */
 public static final int H5_DEV_T_IS_SCALAR = 1;
 
+/* Define if your system is IBM ppc64le and cannot convert some long double
+   values correctly. */
+/* #undef H5_DISABLE_SOME_LDOUBLE_CONV */
+
 /* Define to dummy `main' function (if any) required to link to the Fortran
    libraries. */
 /* #undef H5_FC_DUMMY_MAIN */
@@ -254,6 +258,9 @@ public static final int H5_HAVE_MEMORY_H = 1;
 /* Define if we have parallel support */
 /* #undef H5_HAVE_PARALLEL */
 
+/* Define if both pread and pwrite exist. */
+public static final int H5_HAVE_PREADWRITE = 1;
+
 /* Define to 1 if you have the <pthread.h> header file. */
 /* #undef H5_HAVE_PTHREAD_H */
 
@@ -425,7 +432,7 @@ public static final int H5_INCLUDE_HL = 1;
 
 /* Define if your system can convert long double to (unsigned) long long
    values correctly. */
-/* #undef H5_LDOUBLE_TO_LLONG_ACCURATE */
+public static final int H5_LDOUBLE_TO_LLONG_ACCURATE = 1;
 
 /* Define if your system converts long double to (unsigned) long values with
    special algorithm. */
@@ -433,7 +440,7 @@ public static final int H5_INCLUDE_HL = 1;
 
 /* Define if your system can convert (unsigned) long long to long double
    values correctly. */
-/* #undef H5_LLONG_TO_LDOUBLE_CORRECT */
+public static final int H5_LLONG_TO_LDOUBLE_CORRECT = 1;
 
 /* Define if your system can convert (unsigned) long to long double values
    with special algorithm. */
@@ -445,11 +452,8 @@ public static final String H5_LT_OBJDIR = ".libs/";
 /* Define to enable internal memory allocation sanity checking. */
 /* #undef H5_MEMORY_ALLOC_SANITY_CHECK */
 
-/* Define if the metadata trace file code is to be compiled in */
-/* #undef H5_METADATA_TRACE_FILE */
-
 /* Define if we can violate pointer alignment restrictions */
-/* #undef H5_NO_ALIGNMENT_RESTRICTIONS */
+public static final int H5_NO_ALIGNMENT_RESTRICTIONS = 1;
 
 /* Define if deprecated public API symbols are disabled */
 /* #undef H5_NO_DEPRECATED_SYMBOLS */
@@ -464,7 +468,7 @@ public static final String H5_PACKAGE_BUGREPORT = "help@hdfgroup.org";
 public static final String H5_PACKAGE_NAME = "HDF5";
 
 /* Define to the full name and version of this package. */
-public static final String H5_PACKAGE_STRING = "HDF5 1.10.4";
+public static final String H5_PACKAGE_STRING = "HDF5 1.10.5";
 
 /* Define to the one symbol short name of this package. */
 public static final String H5_PACKAGE_TARNAME = "hdf5";
@@ -473,7 +477,7 @@ public static final String H5_PACKAGE_TARNAME = "hdf5";
 public static final String H5_PACKAGE_URL = "";
 
 /* Define to the version of this package. */
-public static final String H5_PACKAGE_VERSION = "1.10.4";
+public static final String H5_PACKAGE_VERSION = "1.10.5";
 
 /* Determine the maximum decimal precision in C */
 public static final int H5_PAC_C_MAX_REAL_PRECISION = 33;
@@ -559,6 +563,9 @@ public static final int H5_SIZEOF_SIZE_T = 8;
 /* The size of `ssize_t', as computed by sizeof. */
 public static final int H5_SIZEOF_SSIZE_T = 8;
 
+/* The size of `time_t', as computed by sizeof. */
+public static final int H5_SIZEOF_TIME_T = 8;
+
 /* The size of `uint16_t', as computed by sizeof. */
 public static final int H5_SIZEOF_UINT16_T = 2;
 
@@ -635,7 +642,7 @@ public static final int H5_USE_110_API_DEFAULT = 1;
 /* #undef H5_USING_MEMCHECKER */
 
 /* Version number of package */
-public static final String H5_VERSION = "1.10.4";
+public static final String H5_VERSION = "1.10.5";
 
 /* Data accuracy is prefered to speed during data conversions */
 public static final int H5_WANT_DATA_ACCURACY = 1;
@@ -761,10 +768,10 @@ public static final int WORDS_BIGENDIAN = 1;
 /* Version numbers */
 public static final int H5_VERS_MAJOR =	1;	/* For major interface/format changes  	     */
 public static final int H5_VERS_MINOR =	10;	/* For minor interface/format changes  	     */
-public static final int H5_VERS_RELEASE =	4;	/* For tweaks, bug-fixes, or development     */
+public static final int H5_VERS_RELEASE =	5;	/* For tweaks, bug-fixes, or development     */
 public static final String H5_VERS_SUBRELEASE = "";	/* For pre-releases like snap0       */
 				/* Empty string for real releases.           */
-public static final String H5_VERS_INFO =    "HDF5 library version: 1.10.4";      /* Full version string */
+public static final String H5_VERS_INFO =    "HDF5 library version: 1.10.5";      /* Full version string */
 
 // #define H5check()	H5check_version(H5_VERS_MAJOR,H5_VERS_MINOR,
 // 				        H5_VERS_RELEASE)
@@ -2330,6 +2337,28 @@ public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_
 public static native @Cast("herr_t") int H5Oare_mdc_flushes_disabled(@Cast("hid_t") long object_id, @Cast("hbool_t*") boolean[] are_disabled);
 
 /* Future function prototypes to be deprecated in next version */
+public static native @Cast("herr_t") int H5Oget_info(@Cast("hid_t") long loc_id, H5O_info_t oinfo);
+public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_name(@Cast("hid_t") long loc_id, String name, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Oget_info_by_idx(@Cast("hid_t") long loc_id, String group_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, @Cast("hsize_t") long n, H5O_info_t oinfo,
+    @Cast("hid_t") long lapl_id);
+
+public static native @Cast("herr_t") int H5Ovisit(@Cast("hid_t") long obj_id, @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order,
+    H5O_iterate_t op, Pointer op_data);
+public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5O_iterate_t op,
+    Pointer op_data, @Cast("hid_t") long lapl_id);
+public static native @Cast("herr_t") int H5Ovisit_by_name(@Cast("hid_t") long loc_id, String obj_name,
+    @Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, H5O_iterate_t op,
+    Pointer op_data, @Cast("hid_t") long lapl_id);
+
+/* Compatibility function prototypes to replace non-versioned function for use by macro in next version */
 public static native @Cast("herr_t") int H5Oget_info1(@Cast("hid_t") long loc_id, H5O_info_t oinfo);
 public static native @Cast("herr_t") int H5Oget_info_by_name1(@Cast("hid_t") long loc_id, @Cast("const char*") BytePointer name, H5O_info_t oinfo,
     @Cast("hid_t") long lapl_id);
@@ -3349,6 +3378,15 @@ public static native @Cast("hsize_t") long H5Dget_storage_size(@Cast("hid_t") lo
 public static native @Cast("herr_t") int H5Dget_chunk_storage_size(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongPointer offset, @Cast("hsize_t*") LongPointer chunk_bytes);
 public static native @Cast("herr_t") int H5Dget_chunk_storage_size(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongBuffer offset, @Cast("hsize_t*") LongBuffer chunk_bytes);
 public static native @Cast("herr_t") int H5Dget_chunk_storage_size(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") long[] offset, @Cast("hsize_t*") long[] chunk_bytes);
+public static native @Cast("herr_t") int H5Dget_num_chunks(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t*") LongPointer nchunks);
+public static native @Cast("herr_t") int H5Dget_num_chunks(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t*") LongBuffer nchunks);
+public static native @Cast("herr_t") int H5Dget_num_chunks(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t*") long[] nchunks);
+public static native @Cast("herr_t") int H5Dget_chunk_info_by_coord(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongPointer coord, @Cast("unsigned*") IntPointer filter_mask, @Cast("haddr_t*") LongPointer addr, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Dget_chunk_info_by_coord(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") LongBuffer coord, @Cast("unsigned*") IntBuffer filter_mask, @Cast("haddr_t*") LongBuffer addr, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Dget_chunk_info_by_coord(@Cast("hid_t") long dset_id, @Cast("const hsize_t*") long[] coord, @Cast("unsigned*") int[] filter_mask, @Cast("haddr_t*") long[] addr, @Cast("hsize_t*") long[] size);
+public static native @Cast("herr_t") int H5Dget_chunk_info(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t") long chk_idx, @Cast("hsize_t*") LongPointer coord, @Cast("unsigned*") IntPointer filter_mask, @Cast("haddr_t*") LongPointer addr, @Cast("hsize_t*") LongPointer size);
+public static native @Cast("herr_t") int H5Dget_chunk_info(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t") long chk_idx, @Cast("hsize_t*") LongBuffer coord, @Cast("unsigned*") IntBuffer filter_mask, @Cast("haddr_t*") LongBuffer addr, @Cast("hsize_t*") LongBuffer size);
+public static native @Cast("herr_t") int H5Dget_chunk_info(@Cast("hid_t") long dset_id, @Cast("hid_t") long fspace_id, @Cast("hsize_t") long chk_idx, @Cast("hsize_t*") long[] coord, @Cast("unsigned*") int[] filter_mask, @Cast("haddr_t*") long[] addr, @Cast("hsize_t*") long[] size);
 public static native @Cast("haddr_t") long H5Dget_offset(@Cast("hid_t") long dset_id);
 public static native @Cast("herr_t") int H5Dread(@Cast("hid_t") long dset_id, @Cast("hid_t") long mem_type_id, @Cast("hid_t") long mem_space_id,
 			@Cast("hid_t") long file_space_id, @Cast("hid_t") long plist_id, Pointer buf);
@@ -3877,6 +3915,9 @@ public static native @Cast("herr_t") int H5Fget_page_buffering_stats(@Cast("hid_
 public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") LongPointer image_addr, @Cast("hsize_t*") LongPointer image_size);
 public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") LongBuffer image_addr, @Cast("hsize_t*") LongBuffer image_size);
 public static native @Cast("herr_t") int H5Fget_mdc_image_info(@Cast("hid_t") long file_id, @Cast("haddr_t*") long[] image_addr, @Cast("hsize_t*") long[] image_size);
+public static native @Cast("herr_t") int H5Fget_dset_no_attrs_hint(@Cast("hid_t") long file_id, @Cast("hbool_t*") BoolPointer minimize);
+public static native @Cast("herr_t") int H5Fget_dset_no_attrs_hint(@Cast("hid_t") long file_id, @Cast("hbool_t*") boolean[] minimize);
+public static native @Cast("herr_t") int H5Fset_dset_no_attrs_hint(@Cast("hid_t") long file_id, @Cast("hbool_t") boolean minimize);
 
 // #ifdef H5_HAVE_PARALLEL
 // #endif /* H5_HAVE_PARALLEL */
@@ -4574,7 +4615,8 @@ public static final int
     H5D_MPIO_NOT_SIMPLE_OR_SCALAR_DATASPACES = 0x10,
     H5D_MPIO_NOT_CONTIGUOUS_OR_CHUNKED_DATASET = 0x20,
     H5D_MPIO_PARALLEL_FILTERED_WRITES_DISABLED = 0x40,
-    H5D_MPIO_NO_COLLECTIVE_MAX_CAUSE = 0x80;
+    H5D_MPIO_ERROR_WHILE_CHECKING_COLLECTIVE_POSSIBLE = 0x80,
+    H5D_MPIO_NO_COLLECTIVE_MAX_CAUSE = 0x100;
 
 /********************/
 /* Public Variables */
@@ -4962,6 +5004,9 @@ public static native @Cast("herr_t") int H5Pset_fill_time(@Cast("hid_t") long pl
 public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") IntPointer fill_time);
 public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") IntBuffer fill_time);
 public static native @Cast("herr_t") int H5Pget_fill_time(@Cast("hid_t") long plist_id, @Cast("H5D_fill_time_t*") int[] fill_time);
+public static native @Cast("herr_t") int H5Pget_dset_no_attrs_hint(@Cast("hid_t") long dcpl_id, @Cast("hbool_t*") BoolPointer minimize);
+public static native @Cast("herr_t") int H5Pget_dset_no_attrs_hint(@Cast("hid_t") long dcpl_id, @Cast("hbool_t*") boolean[] minimize);
+public static native @Cast("herr_t") int H5Pset_dset_no_attrs_hint(@Cast("hid_t") long dcpl_id, @Cast("hbool_t") boolean minimize);
 
 /* Dataset access property list (DAPL) routines */
 public static native @Cast("herr_t") int H5Pset_chunk_cache(@Cast("hid_t") long dapl_id, @Cast("size_t") long rdcc_nslots,
@@ -8690,9 +8735,6 @@ public static final int H5O_VERSION_2 =    2;
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// Class LinkAccPropList represents the HDF5 file access property list and
-// inherits from DataType.
-
 // #ifndef __H5LinkAccPropList_H
 // #define __H5LinkAccPropList_H
 // Targeting ../LinkAccPropList.java
@@ -8744,9 +8786,6 @@ public static final int H5O_VERSION_2 =    2;
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-// Class LinkCreatPropList represents the HDF5 file access property list and
-// inherits from DataType.
 
 // #ifndef __H5LinkCreatPropList_H
 // #define __H5LinkCreatPropList_H
@@ -8807,7 +8846,13 @@ public static final int H5O_VERSION_2 =    2;
 // Targeting ../attr_operator_t.java
 
 
+// Targeting ../visit_operator_t.java
+
+
 // Targeting ../UserData4Aiterate.java
+
+
+// Targeting ../UserData4Visit.java
 
 
 // Targeting ../H5Object.java

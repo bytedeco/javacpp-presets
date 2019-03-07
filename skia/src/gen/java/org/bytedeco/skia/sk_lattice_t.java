@@ -26,8 +26,9 @@ public class sk_lattice_t extends Pointer {
 
     @MemberGetter public native @Const IntPointer fXDivs();
     @MemberGetter public native @Const IntPointer fYDivs();
-    @MemberGetter public native @Cast("const sk_lattice_flags_t*") IntPointer fFlags();
+    @MemberGetter public native @Cast("const sk_lattice_recttype_t*") IntPointer fRectTypes();
     public native int fXCount(); public native sk_lattice_t fXCount(int fXCount);
     public native int fYCount(); public native sk_lattice_t fYCount(int fYCount);
     @MemberGetter public native @Const sk_irect_t fBounds();
+    @MemberGetter public native @Cast("const sk_color_t*") IntPointer fColors();
 }

@@ -11,7 +11,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
 
 /** \class LinkAccPropList
     \brief Class LinkAccPropList inherits from PropList and provides
-    wrappers for the HDF5 file access property list.
+    wrappers for the HDF5 link access property list.
 */
 // Inheritance: PropList -> IdComponent
 @Namespace("H5") @NoOffset @Properties(inherit = org.bytedeco.hdf5.presets.hdf5.class)
@@ -20,10 +20,10 @@ public class LinkAccPropList extends PropList {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LinkAccPropList(Pointer p) { super(p); }
 
-        /**\brief Default file access property list. */
+        /**\brief Default link access property list. */
         @MemberGetter public static native @Const @ByRef LinkAccPropList DEFAULT();
 
-        // Creates a file access property list.
+        // Creates a link access property list.
         public LinkAccPropList() { super((Pointer)null); allocate(); }
         private native void allocate();
 
@@ -34,7 +34,7 @@ public class LinkAccPropList extends PropList {
         public LinkAccPropList(@Const @ByRef LinkAccPropList original) { super((Pointer)null); allocate(original); }
         private native void allocate(@Const @ByRef LinkAccPropList original);
 
-        // Creates a copy of an existing file access property list
+        // Creates a copy of an existing link access property list
         // using the property list id.
         public LinkAccPropList(@Cast("const hid_t") long plist_id) { super((Pointer)null); allocate(plist_id); }
         private native void allocate(@Cast("const hid_t") long plist_id);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2017 Samuel Audet
+ * Copyright (C) 2016-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -89,6 +89,19 @@ public class hdf5 implements InfoMapper {
                      + "    public native void call( @ByRef H5Object loc/*in*/,\n"
                      + "            @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter<char>\") BytePointer attr_name/*in*/,\n"
                      + "            Pointer operator_data/*in,out*/);\n"
+                     + "}\n"))
+
+               .put(new Info("H5::visit_operator_t").valueTypes("visit_operator_t").pointerTypes("@ByPtrPtr visit_operator_t").javaText(
+                       "public class visit_operator_t extends FunctionPointer {\n"
+                     + "    static { Loader.load(); }\n"
+                     + "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n"
+                     + "    public    visit_operator_t(Pointer p) { super(p); }\n"
+                     + "    protected visit_operator_t() { allocate(); }\n"
+                     + "    private native void allocate();\n"
+                     + "    public native int call(@ByRef H5Object obj,\n"
+                     + "                                 @Cast({\"\", \"std::string\", \"std::string&\"}) @Adapter(\"StringAdapter<char>\") BytePointer attr_name,\n"
+                     + "                                 @Const H5O_info_t oinfo,\n"
+                     + "                                 Pointer operator_data);\n"
                      + "}\n"))
 
                .put(new Info("H5::FileAccPropList::setSplit").skip())

@@ -15,13 +15,12 @@ public class Skia extends org.bytedeco.skia.presets.Skia {
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_types_DEFINED
 // #define sk_types_DEFINED
@@ -70,10 +69,12 @@ public static final int
     RGB_565_SK_COLORTYPE = 2,
     ARGB_4444_SK_COLORTYPE = 3,
     RGBA_8888_SK_COLORTYPE = 4,
-    BGRA_8888_SK_COLORTYPE = 5,
-    Index_8_SK_COLORTYPE = 6,
-    Gray_8_SK_COLORTYPE = 7,
-    RGBA_F16_SK_COLORTYPE = 8;
+    RGB_888X_SK_COLORTYPE = 5,
+    BGRA_8888_SK_COLORTYPE = 6,
+    RGBA_1010102_SK_COLORTYPE = 7,
+    RGB_101010X_SK_COLORTYPE = 8,
+    GRAY_8_SK_COLORTYPE = 9,
+    RGBA_F16_SK_COLORTYPE = 10;
 
 /** enum sk_alphatype_t */
 public static final int
@@ -89,13 +90,10 @@ public static final int
     BGR_H_SK_PIXELGEOMETRY = 2,
     RGB_V_SK_PIXELGEOMETRY = 3,
     BGR_V_SK_PIXELGEOMETRY = 4;
-// Targeting ../sk_imageinfo_t.java
-
-
 
 /** enum sk_surfaceprops_flags_t */
 public static final int
-    USE_DEVICE_INDEPENDENT_FONTS_GR_SURFACE_PROPS_FLAGS = 1 << 0;
+    USE_DEVICE_INDEPENDENT_FONTS_SK_SURFACE_PROPS_FLAGS = 1 << 0;
 // Targeting ../sk_surfaceprops_t.java
 
 
@@ -123,6 +121,15 @@ public static final int
     AFFINE_SK_MATRIX44_TYPE_MASK = 0x04,
     PERSPECTIVE_SK_MATRIX44_TYPE_MASK = 0x08;
 // Targeting ../sk_canvas_t.java
+
+
+// Targeting ../sk_nodraw_canvas_t.java
+
+
+// Targeting ../sk_nway_canvas_t.java
+
+
+// Targeting ../sk_overdraw_canvas_t.java
 
 
 // Targeting ../sk_data_t.java
@@ -230,6 +237,12 @@ public static final long FONTMETRICS_FLAGS_UNDERLINE_POSITION_IS_VALID = (1L << 
 // Targeting ../sk_fontmgr_t.java
 
 
+// Targeting ../sk_fontstyle_t.java
+
+
+// Targeting ../sk_fontstyleset_t.java
+
+
 // Targeting ../sk_codec_t.java
 
 
@@ -295,13 +308,6 @@ public static final int
     EVENODD_SK_PATH_FILLTYPE = 1,
     INVERSE_WINDING_SK_PATH_FILLTYPE = 2,
     INVERSE_EVENODD_SK_PATH_FILLTYPE = 3;
-
-/** enum sk_typeface_style_t */
-public static final int
-    NORMAL_TYPEFACE_STYLE      = 0,
-    BOLD_TYPEFACE_STYLE        = 0x01,
-    ITALIC_TYPEFACE_STYLE      = 0x02,
-    BOLD_ITALIC_TYPEFACE_STYLE = 0x03;
 
 /** enum sk_font_style_slant_t */
 public static final int
@@ -381,29 +387,33 @@ public static final int
     PKM_SK_ENCODED_FORMAT = 7,
     KTX_SK_ENCODED_FORMAT = 8,
     ASTC_SK_ENCODED_FORMAT = 9,
-    DNG_SK_ENCODED_FORMAT = 10;
+    DNG_SK_ENCODED_FORMAT = 10,
+    HEIF_SK_ENCODED_FORMAT = 11;
 
-/** enum sk_codec_origin_t */
+/** enum sk_encodedorigin_t */
 public static final int
-    TOP_LEFT_SK_CODEC_ORIGIN     = 1, // Default
-    TOP_RIGHT_SK_CODEC_ORIGIN    = 2, // Reflected across y-axis
-    BOTTOM_RIGHT_SK_CODEC_ORIGIN = 3, // Rotated 180
-    BOTTOM_LEFT_SK_CODEC_ORIGIN  = 4, // Reflected across x-axis
-    LEFT_TOP_SK_CODEC_ORIGIN     = 5, // Reflected across x-axis, Rotated 90 CCW
-    RIGHT_TOP_SK_CODEC_ORIGIN    = 6, // Rotated 90 CW
-    RIGHT_BOTTOM_SK_CODEC_ORIGIN = 7, // Reflected across x-axis, Rotated 90 CW
-    LEFT_BOTTOM_SK_CODEC_ORIGIN  = 8; // Rotated 90 CCW
+    TOP_LEFT_SK_ENCODED_ORIGIN     = 1, // Default
+    TOP_RIGHT_SK_ENCODED_ORIGIN    = 2, // Reflected across y-axis
+    BOTTOM_RIGHT_SK_ENCODED_ORIGIN = 3, // Rotated 180
+    BOTTOM_LEFT_SK_ENCODED_ORIGIN  = 4, // Reflected across x-axis
+    LEFT_TOP_SK_ENCODED_ORIGIN     = 5, // Reflected across x-axis, Rotated 90 CCW
+    RIGHT_TOP_SK_ENCODED_ORIGIN    = 6, // Rotated 90 CW
+    RIGHT_BOTTOM_SK_ENCODED_ORIGIN = 7, // Reflected across x-axis, Rotated 90 CW
+    LEFT_BOTTOM_SK_ENCODED_ORIGIN  = 8, // Rotated 90 CCW
+    DEFAULT_SK_ENCODED_ORIGIN      = TOP_LEFT_SK_ENCODED_ORIGIN;
 
 /** enum sk_codec_result_t */
 public static final int
     SUCCESS_SK_CODEC_RESULT = 0,
     INCOMPLETE_INPUT_SK_CODEC_RESULT = 1,
-    INVALID_CONVERSION_SK_CODEC_RESULT = 2,
-    INVALID_SCALE_SK_CODEC_RESULT = 3,
-    INVALID_PARAMETERS_SK_CODEC_RESULT = 4,
-    INVALID_INPUT_SK_CODEC_RESULT = 5,
-    COULD_NOT_REWIND_SK_CODEC_RESULT = 6,
-    UNIMPLEMENTED_SK_CODEC_RESULT = 7;
+    ERROR_IN_INPUT_SK_CODEC_RESULT = 2,
+    INVALID_CONVERSION_SK_CODEC_RESULT = 3,
+    INVALID_SCALE_SK_CODEC_RESULT = 4,
+    INVALID_PARAMETERS_SK_CODEC_RESULT = 5,
+    INVALID_INPUT_SK_CODEC_RESULT = 6,
+    COULD_NOT_REWIND_SK_CODEC_RESULT = 7,
+    INTERNAL_ERROR_SK_CODEC_RESULT = 8,
+    UNIMPLEMENTED_SK_CODEC_RESULT = 9;
 
 /** enum sk_codec_zero_initialized_t */
 public static final int
@@ -457,6 +467,11 @@ public static final int
     TRANSLATE_SK_PATH_EFFECT_1D_STYLE = 0,
     ROTATE_SK_PATH_EFFECT_1D_STYLE = 1,
     MORPH_SK_PATH_EFFECT_1D_STYLE = 2;
+
+/** enum sk_path_effect_trim_mode_t */
+public static final int
+    NORMAL_SK_PATH_EFFECT_TRIM_MODE = 0,
+    INVERTED_SK_PATH_EFFECT_TRIM_MODE = 1;
 // Targeting ../sk_path_effect_t.java
 
   
@@ -490,13 +505,6 @@ public static final int
     /** fuzzy inside, nothing outside */
     INNER_SK_BLUR_STYLE = 3;
 
-/** enum sk_blurmaskfilter_blurflags_t */
-public static final int
-    NONE_SK_BLUR_MASK_FILTER_BLUR_FLAGS = 0x00,
-    IGNORE_TRANSFORM_SK_BLUR_MASK_FILTER_BLUR_FLAGS = 0x01,
-    HIGHT_QUALITY_SK_BLUR_MASK_FILTER_BLUR_FLAGS = 0x02,
-    ALL_SK_BLUR_MASK_FILTER_BLUR_FLAGS = 0x03;
-
 /** enum sk_path_direction_t */
 public static final int
     CW_SK_PATH_DIRECTION = 0,
@@ -526,18 +534,10 @@ public static final int
 
 
 
-/** enum sk_bitmapscaler_resizemethod_t */
-public static final int
-    BOX_SK_BITMAP_SCALER_RESIZE_METHOD = 0,
-    TRIANGLE_SK_BITMAP_SCALER_RESIZE_METHOD = 1,
-    LANCZOS3_SK_BITMAP_SCALER_RESIZE_METHOD = 2,
-    HAMMING_SK_BITMAP_SCALER_RESIZE_METHOD = 3,
-    MITCHELL_SK_BITMAP_SCALER_RESIZE_METHOD = 4;
-
 /** enum gr_surfaceorigin_t */
 public static final int
-    TOP_LEFT_GR_SURFACE_ORIGIN = 1,
-    BOTTOM_LEFT_GR_SURFACE_ORIGIN = 2;
+    TOP_LEFT_GR_SURFACE_ORIGIN = 0,
+    BOTTOM_LEFT_GR_SURFACE_ORIGIN = 1;
 
 /** enum gr_pixelconfig_t */
 public static final int
@@ -547,11 +547,11 @@ public static final int
     RGB_565_GR_PIXEL_CONFIG = 3,
     RGBA_4444_GR_PIXEL_CONFIG = 4,
     RGBA_8888_GR_PIXEL_CONFIG = 5,
-    BGRA_8888_GR_PIXEL_CONFIG = 6,
-    SRGBA_8888_GR_PIXEL_CONFIG = 7,
-    SBGRA_8888_GR_PIXEL_CONFIG = 8,
-    RGBA_8888_SINT_GR_PIXEL_CONFIG = 9,
-    ETC1_GR_PIXEL_CONFIG = 10,
+    RGB_888_GR_PIXEL_CONFIG = 6,
+    BGRA_8888_GR_PIXEL_CONFIG = 7,
+    SRGBA_8888_GR_PIXEL_CONFIG = 8,
+    SBGRA_8888_GR_PIXEL_CONFIG = 9,
+    RGBA_1010102_GR_PIXEL_CONFIG = 10,
     RGBA_FLOAT_GR_PIXEL_CONFIG = 11,
     RG_FLOAT_GR_PIXEL_CONFIG = 12,
     ALPHA_HALF_GR_PIXEL_CONFIG = 13,
@@ -577,45 +577,28 @@ public static final int
 public static final int
     NONE_GR_CONTEXT_FLUSHBITS = 0,
     DISCARD_GR_CONTEXT_FLUSHBITS = 0x2;
-// Targeting ../gr_backend_rendertarget_desc_t.java
+// Targeting ../gr_backendrendertarget_t.java
 
 
-
-/** enum gr_backendtexture_flags_t */
-public static final int
-    NONE_GR_BACKEND_TEXTURE_FLAGS = 0,
-    RENDER_TARGET_GR_BACKEND_TEXTURE_FLAGS = 1;
-// Targeting ../gr_backend_texture_desc_t.java
+// Targeting ../gr_backendtexture_t.java
 
 
 // Targeting ../gr_context_t.java
 
 
 
-/** enum gr_contextoptions_gpupathrenderers_t */
-public static final int
-    NONE_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS              = 0,
-    DASHLINE_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS          = 1 << 0,
-    STENCIL_AND_COVER_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS = 1 << 1,
-    MSAA_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS              = 1 << 2,
-    AA_HAIRLINE_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS       = 1 << 3,
-    AA_CONVEX_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS         = 1 << 4,
-    AA_LINEARIZING_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS    = 1 << 5,
-    SMALL_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS             = 1 << 6,
-    TESSELLATING_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS      = 1 << 7,
-    DEFAULT_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS           = 1 << 8,
-
-    ALL_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS               = DEFAULT_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS | (DEFAULT_GR_CONTEXT_OPTIONS_GPU_PATH_RENDERERS - 1);
-// Targeting ../gr_context_options_t.java
-
-
-
 /** enum gr_backend_t */
 public static final int
-    OPENGL_GR_BACKEND = 0,
-    VULKAN_GR_BACKEND = 1;
+    METAL_GR_BACKEND = 0,
+    OPENGL_GR_BACKEND = 1,
+    VULKAN_GR_BACKEND = 2;
 // Targeting ../gr_glinterface_t.java
 
+
+// Targeting ../gr_gl_textureinfo_t.java
+
+
+// Targeting ../gr_gl_framebufferinfo_t.java
 
 
 
@@ -636,10 +619,11 @@ public static final int
     CONVEX_SK_PATH_CONVEXITY = 1,
     CONCAVE_SK_PATH_CONVEXITY = 2;
 
-/** enum sk_lattice_flags_t */
+/** enum sk_lattice_recttype_t */
 public static final int
-    DEFAULT_SK_LATTICE_FLAGS = 0,
-    TRANSPARENT_SK_LATTICE_FLAGS = 1 << 0;
+    DEFAULT_SK_LATTICE_RECT_TYPE = 0,
+    TRANSPARENT_SK_LATTICE_RECT_TYPE = 1,
+    FIXED_COLOR_SK_LATTICE_RECT_TYPE = 2;
 // Targeting ../sk_lattice_t.java
 
 
@@ -664,6 +648,9 @@ public static final int
 // Targeting ../sk_image_texture_release_proc.java
 
 
+// Targeting ../sk_surface_raster_release_proc.java
+
+
 
 /** enum sk_image_caching_hint_t */
 public static final int
@@ -680,29 +667,20 @@ public static final int
 
 
 
-/** enum sk_encodedinfo_alpha_t */
+/** enum sk_colorspace_named_t */
 public static final int
-    OPAQUE_SK_ENCODEDINFO_ALPHA = 0,
-    UNPREMUL_SK_ENCODEDINFO_ALPHA = 1,
-    BINARY_SK_ENCODEDINFO_ALPHA = 2;
+    SRGB_SK_COLORSPACE_NAMED = 0,
+    ADOBE_RGB_SK_COLORSPACE_NAMED = 1,
+    SRGB_LINEAR_SK_COLORSPACE_NAMED = 2;
+// Targeting ../sk_imageinfo_t.java
 
-/** enum sk_encodedinfo_color_t */
+
+
+/** enum sk_codecanimation_disposalmethod_t */
 public static final int
-    GRAY_SK_ENCODEDINFO_COLOR = 0,
-    GRAY_ALPHA_SK_ENCODEDINFO_COLOR = 1,
-    PALETTE_SK_ENCODEDINFO_COLOR = 2,
-    RGB_SK_ENCODEDINFO_COLOR = 3,
-    RGBA_SK_ENCODEDINFO_COLOR = 4,
-    BGR_SK_ENCODEDINFO_COLOR = 5,
-    BGRX_SK_ENCODEDINFO_COLOR = 6,
-    BGRA_SK_ENCODEDINFO_COLOR = 7,
-    YUV_SK_ENCODEDINFO_COLOR = 8,
-    YUVA_SK_ENCODEDINFO_COLOR = 9,
-    INVERTED_CMYK_SK_ENCODEDINFO_COLOR = 10,
-    YCCK_SK_ENCODEDINFO_COLOR = 11;
-// Targeting ../sk_encodedinfo_t.java
-
-
+    KEEP_SK_CODEC_ANIMATION_DISPOSAL_METHOD               = 1,
+    RESTORE_BG_COLOR_SK_CODEC_ANIMATION_DISPOSAL_METHOD   = 2,
+    RESTORE_PREVIOUS_SK_CODEC_ANIMATION_DISPOSAL_METHOD   = 3;
 // Targeting ../sk_codec_frameinfo_t.java
 
 
@@ -728,28 +706,125 @@ public static final int
 
 
 
+/** enum sk_colorspace_render_target_gamma_t */
+public static final int
+    LINEAR_SK_COLORSPACE_RENDER_TARGET_GAMMA = 0,
+    SRGB_SK_COLORSPACE_RENDER_TARGET_GAMMA = 1;
+
+/** enum sk_colorspace_gamut_t */
+public static final int
+    SRGB_SK_COLORSPACE_GAMUT = 0,
+    ADOBE_RGB_SK_COLORSPACE_GAMUT = 1,
+    DCIP3_D65_SK_COLORSPACE_GAMUT = 2,
+    REC2020_SK_COLORSPACE_GAMUT = 3;
+// Targeting ../sk_colorspace_transfer_fn_t.java
+
+
+// Targeting ../sk_colorspaceprimaries_t.java
+
+
+
+/** enum sk_highcontrastconfig_invertstyle_t */
+public static final int
+    NO_INVERT_SK_HIGH_CONTRAST_CONFIG_INVERT_STYLE = 0,
+    INVERT_BRIGHTNESS_SK_HIGH_CONTRAST_CONFIG_INVERT_STYLE = 1,
+    INVERT_LIGHTNESS_SK_HIGH_CONTRAST_CONFIG_INVERT_STYLE = 2;
+// Targeting ../sk_highcontrastconfig_t.java
+
+
+
+/** enum sk_pngencoder_filterflags_t */
+public static final int
+    ZERO_SK_PNGENCODER_FILTER_FLAGS  = 0x00,
+    NONE_SK_PNGENCODER_FILTER_FLAGS  = 0x08,
+    SUB_SK_PNGENCODER_FILTER_FLAGS   = 0x10,
+    UP_SK_PNGENCODER_FILTER_FLAGS    = 0x20,
+    AVG_SK_PNGENCODER_FILTER_FLAGS   = 0x40,
+    PAETH_SK_PNGENCODER_FILTER_FLAGS = 0x80,
+    ALL_SK_PNGENCODER_FILTER_FLAGS   = NONE_SK_PNGENCODER_FILTER_FLAGS |
+                                       SUB_SK_PNGENCODER_FILTER_FLAGS |
+                                       UP_SK_PNGENCODER_FILTER_FLAGS | 
+                                       AVG_SK_PNGENCODER_FILTER_FLAGS | 
+                                       PAETH_SK_PNGENCODER_FILTER_FLAGS;
+// Targeting ../sk_pngencoder_options_t.java
+
+
+
+/** enum sk_jpegencoder_downsample_t */
+public static final int
+    DOWNSAMPLE_420_SK_JPEGENCODER_DOWNSAMPLE = 0,
+    DOWNSAMPLE_422_SK_JPEGENCODER_DOWNSAMPLE = 1,
+    DOWNSAMPLE_444_SK_JPEGENCODER_DOWNSAMPLE = 2;
+
+/** enum sk_jpegencoder_alphaoption_t */
+public static final int
+    IGNORE_SK_JPEGENCODER_ALPHA_OPTION = 0,
+    BLEND_ON_BLACK_SK_JPEGENCODER_ALPHA_OPTION = 1;
+// Targeting ../sk_jpegencoder_options_t.java
+
+
+
+/** enum sk_webpencoder_compression_t */
+public static final int
+    LOSSY_SK_WEBPENCODER_COMPTRESSION = 0,
+    LOSSLESS_SK_WEBPENCODER_COMPTRESSION = 1;
+// Targeting ../sk_webpencoder_options_t.java
+
+
+// Targeting ../sk_rrect_t.java
+
+
+
+/** enum sk_rrect_type_t */
+public static final int
+    EMPTY_SK_RRECT_TYPE = 0,
+    RECT_SK_RRECT_TYPE = 1,
+    OVAL_SK_RRECT_TYPE = 2,
+    SIMPLE_SK_RRECT_TYPE = 3,
+    NINE_PATCH_SK_RRECT_TYPE = 4,
+    COMPLEX_SK_RRECT_TYPE = 5;
+
+/** enum sk_rrect_corner_t */
+public static final int
+    UPPER_LEFT_SK_RRECT_CORNER = 0,
+    UPPER_RIGHT_SK_RRECT_CORNER = 1,
+    LOWER_RIGHT_SK_RRECT_CORNER = 2,
+    LOWER_LEFT_SK_RRECT_CORNER = 3;
+// Targeting ../sk_textblob_t.java
+
+
+// Targeting ../sk_textblob_builder_t.java
+
+
+// Targeting ../sk_textblob_builder_runbuffer_t.java
+
+
+
 // #endif
 
 
 // Parsed from gr_context.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef gr_context_DEFINED
 // #define gr_context_DEFINED
 
 // #include "sk_types.h"
 
-public static native gr_context_t gr_context_create(@Cast("gr_backend_t") int backend, @Cast("gr_backendcontext_t") long backendContext, @Const gr_context_options_t options);
-public static native gr_context_t gr_context_create_with_defaults(@Cast("gr_backend_t") int backend, @Cast("gr_backendcontext_t") long backendContext);
+// GrContext
+
+public static native gr_context_t gr_context_make_gl(@Const gr_glinterface_t glInterface);
+// TODO: the overloads with GrContextOptions
+// TODO: the Vulkan and Metal contexts
+
 public static native void gr_context_unref(gr_context_t context);
 public static native void gr_context_abandon_context(gr_context_t context);
 public static native void gr_context_release_resources_and_abandon_context(gr_context_t context);
@@ -760,16 +835,47 @@ public static native void gr_context_set_resource_cache_limits(gr_context_t cont
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, IntPointer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, IntBuffer maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
 public static native void gr_context_get_resource_cache_usage(gr_context_t context, int[] maxResources, @Cast("size_t*") SizeTPointer maxResourceBytes);
-public static native int gr_context_get_recommended_sample_count(gr_context_t context, @Cast("gr_pixelconfig_t") int config, float dpi);
+public static native int gr_context_get_max_surface_sample_count_for_color_type(gr_context_t context, @Cast("sk_colortype_t") int colorType);
 public static native void gr_context_flush(gr_context_t context);
 public static native void gr_context_reset_context(gr_context_t context, @Cast("uint32_t") int state);
+public static native @Cast("gr_backend_t") int gr_context_get_backend(gr_context_t context);
 
-public static native @Const gr_glinterface_t gr_glinterface_default_interface();
+
+// GrGLInterface
+
 public static native @Const gr_glinterface_t gr_glinterface_create_native_interface();
-public static native gr_glinterface_t gr_glinterface_clone(gr_glinterface_t glInterface);
-public static native @Cast("bool") boolean gr_glinterface_validate(gr_glinterface_t glInterface);
-public static native @Cast("bool") boolean gr_glinterface_has_extension(gr_glinterface_t glInterface, @Cast("const char*") BytePointer extension);
-public static native @Cast("bool") boolean gr_glinterface_has_extension(gr_glinterface_t glInterface, String extension);
+public static native void gr_glinterface_unref(@Const gr_glinterface_t glInterface);
+public static native @Cast("bool") boolean gr_glinterface_validate(@Const gr_glinterface_t glInterface);
+public static native @Cast("bool") boolean gr_glinterface_has_extension(@Const gr_glinterface_t glInterface, @Cast("const char*") BytePointer extension);
+public static native @Cast("bool") boolean gr_glinterface_has_extension(@Const gr_glinterface_t glInterface, String extension);
+
+
+// GrBackendTexture
+
+public static native gr_backendtexture_t gr_backendtexture_new_gl(int width, int height, @Cast("bool") boolean mipmapped, @Const gr_gl_textureinfo_t glInfo);
+public static native void gr_backendtexture_delete(gr_backendtexture_t texture);
+
+public static native @Cast("bool") boolean gr_backendtexture_is_valid(@Const gr_backendtexture_t texture);
+public static native int gr_backendtexture_get_width(@Const gr_backendtexture_t texture);
+public static native int gr_backendtexture_get_height(@Const gr_backendtexture_t texture);
+public static native @Cast("bool") boolean gr_backendtexture_has_mipmaps(@Const gr_backendtexture_t texture);
+public static native @Cast("gr_backend_t") int gr_backendtexture_get_backend(@Const gr_backendtexture_t texture);
+public static native @Cast("bool") boolean gr_backendtexture_get_gl_textureinfo(@Const gr_backendtexture_t texture, gr_gl_textureinfo_t glInfo);
+
+
+// GrBackendRenderTarget
+
+public static native gr_backendrendertarget_t gr_backendrendertarget_new_gl(int width, int height, int samples, int stencils, @Const gr_gl_framebufferinfo_t glInfo);
+public static native void gr_backendrendertarget_delete(gr_backendrendertarget_t rendertarget);
+
+public static native @Cast("bool") boolean gr_backendrendertarget_is_valid(@Const gr_backendrendertarget_t rendertarget);
+public static native int gr_backendrendertarget_get_width(@Const gr_backendrendertarget_t rendertarget);
+public static native int gr_backendrendertarget_get_height(@Const gr_backendrendertarget_t rendertarget);
+public static native int gr_backendrendertarget_get_samples(@Const gr_backendrendertarget_t rendertarget);
+public static native int gr_backendrendertarget_get_stencils(@Const gr_backendrendertarget_t rendertarget);
+public static native @Cast("gr_backend_t") int gr_backendrendertarget_get_backend(@Const gr_backendrendertarget_t rendertarget);
+public static native @Cast("bool") boolean gr_backendrendertarget_get_gl_framebufferinfo(@Const gr_backendrendertarget_t rendertarget, gr_gl_framebufferinfo_t glInfo);
+
 
 // #endif
 
@@ -777,14 +883,13 @@ public static native @Cast("bool") boolean gr_glinterface_has_extension(gr_glint
 // Parsed from sk_bitmap.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_bitmap_DEFINED
 // #define sk_bitmap_DEFINED
@@ -819,17 +924,17 @@ public static native void sk_bitmap_get_pixel_colors(sk_bitmap_t cbitmap, @Cast(
 public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") IntPointer colors);
 public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") IntBuffer colors);
 public static native void sk_bitmap_set_pixel_colors(sk_bitmap_t cbitmap, @Cast("const sk_color_t*") int[] colors);
-public static native @Cast("bool") boolean sk_bitmap_install_pixels(sk_bitmap_t cbitmap, @Const sk_imageinfo_t cinfo, Pointer pixels, @Cast("size_t") long rowBytes, sk_colortable_t ctable, sk_bitmap_release_proc releaseProc, Pointer context);
+public static native @Cast("bool") boolean sk_bitmap_install_pixels(sk_bitmap_t cbitmap, @Const sk_imageinfo_t cinfo, Pointer pixels, @Cast("size_t") long rowBytes, sk_bitmap_release_proc releaseProc, Pointer context);
 public static native @Cast("bool") boolean sk_bitmap_install_pixels_with_pixmap(sk_bitmap_t cbitmap, @Const sk_pixmap_t cpixmap);
 public static native @Cast("bool") boolean sk_bitmap_install_mask_pixels(sk_bitmap_t cbitmap, @Const sk_mask_t cmask);
 public static native @Cast("bool") boolean sk_bitmap_try_alloc_pixels(sk_bitmap_t cbitmap, @Const sk_imageinfo_t requestedInfo, @Cast("size_t") long rowBytes);
-public static native @Cast("bool") boolean sk_bitmap_try_alloc_pixels_with_color_table(sk_bitmap_t cbitmap, @Const sk_imageinfo_t requestedInfo, sk_colortable_t ctable, @Cast("uint32_t") int flags);
-public static native sk_colortable_t sk_bitmap_get_colortable(sk_bitmap_t cbitmap);
-public static native void sk_bitmap_set_pixels(sk_bitmap_t cbitmap, Pointer pixels, sk_colortable_t ctable);
+public static native @Cast("bool") boolean sk_bitmap_try_alloc_pixels_with_flags(sk_bitmap_t cbitmap, @Const sk_imageinfo_t requestedInfo, @Cast("uint32_t") int flags);
+public static native void sk_bitmap_set_pixels(sk_bitmap_t cbitmap, Pointer pixels);
 public static native @Cast("bool") boolean sk_bitmap_peek_pixels(sk_bitmap_t cbitmap, sk_pixmap_t cpixmap);
 public static native @Cast("bool") boolean sk_bitmap_extract_subset(sk_bitmap_t cbitmap, sk_bitmap_t dst, sk_irect_t subset);
 public static native @Cast("bool") boolean sk_bitmap_extract_alpha(sk_bitmap_t cbitmap, sk_bitmap_t dst, @Const sk_paint_t paint, sk_ipoint_t offset);
 public static native void sk_bitmap_notify_pixels_changed(sk_bitmap_t cbitmap);
+public static native void sk_bitmap_swap(sk_bitmap_t cbitmap, sk_bitmap_t cother);
 
 // #endif
 
@@ -838,13 +943,12 @@ public static native void sk_bitmap_notify_pixels_changed(sk_bitmap_t cbitmap);
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_canvas_DEFINED
 // #define sk_canvas_DEFINED
@@ -852,341 +956,77 @@ public static native void sk_bitmap_notify_pixels_changed(sk_bitmap_t cbitmap);
 // #include "sk_types.h"
 
 public static native void sk_canvas_destroy(sk_canvas_t arg0);
-
-/**
-    Save the current matrix and clip on the canvas.  When the
-    balancing call to sk_canvas_restore() is made, the previous matrix
-    and clip are restored.
-*/
 public static native int sk_canvas_save(sk_canvas_t arg0);
-/**
-    This behaves the same as sk_canvas_save(), but in addition it
-    allocates an offscreen surface. All drawing calls are directed
-    there, and only when the balancing call to sk_canvas_restore() is
-    made is that offscreen transfered to the canvas (or the previous
-    layer).
-    <p>
-    @param sk_rect_t* (may be null) This rect, if non-null, is used as
-                      a hint to limit the size of the offscreen, and
-                      thus drawing may be clipped to it, though that
-                      clipping is not guaranteed to happen. If exact
-                      clipping is desired, use sk_canvas_clip_rect().
-    @param sk_paint_t* (may be null) The paint is copied, and is applied
-                       to the offscreen when sk_canvas_restore() is
-                       called.
-*/
 public static native int sk_canvas_save_layer(sk_canvas_t arg0, @Const sk_rect_t arg1, @Const sk_paint_t arg2);
-/**
-    This call balances a previous call to sk_canvas_save() or
-    sk_canvas_save_layer(), and is used to remove all modifications to
-    the matrix and clip state since the last save call.  It is an
-    error to call sk_canvas_restore() more times than save and
-    save_layer were called.
-*/
 public static native void sk_canvas_restore(sk_canvas_t arg0);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified translation.
-*/
 public static native void sk_canvas_translate(sk_canvas_t arg0, float dx, float dy);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified scale.
-*/
 public static native void sk_canvas_scale(sk_canvas_t arg0, float sx, float sy);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified rotation in degrees.
-*/
 public static native void sk_canvas_rotate_degrees(sk_canvas_t arg0, float degrees);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified rotation in radians.
-*/
 public static native void sk_canvas_rotate_radians(sk_canvas_t arg0, float radians);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified skew.
-*/
 public static native void sk_canvas_skew(sk_canvas_t arg0, float sx, float sy);
-/**
-    Preconcat the current coordinate transformation matrix with the
-    specified matrix.
-*/
 public static native void sk_canvas_concat(sk_canvas_t arg0, @Const sk_matrix_t arg1);
-
-/**
-    Modify the current clip with the specified rectangle.  The new
-    current clip will be the intersection of the old clip and the
-    rectange.
-*/
 public static native @Cast("bool") boolean sk_canvas_quick_reject(sk_canvas_t arg0, @Const sk_rect_t arg1);
-public static native void sk_canvas_clip_rect(sk_canvas_t arg0, @Const sk_rect_t arg1);
 public static native void sk_canvas_clip_region(sk_canvas_t canvas, @Const sk_region_t region, @Cast("sk_clipop_t") int op);
-/**
-    Modify the current clip with the specified path.  The new
-    current clip will be the intersection of the old clip and the
-    path.
-*/
-public static native void sk_canvas_clip_path(sk_canvas_t arg0, @Const sk_path_t arg1);
-
-/**
-    Fill the entire canvas (restricted to the current clip) with the
-    specified paint.
-*/
 public static native void sk_canvas_draw_paint(sk_canvas_t arg0, @Const sk_paint_t arg1);
-/**
-    Draw the specified rectangle using the specified paint. The
-    rectangle will be filled or stroked based on the style in the
-    paint.
-*/
 public static native void sk_canvas_draw_rect(sk_canvas_t arg0, @Const sk_rect_t arg1, @Const sk_paint_t arg2);
+public static native void sk_canvas_draw_rrect(sk_canvas_t arg0, @Const sk_rrect_t arg1, @Const sk_paint_t arg2);
 public static native void sk_canvas_draw_region(sk_canvas_t arg0, @Const sk_region_t arg1, @Const sk_paint_t arg2);
-/**
- *  Draw the circle centered at (cx, cy) with radius rad using the specified paint.
- *  The circle will be filled or framed based on the style in the paint
- */
 public static native void sk_canvas_draw_circle(sk_canvas_t arg0, float cx, float cy, float rad, @Const sk_paint_t arg4);
-/**
-    Draw the specified oval using the specified paint. The oval will be
-    filled or framed based on the style in the paint
-*/
 public static native void sk_canvas_draw_oval(sk_canvas_t arg0, @Const sk_rect_t arg1, @Const sk_paint_t arg2);
-/**
-    Draw the specified path using the specified paint. The path will be
-    filled or framed based on the style in the paint
-*/
 public static native void sk_canvas_draw_path(sk_canvas_t arg0, @Const sk_path_t arg1, @Const sk_paint_t arg2);
-/**
-    Draw the specified image, with its top/left corner at (x,y), using
-    the specified paint, transformed by the current matrix.
-    <p>
-    @param sk_paint_t* (may be NULL) the paint used to draw the image.
-*/
-public static native void sk_canvas_draw_image(sk_canvas_t arg0, @Const sk_image_t arg1,
-                                 float x, float y, @Const sk_paint_t arg4);
-/**
-    Draw the specified image, scaling and translating so that it fills
-    the specified dst rect. If the src rect is non-null, only that
-    subset of the image is transformed and drawn.
-    <p>
-    @param sk_paint_t* (may be NULL) The paint used to draw the image.
-*/
-public static native void sk_canvas_draw_image_rect(sk_canvas_t arg0, @Const sk_image_t arg1,
-                                      @Const sk_rect_t src,
-                                      @Const sk_rect_t dst, @Const sk_paint_t arg4);
-/**
-    Draw the picture into this canvas (replay the pciture's drawing commands).
-    <p>
-    @param sk_matrix_t* If non-null, apply that matrix to the CTM when
-                        drawing this picture. This is logically
-                        equivalent to: save, concat, draw_picture,
-                        restore.
-    <p>
-    @param sk_paint_t* If non-null, draw the picture into a temporary
-                       buffer, and then apply the paint's alpha,
-                       colorfilter, imagefilter, and xfermode to that
-                       buffer as it is drawn to the canvas.  This is
-                       logically equivalent to save_layer(paint),
-                       draw_picture, restore.
-*/
-public static native void sk_canvas_draw_picture(sk_canvas_t arg0, @Const sk_picture_t arg1,
-                                   @Const sk_matrix_t arg2, @Const sk_paint_t arg3);
-/**
-   Helper method for drawing a color in SRC mode, completely replacing all the pixels
-   in the current clip with this color.
- */
+public static native void sk_canvas_draw_image(sk_canvas_t arg0, @Const sk_image_t arg1, float x, float y, @Const sk_paint_t arg4);
+public static native void sk_canvas_draw_image_rect(sk_canvas_t arg0, @Const sk_image_t arg1, @Const sk_rect_t src, @Const sk_rect_t dst, @Const sk_paint_t arg4);
+public static native void sk_canvas_draw_picture(sk_canvas_t arg0, @Const sk_picture_t arg1, @Const sk_matrix_t arg2, @Const sk_paint_t arg3);
 public static native void sk_canvas_clear(sk_canvas_t arg0, @Cast("sk_color_t") int arg1);
-/**
-   This makes the contents of the canvas undefined. Subsequent calls that
-   require reading the canvas contents will produce undefined results. Examples
-   include blending and readPixels. The actual implementation is backend-
-   dependent and one legal implementation is to do nothing. Like clear(), this
-   ignores the clip.
-   
-   This function should only be called if the caller intends to subsequently
-   draw to the canvas. The canvas may do real work at discard() time in order
-   to optimize performance on subsequent draws. Thus, if you call this and then
-   never draw to the canvas subsequently you may pay a perfomance penalty.
-*/
 public static native void sk_canvas_discard(sk_canvas_t arg0);
-/**
-    Returns the number of matrix/clip states on the SkCanvas' private stack.
-    This will equal # save() calls - # restore() calls + 1. The save count on
-    a new canvas is 1.
-*/
 public static native int sk_canvas_get_save_count(sk_canvas_t arg0);
-/**
-    Efficient way to pop any calls to sk_canvas_save() that happened after the save
-    count reached saveCount. It is an error for saveCount to be greater than
-    getSaveCount(). To pop all the way back to the initial matrix/clip context
-    pass saveCount == 1.
-*/
 public static native void sk_canvas_restore_to_count(sk_canvas_t arg0, int saveCount);
-/**
-    Draws with the specified color and mode.
-**/
 public static native void sk_canvas_draw_color(sk_canvas_t ccanvas, @Cast("sk_color_t") int color, @Cast("sk_blendmode_t") int mode);
-/**
-   Draw a series of points, interpreted based on the sk_point_mode_t mode. For
-   all modes, the count parameter is interpreted as the total number of
-   points. For LINES_SK_POINT_MODE mode, count/2 line segments are drawn.
-   For POINTS_SK_POINT_MODE mode, each point is drawn centered at its coordinate, and its
-   size is specified by the paint's stroke-width. It draws as a square,
-   unless the paint's cap-type is round, in which the points are drawn as
-   circles.
-   For LINES_SK_POINT_MODE mode, each pair of points is drawn as a line segment,
-   respecting the paint's settings for cap/join/width.
-   For POLYGON_SK_POINT_MODE mode, the entire array is drawn as a series of connected
-   line segments.
-   Note that, while similar, LINES_SK_POINT_MODE and POLYGON_SK_POINT_MODE modes draw slightly
-   differently than the equivalent path built with a series of moveto,
-   lineto calls, in that the path will draw all of its contours at once,
-   with no interactions if contours intersect each other (think XOR
-   xfermode). sk_canvas_draw_paint always draws each element one at a time.
-*/
 public static native void sk_canvas_draw_points(sk_canvas_t arg0, @Cast("sk_point_mode_t") int arg1, @Cast("size_t") long arg2, @Const sk_point_t arg3, @Const sk_paint_t arg4);
-/**
-   Draws a single point with the specified paint
-*/
 public static native void sk_canvas_draw_point(sk_canvas_t arg0, float arg1, float arg2, @Const sk_paint_t arg3);
-/**
-   Draws a line from x0,y0 to x1,y1
-*/
 public static native void sk_canvas_draw_line(sk_canvas_t ccanvas, float x0, float y0, float x1, float y1, sk_paint_t cpaint);
-/**
-    Draw the text, with origin at (x,y), using the specified paint.
-    The origin is interpreted based on the Align setting in the paint.
-    <p>
-    @param text The text to be drawn
-    @param byteLength   The number of bytes to read from the text parameter
-    @param x        The x-coordinate of the origin of the text being drawn
-    @param y        The y-coordinate of the origin of the text being drawn
-    @param paint    The paint used for the text (e.g. color, size, style)
-*/
 public static native void sk_canvas_draw_text(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, float x, float y, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_text(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, float x, float y, @Const sk_paint_t paint);
-/**
-    Draw the text, with each character/glyph origin specified by the pos[]
-    array. The origin is interpreted by the Align setting in the paint.
-    <p>
-    @param text The text to be drawn
-    @param byteLength   The number of bytes to read from the text parameter
-    @param pos      Array of positions, used to position each character
-    @param paint    The paint used for the text (e.g. color, size, style)
-*/
 public static native void sk_canvas_draw_pos_text(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, @Const sk_point_t arg3, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_pos_text(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, @Const sk_point_t arg3, @Const sk_paint_t paint);
-/**
-    Draw the text, with origin at (x,y), using the specified paint, along
-    the specified path. The paint's Align setting determins where along the
-    path to start the text.
-    <p>
-    @param text The text to be drawn
-    @param byteLength   The number of bytes to read from the text parameter
-    @param path         The path the text should follow for its baseline
-    @param hOffset      The distance along the path to add to the text's
-                        starting position
-    @param vOffset      The distance above(-) or below(+) the path to
-                        position the text
-    @param paint        The paint used for the text
-*/
 public static native void sk_canvas_draw_text_on_path(sk_canvas_t arg0, @Cast("const char*") BytePointer text, @Cast("size_t") long byteLength, @Const sk_path_t path, float hOffset, float vOffset, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_text_on_path(sk_canvas_t arg0, String text, @Cast("size_t") long byteLength, @Const sk_path_t path, float hOffset, float vOffset, @Const sk_paint_t paint);
-/** 
-    Draw the specified bitmap, with its top/left corner at (x,y), using the
-    specified paint, transformed by the current matrix. Note: if the paint
-    contains a maskfilter that generates a mask which extends beyond the
-    bitmap's original width/height, then the bitmap will be drawn as if it
-    were in a Shader with CLAMP mode. Thus the color outside of the original
-    width/height will be the edge color replicated.
-    <p>
-    If a shader is present on the paint it will be ignored, except in the
-    case where the bitmap is kAlpha_8_SkColorType. In that case, the color is
-    generated by the shader.
-    <p>
-    @param bitmap   The bitmap to be drawn
-    @param left     The position of the left side of the bitmap being drawn
-    @param top      The position of the top side of the bitmap being drawn
-    @param paint    The paint used to draw the bitmap, or NULL
-*/
+public static native void sk_canvas_draw_text_blob(sk_canvas_t arg0, sk_textblob_t text, float x, float y, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_bitmap(sk_canvas_t ccanvas, @Const sk_bitmap_t bitmap, float left, float top, @Const sk_paint_t paint);
-/** Draw the specified bitmap, scaling and translating so that it fills the specified
-    dst rect. If the src rect is non-null, only that subset of the bitmap is transformed
-    and drawn.
-  
-    @param bitmap     The bitmap to be drawn
-    @param src        Optional: specify the subset of the bitmap to be drawn
-    @param dst        The destination rectangle where the scaled/translated
-                      bitmap will be drawn
-    @param paint      The paint used to draw the bitmap, or NULL
-*/
 public static native void sk_canvas_draw_bitmap_rect(sk_canvas_t ccanvas, @Const sk_bitmap_t bitmap, @Const sk_rect_t src, @Const sk_rect_t dst, @Const sk_paint_t paint);
-/**
-    Helper for setMatrix(identity). Sets the current matrix to identity.
-*/
 public static native void sk_canvas_reset_matrix(sk_canvas_t ccanvas);
-/**
-    Replace the current matrix with a copy of the specified matrix.
-    <p>
-    @param matrix The matrix that will be copied into the current matrix.
-*/
 public static native void sk_canvas_set_matrix(sk_canvas_t ccanvas, @Const sk_matrix_t matrix);
-/**
-    Return the current matrix on the canvas.
-    This does not account for the translate in any of the devices.
-    <p>
-    @param matrix The current matrix on the canvas.
-*/
 public static native void sk_canvas_get_total_matrix(sk_canvas_t ccanvas, sk_matrix_t matrix);
-/**
-    Draw the specified rounded rectangle using the specified paint. The
-    rectangle will be filled or stroked based on the style in the
-    paint.
-*/
 public static native void sk_canvas_draw_round_rect(sk_canvas_t arg0, @Const sk_rect_t arg1, float rx, float ry, @Const sk_paint_t arg4);
-/**
-    Modify the current clip with the specified rectangle.
-*/
 public static native void sk_canvas_clip_rect_with_operation(sk_canvas_t t, @Const sk_rect_t crect, @Cast("sk_clipop_t") int op, @Cast("bool") boolean doAA);
-/**
-    Modify the current clip with the specified path.
-*/
 public static native void sk_canvas_clip_path_with_operation(sk_canvas_t t, @Const sk_path_t crect, @Cast("sk_clipop_t") int op, @Cast("bool") boolean doAA);
-
-/**
-    Return the bounds of the current clip (in local coordinates) in the
-    bounds parameter, and return true if it is non-empty. This can be useful
-    in a way similar to quickReject, in that it tells you that drawing
-    outside of these bounds will be clipped out.
-*/
+public static native void sk_canvas_clip_rrect_with_operation(sk_canvas_t t, @Const sk_rrect_t crect, @Cast("sk_clipop_t") int op, @Cast("bool") boolean doAA);
 public static native @Cast("bool") boolean sk_canvas_get_local_clip_bounds(sk_canvas_t t, sk_rect_t cbounds);
-/**
-    Return the bounds of the current clip, in device coordinates; returns
-    true if non-empty. Maybe faster than getting the clip explicitly and
-    then taking its bounds.
-*/
 public static native @Cast("bool") boolean sk_canvas_get_device_clip_bounds(sk_canvas_t t, sk_irect_t cbounds);
-
-/**
-    Trigger the immediate execution of all pending draw operations. For the GPU
-    backend this will resolve all rendering to the GPU surface backing the
-    SkSurface that owns this canvas.
-*/
 public static native void sk_canvas_flush(sk_canvas_t ccanvas);
-
 public static native sk_canvas_t sk_canvas_new_from_bitmap(@Const sk_bitmap_t bitmap);
-
 public static native void sk_canvas_draw_annotation(sk_canvas_t t, @Const sk_rect_t rect, @Cast("const char*") BytePointer key, sk_data_t value);
 public static native void sk_canvas_draw_annotation(sk_canvas_t t, @Const sk_rect_t rect, String key, sk_data_t value);
 public static native void sk_canvas_draw_url_annotation(sk_canvas_t t, @Const sk_rect_t rect, sk_data_t value);
 public static native void sk_canvas_draw_named_destination_annotation(sk_canvas_t t, @Const sk_point_t point, sk_data_t value);
 public static native void sk_canvas_draw_link_destination_annotation(sk_canvas_t t, @Const sk_rect_t rect, sk_data_t value);
-
 public static native void sk_canvas_draw_bitmap_lattice(sk_canvas_t t, @Const sk_bitmap_t bitmap, @Const sk_lattice_t lattice, @Const sk_rect_t dst, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_image_lattice(sk_canvas_t t, @Const sk_image_t image, @Const sk_lattice_t lattice, @Const sk_rect_t dst, @Const sk_paint_t paint);
-
+public static native void sk_canvas_draw_bitmap_nine(sk_canvas_t t, @Const sk_bitmap_t bitmap, @Const sk_irect_t center, @Const sk_rect_t dst, @Const sk_paint_t paint);
+public static native void sk_canvas_draw_image_nine(sk_canvas_t t, @Const sk_image_t image, @Const sk_irect_t center, @Const sk_rect_t dst, @Const sk_paint_t paint);
 public static native void sk_canvas_draw_vertices(sk_canvas_t ccanvas, sk_vertices_t vertices, @Cast("sk_blendmode_t") int mode, @Const sk_paint_t paint);
+
+public static native sk_nodraw_canvas_t sk_nodraw_canvas_new(int width, int height);
+public static native void sk_nodraw_canvas_destroy(sk_nodraw_canvas_t arg0);
+
+public static native sk_nway_canvas_t sk_nway_canvas_new(int width, int height);
+public static native void sk_nway_canvas_destroy(sk_nway_canvas_t arg0);
+public static native void sk_nway_canvas_add_canvas(sk_nway_canvas_t arg0, sk_canvas_t canvas);
+public static native void sk_nway_canvas_remove_canvas(sk_nway_canvas_t arg0, sk_canvas_t canvas);
+public static native void sk_nway_canvas_remove_all(sk_nway_canvas_t arg0);
+
+public static native sk_overdraw_canvas_t sk_overdraw_canvas_new(sk_canvas_t canvas);
+public static native void sk_overdraw_canvas_destroy(sk_overdraw_canvas_t canvas);
 
 // #endif
 
@@ -1194,14 +1034,13 @@ public static native void sk_canvas_draw_vertices(sk_canvas_t ccanvas, sk_vertic
 // Parsed from sk_codec.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_codec_DEFINED
 // #define sk_codec_DEFINED
@@ -1210,29 +1049,22 @@ public static native void sk_canvas_draw_vertices(sk_canvas_t ccanvas, sk_vertic
 
 public static native @Cast("size_t") long sk_codec_min_buffered_bytes_needed();
 
-public static native sk_codec_t sk_codec_new_from_stream(sk_stream_t stream);
+public static native sk_codec_t sk_codec_new_from_stream(sk_stream_t stream, @Cast("sk_codec_result_t*") IntPointer result);
+public static native sk_codec_t sk_codec_new_from_stream(sk_stream_t stream, @Cast("sk_codec_result_t*") IntBuffer result);
+public static native sk_codec_t sk_codec_new_from_stream(sk_stream_t stream, @Cast("sk_codec_result_t*") int[] result);
 public static native sk_codec_t sk_codec_new_from_data(sk_data_t data);
-
 public static native void sk_codec_destroy(sk_codec_t codec);
 public static native void sk_codec_get_info(sk_codec_t codec, sk_imageinfo_t info);
-public static native void sk_codec_get_encodedinfo(sk_codec_t codec, sk_encodedinfo_t info);
-public static native @Cast("sk_codec_origin_t") int sk_codec_get_origin(sk_codec_t codec);
+public static native @Cast("sk_encodedorigin_t") int sk_codec_get_origin(sk_codec_t codec);
 public static native void sk_codec_get_scaled_dimensions(sk_codec_t codec, float desiredScale, sk_isize_t dimensions);
 public static native @Cast("bool") boolean sk_codec_get_valid_subset(sk_codec_t codec, sk_irect_t desiredSubset);
 public static native @Cast("sk_encoded_image_format_t") int sk_codec_get_encoded_format(sk_codec_t codec);
-public static native @Cast("sk_codec_result_t") int sk_codec_get_pixels(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntPointer ctable, IntPointer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_get_pixels(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntBuffer ctable, IntBuffer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_get_pixels(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") int[] ctable, int[] ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_get_pixels_using_defaults(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_incremental_decode(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntPointer ctable, IntPointer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_incremental_decode(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntBuffer ctable, IntBuffer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_incremental_decode(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") int[] ctable, int[] ctableCount);
+public static native @Cast("sk_codec_result_t") int sk_codec_get_pixels(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options);
+public static native @Cast("sk_codec_result_t") int sk_codec_start_incremental_decode(sk_codec_t codec, @Const sk_imageinfo_t info, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_codec_options_t options);
 public static native @Cast("sk_codec_result_t") int sk_codec_incremental_decode(sk_codec_t codec, IntPointer rowsDecoded);
 public static native @Cast("sk_codec_result_t") int sk_codec_incremental_decode(sk_codec_t codec, IntBuffer rowsDecoded);
 public static native @Cast("sk_codec_result_t") int sk_codec_incremental_decode(sk_codec_t codec, int[] rowsDecoded);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_scanline_decode(sk_codec_t codec, @Const sk_imageinfo_t info, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntPointer ctable, IntPointer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_scanline_decode(sk_codec_t codec, @Const sk_imageinfo_t info, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") IntBuffer ctable, IntBuffer ctableCount);
-public static native @Cast("sk_codec_result_t") int sk_codec_start_scanline_decode(sk_codec_t codec, @Const sk_imageinfo_t info, @Const sk_codec_options_t options, @Cast("sk_pmcolor_t*") int[] ctable, int[] ctableCount);
+public static native @Cast("sk_codec_result_t") int sk_codec_start_scanline_decode(sk_codec_t codec, @Const sk_imageinfo_t info, @Const sk_codec_options_t options);
 public static native int sk_codec_get_scanlines(sk_codec_t codec, Pointer dst, int countLines, @Cast("size_t") long rowBytes);
 public static native @Cast("bool") boolean sk_codec_skip_scanlines(sk_codec_t codec, int countLines);
 public static native @Cast("sk_codec_scanline_order_t") int sk_codec_get_scanline_order(sk_codec_t codec);
@@ -1240,6 +1072,7 @@ public static native int sk_codec_next_scanline(sk_codec_t codec);
 public static native int sk_codec_output_scanline(sk_codec_t codec, int inputScanline);
 public static native int sk_codec_get_frame_count(sk_codec_t codec);
 public static native void sk_codec_get_frame_info(sk_codec_t codec, sk_codec_frameinfo_t frameInfo);
+public static native @Cast("bool") boolean sk_codec_get_frame_info_for_index(sk_codec_t codec, int index, sk_codec_frameinfo_t frameInfo);
 public static native int sk_codec_get_repetition_count(sk_codec_t codec);
 
 // #endif
@@ -1248,14 +1081,13 @@ public static native int sk_codec_get_repetition_count(sk_codec_t codec);
 // Parsed from sk_colorfilter.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_colorfilter_DEFINED
 // #define sk_colorfilter_DEFINED
@@ -1270,6 +1102,7 @@ public static native sk_colorfilter_t sk_colorfilter_new_color_matrix(@Const Flo
 public static native sk_colorfilter_t sk_colorfilter_new_color_matrix(@Const FloatBuffer array);
 public static native sk_colorfilter_t sk_colorfilter_new_color_matrix(@Const float[] array);
 public static native sk_colorfilter_t sk_colorfilter_new_luma_color();
+public static native sk_colorfilter_t sk_colorfilter_new_high_contrast(@Const sk_highcontrastconfig_t config);
 public static native sk_colorfilter_t sk_colorfilter_new_table(@Cast("const uint8_t*") BytePointer table);
 public static native sk_colorfilter_t sk_colorfilter_new_table(@Cast("const uint8_t*") ByteBuffer table);
 public static native sk_colorfilter_t sk_colorfilter_new_table(@Cast("const uint8_t*") byte[] table);
@@ -1283,14 +1116,13 @@ public static native sk_colorfilter_t sk_colorfilter_new_table_argb(@Cast("const
 // Parsed from sk_colortable.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_colortable_DEFINED
 // #define sk_colortable_DEFINED
@@ -1314,86 +1146,30 @@ public static native void sk_colortable_read_colors(@Const sk_colortable_t ctabl
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_data_DEFINED
 // #define sk_data_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Returns a new empty sk_data_t.  This call must be balanced with a call to
-    sk_data_unref().
-*/
 public static native sk_data_t sk_data_new_empty();
-/**
-    Returns a new sk_data_t by copying the specified source data.
-    This call must be balanced with a call to sk_data_unref().
-*/
 public static native sk_data_t sk_data_new_with_copy(@Const Pointer src, @Cast("size_t") long length);
-/**
-    Pass ownership of the given memory to a new sk_data_t, which will
-    call free() when the refernce count of the data goes to zero.  For
-    example:
-        size_t length = 1024;
-        void* buffer = malloc(length);
-        memset(buffer, 'X', length);
-        sk_data_t* data = sk_data_new_from_malloc(buffer, length);
-    This call must be balanced with a call to sk_data_unref().
-*/
-public static native sk_data_t sk_data_new_from_malloc(@Const Pointer memory, @Cast("size_t") long length);
-/**
-    Returns a new sk_data_t using a subset of the data in the
-    specified source sk_data_t.  This call must be balanced with a
-    call to sk_data_unref().
-*/
 public static native sk_data_t sk_data_new_subset(@Const sk_data_t src, @Cast("size_t") long offset, @Cast("size_t") long length);
-/**
-    Increment the reference count on the given sk_data_t. Must be
-    balanced by a call to sk_data_unref().
-*/
 public static native void sk_data_ref(@Const sk_data_t arg0);
-/**
-    Decrement the reference count. If the reference count is 1 before
-    the decrement, then release both the memory holding the sk_data_t
-    and the memory it is managing.  New sk_data_t are created with a
-    reference count of 1.
-*/
 public static native void sk_data_unref(@Const sk_data_t arg0);
-/**
-    Returns the number of bytes stored.
-*/
 public static native @Cast("size_t") long sk_data_get_size(@Const sk_data_t arg0);
-/**
-    Returns the pointer to the data.
- */
 public static native @Const Pointer sk_data_get_data(@Const sk_data_t arg0);
-/**
-    Create a new dataref the file with the specified path.
-    If the file cannot be opened, this returns NULL.
-*/
 public static native sk_data_t sk_data_new_from_file(@Cast("const char*") BytePointer path);
 public static native sk_data_t sk_data_new_from_file(String path);
-/**
-    Attempt to read size bytes into a SkData. If the read succeeds, return the data,
-    else return NULL. Either way the stream's cursor may have been changed as a result
-    of calling read().
-*/
 public static native sk_data_t sk_data_new_from_stream(sk_stream_t stream, @Cast("size_t") long length);
-/**
-    Like data(), returns a read-only ptr into the data, but in this case
-    it is cast to uint8_t*, to make it easy to add an offset to it.
-*/
 public static native @Cast("const uint8_t*") BytePointer sk_data_get_bytes(@Const sk_data_t arg0);
-
 public static native sk_data_t sk_data_new_with_proc(@Const Pointer ptr, @Cast("size_t") long length, sk_data_release_proc proc, Pointer ctx);
-
 public static native sk_data_t sk_data_new_uninitialized(@Cast("size_t") long size);
 
 // #endif
@@ -1402,14 +1178,13 @@ public static native sk_data_t sk_data_new_uninitialized(@Cast("size_t") long si
 // Parsed from sk_document.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_document_DEFINED
 // #define sk_document_DEFINED
@@ -1418,10 +1193,8 @@ public static native sk_data_t sk_data_new_uninitialized(@Cast("size_t") long si
 
 public static native void sk_document_unref(sk_document_t document);
 
-public static native sk_document_t sk_document_create_pdf_from_stream(sk_wstream_t stream, float dpi);
-public static native sk_document_t sk_document_create_pdf_from_stream_with_metadata(sk_wstream_t stream, float dpi, @Const sk_document_pdf_metadata_t metadata);
-public static native sk_document_t sk_document_create_pdf_from_filename(@Cast("const char*") BytePointer path, float dpi);
-public static native sk_document_t sk_document_create_pdf_from_filename(String path, float dpi);
+public static native sk_document_t sk_document_create_pdf_from_stream(sk_wstream_t stream);
+public static native sk_document_t sk_document_create_pdf_from_stream_with_metadata(sk_wstream_t stream, @Const sk_document_pdf_metadata_t metadata);
 
 public static native sk_document_t sk_document_create_xps_from_stream(sk_wstream_t stream, float dpi);
 
@@ -1437,47 +1210,51 @@ public static native void sk_document_abort(sk_document_t document);
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_image_DEFINED
 // #define sk_image_DEFINED
 
 // #include "sk_types.h"
 
-public static native void sk_image_ref(@Const sk_image_t arg0);
-public static native void sk_image_unref(@Const sk_image_t arg0);
 public static native sk_image_t sk_image_new_raster_copy(@Const sk_imageinfo_t arg0, @Const Pointer pixels, @Cast("size_t") long rowBytes);
 public static native sk_image_t sk_image_new_raster_copy_with_pixmap(@Const sk_pixmap_t pixmap);
-public static native sk_image_t sk_image_new_raster_copy_with_colortable(@Const sk_imageinfo_t cinfo, @Const Pointer pixels, @Cast("size_t") long rowBytes, sk_colortable_t ctable);
 public static native sk_image_t sk_image_new_raster_data(@Const sk_imageinfo_t cinfo, sk_data_t pixels, @Cast("size_t") long rowBytes);
 public static native sk_image_t sk_image_new_raster(@Const sk_pixmap_t pixmap, sk_image_raster_release_proc releaseProc, Pointer context);
 public static native sk_image_t sk_image_new_from_bitmap(@Const sk_bitmap_t cbitmap);
-public static native sk_image_t sk_image_new_from_encoded(@Const sk_data_t encoded, @Const sk_irect_t subset);
-public static native sk_image_t sk_image_new_from_texture(gr_context_t context, @Const gr_backend_texture_desc_t desc, @Cast("sk_alphatype_t") int alpha, sk_colorspace_t colorSpace, sk_image_texture_release_proc releaseProc, Pointer releaseContext);
-public static native sk_image_t sk_image_new_from_adopted_texture(gr_context_t context, @Const gr_backend_texture_desc_t desc, @Cast("sk_alphatype_t") int alpha, sk_colorspace_t colorSpace);
+public static native sk_image_t sk_image_new_from_encoded(sk_data_t encoded, @Const sk_irect_t subset);
+public static native sk_image_t sk_image_new_from_texture(gr_context_t context, @Const gr_backendtexture_t texture, @Cast("gr_surfaceorigin_t") int origin, @Cast("sk_colortype_t") int colorType, @Cast("sk_alphatype_t") int alpha, sk_colorspace_t colorSpace, sk_image_texture_release_proc releaseProc, Pointer releaseContext);
+public static native sk_image_t sk_image_new_from_adopted_texture(gr_context_t context, @Const gr_backendtexture_t texture, @Cast("gr_surfaceorigin_t") int origin, @Cast("sk_colortype_t") int colorType, @Cast("sk_alphatype_t") int alpha, sk_colorspace_t colorSpace);
 public static native sk_image_t sk_image_new_from_picture(sk_picture_t picture, @Const sk_isize_t dimensions, @Const sk_matrix_t matrix, @Const sk_paint_t paint);
+
+public static native sk_image_t sk_image_make_subset(@Const sk_image_t cimage, @Const sk_irect_t subset);
+public static native sk_image_t sk_image_make_non_texture_image(@Const sk_image_t cimage);
+public static native sk_image_t sk_image_make_with_filter(@Const sk_image_t cimage, @Const sk_imagefilter_t filter, @Const sk_irect_t subset, @Const sk_irect_t clipBounds, sk_irect_t outSubset, sk_ipoint_t outOffset);
+
+public static native void sk_image_ref(@Const sk_image_t arg0);
+public static native void sk_image_unref(@Const sk_image_t arg0);
 public static native int sk_image_get_width(@Const sk_image_t arg0);
 public static native int sk_image_get_height(@Const sk_image_t arg0);
 public static native @Cast("uint32_t") int sk_image_get_unique_id(@Const sk_image_t arg0);
 public static native @Cast("sk_alphatype_t") int sk_image_get_alpha_type(@Const sk_image_t arg0);
+public static native @Cast("sk_colortype_t") int sk_image_get_color_type(@Const sk_image_t arg0);
+public static native sk_colorspace_t sk_image_get_colorspace(@Const sk_image_t arg0);
 public static native @Cast("bool") boolean sk_image_is_alpha_only(@Const sk_image_t arg0);
 public static native sk_shader_t sk_image_make_shader(@Const sk_image_t arg0, @Cast("sk_shader_tilemode_t") int tileX, @Cast("sk_shader_tilemode_t") int tileY, @Const sk_matrix_t localMatrix);
 public static native @Cast("bool") boolean sk_image_peek_pixels(@Const sk_image_t image, sk_pixmap_t pixmap);
 public static native @Cast("bool") boolean sk_image_is_texture_backed(@Const sk_image_t image);
+public static native @Cast("bool") boolean sk_image_is_lazy_generated(@Const sk_image_t image);
 public static native @Cast("bool") boolean sk_image_read_pixels(@Const sk_image_t image, @Const sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY, @Cast("sk_image_caching_hint_t") int cachingHint);
 public static native @Cast("bool") boolean sk_image_read_pixels_into_pixmap(@Const sk_image_t image, @Const sk_pixmap_t dst, int srcX, int srcY, @Cast("sk_image_caching_hint_t") int cachingHint);
 public static native @Cast("bool") boolean sk_image_scale_pixels(@Const sk_image_t image, @Const sk_pixmap_t dst, @Cast("sk_filter_quality_t") int quality, @Cast("sk_image_caching_hint_t") int cachingHint);
+public static native sk_data_t sk_image_ref_encoded(@Const sk_image_t arg0);
 public static native sk_data_t sk_image_encode(@Const sk_image_t arg0);
 public static native sk_data_t sk_image_encode_specific(@Const sk_image_t cimage, @Cast("sk_encoded_image_format_t") int encoder, int quality);
-public static native sk_image_t sk_image_make_subset(@Const sk_image_t cimage, @Const sk_irect_t subset);
-public static native sk_image_t sk_image_make_non_texture_image(@Const sk_image_t cimage);
-public static native sk_image_t sk_image_make_with_filter(@Const sk_image_t cimage, @Const sk_imagefilter_t filter, @Const sk_irect_t subset, @Const sk_irect_t clipBounds, sk_irect_t outSubset, sk_ipoint_t outOffset);
 
 // #endif
 
@@ -1485,14 +1262,13 @@ public static native sk_image_t sk_image_make_with_filter(@Const sk_image_t cima
 // Parsed from sk_imagefilter.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_imagefilter_DEFINED
 // #define sk_imagefilter_DEFINED
@@ -1510,7 +1286,7 @@ public static native sk_imagefilter_t sk_imagefilter_new_matrix(
     @Cast("sk_filter_quality_t") int quality, 
     sk_imagefilter_t input);
 public static native sk_imagefilter_t sk_imagefilter_new_alpha_threshold(
-    @Const sk_irect_t region,
+    @Const sk_region_t region,
     float innerThreshold,
     float outerThreshold, 
     sk_imagefilter_t input);
@@ -1596,7 +1372,8 @@ public static native sk_imagefilter_t sk_imagefilter_new_spot_lit_specular(
 public static native sk_imagefilter_t sk_imagefilter_new_magnifier(
     @Const sk_rect_t src, 
     float inset,
-    sk_imagefilter_t input);
+    sk_imagefilter_t input,
+    @Const sk_imagefilter_croprect_t cropRect);
 public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(
     @Const sk_isize_t kernelSize,
     @Const FloatPointer kernel,
@@ -1630,22 +1407,10 @@ public static native sk_imagefilter_t sk_imagefilter_new_matrix_convolution(
 public static native sk_imagefilter_t sk_imagefilter_new_merge(
     @Cast("sk_imagefilter_t**") PointerPointer filters,
     int count,
-    @Cast("const sk_blendmode_t*") IntPointer modes,
     @Const sk_imagefilter_croprect_t cropRect);
 public static native sk_imagefilter_t sk_imagefilter_new_merge(
     @ByPtrPtr sk_imagefilter_t filters,
     int count,
-    @Cast("const sk_blendmode_t*") IntPointer modes,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_merge(
-    @ByPtrPtr sk_imagefilter_t filters,
-    int count,
-    @Cast("const sk_blendmode_t*") IntBuffer modes,
-    @Const sk_imagefilter_croprect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_merge(
-    @ByPtrPtr sk_imagefilter_t filters,
-    int count,
-    @Cast("const sk_blendmode_t*") int[] modes,
     @Const sk_imagefilter_croprect_t cropRect);
 public static native sk_imagefilter_t sk_imagefilter_new_dilate(
     int radiusX, 
@@ -1667,10 +1432,6 @@ public static native sk_imagefilter_t sk_imagefilter_new_picture(
 public static native sk_imagefilter_t sk_imagefilter_new_picture_with_croprect(
     sk_picture_t picture,
     @Const sk_rect_t cropRect);
-public static native sk_imagefilter_t sk_imagefilter_new_picture_for_localspace(
-    sk_picture_t picture,
-    @Const sk_rect_t cropRect,
-    @Cast("sk_filter_quality_t") int filterQuality);
 public static native sk_imagefilter_t sk_imagefilter_new_tile(
     @Const sk_rect_t src,
     @Const sk_rect_t dst,
@@ -1686,6 +1447,16 @@ public static native sk_imagefilter_t sk_imagefilter_new_arithmetic(
     sk_imagefilter_t background,
     sk_imagefilter_t foreground,
     @Const sk_imagefilter_croprect_t cropRect);
+public static native sk_imagefilter_t sk_imagefilter_new_image_source(
+    sk_image_t image,
+    @Const sk_rect_t srcRect,
+    @Const sk_rect_t dstRect,
+    @Cast("sk_filter_quality_t") int filterQuality);
+public static native sk_imagefilter_t sk_imagefilter_new_image_source_default(
+    sk_image_t image);
+public static native sk_imagefilter_t sk_imagefilter_new_paint(
+    @Const sk_paint_t paint,
+    @Const sk_imagefilter_croprect_t cropRect);
 
 // #endif
 
@@ -1693,14 +1464,14 @@ public static native sk_imagefilter_t sk_imagefilter_new_arithmetic(
 // Parsed from sk_mask.h
 
 /*
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
  * Copyright 2017 Bluebeam Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_mask_DEFINED
 // #define sk_mask_DEFINED
@@ -1725,53 +1496,27 @@ public static native Pointer sk_mask_get_addr(sk_mask_t cmask, int x, int y);
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_maskfilter_DEFINED
 // #define sk_maskfilter_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Increment the reference count on the given sk_maskfilter_t. Must be
-    balanced by a call to sk_maskfilter_unref().
-*/
 public static native void sk_maskfilter_ref(sk_maskfilter_t arg0);
-/**
-    Decrement the reference count. If the reference count is 1 before
-    the decrement, then release both the memory holding the
-    sk_maskfilter_t and any other associated resources.  New
-    sk_maskfilter_t are created with a reference count of 1.
-*/
 public static native void sk_maskfilter_unref(sk_maskfilter_t arg0);
-
-/**
-    Create a blur maskfilter.
-    @param sk_blurstyle_t The SkBlurStyle to use
-    @param sigma Standard deviation of the Gaussian blur to apply. Must be > 0.
-*/
 public static native sk_maskfilter_t sk_maskfilter_new_blur(@Cast("sk_blurstyle_t") int arg0, float sigma);
-public static native sk_maskfilter_t sk_maskfilter_new_blur_with_flags(@Cast("sk_blurstyle_t") int arg0, float sigma, @Const sk_rect_t occluder, @Cast("sk_blurmaskfilter_blurflags_t") int flags);
-
-public static native sk_maskfilter_t sk_maskfilter_new_table(
-    @Cast("const uint8_t*") BytePointer table);
-public static native sk_maskfilter_t sk_maskfilter_new_table(
-    @Cast("const uint8_t*") ByteBuffer table);
-public static native sk_maskfilter_t sk_maskfilter_new_table(
-    @Cast("const uint8_t*") byte[] table);
-
-public static native sk_maskfilter_t sk_maskfilter_new_gamma(
-    float gamma);
-
-public static native sk_maskfilter_t sk_maskfilter_new_clip(
-    @Cast("uint8_t") byte min,
-    @Cast("uint8_t") byte max);
+public static native sk_maskfilter_t sk_maskfilter_new_blur_with_flags(@Cast("sk_blurstyle_t") int arg0, float sigma, @Const sk_rect_t occluder, @Cast("bool") boolean respectCTM);
+public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") BytePointer table);
+public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") ByteBuffer table);
+public static native sk_maskfilter_t sk_maskfilter_new_table(@Cast("const uint8_t*") byte[] table);
+public static native sk_maskfilter_t sk_maskfilter_new_gamma(float gamma);
+public static native sk_maskfilter_t sk_maskfilter_new_clip(@Cast("uint8_t") byte min, @Cast("uint8_t") byte max);
 
 // #endif
 
@@ -1780,115 +1525,27 @@ public static native sk_maskfilter_t sk_maskfilter_new_clip(
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_matrix_DEFINED
 // #define sk_matrix_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Set the matrix to identity
-*/
-public static native void sk_matrix_set_identity(sk_matrix_t arg0);
-
-/**
-    Set the matrix to translate by (tx, ty).
-*/
-public static native void sk_matrix_set_translate(sk_matrix_t arg0, float tx, float ty);
-
-/**
-    Preconcats the matrix with the specified translation.
-        M' = M * T(dx, dy)
-*/
-public static native void sk_matrix_pre_translate(sk_matrix_t arg0, float tx, float ty);
-
-/**
-    Postconcats the matrix with the specified translation.
-        M' = T(dx, dy) * M
-*/
-public static native void sk_matrix_post_translate(sk_matrix_t arg0, float tx, float ty);
-
-/** 
-    Set the matrix to scale by sx and sy. 
-*/
-public static native void sk_matrix_set_scale(sk_matrix_t arg0, float sx, float sy);
-
-/**
-    Preconcats the matrix with the specified scale.
-        M' = M * S(sx, sy)
-*/
-public static native void sk_matrix_pre_scale(sk_matrix_t arg0, float sx, float sy);
-
-/**
-    Postconcats the matrix with the specified scale.
-        M' = S(sx, sy) * M
-*/
-public static native void sk_matrix_post_scale(sk_matrix_t arg0, float sx, float sy);
-
-/**
-    Returns the matrix type
- */
-public static native int sk_matrix_try_invert(sk_matrix_t matrix, sk_matrix_t result);
-
-/**
-    Sets a matrix to the concatenation of the other two.
- */
+public static native @Cast("bool") boolean sk_matrix_try_invert(sk_matrix_t matrix, sk_matrix_t result);
 public static native void sk_matrix_concat(sk_matrix_t result, sk_matrix_t first, sk_matrix_t second);
-
-/**
-    Preconcatenates the matrix
- */
 public static native void sk_matrix_pre_concat(sk_matrix_t result, sk_matrix_t matrix);
-/**
-    Sets a matrix to the concatenation of the other two.
- */
 public static native void sk_matrix_post_concat(sk_matrix_t result, sk_matrix_t matrix);
-
-/**
-    Apply the \matrix to the coordinates in rectangle \source using the matrix definition into \dest
-*/
 public static native void sk_matrix_map_rect(sk_matrix_t matrix, sk_rect_t dest, sk_rect_t source);
-
-/**
-    Apply the \matrix to the array of points \src containing \count points into \dst
-*/
 public static native void sk_matrix_map_points(sk_matrix_t matrix, sk_point_t dst, sk_point_t src, int count);
-
-/**
-    Apply this matrix to the array of vectors specified by src, and write
-        the transformed vectors into the array of vectors specified by dst.
-        This is similar to mapPoints, but ignores any translation in the matrix.
-        @param dst  Where the transformed coordinates are written. It must
-                    contain at least count entries
-        @param src  The original coordinates that are to be transformed. It
-                    must contain at least count entries
-        @param count The number of vectors in src to read, and then transform
-                     into dst.
-*/
 public static native void sk_matrix_map_vectors(sk_matrix_t matrix, sk_point_t dst, sk_point_t src, int count);
-
-/**
-    Applies the matrix to the the \x,\y positions
-*/
 public static native void sk_matrix_map_xy(sk_matrix_t matrix, float x, float y, sk_point_t result);
-
-/**
-    Applies the matrix to the the \x,\y positions, ignoring the translation component.
-*/
 public static native void sk_matrix_map_vector(sk_matrix_t matrix, float x, float y, sk_point_t result);
-
-/**
-    Return the mean radius of a circle after it has been mapped by
-    this matrix. NOTE: in perspective this value assumes the circle
-    has its center at the origin.
-*/
 public static native float sk_matrix_map_radius(sk_matrix_t matrix, float radius);
 
 
@@ -1963,279 +1620,109 @@ public static native double sk_matrix44_determinant(sk_matrix44_t matrix);
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_paint_DEFINED
 // #define sk_paint_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Create a new paint with default settings:
-        antialias : false
-        stroke : false
-        stroke width : 0.0f (hairline)
-        stroke miter : 4.0f
-        stroke cap : BUTT_SK_STROKE_CAP
-        stroke join : MITER_SK_STROKE_JOIN
-        color : opaque black
-        shader : NULL
-        maskfilter : NULL
-        xfermode_mode : SRCOVER_SK_XFERMODE_MODE
-*/
 public static native sk_paint_t sk_paint_new();
 public static native sk_paint_t sk_paint_clone(sk_paint_t arg0);
-/**
-    Release the memory storing the sk_paint_t and unref() all
-    associated objects.
-*/
 public static native void sk_paint_delete(sk_paint_t arg0);
-/**
-    Return true iff the paint has antialiasing enabled.
-*/
 public static native @Cast("bool") boolean sk_paint_is_antialias(@Const sk_paint_t arg0);
-/**
-    Set to true to enable antialiasing, false to disable it on this
-    sk_paint_t.
-*/
 public static native void sk_paint_set_antialias(sk_paint_t arg0, @Cast("bool") boolean arg1);
-/**
-    Return the paint's curent drawing color.
-*/
 public static native @Cast("sk_color_t") int sk_paint_get_color(@Const sk_paint_t arg0);
-/**
-    Set the paint's curent drawing color.
-*/
 public static native void sk_paint_set_color(sk_paint_t arg0, @Cast("sk_color_t") int arg1);
-/**
-    Return true iff stroking is enabled rather than filling on this
-    sk_paint_t.
-*/
 public static native @Cast("sk_paint_style_t") int sk_paint_get_style(@Const sk_paint_t arg0);
-/**
-    Set to true to enable stroking rather than filling with this
-    sk_paint_t.
-*/
 public static native void sk_paint_set_style(sk_paint_t arg0, @Cast("sk_paint_style_t") int arg1);
-/**
-    Return the width for stroking.  A value of 0 strokes in hairline mode.
- */
 public static native float sk_paint_get_stroke_width(@Const sk_paint_t arg0);
-/**
-   Set the width for stroking.  A value of 0 strokes in hairline mode
-   (always draw 1-pixel wide, regardless of the matrix).
- */
 public static native void sk_paint_set_stroke_width(sk_paint_t arg0, float width);
-/**
-    Return the paint's stroke miter value. This is used to control the
-    behavior of miter joins when the joins angle is sharp.
-*/
 public static native float sk_paint_get_stroke_miter(@Const sk_paint_t arg0);
-/**
-   Set the paint's stroke miter value. This is used to control the
-   behavior of miter joins when the joins angle is sharp. This value
-   must be >= 0.
-*/
 public static native void sk_paint_set_stroke_miter(sk_paint_t arg0, float miter);
-/**
-    Return the paint's stroke cap type, controlling how the start and
-    end of stroked lines and paths are treated.
-*/
 public static native @Cast("sk_stroke_cap_t") int sk_paint_get_stroke_cap(@Const sk_paint_t arg0);
-/**
-    Set the paint's stroke cap type, controlling how the start and
-    end of stroked lines and paths are treated.
-*/
 public static native void sk_paint_set_stroke_cap(sk_paint_t arg0, @Cast("sk_stroke_cap_t") int arg1);
-/**
-    Return the paint's stroke join type, specifies the treatment that
-    is applied to corners in paths and rectangles
- */
 public static native @Cast("sk_stroke_join_t") int sk_paint_get_stroke_join(@Const sk_paint_t arg0);
-/**
-    Set the paint's stroke join type, specifies the treatment that
-    is applied to corners in paths and rectangles
- */
 public static native void sk_paint_set_stroke_join(sk_paint_t arg0, @Cast("sk_stroke_join_t") int arg1);
-/**
- *  Set the paint's shader to the specified parameter. This will automatically call unref() on
- *  any previous value, and call ref() on the new value.
- */
 public static native void sk_paint_set_shader(sk_paint_t arg0, sk_shader_t arg1);
-/**
- *  Set the paint's maskfilter to the specified parameter. This will automatically call unref() on
- *  any previous value, and call ref() on the new value.
- */
 public static native void sk_paint_set_maskfilter(sk_paint_t arg0, sk_maskfilter_t arg1);
-/**
- *  Set the paint's blend mode to the specified parameter.
- */
 public static native void sk_paint_set_blendmode(sk_paint_t arg0, @Cast("sk_blendmode_t") int arg1);
-/**
- *  Return true iff the paint has dithering enabled.
- */
 public static native @Cast("bool") boolean sk_paint_is_dither(@Const sk_paint_t arg0);
-/**
- *  Set to true to enable dithering, false to disable it on this
- *  sk_paint_t.
- */
 public static native void sk_paint_set_dither(sk_paint_t arg0, @Cast("bool") boolean arg1);
-/**
- *  Return true iff the paint has verticaltext enabled.
- */
 public static native @Cast("bool") boolean sk_paint_is_verticaltext(@Const sk_paint_t arg0);
-/**
- *  Set to true to enable verticaltext, false to disable it on this
- *  sk_paint_t.
- */
 public static native void sk_paint_set_verticaltext(sk_paint_t arg0, @Cast("bool") boolean arg1);
-/**
- *  Get the paint's shader object.
- */
 public static native sk_shader_t sk_paint_get_shader(sk_paint_t arg0);
-/**
- *  Get the paint's mask filter object.
- */
 public static native sk_maskfilter_t sk_paint_get_maskfilter(sk_paint_t arg0);
-/**
- *  Set or clear the paint's color filter.
- */
 public static native void sk_paint_set_colorfilter(sk_paint_t arg0, sk_colorfilter_t arg1);
-/**
- *  Get the paint's color filter object.
- */
 public static native sk_colorfilter_t sk_paint_get_colorfilter(sk_paint_t arg0);
-/**
- *  Set or clear the paint's image filter.
- */
 public static native void sk_paint_set_imagefilter(sk_paint_t arg0, sk_imagefilter_t arg1);
-/**
- *  Get the paint's image filter object.
- */
 public static native sk_imagefilter_t sk_paint_get_imagefilter(sk_paint_t arg0);
-/**
- *  Get the paint's blend mode.
- */
 public static native @Cast("sk_blendmode_t") int sk_paint_get_blendmode(sk_paint_t arg0);
-/**
- *  Set the paint's filter quality.
- */
 public static native void sk_paint_set_filter_quality(sk_paint_t arg0, @Cast("sk_filter_quality_t") int arg1);
-/**
- *  Get the paint's filter quality.
- */
 public static native @Cast("sk_filter_quality_t") int sk_paint_get_filter_quality(sk_paint_t arg0);
-/**
- *  Get the paint's typeface
- */
 public static native sk_typeface_t sk_paint_get_typeface(sk_paint_t arg0);
-/**
- *  Set the paint's typeface
- */
 public static native void sk_paint_set_typeface(sk_paint_t arg0, sk_typeface_t arg1);
-/**
- *  Get the paint's text sixe
- */
 public static native float sk_paint_get_textsize(sk_paint_t arg0);
-/**
- *  Set the paint's text sixe
- */
 public static native void sk_paint_set_textsize(sk_paint_t arg0, float arg1);
-/**
- *  Get the paint's text alignment
- */
 public static native @Cast("sk_text_align_t") int sk_paint_get_text_align(@Const sk_paint_t arg0);
-/**
- *  Set the paint's text alignment
- */
 public static native void sk_paint_set_text_align(sk_paint_t arg0, @Cast("sk_text_align_t") int arg1);
-/**
- *  Get the paint's text encoding
- */
 public static native @Cast("sk_text_encoding_t") int sk_paint_get_text_encoding(@Const sk_paint_t arg0);
-/**
- *  Set the paint's text encoding
- */
 public static native void sk_paint_set_text_encoding(sk_paint_t arg0, @Cast("sk_text_encoding_t") int arg1);
-/**
- *  Set the paint's horizontal scale factor for text
- */
 public static native float sk_paint_get_text_scale_x(@Const sk_paint_t cpaint);
-/**
- *  Set the paint's horizontal scale factor for text
- */
 public static native void sk_paint_set_text_scale_x(sk_paint_t cpaint, float scale);
-/**
- *  Set the paint's horizontal skew factor for text
- */
 public static native float sk_paint_get_text_skew_x(@Const sk_paint_t cpaint);
-/**
- *  Set the paint's horizontal skew factor for text
- */
 public static native void sk_paint_set_text_skew_x(sk_paint_t cpaint, float skew);
-/**
- *  Return the number of bytes of text that were measured
- */
 public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, FloatPointer measuredWidth);
 public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, FloatBuffer measuredWidth);
 public static native @Cast("size_t") long sk_paint_break_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float maxWidth, float[] measuredWidth);
-/**
- *  Return the width of the text
- */
 public static native float sk_paint_measure_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, sk_rect_t cbounds);
-/**
- *  Get the path outline of text.
- */
 public static native sk_path_t sk_paint_get_text_path(sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, float x, float y);
-/**
- *  Get the path outline of text with each glyph positioned.
- */
 public static native sk_path_t sk_paint_get_pos_text_path(sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long length, @Const sk_point_t pos);
-/**
- * Return the recommend spacing between lines (which will be fDescent - fAscent + fLeading). 
- * Also get the font metrics for the current typeface and type size if cfontmetrics is not null.
- */
 public static native float sk_paint_get_fontmetrics(sk_paint_t cpaint, sk_fontmetrics_t cfontmetrics, float scale);
-/**
- *  Return the paint's patheffect object  
- */  
 public static native sk_path_effect_t sk_paint_get_path_effect(sk_paint_t cpaint);
-/**
- *  Sets the paint's patheffect object  
- */  
 public static native void sk_paint_set_path_effect(sk_paint_t cpaint, sk_path_effect_t effect);  
-
 public static native @Cast("bool") boolean sk_paint_is_linear_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_linear_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_subpixel_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_subpixel_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_lcd_render_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_lcd_render_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_embedded_bitmap_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_embedded_bitmap_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("sk_paint_hinting_t") int sk_paint_get_hinting(@Const sk_paint_t arg0);
 public static native void sk_paint_set_hinting(sk_paint_t arg0, @Cast("sk_paint_hinting_t") int arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_autohinted(@Const sk_paint_t arg0);
 public static native void sk_paint_set_autohinted(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_fake_bold_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_fake_bold_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_is_dev_kern_text(@Const sk_paint_t arg0);
 public static native void sk_paint_set_dev_kern_text(sk_paint_t arg0, @Cast("bool") boolean arg1);
-
 public static native @Cast("bool") boolean sk_paint_get_fill_path(@Const sk_paint_t arg0, @Const sk_path_t src, sk_path_t dst, @Const sk_rect_t cullRect, float resScale);
+public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") ShortPointer glyphs);
+public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") ShortBuffer glyphs);
+public static native int sk_paint_text_to_glyphs(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, @Cast("uint16_t*") short[] glyphs);
+public static native @Cast("bool") boolean sk_paint_contains_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength);
+public static native int sk_paint_count_text(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength);
+public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatPointer widths, sk_rect_t bounds);
+public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatBuffer widths, sk_rect_t bounds);
+public static native int sk_paint_get_text_widths(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float[] widths, sk_rect_t bounds);
+public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const FloatPointer bounds, FloatPointer intervals);
+public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const FloatBuffer bounds, FloatBuffer intervals);
+public static native int sk_paint_get_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float x, float y, @Const float[] bounds, float[] intervals);
+public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const FloatPointer bounds, FloatPointer intervals);
+public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const FloatBuffer bounds, FloatBuffer intervals);
+public static native int sk_paint_get_pos_text_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, sk_point_t pos, @Const float[] bounds, float[] intervals);
+public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatPointer xpos, float y, @Const FloatPointer bounds, FloatPointer intervals);
+public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, FloatBuffer xpos, float y, @Const FloatBuffer bounds, FloatBuffer intervals);
+public static native int sk_paint_get_pos_text_h_intercepts(@Const sk_paint_t cpaint, @Const Pointer text, @Cast("size_t") long byteLength, float[] xpos, float y, @Const float[] bounds, float[] intervals);
+public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const FloatPointer bounds, FloatPointer intervals);
+public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const FloatBuffer bounds, FloatBuffer intervals);
+public static native int sk_paint_get_pos_text_blob_intercepts(@Const sk_paint_t cpaint, sk_textblob_t blob, @Const float[] bounds, float[] intervals);
 
 // #endif
 
@@ -2244,277 +1731,117 @@ public static native @Cast("bool") boolean sk_paint_get_fill_path(@Const sk_pain
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_path_DEFINED
 // #define sk_path_DEFINED
 
 // #include "sk_types.h"
 
-/** Create a new, empty path. */
+/* Path */
 public static native sk_path_t sk_path_new();
-/** Release the memory used by a sk_path_t. */
 public static native void sk_path_delete(sk_path_t arg0);
-
-/** Set the beginning of the next contour to the point (x,y). */
 public static native void sk_path_move_to(sk_path_t arg0, float x, float y);
-/**
-    Add a line from the last point to the specified point (x,y). If no
-    sk_path_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
 public static native void sk_path_line_to(sk_path_t arg0, float x, float y);
-/**
-    Add a quadratic bezier from the last point, approaching control
-    point (x0,y0), and ending at (x1,y1). If no sk_path_move_to() call
-    has been made for this contour, the first point is automatically
-    set to (0,0).
-*/
 public static native void sk_path_quad_to(sk_path_t arg0, float x0, float y0, float x1, float y1);
-/**
-    Add a conic curve from the last point, approaching control point
-    (x0,y01), and ending at (x1,y1) with weight w.  If no
-    sk_path_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
 public static native void sk_path_conic_to(sk_path_t arg0, float x0, float y0, float x1, float y1, float w);
-/**
-    Add a cubic bezier from the last point, approaching control points
-    (x0,y0) and (x1,y1), and ending at (x2,y2). If no
-    sk_path_move_to() call has been made for this contour, the first
-    point is automatically set to (0,0).
-*/
-public static native void sk_path_cubic_to(sk_path_t arg0,
-                             float x0, float y0,
-                             float x1, float y1,
-                             float x2, float y2);
-/**
- *  Append an elliptical arc from the current point in the format used by SVG.
- *  The center of the ellipse is computed to satisfy the constraints below.
- */
+public static native void sk_path_cubic_to(sk_path_t arg0, float x0, float y0, float x1, float y1, float x2, float y2);
 public static native void sk_path_arc_to(sk_path_t arg0, float rx, float ry, float xAxisRotate, @Cast("sk_path_arc_size_t") int largeArc, @Cast("sk_path_direction_t") int sweep, float x, float y);
-/**
- *  Same as arcTo format used by SVG, but the destination coordinate is relative to the
- *  last point on this contour. If there is no previous point, then a
- *  moveTo(0,0) is inserted automatically.
- */
 public static native void sk_path_rarc_to(sk_path_t arg0, float rx, float ry, float xAxisRotate, @Cast("sk_path_arc_size_t") int largeArc, @Cast("sk_path_direction_t") int sweep, float x, float y);
-
 public static native void sk_path_arc_to_with_oval(sk_path_t arg0, @Const sk_rect_t oval, float startAngle, float sweepAngle, @Cast("bool") boolean forceMoveTo);
-
 public static native void sk_path_arc_to_with_points(sk_path_t arg0, float x1, float y1, float x2, float y2, float radius);
-
-/**
-   Close the current contour. If the current point is not equal to the
-   first point of the contour, a line segment is automatically added.
-*/
 public static native void sk_path_close(sk_path_t arg0);
-
-/**
-    Add a closed rectangle contour to the path.
-*/
 public static native void sk_path_add_rect(sk_path_t arg0, @Const sk_rect_t arg1, @Cast("sk_path_direction_t") int arg2);
-/**
- *  Add a closed rounded rectangle contour to the path.
- */
+public static native void sk_path_add_rrect(sk_path_t arg0, @Const sk_rrect_t arg1, @Cast("sk_path_direction_t") int arg2);
+public static native void sk_path_add_rrect_start(sk_path_t arg0, @Const sk_rrect_t arg1, @Cast("sk_path_direction_t") int arg2, @Cast("uint32_t") int arg3);
 public static native void sk_path_add_rounded_rect(sk_path_t arg0, @Const sk_rect_t arg1, float arg2, float arg3, @Cast("sk_path_direction_t") int arg4);
-/**
-    Add a closed oval contour to the path
-*/
 public static native void sk_path_add_oval(sk_path_t arg0, @Const sk_rect_t arg1, @Cast("sk_path_direction_t") int arg2);
-/**
- *  Add a closed circle contour to the path. The circle contour begins at
- *  the right-most point (as though 1 were passed to addOval's 'start' param).
- */
 public static native void sk_path_add_circle(sk_path_t arg0, float x, float y, float radius, @Cast("sk_path_direction_t") int dir);
-
-/**
- *  If the path is empty, return false and set the rect parameter to [0, 0, 0, 0].
- *  else return true and set the rect parameter to the bounds of the control-points
- *  of the path.
- */
-public static native @Cast("bool") boolean sk_path_get_bounds(@Const sk_path_t arg0, sk_rect_t arg1);
-
+public static native void sk_path_get_bounds(@Const sk_path_t arg0, sk_rect_t arg1);
 public static native void sk_path_compute_tight_bounds(@Const sk_path_t arg0, sk_rect_t arg1);
-
-/** Set the beginning of the next contour relative to the last point on the
-        previous contour. If there is no previous contour, this is treated the
-        same as sk_path_move_to. 
-*/
 public static native void sk_path_rmove_to(sk_path_t arg0, float dx, float dy);
-/**
-    Same as sk_path_line_to, but the coordinates are considered relative to the last
-    point on this contour. If there is no previous point, then a sk_path_move_to(0,0)
-    is inserted automatically.
-*/
 public static native void sk_path_rline_to(sk_path_t arg0, float dx, float yd);
-/**
-    Same as sk_path_quad_to, but the coordinates are considered relative to the last
-    point on this contour. If there is no previous point, then a sk_path_move_to(0,0)
-    is inserted automatically.
-*/
 public static native void sk_path_rquad_to(sk_path_t arg0, float dx0, float dy0, float dx1, float dy1);
-/**
-    Same as sk_path_conic_to, but the coordinates are considered relative to the last
-    point on this contour. If there is no previous point, then a sk_path_move_to(0,0)
-    is inserted automatically.
-*/
 public static native void sk_path_rconic_to(sk_path_t arg0, float dx0, float dy0, float dx1, float dy1, float w);
-/**
-    Same as sk_path_cubic_to, but the coordinates are considered relative to the last
-    point on this contour. If there is no previous point, then a sk_path_move_to(0,0)
-    is inserted automatically.
-*/
-public static native void sk_path_rcubic_to(sk_path_t arg0,
-                             float dx0, float dy0,
-                             float dx1, float dy1,
-                             float dx2, float dy2);
-/**
-   Add a closed rectangle contour to the path with an initial point of the contour
-   (startIndex) expressed as a corner index (0-3)
- */
+public static native void sk_path_rcubic_to(sk_path_t arg0, float dx0, float dy0, float dx1, float dy1, float dx2, float dy2);
 public static native void sk_path_add_rect_start(sk_path_t cpath, @Const sk_rect_t crect, @Cast("sk_path_direction_t") int cdir, @Cast("uint32_t") int startIndex);
-/**
- Add the specified arc to the path as a new contour.
- */
 public static native void sk_path_add_arc(sk_path_t cpath, @Const sk_rect_t crect, float startAngle, float sweepAngle);
-/**
-    Get the fill type of the path.
-*/
 public static native @Cast("sk_path_filltype_t") int sk_path_get_filltype(sk_path_t arg0);
-/**
-    Set the fill type of the path.
-*/
 public static native void sk_path_set_filltype(sk_path_t arg0, @Cast("sk_path_filltype_t") int arg1);
-/**
-    Transform the points in this path by matrix, and write the answer back into the path
-*/
 public static native void sk_path_transform(sk_path_t cpath, @Const sk_matrix_t cmatrix);
-/**
-    Creates a copy of the path
-*/
 public static native sk_path_t sk_path_clone(@Const sk_path_t cpath);
+public static native void sk_path_add_path_offset(sk_path_t cpath, sk_path_t other, float dx, float dy, @Cast("sk_path_add_mode_t") int add_mode);
+public static native void sk_path_add_path_matrix(sk_path_t cpath, sk_path_t other, sk_matrix_t matrix, @Cast("sk_path_add_mode_t") int add_mode);
+public static native void sk_path_add_path(sk_path_t cpath, sk_path_t other, @Cast("sk_path_add_mode_t") int add_mode);
+public static native void sk_path_add_path_reverse(sk_path_t cpath, sk_path_t other);
+public static native void sk_path_reset(sk_path_t cpath);
+public static native void sk_path_rewind(sk_path_t cpath);
+public static native int sk_path_count_points(@Const sk_path_t cpath);
+public static native int sk_path_count_verbs(@Const sk_path_t cpath);
+public static native void sk_path_get_point(@Const sk_path_t cpath, int index, sk_point_t point);
+public static native int sk_path_get_points(@Const sk_path_t cpath, sk_point_t points, int max);
+public static native @Cast("bool") boolean sk_path_contains(@Const sk_path_t cpath, float x, float y);
+public static native @Cast("sk_path_convexity_t") int sk_path_get_convexity(@Const sk_path_t cpath);
+public static native void sk_path_set_convexity(sk_path_t cpath, @Cast("sk_path_convexity_t") int convexity);
+public static native @Cast("bool") boolean sk_path_parse_svg_string(sk_path_t cpath, @Cast("const char*") BytePointer str);
+public static native @Cast("bool") boolean sk_path_parse_svg_string(sk_path_t cpath, String str);
+public static native void sk_path_to_svg_string(@Const sk_path_t cpath, sk_string_t str);
+public static native @Cast("bool") boolean sk_path_get_last_point(@Const sk_path_t cpath, sk_point_t point);
+public static native int sk_path_convert_conic_to_quads(@Const sk_point_t p0, @Const sk_point_t p1, @Const sk_point_t p2, float w, sk_point_t pts, int pow2);
+public static native void sk_path_add_poly(sk_path_t cpath, @Const sk_point_t points, int count, @Cast("bool") boolean close);
+public static native @Cast("uint32_t") int sk_path_get_segment_masks(sk_path_t cpath);
+public static native @Cast("bool") boolean sk_path_is_oval(sk_path_t cpath, sk_rect_t bounds);
+public static native @Cast("bool") boolean sk_path_is_rrect(sk_path_t cpath, sk_rrect_t bounds);
+public static native @Cast("bool") boolean sk_path_is_line(sk_path_t cpath, sk_point_t line);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") BoolPointer isClosed, @Cast("sk_path_direction_t*") IntPointer direction);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") boolean[] isClosed, @Cast("sk_path_direction_t*") IntBuffer direction);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") BoolPointer isClosed, @Cast("sk_path_direction_t*") int[] direction);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") boolean[] isClosed, @Cast("sk_path_direction_t*") IntPointer direction);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") BoolPointer isClosed, @Cast("sk_path_direction_t*") IntBuffer direction);
+public static native @Cast("bool") boolean sk_path_is_rect(sk_path_t cpath, sk_rect_t rect, @Cast("bool*") boolean[] isClosed, @Cast("sk_path_direction_t*") int[] direction);
 
 /* Iterators */
 public static native sk_path_iterator_t sk_path_create_iter(sk_path_t cpath, int forceClose);
-
 public static native @Cast("sk_path_verb_t") int sk_path_iter_next(sk_path_iterator_t iterator, sk_point_t points, int doConsumeDegenerates, int exact);
-
 public static native float sk_path_iter_conic_weight(sk_path_iterator_t iterator);
-
 public static native int sk_path_iter_is_close_line(sk_path_iterator_t iterator);
-
 public static native int sk_path_iter_is_closed_contour(sk_path_iterator_t iterator);
-
 public static native void sk_path_iter_destroy(sk_path_iterator_t iterator);
 
 /* Raw iterators */
 public static native sk_path_rawiterator_t sk_path_create_rawiter(sk_path_t cpath);
-
 public static native @Cast("sk_path_verb_t") int sk_path_rawiter_peek(sk_path_rawiterator_t iterator);
-
 public static native @Cast("sk_path_verb_t") int sk_path_rawiter_next(sk_path_rawiterator_t iterator, sk_point_t points);
-
 public static native float sk_path_rawiter_conic_weight(sk_path_rawiterator_t iterator);
-
 public static native void sk_path_rawiter_destroy(sk_path_rawiterator_t iterator);
 
-/* Paths */
-
-/**
-   Adds the \other path to the \cpath by appending a \dx, \dy offset to each node, using the specified adding mode in \add_mode
- */ 
-public static native void sk_path_add_path_offset(sk_path_t cpath, sk_path_t other, float dx, float dy, @Cast("sk_path_add_mode_t") int add_mode);
-/**
-   Adds the \other path to the \cpath by applying the \matrix transformation on the \other, using the specified adding mode in \add_mode
- */ 
-public static native void sk_path_add_path_matrix(sk_path_t cpath, sk_path_t other, sk_matrix_t matrix, @Cast("sk_path_add_mode_t") int add_mode);
-/**
-   Adds the \other path to the \cpath using the specified adding mode in \add_mode
- */ 
-public static native void sk_path_add_path(sk_path_t cpath, sk_path_t other, @Cast("sk_path_add_mode_t") int add_mode);
-public static native void sk_path_add_path_reverse(sk_path_t cpath, sk_path_t other);
-
-/**
-   Clear any lines and curves from the path, making it empty. This frees up
-   internal storage associated with those segments.
-   On Android, does not change fSourcePath.
- */
-public static native void sk_path_reset(sk_path_t cpath);
-
-/**
-   Similar to sk_path_reset (), in that all lines and curves are removed from the
-   path. However, any internal storage for those lines/curves is retained,
-   making reuse of the path potentially faster.
-   On Android, does not change fSourcePath.   
- */
-public static native void sk_path_rewind(sk_path_t cpath);
-
-public static native int sk_path_count_points(@Const sk_path_t cpath);
-public static native int sk_path_count_verbs(@Const sk_path_t cpath);
-
-public static native void sk_path_get_point(@Const sk_path_t cpath, int index, sk_point_t point);
-
-public static native int sk_path_get_points(@Const sk_path_t cpath, sk_point_t points, int max);
-
-public static native @Cast("bool") boolean sk_path_contains(@Const sk_path_t cpath, float x, float y);
-
-public static native @Cast("sk_path_convexity_t") int sk_path_get_convexity(@Const sk_path_t cpath);
-
-public static native void sk_path_set_convexity(sk_path_t cpath, @Cast("sk_path_convexity_t") int convexity);
-
-public static native @Cast("bool") boolean sk_path_parse_svg_string(sk_path_t cpath, @Cast("const char*") BytePointer str);
-public static native @Cast("bool") boolean sk_path_parse_svg_string(sk_path_t cpath, String str);
-
-public static native void sk_path_to_svg_string(@Const sk_path_t cpath, sk_string_t str);
-
-public static native @Cast("bool") boolean sk_path_get_last_point(@Const sk_path_t cpath, sk_point_t point);
-
+/* Path Ops */
 public static native @Cast("bool") boolean sk_pathop_op(@Const sk_path_t one, @Const sk_path_t two, @Cast("sk_pathop_t") int op, sk_path_t result);
-
 public static native @Cast("bool") boolean sk_pathop_simplify(@Const sk_path_t path, sk_path_t result);
-
 public static native @Cast("bool") boolean sk_pathop_tight_bounds(@Const sk_path_t path, sk_rect_t result);
 
+/* Path Op Builder */
 public static native sk_opbuilder_t sk_opbuilder_new();
-
 public static native void sk_opbuilder_destroy(sk_opbuilder_t builder);
-
 public static native void sk_opbuilder_add(sk_opbuilder_t builder, @Const sk_path_t path, @Cast("sk_pathop_t") int op);
-
 public static native @Cast("bool") boolean sk_opbuilder_resolve(sk_opbuilder_t builder, sk_path_t result);
 
-public static native int sk_path_convert_conic_to_quads(@Const sk_point_t p0, @Const sk_point_t p1, @Const sk_point_t p2, float w, sk_point_t pts, int pow2);
-
+/* Path Measure */
 public static native sk_pathmeasure_t sk_pathmeasure_new();
-
 public static native sk_pathmeasure_t sk_pathmeasure_new_with_path(@Const sk_path_t path, @Cast("bool") boolean forceClosed, float resScale);
-
 public static native void sk_pathmeasure_destroy(sk_pathmeasure_t pathMeasure);
-
 public static native void sk_pathmeasure_set_path(sk_pathmeasure_t pathMeasure, @Const sk_path_t path, @Cast("bool") boolean forceClosed);
-
 public static native float sk_pathmeasure_get_length(sk_pathmeasure_t pathMeasure);
-
 public static native @Cast("bool") boolean sk_pathmeasure_get_pos_tan(sk_pathmeasure_t pathMeasure, float distance, sk_point_t position, @Cast("sk_vector_t*") sk_point_t tangent);
-
 public static native @Cast("bool") boolean sk_pathmeasure_get_matrix(sk_pathmeasure_t pathMeasure, float distance, sk_matrix_t matrix, @Cast("sk_pathmeasure_matrixflags_t") int flags);
-
 public static native @Cast("bool") boolean sk_pathmeasure_get_segment(sk_pathmeasure_t pathMeasure, float start, float stop, sk_path_t dst, @Cast("bool") boolean startWithMoveTo);
-
 public static native @Cast("bool") boolean sk_pathmeasure_is_closed(sk_pathmeasure_t pathMeasure);
-
 public static native @Cast("bool") boolean sk_pathmeasure_next_contour(sk_pathmeasure_t pathMeasure);
-
-public static native void sk_path_add_poly(sk_path_t cpath, @Const sk_point_t points, int count, @Cast("bool") boolean close);
-
-public static native @Cast("uint32_t") int sk_path_get_segment_masks(sk_path_t cpath);
 
 // #endif
 
@@ -2522,14 +1849,13 @@ public static native @Cast("uint32_t") int sk_path_get_segment_masks(sk_path_t c
 // Parsed from sk_patheffect.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_patheffect_DEFINED
 // #define sk_patheffect_DEFINED
@@ -2547,6 +1873,7 @@ public static native sk_path_effect_t sk_path_effect_create_2d_path(@Const sk_ma
 public static native sk_path_effect_t sk_path_effect_create_dash(@Const FloatPointer intervals, int count, float phase);
 public static native sk_path_effect_t sk_path_effect_create_dash(@Const FloatBuffer intervals, int count, float phase);
 public static native sk_path_effect_t sk_path_effect_create_dash(@Const float[] intervals, int count, float phase);
+public static native sk_path_effect_t sk_path_effect_create_trim(float start, float stop, @Cast("sk_path_effect_trim_mode_t") int mode);
 
 // #endif
 
@@ -2555,69 +1882,27 @@ public static native sk_path_effect_t sk_path_effect_create_dash(@Const float[] 
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_picture_DEFINED
 // #define sk_picture_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Create a new sk_picture_recorder_t.  Its resources should be
-    released with a call to sk_picture_recorder_delete().
-*/
 public static native sk_picture_recorder_t sk_picture_recorder_new();
-/**
-    Release the memory and other resources used by this
-    sk_picture_recorder_t.
-*/
 public static native void sk_picture_recorder_delete(sk_picture_recorder_t arg0);
-
-/**
-   Returns the canvas that records the drawing commands
-   <p>
-   @param sk_rect_t* the cull rect used when recording this
-                     picture. Any drawing the falls outside of this
-                     rect is undefined, and may be drawn or it may not.
-*/
 public static native sk_canvas_t sk_picture_recorder_begin_recording(sk_picture_recorder_t arg0, @Const sk_rect_t arg1);
-/**
-    Signal that the caller is done recording. This invalidates the
-    canvas returned by begin_recording. Ownership of the sk_picture_t
-    is passed to the caller, who must call sk_picture_unref() when
-    they are done using it.  The returned picture is immutable.
-*/
 public static native sk_picture_t sk_picture_recorder_end_recording(sk_picture_recorder_t arg0);
-
 public static native sk_canvas_t sk_picture_get_recording_canvas(sk_picture_recorder_t crec);
 
-/**
-    Increment the reference count on the given sk_picture_t. Must be
-    balanced by a call to sk_picture_unref().
-*/
 public static native void sk_picture_ref(sk_picture_t arg0);
-/**
-    Decrement the reference count. If the reference count is 1 before
-    the decrement, then release both the memory holding the
-    sk_picture_t and any resouces it may be managing.  New
-    sk_picture_t are created with a reference count of 1.
-*/
 public static native void sk_picture_unref(sk_picture_t arg0);
-
-/**
-    Returns a non-zero value unique among all pictures.
- */
 public static native @Cast("uint32_t") int sk_picture_get_unique_id(sk_picture_t arg0);
-
-/**
-    Return the cull rect specified when this picture was recorded.
-*/
 public static native void sk_picture_get_cull_rect(sk_picture_t arg0, sk_rect_t arg1);
 
 // #endif
@@ -2626,14 +1911,13 @@ public static native void sk_picture_get_cull_rect(sk_picture_t arg0, sk_rect_t 
 // Parsed from sk_pixmap.h
 
 /*
- * Copyright 2017 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_pixmap_DEFINED
 // #define sk_pixmap_DEFINED
@@ -2642,15 +1926,19 @@ public static native void sk_picture_get_cull_rect(sk_picture_t arg0, sk_rect_t 
 
 public static native void sk_pixmap_destructor(sk_pixmap_t cpixmap);
 public static native sk_pixmap_t sk_pixmap_new();
-public static native sk_pixmap_t sk_pixmap_new_with_params(@Const sk_imageinfo_t cinfo, @Const Pointer addr, @Cast("size_t") long rowBytes, sk_colortable_t ctable);
+public static native sk_pixmap_t sk_pixmap_new_with_params(@Const sk_imageinfo_t cinfo, @Const Pointer addr, @Cast("size_t") long rowBytes);
 public static native void sk_pixmap_reset(sk_pixmap_t cpixmap);
-public static native void sk_pixmap_reset_with_params(sk_pixmap_t cpixmap, @Const sk_imageinfo_t cinfo, @Const Pointer addr, @Cast("size_t") long rowBytes, sk_colortable_t ctable);
-public static native void sk_pixmap_get_info(sk_pixmap_t cpixmap, sk_imageinfo_t cinfo);
-public static native @Cast("size_t") long sk_pixmap_get_row_bytes(sk_pixmap_t cpixmap);
-public static native @Const Pointer sk_pixmap_get_pixels(sk_pixmap_t cpixmap);
-public static native sk_colortable_t sk_pixmap_get_colortable(sk_pixmap_t cpixmap);
-
-public static native @Cast("bool") boolean sk_bitmapscaler_resize(@Const sk_pixmap_t dst, @Const sk_pixmap_t src, @Cast("sk_bitmapscaler_resizemethod_t") int method);
+public static native void sk_pixmap_reset_with_params(sk_pixmap_t cpixmap, @Const sk_imageinfo_t cinfo, @Const Pointer addr, @Cast("size_t") long rowBytes);
+public static native void sk_pixmap_get_info(@Const sk_pixmap_t cpixmap, sk_imageinfo_t cinfo);
+public static native @Cast("size_t") long sk_pixmap_get_row_bytes(@Const sk_pixmap_t cpixmap);
+public static native @Const Pointer sk_pixmap_get_pixels(@Const sk_pixmap_t cpixmap);
+public static native @Const Pointer sk_pixmap_get_pixels_with_xy(@Const sk_pixmap_t cpixmap, int x, int y);
+public static native @Cast("sk_color_t") int sk_pixmap_get_pixel_color(@Const sk_pixmap_t cpixmap, int x, int y);
+public static native @Cast("bool") boolean sk_pixmap_encode_image(sk_wstream_t dst, @Const sk_pixmap_t src, @Cast("sk_encoded_image_format_t") int encoder, int quality);
+public static native @Cast("bool") boolean sk_pixmap_read_pixels(@Const sk_pixmap_t cpixmap, @Const sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY, @Cast("sk_transfer_function_behavior_t") int behavior);
+public static native @Cast("bool") boolean sk_pixmap_scale_pixels(@Const sk_pixmap_t cpixmap, @Const sk_pixmap_t dst, @Cast("sk_filter_quality_t") int quality);
+public static native @Cast("bool") boolean sk_pixmap_extract_subset(@Const sk_pixmap_t cpixmap, sk_pixmap_t result, @Const sk_irect_t subset);
+public static native @Cast("bool") boolean sk_pixmap_erase_color(@Const sk_pixmap_t cpixmap, @Cast("sk_color_t") int color, @Const sk_irect_t subset);
 
 public static native @Cast("sk_color_t") int sk_color_unpremultiply(@Cast("const sk_pmcolor_t") int pmcolor);
 public static native @Cast("sk_pmcolor_t") int sk_color_premultiply(@Cast("const sk_color_t") int color);
@@ -2664,9 +1952,13 @@ public static native void sk_color_get_bit_shift(IntPointer a, IntPointer r, Int
 public static native void sk_color_get_bit_shift(IntBuffer a, IntBuffer r, IntBuffer g, IntBuffer b);
 public static native void sk_color_get_bit_shift(int[] a, int[] r, int[] g, int[] b);
 
-public static native @Cast("bool") boolean sk_pixmap_encode_image(sk_wstream_t dst, @Const sk_pixmap_t src, @Cast("sk_encoded_image_format_t") int encoder, int quality);
+public static native void sk_swizzle_swap_rb(@Cast("uint32_t*") IntPointer dest, @Cast("const uint32_t*") IntPointer src, int count);
+public static native void sk_swizzle_swap_rb(@Cast("uint32_t*") IntBuffer dest, @Cast("const uint32_t*") IntBuffer src, int count);
+public static native void sk_swizzle_swap_rb(@Cast("uint32_t*") int[] dest, @Cast("const uint32_t*") int[] src, int count);
 
-public static native @Cast("bool") boolean sk_pixmap_read_pixels(@Const sk_pixmap_t cpixmap, @Const sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY);
+public static native @Cast("bool") boolean sk_webpencoder_encode(sk_wstream_t dst, @Const sk_pixmap_t src, @ByVal sk_webpencoder_options_t options);
+public static native @Cast("bool") boolean sk_jpegencoder_encode(sk_wstream_t dst, @Const sk_pixmap_t src, @ByVal sk_jpegencoder_options_t options);
+public static native @Cast("bool") boolean sk_pngencoder_encode(sk_wstream_t dst, @Const sk_pixmap_t src, @ByVal sk_pngencoder_options_t options);
 
 // #endif
 
@@ -2674,7 +1966,10 @@ public static native @Cast("bool") boolean sk_pixmap_read_pixels(@Const sk_pixma
 // Parsed from sk_region.h
 
 /*
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
  * Copyright 2016 Bluebeam Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
@@ -2705,13 +2000,12 @@ public static native void sk_region_get_bounds(sk_region_t r, sk_irect_t rect);
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_shader_DEFINED
 // #define sk_shader_DEFINED
@@ -2720,25 +2014,6 @@ public static native void sk_region_get_bounds(sk_region_t r, sk_irect_t rect);
 
 public static native void sk_shader_ref(sk_shader_t arg0);
 public static native void sk_shader_unref(sk_shader_t arg0);
-
-/**
-    Returns a shader that generates a linear gradient between the two
-    specified points.
-    <p>
-    @param points The start and end points for the gradient.
-    @param colors The array[count] of colors, to be distributed between
-                  the two points
-    @param colorPos May be NULL. array[count] of SkScalars, or NULL, of
-                    the relative position of each corresponding color
-                    in the colors array. If this is NULL, the the
-                    colors are distributed evenly between the start
-                    and end point.  If this is not null, the values
-                    must begin with 0, end with 1.0, and intermediate
-                    values must be strictly increasing.
-    @param colorCount Must be >=2. The number of colors (and pos if not
-                      NULL) entries.
-    @param mode The tiling mode
-*/
 public static native sk_shader_t sk_shader_new_linear_gradient(@Const sk_point_t points,
                                            @Cast("const sk_color_t*") IntPointer colors,
                                            @Const FloatPointer colorPos,
@@ -2757,29 +2032,6 @@ public static native sk_shader_t sk_shader_new_linear_gradient(@Const sk_point_t
                                            int colorCount,
                                            @Cast("sk_shader_tilemode_t") int tileMode,
                                            @Const sk_matrix_t localMatrix);
-
-
-/**
-    Returns a shader that generates a radial gradient given the center
-    and radius.
-    <p>
-    @param center The center of the circle for this gradient
-    @param radius Must be positive. The radius of the circle for this
-                  gradient
-    @param colors The array[count] of colors, to be distributed
-                  between the center and edge of the circle
-    @param colorPos May be NULL. The array[count] of the relative
-                    position of each corresponding color in the colors
-                    array. If this is NULL, the the colors are
-                    distributed evenly between the center and edge of
-                    the circle.  If this is not null, the values must
-                    begin with 0, end with 1.0, and intermediate
-                    values must be strictly increasing.
-    @param count Must be >= 2. The number of colors (and pos if not
-                 NULL) entries
-    @param tileMode The tiling mode
-    @param localMatrix May be NULL
-*/
 public static native sk_shader_t sk_shader_new_radial_gradient(@Const sk_point_t center,
                                            float radius,
                                            @Cast("const sk_color_t*") IntPointer colors,
@@ -2801,65 +2053,30 @@ public static native sk_shader_t sk_shader_new_radial_gradient(@Const sk_point_t
                                            int colorCount,
                                            @Cast("sk_shader_tilemode_t") int tileMode,
                                            @Const sk_matrix_t localMatrix);
-
-/**
-    Returns a shader that generates a sweep gradient given a center.
-    <p>
-    @param center The coordinates of the center of the sweep
-    @param colors The array[count] of colors, to be distributed around
-                  the center.
-    @param colorPos May be NULL. The array[count] of the relative
-                    position of each corresponding color in the colors
-                    array. If this is NULL, the the colors are
-                    distributed evenly between the center and edge of
-                    the circle.  If this is not null, the values must
-                    begin with 0, end with 1.0, and intermediate
-                    values must be strictly increasing.
-    @param colorCount Must be >= 2. The number of colors (and pos if
-                      not NULL) entries
-    @param localMatrix May be NULL
-*/
 public static native sk_shader_t sk_shader_new_sweep_gradient(@Const sk_point_t center,
                                           @Cast("const sk_color_t*") IntPointer colors,
                                           @Const FloatPointer colorPos,
                                           int colorCount,
+                                          @Cast("sk_shader_tilemode_t") int tileMode,
+                                          float startAngle,
+                                          float endAngle,
                                           @Const sk_matrix_t localMatrix);
 public static native sk_shader_t sk_shader_new_sweep_gradient(@Const sk_point_t center,
                                           @Cast("const sk_color_t*") IntBuffer colors,
                                           @Const FloatBuffer colorPos,
                                           int colorCount,
+                                          @Cast("sk_shader_tilemode_t") int tileMode,
+                                          float startAngle,
+                                          float endAngle,
                                           @Const sk_matrix_t localMatrix);
 public static native sk_shader_t sk_shader_new_sweep_gradient(@Const sk_point_t center,
                                           @Cast("const sk_color_t*") int[] colors,
                                           @Const float[] colorPos,
                                           int colorCount,
+                                          @Cast("sk_shader_tilemode_t") int tileMode,
+                                          float startAngle,
+                                          float endAngle,
                                           @Const sk_matrix_t localMatrix);
-
-/**
-    Returns a shader that generates a conical gradient given two circles, or
-    returns NULL if the inputs are invalid. The gradient interprets the
-    two circles according to the following HTML spec.
-    http://dev.w3.org/html5/2dcontext/#dom-context-2d-createradialgradient
-    <p>
-    Returns a shader that generates a sweep gradient given a center.
-    <p>
-    @param start, startRadius Defines the first circle.
-    @param end, endRadius Defines the first circle.
-    @param colors The array[count] of colors, to be distributed between
-                  the two circles.
-    @param colorPos May be NULL. The array[count] of the relative
-                    position of each corresponding color in the colors
-                    array. If this is NULL, the the colors are
-                    distributed evenly between the two circles.  If
-                    this is not null, the values must begin with 0,
-                    end with 1.0, and intermediate values must be
-                    strictly increasing.
-    @param colorCount Must be >= 2. The number of colors (and pos if
-                      not NULL) entries
-    @param tileMode The tiling mode
-    @param localMatrix May be NULL
-<p>
-*/
 public static native sk_shader_t sk_shader_new_two_point_conical_gradient(
         @Const sk_point_t start,
         float startRadius,
@@ -2890,27 +2107,8 @@ public static native sk_shader_t sk_shader_new_two_point_conical_gradient(
         int colorCount,
         @Cast("sk_shader_tilemode_t") int tileMode,
         @Const sk_matrix_t localMatrix);
-
-/**
-    Call this to create a new "empty" shader, that will not draw anything.
-*/
 public static native sk_shader_t sk_shader_new_empty();
-/**
-    Call this to create a new shader that just draws the specified color. This should always
-    draw the same as a paint with this color (and no shader).
-*/
 public static native sk_shader_t sk_shader_new_color(@Cast("sk_color_t") int color);
-/** 
-    Call this to create a new shader that will draw with the specified bitmap.
- 
-    If the bitmap cannot be used (e.g. has no pixels, or its dimensions
-    exceed implementation limits (currently at 64K - 1)) then SkEmptyShader
-    may be returned.
- 
-    @param src  The bitmap to use inside the shader
-    @param tmx  The tiling mode to use when sampling the bitmap in the x-direction.
-    @param tmy  The tiling mode to use when sampling the bitmap in the y-direction.
-*/
 public static native sk_shader_t sk_shader_new_bitmap(@Const sk_bitmap_t src,
                                          @Cast("sk_shader_tilemode_t") int tmx,
                                          @Cast("sk_shader_tilemode_t") int tmy,
@@ -2920,16 +2118,8 @@ public static native sk_shader_t sk_shader_new_picture(sk_picture_t src,
                                          @Cast("sk_shader_tilemode_t") int tmy,
                                          @Const sk_matrix_t localMatrix,
                                          @Const sk_rect_t tile);
-/**
-    Return a shader that will apply the specified localMatrix to the proxy shader.
-    The specified matrix will be applied before any matrix associated with the proxy.
-    <p>
-    Note: ownership of the proxy is not transferred (though a ref is taken).
-*/
-public static native sk_shader_t sk_shader_new_local_matrix(sk_shader_t proxy,
-                                               @Const sk_matrix_t localMatrix);
-public static native sk_shader_t sk_shader_new_color_filter(sk_shader_t proxy,
-                                               sk_colorfilter_t filter);
+public static native sk_shader_t sk_shader_new_local_matrix(sk_shader_t proxy, @Const sk_matrix_t localMatrix);
+public static native sk_shader_t sk_shader_new_color_filter(sk_shader_t proxy, sk_colorfilter_t filter);
 public static native sk_shader_t sk_shader_new_perlin_noise_fractal_noise(
     float baseFrequencyX,
     float baseFrequencyY,
@@ -2956,14 +2146,13 @@ public static native sk_shader_t sk_shader_new_compose_with_mode(
 // Parsed from sk_stream.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_stream_DEFINED
 // #define sk_stream_DEFINED
@@ -2977,6 +2166,7 @@ public static native void sk_stream_asset_destroy(sk_stream_asset_t cstream);
 public static native sk_stream_filestream_t sk_filestream_new(@Cast("const char*") BytePointer path);
 public static native sk_stream_filestream_t sk_filestream_new(String path);
 public static native void sk_filestream_destroy(sk_stream_filestream_t cstream);
+public static native @Cast("bool") boolean sk_filestream_is_valid(sk_stream_filestream_t cstream);
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -2990,15 +2180,29 @@ public static native void sk_memorystream_destroy(sk_stream_memorystream_t cstre
 ////////////////////////////////////////////////////////////////////////////////
 
 public static native @Cast("size_t") long sk_stream_read(sk_stream_t cstream, Pointer buffer, @Cast("size_t") long size);
+public static native @Cast("size_t") long sk_stream_peek(sk_stream_t cstream, Pointer buffer, @Cast("size_t") long size);
 public static native @Cast("size_t") long sk_stream_skip(sk_stream_t cstream, @Cast("size_t") long size);
 public static native @Cast("bool") boolean sk_stream_is_at_end(sk_stream_t cstream);
-public static native byte sk_stream_read_s8(sk_stream_t cstream);
-public static native short sk_stream_read_s16(sk_stream_t cstream);
-public static native int sk_stream_read_s32(sk_stream_t cstream);
-public static native @Cast("uint8_t") byte sk_stream_read_u8(sk_stream_t cstream);
-public static native @Cast("uint16_t") short sk_stream_read_u16(sk_stream_t cstream);
-public static native @Cast("uint32_t") int sk_stream_read_u32(sk_stream_t cstream);
-public static native @Cast("bool") boolean sk_stream_read_bool(sk_stream_t cstream);
+public static native @Cast("bool") boolean sk_stream_read_s8(sk_stream_t cstream, BytePointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s8(sk_stream_t cstream, ByteBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s8(sk_stream_t cstream, byte[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_s16(sk_stream_t cstream, ShortPointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s16(sk_stream_t cstream, ShortBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s16(sk_stream_t cstream, short[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_s32(sk_stream_t cstream, IntPointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s32(sk_stream_t cstream, IntBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_s32(sk_stream_t cstream, int[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_u8(sk_stream_t cstream, @Cast("uint8_t*") BytePointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u8(sk_stream_t cstream, @Cast("uint8_t*") ByteBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u8(sk_stream_t cstream, @Cast("uint8_t*") byte[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_u16(sk_stream_t cstream, @Cast("uint16_t*") ShortPointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u16(sk_stream_t cstream, @Cast("uint16_t*") ShortBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u16(sk_stream_t cstream, @Cast("uint16_t*") short[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_u32(sk_stream_t cstream, @Cast("uint32_t*") IntPointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u32(sk_stream_t cstream, @Cast("uint32_t*") IntBuffer buffer);
+public static native @Cast("bool") boolean sk_stream_read_u32(sk_stream_t cstream, @Cast("uint32_t*") int[] buffer);
+public static native @Cast("bool") boolean sk_stream_read_bool(sk_stream_t cstream, @Cast("bool*") BoolPointer buffer);
+public static native @Cast("bool") boolean sk_stream_read_bool(sk_stream_t cstream, @Cast("bool*") boolean[] buffer);
 public static native @Cast("bool") boolean sk_stream_rewind(sk_stream_t cstream);
 public static native @Cast("bool") boolean sk_stream_has_position(sk_stream_t cstream);
 public static native @Cast("size_t") long sk_stream_get_position(sk_stream_t cstream);
@@ -3013,12 +2217,13 @@ public static native @Const Pointer sk_stream_get_memory_base(sk_stream_t cstrea
 public static native sk_wstream_filestream_t sk_filewstream_new(@Cast("const char*") BytePointer path);
 public static native sk_wstream_filestream_t sk_filewstream_new(String path);
 public static native void sk_filewstream_destroy(sk_wstream_filestream_t cstream);
+public static native @Cast("bool") boolean sk_filewstream_is_valid(sk_wstream_filestream_t cstream);
 
 public static native sk_wstream_dynamicmemorystream_t sk_dynamicmemorywstream_new();
 public static native sk_stream_asset_t sk_dynamicmemorywstream_detach_as_stream(sk_wstream_dynamicmemorystream_t cstream);
 public static native sk_data_t sk_dynamicmemorywstream_detach_as_data(sk_wstream_dynamicmemorystream_t cstream);
 public static native void sk_dynamicmemorywstream_copy_to(sk_wstream_dynamicmemorystream_t cstream, Pointer data);
-public static native void sk_dynamicmemorywstream_write_to_stream(sk_wstream_dynamicmemorystream_t cstream, sk_wstream_t dst);
+public static native @Cast("bool") boolean sk_dynamicmemorywstream_write_to_stream(sk_wstream_dynamicmemorystream_t cstream, sk_wstream_t dst);
 public static native void sk_dynamicmemorywstream_destroy(sk_wstream_dynamicmemorystream_t cstream);
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3048,44 +2253,24 @@ public static native int sk_wstream_get_size_of_packed_uint(@Cast("size_t") long
 // Parsed from sk_string.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_string_DEFINED
 // #define sk_string_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Returns a new empty sk_string_t.  This call must be balanced with a call to
-    sk_string_destructor().
-*/
 public static native sk_string_t sk_string_new_empty();
-/**
-    Returns a new sk_string_t by copying the specified source string, encoded in UTF-8.
-    This call must be balanced with a call to sk_string_destructor().
-*/
 public static native sk_string_t sk_string_new_with_copy(@Cast("const char*") BytePointer src, @Cast("size_t") long length);
 public static native sk_string_t sk_string_new_with_copy(String src, @Cast("size_t") long length);
-
-/**
-    Deletes the string.
-*/
 public static native void sk_string_destructor(@Const sk_string_t arg0);
-
-/**
-    Returns the number of bytes stored in the UTF 8 string. Note that this is the number of bytes, not characters.
-*/
 public static native @Cast("size_t") long sk_string_get_size(@Const sk_string_t arg0);
-/**
-    Returns the pointer to the string.
- */
 public static native @Cast("const char*") BytePointer sk_string_get_c_str(@Const sk_string_t arg0);
 
 // #endif
@@ -3095,111 +2280,45 @@ public static native @Cast("const char*") BytePointer sk_string_get_c_str(@Const
 
 /*
  * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_surface_DEFINED
 // #define sk_surface_DEFINED
 
 // #include "sk_types.h"
 
-/**
-    Return the default sk_colortype_t; this is operating-system dependent.
-*/
 public static native @Cast("sk_colortype_t") int sk_colortype_get_default_8888();
 
-public static native @Cast("bool") boolean sk_imageinfo_valid_conversion(@Const sk_imageinfo_t dst, @Const sk_imageinfo_t src);
+// surface
 
-/**
-    Return a new surface, with the memory for the pixels automatically
-    allocated.  If the requested surface cannot be created, or the
-    request is not a supported configuration, NULL will be returned.
-    <p>
-    @param sk_imageinfo_t* Specify the width, height, color type, and
-                           alpha type for the surface.
-    <p>
-    @param sk_surfaceprops_t* If not NULL, specify additional non-default
-                              properties of the surface.
-*/
-public static native sk_surface_t sk_surface_new_raster(@Const sk_imageinfo_t arg0, @Const sk_surfaceprops_t arg1);
+public static native sk_surface_t sk_surface_new_null(int width, int height);
+public static native sk_surface_t sk_surface_new_raster(@Const sk_imageinfo_t arg0, @Cast("size_t") long rowBytes, @Const sk_surfaceprops_t arg2);
+public static native sk_surface_t sk_surface_new_raster_direct(@Const sk_imageinfo_t arg0, Pointer pixels, @Cast("size_t") long rowBytes, sk_surface_raster_release_proc releaseProc, Pointer context, @Const sk_surfaceprops_t props);
 
-/**
-    Create a new surface which will draw into the specified pixels
-    with the specified rowbytes.  If the requested surface cannot be
-    created, or the request is not a supported configuration, NULL
-    will be returned.
-    <p>
-    @param sk_imageinfo_t* Specify the width, height, color type, and
-                           alpha type for the surface.
-    @param void* pixels Specify the location in memory where the
-                        destination pixels are.  This memory must
-                        outlast this surface.
-     @param size_t rowBytes Specify the difference, in bytes, between
-                           each adjacent row.  Should be at least
-                           (width * sizeof(one pixel)).
-    @param sk_surfaceprops_t* If not NULL, specify additional non-default
-                              properties of the surface.
-*/
-public static native sk_surface_t sk_surface_new_raster_direct(@Const sk_imageinfo_t arg0, Pointer pixels, @Cast("size_t") long rowBytes, @Const sk_surfaceprops_t props);
+public static native sk_surface_t sk_surface_new_backend_texture(gr_context_t context, @Const gr_backendtexture_t texture, @Cast("gr_surfaceorigin_t") int origin, int samples, @Cast("sk_colortype_t") int colorType, sk_colorspace_t colorspace, @Const sk_surfaceprops_t props);
+public static native sk_surface_t sk_surface_new_backend_render_target(gr_context_t context, @Const gr_backendrendertarget_t target, @Cast("gr_surfaceorigin_t") int origin, @Cast("sk_colortype_t") int colorType, sk_colorspace_t colorspace, @Const sk_surfaceprops_t props);
+public static native sk_surface_t sk_surface_new_backend_texture_as_render_target(gr_context_t context, @Const gr_backendtexture_t texture, @Cast("gr_surfaceorigin_t") int origin, int samples, @Cast("sk_colortype_t") int colorType, sk_colorspace_t colorspace, @Const sk_surfaceprops_t props);
+public static native sk_surface_t sk_surface_new_render_target(gr_context_t context, @Cast("bool") boolean budgeted, @Const sk_imageinfo_t cinfo, int sampleCount, @Cast("gr_surfaceorigin_t") int origin, @Const sk_surfaceprops_t props, @Cast("bool") boolean shouldCreateWithMips);
 
-/**
-    Decrement the reference count. If the reference count is 1 before
-    the decrement, then release both the memory holding the
-    sk_surface_t and any pixel memory it may be managing.  New
-    sk_surface_t are created with a reference count of 1.
-*/
 public static native void sk_surface_unref(sk_surface_t arg0);
-
-/**
- *  Return the canvas associated with this surface. Note: the canvas is owned by the surface,
- *  so the returned object is only valid while the owning surface is valid.
- */
 public static native sk_canvas_t sk_surface_get_canvas(sk_surface_t arg0);
-
-/**
- *  Call sk_image_unref() when the returned image is no longer used.
- */
 public static native sk_image_t sk_surface_new_image_snapshot(sk_surface_t arg0);
-
-/**
- *  Used to wrap a pre-existing 3D API rendering target as a SkSurface. Skia will not assume
- *  ownership of the render target and the client must ensure the render target is valid for the
- *  lifetime of the SkSurface.
- */
-public static native sk_surface_t sk_surface_new_backend_render_target(gr_context_t context, @Const gr_backend_rendertarget_desc_t desc, @Const sk_surfaceprops_t props);
-
-/**
- *  Used to wrap a pre-existing backend 3D API texture as a SkSurface. The kRenderTarget flag
- *  must be set on GrBackendTextureDesc for this to succeed. Skia will not assume ownership
- *  of the texture and the client must ensure the texture is valid for the lifetime of the
- *  SkSurface.
- */
-public static native sk_surface_t sk_surface_new_backend_texture(gr_context_t context, @Const gr_backend_texture_desc_t desc, @Const sk_surfaceprops_t props);
-
-/**
- *  Used to wrap a pre-existing 3D API texture as a SkSurface. Skia will treat the texture as
- *  a rendering target only, but unlike NewFromBackendRenderTarget, Skia will manage and own
- *  the associated render target objects (but not the provided texture). The kRenderTarget flag
- *  must be set on GrBackendTextureDesc for this to succeed. Skia will not assume ownership
- *  of the texture and the client must ensure the texture is valid for the lifetime of the
- *  SkSurface.
- */
-public static native sk_surface_t sk_surface_new_backend_texture_as_render_target(gr_context_t context, @Const gr_backend_texture_desc_t desc, @Const sk_surfaceprops_t props);
-
-public static native sk_surface_t sk_surface_new_render_target(gr_context_t context, @Cast("bool") boolean budgeted, @Const sk_imageinfo_t info, int sampleCount, @Const sk_surfaceprops_t props);
-
 public static native void sk_surface_draw(sk_surface_t surface, sk_canvas_t canvas, float x, float y, @Const sk_paint_t paint);
-
 public static native @Cast("bool") boolean sk_surface_peek_pixels(sk_surface_t surface, sk_pixmap_t pixmap);
-
 public static native @Cast("bool") boolean sk_surface_read_pixels(sk_surface_t surface, sk_imageinfo_t dstInfo, Pointer dstPixels, @Cast("size_t") long dstRowBytes, int srcX, int srcY);
+public static native @Const sk_surfaceprops_t sk_surface_get_props(sk_surface_t surface);
 
-public static native void sk_surface_get_props(sk_surface_t surface, sk_surfaceprops_t props);
+// surface props
+
+public static native sk_surfaceprops_t sk_surfaceprops_new(@Cast("uint32_t") int flags, @Cast("sk_pixelgeometry_t") int geometry);
+public static native void sk_surfaceprops_delete(sk_surfaceprops_t props);
+public static native @Cast("uint32_t") int sk_surfaceprops_get_flags(sk_surfaceprops_t props);
+public static native @Cast("sk_pixelgeometry_t") int sk_surfaceprops_get_pixel_geometry(sk_surfaceprops_t props);
 
 // #endif
 
@@ -3207,14 +2326,13 @@ public static native void sk_surface_get_props(sk_surface_t surface, sk_surfacep
 // Parsed from sk_svg.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_svg_DEFINED
 // #define sk_svg_DEFINED
@@ -3229,26 +2347,26 @@ public static native sk_canvas_t sk_svgcanvas_create(@Const sk_rect_t bounds, sk
 // Parsed from sk_typeface.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_typeface_DEFINED
 // #define sk_typeface_DEFINED
 
 // #include "sk_types.h"
 
-public static native sk_typeface_t sk_typeface_create_from_name(@Cast("const char*") BytePointer familyName, @Cast("sk_typeface_style_t") int style);
-public static native sk_typeface_t sk_typeface_create_from_name(String familyName, @Cast("sk_typeface_style_t") int style);
-public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(@Cast("const char*") BytePointer familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant);
-public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(String familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant);
+// typeface
+
+public static native sk_typeface_t sk_typeface_create_default();
+public static native sk_typeface_t sk_typeface_ref_default();
+public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(@Cast("const char*") BytePointer familyName, sk_fontstyle_t style);
+public static native sk_typeface_t sk_typeface_create_from_name_with_font_style(String familyName, sk_fontstyle_t style);
 public static native void sk_typeface_unref(sk_typeface_t arg0);
-public static native sk_typeface_t sk_typeface_create_from_typeface(sk_typeface_t typeface, @Cast("sk_typeface_style_t") int sstyle);
 public static native sk_typeface_t sk_typeface_create_from_file(@Cast("const char*") BytePointer path, int index);
 public static native sk_typeface_t sk_typeface_create_from_file(String path, int index);
 public static native sk_typeface_t sk_typeface_create_from_stream(sk_stream_asset_t stream, int index);
@@ -3262,13 +2380,11 @@ public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typ
 public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typeface, IntBuffer ttcIndex);
 public static native sk_stream_asset_t sk_typeface_open_stream(sk_typeface_t typeface, int[] ttcIndex);
 public static native int sk_typeface_get_units_per_em(sk_typeface_t typeface);
-
 public static native sk_string_t sk_typeface_get_family_name(sk_typeface_t typeface);
+public static native sk_fontstyle_t sk_typeface_get_fontstyle(sk_typeface_t typeface);
 public static native int sk_typeface_get_font_weight(sk_typeface_t typeface);
 public static native int sk_typeface_get_font_width(sk_typeface_t typeface);
 public static native @Cast("sk_font_style_slant_t") int sk_typeface_get_font_slant(sk_typeface_t typeface);
-public static native @Cast("sk_typeface_style_t") int sk_typeface_get_style(sk_typeface_t typeface);
-
 public static native int sk_typeface_count_tables(sk_typeface_t typeface);
 public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntPointer tags);
 public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cast("sk_font_table_tag_t*") IntBuffer tags);
@@ -3276,17 +2392,47 @@ public static native int sk_typeface_get_table_tags(sk_typeface_t typeface, @Cas
 public static native @Cast("size_t") long sk_typeface_get_table_size(sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag);
 public static native @Cast("size_t") long sk_typeface_get_table_data(sk_typeface_t typeface, @Cast("sk_font_table_tag_t") int tag, @Cast("size_t") long offset, @Cast("size_t") long length, Pointer data);
 
+// font manager
+
+public static native sk_fontmgr_t sk_fontmgr_create_default();
 public static native sk_fontmgr_t sk_fontmgr_ref_default();
 public static native void sk_fontmgr_unref(sk_fontmgr_t arg0);
 public static native int sk_fontmgr_count_families(sk_fontmgr_t arg0);
 public static native void sk_fontmgr_get_family_name(sk_fontmgr_t arg0, int index, sk_string_t familyName);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") PointerPointer bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr BytePointer bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr ByteBuffer bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr byte[] bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr BytePointer bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr ByteBuffer bcp47, int bcp47Count, int character);
-public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, int weight, int width, @Cast("sk_font_style_slant_t") int slant, @Cast("const char**") @ByPtrPtr byte[] bcp47, int bcp47Count, int character);
+public static native sk_fontstyleset_t sk_fontmgr_create_styleset(sk_fontmgr_t arg0, int index);
+public static native sk_fontstyleset_t sk_fontmgr_match_family(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName);
+public static native sk_fontstyleset_t sk_fontmgr_match_family(sk_fontmgr_t arg0, String familyName);
+public static native sk_typeface_t sk_fontmgr_match_family_style(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, sk_fontstyle_t style);
+public static native sk_typeface_t sk_fontmgr_match_family_style(sk_fontmgr_t arg0, String familyName, sk_fontstyle_t style);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, sk_fontstyle_t style, @Cast("const char**") PointerPointer bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr BytePointer bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr ByteBuffer bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr byte[] bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr BytePointer bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, @Cast("const char*") BytePointer familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr ByteBuffer bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fontmgr_t arg0, String familyName, sk_fontstyle_t style, @Cast("const char**") @ByPtrPtr byte[] bcp47, int bcp47Count, int character);
+public static native sk_typeface_t sk_fontmgr_match_face_style(sk_fontmgr_t arg0, @Const sk_typeface_t face, sk_fontstyle_t style);
+public static native sk_typeface_t sk_fontmgr_create_from_data(sk_fontmgr_t arg0, sk_data_t data, int index);
+public static native sk_typeface_t sk_fontmgr_create_from_stream(sk_fontmgr_t arg0, sk_stream_asset_t stream, int index);
+public static native sk_typeface_t sk_fontmgr_create_from_file(sk_fontmgr_t arg0, @Cast("const char*") BytePointer path, int index);
+public static native sk_typeface_t sk_fontmgr_create_from_file(sk_fontmgr_t arg0, String path, int index);
+
+// font style
+
+public static native sk_fontstyle_t sk_fontstyle_new(int weight, int width, @Cast("sk_font_style_slant_t") int slant);
+public static native void sk_fontstyle_delete(sk_fontstyle_t fs);
+public static native int sk_fontstyle_get_weight(@Const sk_fontstyle_t fs);
+public static native int sk_fontstyle_get_width(@Const sk_fontstyle_t fs);
+public static native @Cast("sk_font_style_slant_t") int sk_fontstyle_get_slant(@Const sk_fontstyle_t fs);
+
+// font style set
+
+public static native sk_fontstyleset_t sk_fontstyleset_create_empty();
+public static native void sk_fontstyleset_unref(sk_fontstyleset_t fss);
+public static native int sk_fontstyleset_get_count(sk_fontstyleset_t fss);
+public static native void sk_fontstyleset_get_style(sk_fontstyleset_t fss, int index, sk_fontstyle_t fs, sk_string_t style);
+public static native sk_typeface_t sk_fontstyleset_create_typeface(sk_fontstyleset_t fss, int index);
+public static native sk_typeface_t sk_fontstyleset_match_style(sk_fontstyleset_t fss, sk_fontstyle_t style);
 
 // #endif
 
@@ -3294,14 +2440,13 @@ public static native sk_typeface_t sk_fontmgr_match_family_style_character(sk_fo
 // Parsed from sk_vertices.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_vertices_DEFINED
 // #define sk_vertices_DEFINED
@@ -3319,14 +2464,13 @@ public static native sk_vertices_t sk_vertices_make_copy(@Cast("sk_vertices_vert
 // Parsed from sk_xml.h
 
 /*
- * Copyright 2016 Xamarin Inc.
+ * Copyright 2014 Google Inc.
+ * Copyright 2015 Xamarin Inc.
+ * Copyright 2017 Microsoft Corporation. All rights reserved.
  *
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file.
  */
-
-// EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL EXPERIMENTAL
-// DO NOT USE -- FOR INTERNAL TESTING ONLY
 
 // #ifndef sk_xml_DEFINED
 // #define sk_xml_DEFINED

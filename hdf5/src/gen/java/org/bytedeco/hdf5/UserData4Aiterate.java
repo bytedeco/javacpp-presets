@@ -27,5 +27,5 @@ public class UserData4Aiterate extends Pointer {
 
         public native attr_operator_t op(); public native UserData4Aiterate op(attr_operator_t op);
         public native Pointer opData(); public native UserData4Aiterate opData(Pointer opData);
-        public native H5Object location(); public native UserData4Aiterate location(H5Object location);
+        public native H5Object location(); public native UserData4Aiterate location(H5Object location); // Consider changing to H5Location
 }

@@ -37,6 +37,9 @@ public class H5Object extends H5Location {
         public native int iterateAttrs(attr_operator_t user_op, @Cast("unsigned*") IntBuffer idx/*=NULL*/, Pointer op_data/*=NULL*/);
         public native int iterateAttrs(attr_operator_t user_op, @Cast("unsigned*") int[] idx/*=NULL*/, Pointer op_data/*=NULL*/);
 
+        // Recursively visit elements reachable from this object.
+        public native void visit(@Cast("H5_index_t") int idx_type, @Cast("H5_iter_order_t") int order, visit_operator_t user_op, Pointer op_data, @Cast("unsigned int") int fields);
+
         // Returns the object header version of an object
         public native @Cast("unsigned") int objVersion();
 

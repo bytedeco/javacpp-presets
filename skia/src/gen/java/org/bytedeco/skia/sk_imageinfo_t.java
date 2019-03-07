@@ -24,6 +24,7 @@ public class sk_imageinfo_t extends Pointer {
         return (sk_imageinfo_t)super.position(position);
     }
 
+    public native sk_colorspace_t colorspace(); public native sk_imageinfo_t colorspace(sk_colorspace_t colorspace);
     public native int width(); public native sk_imageinfo_t width(int width);
     public native int height(); public native sk_imageinfo_t height(int height);
     public native @Cast("sk_colortype_t") int colorType(); public native sk_imageinfo_t colorType(int colorType);

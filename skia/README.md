@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * [mono/skia](https://github.com/mono/skia) branch `update-master` as of 2017-05-11  https://skia.org/
+ * Mono/Skia 1.68.0  https://github.com/mono/skia
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,13 +16,14 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/skia/apidocs/
 
-&lowast; Bindings are currently available only for the C API of Skia.
+&lowast; Bindings are currently available only for the C API of Mono/Skia.
+
 
 Sample Usage
 ------------
-Here is a simple example of Skia ported to Java from this C source file:
+Here is a simple example of Mono/Skia ported to Java from this C source file:
 
- * https://github.com/mono/skia/blob/update-master/experimental/c-api-example/skia-c-example.c
+ * https://github.com/mono/skia/blob/xamarin-mobile-bindings/experimental/c-api-example/skia-c-example.c
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `SkiaCExample.java` source files below, simply execute on the command line:
 ```bash
@@ -43,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>20170511-53d6729-1.5-SNAPSHOT</version>
+            <version>1.68.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -69,7 +70,7 @@ public class SkiaCExample {
         info.height(h);
         info.colorType(sk_colortype_get_default_8888());
         info.alphaType(PREMUL_SK_ALPHATYPE);
-        return sk_surface_new_raster(info, null);
+        return sk_surface_new_raster(info, 0, null);
     }
 
     private static void emitPng(String path, sk_surface_t surface) throws IOException {

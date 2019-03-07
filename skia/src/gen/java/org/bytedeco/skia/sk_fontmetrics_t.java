@@ -24,18 +24,20 @@ public class sk_fontmetrics_t extends Pointer {
         return (sk_fontmetrics_t)super.position(position);
     }
 
-    public native @Cast("uint32_t") int fFlags(); public native sk_fontmetrics_t fFlags(int fFlags);            // Bit field to identify which values are unknown
-    public native float fTop(); public native sk_fontmetrics_t fTop(float fTop);              // The greatest distance above the baseline for any glyph (will be <= 0)
-    public native float fAscent(); public native sk_fontmetrics_t fAscent(float fAscent);           // The recommended distance above the baseline (will be <= 0)
-    public native float fDescent(); public native sk_fontmetrics_t fDescent(float fDescent);          // The recommended distance below the baseline (will be >= 0)
-    public native float fBottom(); public native sk_fontmetrics_t fBottom(float fBottom);           // The greatest distance below the baseline for any glyph (will be >= 0)
-    public native float fLeading(); public native sk_fontmetrics_t fLeading(float fLeading);          // The recommended distance to add between lines of text (will be >= 0)
-    public native float fAvgCharWidth(); public native sk_fontmetrics_t fAvgCharWidth(float fAvgCharWidth);     // the average character width (>= 0)
-    public native float fMaxCharWidth(); public native sk_fontmetrics_t fMaxCharWidth(float fMaxCharWidth);     // the max character width (>= 0)
-    public native float fXMin(); public native sk_fontmetrics_t fXMin(float fXMin);             // The minimum bounding box x value for all glyphs
-    public native float fXMax(); public native sk_fontmetrics_t fXMax(float fXMax);             // The maximum bounding box x value for all glyphs
-    public native float fXHeight(); public native sk_fontmetrics_t fXHeight(float fXHeight);          // The height of an 'x' in px, or 0 if no 'x' in face
-    public native float fCapHeight(); public native sk_fontmetrics_t fCapHeight(float fCapHeight);        // The cap height (> 0), or 0 if cannot be determined.
-    public native float fUnderlineThickness(); public native sk_fontmetrics_t fUnderlineThickness(float fUnderlineThickness); // underline thickness, or 0 if cannot be determined
-    public native float fUnderlinePosition(); public native sk_fontmetrics_t fUnderlinePosition(float fUnderlinePosition); // underline position, or 0 if cannot be determined
+    public native @Cast("uint32_t") int fFlags(); public native sk_fontmetrics_t fFlags(int fFlags);
+    public native float fTop(); public native sk_fontmetrics_t fTop(float fTop);
+    public native float fAscent(); public native sk_fontmetrics_t fAscent(float fAscent);
+    public native float fDescent(); public native sk_fontmetrics_t fDescent(float fDescent);
+    public native float fBottom(); public native sk_fontmetrics_t fBottom(float fBottom);
+    public native float fLeading(); public native sk_fontmetrics_t fLeading(float fLeading);
+    public native float fAvgCharWidth(); public native sk_fontmetrics_t fAvgCharWidth(float fAvgCharWidth);
+    public native float fMaxCharWidth(); public native sk_fontmetrics_t fMaxCharWidth(float fMaxCharWidth);
+    public native float fXMin(); public native sk_fontmetrics_t fXMin(float fXMin);
+    public native float fXMax(); public native sk_fontmetrics_t fXMax(float fXMax);
+    public native float fXHeight(); public native sk_fontmetrics_t fXHeight(float fXHeight);
+    public native float fCapHeight(); public native sk_fontmetrics_t fCapHeight(float fCapHeight);
+    public native float fUnderlineThickness(); public native sk_fontmetrics_t fUnderlineThickness(float fUnderlineThickness);
+    public native float fUnderlinePosition(); public native sk_fontmetrics_t fUnderlinePosition(float fUnderlinePosition);
+    public native float fStrikeoutThickness(); public native sk_fontmetrics_t fStrikeoutThickness(float fStrikeoutThickness);
+    public native float fStrikeoutPosition(); public native sk_fontmetrics_t fStrikeoutPosition(float fStrikeoutPosition);
 }

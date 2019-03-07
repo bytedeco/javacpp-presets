@@ -124,7 +124,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>hdf5-platform</artifactId>
-      <version>1.10.4-${project.version}</version>
+      <version>1.10.5-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -229,7 +229,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>liquidfun-platform</artifactId>
-      <version>20170717-43d53e0-${project.version}</version>
+      <version>master-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -239,7 +239,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>skia-platform</artifactId>
-      <version>20170511-53d6729-${project.version}</version>
+      <version>1.68.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

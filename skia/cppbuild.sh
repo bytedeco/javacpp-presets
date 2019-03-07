@@ -41,9 +41,9 @@ case $PLATFORM in
 esac
 
 # Must be kept in sync with skia.version in pom.xml
-SKIA_VERSION=53d672981d2f4535d61da05befa793a73103c4fd
-download "https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz" "depot_tools.tar.gz"
-download "https://github.com/mono/skia/archive/$SKIA_VERSION.tar.gz" "skia-$SKIA_VERSION.tar.gz"
+SKIA_VERSION=1.68.0
+download https://chromium.googlesource.com/chromium/tools/depot_tools.git/+archive/master.tar.gz depot_tools.tar.gz
+download https://github.com/mono/skia/archive/v$SKIA_VERSION.tar.gz skia-$SKIA_VERSION.tar.gz
 
 mkdir -p "$PLATFORM"
 cd "$PLATFORM"
@@ -53,29 +53,18 @@ mkdir -p depot_tools
 tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
-sed -i="" /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
-# Upstream doesn't appear to build ios with is_component_build=true
-patch -p0 skia-$SKIA_VERSION/gn/BUILD.gn <<-PATCH
-696c696
-<     if (is_mac) {
----
->     if (is_mac || is_ios) {
-PATCH
+sedinplace /tests.gni/d skia-$SKIA_VERSION/BUILD.gn
+sedinplace /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
 export PATH="$PWD/depot_tools:$PATH"
 
 cd skia-$SKIA_VERSION
-# Work around the disappearance of https://skia.googlesource.com/third_party/libjpeg-turbo.git
-patch -Np1 < ../../../skia.patch || true
 python2 tools/git-sync-deps
-cp third_party/libjpeg-turbo/* third_party/externals/libjpeg-turbo/
 
 if [[ $PLATFORM == ios* ]]; then
-    sed -i="" s/thread_local//g tools/ok.cpp
-    sed -i="" /SRC_SK_XFERMODE_MODE/d tests/CTest.cpp
-    bin/gn gen out/Static --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\"] $EXTRA_ARGS"
+    bin/gn gen out/Static --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\"] $EXTRA_ARGS"
     ninja -C out/Static
 else
-    bin/gn gen out/Shared --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
+    bin/gn gen out/Shared --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
     ninja -C out/Shared
 fi
 

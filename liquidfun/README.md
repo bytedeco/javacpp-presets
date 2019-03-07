@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LiquidFun master as of 2017-07-17  https://github.com/google/liquidfun
+ * LiquidFun  https://github.com/google/liquidfun
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>liquidfun-platform</artifactId>
-            <version>20170717-43d53e0-1.5-SNAPSHOT</version>
+            <version>master-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

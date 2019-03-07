@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>liquidfun</artifactId>
-  <version>20170717-43d53e0-${project.parent.version}</version>
+  <version>master-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for LiquidFun</name>
 
