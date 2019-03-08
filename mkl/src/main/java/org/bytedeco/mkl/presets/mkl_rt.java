@@ -83,11 +83,13 @@ public class mkl_rt implements InfoMapper {
                              "mkl_dc_type", "mkl_dc_real_type", "mkl_dc_native_type", "mkl_dc_veclen", "MKL_DC_PREC_LETTER",
                              "mkl_dc_gemm", "mkl_dc_syrk", "mkl_dc_trsm", "mkl_dc_axpy", "mkl_dc_dot", "MKL_DC_DOT_CONVERT",
                              "mkl_dc_getrf", "mkl_dc_lapacke_getrf_convert", "mkl_dc_getri", "mkl_dc_lapacke_getri_convert", "mkl_dc_getrs", "mkl_dc_lapacke_getrs_convert",
-                             "__inline", "MKL_DIRECT_CALL_INIT_FLAG", "mkl_jit_create_dgemm", "mkl_jit_create_sgemm").cppTypes().annotations())
+                             "__inline", "MKL_DIRECT_CALL_INIT_FLAG", "mkl_jit_create_dgemm", "mkl_jit_create_sgemm", "mkl_jit_create_cgemm", "mkl_jit_create_zgemm").cppTypes().annotations())
 
-               .put(new Info("DEPRECATED").cppText("#define DEPRECATED deprecated").cppTypes())
                .put(new Info("MKL_DEPRECATED").cppText("#define MKL_DEPRECATED deprecated").cppTypes())
+               .put(new Info("MKL_DEPRECATED_C").cppText("#define MKL_DEPRECATED_C deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
+
+               .put(new Info("MKL_CBWR_UNSET_ALL").translate(false))
 
                .put(new Info("sparse_matrix_t").valueTypes("sparse_matrix").pointerTypes("@ByPtrPtr sparse_matrix"))
                .put(new Info("sparse_vector_t").valueTypes("sparse_vector").pointerTypes("@ByPtrPtr sparse_vector"))
