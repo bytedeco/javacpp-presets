@@ -53,7 +53,9 @@ mkdir -p depot_tools
 tar --totals -xzf ../depot_tools.tar.gz -C depot_tools
 tar --totals -xzf ../skia-$SKIA_VERSION.tar.gz
 
-sedinplace /tests.gni/d skia-$SKIA_VERSION/BUILD.gn
+sedinplace '/sources = tests_sources/,/}/d' skia-$SKIA_VERSION/BUILD.gn
+sedinplace /-ffp-contract=fast/d skia-$SKIA_VERSION/BUILD.gn
+sedinplace /-march=haswell/d skia-$SKIA_VERSION/BUILD.gn
 sedinplace /-Werror/d skia-$SKIA_VERSION/gn/BUILD.gn
 export PATH="$PWD/depot_tools:$PATH"
 
@@ -62,10 +64,10 @@ python2 tools/git-sync-deps
 
 if [[ $PLATFORM == ios* ]]; then
     bin/gn gen out/Static --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\"] $EXTRA_ARGS"
-    ninja -C out/Static
+    ninja -C out/Static skia
 else
     bin/gn gen out/Shared --script-executable=python2 --args="target_cpu=\"$TARGET_CPU\" is_official_build=false is_debug=false is_component_build=true extra_cflags=[\"-g0\", \"-I../../third_party/externals/freetype/include/\", \"-DSKIA_C_DLL\"] $EXTRA_ARGS"
-    ninja -C out/Shared
+    ninja -C out/Shared skia
 fi
 
 cd ../..

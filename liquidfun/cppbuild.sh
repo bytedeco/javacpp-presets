@@ -17,6 +17,7 @@ mkdir -p include lib bin
 echo "Decompressing archives..."
 tar --totals -xzf ../liquidfun-$LIQUIDFUN_VERSION.tar.gz
 cd liquidfun-$LIQUIDFUN_VERSION
+sedinplace /WX/d liquidfun/Box2D/CMakeLists.txt
 
 case $PLATFORM in
     linux-x86)
