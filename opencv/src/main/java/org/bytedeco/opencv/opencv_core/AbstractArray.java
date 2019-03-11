@@ -25,9 +25,9 @@ public abstract class AbstractArray extends Pointer implements Indexable {
     public abstract int arrayWidth();
     public abstract int arrayHeight();
     public abstract IplROI arrayROI();
-    public abstract int arraySize();
+    public abstract long arraySize();
     public abstract BytePointer arrayData();
-    public abstract int arrayStep();
+    public abstract long arrayStep();
 
     /** @return {@code createBuffer(0)} */
     public <B extends Buffer> B createBuffer() {
@@ -36,7 +36,7 @@ public abstract class AbstractArray extends Pointer implements Indexable {
     /** @return {@link #arrayData()} wrapped in a {@link Buffer} of appropriate type starting at given index */
     public <B extends Buffer> B createBuffer(int index) {
         BytePointer ptr = arrayData();
-        int size = arraySize();
+        long size = arraySize();
         switch (arrayDepth()) {
             case IPL_DEPTH_8U:
             case IPL_DEPTH_8S:  return (B)ptr.position(index).capacity(size).asBuffer();
@@ -57,7 +57,7 @@ public abstract class AbstractArray extends Pointer implements Indexable {
     }
     @Override public <I extends Indexer> I createIndexer(boolean direct) {
         BytePointer ptr = arrayData();
-        int size = arraySize();
+        long size = arraySize();
         long[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
         long[] strides = { arrayStep(), arrayChannels(), 1 };
         switch (arrayDepth()) {

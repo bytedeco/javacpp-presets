@@ -1597,5 +1597,5 @@ public class Mat extends AbstractMat {
     public native @ByVal Size size();
     @MemberGetter public native int size(int i);
     @MemberGetter public native long step();
-    @MemberGetter public native int step(int i);
+    @MemberGetter public native long step(int i);
 }

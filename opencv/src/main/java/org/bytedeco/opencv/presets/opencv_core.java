@@ -318,10 +318,10 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                      + "public Mat(DoublePointer p) { this(1, Math.max(1, p.limit() - p.position()), CV_64FC1, p); }\n"))
                .put(new Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip())
                .put(new Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
-               .put(new Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
+               .put(new Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native long step(int i);"))
                .put(new Info("cv::UMat::zeros(int, int*, int)", "cv::UMat::ones(int, int*, int)").skip())
                .put(new Info("cv::UMat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
-               .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
+               .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native long step(int i);"))
                .put(new Info("cv::DefaultDeleter<CvMat>").pointerTypes("CvMatDefaultDeleter"))
 
                .put(new Info("std::initializer_list", "_InputArray::KindFlag").skip())
