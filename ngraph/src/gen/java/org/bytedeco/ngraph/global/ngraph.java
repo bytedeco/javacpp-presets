@@ -12,6 +12,9 @@ import org.bytedeco.javacpp.annotation.*;
 public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
     static { Loader.load(); }
 
+// Targeting ../StringBoolMap.java
+
+
 // Targeting ../StringVector.java
 
 
@@ -149,6 +152,34 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 
+// Parsed from ngraph/pass/pass_config.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <map>
+    
+
+// Targeting ../PassConfig.java
+
+
+
+
 // Parsed from ngraph/runtime/tensor.hpp
 
 //*****************************************************************************
@@ -223,6 +254,9 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../Backend.java
 
 
+// Targeting ../Executable.java
+
+
 
 
 // Parsed from ngraph/runtime/cpu/cpu_backend.hpp
@@ -249,6 +283,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <memory>
 
 // #include "cpu_backend_visibility.h"
+// #include "ngraph/pass/pass_config.hpp"
 // #include "ngraph/runtime/backend.hpp"
 // Targeting ../CPU_ExternalFunction.java
 
@@ -257,6 +292,9 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 // Targeting ../CPU_Backend.java
+
+
+// Targeting ../CPU_Executable.java
 
 
         
@@ -1311,7 +1349,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
     
-    
+     // namespace op
 
     @Namespace("ngraph") public static native void replace_node_users_arguments(@SharedPtr @ByVal Node target,
                                           @SharedPtr @ByVal Node replacement);
@@ -1336,7 +1374,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
     @Namespace("ngraph") public static native void check_new_args_count(@Const Node node, @Const @ByRef NodeVector new_args);
-
+ // namespace ngraph
 
 // #define NODE_VALIDATION_ASSERT(node, cond)
 //     NGRAPH_ASSERT_STREAM_WITH_LOC(

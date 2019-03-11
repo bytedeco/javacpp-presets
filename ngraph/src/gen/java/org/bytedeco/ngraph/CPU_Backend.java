@@ -34,17 +34,17 @@ public class CPU_Backend extends Backend {
                 public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
                                                   @Const @ByRef Shape shape);
 
-                public native @SharedPtr @ByVal Function compile(@SharedPtr @ByVal Function func);
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
+                                            @Cast("bool") boolean enable_performance_counters/*=false*/);
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func);
 
-                public native @Cast("bool") boolean call(@SharedPtr @ByVal Function func,
-                                          @Const @ByRef NgraphTensorVector outputs,
-                                          @Const @ByRef NgraphTensorVector inputs);
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
+                                            @ByRef PassConfig pass_config,
+                                            @Cast("bool") boolean enable_performance_counters/*=false*/);
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
+                                            @ByRef PassConfig pass_config);
 
-                public native void remove_compiled_function(@SharedPtr @ByVal Function func);
-                public native @SharedPtr CPU_CallFrame get_call_frame(@SharedPtr @ByVal Function func);
-
-                public native void enable_performance_data(@SharedPtr @ByVal Function func, @Cast("bool") boolean enable);
-                public native @StdVector PerformanceCounter get_performance_data(@SharedPtr @ByVal Function func);
+                public native void remove_compiled_function(@SharedPtr Executable exec);
 
                 public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
                 public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::cpu::CPU_Backend::Property") int prop);

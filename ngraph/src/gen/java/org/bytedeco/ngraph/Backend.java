@@ -54,38 +54,9 @@ public class Backend extends Pointer {
     /** \brief Compiles a Function.
      *  @param func The function to compile
      *  @return compiled function or nullptr on failure */
-    public native @SharedPtr @ByVal Function compile(@SharedPtr @ByVal Function func);
-
-    /** \brief Executes a single iteration of a Function. If func is not compiled the call will
-     *      compile it.
-     *  @param func The function to execute
-     *  @return true if iteration is successful, false otherwise */
-    public native @Cast("bool") boolean call(@SharedPtr @ByVal Function func,
-                          @Const @ByRef NgraphTensorVector outputs,
-                          @Const @ByRef NgraphTensorVector inputs);
-
-    /** \brief Executes a single iteration of a Function. If func is not compiled the call will
-     *      compile it. Optionally validates the inputs and outputs against the function graph.
-     *  @param func The function to execute
-     *  @return true if iteration is successful, false otherwise */
-    public native @Cast("bool") boolean call_with_validate(@SharedPtr @ByVal Function func,
-                                @Const @ByRef NgraphTensorVector outputs,
-                                @Const @ByRef NgraphTensorVector inputs);
-
-    /** \brief Compiled functions may be cached. This function removes a compiled function
-     *      from the cache.
-     *  @param func The function to execute */
-    public native void remove_compiled_function(@SharedPtr @ByVal Function func);
-
-    /** \brief Enable the collection of per-op performance information on a specified Function.
-     *      Data collection is via the {@code get_performance_data} method.
-     *  @param func The function to collect perfomance data on.
-     *  @param enable Set to true to enable or false to disable data collection */
-    public native void enable_performance_data(@SharedPtr @ByVal Function func, @Cast("bool") boolean enable);
-    /** \brief Collect performance information gathered on a Function.
-     *  @param func The function to get collected data.
-     *  @return Vector of PerformanceCounter information. */
-    public native @StdVector PerformanceCounter get_performance_data(@SharedPtr @ByVal Function func);
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
+                                                    @Cast("bool") boolean enable_performance_data/*=false*/);
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func);
 
     /** \brief Test if a backend is capable of supporting an op
      *  @param node is the op to test.
@@ -101,7 +72,6 @@ public class Backend extends Pointer {
      *  @param prop is the feature to test.
      *  @return true if the property is supported, false otherwise. */
     public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::Backend::Property") int prop);
-    public native void validate(@Cast("const ngraph::Function*") @SharedPtr @ByVal Function func,
-                      @Const @ByRef NgraphTensorVector outputs,
-                      @Const @ByRef NgraphTensorVector inputs);
+
+    public native void remove_compiled_function(@SharedPtr Executable exec);
 }

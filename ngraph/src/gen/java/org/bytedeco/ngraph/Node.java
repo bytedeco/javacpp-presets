@@ -12,7 +12,7 @@ import static org.bytedeco.ngraph.global.ngraph.*;
 
     /** Nodes are the backbone of the graph of Value dataflow. Every node has
      *  zero or more nodes as arguments and one value, which is either a tensor
-     *  view or a (possibly empty) tuple of values. */
+     *  or a (possibly empty) tuple of values. */
     @Namespace("ngraph") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class Node extends Pointer {
         static { Loader.load(); }
@@ -23,12 +23,27 @@ public class Node extends Pointer {
         // Called after transition
         public native void delayed_validate_and_infer_types();
 
-        /** The class name, must not contain spaces */
+        /** \brief Get the string name for the type of the node, such as {@code Add} or {@code Multiply}.
+         *         The class name, must not contain spaces as it is used for codegen.
+         *  @return A const reference to the node's type name */
         public native @StdString BytePointer description();
-        public native @StdString BytePointer get_friendly_name();
+
+        /** \brief Get the unique name of the node.
+         *  @return A const reference to the node's unique name. */
         public native @StdString BytePointer get_name();
-        public native void set_name(@StdString BytePointer name);
-        public native void set_name(@StdString String name);
+
+        /** \brief Sets a friendly name for a node. This does not overwrite the unique name
+         *         of the node and is retrieved via get_friendly_name(). Used mainly for debugging.
+         *         The friendly name may be set exactly once.
+         *  @param name is the friendly name to set */
+        public native void set_friendly_name(@StdString BytePointer name);
+        public native void set_friendly_name(@StdString String name);
+
+        /** \brief Gets the friendly name for a node. If no friendly name has been set via
+         *         set_friendly_name then the node's unique name is returned.
+         *  @return A const reference to the node's friendly name. */
+        public native @StdString BytePointer get_friendly_name();
+
         /** Return true if this has the same implementing class as node. This
          *  will be used by the pattern matcher when comparing a pattern
          *  graph against the graph. */
@@ -41,6 +56,7 @@ public class Node extends Pointer {
         public native @Cast("bool") boolean is_parameter();
         public native @Cast("bool") boolean is_output();
         public native @Cast("bool") boolean is_constant();
+        public native @Cast("bool") boolean is_null();
         public native @Cast("bool") boolean is_op();
         public native @Cast("bool") boolean is_commutative();
         public native @Cast("size_t") long get_instance_id();
@@ -85,10 +101,10 @@ public class Node extends Pointer {
         /** Checks that there is exactly one output and returns its tensor. */
         public native @ByRef DescriptorTensor get_output_tensor();
 
-        /** Returns the tensor view of output i */
+        /** Returns the tensor of output i */
         public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr(@Cast("size_t") long i);
 
-        /** Checks that there is exactly one output and returns its tensor view. */
+        /** Checks that there is exactly one output and returns its tensor. */
         public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr();
 
         /** Returns the set of inputs using output i */

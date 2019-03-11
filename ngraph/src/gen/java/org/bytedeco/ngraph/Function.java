@@ -90,10 +90,21 @@ public class Function extends Pointer {
         /** Check that there is a single result and return it. */
         public native @SharedPtr @ByVal Node get_result();
 
-        public native @StdString BytePointer get_friendly_name();
+        /** \brief Get the unique name of the function.
+         *  @return A const reference to the function's unique name. */
         public native @StdString BytePointer get_name();
-        public native void set_name(@StdString BytePointer name);
-        public native void set_name(@StdString String name);
+
+        /** \brief Sets a friendly name for a function. This does not overwrite the unique name
+         *         of the function and is retrieved via get_friendly_name(). Used mainly for debugging.
+         *         The friendly name may be set exactly once.
+         *  @param name is the friendly name to set */
+        public native void set_friendly_name(@StdString BytePointer name);
+        public native void set_friendly_name(@StdString String name);
+
+        /** \brief Gets the friendly name for a function. If no friendly name has been set via
+         *         set_friendly_name then the function's unique name is returned.
+         *  @return A const reference to the function's friendly name. */
+        public native @StdString BytePointer get_friendly_name();
         
         public native @Cast("size_t") long get_instance_id();
         public native @Cast("size_t") long get_temporary_pool_size();

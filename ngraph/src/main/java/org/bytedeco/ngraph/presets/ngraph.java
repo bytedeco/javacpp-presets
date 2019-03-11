@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Alexander Merritt
+ * Copyright (C) 2018-2019 Alexander Merritt, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ import java.lang.annotation.Target;
         "ngraph/frontend/onnxifi/backend.hpp",
         "ngraph/frontend/onnxifi/backend_manager.hpp",
         "ngraph/descriptor/tensor.hpp",
+        "ngraph/pass/pass_config.hpp",
         "ngraph/runtime/tensor.hpp",
         "ngraph/runtime/backend.hpp",
         "ngraph/runtime/cpu/cpu_backend.hpp",
@@ -124,6 +125,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("ONNXIFI_ABI", "ONNXIFI_PUBLIC", "ONNXIFI_CHECK_RESULT", "NGRAPH_API").cppTypes().annotations())
                .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>",
                              "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
+               .put(new Info("std::map<std::string,bool>").pointerTypes("StringBoolMap").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<size_t>").pointerTypes("SizeTVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("NgraphResultVector").define())

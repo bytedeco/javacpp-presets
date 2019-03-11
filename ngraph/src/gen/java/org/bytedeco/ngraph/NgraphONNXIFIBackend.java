@@ -23,14 +23,5 @@ public class NgraphONNXIFIBackend extends Pointer {
             
 
             public native @StdString BytePointer get_type();
-            public native @SharedPtr @ByVal Function compile(@Const @SharedPtr @ByRef Function function);
-
-            public native @Cast("bool") boolean call(@Const @SharedPtr @ByRef Function function,
-                                  @Const @ByRef NgraphTensorVector outputs,
-                                  @Const @ByRef NgraphTensorVector inputs);
-
-            public native @Cast("bool") boolean call_with_validate(
-                            @Const @SharedPtr @ByRef Function function,
-                            @Const @ByRef NgraphTensorVector outputs,
-                            @Const @ByRef NgraphTensorVector inputs);
+            public native @SharedPtr Executable compile(@Const @SharedPtr @ByRef Function function);
         }

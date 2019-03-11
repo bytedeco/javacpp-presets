@@ -20,7 +20,7 @@ public class Parameter extends Op {
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameter(Pointer p) { super(p); }
         
-            /** \brief Constructions a tensor view-typed parameter node.
+            /** \brief Constructions a tensor-typed parameter node.
              * 
              *  @param element_type The element type of the parameter.
              *  @param pshape The partial shape of the parameter.

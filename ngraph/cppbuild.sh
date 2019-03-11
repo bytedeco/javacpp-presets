@@ -14,7 +14,7 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 NCURSES=6.1
-NGRAPH=0.14.0
+NGRAPH=0.15.0
 download https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$NCURSES.tar.gz ncurses-$NCURSES.tar.gz
 download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph-$NGRAPH.tar.gz
 
@@ -43,6 +43,7 @@ cd ../ngraph-$NGRAPH
 patch -Np1 < ../../../ngraph.patch
 
 sedinplace '/In-source builds are not allowed/d' CMakeLists.txt
+sedinplace 's/set(NGRAPH_FORWARD_CMAKE_ARGS/set(NGRAPH_FORWARD_CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib/g' CMakeLists.txt
 $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=lib -DNGRAPH_UNIT_TEST_ENABLE=FALSE -DNGRAPH_TOOLS_ENABLE=FALSE -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DNGRAPH_USE_PREBUILT_LLVM=TRUE -DNGRAPH_ONNXIFI_ENABLE=TRUE .
 make -j $MAKEJ
 make install
