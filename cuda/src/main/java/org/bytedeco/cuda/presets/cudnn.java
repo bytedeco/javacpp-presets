@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -59,6 +59,9 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnPersistentRNNPlan_t").valueTypes("cudnnPersistentRNNPlan").pointerTypes("@ByPtrPtr cudnnPersistentRNNPlan"))
                .put(new Info("cudnnDropoutDescriptor_t").valueTypes("cudnnDropoutStruct").pointerTypes("@ByPtrPtr cudnnDropoutStruct"))
                .put(new Info("cudnnCTCLossDescriptor_t").valueTypes("cudnnCTCLossStruct").pointerTypes("@ByPtrPtr cudnnCTCLossStruct"))
+               .put(new Info("cudnnTensorTransformDescriptor_t").valueTypes("cudnnTensorTransformStruct").pointerTypes("@ByPtrPtr cudnnTensorTransformStruct"))
+               .put(new Info("cudnnSeqDataDescriptor_t").valueTypes("cudnnSeqDataStruct").pointerTypes("@ByPtrPtr cudnnSeqDataStruct"))
+               .put(new Info("cudnnAttnDescriptor_t").valueTypes("cudnnAttnStruct").pointerTypes("@ByPtrPtr cudnnAttnStruct"))
 
                .put(new Info("cudnnSetConvolution2dDescriptor_v4").javaText(
                           " public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,\n"

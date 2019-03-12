@@ -19,8 +19,8 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 10.0  https://developer.nvidia.com/cuda-zone
- * cuDNN 7.4  https://developer.nvidia.com/cudnn
+ * CUDA 10.1  https://developer.nvidia.com/cuda-zone
+ * cuDNN 7.5  https://developer.nvidia.com/cudnn
  * NCCL 2.4  https://developer.nvidia.com/nccl
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
@@ -60,32 +60,32 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5-SNAPSHOT</version>
             <classifier>linux-ppc64le-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5-SNAPSHOT</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.0-7.4-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

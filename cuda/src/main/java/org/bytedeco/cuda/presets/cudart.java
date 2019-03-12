@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,14 +38,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
               exclude = "<crt/host_defines.h>",
-              includepath = "/usr/local/cuda-10.0/include/", link = {"cudart@.10.0", "cuda@.10.0#"}, linkpath = "/usr/local/cuda-10.0/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.0/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.0/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-10.0/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64",     preload = "cudart64_100",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/") },
+              includepath = "/usr/local/cuda-10.1/include/", link = {"cudart@.10.1", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.1/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.1/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.1/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-10.1/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64",     preload = "cudart64_101",
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -64,6 +64,7 @@ public class cudart implements InfoMapper {
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4000",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4010",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 6050",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 10010",
                              "defined(__CUDA_API_VERSION) && __CUDA_API_VERSION >= 3020 && __CUDA_API_VERSION < 4010",
                              "defined(__CUDA_API_VERSION_INTERNAL)", "defined(__CUDA_API_PER_THREAD_DEFAULT_STREAM)",
                              "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION < 3020",
@@ -93,6 +94,7 @@ public class cudart implements InfoMapper {
                .put(new Info("const CUexternalSemaphore").valueTypes("CUextSemaphore_st").pointerTypes("@Cast(\"const CUexternalSemaphore*\") @ByPtrPtr CUextSemaphore_st"))
                .put(new Info("CUgraph").valueTypes("CUgraph_st").pointerTypes("@ByPtrPtr CUgraph_st"))
                .put(new Info("CUgraphNode").valueTypes("CUgraphNode_st").pointerTypes("@ByPtrPtr CUgraphNode_st"))
+               .put(new Info("const CUgraphNode").valueTypes("CUgraphNode_st").pointerTypes("@Cast(\"const CUgraphNode*\") @ByPtrPtr CUgraphNode_st"))
                .put(new Info("CUgraphExec").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"))
                .put(new Info("CUgraphicsResource").valueTypes("CUgraphicsResource_st").pointerTypes("@ByPtrPtr CUgraphicsResource_st"))
                .put(new Info("CUlinkState").valueTypes("CUlinkState_st").pointerTypes("@ByPtrPtr CUlinkState_st"))
@@ -109,6 +111,7 @@ public class cudart implements InfoMapper {
                .put(new Info("const cudaExternalSemaphore_t").valueTypes("CUexternalSemaphore_st").pointerTypes("@Cast(\"const cudaExternalSemaphore_t*\") @ByPtrPtr CUexternalSemaphore_st"))
                .put(new Info("cudaGraph_t").valueTypes("CUgraph_st").pointerTypes("@ByPtrPtr CUgraph_st"))
                .put(new Info("cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@ByPtrPtr CUgraphNode_st"))
+               .put(new Info("const cudaGraphNode_t").valueTypes("CUgraphNode_st").pointerTypes("@Cast(\"const cudaGraphNode_t*\") @ByPtrPtr CUgraphNode_st"))
                .put(new Info("cudaGraphExec_t").valueTypes("CUgraphExec_st").pointerTypes("@ByPtrPtr CUgraphExec_st"));
     }
 }

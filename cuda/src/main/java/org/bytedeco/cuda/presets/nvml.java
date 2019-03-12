@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class nvml implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("DECLDIR", "nvmlInit", "nvmlDeviceGetPciInfo", "nvmlDeviceGetCount", "nvmlDeviceGetHandleByIndex",
-                             "nvmlDeviceGetHandleByPciBusId", "nvmlDeviceGetNvLinkRemotePciInfo", "nvmlDeviceRemoveGpu", "nvmlEccBitType_t").cppTypes().annotations())
+                             "nvmlDeviceGetHandleByPciBusId", "nvmlDeviceGetNvLinkRemotePciInfo", "nvmlDeviceRemoveGpu",
+                             "nvmlDeviceGetGridLicensableFeatures", "nvmlEccBitType_t").cppTypes().annotations())
                .put(new Info("NVML_SINGLE_BIT_ECC", "NVML_DOUBLE_BIT_ECC").translate(false))
                .put(new Info("NVML_VGPU_PGPU_VIRTUALIZATION_CAP_MIGRATION").skip(true))
                .put(new Info("nvmlDevice_t").valueTypes("nvmlDevice_st").pointerTypes("@ByPtrPtr nvmlDevice_st", "@Cast(\"nvmlDevice_st**\") PointerPointer"))

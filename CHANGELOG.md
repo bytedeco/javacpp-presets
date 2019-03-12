@@ -1,4 +1,5 @@
 
+ * Lengthen `Mat` size and step getters to support `long` indexing ([pull #700](https://github.com/bytedeco/javacpp-presets/pull/700))
  * Rename `groupId` to "org.bytedeco" and use ModiTect to modularize all presets and comply with JPMS ([pull #681](https://github.com/bytedeco/javacpp-presets/pull/681))
  * Make `nvinfer1::Weights::values` settable in presets for TensorRT ([issue #698](https://github.com/bytedeco/javacpp-presets/issues/698))
  * Fix mapping of `HoughLines`, `HoughLinesP`, `HoughCircles`, and `Subdiv2D` from `opencv_imgproc` (issues [bytedeco/javacv#913](https://github.com/bytedeco/javacv/issues/913) and [bytedeco/javacv#1146](https://github.com/bytedeco/javacv/issues/1146))
@@ -6,7 +7,7 @@
  * Fix crash in Leptonica on CentOS 6 by downgrading to libpng 1.5.30 ([issue #680](https://github.com/bytedeco/javacpp-presets/issues/680))
  * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))
  * Add presets for NCCL 2.4.2, nGraph 0.15.0 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674))
- * Upgrade presets for FFmpeg 4.1.1, libfreenect 0.5.7, HDF5 1.10.5, MKL 2019.3, MKL-DNN 0.18, ARPACK-NG 3.7.0, MXNet 1.4.0, TensorFlow 1.13.1, ONNX 1.4.1 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676)), LiquidFun, Skia 1.68.0, and their dependencies including NCCL
+ * Upgrade presets for FFmpeg 4.1.1, libfreenect 0.5.7, HDF5 1.10.5, MKL 2019.3, MKL-DNN 0.18, ARPACK-NG 3.7.0, CUDA 10.1, cuDNN 7.5, MXNet 1.4.0, TensorFlow 1.13.1, ONNX 1.4.1 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676)), LiquidFun, Skia 1.68.0, and their dependencies including NCCL
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
 ### January 11, 2019 version 1.4.4

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2018 Samuel Audet
+ * Copyright (C) 2015-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<curand.h>", link = "curand@.10.0"),
-    @Platform(value = "windows-x86_64", preload = "curand64_100")},
+    @Platform(include = "<curand.h>", link = "curand@.10"),
+    @Platform(value = "windows-x86_64", preload = "curand64_10")},
         target = "org.bytedeco.cuda.curand", global = "org.bytedeco.cuda.global.curand")
 @NoException
 public class curand implements InfoMapper {

@@ -436,8 +436,8 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <minmemory>128m</minmemory>
-              <maxmemory>1024m</maxmemory>
+              <minmemory>256m</minmemory>
+              <maxmemory>2048m</maxmemory>
               <links>
                 <link>http://bytedeco.org/javacpp/apidocs</link>
               </links>
