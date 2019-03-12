@@ -19,7 +19,7 @@ public abstract class AbstractMat extends AbstractArray {
     public abstract int cols();
     public abstract BytePointer data();
     public abstract int size(int i);
-    public abstract int step(int i);
+    public abstract long step(int i);
     public abstract int dims();
     public abstract long elemSize1();
 
@@ -42,15 +42,15 @@ public abstract class AbstractMat extends AbstractArray {
     @Override public int arrayWidth() { return cols(); }
     @Override public int arrayHeight() { return rows(); }
     @Override public IplROI arrayROI() { return null; }
-    @Override public int arraySize() { return step(0)*size(0); }
+    @Override public long arraySize() { return step(0)*size(0); }
     @Override public BytePointer arrayData() { return data(); }
-    @Override public int arrayStep() { return step(0); }
+    @Override public long arrayStep() { return step(0); }
 
     public static final Mat EMPTY = null;
 
     @Override public <I extends Indexer> I createIndexer(boolean direct) {
         BytePointer ptr = arrayData();
-        int size = arraySize();
+        long size = arraySize();
         int dims = dims();
         int depth = depth();
         long elemSize = elemSize1();
@@ -60,7 +60,7 @@ public abstract class AbstractMat extends AbstractArray {
 
         for (int i=0; i<dims; i++) {
             sizes[i] = size(i);
-            int step = step(i);
+            long step = step(i);
             if (step%elemSize != 0) {
                 throw new UnsupportedOperationException("Step is not a multiple of element size");
             }

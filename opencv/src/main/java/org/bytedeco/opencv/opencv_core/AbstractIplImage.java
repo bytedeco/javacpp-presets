@@ -168,9 +168,9 @@ public abstract class AbstractIplImage extends CvArr {
     @Override public int arrayWidth() { return width(); }
     @Override public int arrayHeight() { return height(); }
     @Override public IplROI arrayROI() { return roi(); }
-    @Override public int arraySize() { return imageSize(); }
+    @Override public long arraySize() { return imageSize(); }
     @Override public BytePointer arrayData() { return imageData(); }
-    @Override public int arrayStep() { return widthStep(); }
+    @Override public long arrayStep() { return widthStep(); }
 
     public CvMat asCvMat() {
         CvMat mat = new CvMat();

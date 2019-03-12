@@ -15,7 +15,7 @@ import org.bytedeco.javacpp.annotation.Opaque;
     @Override public int arrayWidth()             { throw new UnsupportedOperationException(); }
     @Override public int arrayHeight()            { throw new UnsupportedOperationException(); }
     @Override public IplROI arrayROI()            { throw new UnsupportedOperationException(); }
-    @Override public int arraySize()              { throw new UnsupportedOperationException(); }
+    @Override public long arraySize()             { throw new UnsupportedOperationException(); }
     @Override public BytePointer arrayData()      { throw new UnsupportedOperationException(); }
-    @Override public int arrayStep()              { throw new UnsupportedOperationException(); }
+    @Override public long arrayStep()             { throw new UnsupportedOperationException(); }
 }

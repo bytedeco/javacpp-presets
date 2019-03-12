@@ -203,9 +203,9 @@ public abstract class AbstractCvMat extends CvArr {
     @Override public int arrayWidth() { return cols(); }
     @Override public int arrayHeight() { return rows(); }
     @Override public IplROI arrayROI() { return null; }
-    @Override public int arraySize() { return size(); }
+    @Override public long arraySize() { return size(); }
     @Override public BytePointer arrayData() { return data_ptr(); }
-    @Override public int arrayStep() { return step(); }
+    @Override public long arrayStep() { return step(); }
 
     /** @see #createBuffer() */
     @Deprecated public void reset() {
