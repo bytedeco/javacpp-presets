@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 
+
 @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class CUuuid extends Pointer {
     static { Loader.load(); }

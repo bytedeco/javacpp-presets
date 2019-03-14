@@ -12,8 +12,8 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/**
- * Structure to hold encoder session data
+/*
+ * Struct to hold encoder session data
  */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlEncoderSessionInfo_t extends Pointer {

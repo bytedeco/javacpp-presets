@@ -42,8 +42,6 @@ public class nvmlVgpuPgpuMetadata_t extends Pointer {
     /** Reserved for internal use */
     public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuPgpuMetadata_t reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
-    /** vGPU version range supported by host driver */
-    public native @ByRef nvmlVgpuVersion_t hostSupportedVgpuRange(); public native nvmlVgpuPgpuMetadata_t hostSupportedVgpuRange(nvmlVgpuVersion_t setter);
     /** Size of opaque data field in bytes */
     public native @Cast("unsigned int") int opaqueDataSize(); public native nvmlVgpuPgpuMetadata_t opaqueDataSize(int setter);
     /** Opaque data */

@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 
+// #endif
 
 /**
  * Type of stream callback functions.

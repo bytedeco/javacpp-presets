@@ -19,7 +19,7 @@ public class nvrtc extends org.bytedeco.cuda.presets.nvrtc {
 //
 // NVIDIA_COPYRIGHT_BEGIN
 //
-// Copyright (c) 2014-2018, NVIDIA CORPORATION.  All rights reserved.
+// Copyright (c) 2014-2017, NVIDIA CORPORATION.  All rights reserved.
 //
 // NVIDIA CORPORATION and its licensors retain all intellectual property
 // and proprietary rights in and to this software, related documentation
@@ -300,14 +300,14 @@ public static native @Cast("nvrtcResult") int nvrtcGetProgramLog(_nvrtcProgram p
 /**
  * \ingroup compilation
  * \brief   nvrtcAddNameExpression notes the given name expression
- *          denoting the address of a __global__ function 
- *          or __device__/__constant__ variable.
+ *          denoting a __global__ function or function template
+ *          instantiation.
  *
  * The identical name expression string must be provided on a subsequent
  * call to nvrtcGetLoweredName to extract the lowered name.
  * @param prog [in] CUDA Runtime Compilation program.
- * @param name_expression [in] constant expression denoting the address of
- *               a __global__ function or __device__/__constant__ variable.
+ * @param name_expression [in] constant expression denoting a __global__
+ *               function or function template instantiation.
  * @return
  *   - \link #nvrtcResult NVRTC_SUCCESS \endlink
  *   - \link #nvrtcResult NVRTC_ERROR_NO_NAME_EXPRESSIONS_AFTER_COMPILATION \endlink
@@ -322,7 +322,7 @@ public static native @Cast("nvrtcResult") int nvrtcAddNameExpression(_nvrtcProgr
 /**
  * \ingroup compilation
  * \brief   nvrtcGetLoweredName extracts the lowered (mangled) name
- *          for a __global__ function or __device__/__constant__ variable,
+ *          for a __global__ function or function template instantiation,
  *          and updates *lowered_name to point to it. The memory containing
  *          the name is released when the NVRTC program is destroyed by 
  *          nvrtcDestroyProgram.
@@ -330,8 +330,8 @@ public static native @Cast("nvrtcResult") int nvrtcAddNameExpression(_nvrtcProgr
  *          provided to nvrtcAddNameExpression.
  *
  * @param prog [in] CUDA Runtime Compilation program.
- * @param name_expression [in] constant expression denoting the address of 
- *               a __global__ function or __device__/__constant__ variable.
+ * @param name_expression [in] constant expression denoting a __global__
+ *               function or function template instantiation.
  * @param lowered_name [out] initialized by the function to point to a
  *               C string containing the lowered (mangled)
  *               name corresponding to the provided name expression.

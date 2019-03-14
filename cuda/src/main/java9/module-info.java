@@ -9,7 +9,6 @@ module org.bytedeco.cuda {
   exports org.bytedeco.cuda.curand;
   exports org.bytedeco.cuda.cusolver;
   exports org.bytedeco.cuda.cusparse;
-  exports org.bytedeco.cuda.nccl;
   exports org.bytedeco.cuda.nppc;
   exports org.bytedeco.cuda.nppicc;
   exports org.bytedeco.cuda.nppicom;

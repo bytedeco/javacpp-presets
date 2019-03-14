@@ -15,6 +15,7 @@ import static org.bytedeco.cuda.global.nppicom.*;
 
    
 
+
 // #if defined (__cplusplus)
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.nppicom.class)
 public class NppiDCTState extends Pointer {

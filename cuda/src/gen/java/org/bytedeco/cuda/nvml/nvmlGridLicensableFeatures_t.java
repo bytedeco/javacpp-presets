@@ -12,9 +12,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
-/**
- * Structure to store GRID licensable features
- */
 @Properties(inherit = org.bytedeco.cuda.presets.nvml.class)
 public class nvmlGridLicensableFeatures_t extends Pointer {
     static { Loader.load(); }
@@ -30,11 +27,8 @@ public class nvmlGridLicensableFeatures_t extends Pointer {
         return (nvmlGridLicensableFeatures_t)super.position(position);
     }
 
-    /** Non-zero if GRID Software Licensing is supported on the system, otherwise zero */
-    public native int isGridLicenseSupported(); public native nvmlGridLicensableFeatures_t isGridLicenseSupported(int setter);
-    /** Entries returned in \a gridLicensableFeatures array */
-    public native @Cast("unsigned int") int licensableFeaturesCount(); public native nvmlGridLicensableFeatures_t licensableFeaturesCount(int setter);
-    /** Array of GRID licensable features. */
+    public native int isGridLicenseSupported(); public native nvmlGridLicensableFeatures_t isGridLicenseSupported(int setter);     //<! Non-zero if GRID Software Licensing is supported on the system, otherwise zero
+    public native @Cast("unsigned int") int licensableFeaturesCount(); public native nvmlGridLicensableFeatures_t licensableFeaturesCount(int setter);    //<! Entries returned in \a gridLicensableFeatures array
     public native @ByRef nvmlGridLicensableFeature_t gridLicensableFeatures(int i); public native nvmlGridLicensableFeatures_t gridLicensableFeatures(int i, nvmlGridLicensableFeature_t setter);
     @MemberGetter public native nvmlGridLicensableFeature_t gridLicensableFeatures();
 }

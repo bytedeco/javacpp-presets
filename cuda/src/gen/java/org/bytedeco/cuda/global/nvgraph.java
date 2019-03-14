@@ -31,9 +31,10 @@ public class nvgraph extends org.bytedeco.cuda.presets.nvgraph {
 // #define _NVGRAPH_H_
 
 // #include "stddef.h"
-// #include "stdint.h"
+// #include "cuda_runtime_api.h"
+// #include <library_types.h>
 
-// #include "library_types.h"
+// #include "stdint.h"
 
 // #ifndef NVGRAPH_API
 // #ifdef _WIN32
@@ -150,15 +151,15 @@ public static native @Cast("nvgraphStatus_t") int nvgraphGetGraphStructure(nvgra
 
 /* Allocate numsets vectors of size V reprensenting Vertex Data and attached them the graph.
  * settypes[i] is the type of vector #i, currently all Vertex and Edge data should have the same type */
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") IntPointer settypes);
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") IntBuffer settypes);
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") int[] settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") IntPointer settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") IntBuffer settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateVertexData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") int[] settypes);
 
 /* Allocate numsets vectors of size E reprensenting Edge Data and attached them the graph.
  * settypes[i] is the type of vector #i, currently all Vertex and Edge data should have the same type */
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") IntPointer settypes);
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") IntBuffer settypes);
-public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType*") int[] settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") IntPointer settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") IntBuffer settypes);
+public static native @Cast("nvgraphStatus_t") int nvgraphAllocateEdgeData(nvgraphContext handle, nvgraphGraphDescr descrG, @Cast("size_t") long numsets, @Cast("cudaDataType_t*") int[] settypes);
 
 /* Update the vertex set #setnum with the data in *vertexData, sets have 0-based index
  *  Conversions are not sopported so nvgraphTopologyType_t should match the graph structure */
@@ -171,13 +172,13 @@ public static native @Cast("nvgraphStatus_t") int nvgraphGetVertexData(nvgraphCo
 /* Convert the edge data to another topology
  */
 public static native @Cast("nvgraphStatus_t") int nvgraphConvertTopology(nvgraphContext handle,
-                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType*") IntPointer dataType,
+                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType_t*") IntPointer dataType,
                                 @Cast("nvgraphTopologyType_t") int dstTType, Pointer dstTopology, Pointer dstEdgeData);
 public static native @Cast("nvgraphStatus_t") int nvgraphConvertTopology(nvgraphContext handle,
-                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType*") IntBuffer dataType,
+                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType_t*") IntBuffer dataType,
                                 @Cast("nvgraphTopologyType_t") int dstTType, Pointer dstTopology, Pointer dstEdgeData);
 public static native @Cast("nvgraphStatus_t") int nvgraphConvertTopology(nvgraphContext handle,
-                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType*") int[] dataType,
+                                @Cast("nvgraphTopologyType_t") int srcTType, Pointer srcTopology, Pointer srcEdgeData, @Cast("cudaDataType_t*") int[] dataType,
                                 @Cast("nvgraphTopologyType_t") int dstTType, Pointer dstTopology, Pointer dstEdgeData);
 
 /* Convert graph to another structure

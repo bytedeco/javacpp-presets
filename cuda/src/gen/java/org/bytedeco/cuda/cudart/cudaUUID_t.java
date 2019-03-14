@@ -8,7 +8,10 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 
-// #endif
+
+/**
+ * CUDA UUID types
+ */
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudart.class)
 public class cudaUUID_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

@@ -8,7 +8,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 
-
 /**
  * CUDA device properties
  */
@@ -30,13 +29,6 @@ public class cudaDeviceProp extends Pointer {
     /** ASCII string identifying device */
     public native @Cast("char") byte name(int i); public native cudaDeviceProp name(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer name();
-    /** 16-byte unique identifier */
-    public native @ByRef cudaUUID_t uuid(); public native cudaDeviceProp uuid(cudaUUID_t setter);
-    /** 8-byte locally unique identifier. Value is undefined on TCC and non-Windows platforms */
-    public native @Cast("char") byte luid(int i); public native cudaDeviceProp luid(int i, byte setter);
-    @MemberGetter public native @Cast("char*") BytePointer luid();
-    /** LUID device node mask. Value is undefined on TCC and non-Windows platforms */
-    public native @Cast("unsigned int") int luidDeviceNodeMask(); public native cudaDeviceProp luidDeviceNodeMask(int setter);
     /** Global memory available on device in bytes */
     public native @Cast("size_t") long totalGlobalMem(); public native cudaDeviceProp totalGlobalMem(long setter);
     /** Shared memory available per block in bytes */

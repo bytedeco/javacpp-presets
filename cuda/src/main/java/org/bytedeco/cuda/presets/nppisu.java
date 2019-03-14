@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_support_functions.h>", link = "nppisu@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppisu64_10")},
+    @Platform(include = "<nppi_support_functions.h>", link = "nppisu@9.2"),
+    @Platform(value = "windows-x86_64", preload = "nppisu64_92")},
         global = "org.bytedeco.cuda.global.nppisu")
 @NoException
 public class nppisu implements InfoMapper {

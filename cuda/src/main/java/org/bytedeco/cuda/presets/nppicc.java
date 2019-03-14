@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppicc64_10")},
+    @Platform(include = "<nppi_color_conversion.h>", link = "nppicc@9.2"),
+    @Platform(value = "windows-x86_64", preload = "nppicc64_92")},
         target = "org.bytedeco.cuda.nppicc", global = "org.bytedeco.cuda.global.nppicc")
 @NoException
 public class nppicc implements InfoMapper {

@@ -28,29 +28,19 @@ public class cudaPointerAttributes extends Pointer {
     }
 
     /**
-     * @deprecated
-     * 
      * The physical location of the memory, ::cudaMemoryTypeHost or 
-     * ::cudaMemoryTypeDevice. Note that managed memory can return either
-     * ::cudaMemoryTypeDevice or ::cudaMemoryTypeHost regardless of it's
-     * physical location.
+     * ::cudaMemoryTypeDevice.
      */
-    public native @Cast("cudaMemoryType") @Deprecated int memoryType(); public native cudaPointerAttributes memoryType(int setter);
-
-    /**
-     * The type of memory - ::cudaMemoryTypeUnregistered, ::cudaMemoryTypeHost,
-     * ::cudaMemoryTypeDevice or ::cudaMemoryTypeManaged.
-     */
-    public native @Cast("cudaMemoryType") int type(); public native cudaPointerAttributes type(int setter);
+    public native @Cast("cudaMemoryType") int memoryType(); public native cudaPointerAttributes memoryType(int setter);
 
     /** 
      * The device against which the memory was allocated or registered.
      * If the memory type is ::cudaMemoryTypeDevice then this identifies 
      * the device on which the memory referred physically resides.  If
-     * the memory type is ::cudaMemoryTypeHost or::cudaMemoryTypeManaged then
-     * this identifies the device which was current when the memory was allocated
-     * or registered (and if that device is deinitialized then this allocation
-     * will vanish with that device's state).
+     * the memory type is ::cudaMemoryTypeHost then this identifies the 
+     * device which was current when the memory was allocated or registered
+     * (and if that device is deinitialized then this allocation will vanish
+     * with that device's state).
      */
     public native int device(); public native cudaPointerAttributes device(int setter);
 
@@ -63,16 +53,11 @@ public class cudaPointerAttributes extends Pointer {
     /**
      * The address which may be dereferenced on the host to access the
      * memory or NULL if no such address exists.
-     *
-     * \note CUDA doesn't check if unregistered memory is allocated so this field
-     * may contain invalid pointer if an invalid pointer has been passed to CUDA.
      */
     public native Pointer hostPointer(); public native cudaPointerAttributes hostPointer(Pointer setter);
 
     /**
-     * @deprecated
-     *
      * Indicates if this pointer points to managed memory
      */
-    public native @Deprecated int isManaged(); public native cudaPointerAttributes isManaged(int setter);
+    public native int isManaged(); public native cudaPointerAttributes isManaged(int setter);
 }

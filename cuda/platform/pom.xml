@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>cuda</javacpp.moduleId>
-    <revision>10.1-7.5-${project.parent.version}</revision>
+    <revision>9.2-7.2-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

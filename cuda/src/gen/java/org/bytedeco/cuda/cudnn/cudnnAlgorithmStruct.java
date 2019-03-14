@@ -12,8 +12,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cudnn.*;
 
 
-/* RNN FIND API */
-
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cudnn.class)
 public class cudnnAlgorithmStruct extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

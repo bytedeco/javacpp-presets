@@ -826,33 +826,6 @@ public static native void fftwf_execute_dft_c2r(fftwf_plan plan,
                                     @Cast("fftwf_complex*") float[] idata,
                                     float[] odata);
 
-/** CUFFTW 64-bit Guru Interface
- *  dp */
-public static native fftw_plan fftw_plan_guru64_dft(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") DoublePointer in, @Cast("fftw_complex*") DoublePointer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") double[] in, @Cast("fftw_complex*") double[] out, int sign, @Cast("unsigned") int flags);
-
-public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, DoublePointer in, @Cast("fftw_complex*") DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, DoubleBuffer in, @Cast("fftw_complex*") DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft_r2c(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, double[] in, @Cast("fftw_complex*") double[] out, @Cast("unsigned") int flags);
-
-public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") DoublePointer in, DoublePointer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") DoubleBuffer in, DoubleBuffer out, @Cast("unsigned") int flags);
-public static native fftw_plan fftw_plan_guru64_dft_c2r(int rank, @Const fftw_iodim64 dims, int batch_rank, @Const fftw_iodim64 batch_dims, @Cast("fftw_complex*") double[] in, double[] out, @Cast("unsigned") int flags);
-
-/** sp */
-public static native fftwf_plan fftwf_plan_guru64_dft(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, int sign, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") float[] in, @Cast("fftwf_complex*") float[] out, int sign, @Cast("unsigned") int flags);
-
-public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, FloatPointer in, @Cast("fftwf_complex*") FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, FloatBuffer in, @Cast("fftwf_complex*") FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft_r2c(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, float[] in, @Cast("fftwf_complex*") float[] out, @Cast("unsigned") int flags);
-
-public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") FloatPointer in, FloatPointer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") FloatBuffer in, FloatBuffer out, @Cast("unsigned") int flags);
-public static native fftwf_plan fftwf_plan_guru64_dft_c2r(int rank, @Cast("const fftwf_iodim64*") fftw_iodim64 dims, int batch_rank, @Cast("const fftwf_iodim64*") fftw_iodim64 batch_dims, @Cast("fftwf_complex*") float[] in, float[] out, @Cast("unsigned") int flags);
-
 // #ifdef _WIN32
 // #define _CUFFTAPI(T) T CUFFTAPI
 // #else
@@ -878,7 +851,7 @@ public static native void fftwf_import_wisdom_from_file(@Cast("FILE*") Pointer i
 
 public static native void fftw_print_plan(fftw_plan plan);                                 
 
-public static native void fftwf_print_plan(fftwf_plan plan);
+public static native void fftwf_print_plan(fftwf_plan plan); 
 
 public static native void fftw_set_timelimit(double seconds);
 

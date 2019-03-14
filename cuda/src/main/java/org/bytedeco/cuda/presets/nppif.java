@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_filtering_functions.h>", link = "nppif@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppif64_10")},
+    @Platform(include = "<nppi_filtering_functions.h>", link = "nppif@9.2"),
+    @Platform(value = "windows-x86_64", preload = "nppif64_92")},
         global = "org.bytedeco.cuda.global.nppif")
 @NoException
 public class nppif implements InfoMapper {

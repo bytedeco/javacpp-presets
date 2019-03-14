@@ -33,7 +33,6 @@ import static org.bytedeco.cuda.global.nppig.*;
  * @param flip Specifies the axis about which the images are to be mirrored.
  * @param pBatchList Device memory pointer to nBatchSize list of NppiMirrorBatchCXR structures.
  * @param nBatchSize Number of NppiMirrorBatchCXR structures in this call (must be > 1).
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes, \ref mirror_error_codes
  *
  * \{

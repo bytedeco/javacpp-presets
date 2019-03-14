@@ -29,13 +29,11 @@ import static org.bytedeco.cuda.global.nppig.*;
  * in the batch.  The primary purpose of this function is to provide improved performance for batches of smaller images as long as GPU 
  * resources are available.  Therefore it is recommended that the function not be used for very large images as there may not be resources 
  * available for processing several large images simultaneously.  
- * A single set of oSrcRectROI and oDstRectROI values are applied to each source image and destination image in the batch in the nppiResizeBatch 
- * version of the function while per image specific oSrcRectROI and oDstRectROI values can be used in the nppiResizeBatch_Advanced version of the function.
+ * A single set of oSrcRectROI and oDstRectROI values are applied to each source image and destination image in the batch.
  * Source and destination image sizes may vary but oSmallestSrcSize and oSmallestDstSize must be set to the smallest
  * source and destination image sizes in the batch. The parameters in the NppiResizeBatchCXR structure represent the corresponding
- * per-image nppiResize parameters for each image in the nppiResizeBatch functions and the NppiImageDescriptor and NppiResizeBatchROI_Advanced structures represent 
- * the corresponding per-image nppiResize parameters for the nppiResizeBatch_Advanced functions.  The NppiResizeBatchCXR or 
- * NppiImageDescriptor and NppiResizeBatchROI_Advanced arrays must be in device memory.
+ * per-image nppiResize parameters for each image in the batch.  The NppiResizeBatchCXR array must be in device memory.
+ *
  *
  * ResizeBatch supports the following interpolation modes:
  *
@@ -45,11 +43,6 @@ import static org.bytedeco.cuda.global.nppig.*;
  *   NPPI_INTER_CUBIC
  *   NPPI_INTER_SUPER
  * }</pre>
- *
- * Below is the diagram of batch resize functions for variable ROIs. Figure shows the flexibility that the API can handle.
- * The ROIs for source and destination images can be any rectangular width and height that reflects the needed resize factors, inside or beyond the image boundary.
- *
- * \image html resize.png
  *
  * \section resize_error_codes Error Codes
  * The resize primitives return the following error codes:
@@ -67,23 +60,7 @@ import static org.bytedeco.cuda.global.nppig.*;
  * @param oDstRectROI Region of interest in the destination images (may overlap destination image size width and height).
  * @param eInterpolation The type of eInterpolation to perform resampling. Currently limited to NPPI_INTER_NN, NPPI_INTER_LINEAR, NPPI_INTER_CUBIC, or NPPI_INTER_SUPER. 
  * @param pBatchList Device memory pointer to nBatchSize list of NppiResizeBatchCXR structures.
- * @param pBatchSrc Device pointer to NppiImageDescriptor list of source image descriptors. User needs to intialize this structure and copy it to device.
- * @param pBatchDst Device pointer to NppiImageDescriptor list of destination image descriptors. User needs to intialize this structure and copy it to device. 
- * @param pBatchROI Device pointer to NppiResizeBatchROI_Advanced list of per-image variable ROIs. User needs to initialize this structure and copy it to device. 
  * @param nBatchSize Number of NppiResizeBatchCXR structures in this call (must be > 1).
- * @param nppStreamCtx \ref application_managed_stream_context. 
- * @return \ref image_data_error_codes, \ref roi_error_codes, \ref resize_error_codes
- *
- * <h3><a name="CommonResizeBatchAdvancedParameters">Common parameters for nppiResizeBatchAdvanced functions include:</a></h3>
- *
- * @param nMaxWidth The maximum width of all destination ROIs
- * @param nMaxHeight The maximum height of all destination ROIs
- * @param pBatchSrc Device pointer to NppiImageDescriptor list of source image descriptors. User needs to intialize this structure and copy it to device.
- * @param pBatchDst Device pointer to NppiImageDescriptor list of destination image descriptors. User needs to intialize this structure and copy it to device. 
- * @param pBatchROI Device pointer to NppiResizeBatchROI_Advanced list of per-image variable ROIs. User needs to initialize this structure and copy it to device. 
- * @param nBatchSize Number of images in a batch.
- * @param eInterpolation The type of eInterpolation to perform resampling.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes, \ref resize_error_codes
  *
  * \{

@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_compression_functions.h>", link = "nppicom@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppicom64_10")},
+    @Platform(include = "<nppi_compression_functions.h>", link = "nppicom@9.2"),
+    @Platform(value = "windows-x86_64", preload = "nppicom64_92")},
         target = "org.bytedeco.cuda.nppicom", global = "org.bytedeco.cuda.global.nppicom")
 @NoException
 public class nppicom implements InfoMapper {
