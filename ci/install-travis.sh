@@ -49,7 +49,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   SCL_ENABLE="devtoolset-7 python27"
   if [[ "cpython mxnet tensorflow onnx ngraph qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="devtoolset-7"
+    SCL_ENABLE=""
+    # MXNet and TensorFlow don't work well with GCC 6 or 7 for some reason
+    if [[ ! "mxnet tensorflow " =~ "$PROJ " ]]; then
+      SCL_ENABLE="devtoolset-7"
+    fi
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
@@ -61,12 +65,15 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "find /var/cache/yum/ -name *.rpm | xargs rpm -i --force"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "wget --no-directories --no-parent -r https://www.repo.cloudlinux.com/cloudlinux/$CENTOS_VERSION/sclo/devtoolset-7/i386/ -P $HOME"
-    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i --force --nodeps $HOME/*.rpm"
+    if [[ "$SCL_ENABLE" =~ devtoolset-7 ]]; then
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "wget --no-directories --no-parent -r https://www.repo.cloudlinux.com/cloudlinux/$CENTOS_VERSION/sclo/devtoolset-7/i386/ -P $HOME"
+      docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i --force --nodeps $HOME/*.rpm"
+    fi
   fi
   # work around issues with CUDA 10.1
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do sudo ln -s \$f \$f.1; done"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.1; done"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
@@ -278,11 +285,14 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.0-osx-x64-v7.5.0.56.tgz
+        tar xvf $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
         sudo cp /usr/local/cuda/lib/* /usr/local/lib/
+
+        # work around issues with CUDA 10.1
+        for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.1.dylib}; done
       fi
 
       if [ "$PROJ" == "tensorflow" ]; then

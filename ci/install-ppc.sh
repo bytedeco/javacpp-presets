@@ -83,6 +83,10 @@ if [[ "$PROJ" =~ cuda ]]; then
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/cudnn-10.1-linux-ppc64le-v7.5.0.56.tgz -C /usr/local/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/nccl_ppc64le.txz --strip-components=1 -C /usr/local/cuda/"
    docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
+   # work around issues with CUDA 10.1
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib/powerpc64le-linux-gnu/libcublas* /usr/lib/powerpc64le-linux-gnu/libnvblas* /usr/local/cuda/lib64/"
+   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.1; done"
 fi
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "powerpc64le-linux-gnu-gcc --version"
