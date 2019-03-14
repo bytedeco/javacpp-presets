@@ -31,13 +31,10 @@ public class dim3 extends Pointer {
     public native @Cast("unsigned int") int y(); public native dim3 y(int setter);
     public native @Cast("unsigned int") int z(); public native dim3 z(int setter);
 // #if defined(__cplusplus)
-// #if __cplusplus >= 201103L
     public dim3(@Cast("unsigned int") int vx/*=1*/, @Cast("unsigned int") int vy/*=1*/, @Cast("unsigned int") int vz/*=1*/) { super((Pointer)null); allocate(vx, vy, vz); }
     private native void allocate(@Cast("unsigned int") int vx/*=1*/, @Cast("unsigned int") int vy/*=1*/, @Cast("unsigned int") int vz/*=1*/);
     public dim3() { super((Pointer)null); allocate(); }
     private native void allocate();
-// #else
-// #endif
     public dim3(@ByVal uint3 v) { super((Pointer)null); allocate(v); }
     private native void allocate(@ByVal uint3 v);
     public native @ByVal @Name("operator uint3") uint3 asUint3();

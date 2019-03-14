@@ -148,8 +148,8 @@ public class nppc extends org.bytedeco.cuda.presets.nppc {
 // #endif
 
 public static final int NPP_VERSION_MAJOR = 10;
-public static final int NPP_VERSION_MINOR = 1;
-public static final int NPP_VERSION_BUILD = 105;
+public static final int NPP_VERSION_MINOR = 0;
+public static final int NPP_VERSION_BUILD = 130;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -160,7 +160,7 @@ public static final int NPP_VERSION_BUILD = 105;
 
 // Parsed from <nppdefs.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -218,17 +218,11 @@ public static final int NPP_VERSION_BUILD = 105;
  * Typedefinitions and macros for NPP library.
  */
  
+
 // #ifdef __cplusplus
-// Targeting ../nppc/Npp16f.java
+// #endif
 
-
-// Targeting ../nppc/Npp16f_2.java
-
-
-
-// #define NPP_HALF_TO_NPP16F(pHalf) (* reinterpret_cast<Npp16f *>((void *)(pHalf)))
-
-// If this is a 32-bit Windows compile, don't align to 16-byte at all
+        // If this is a 32-bit Windows compile, don't align to 16-byte at all
         // and use a "union-trick" to create 8-byte alignment.
 // #if defined(_WIN32) && !defined(_WIN64)
 
@@ -276,7 +270,7 @@ public static final int
     /**  Generic Lanczos filtering with order 3. */
     NPPI_INTER_LANCZOS3_ADVANCED = 17,
     /**  Smooth edge filtering. */
-    NPPI_SMOOTH_EDGE             = (int)0x8000000; 
+    NPPI_SMOOTH_EDGE             = (1 << 31); 
 
 /** 
  * Bayer Grid Position Registration.
@@ -439,10 +433,6 @@ public static final int
     /**  Speed reduction due to uncoalesced memory accesses warning. */
     NPP_MISALIGNED_DST_ROI_WARNING          = 10000;
 
-
-/*
- *  NOTE THAT THIS ENUM WILL BE DEPRECATED IN THE NEXT NPP RELEASE, CALL CUDA DIRECTLY TO FIND OUT THIS INFORMATION.
- */
 /** enum NppGpuComputeCapability */
 public static final int
     /**  Indicates that the compute-capability query failed */
@@ -487,6 +477,8 @@ public static final int
     NPP_CUDA_7_0             = 700,
     /**  Indicates that CUDA 7.2 capable device is machine's default device */
     NPP_CUDA_7_2             = 720,
+    /**  Indicates that CUDA 7.3 capable device is machine's default device */
+    NPP_CUDA_7_3             = 730,
     /**  Indicates that CUDA 7.5 or better is machine's default device */
     NPP_CUDA_7_5             = 750;
 // Targeting ../nppc/NppLibraryVersion.java
@@ -747,11 +739,6 @@ public static final int
     nppiNormL1 = 1,
     /**  square root of sum of squares */
     nppiNormL2 = 2;
-// Targeting ../nppc/NppiImageDescriptor.java
-
-
-// Targeting ../nppc/NppStreamContext.java
-
 
 
 // #ifdef __cplusplus /* extern "C" */
@@ -764,7 +751,7 @@ public static final int
 
 // Parsed from <nppcore.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -846,12 +833,7 @@ public static native @Const NppLibraryVersion nppGetLibVersion();
  * What CUDA compute model is supported by the active CUDA device?
  * 
  * Before trying to call any NPP functions, the user should make a call
- * this function to ensure that the current machine has a CUDA capable device. 
- *  
- * NOTE THAT THIS FUNCTION WILL BE DEPRECATED IN THE NEXT NPP RELEASE. 
- * INSTEAD CALL cudaGetDevice() TO GET THE GPU DEVICE ID THEN cudaDeviceGetAttribute() TWICE, 
- * ONCE WITH THE cudaDevAttrComputeCapabilityMajor PARAMETER AND ONCE WITH THE 
- * cudaDevAttrComputeCapabilityMinor PARAMETER. 
+ * this function to ensure that the current machine has a CUDA capable device.
  *
  * @return An enum value representing if a CUDA capable device was found and what
  *      level of compute capabilities it supports.
@@ -904,20 +886,6 @@ public static native @Cast("const char*") BytePointer nppGetGpuName();
  * issed to that NPP stream.
  */
 public static native CUstream_st nppGetStream();
-
-/**
- * Get the current NPP managed CUDA stream context as set by calls to nppSetStream().
- * NPP enables concurrent device tasks via an NPP maintained global stream state context.
- * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
- * A user can set the NPP stream to any valid CUDA stream which will update the current NPP managed stream state context 
- * or supply application initialized stream contexts to NPP calls. All CUDA commands
- * issued by NPP (e.g. kernels launched by the NPP library) are then
- * issed to the current NPP managed stream or to application supplied stream contexts depending on whether 
- * the stream context is passed to the NPP function or not.  NPP managed stream context calls (those without stream context parameters) 
- * can be intermixed with application managed stream context calls but any NPP managed stream context calls will always use the most recent 
- * stream set by nppSetStream() or the NULL stream if nppSetStream() has never been called. 
- */
-public static native @Cast("NppStatus") int nppGetStreamContext(NppStreamContext pNppStreamContext);
 
 /**
  * Get the number of SMs on the device associated with the current NPP CUDA stream.

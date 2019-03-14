@@ -14,10 +14,6 @@ import static org.bytedeco.cuda.global.nppc.*;
 import static org.bytedeco.cuda.global.nppig.*;
 
 
-/**
- * Data structure for variable ROI image resizing.
- * 
- */
 @Properties(inherit = org.bytedeco.cuda.presets.nppig.class)
 public class NppiResizeBatchROI_Advanced extends Pointer {
     static { Loader.load(); }

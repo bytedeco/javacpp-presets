@@ -61,7 +61,6 @@ import static org.bytedeco.cuda.global.nppig.*;
  * @param eInterpolation The type of eInterpolation to perform resampling. Currently limited to NPPI_INTER_NN, NPPI_INTER_LINEAR, or NPPI_INTER_CUBIC. 
  * @param pBatchList Device memory pointer to nBatchSize list of NppiWarpAffineBatchCXR structures.
  * @param nBatchSize Number of NppiWarpAffineBatchCXR structures in this call (must be > 1).
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{

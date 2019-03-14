@@ -11,17 +11,13 @@ To view the license for the CUDA Toolkit included in these archives, click [here
 ### CUDA Deep Neural Network library (cuDNN)
 To view the license for cuDNN included in these archives, click [here](https://developer.nvidia.com/cudnn/license_agreement)
 
-### NVIDIA Collective Communications Library (NCCL)
-To view the license for NCCL included in these archives, click [here](https://github.com/NVIDIA/nccl/blob/master/LICENSE.txt)
-
 
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 10.1  https://developer.nvidia.com/cuda-zone
- * cuDNN 7.5  https://developer.nvidia.com/cudnn
- * NCCL 2.4  https://developer.nvidia.com/nccl
+ * CUDA 10.0  https://developer.nvidia.com/cuda-zone
+ * cuDNN 7.4  https://developer.nvidia.com/cudnn
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -60,32 +56,32 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform</artifactId>
-            <version>10.1-7.5-1.5</version>
+            <version>10.0-7.4-1.5</version>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
+        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5</version>
+            <version>10.0-7.4-1.5</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5</version>
+            <version>10.0-7.4-1.5</version>
             <classifier>linux-ppc64le-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5</version>
+            <version>10.0-7.4-1.5</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5</version>
+            <version>10.0-7.4-1.5</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

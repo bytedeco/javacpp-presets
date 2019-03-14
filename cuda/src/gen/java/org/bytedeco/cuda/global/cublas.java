@@ -98,13 +98,6 @@ public class cublas extends org.bytedeco.cuda.presets.cublas {
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
 
-public static final int CUBLAS_VER_MAJOR = 10;
-public static final int CUBLAS_VER_MINOR = 1;
-public static final int CUBLAS_VER_PATCH = 0;
-public static final int CUBLAS_VERSION =  (CUBLAS_VER_MAJOR * 1000 + 
-                         CUBLAS_VER_MINOR *  100 + 
-                         CUBLAS_VER_PATCH);
-
 /* CUBLAS status type returns */
 /** enum cublasStatus_t */
 public static final int
@@ -123,8 +116,7 @@ public static final int
 /** enum cublasFillMode_t */
 public static final int
     CUBLAS_FILL_MODE_LOWER = 0, 
-    CUBLAS_FILL_MODE_UPPER = 1,
-    CUBLAS_FILL_MODE_FULL = 2;
+    CUBLAS_FILL_MODE_UPPER = 1;
 
 /** enum cublasDiagType_t */
 public static final int
@@ -141,9 +133,7 @@ public static final int
 public static final int
     CUBLAS_OP_N = 0,  
     CUBLAS_OP_T = 1,  
-    CUBLAS_OP_C = 2,
-    CUBLAS_OP_HERMITAN = 2, /* synonym if CUBLAS_OP_C */
-    CUBLAS_OP_CONJG = 3;     /* conjugate */
+    CUBLAS_OP_C = 2;
 
 
 /** enum cublasPointerMode_t */
@@ -224,7 +214,6 @@ public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasConte
 public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, IntPointer value);
 public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, IntBuffer value);
 public static native @Cast("cublasStatus_t") int cublasGetProperty(@Cast("libraryPropertyType") int type, int[] value);
-public static native @Cast("size_t") long cublasGetCudartVersion();
 
 public static native @Cast("cublasStatus_t") int cublasSetStream_v2(cublasContext handle, CUstream_st streamId); 
 public static native @Cast("cublasStatus_t") int cublasGetStream_v2(cublasContext handle, @ByPtrPtr CUstream_st streamId); 
@@ -447,7 +436,6 @@ public static native @Cast("cublasStatus_t") int cublasNrm2Ex(cublasContext hand
                                                      Pointer result,
                                                      @Cast("cudaDataType") int resultType,
                                                      @Cast("cudaDataType") int executionType); /* host or device pointer */
-
 public static native @Cast("cublasStatus_t") int cublasSnrm2_v2(cublasContext handle, 
                                                      int n, 
                                                      @Const FloatPointer x, 
@@ -620,7 +608,6 @@ public static native @Cast("cublasStatus_t") int cublasScalEx(cublasContext hand
                                                      @Cast("cudaDataType") int xType,
                                                      int incx,
                                                      @Cast("cudaDataType") int executionType);
-
 public static native @Cast("cublasStatus_t") int cublasSscal_v2(cublasContext handle, 
                                                      int n, 
                                                      @Const FloatPointer alpha,
@@ -769,15 +756,6 @@ public static native @Cast("cublasStatus_t") int cublasZaxpy_v2(cublasContext ha
                                                       @Cast("cuDoubleComplex*") double2 y, 
                                                       int incy);
 
-public static native @Cast("cublasStatus_t") int cublasCopyEx(cublasContext handle,
-                                                      int n, 
-                                                      @Const Pointer x,
-                                                      @Cast("cudaDataType") int xType,
-                                                      int incx, 
-                                                      Pointer y,
-                                                      @Cast("cudaDataType") int yType,
-                                                      int incy);
-
 public static native @Cast("cublasStatus_t") int cublasScopy_v2(cublasContext handle,
                                                       int n, 
                                                       @Const FloatPointer x, 
@@ -882,15 +860,6 @@ public static native @Cast("cublasStatus_t") int cublasZswap_v2(cublasContext ha
                                                       @Cast("cuDoubleComplex*") double2 y,
                                                       int incy);
 
-public static native @Cast("cublasStatus_t") int cublasSwapEx(cublasContext handle,
-                                                      int n,
-                                                      Pointer x,
-                                                      @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      Pointer y,
-                                                      @Cast("cudaDataType") int yType,
-                                                      int incy);
-
 public static native @Cast("cublasStatus_t") int cublasIsamax_v2(cublasContext handle, 
                                                       int n, 
                                                       @Const FloatPointer x, 
@@ -954,26 +923,6 @@ public static native @Cast("cublasStatus_t") int cublasIzamax_v2(cublasContext h
                                                       @Cast("const cuDoubleComplex*") double2 x, 
                                                       int incx, 
                                                       int[] result); /* host or device pointer */
-
-public static native @Cast("cublasStatus_t") int cublasIamaxEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      IntPointer result
-                                                    );
-public static native @Cast("cublasStatus_t") int cublasIamaxEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      IntBuffer result
-                                                    );
-public static native @Cast("cublasStatus_t") int cublasIamaxEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      int[] result
-                                                    );
-
 
 public static native @Cast("cublasStatus_t") int cublasIsamin_v2(cublasContext handle, 
                                                       int n, 
@@ -1039,35 +988,6 @@ public static native @Cast("cublasStatus_t") int cublasIzamin_v2(cublasContext h
                                                       int incx, 
                                                       int[] result); /* host or device pointer */
  
-public static native @Cast("cublasStatus_t") int cublasIaminEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      IntPointer result
-                                                    );
-public static native @Cast("cublasStatus_t") int cublasIaminEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      IntBuffer result
-                                                    );
-public static native @Cast("cublasStatus_t") int cublasIaminEx(cublasContext handle,
-                                                      int n,
-                                                      @Const Pointer x, @Cast("cudaDataType") int xType,
-                                                      int incx,
-                                                      int[] result
-                                                    );
-
-public static native @Cast("cublasStatus_t") int cublasAsumEx(cublasContext handle,
-                                                     int n, 
-                                                     @Const Pointer x,
-                                                     @Cast("cudaDataType") int xType,
-                                                     int incx, 
-                                                     Pointer result,
-                                                     @Cast("cudaDataType") int resultType,
-                                                     @Cast("cudaDataType") int executiontype
-                                                  );
-
 public static native @Cast("cublasStatus_t") int cublasSasum_v2(cublasContext handle, 
                                                      int n, 
                                                      @Const FloatPointer x, 
@@ -1282,20 +1202,6 @@ public static native @Cast("cublasStatus_t") int cublasZdrot_v2(cublasContext ha
                                                      @Const double[] c,
                                                      @Const double[] s); /* host or device pointer */
 
-public static native @Cast("cublasStatus_t") int cublasRotEx(cublasContext handle,
-                                                     int n,
-                                                     Pointer x,
-                                                     @Cast("cudaDataType") int xType,
-                                                     int incx,
-                                                     Pointer y,
-                                                     @Cast("cudaDataType") int yType,
-                                                     int incy,
-                                                     @Const Pointer c,
-                                                     @Const Pointer s,
-                                                     @Cast("cudaDataType") int csType,
-                                                     @Cast("cudaDataType") int executiontype);
-
-
 public static native @Cast("cublasStatus_t") int cublasSrotg_v2(cublasContext handle, 
                                                      FloatPointer a,
                                                      FloatPointer b,
@@ -1360,15 +1266,6 @@ public static native @Cast("cublasStatus_t") int cublasZrotg_v2(cublasContext ha
                                                      double[] c,
                                                      @Cast("cuDoubleComplex*") double2 s); /* host or device pointer */
 
-public static native @Cast("cublasStatus_t") int cublasRotgEx(cublasContext handle,
-                                                     Pointer a,
-                                                     Pointer b,
-                                                     @Cast("cudaDataType") int abType,
-                                                     Pointer c,
-                                                     Pointer s,
-                                                     @Cast("cudaDataType") int csType,
-                                                     @Cast("cudaDataType") int executiontype);
-
 public static native @Cast("cublasStatus_t") int cublasSrotm_v2(cublasContext handle, 
                                                      int n, 
                                                      FloatPointer x, 
@@ -1412,19 +1309,7 @@ public static native @Cast("cublasStatus_t") int cublasDrotm_v2(cublasContext ha
                                                      double[] y, 
                                                      int incy, 
                                                      @Const double[] param);  /* host or device pointer */
-
-public static native @Cast("cublasStatus_t") int cublasRotmEx(cublasContext handle,
-                                                     int n,
-                                                     Pointer x,
-                                                     @Cast("cudaDataType") int xType,
-                                                     int incx,
-                                                     Pointer y,
-                                                     @Cast("cudaDataType") int yType,
-                                                     int incy,
-                                                     @Const Pointer param,
-                                                     @Cast("cudaDataType") int paramType,
-                                                     @Cast("cudaDataType") int executiontype);
-
+        
 public static native @Cast("cublasStatus_t") int cublasSrotmg_v2(cublasContext handle, 
                                                       FloatPointer d1,
                                                       FloatPointer d2,
@@ -1463,19 +1348,6 @@ public static native @Cast("cublasStatus_t") int cublasDrotmg_v2(cublasContext h
                                                       @Const double[] y1,  
                                                       double[] param);    /* host or device pointer */  
 
-public static native @Cast("cublasStatus_t") int cublasRotmgEx(cublasContext handle,
-                                                      Pointer d1,
-                                                      @Cast("cudaDataType") int d1Type,
-                                                      Pointer d2,
-                                                      @Cast("cudaDataType") int d2Type,
-                                                      Pointer x1,
-                                                      @Cast("cudaDataType") int x1Type,
-                                                      @Const Pointer y1,
-                                                      @Cast("cudaDataType") int y1Type,
-                                                      Pointer param,
-                                                      @Cast("cudaDataType") int paramType,
-                                                      @Cast("cudaDataType") int executiontype
-                                                      );
 /* --------------- CUBLAS BLAS2 functions  ---------------- */
 
 /* GEMV */

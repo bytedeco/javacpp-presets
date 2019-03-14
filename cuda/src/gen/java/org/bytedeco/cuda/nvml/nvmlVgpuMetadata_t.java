@@ -12,6 +12,15 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.nvml.*;
 
 
+/** \} */
+
+/***************************************************************************************************/
+/** \defgroup nvml vGPU Migration
+ * This chapter describes NVML operations that are associated with vGPU Migration.
+ *  \{
+ */
+/***************************************************************************************************/
+
 /**
  * vGPU metadata structure.
  */
@@ -45,8 +54,6 @@ public class nvmlVgpuMetadata_t extends Pointer {
     /** Reserved for internal use */
     public native @Cast("unsigned int") int reserved(int i); public native nvmlVgpuMetadata_t reserved(int i, int setter);
     @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
-    /** vGPU version of guest driver */
-    public native @Cast("unsigned int") int guestVgpuVersion(); public native nvmlVgpuMetadata_t guestVgpuVersion(int setter);
     /** Size of opaque data field in bytes */
     public native @Cast("unsigned int") int opaqueDataSize(); public native nvmlVgpuMetadata_t opaqueDataSize(int setter);
     /** Opaque data */

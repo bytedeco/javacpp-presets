@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = "<nppi_data_exchange_and_initialization.h>", link = "nppidei@.10"),
-    @Platform(value = "windows-x86_64", preload = "nppidei64_10")},
+    @Platform(include = "<nppi_data_exchange_and_initialization.h>", link = "nppidei@10.0"),
+    @Platform(value = "windows-x86_64", preload = "nppidei64_100")},
         global = "org.bytedeco.cuda.global.nppidei")
 @NoException
 public class nppidei implements InfoMapper {

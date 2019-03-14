@@ -36,6 +36,4 @@ public class nvmlGridLicensableFeature_t extends Pointer {
     public native @Cast("unsigned int") int featureState(); public native nvmlGridLicensableFeature_t featureState(int setter);
     public native @Cast("char") byte licenseInfo(int i); public native nvmlGridLicensableFeature_t licenseInfo(int i, byte setter);
     @MemberGetter public native @Cast("char*") BytePointer licenseInfo();
-    public native @Cast("char") byte productName(int i); public native nvmlGridLicensableFeature_t productName(int i, byte setter);
-    @MemberGetter public native @Cast("char*") BytePointer productName();
 }

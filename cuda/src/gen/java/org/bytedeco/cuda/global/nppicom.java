@@ -18,7 +18,7 @@ public class nppicom extends org.bytedeco.cuda.presets.nppicom {
 
 // Parsed from <nppi_compression_functions.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2016 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -173,7 +173,6 @@ public static native @Cast("NppStatus") int nppiQuantInvTableInit_JPEG_8u16u(@Ca
  * @param pQuantFwdTable Forward quantization tables for JPEG encoding created
  *          using nppiQuantInvTableInit_JPEG_8u16u().
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -181,16 +180,6 @@ public static native @Cast("NppStatus") int nppiQuantInvTableInit_JPEG_8u16u(@Ca
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") ShortPointer pQuantFwdTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") ShortBuffer pQuantFwdTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") short[] pQuantFwdTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, 
                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                     @Cast("const Npp16u*") ShortPointer pQuantFwdTable, @ByVal NppiSize oSizeROI);
@@ -213,7 +202,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R(
  * @param pQuantInvTable Inverse quantization tables for JPEG decoding created
  *           using nppiQuantInvTableInit_JPEG_8u16u().
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -221,16 +209,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R(
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") ShortPointer pQuantInvTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") ShortBuffer pQuantInvTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                        @Cast("const Npp16u*") short[] pQuantInvTable, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-   
 public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, 
                                           @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                     @Cast("const Npp16u*") ShortPointer pQuantInvTable, @ByVal NppiSize oSizeROI);
@@ -253,7 +231,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R(
  * @see nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW(), nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW.
  * 
  * @param ppState Pointer to pointer to DCT state structure. 
- * @param nppStreamCtx \ref application_managed_stream_context. 
  *
  * @return NPP_SUCCESS Indicates no error. Any other value indicates an error
  *         or a warning
@@ -262,9 +239,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R(
  * @return NPP_NULL_POINTER_ERROR Indicates an error condition if pBufSize
  *         pointer is NULL
  */
-public static native @Cast("NppStatus") int nppiDCTInitAlloc_Ctx(@Cast("NppiDCTState**") PointerPointer ppState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTInitAlloc_Ctx(@ByPtrPtr NppiDCTState ppState, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDCTInitAlloc(@Cast("NppiDCTState**") PointerPointer ppState);
 public static native @Cast("NppStatus") int nppiDCTInitAlloc(@ByPtrPtr NppiDCTState ppState);
 
@@ -298,7 +272,6 @@ public static native @Cast("NppStatus") int nppiDCTFree(NppiDCTState pState);
  * @param oSizeROI \ref roi_specification.
  * @param pState Pointer to DCT state structure. This structure must be
  *          initialized allocated and initialized using nppiDCTInitAlloc(). 
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -306,29 +279,16 @@ public static native @Cast("NppStatus") int nppiDCTFree(NppiDCTState pState);
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, 
-                                                  @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") BytePointer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, 
-                                                  @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") ByteBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, 
-                                                  @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") byte[] pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
+                                        @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                         @Cast("const Npp8u*") BytePointer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
+                                        @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
                                         @Cast("const Npp8u*") ByteBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, 
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
+                                        @Cast("Npp16s*") short[] pDst, int nDstStep, 
                                         @Cast("const Npp8u*") byte[] pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
 
@@ -346,7 +306,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_
  * @param oSizeROI \ref roi_specification.
  * @param pState Pointer to DCT state structure. This structure must be
  *          initialized allocated and initialized using nppiDCTInitAlloc().  
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -354,29 +313,16 @@ public static native @Cast("NppStatus") int nppiDCTQuantFwd8x8LS_JPEG_8u16s_C1R_
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, 
-                                                  @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") BytePointer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, 
-                                                  @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") ByteBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, 
-                                                  @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                            @Cast("const Npp8u*") byte[] pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                            NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-                                    
 public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
+                                        @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                         @Cast("const Npp8u*") BytePointer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
+                                        @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
                                         @Cast("const Npp8u*") ByteBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, 
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep, 
+                                        @Cast("Npp8u*") byte[] pDst, int nDstStep, 
                                         @Cast("const Npp8u*") byte[] pQuantizationTable, @ByVal NppiSize oSizeROI,
                                         NppiDCTState pState);
                                     
@@ -394,7 +340,6 @@ public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_
  * @param oSizeROI \ref roi_specification.
  * @param pState Pointer to DCT state structure. This structure must be
  *          initialized allocated and initialized using nppiDCTInitAlloc(). 
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -402,29 +347,16 @@ public static native @Cast("NppStatus") int nppiDCTQuantInv8x8LS_JPEG_16s8u_C1R_
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                    @Cast("Npp16s*") ShortPointer pDst, int nDstStep,
-                                              @Cast("const Npp16u*") ShortPointer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                    @Cast("Npp16s*") ShortBuffer pDst, int nDstStep,
-                                              @Cast("const Npp16u*") ShortBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                    @Cast("Npp16s*") short[] pDst, int nDstStep,
-                                              @Cast("const Npp16u*") short[] pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortPointer pDst, int nDstStep,
+                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep,
                                           @Cast("const Npp16u*") ShortPointer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortBuffer pDst, int nDstStep,
+                                          @Cast("Npp16s*") ShortBuffer pDst, int nDstStep,
                                           @Cast("const Npp16u*") ShortBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1R_NEW(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") short[] pDst, int nDstStep,
+                                          @Cast("Npp16s*") short[] pDst, int nDstStep,
                                           @Cast("const Npp16u*") short[] pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 
@@ -442,7 +374,6 @@ public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1
  * @param oSizeROI \ref roi_specification.
  * @param pState Pointer to DCT state structure. This structure must be
  *          initialized allocated and initialized using nppiDCTInitAlloc().  
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -450,29 +381,16 @@ public static native @Cast("NppStatus") int nppiDCTQuant16Fwd8x8LS_JPEG_8u16s_C1
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") BytePointer pDst, int nDstStep,
-                                              @Cast("const Npp16u*") ShortPointer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
-                                              @Cast("const Npp16u*") ShortBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") byte[] pDst, int nDstStep,
-                                              @Cast("const Npp16u*") short[] pQuantizationTable, @ByVal NppiSize oSizeROI,
-                                              NppiDCTState pState, @ByVal NppStreamContext nppStreamCtx);
-                                          
 public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") BytePointer pDst, int nDstStep,
+                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep,
                                           @Cast("const Npp16u*") ShortPointer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
+                                          @Cast("Npp8u*") ByteBuffer pDst, int nDstStep,
                                           @Cast("const Npp16u*") ShortBuffer pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 public static native @Cast("NppStatus") int nppiDCTQuant16Inv8x8LS_JPEG_16s8u_C1R_NEW(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") byte[] pDst, int nDstStep,
+                                          @Cast("Npp8u*") byte[] pDst, int nDstStep,
                                           @Cast("const Npp16u*") short[] pQuantizationTable, @ByVal NppiSize oSizeROI,
                                           NppiDCTState pState);
 // Targeting ../nppicom/NppiDecodeHuffmanSpec.java
@@ -539,7 +457,6 @@ public static native @Cast("NppStatus") int nppiDecodeHuffmanSpecFreeHost_JPEG(N
  * @param pHuffmanTableDC DC Huffman table.
  * @param pHuffmanTableAC AC Huffman table.
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -547,26 +464,25 @@ public static native @Cast("NppStatus") int nppiDecodeHuffmanSpecFreeHost_JPEG(N
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
- 
-
 public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nLength,
-                                         @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
-                                         @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep,
-                                         NppiDecodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiDecodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI);
+                  @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
+                    @Cast("Npp16s*") ShortPointer pDst, @Cast("Npp32s") int nDstStep,
+                    NppiDecodeHuffmanSpec pHuffmanTableDC, 
+                    NppiDecodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nLength,
-                                         @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
-                                         @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep,
-                                         NppiDecodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiDecodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI);
+                  @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
+                    @Cast("Npp16s*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep,
+                    NppiDecodeHuffmanSpec pHuffmanTableDC, 
+                    NppiDecodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nLength,
-                                         @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
-                                         @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep,
-                                         NppiDecodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiDecodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI); 
+                  @Cast("Npp32s") int restartInterval, @Cast("Npp32s") int Ss, @Cast("Npp32s") int Se, @Cast("Npp32s") int Ah, @Cast("Npp32s") int Al,
+                    @Cast("Npp16s*") short[] pDst, @Cast("Npp32s") int nDstStep,
+                    NppiDecodeHuffmanSpec pHuffmanTableDC, 
+                    NppiDecodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI); 
+
 
 /**
  * Huffman Decoding of the JPEG decoding on the host.
@@ -584,7 +500,6 @@ public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s
  * @param apHuffmanDCTable DC Huffman tables.
  * @param apHuffmanACTable AC Huffman tables.
  * @param aSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -592,32 +507,30 @@ public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
- 
-
  public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nLength,
- 				                          @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
- 					                      @Cast("Npp16s**") PointerPointer apDst, @Cast("Npp32s*") IntPointer aDstStep,
- 					                      @Cast("NppiDecodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
- 					                      @Cast("NppiDecodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
- 					                      NppiSize aSizeROI);
+                   @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp16s**") PointerPointer apDst, @Cast("Npp32s*") IntPointer aDstStep,
+                     @Cast("NppiDecodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
+                     @Cast("NppiDecodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
+                     NppiSize aSizeROI);
  public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nLength,
- 				                          @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
- 					                      @Cast("Npp16s**") @ByPtrPtr ShortPointer apDst, @Cast("Npp32s*") IntPointer aDstStep,
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
- 					                      NppiSize aSizeROI);
+                   @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp16s**") @ByPtrPtr ShortPointer apDst, @Cast("Npp32s*") IntPointer aDstStep,
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI);
  public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nLength,
- 				                          @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
- 					                      @Cast("Npp16s**") @ByPtrPtr ShortBuffer apDst, @Cast("Npp32s*") IntBuffer aDstStep,
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
- 					                      NppiSize aSizeROI);
+                   @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp16s**") @ByPtrPtr ShortBuffer apDst, @Cast("Npp32s*") IntBuffer aDstStep,
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI);
  public static native @Cast("NppStatus") int nppiDecodeHuffmanScanHost_JPEG_8u16s_P3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nLength,
- 				                          @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
- 					                      @Cast("Npp16s**") @ByPtrPtr short[] apDst, @Cast("Npp32s*") int[] aDstStep,
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
- 					                      @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
- 					                      NppiSize aSizeROI);
+                   @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp16s**") @ByPtrPtr short[] apDst, @Cast("Npp32s*") int[] aDstStep,
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiDecodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI);
 // Targeting ../nppicom/NppiEncodeHuffmanSpec.java
 
 
@@ -640,14 +553,9 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecGetBufSize_JPEG
  * @param pRawHuffmanTable Huffman table formated as specified in the JPEG standard.
  * @param eTableType Enum specifying type of table (nppiDCTable or nppiACTable).
  * @param pHuffmanSpec Pointer to the Huffman table for the decoder
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_NULL_POINTER_ERROR If one of the pointers is 0.
 **/
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG_Ctx(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG_Ctx(@Cast("const Npp8u*") ByteBuffer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG_Ctx(@Cast("const Npp8u*") byte[] pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG(@Cast("const Npp8u*") ByteBuffer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG(@Cast("const Npp8u*") byte[] pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, NppiEncodeHuffmanSpec pHuffmanSpec);
@@ -660,11 +568,6 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInit_JPEG(@Cast
  * @return Error codes:
  *         - ::NPP_NULL_POINTER_ERROR If one of the pointers is 0.
 **/
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG_Ctx(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @Cast("NppiEncodeHuffmanSpec**") PointerPointer ppHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG_Ctx(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @ByPtrPtr NppiEncodeHuffmanSpec ppHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG_Ctx(@Cast("const Npp8u*") ByteBuffer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @ByPtrPtr NppiEncodeHuffmanSpec ppHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG_Ctx(@Cast("const Npp8u*") byte[] pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @ByPtrPtr NppiEncodeHuffmanSpec ppHuffmanSpec, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @Cast("NppiEncodeHuffmanSpec**") PointerPointer ppHuffmanSpec);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG(@Cast("const Npp8u*") BytePointer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @ByPtrPtr NppiEncodeHuffmanSpec ppHuffmanSpec);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecInitAlloc_JPEG(@Cast("const Npp8u*") ByteBuffer pRawHuffmanTable, @Cast("NppiHuffmanTableType") int eTableType, @ByPtrPtr NppiEncodeHuffmanSpec ppHuffmanSpec);
@@ -694,7 +597,6 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecFree_JPEG(NppiE
  * @param pHuffmanTableAC AC Huffman table.
  * @param oSizeROI \ref roi_specification.
  * @param pTempStorage Temporary storage.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -703,49 +605,28 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanSpecFree_JPEG(NppiE
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  *         - ::NPP_NOT_SUFFICIENT_COMPUTE_CAPABILITY If the device has compute capability < 2.0. 
  */
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep,
-                                         @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                         @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                         NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI,
-                                         @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep,
-                                         @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                         @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
-                                         NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI,
-                                         @Cast("Npp8u*") ByteBuffer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep,
-                                         @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                         @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
-                                         NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                         NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                         @ByVal NppiSize oSizeROI,
-                                         @Cast("Npp8u*") byte[] pTempStorage, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep,
-                                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                     @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                     NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                     NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                     @ByVal NppiSize oSizeROI,
-                                     @Cast("Npp8u*") BytePointer pTempStorage);
+                    @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                    @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
+                    NppiEncodeHuffmanSpec pHuffmanTableDC, 
+                    NppiEncodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI,
+                    @Cast("Npp8u*") BytePointer pTempStorage);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep,
-                                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                     @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
-                                     NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                     NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                     @ByVal NppiSize oSizeROI,
-                                     @Cast("Npp8u*") ByteBuffer pTempStorage);
+                    @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                    @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
+                    NppiEncodeHuffmanSpec pHuffmanTableDC, 
+                    NppiEncodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI,
+                    @Cast("Npp8u*") ByteBuffer pTempStorage);
 public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep,
-                                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                     @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
-                                     NppiEncodeHuffmanSpec pHuffmanTableDC, 
-                                     NppiEncodeHuffmanSpec pHuffmanTableAC, 
-                                     @ByVal NppiSize oSizeROI,
-                                     @Cast("Npp8u*") byte[] pTempStorage); 
+                    @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                    @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
+                    NppiEncodeHuffmanSpec pHuffmanTableDC, 
+                    NppiEncodeHuffmanSpec pHuffmanTableAC, 
+                    @ByVal NppiSize oSizeROI,
+                    @Cast("Npp8u*") byte[] pTempStorage); 
+
 
 /**
  * Huffman Encoding of the JPEG Encoding.
@@ -764,7 +645,6 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R
  * @param apHuffmanACTable AC Huffman tables.
  * @param aSizeROI \ref roi_specification.
  * @param pTempStorage Temporary storage.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -773,63 +653,34 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P1R
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  *         - ::NPP_NOT_SUFFICIENT_COMPUTE_CAPABILITY If the device has compute capability < 2.0.
  */
- public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") PointerPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                           @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                           @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                           @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
-                                           @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
-                                           NppiSize aSizeROI,
-                                           @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
- public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr ShortPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                           @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                           @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                           NppiSize aSizeROI,
-                                           @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
- public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr ShortBuffer apSrc, @Cast("Npp32s*") IntBuffer aSrcStep,
-                                           @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                           @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                           NppiSize aSizeROI,
-                                           @Cast("Npp8u*") ByteBuffer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
- public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr short[] apSrc, @Cast("Npp32s*") int[] aSrcStep,
-                                           @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                           @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                           @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                           NppiSize aSizeROI,
-                                           @Cast("Npp8u*") byte[] pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") PointerPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                      @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                      @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                      @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
-                                      @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
-                                      NppiSize aSizeROI,
-                                      @Cast("Npp8u*") BytePointer pTempStorage);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr ShortPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                      @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                      @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                      NppiSize aSizeROI,
-                                      @Cast("Npp8u*") BytePointer pTempStorage);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr ShortBuffer apSrc, @Cast("Npp32s*") IntBuffer aSrcStep,
-                                      @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                      @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                      NppiSize aSizeROI,
-                                      @Cast("Npp8u*") ByteBuffer pTempStorage);
-public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr short[] apSrc, @Cast("Npp32s*") int[] aSrcStep,
-                                      @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                      @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                      @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                      NppiSize aSizeROI,
-                                      @Cast("Npp8u*") byte[] pTempStorage);
+ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") PointerPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
+                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
+                     @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
+                     @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
+                     NppiSize aSizeROI,
+                     @Cast("Npp8u*") BytePointer pTempStorage);
+ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr ShortPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
+                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer nLength,
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI,
+                     @Cast("Npp8u*") BytePointer pTempStorage);
+ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr ShortBuffer apSrc, @Cast("Npp32s*") IntBuffer aSrcStep,
+                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer nLength,
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI,
+                     @Cast("Npp8u*") ByteBuffer pTempStorage);
+ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") @ByPtrPtr short[] apSrc, @Cast("Npp32s*") int[] aSrcStep,
+                     @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
+                     @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] nLength,
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
+                     @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
+                     NppiSize aSizeROI,
+                     @Cast("Npp8u*") byte[] pTempStorage);
 
 /**
  * Optimize Huffman Encoding of the JPEG Encoding.
@@ -852,7 +703,6 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R
  * @param pHuffmanACTable AC Huffman table.
  * @param oSizeROI \ref roi_specification.
  * @param pTempStorage Temporary storage.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -861,34 +711,6 @@ public static native @Cast("NppStatus") int nppiEncodeHuffmanScan_JPEG_8u16s_P3R
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  *         - ::NPP_NOT_SUFFICIENT_COMPUTE_CAPABILITY If the device has compute capability < 2.0. 
  */
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer pLength,
-                                                 @Cast("Npp8u*") BytePointer hpCodesDC, @Cast("Npp8u*") BytePointer hpTableDC,
-                                                 @Cast("Npp8u*") BytePointer hpCodesAC, @Cast("Npp8u*") BytePointer hpTableAC,
-                                                 NppiEncodeHuffmanSpec pHuffmanDCTable, 
-                                                 NppiEncodeHuffmanSpec pHuffmanACTable, 
-                                                 @ByVal NppiSize oSizeROI, @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer pLength,
-                                                 @Cast("Npp8u*") ByteBuffer hpCodesDC, @Cast("Npp8u*") ByteBuffer hpTableDC,
-                                                 @Cast("Npp8u*") ByteBuffer hpCodesAC, @Cast("Npp8u*") ByteBuffer hpTableAC,
-                                                 NppiEncodeHuffmanSpec pHuffmanDCTable, 
-                                                 NppiEncodeHuffmanSpec pHuffmanACTable, 
-                                                 @ByVal NppiSize oSizeROI, @Cast("Npp8u*") ByteBuffer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P1R_Ctx(@Cast("const Npp16s*") short[] pSrc, @Cast("Npp32s") int nSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] pLength,
-                                                 @Cast("Npp8u*") byte[] hpCodesDC, @Cast("Npp8u*") byte[] hpTableDC,
-                                                 @Cast("Npp8u*") byte[] hpCodesAC, @Cast("Npp8u*") byte[] hpTableAC,
-                                                 NppiEncodeHuffmanSpec pHuffmanDCTable, 
-                                                 NppiEncodeHuffmanSpec pHuffmanACTable, 
-                                                 @ByVal NppiSize oSizeROI, @Cast("Npp8u*") byte[] pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P1R(@Cast("const Npp16s*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep,
                                              @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
                                              @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
@@ -938,7 +760,6 @@ public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8
  * @param apHuffmanACTable AC Huffman tables.
  * @param oSizeROI \ref roi_specification.
  * @param pTempStorage Temporary storage.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -947,43 +768,6 @@ public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  *         - ::NPP_NOT_SUFFICIENT_COMPUTE_CAPABILITY If the device has compute capability < 2.0.
  */
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") PointerPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer pLength,
-                                                 @Cast("Npp8u**") PointerPointer hpCodesDC, @Cast("Npp8u**") PointerPointer hpTableDC,
-                                                 @Cast("Npp8u**") PointerPointer hpCodesAC, @Cast("Npp8u**") PointerPointer hpTableAC,
-                                                 @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanDCTable, 
-                                                 @Cast("NppiEncodeHuffmanSpec**") PointerPointer apHuffmanACTable, 
-                                                 NppiSize oSizeROI, @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr ShortPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s*") IntPointer pLength,
-                                                 @Cast("Npp8u**") @ByPtrPtr BytePointer hpCodesDC, @Cast("Npp8u**") @ByPtrPtr BytePointer hpTableDC,
-                                                 @Cast("Npp8u**") @ByPtrPtr BytePointer hpCodesAC, @Cast("Npp8u**") @ByPtrPtr BytePointer hpTableAC,
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                                 NppiSize oSizeROI, @Cast("Npp8u*") BytePointer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr ShortBuffer apSrc, @Cast("Npp32s*") IntBuffer aSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s*") IntBuffer pLength,
-                                                 @Cast("Npp8u**") @ByPtrPtr ByteBuffer hpCodesDC, @Cast("Npp8u**") @ByPtrPtr ByteBuffer hpTableDC,
-                                                 @Cast("Npp8u**") @ByPtrPtr ByteBuffer hpCodesAC, @Cast("Npp8u**") @ByPtrPtr ByteBuffer hpTableAC,
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                                 NppiSize oSizeROI, @Cast("Npp8u*") ByteBuffer pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P3R_Ctx(@Cast("Npp16s**") @ByPtrPtr short[] apSrc, @Cast("Npp32s*") int[] aSrcStep,
-                                                 @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
-                                                 @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
-                                                 @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s*") int[] pLength,
-                                                 @Cast("Npp8u**") @ByPtrPtr byte[] hpCodesDC, @Cast("Npp8u**") @ByPtrPtr byte[] hpTableDC,
-                                                 @Cast("Npp8u**") @ByPtrPtr byte[] hpCodesAC, @Cast("Npp8u**") @ByPtrPtr byte[] hpTableAC,
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanDCTable, 
-                                                 @ByPtrPtr NppiEncodeHuffmanSpec apHuffmanACTable, 
-                                                 NppiSize oSizeROI, @Cast("Npp8u*") byte[] pTempStorage, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiEncodeOptimizeHuffmanScan_JPEG_8u16s_P3R(@Cast("Npp16s**") PointerPointer apSrc, @Cast("Npp32s*") IntPointer aSrcStep,
                                              @Cast("Npp32s") int nRestartInterval, @Cast("Npp32s") int nSs, 
                                              @Cast("Npp32s") int nSe, @Cast("Npp32s") int nAh, @Cast("Npp32s") int nAl,
@@ -1182,7 +966,7 @@ public static native @Cast("NppStatus") int nppiJpegDecodeJobMemorySize(@Const N
      nppiJpegDecodeJob(&job, &memory);
  
      // Synchronization is needed only if you reuse buffers between scans. 
-     cudaStreamSynchronize(nppGetStream()); or CudaStreamSynchronize(nppStreamCtx.hStream);
+     cudaStreamSynchronize(nppGetStream());
  }
  
  nppiJpegDecodeJobCreateFinalize(&job);
@@ -1191,15 +975,12 @@ public static native @Cast("NppStatus") int nppiJpegDecodeJobMemorySize(@Const N
  // Perform further steps of decoding (iDCT etc.)
  * }</pre>
  *
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return
  * * \ref NPP_SUCCESS
  * * \ref NPP_BAD_ARGUMENT_ERROR when the scan doesn't represent valid JPEG scan
  * * \ref NPP_NULL_POINTER_ERROR when one of necessary arguments of buffers is NULL
  * * \ref NPP_ERROR when encountered CUDA error
  */
-public static native @Cast("NppStatus") int nppiJpegDecodeJob_Ctx(@Const NppiJpegDecodeJob pJob, @Const NppiJpegDecodeJobMemory pMemory, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiJpegDecodeJob(@Const NppiJpegDecodeJob pJob, @Const NppiJpegDecodeJobMemory pMemory);
 
 /**
@@ -1267,7 +1048,6 @@ public static native @Cast("size_t") long nppiJpegDecodeGetDCTBufferSize(@ByVal 
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return Error codes:
  *         - ::NPP_SIZE_ERROR For negative input height/width or not a multiple of
  *           8 width/height.
@@ -1275,10 +1055,6 @@ public static native @Cast("size_t") long nppiJpegDecodeGetDCTBufferSize(@ByVal 
  *           match ROI.
  *         - ::NPP_NULL_POINTER_ERROR If the destination pointer is 0.
  */
-public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDCTInv4x4_WebP_16s_C1R(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @Cast("Npp16s*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);

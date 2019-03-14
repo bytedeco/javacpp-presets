@@ -38,14 +38,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
               exclude = "<crt/host_defines.h>",
-              includepath = "/usr/local/cuda-10.1/include/", link = {"cudart@.10.1", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.1/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.1/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.1/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-10.1/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64",     preload = "cudart64_101",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/") },
+              includepath = "/usr/local/cuda-10.0/include/", link = {"cudart@.10.0", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.0/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.0/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.0/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-10.0/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64",     preload = "cudart64_100",
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {

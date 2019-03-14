@@ -16,7 +16,7 @@ public class nppitc extends org.bytedeco.cuda.presets.nppitc {
 
 // Parsed from <nppi_threshold_and_compare_operations.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2017 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -114,7 +114,6 @@ public class nppitc extends org.bytedeco.cuda.presets.nppitc {
  * @param nThreshold The threshold value.
  * @param eComparisonOperation The type of comparison operation to be used. The only valid
  *      values are: NPP_CMP_LESS and NPP_CMP_GREATER.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes, or NPP_NOT_SUPPORTED_MODE_ERROR if an invalid
  * comparison operation type is specified.
  *
@@ -130,19 +129,6 @@ public class nppitc extends org.bytedeco.cuda.presets.nppitc {
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                      @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, 
@@ -164,16 +150,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                 @ByVal NppiSize oSizeROI, 
                                 @Cast("const Npp8u") byte nThreshold, @Cast("NppCmpOp") int eComparisonOperation);
@@ -192,19 +168,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_C1IR(@Cast("Npp8u*"
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                       @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -226,16 +189,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp16u") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation);
@@ -254,19 +207,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_C1IR(@Cast("Npp16u
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                       @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -288,16 +228,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp16s") short nThreshold, @Cast("NppCmpOp") int eComparisonOperation);
@@ -316,19 +246,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_C1IR(@Cast("Npp16s
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                       @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -350,16 +267,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp32f") float nThreshold, @Cast("NppCmpOp") int eComparisonOperation);
@@ -378,31 +285,18 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_C1IR(@Cast("Npp32f
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                         @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, 
-                                   @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                      @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
+                                @ByVal NppiSize oSizeROI, 
+                                @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
 public static native @Cast("NppStatus") int nppiThreshold_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
                                      @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
+                                @ByVal NppiSize oSizeROI, 
+                                @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
 public static native @Cast("NppStatus") int nppiThreshold_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
                                      @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation); 
+                                @ByVal NppiSize oSizeROI, 
+                                @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation); 
 
 /** 
  * 3 channel 8-bit unsigned char in place threshold.
@@ -412,16 +306,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                 @ByVal NppiSize oSizeROI, 
                                 @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -440,19 +324,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_C3IR(@Cast("Npp8u*"
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                          @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16u*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                       @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -474,16 +345,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_C3R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -502,19 +363,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_C3IR(@Cast("Npp16u
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                          @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp16s*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                       @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -536,16 +384,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_C3R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -564,19 +402,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_C3IR(@Cast("Npp16s
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                          @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp32f*") float[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                       @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -598,16 +423,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_C3R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") float[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -618,6 +433,7 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR(@Cast("Npp32f
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp32f*") float[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation); 
 
+
 /** 
  * 4 channel 8-bit unsigned char image threshold, not affecting Alpha.
  * If for a comparison operations OP the predicate (sourcePixel.channel OP nThreshold) is true, the channel
@@ -626,19 +442,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_C3IR(@Cast("Npp32f
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                          @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                          @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, 
-                                    @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                       @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, 
@@ -660,16 +463,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp8u*") byte[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                  @ByVal NppiSize oSizeROI, 
                                  @Cast("const Npp8u*") BytePointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -688,19 +481,6 @@ public static native @Cast("NppStatus") int nppiThreshold_8u_AC4IR(@Cast("Npp8u*
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                           @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                           @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                           @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16u*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                        @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, 
@@ -722,16 +502,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_AC4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16u*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                   @ByVal NppiSize oSizeROI, 
                                   @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -750,19 +520,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16u_AC4IR(@Cast("Npp16
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                           @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                           @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp16s*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                        @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, 
@@ -784,16 +541,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_AC4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp16s*") short[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                   @ByVal NppiSize oSizeROI, 
                                   @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -812,19 +559,6 @@ public static native @Cast("NppStatus") int nppiThreshold_16s_AC4IR(@Cast("Npp16
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                           @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                           @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                           @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, 
-                                     @Cast("const Npp32f*") float[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                        @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                  @ByVal NppiSize oSizeROI, 
@@ -846,16 +580,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_AC4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonThresholdParameters">Common parameters for nppiThreshold functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp32f*") float[] rThresholds, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                   @ByVal NppiSize oSizeROI, 
                                   @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("NppCmpOp") int eComparisonOperation);
@@ -882,7 +606,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR(@Cast("Npp32
  * @param nDstStep \ref destination_image_line_step for non-inplace functions.
  * @param oSizeROI \ref roi_specification.
  * @param nThreshold The threshold value.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
  *
  * \{
@@ -897,19 +620,6 @@ public static native @Cast("NppStatus") int nppiThreshold_32f_AC4IR(@Cast("Npp32
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, 
@@ -931,16 +641,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                    @ByVal NppiSize oSizeROI, 
                                    @Cast("const Npp8u") byte nThreshold);
@@ -959,19 +659,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C1IR(@Cast("Npp8
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -993,16 +680,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16u") short nThreshold);
@@ -1021,19 +698,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1055,16 +719,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16s") short nThreshold);
@@ -1083,19 +737,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1117,16 +758,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f") float nThreshold);
@@ -1145,19 +776,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, 
@@ -1179,16 +797,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                    @ByVal NppiSize oSizeROI, 
                                    @Cast("const Npp8u*") BytePointer rThresholds);
@@ -1207,19 +815,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_C3IR(@Cast("Npp8
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1241,16 +836,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16u*") ShortPointer rThresholds);
@@ -1269,19 +854,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1303,16 +875,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16s*") ShortPointer rThresholds);
@@ -1331,19 +893,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1365,16 +914,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f*") FloatPointer rThresholds);
@@ -1385,6 +924,7 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR(@Cast("Npp
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f*") float[] rThresholds); 
 
+
 /** 
  * 4 channel 8-bit unsigned char image threshold, not affecting Alpha.
  * If for a comparison operations sourcePixel is greater than nThreshold is true, the pixel is set
@@ -1393,19 +933,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1427,16 +954,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp8u*") BytePointer rThresholds);
@@ -1455,19 +972,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_8u_AC4IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -1489,16 +993,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16u*") ShortPointer rThresholds);
@@ -1517,19 +1011,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16u_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -1551,16 +1032,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16s*") ShortPointer rThresholds);
@@ -1579,19 +1050,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_16s_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                           @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -1613,16 +1071,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanParameters">Common parameters for nppiThreshold_GT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp32f*") FloatPointer rThresholds);
@@ -1649,7 +1097,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR(@Cast("Np
  * @param nDstStep \ref destination_image_line_step for non-inplace functions.
  * @param oSizeROI \ref roi_specification.
  * @param nThreshold The threshold value.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
  *
  * \{
@@ -1664,19 +1111,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GT_32f_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, 
@@ -1698,16 +1132,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                    @ByVal NppiSize oSizeROI, 
                                    @Cast("const Npp8u") byte nThreshold);
@@ -1726,19 +1150,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C1IR(@Cast("Npp8
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1760,16 +1171,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16u") short nThreshold);
@@ -1788,19 +1189,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1822,16 +1210,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16s") short nThreshold);
@@ -1850,19 +1228,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -1884,16 +1249,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f") float nThreshold);
@@ -1912,19 +1267,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                            @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                      @ByVal NppiSize oSizeROI, 
-                                      @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                         @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                   @ByVal NppiSize oSizeROI, 
@@ -1946,16 +1288,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                    @ByVal NppiSize oSizeROI, 
                                    @Cast("const Npp8u*") BytePointer rThresholds);
@@ -1974,19 +1306,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_C3IR(@Cast("Npp8
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2008,16 +1327,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16u*") ShortPointer rThresholds);
@@ -2036,19 +1345,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                             @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                          @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2070,16 +1366,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp16s*") ShortPointer rThresholds);
@@ -2098,19 +1384,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                             @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                          @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2132,16 +1405,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f*") FloatPointer rThresholds);
@@ -2152,6 +1415,7 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR(@Cast("Npp
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp32f*") float[] rThresholds); 
 
+
 /** 
  * 4 channel 8-bit unsigned char image threshold, not affecting Alpha.
  * If for a comparison operations sourcePixel is less than nThreshold is true, the pixel is set
@@ -2160,19 +1424,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2194,16 +1445,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") BytePointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") ByteBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") byte[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp8u*") BytePointer rThresholds);
@@ -2222,19 +1463,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_8u_AC4IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2256,16 +1484,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16u*") ShortPointer rThresholds);
@@ -2284,19 +1502,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16u_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2318,16 +1523,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") short[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16s*") ShortPointer rThresholds);
@@ -2346,19 +1541,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_16s_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                           @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2380,16 +1562,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanParameters">Common parameters for nppiThreshold_LT functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatPointer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatBuffer rThresholds, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") float[] rThresholds, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp32f*") FloatPointer rThresholds);
@@ -2419,7 +1591,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR(@Cast("Np
  * @param nValue The threshold replacement value.
  * @param eComparisonOperation The type of comparison operation to be used. The only valid
  *      values are: NPP_CMP_LESS and NPP_CMP_GREATER.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes, or NPP_NOT_SUPPORTED_MODE_ERROR if an invalid
  * comparison operation type is specified.
  *
@@ -2435,19 +1606,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LT_32f_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2469,16 +1627,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2497,19 +1645,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C1IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2531,16 +1666,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2559,19 +1684,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C1IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2593,16 +1705,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-                                     
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2621,19 +1723,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C1IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                           @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2655,16 +1744,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2683,19 +1762,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C1IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                             @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                       @ByVal NppiSize oSizeROI, 
-                                       @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                          @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                    @ByVal NppiSize oSizeROI, 
@@ -2717,16 +1783,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                     @ByVal NppiSize oSizeROI, 
                                     @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2745,19 +1801,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_C3IR(@Cast("Npp
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2779,16 +1822,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2807,19 +1840,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_C3IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                              @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                           @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2841,16 +1861,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2869,19 +1879,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_C3IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                              @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                           @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2903,16 +1900,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2932,19 +1919,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_C3IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                              @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                              @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                              @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                        @ByVal NppiSize oSizeROI, 
-                                        @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                           @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                     @ByVal NppiSize oSizeROI, 
@@ -2966,16 +1940,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                      @ByVal NppiSize oSizeROI, 
                                      @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -2994,19 +1958,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_8u_AC4IR(@Cast("Np
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                               @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                               @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                            @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -3028,16 +1979,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -3056,19 +1997,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16u_AC4IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                               @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                               @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                            @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -3090,16 +2018,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -3118,19 +2036,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_16s_AC4IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                               @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                               @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                            @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -3152,16 +2057,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdValueParameters">Common parameters for nppiThreshold_Val functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @Cast("NppCmpOp") int eComparisonOperation);
@@ -3189,7 +2084,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR(@Cast("N
  * @param oSizeROI \ref roi_specification.
  * @param nThreshold The threshold value.
  * @param nValue The threshold replacement value.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
  *
  * \{
@@ -3206,19 +2100,6 @@ public static native @Cast("NppStatus") int nppiThreshold_Val_32f_AC4IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -3240,16 +2121,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue);
@@ -3268,19 +2139,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C1IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3302,16 +2160,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue);
@@ -3330,19 +2178,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3364,16 +2199,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue);
@@ -3392,19 +2217,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3426,16 +2238,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue);
@@ -3454,19 +2256,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -3488,16 +2277,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues);
@@ -3516,19 +2295,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_C3IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3550,16 +2316,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-                                       
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues);
@@ -3578,19 +2334,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3612,16 +2355,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues);
@@ -3640,19 +2373,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3674,16 +2394,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues);
@@ -3702,19 +2412,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -3736,16 +2433,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues);
@@ -3764,19 +2451,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_8u_AC4IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -3798,16 +2472,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues);
@@ -3826,19 +2490,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16u_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -3860,16 +2511,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues);
@@ -3888,19 +2529,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_16s_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -3922,16 +2550,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdGreaterThanValueParameters">Common parameters for nppiThreshold_GTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues);
@@ -3959,7 +2577,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR(@Cast(
  * @param oSizeROI \ref roi_specification.
  * @param nThreshold The threshold value.
  * @param nValue The threshold replacement value.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
  *
  * \{
@@ -3974,19 +2591,6 @@ public static native @Cast("NppStatus") int nppiThreshold_GTVal_32f_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -4008,16 +2612,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp8u") byte nThreshold, @Cast("const Npp8u") byte nValue);
@@ -4036,19 +2630,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C1IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4070,16 +2651,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16u") short nThreshold, @Cast("const Npp16u") short nValue);
@@ -4098,19 +2669,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4132,16 +2690,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16s") short nThreshold, @Cast("const Npp16s") short nValue);
@@ -4160,19 +2708,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4194,16 +2729,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp32f") float nThreshold, @Cast("const Npp32f") float nValue);
@@ -4222,19 +2747,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C1IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                               @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                         @ByVal NppiSize oSizeROI, 
-                                         @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                            @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                      @ByVal NppiSize oSizeROI, 
@@ -4256,16 +2768,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                       @ByVal NppiSize oSizeROI, 
                                       @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues);
@@ -4284,19 +2786,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_C3IR(@Cast("N
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4318,16 +2807,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues);
@@ -4346,19 +2825,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                             @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4380,16 +2846,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues);
@@ -4408,19 +2864,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                             @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4442,16 +2885,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues);
@@ -4470,19 +2903,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_C3IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                          @ByVal NppiSize oSizeROI, 
-                                          @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                             @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                       @ByVal NppiSize oSizeROI, 
@@ -4504,16 +2924,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") ByteBuffer rThresholds, @Cast("const Npp8u*") ByteBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp8u*") byte[] rThresholds, @Cast("const Npp8u*") byte[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                        @ByVal NppiSize oSizeROI, 
                                        @Cast("const Npp8u*") BytePointer rThresholds, @Cast("const Npp8u*") BytePointer rValues);
@@ -4532,19 +2942,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_8u_AC4IR(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                 @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                              @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -4566,16 +2963,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") ShortBuffer rThresholds, @Cast("const Npp16u*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16u*") short[] rThresholds, @Cast("const Npp16u*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp16u*") ShortPointer rThresholds, @Cast("const Npp16u*") ShortPointer rValues);
@@ -4594,19 +2981,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16u_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                 @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                              @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -4628,16 +3002,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") ShortBuffer rThresholds, @Cast("const Npp16s*") ShortBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp16s*") short[] rThresholds, @Cast("const Npp16s*") short[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp16s*") ShortPointer rThresholds, @Cast("const Npp16s*") ShortPointer rValues);
@@ -4656,19 +3020,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_16s_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                 @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                           @ByVal NppiSize oSizeROI, 
-                                           @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                              @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                        @ByVal NppiSize oSizeROI, 
@@ -4690,16 +3041,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueParameters">Common parameters for nppiThreshold_LTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") FloatBuffer rThresholds, @Cast("const Npp32f*") FloatBuffer rValues, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                            @ByVal NppiSize oSizeROI, 
-                                            @Cast("const Npp32f*") float[] rThresholds, @Cast("const Npp32f*") float[] rValues, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                         @ByVal NppiSize oSizeROI, 
                                         @Cast("const Npp32f*") FloatPointer rThresholds, @Cast("const Npp32f*") FloatPointer rValues);
@@ -4729,7 +3070,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR(@Cast(
  * @param nValueLT The thresholdLT replacement value.
  * @param nThresholdGT The thresholdGT value.
  * @param nValueGT The thresholdGT replacement value.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes.
  *
  * \{
@@ -4745,19 +3085,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTVal_32f_AC4IR(@Cast(
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                                 @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                           @ByVal NppiSize oSizeROI, 
@@ -4779,16 +3106,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                            @ByVal NppiSize oSizeROI, 
                                            @Cast("const Npp8u") byte nThresholdLT, @Cast("const Npp8u") byte nValueLT, @Cast("const Npp8u") byte nThresholdGT, @Cast("const Npp8u") byte nValueGT);
@@ -4807,19 +3124,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C1IR(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                                  @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -4841,16 +3145,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp16u") short nThresholdLT, @Cast("const Npp16u") short nValueLT, @Cast("const Npp16u") short nThresholdGT, @Cast("const Npp16u") short nValueGT);
@@ -4869,19 +3163,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C1IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                                  @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -4903,16 +3184,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp16s") short nThresholdLT, @Cast("const Npp16s") short nValueLT, @Cast("const Npp16s") short nThresholdGT, @Cast("const Npp16s") short nValueGT);
@@ -4931,19 +3202,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C1IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                                  @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -4965,16 +3223,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp32f") float nThresholdLT, @Cast("const Npp32f") float nValueLT, @Cast("const Npp32f") float nThresholdGT, @Cast("const Npp32f") float nValueGT);
@@ -4993,19 +3241,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C1IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u*") ByteBuffer rThresholdsLT, @Cast("const Npp8u*") ByteBuffer rValuesLT, @Cast("const Npp8u*") ByteBuffer rThresholdsGT, @Cast("const Npp8u*") ByteBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                    @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                              @ByVal NppiSize oSizeROI, 
-                                              @Cast("const Npp8u*") byte[] rThresholdsLT, @Cast("const Npp8u*") byte[] rValuesLT, @Cast("const Npp8u*") byte[] rThresholdsGT, @Cast("const Npp8u*") byte[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                                 @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                           @ByVal NppiSize oSizeROI, 
@@ -5027,16 +3262,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3R(@Cas
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") ByteBuffer rThresholdsLT, @Cast("const Npp8u*") ByteBuffer rValuesLT, @Cast("const Npp8u*") ByteBuffer rThresholdsGT, @Cast("const Npp8u*") ByteBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") byte[] rThresholdsLT, @Cast("const Npp8u*") byte[] rValuesLT, @Cast("const Npp8u*") byte[] rThresholdsGT, @Cast("const Npp8u*") byte[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                            @ByVal NppiSize oSizeROI, 
                                            @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT);
@@ -5055,19 +3280,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_C3IR(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u*") ShortBuffer rThresholdsLT, @Cast("const Npp16u*") ShortBuffer rValuesLT, @Cast("const Npp16u*") ShortBuffer rThresholdsGT, @Cast("const Npp16u*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                     @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16u*") short[] rThresholdsLT, @Cast("const Npp16u*") short[] rValuesLT, @Cast("const Npp16u*") short[] rThresholdsGT, @Cast("const Npp16u*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                                  @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -5089,16 +3301,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") ShortBuffer rThresholdsLT, @Cast("const Npp16u*") ShortBuffer rValuesLT, @Cast("const Npp16u*") ShortBuffer rThresholdsGT, @Cast("const Npp16u*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") short[] rThresholdsLT, @Cast("const Npp16u*") short[] rValuesLT, @Cast("const Npp16u*") short[] rThresholdsGT, @Cast("const Npp16u*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT);
@@ -5117,19 +3319,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_C3IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s*") ShortBuffer rThresholdsLT, @Cast("const Npp16s*") ShortBuffer rValuesLT, @Cast("const Npp16s*") ShortBuffer rThresholdsGT, @Cast("const Npp16s*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                     @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp16s*") short[] rThresholdsLT, @Cast("const Npp16s*") short[] rValuesLT, @Cast("const Npp16s*") short[] rThresholdsGT, @Cast("const Npp16s*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                                  @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -5151,16 +3340,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") ShortBuffer rThresholdsLT, @Cast("const Npp16s*") ShortBuffer rValuesLT, @Cast("const Npp16s*") ShortBuffer rThresholdsGT, @Cast("const Npp16s*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") short[] rThresholdsLT, @Cast("const Npp16s*") short[] rValuesLT, @Cast("const Npp16s*") short[] rThresholdsGT, @Cast("const Npp16s*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT);
@@ -5179,19 +3358,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_C3IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f*") FloatBuffer rThresholdsLT, @Cast("const Npp32f*") FloatBuffer rValuesLT, @Cast("const Npp32f*") FloatBuffer rThresholdsGT, @Cast("const Npp32f*") FloatBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                     @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp32f*") float[] rThresholdsLT, @Cast("const Npp32f*") float[] rValuesLT, @Cast("const Npp32f*") float[] rThresholdsGT, @Cast("const Npp32f*") float[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                                  @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -5213,16 +3379,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") FloatBuffer rThresholdsLT, @Cast("const Npp32f*") FloatBuffer rValuesLT, @Cast("const Npp32f*") FloatBuffer rThresholdsGT, @Cast("const Npp32f*") FloatBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") float[] rThresholdsLT, @Cast("const Npp32f*") float[] rValuesLT, @Cast("const Npp32f*") float[] rThresholdsGT, @Cast("const Npp32f*") float[] rValuesGT, @ByVal NppStreamContext nppStreamCtx); 
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT);
@@ -5241,19 +3397,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_C3IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                                     @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                                     @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") ByteBuffer rThresholdsLT, @Cast("const Npp8u*") ByteBuffer rValuesLT, @Cast("const Npp8u*") ByteBuffer rThresholdsGT, @Cast("const Npp8u*") ByteBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                                     @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                               @ByVal NppiSize oSizeROI, 
-                                               @Cast("const Npp8u*") byte[] rThresholdsLT, @Cast("const Npp8u*") byte[] rValuesLT, @Cast("const Npp8u*") byte[] rThresholdsGT, @Cast("const Npp8u*") byte[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                                  @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                            @ByVal NppiSize oSizeROI, 
@@ -5275,16 +3418,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4R(@Ca
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") ByteBuffer pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp8u*") ByteBuffer rThresholdsLT, @Cast("const Npp8u*") ByteBuffer rValuesLT, @Cast("const Npp8u*") ByteBuffer rThresholdsGT, @Cast("const Npp8u*") ByteBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4IR_Ctx(@Cast("Npp8u*") byte[] pSrcDst, int nSrcDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp8u*") byte[] rThresholdsLT, @Cast("const Npp8u*") byte[] rValuesLT, @Cast("const Npp8u*") byte[] rThresholdsGT, @Cast("const Npp8u*") byte[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4IR(@Cast("Npp8u*") BytePointer pSrcDst, int nSrcDstStep, 
                                             @ByVal NppiSize oSizeROI, 
                                             @Cast("const Npp8u*") BytePointer rThresholdsLT, @Cast("const Npp8u*") BytePointer rValuesLT, @Cast("const Npp8u*") BytePointer rThresholdsGT, @Cast("const Npp8u*") BytePointer rValuesGT);
@@ -5303,19 +3436,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_8u_AC4IR(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                                      @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                                      @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") ShortBuffer rThresholdsLT, @Cast("const Npp16u*") ShortBuffer rValuesLT, @Cast("const Npp16u*") ShortBuffer rThresholdsGT, @Cast("const Npp16u*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                                      @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16u*") short[] rThresholdsLT, @Cast("const Npp16u*") short[] rValuesLT, @Cast("const Npp16u*") short[] rThresholdsGT, @Cast("const Npp16u*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                                   @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                             @ByVal NppiSize oSizeROI, 
@@ -5337,16 +3457,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4R(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16u*") ShortBuffer rThresholdsLT, @Cast("const Npp16u*") ShortBuffer rValuesLT, @Cast("const Npp16u*") ShortBuffer rThresholdsGT, @Cast("const Npp16u*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4IR_Ctx(@Cast("Npp16u*") short[] pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16u*") short[] rThresholdsLT, @Cast("const Npp16u*") short[] rValuesLT, @Cast("const Npp16u*") short[] rThresholdsGT, @Cast("const Npp16u*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4IR(@Cast("Npp16u*") ShortPointer pSrcDst, int nSrcDstStep, 
                                              @ByVal NppiSize oSizeROI, 
                                              @Cast("const Npp16u*") ShortPointer rThresholdsLT, @Cast("const Npp16u*") ShortPointer rValuesLT, @Cast("const Npp16u*") ShortPointer rThresholdsGT, @Cast("const Npp16u*") ShortPointer rValuesGT);
@@ -5365,19 +3475,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16u_AC4IR(@
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                                      @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                                      @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") ShortBuffer rThresholdsLT, @Cast("const Npp16s*") ShortBuffer rValuesLT, @Cast("const Npp16s*") ShortBuffer rThresholdsGT, @Cast("const Npp16s*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                                      @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp16s*") short[] rThresholdsLT, @Cast("const Npp16s*") short[] rValuesLT, @Cast("const Npp16s*") short[] rThresholdsGT, @Cast("const Npp16s*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                                   @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                             @ByVal NppiSize oSizeROI, 
@@ -5399,16 +3496,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4R(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") ShortBuffer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16s*") ShortBuffer rThresholdsLT, @Cast("const Npp16s*") ShortBuffer rValuesLT, @Cast("const Npp16s*") ShortBuffer rThresholdsGT, @Cast("const Npp16s*") ShortBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4IR_Ctx(@Cast("Npp16s*") short[] pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp16s*") short[] rThresholdsLT, @Cast("const Npp16s*") short[] rValuesLT, @Cast("const Npp16s*") short[] rThresholdsGT, @Cast("const Npp16s*") short[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4IR(@Cast("Npp16s*") ShortPointer pSrcDst, int nSrcDstStep, 
                                              @ByVal NppiSize oSizeROI, 
                                              @Cast("const Npp16s*") ShortPointer rThresholdsLT, @Cast("const Npp16s*") ShortPointer rValuesLT, @Cast("const Npp16s*") ShortPointer rThresholdsGT, @Cast("const Npp16s*") ShortPointer rValuesGT);
@@ -5427,19 +3514,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_16s_AC4IR(@
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                                      @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                                      @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") FloatBuffer rThresholdsLT, @Cast("const Npp32f*") FloatBuffer rValuesLT, @Cast("const Npp32f*") FloatBuffer rThresholdsGT, @Cast("const Npp32f*") FloatBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                                      @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                                @ByVal NppiSize oSizeROI, 
-                                                @Cast("const Npp32f*") float[] rThresholdsLT, @Cast("const Npp32f*") float[] rValuesLT, @Cast("const Npp32f*") float[] rThresholdsGT, @Cast("const Npp32f*") float[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                                   @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                             @ByVal NppiSize oSizeROI, 
@@ -5461,16 +3535,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4R(@C
  * For common parameter descriptions, see <a href="#CommonThresholdLessThanValueGreaterThanValueParameters">Common parameters for nppiThreshold_LTValGTVal functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") FloatBuffer pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp32f*") FloatBuffer rThresholdsLT, @Cast("const Npp32f*") FloatBuffer rValuesLT, @Cast("const Npp32f*") FloatBuffer rThresholdsGT, @Cast("const Npp32f*") FloatBuffer rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR_Ctx(@Cast("Npp32f*") float[] pSrcDst, int nSrcDstStep, 
-                                                 @ByVal NppiSize oSizeROI, 
-                                                 @Cast("const Npp32f*") float[] rThresholdsLT, @Cast("const Npp32f*") float[] rValuesLT, @Cast("const Npp32f*") float[] rThresholdsGT, @Cast("const Npp32f*") float[] rValuesGT, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR(@Cast("Npp32f*") FloatPointer pSrcDst, int nSrcDstStep, 
                                              @ByVal NppiSize oSizeROI, 
                                              @Cast("const Npp32f*") FloatPointer rThresholdsLT, @Cast("const Npp32f*") FloatPointer rValuesLT, @Cast("const Npp32f*") FloatPointer rThresholdsGT, @Cast("const Npp32f*") FloatPointer rValuesGT);
@@ -5512,7 +3576,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR(@
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param eComparisonOperation Specifies the comparison operation to be used in the pixel comparison.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -5526,19 +3589,6 @@ public static native @Cast("NppStatus") int nppiThreshold_LTValGTVal_32f_AC4IR(@
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
                              @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5559,19 +3609,6 @@ public static native @Cast("NppStatus") int nppiCompare_8u_C1R(@Cast("const Npp8
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
                              @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5592,19 +3629,6 @@ public static native @Cast("NppStatus") int nppiCompare_8u_C3R(@Cast("const Npp8
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step,
-                                 @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step,
-                                       @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                 @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
                              @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
                                    @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5625,19 +3649,6 @@ public static native @Cast("NppStatus") int nppiCompare_8u_C4R(@Cast("const Npp8
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp8u*") ByteBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp8u*") byte[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc1, int nSrc1Step,
                               @Cast("const Npp8u*") BytePointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5658,19 +3669,6 @@ public static native @Cast("NppStatus") int nppiCompare_8u_AC4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5691,19 +3689,6 @@ public static native @Cast("NppStatus") int nppiCompare_16u_C1R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5724,19 +3709,6 @@ public static native @Cast("NppStatus") int nppiCompare_16u_C3R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16u*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5757,19 +3729,6 @@ public static native @Cast("NppStatus") int nppiCompare_16u_C4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16u*") ShortBuffer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16u*") short[] pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc1, int nSrc1Step,
                                @Cast("const Npp16u*") ShortPointer pSrc2, int nSrc2Step,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5790,19 +3749,6 @@ public static native @Cast("NppStatus") int nppiCompare_16u_AC4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5823,19 +3769,6 @@ public static native @Cast("NppStatus") int nppiCompare_16s_C1R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5856,19 +3789,6 @@ public static native @Cast("NppStatus") int nppiCompare_16s_C3R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16s_C4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") ShortBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_C4R_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp16s*") short[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16s_C4R(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5889,19 +3809,6 @@ public static native @Cast("NppStatus") int nppiCompare_16s_C4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16s*") ShortBuffer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc1, int nSrc1Step,
-                                   @Cast("const Npp16s*") short[] pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc1, int nSrc1Step,
                                @Cast("const Npp16s*") ShortPointer pSrc2, int nSrc2Step,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5922,19 +3829,6 @@ public static native @Cast("NppStatus") int nppiCompare_16s_AC4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5955,19 +3849,6 @@ public static native @Cast("NppStatus") int nppiCompare_32f_C1R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -5988,19 +3869,6 @@ public static native @Cast("NppStatus") int nppiCompare_32f_C3R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                  @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                               @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6021,19 +3889,6 @@ public static native @Cast("NppStatus") int nppiCompare_32f_C4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImagesParameters">Common parameters for nppiCompare functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompare_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                   @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompare_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                   @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompare_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                                @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6065,7 +3920,6 @@ public static native @Cast("NppStatus") int nppiCompare_32f_AC4R(@Cast("const Np
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param eComparisonOperation Specifies the comparison operation to be used in the pixel comparison.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -6079,19 +3933,6 @@ public static native @Cast("NppStatus") int nppiCompare_32f_AC4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u") byte nConstant,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u") byte nConstant,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                  @Cast("const Npp8u") byte nConstant,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                               @Cast("const Npp8u") byte nConstant,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6112,19 +3953,6 @@ public static native @Cast("NppStatus") int nppiCompareC_8u_C1R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") BytePointer pConstants,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") ByteBuffer pConstants,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") byte[] pConstants,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                               @Cast("const Npp8u*") BytePointer pConstants,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6145,19 +3973,6 @@ public static native @Cast("NppStatus") int nppiCompareC_8u_C3R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") BytePointer pConstants,
-                                        @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") ByteBuffer pConstants,
-                                        @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                  @Cast("const Npp8u*") byte[] pConstants,
-                                        @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                  @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                               @Cast("const Npp8u*") BytePointer pConstants,
                                     @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6178,19 +3993,6 @@ public static native @Cast("NppStatus") int nppiCompareC_8u_C4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
-                                   @Cast("const Npp8u*") BytePointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp8u*") ByteBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep,
-                                   @Cast("const Npp8u*") byte[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep,
                                @Cast("const Npp8u*") BytePointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6211,19 +4013,6 @@ public static native @Cast("NppStatus") int nppiCompareC_8u_AC4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u") short nConstant,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u") short nConstant,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16u") short nConstant,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16u") short nConstant,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6244,19 +4033,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16u_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") ShortPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") ShortBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") short[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16u*") ShortPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6277,19 +4053,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16u_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") ShortPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") ShortBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16u*") short[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16u*") ShortPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6310,19 +4073,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16u_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
-                                    @Cast("const Npp16u*") ShortPointer pConstants,
-                                          @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep,
-                                    @Cast("const Npp16u*") ShortBuffer pConstants,
-                                          @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep,
-                                    @Cast("const Npp16u*") short[] pConstants,
-                                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep,
                                 @Cast("const Npp16u*") ShortPointer pConstants,
                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6343,19 +4093,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16u_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s") short nConstant,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s") short nConstant,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16s") short nConstant,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16s") short nConstant,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6376,19 +4113,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16s_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16s_C3R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") ShortPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C3R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") ShortBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C3R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") short[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16s_C3R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16s*") ShortPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6409,19 +4133,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16s_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16s_C4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") ShortPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") ShortBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_C4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                   @Cast("const Npp16s*") short[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16s_C4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                @Cast("const Npp16s*") ShortPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6442,19 +4153,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16s_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
-                                    @Cast("const Npp16s*") ShortPointer pConstants,
-                                          @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_AC4R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep,
-                                    @Cast("const Npp16s*") ShortBuffer pConstants,
-                                          @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_16s_AC4R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep,
-                                    @Cast("const Npp16s*") short[] pConstants,
-                                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_16s_AC4R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep,
                                 @Cast("const Npp16s*") ShortPointer pConstants,
                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6475,19 +4173,6 @@ public static native @Cast("NppStatus") int nppiCompareC_16s_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f") float nConstant,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f") float nConstant,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                   @Cast("const Npp32f") float nConstant,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                @Cast("const Npp32f") float nConstant,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6508,19 +4193,6 @@ public static native @Cast("NppStatus") int nppiCompareC_32f_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") FloatPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") FloatBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") float[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                @Cast("const Npp32f*") FloatPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6541,19 +4213,6 @@ public static native @Cast("NppStatus") int nppiCompareC_32f_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") FloatPointer pConstants,
-                                         @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") FloatBuffer pConstants,
-                                         @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                   @Cast("const Npp32f*") float[] pConstants,
-                                         @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                   @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                @Cast("const Npp32f*") FloatPointer pConstants,
                                      @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6574,19 +4233,6 @@ public static native @Cast("NppStatus") int nppiCompareC_32f_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonCompareImageWithConstantParameters">Common parameters for nppiCompareC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                    @Cast("const Npp32f*") FloatPointer pConstants,
-                                          @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                    @Cast("const Npp32f*") FloatBuffer pConstants,
-                                          @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                    @Cast("const Npp32f*") float[] pConstants,
-                                          @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                    @ByVal NppiSize oSizeROI, @Cast("NppCmpOp") int eComparisonOperation, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                 @Cast("const Npp32f*") FloatPointer pConstants,
                                       @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6618,7 +4264,6 @@ public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R(@Cast("const N
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param nEpsilon epsilon tolerance value to compare to pixel absolute differences
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -6632,19 +4277,6 @@ public static native @Cast("NppStatus") int nppiCompareC_32f_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferencesWithEpsilonParameters">Common parameters for nppiCompareEqualEps functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") ByteBuffer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") byte[] pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                                       @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                             @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
@@ -6665,19 +4297,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferencesWithEpsilonParameters">Common parameters for nppiCompareEqualEps functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") ByteBuffer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") byte[] pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                                       @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                             @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
@@ -6698,19 +4317,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferencesWithEpsilonParameters">Common parameters for nppiCompareEqualEps functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") ByteBuffer pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                          @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                                @Cast("Npp8u*") byte[] pDst,   int nDstStep,
-                                          @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                                       @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                             @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
@@ -6731,19 +4337,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_C4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferencesWithEpsilonParameters">Common parameters for nppiCompareEqualEps functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
-                                           @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
-                                                 @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc1, int nSrc1Step,
-                                           @Cast("const Npp32f*") FloatBuffer pSrc2, int nSrc2Step,
-                                                 @Cast("Npp8u*") ByteBuffer pDst,   int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc1, int nSrc1Step,
-                                           @Cast("const Npp32f*") float[] pSrc2, int nSrc2Step,
-                                                 @Cast("Npp8u*") byte[] pDst,   int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc1, int nSrc1Step,
                                        @Cast("const Npp32f*") FloatPointer pSrc2, int nSrc2Step,
                                              @Cast("Npp8u*") BytePointer pDst,   int nDstStep,
@@ -6776,7 +4369,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R(@Cast("
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param nEpsilon epsilon tolerance value to compare to per color channel pixel absolute differences
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -6790,19 +4382,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEps_32f_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferenceWithConstantWithinEpsilonParameters">Common parameters for nppiCompareEqualEpsC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f") float nConstant,
-                                                 @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f") float nConstant,
-                                                 @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                           @Cast("const Npp32f") float nConstant,
-                                                 @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                        @Cast("const Npp32f") float nConstant,
                                              @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6823,19 +4402,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferenceWithConstantWithinEpsilonParameters">Common parameters for nppiCompareEqualEpsC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") FloatPointer pConstants,
-                                                 @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") FloatBuffer pConstants,
-                                                 @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") float[] pConstants,
-                                                 @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                        @Cast("const Npp32f*") FloatPointer pConstants,
                                              @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6856,19 +4422,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C3R(@Cast("
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferenceWithConstantWithinEpsilonParameters">Common parameters for nppiCompareEqualEpsC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") FloatPointer pConstants,
-                                                 @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") FloatBuffer pConstants,
-                                                 @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                           @Cast("const Npp32f*") float[] pConstants,
-                                                 @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                           @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                        @Cast("const Npp32f*") FloatPointer pConstants,
                                              @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
@@ -6889,19 +4442,6 @@ public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_C4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonCompareImageDifferenceWithConstantWithinEpsilonParameters">Common parameters for nppiCompareEqualEpsC functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
-                                            @Cast("const Npp32f*") FloatPointer pConstants,
-                                                  @Cast("Npp8u*") BytePointer pDst,  int nDstStep,
-                                            @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep,
-                                            @Cast("const Npp32f*") FloatBuffer pConstants,
-                                                  @Cast("Npp8u*") ByteBuffer pDst,  int nDstStep,
-                                            @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep,
-                                            @Cast("const Npp32f*") float[] pConstants,
-                                                  @Cast("Npp8u*") byte[] pDst,  int nDstStep,
-                                            @ByVal NppiSize oSizeROI, @Cast("Npp32f") float nEpsilon, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiCompareEqualEpsC_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep,
                                         @Cast("const Npp32f*") FloatPointer pConstants,
                                               @Cast("Npp8u*") BytePointer pDst,  int nDstStep,

@@ -16,7 +16,7 @@ public class nppim extends org.bytedeco.cuda.presets.nppim {
 
 // Parsed from <nppi_morphological_operations.h>
 
- /* Copyright 2009-2018 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2017 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -110,7 +110,6 @@ public class nppim extends org.bytedeco.cuda.presets.nppim {
  * @param oMaskSize Width and Height mask array.
  * @param oAnchor X and Y offsets of the mask origin frame of reference
  *        w.r.t the source pixel.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -123,13 +122,6 @@ public class nppim extends org.bytedeco.cuda.presets.nppim {
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -143,13 +135,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C1R(@Cast("const Npp8u
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -163,13 +148,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C3R(@Cast("const Npp8u
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -183,13 +161,6 @@ public static native @Cast("NppStatus") int nppiDilate_8u_C4R(@Cast("const Npp8u
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -197,19 +168,13 @@ public static native @Cast("NppStatus") int nppiDilate_8u_AC4R(@Cast("const Npp8
 public static native @Cast("NppStatus") int nppiDilate_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                    @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
+
 /**
  * Single-channel 16-bit unsigned integer dilation.
  * 
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -223,13 +188,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C1R(@Cast("const Npp1
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -243,13 +201,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C3R(@Cast("const Npp1
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -263,13 +214,6 @@ public static native @Cast("NppStatus") int nppiDilate_16u_C4R(@Cast("const Npp1
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                     @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -277,19 +221,13 @@ public static native @Cast("NppStatus") int nppiDilate_16u_AC4R(@Cast("const Npp
 public static native @Cast("NppStatus") int nppiDilate_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                     @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
+
 /**
  * Single-channel 32-bit floating-point dilation.
  * 
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -303,13 +241,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C1R(@Cast("const Npp3
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -323,13 +254,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C3R(@Cast("const Npp3
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -343,19 +267,13 @@ public static native @Cast("NppStatus") int nppiDilate_32f_C4R(@Cast("const Npp3
  * For common parameter descriptions, see <a href="#CommonDilateParameters">Common parameters for nppiDilate functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                        @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                     @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                     @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiDilate_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                     @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+
 
 /** \} image_dilate */
 
@@ -385,7 +303,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_AC4R(@Cast("const Npp
  * @param oAnchor X and Y offsets of the mask origin frame of reference
  *        w.r.t the source pixel.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -398,13 +315,6 @@ public static native @Cast("NppStatus") int nppiDilate_32f_AC4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -418,13 +328,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C1R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -438,13 +341,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C3R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -458,13 +354,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_C4R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -472,19 +361,13 @@ public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R(@Cast("cons
 public static native @Cast("NppStatus") int nppiDilateBorder_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 16-bit unsigned integer dilation with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -498,13 +381,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -518,13 +394,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -538,13 +407,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_C4R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                           @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -552,19 +414,13 @@ public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R(@Cast("con
 public static native @Cast("NppStatus") int nppiDilateBorder_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                           @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 32-bit floating-point dilation with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -578,13 +434,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C1R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -598,13 +447,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C3R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -618,13 +460,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_C4R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                              @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                           @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -638,13 +473,6 @@ public static native @Cast("NppStatus") int nppiDilateBorder_32f_AC4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32s*") IntPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32s*") IntBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32s*") int[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32s*") IntPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -658,13 +486,6 @@ public static native @Cast("NppStatus") int nppiGrayDilateBorder_8u_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonDilateBorderParameters">Common parameters for nppiDilateBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                 @Cast("const Npp32f*") FloatPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                 @Cast("const Npp32f*") FloatBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                 @Cast("const Npp32f*") float[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                              @Cast("const Npp32f*") FloatPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -687,7 +508,6 @@ public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R(@Cast("
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -700,10 +520,6 @@ public static native @Cast("NppStatus") int nppiGrayDilateBorder_32f_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -714,10 +530,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -728,10 +540,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -742,13 +550,10 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
 
 /**
  * Single-channel 16-bit unsigned integer 3x3 dilation.
@@ -756,10 +561,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_8u_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -770,10 +571,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -784,10 +581,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C3R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -798,13 +591,10 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_C4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
 
 /**
  * Single-channel 32-bit floating-point 3x3 dilation.
@@ -812,10 +602,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_16u_AC4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -826,10 +612,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -840,10 +622,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C3R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -854,10 +632,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_C4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -868,10 +642,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_32f_AC4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonDilate3x3Parameters">Common parameters for nppiDilate3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R_Ctx(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -897,7 +667,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R(@Cast("const N
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -910,10 +679,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3_64f_C1R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -924,10 +689,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -938,10 +699,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -952,13 +709,10 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_C4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
+
 
 /**
  * Single-channel 16-bit unsigned integer 3x3 dilation with border control.
@@ -966,10 +720,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_8u_AC4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -978,10 +728,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C1R(@Cast("c
  * Three-channel 16-bit unsigned integer 3x3 dilation with border control.
  * 
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -990,10 +736,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C3R(@Cast("c
  * Four-channel 16-bit unsigned integer 3x3 dilation with border control.
  * 
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -1002,13 +744,10 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_C4R(@Cast("c
  * Four-channel 16-bit unsigned integer 3x3 dilation with border control, ignoring alpha-channel.
  * 
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
+
 
 /**
  * Single-channel 32-bit floating-point 3x3 dilation with border control.
@@ -1016,10 +755,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_16u_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -1030,10 +765,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -1044,10 +775,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -1058,10 +785,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_C4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonDilate3x3BorderParameters">Common parameters for nppiDilate3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
@@ -1087,7 +810,6 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R(@Cast("
  * @param oMaskSize Width and Height mask array.
  * @param oAnchor X and Y offsets of the mask origin frame of reference
  *        w.r.t the source pixel.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -1101,19 +823,12 @@ public static native @Cast("NppStatus") int nppiDilate3x3Border_32f_AC4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Three-channel 8-bit unsigned integer erosion.
@@ -1121,19 +836,12 @@ public static native @Cast("NppStatus") int nppiErode_8u_C1R(@Cast("const Npp8u*
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                     @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                 @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 8-bit unsigned integer erosion.
@@ -1141,19 +849,12 @@ public static native @Cast("NppStatus") int nppiErode_8u_C3R(@Cast("const Npp8u*
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                     @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                     @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                     @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                 @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                 @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                 @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 8-bit unsigned integer erosion, ignoring alpha-channel.
@@ -1161,19 +862,13 @@ public static native @Cast("NppStatus") int nppiErode_8u_C4R(@Cast("const Npp8u*
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+
 
 /**
  * Single-channel 16-bit unsigned integer erosion.
@@ -1181,37 +876,23 @@ public static native @Cast("NppStatus") int nppiErode_8u_AC4R(@Cast("const Npp8u
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C1R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Three-channel 16-bit unsigned integer erosion.
  * 
  */
-public static native @Cast("NppStatus") int nppiErode_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C3R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 16-bit unsigned integer erosion.
@@ -1219,19 +900,12 @@ public static native @Cast("NppStatus") int nppiErode_16u_C3R(@Cast("const Npp16
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_C4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 16-bit unsigned integer erosion, ignoring alpha-channel.
@@ -1239,19 +913,13 @@ public static native @Cast("NppStatus") int nppiErode_16u_C4R(@Cast("const Npp16
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+
 
 /**
  * Single-channel 32-bit floating-point erosion.
@@ -1259,19 +927,12 @@ public static native @Cast("NppStatus") int nppiErode_16u_AC4R(@Cast("const Npp1
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C1R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Three-channel 32-bit floating-point erosion.
@@ -1279,19 +940,12 @@ public static native @Cast("NppStatus") int nppiErode_32f_C1R(@Cast("const Npp32
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C3R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 32-bit floating-point erosion.
@@ -1299,19 +953,12 @@ public static native @Cast("NppStatus") int nppiErode_32f_C3R(@Cast("const Npp32
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                      @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_C4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                  @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 
 /**
  * Four-channel 32-bit floating-point erosion, ignoring alpha-channel.
@@ -1319,19 +966,13 @@ public static native @Cast("NppStatus") int nppiErode_32f_C4R(@Cast("const Npp32
  * For common parameter descriptions, see <a href="#CommonErodeParameters">Common parameters for nppiErode functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                       @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
 public static native @Cast("NppStatus") int nppiErode_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                   @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+                    @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor);
+
 
 /** \} image_erode */
 
@@ -1361,7 +1002,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_AC4R(@Cast("const Npp3
  * @param oAnchor X and Y offsets of the mask origin frame of reference
  *        w.r.t the source pixel.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -1374,13 +1014,6 @@ public static native @Cast("NppStatus") int nppiErode_32f_AC4R(@Cast("const Npp3
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1394,13 +1027,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C1R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                           @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                        @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1414,13 +1040,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C3R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                           @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                           @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                           @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                        @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1434,13 +1053,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_C4R(@Cast("const 
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1448,19 +1060,13 @@ public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R(@Cast("const
 public static native @Cast("NppStatus") int nppiErodeBorder_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 16-bit unsigned integer erosion with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1474,13 +1080,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C1R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1494,13 +1093,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C3R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1514,13 +1106,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_C4R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1528,19 +1113,13 @@ public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R(@Cast("cons
 public static native @Cast("NppStatus") int nppiErodeBorder_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 32-bit floating-point erosion with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1554,13 +1133,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C1R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1574,13 +1146,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C3R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                            @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                         @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1594,13 +1159,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_C4R(@Cast("const
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI,
-                             @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
                          @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI,
@@ -1614,13 +1172,6 @@ public static native @Cast("NppStatus") int nppiErodeBorder_32f_AC4R(@Cast("cons
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp32s*") IntPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp32s*") IntBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                               @Cast("const Npp32s*") int[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                            @Cast("const Npp32s*") IntPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1634,13 +1185,6 @@ public static native @Cast("NppStatus") int nppiGrayErodeBorder_8u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErodeBorderParameters">Common parameters for nppiErodeBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32f*") FloatPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32f*") FloatBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
-                                @Cast("const Npp32f*") float[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
                             @Cast("const Npp32f*") FloatPointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, 
@@ -1663,7 +1207,6 @@ public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R(@Cast("c
  * @param pDst \ref destination_image_pointer.
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -1677,10 +1220,6 @@ public static native @Cast("NppStatus") int nppiGrayErodeBorder_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1691,10 +1230,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C1R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1705,10 +1240,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C3R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1719,13 +1250,10 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_C4R(@Cast("const Npp
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
 
 /**
  * Single-channel 16-bit unsigned integer 3x3 erosion.
@@ -1733,10 +1261,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_8u_AC4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1747,10 +1271,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1761,10 +1281,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1775,13 +1291,10 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
+
 
 /**
  * Single-channel 32-bit floating-point 3x3 erosion.
@@ -1789,10 +1302,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_16u_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1803,10 +1312,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1817,10 +1322,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C3R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1831,10 +1332,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_C4R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1845,10 +1342,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_32f_AC4R(@Cast("const N
  * For common parameter descriptions, see <a href="#CommonErode3x3Parameters">Common parameters for nppiErode3x3 functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R_Ctx(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R(@Cast("const Npp64f*") DoublePointer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoublePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R(@Cast("const Npp64f*") DoubleBuffer pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") DoubleBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
 public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R(@Cast("const Npp64f*") double[] pSrc, @Cast("Npp32s") int nSrcStep, @Cast("Npp64f*") double[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI);
@@ -1874,7 +1367,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R(@Cast("const Np
  * @param nDstStep \ref destination_image_line_step.
  * @param oSizeROI \ref roi_specification.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -1887,13 +1379,6 @@ public static native @Cast("NppStatus") int nppiErode3x3_64f_C1R(@Cast("const Np
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                 @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -1907,13 +1392,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C1R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") ByteBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") byte[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                 @Cast("Npp8u*") BytePointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -1927,13 +1405,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C3R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                    @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                 @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -1947,13 +1418,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_C4R(@Cast("con
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp8u*") BytePointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -1961,19 +1425,13 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R(@Cast("co
 public static native @Cast("NppStatus") int nppiErode3x3Border_8u_AC4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp8u*") byte[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 16-bit unsigned integer 3x3 erosion with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -1987,13 +1445,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R_Ctx(@Cast("const Npp16u*") short[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") short[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R(@Cast("const Npp16u*") ShortPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp16u*") ShortPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R(@Cast("const Npp16u*") ShortBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2007,13 +1458,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2027,13 +1471,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_C4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                   @Cast("Npp16u*") ShortPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2041,19 +1478,13 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R(@Cast("c
 public static native @Cast("NppStatus") int nppiErode3x3Border_16u_AC4R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                   @Cast("Npp16u*") short[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 
+
 /**
  * Single-channel 32-bit floating-point 3x3 erosion with border control.
  * 
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2067,13 +1498,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatBuffer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") float[] pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp32f*") FloatPointer pDst, @Cast("Npp32s") int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, @Cast("Npp32s") int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2087,13 +1511,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                     @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                  @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2107,13 +1524,6 @@ public static native @Cast("NppStatus") int nppiErode3x3Border_32f_C4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonErode3x3BorderParameters">Common parameters for nppiErode3x3Border functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
-                                      @Cast("Npp32f*") float[] pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
                                   @Cast("Npp32f*") FloatPointer pDst, int nDstStep, @ByVal NppiSize oSizeROI, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiErode3x3Border_32f_AC4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, 
@@ -2271,7 +1681,6 @@ public static native @Cast("NppStatus") int nppiMorphGetBufferSize_32f_C4R(@ByVa
  *        w.r.t the source pixel.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding MorphGetBufferSize call.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -2284,13 +1693,6 @@ public static native @Cast("NppStatus") int nppiMorphGetBufferSize_32f_C4R(@ByVa
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2304,13 +1706,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2324,13 +1719,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2344,13 +1732,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_8u_C4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
@@ -2364,13 +1745,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_16u_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
@@ -2384,13 +1758,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_16s_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2404,13 +1771,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2424,13 +1784,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C3R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphCloseBorderParameters">Common parameters for nppiMorphCloseBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2475,7 +1828,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R(@Cast("
  *        w.r.t the source pixel.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding MorphGetBufferSize call.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -2488,13 +1840,6 @@ public static native @Cast("NppStatus") int nppiMorphCloseBorder_32f_C4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                            @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2508,13 +1853,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C1R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                            @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2528,13 +1866,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C3R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                            @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2548,13 +1879,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_8u_C4R(@Cast("co
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
@@ -2568,13 +1892,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_16u_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
@@ -2588,13 +1905,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_16s_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2608,13 +1918,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C1R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2628,13 +1931,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C3R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphOpenBorderParameters">Common parameters for nppiMorphOpenBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2678,7 +1974,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R(@Cast("c
  *        w.r.t the source pixel.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding MorphGetBufferSize call.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -2691,13 +1986,6 @@ public static native @Cast("NppStatus") int nppiMorphOpenBorder_32f_C4R(@Cast("c
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2711,13 +1999,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C1R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2731,13 +2012,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C3R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -2751,13 +2025,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_8u_C4R(@Cast("
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
@@ -2771,13 +2038,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16u_C1R(@Cast(
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
@@ -2791,13 +2051,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_16s_C1R(@Cast(
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2811,13 +2064,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C1R(@Cast(
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2831,13 +2077,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C3R(@Cast(
  * For common parameter descriptions, see <a href="#CommonMorphTopHatBorderParameters">Common parameters for nppiMorphTopHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                  @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -2881,7 +2120,6 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R(@Cast(
  *        w.r.t the source pixel.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding MorphGetBufferSize call.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -2894,19 +2132,12 @@ public static native @Cast("NppStatus") int nppiMorphTopHatBorder_32f_C4R(@Cast(
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 3 channel 8-bit unsigned integer morphological black hat with border control.
@@ -2914,19 +2145,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C1R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 4 channel 8-bit unsigned integer morphological black hat with border control.
@@ -2934,19 +2158,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C3R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                               @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                             @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 1 channel 16-bit unsigned integer morphological black hat with border control.
@@ -2954,19 +2171,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_8u_C4R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 1 channel 16-bit signed integer morphological black hat with border control.
@@ -2974,19 +2184,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16u_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 1 channel 32-bit floating point morphological black hat with border control.
@@ -2994,19 +2197,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_16s_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 3 channel 32-bit floating point morphological black hat with border control.
@@ -3014,19 +2210,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /**
  * 4 channel 32-bit floating point morphological black hat with border control.
@@ -3034,19 +2223,12 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C3R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphBlackHatBorderParameters">Common parameters for nppiMorphBlackHatBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
+                              @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType);
 
 /** \} image_morph_black_hat_border */
 
@@ -3084,7 +2266,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R(@Cas
  *        w.r.t the source pixel.
  * @param pBuffer Pointer to device memory scratch buffer at least as large as value returned by the corresponding MorphGetBufferSize call.
  * @param eBorderType The border type operation to be applied at source image border boundaries.
- * @param nppStreamCtx \ref application_managed_stream_context. 
  * @return \ref image_data_error_codes, \ref roi_error_codes
  *
  * \{
@@ -3097,13 +2278,6 @@ public static native @Cast("NppStatus") int nppiMorphBlackHatBorder_32f_C4R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -3117,13 +2291,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C1R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -3137,13 +2304,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C3R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R_Ctx(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R_Ctx(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R_Ctx(@Cast("const Npp8u*") byte[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") byte[] pDst, int nDstStep, 
-                                   @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R(@Cast("const Npp8u*") BytePointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") BytePointer pDst, int nDstStep, 
                                @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R(@Cast("const Npp8u*") ByteBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp8u*") ByteBuffer pDst, int nDstStep, 
@@ -3157,13 +2317,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_8u_C4R(@Cast
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R_Ctx(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R_Ctx(@Cast("const Npp16u*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R(@Cast("const Npp16u*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R(@Cast("const Npp16u*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16u*") ShortBuffer pDst, int nDstStep, 
@@ -3177,13 +2330,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_16u_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R_Ctx(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R_Ctx(@Cast("const Npp16s*") short[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") short[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R(@Cast("const Npp16s*") ShortPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R(@Cast("const Npp16s*") ShortBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp16s*") ShortBuffer pDst, int nDstStep, 
@@ -3197,13 +2343,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_16s_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                     @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -3217,13 +2356,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C1R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
@@ -3237,13 +2369,6 @@ public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C3R(@Cas
  * For common parameter descriptions, see <a href="#CommonMorphGradientBorderParameters">Common parameters for nppiMorphGradientBorder functions</a>.
  *
  */
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R_Ctx(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") ByteBuffer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") ByteBuffer pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R_Ctx(@Cast("const Npp32f*") float[] pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") float[] pDst, int nDstStep, 
-                                    @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") byte[] pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") byte[] pBuffer, @Cast("NppiBorderType") int eBorderType, @ByVal NppStreamContext nppStreamCtx);
-
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R(@Cast("const Npp32f*") FloatPointer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatPointer pDst, int nDstStep, 
                                 @ByVal NppiSize oSizeROI, @Cast("const Npp8u*") BytePointer pMask, @ByVal NppiSize oMaskSize, @ByVal NppiPoint oAnchor, @Cast("Npp8u*") BytePointer pBuffer, @Cast("NppiBorderType") int eBorderType);
 public static native @Cast("NppStatus") int nppiMorphGradientBorder_32f_C4R(@Cast("const Npp32f*") FloatBuffer pSrc, int nSrcStep, @ByVal NppiSize oSrcSize, @ByVal NppiPoint oSrcOffset, @Cast("Npp32f*") FloatBuffer pDst, int nDstStep, 

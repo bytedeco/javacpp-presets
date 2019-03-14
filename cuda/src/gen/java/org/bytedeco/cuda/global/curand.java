@@ -588,7 +588,6 @@ public static native @Cast("curandStatus_t") int curandSetQuasiRandomGeneratorDi
  * @param num - Number of random 32-bit values to generate
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from 
  *     a previous kernel launch \n
@@ -649,7 +648,6 @@ public static native @Cast("curandStatus_t") int curandGenerateLongLong(curandGe
  * @param num - Number of floats to generate
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -679,7 +677,6 @@ public static native @Cast("curandStatus_t") int curandGenerateUniform(curandGen
  * @param num - Number of doubles to generate
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -726,7 +723,6 @@ public static native @Cast("curandStatus_t") int curandGenerateUniformDouble(cur
  * @param stddev - Standard deviation of normal distribution
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -776,7 +772,6 @@ public static native @Cast("curandStatus_t") int curandGenerateNormal(curandGene
  * @param stddev - Standard deviation of normal distribution
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -828,7 +823,6 @@ public static native @Cast("curandStatus_t") int curandGenerateNormalDouble(cura
  * @param stddev - Standard deviation of associated normal distribution
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -879,7 +873,6 @@ public static native @Cast("curandStatus_t") int curandGenerateLogNormal(curandG
  * @param stddev - Standard deviation of normal distribution
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -954,7 +947,6 @@ public static native @Cast("curandStatus_t") int curandDestroyDistribution(curan
  * @param lambda - lambda for the Poisson distribution
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -998,7 +990,6 @@ public static native @Cast("curandStatus_t") int curandGeneratePoissonMethod(cur
  * @param generator - Generator to update
  *
  * @return
- * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from 
  *     a previous kernel launch \n

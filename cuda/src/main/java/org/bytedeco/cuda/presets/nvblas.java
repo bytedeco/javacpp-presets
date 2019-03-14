@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(include = "<nvblas.h>", link = "nvblas@.10"),
-    @Platform(value = "windows-x86_64", preload = "nvblas64_10")},
+    @Platform(include = "<nvblas.h>", link = "nvblas@10.0"),
+    @Platform(value = "windows-x86_64", preload = "nvblas64_100")},
         global = "org.bytedeco.cuda.global.nvblas")
 @NoException
 public class nvblas implements InfoMapper {

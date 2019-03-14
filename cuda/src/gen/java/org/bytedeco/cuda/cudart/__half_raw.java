@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cuda.global.cudart.*;
 
+// #endif
 
 /**
 * Types which allow static initialization of "half" and "half2" until
