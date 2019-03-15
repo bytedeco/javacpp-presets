@@ -43,7 +43,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(define = {"__OPENBLAS 1", "LAPACK_COMPLEX_CPP"},
               include = {"openblas_config.h", "cblas.h"},
               link    =  "openblas_nolapack@.0", resource = {"include", "lib"},
-              preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
+              preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
               preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
     @Platform(value = "android", link = "openblas", preload = ""),
     @Platform(value = "macosx",  link = "openblas_nolapack", preload = "openblas#openblas_nolapack"),
