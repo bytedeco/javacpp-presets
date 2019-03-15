@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>llvm</artifactId>
-  <version>7.0.1-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for LLVM</name>
+
+  <properties>
+    <revision>7.0.1-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

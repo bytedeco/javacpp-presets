@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorrt-platform</artifactId>
-  <version>5.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for TensorRT</name>
 
   <properties>
     <javacpp.moduleId>tensorrt</javacpp.moduleId>
+    <revision>5.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

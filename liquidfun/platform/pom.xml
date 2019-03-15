@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>liquidfun-platform</artifactId>
-  <version>master-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for LiquidFun</name>
 
   <properties>
     <javacpp.moduleId>liquidfun</javacpp.moduleId>
+    <revision>master-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

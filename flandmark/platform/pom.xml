@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>flandmark-platform</artifactId>
-  <version>1.07-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for flandmark</name>
 
   <properties>
     <javacpp.moduleId>flandmark</javacpp.moduleId>
+    <revision>1.07-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

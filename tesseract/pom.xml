@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tesseract</artifactId>
-  <version>4.0.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for Tesseract</name>
+
+  <properties>
+    <revision>4.0.0-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

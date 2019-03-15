@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>artoolkitplus-platform</artifactId>
-  <version>2.3.1-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for ARToolKitPlus</name>
 
   <properties>
     <javacpp.moduleId>artoolkitplus</javacpp.moduleId>
+    <revision>2.3.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

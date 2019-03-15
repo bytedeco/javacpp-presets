@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mxnet-platform</artifactId>
-  <version>1.4.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for MXNet</name>
 
   <properties>
     <javacpp.moduleId>mxnet</javacpp.moduleId>
+    <revision>1.4.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

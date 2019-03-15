@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libfreenect2-platform</artifactId>
-  <version>0.2.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for libfreenect2</name>
 
   <properties>
     <javacpp.moduleId>libfreenect2</javacpp.moduleId>
+    <revision>0.2.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

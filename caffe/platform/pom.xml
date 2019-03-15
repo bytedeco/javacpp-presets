@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>caffe-platform</artifactId>
-  <version>1.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for Caffe</name>
 
   <properties>
     <javacpp.moduleId>caffe</javacpp.moduleId>
+    <revision>1.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

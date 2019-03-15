@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>videoinput-platform</artifactId>
-  <version>0.200-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for videoInput</name>
 
   <properties>
     <javacpp.moduleId>videoinput</javacpp.moduleId>
+    <revision>0.200-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

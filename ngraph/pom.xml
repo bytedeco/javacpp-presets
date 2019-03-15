@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ngraph</artifactId>
-  <version>0.15.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for nGraph</name>
+
+  <properties>
+    <revision>0.15.0-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -28,12 +32,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-        </configuration>
-      </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>

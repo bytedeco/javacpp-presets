@@ -11,11 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>openblas</artifactId>
-  <version>0.3.5-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for OpenBLAS</name>
 
   <properties>
     <javacpp.compiler.option>-O3</javacpp.compiler.option>
+    <revision>0.3.5-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

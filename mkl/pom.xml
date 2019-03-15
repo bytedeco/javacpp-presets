@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl</artifactId>
-  <version>2019.3-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for MKL</name>
+
+  <properties>
+    <revision>2019.3-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

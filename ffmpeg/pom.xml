@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ffmpeg</artifactId>
-  <version>4.1.1-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for FFmpeg</name>
+
+  <properties>
+    <revision>4.1.1-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

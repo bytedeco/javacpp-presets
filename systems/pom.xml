@@ -11,8 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>systems</artifactId>
-  <version>${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets for Systems</name>
+
+  <properties>
+    <revision>${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

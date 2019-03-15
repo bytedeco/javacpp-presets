@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>librealsense-platform</artifactId>
-  <version>1.12.1-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for librealsense</name>
 
   <properties>
     <javacpp.moduleId>librealsense</javacpp.moduleId>
+    <revision>1.12.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

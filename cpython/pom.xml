@@ -11,9 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpython</artifactId>
-  <version>3.6-${project.parent.version}</version>
-  <packaging>jar</packaging>
+  <version>${revision}</version>
   <name>JavaCPP Presets for CPython</name>
+
+  <properties>
+    <revision>3.6-${project.parent.version}</revision>
+  </properties>
 
   <dependencies>
     <dependency>

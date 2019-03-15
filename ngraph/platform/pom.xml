@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ngraph-platform</artifactId>
-  <version>0.15.0-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for nGraph</name>
 
   <properties>
     <javacpp.moduleId>ngraph</javacpp.moduleId>
+    <revision>0.15.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

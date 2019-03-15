@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow-platform</artifactId>
-  <version>1.13.1-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for TensorFlow</name>
 
   <properties>
     <javacpp.moduleId>tensorflow</javacpp.moduleId>
+    <revision>1.13.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpython-platform</artifactId>
-  <version>3.6-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for CPython</name>
 
   <properties>
     <javacpp.moduleId>cpython</javacpp.moduleId>
+    <revision>3.6-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

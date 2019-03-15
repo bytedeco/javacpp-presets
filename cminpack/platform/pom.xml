@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cminpack-platform</artifactId>
-  <version>1.3.6-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for CMINPACK</name>
 
   <properties>
     <javacpp.moduleId>cminpack</javacpp.moduleId>
+    <revision>1.3.6-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

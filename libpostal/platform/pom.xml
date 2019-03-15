@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>libpostal-platform</artifactId>
-  <version>1.1-alpha-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for libpostal</name>
 
   <properties>
     <javacpp.moduleId>libpostal</javacpp.moduleId>
+    <revision>1.1-alpha-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

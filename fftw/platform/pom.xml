@@ -12,11 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>fftw-platform</artifactId>
-  <version>3.3.8-${project.parent.version}</version>
+  <version>${revision}</version>
   <name>JavaCPP Presets Platform for FFTW</name>
 
   <properties>
     <javacpp.moduleId>fftw</javacpp.moduleId>
+    <revision>3.3.8-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
