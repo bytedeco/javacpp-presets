@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -100,16 +100,16 @@ public class opencv_core implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublas", "cufft", "nppc", "nppc", "nppial", "nppicc", "nppicom",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "nppc", "nppc", "nppial", "nppicc", "nppicom",
                          "nppidei", "nppif", "nppig", "nppim", "nppist", "nppisu", "nppitc", "npps"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += "@.10.0";
+                    lib += lib.equals("cudart") ? "@.10.1" : "@.10";
                     break;
                 case "windows-x86_64":
-                    lib += "64_100";
+                    lib += lib.equals("cudart") ? "64_101" : "64_10";
                     break;
                 default:
                     continue; // no CUDA

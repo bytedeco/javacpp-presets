@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -62,9 +62,9 @@ public class nvinfer implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublas", "cudnn"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
         for (String lib : libs) {
-            lib += lib.equals("cudnn") ? "@.7" : "@.10.0";
+            lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.1" : "@.10";
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Audet
+ * Copyright (C) 2016-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -53,10 +53,10 @@ import org.bytedeco.opencv.presets.*;
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
     @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
         define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0"},
-        link = {"cudart@.10.0#", "cuda@.10.0#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
-        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/include/"},
-        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/lib/x64/"},
-        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.0/bin/"}, extension = "-gpu") })
+        link = {"cudart@.10.1#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
+        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/"},
+        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/"},
+        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
 
     @Override public void init(ClassProperties properties) {
@@ -74,15 +74,15 @@ public class mxnet implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvrtc"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvrtc"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : "@.10.0";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvrtc") || lib.equals("cudart") ? "@.10.1" : "@.10";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_100_0" : "64_100";
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_101_0" : lib.equals("cudart") ? "64_101" : "64_10";
                     break;
                 default:
                     continue; // no CUDA

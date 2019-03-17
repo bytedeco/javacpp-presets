@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cudart.class, value = {
-    @Platform(define = {"CUBLASAPI", "CUBLAS_V2_H_"}, include = {"<cublas_api.h>", "<cublas.h>", "<cublasXt.h>"}, link = "cublas@.10"),
-    @Platform(value = "windows-x86_64", preload = "cublas64_10")},
+    @Platform(define = {"CUBLASAPI", "CUBLAS_V2_H_"}, include = {"<cublas_api.h>", "<cublas.h>", "<cublasXt.h>"}, link = {"cublasLt@.10", "cublas@.10"}),
+    @Platform(value = "windows-x86_64", preload = {"cublasLt64_10", "cublas64_10"})},
         target = "org.bytedeco.cuda.cublas", global = "org.bytedeco.cuda.global.cublas")
 @NoException
 public class cublas implements InfoMapper {
