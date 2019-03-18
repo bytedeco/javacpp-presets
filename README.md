@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.3  https://software.intel.com/intel-mkl
- * MKL-DNN 0.18  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.18.1  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.5  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -142,8 +142,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ONNX 1.4.1  https://github.com/onnx/onnx
  * nGraph 0.15.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.12  https://www.qt.io/download
- * Skia 1.68.0  https://skia.org
+ * Qt 5.12.2  https://download.qt.io/archive/qt/
+ * Mono/Skia 1.68.0  https://github.com/mono/skia
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

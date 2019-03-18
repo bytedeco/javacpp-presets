@@ -54,6 +54,12 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
+# upgrade MKL-DNN
+sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
+sedinplace 's/0.17.4/0.18.1/g' 3rdparty/mkldnn/CMakeLists.txt
+sedinplace 's/0.17.3/0.18/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
+sedinplace 's/2019.0.1.20180928/2019.0.3.20190220/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
+
 # patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc

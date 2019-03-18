@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.18
+MKLDNN_VERSION=0.18.1
 MKLML_VERSION=2019.0.3.20190220
 download https://github.com/intel/mkl-dnn/archive/v$MKLDNN_VERSION.tar.gz mkl-dnn-$MKLDNN_VERSION.tar.bz2
 
@@ -23,7 +23,7 @@ sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake
 
 case $PLATFORM in
     linux-x86_64)
-        download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_lnx_$MKLML_VERSION.tgz mklml_lnx_$MKLML_VERSION.tgz
+        download https://github.com/intel/mkl-dnn/releases/download/v${MKLDNN_VERSION%.*}/mklml_lnx_$MKLML_VERSION.tgz mklml_lnx_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_lnx_$MKLML_VERSION.tgz -C external
         # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
@@ -33,7 +33,7 @@ case $PLATFORM in
         cp external/mklml_lnx_$MKLML_VERSION/include/* ../include/
         ;;
     macosx-x86_64)
-        download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_mac_$MKLML_VERSION.tgz mklml_mac_$MKLML_VERSION.tgz
+        download https://github.com/intel/mkl-dnn/releases/download/v${MKLDNN_VERSION%.*}/mklml_mac_$MKLML_VERSION.tgz mklml_mac_$MKLML_VERSION.tgz
         mkdir -p external
         tar --totals -xf mklml_mac_$MKLML_VERSION.tgz -C external
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
@@ -47,7 +47,7 @@ case $PLATFORM in
         unset CXX
         ;;
     windows-x86_64)
-        download https://github.com/intel/mkl-dnn/releases/download/v$MKLDNN_VERSION/mklml_win_$MKLML_VERSION.zip mklml_win_$MKLML_VERSION.zip
+        download https://github.com/intel/mkl-dnn/releases/download/v${MKLDNN_VERSION%.*}/mklml_win_$MKLML_VERSION.zip mklml_win_$MKLML_VERSION.zip
         mkdir -p external
         unzip -o mklml_win_$MKLML_VERSION.zip -d external
         "$CMAKE" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
