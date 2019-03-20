@@ -241,7 +241,7 @@ import java.util.List;
 //                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
                 includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/"},
                 linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/extras/CUPTI/libx64/"}),
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/extras/CUPTI/lib64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},

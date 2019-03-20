@@ -157,6 +157,7 @@
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*msvcr120*</exclude>
               </excludes>
             </configuration>
           </execution>
