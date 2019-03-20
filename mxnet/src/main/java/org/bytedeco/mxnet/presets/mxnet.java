@@ -67,7 +67,12 @@ public class mxnet implements LoadEnabled, InfoMapper {
 
         // Only apply this at load time since we don't want to copy the MKL or CUDA libraries here
         if (Loader.isLoadLibraries()) {
-            preloads.addAll(0, Arrays.asList("iomp5", "libiomp5md", "mklml", "mklml_intel"));
+            List<String> l = Arrays.asList("iomp5", "libiomp5md", "mklml", "mklml_intel");
+            if (!preloads.containsAll(l)) {
+                preloads.addAll(0, l);
+            }
+            // make sure to look for MXNet's version of MKL-DNN first
+            resources.add("/org/bytedeco/mxnet/");
             resources.add("/org/bytedeco/mkldnn/");
         }
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
@@ -113,7 +118,8 @@ public class mxnet implements LoadEnabled, InfoMapper {
                .put(new Info("RecordIOHandle").valueTypes("RecordIOHandle").pointerTypes("PointerPointer", "@Cast(\"RecordIOHandle*\") @ByPtrPtr RecordIOHandle"))
                .put(new Info("RtcHandle").valueTypes("RtcHandle").pointerTypes("PointerPointer", "@Cast(\"RtcHandle*\") @ByPtrPtr RtcHandle"))
                .put(new Info("OptimizerCreator").valueTypes("OptimizerCreator").pointerTypes("PointerPointer", "@Cast(\"OptimizerCreator*\") @ByPtrPtr OptimizerCreator"))
-               .put(new Info("OptimizerHandle").valueTypes("OptimizerHandle").pointerTypes("PointerPointer", "@Cast(\"OptimizerHandle*\") @ByPtrPtr OptimizerHandle"));
+               .put(new Info("OptimizerHandle").valueTypes("OptimizerHandle").pointerTypes("PointerPointer", "@Cast(\"OptimizerHandle*\") @ByPtrPtr OptimizerHandle"))
+               .put(new Info("PredictorHandle").valueTypes("PredictorHandle").pointerTypes("PointerPointer", "@Cast(\"PredictorHandle*\") @ByPtrPtr PredictorHandle"));
 /*
         infoMap.put(new Info("DMLC_USE_REGEX", "DMLC_USE_CXX11", "DMLC_ENABLE_STD_THREAD").define())
                .put(new Info("!defined(__GNUC__)", "_MSC_VER < 1900", "__APPLE__", "defined(_MSC_VER) && _MSC_VER < 1900").define(false))

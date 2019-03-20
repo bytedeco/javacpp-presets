@@ -84,6 +84,8 @@ case $PLATFORM in
         export CC="$(which gcc) -m64"
         export CXX="$(which g++) -m64"
         export BLAS="openblas"
+        # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
+        sedinplace "s/$CMAKE/$CMAKE -DCMAKE_CXX_FLAGS='-Wl,-rpath,\$\$ORIGIN\/'/g" mkldnn.mk
         ;;
     macosx-*)
         # remove harmful changes to rpath

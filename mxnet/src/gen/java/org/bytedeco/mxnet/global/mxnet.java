@@ -4808,7 +4808,7 @@ public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_js
                            @Cast("const char**") PointerPointer input_keys,
                            @Cast("const mx_uint*") IntPointer input_shape_indptr,
                            @Cast("const mx_uint*") IntPointer input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           PointerPointer out);
 public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4817,7 +4817,7 @@ public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_js
                            @Cast("const char**") @ByPtrPtr BytePointer input_keys,
                            @Cast("const mx_uint*") IntPointer input_shape_indptr,
                            @Cast("const mx_uint*") IntPointer input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           PointerPointer out);
 public static native int MXPredCreate(String symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4826,7 +4826,7 @@ public static native int MXPredCreate(String symbol_json_str,
                            @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
                            @Cast("const mx_uint*") IntBuffer input_shape_indptr,
                            @Cast("const mx_uint*") IntBuffer input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4835,7 +4835,7 @@ public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_js
                            @Cast("const char**") @ByPtrPtr byte[] input_keys,
                            @Cast("const mx_uint*") int[] input_shape_indptr,
                            @Cast("const mx_uint*") int[] input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           PointerPointer out);
 public static native int MXPredCreate(String symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4844,7 +4844,7 @@ public static native int MXPredCreate(String symbol_json_str,
                            @Cast("const char**") @ByPtrPtr BytePointer input_keys,
                            @Cast("const mx_uint*") IntPointer input_shape_indptr,
                            @Cast("const mx_uint*") IntPointer input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4853,7 +4853,7 @@ public static native int MXPredCreate(@Cast("const char*") BytePointer symbol_js
                            @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
                            @Cast("const mx_uint*") IntBuffer input_shape_indptr,
                            @Cast("const mx_uint*") IntBuffer input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           PointerPointer out);
 public static native int MXPredCreate(String symbol_json_str,
                            @Const Pointer param_bytes,
                            int param_size,
@@ -4862,7 +4862,7 @@ public static native int MXPredCreate(String symbol_json_str,
                            @Cast("const char**") @ByPtrPtr byte[] input_keys,
                            @Cast("const mx_uint*") int[] input_shape_indptr,
                            @Cast("const mx_uint*") int[] input_shape_data,
-                           @ByPtrPtr PredictorHandle out);
+                           @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 
 /**
  * \brief create a predictor wich customized outputs
@@ -4897,7 +4897,7 @@ public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer
                                      @Cast("const mx_uint*") IntPointer input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") PointerPointer output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     PointerPointer out);
 public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4908,7 +4908,7 @@ public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer
                                      @Cast("const mx_uint*") IntPointer input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr BytePointer output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     PointerPointer out);
 public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4919,7 +4919,7 @@ public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Cast("const mx_uint*") IntBuffer input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr ByteBuffer output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4930,7 +4930,7 @@ public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer
                                      @Cast("const mx_uint*") int[] input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr byte[] output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     PointerPointer out);
 public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4941,7 +4941,7 @@ public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Cast("const mx_uint*") IntPointer input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr BytePointer output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4952,7 +4952,7 @@ public static native int MXPredCreatePartialOut(@Cast("const char*") BytePointer
                                      @Cast("const mx_uint*") IntBuffer input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr ByteBuffer output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     PointerPointer out);
 public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Const Pointer param_bytes,
                                      int param_size,
@@ -4963,7 +4963,7 @@ public static native int MXPredCreatePartialOut(String symbol_json_str,
                                      @Cast("const mx_uint*") int[] input_shape_data,
                                      @Cast("mx_uint") int num_output_nodes,
                                      @Cast("const char**") @ByPtrPtr byte[] output_keys,
-                                     @ByPtrPtr PredictorHandle out);
+                                     @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 
 /**
  * \brief create predictors for multiple threads. One predictor for a thread.
@@ -4995,7 +4995,7 @@ public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointe
                                       @Cast("const mx_uint*") IntPointer input_shape_indptr,
                                       @Cast("const mx_uint*") IntPointer input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      PointerPointer out);
 public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5005,7 +5005,7 @@ public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointe
                                       @Cast("const mx_uint*") IntPointer input_shape_indptr,
                                       @Cast("const mx_uint*") IntPointer input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      PointerPointer out);
 public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5015,7 +5015,7 @@ public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Cast("const mx_uint*") IntBuffer input_shape_indptr,
                                       @Cast("const mx_uint*") IntBuffer input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5025,7 +5025,7 @@ public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointe
                                       @Cast("const mx_uint*") int[] input_shape_indptr,
                                       @Cast("const mx_uint*") int[] input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      PointerPointer out);
 public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5035,7 +5035,7 @@ public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Cast("const mx_uint*") IntPointer input_shape_indptr,
                                       @Cast("const mx_uint*") IntPointer input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointer symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5045,7 +5045,7 @@ public static native int MXPredCreateMultiThread(@Cast("const char*") BytePointe
                                       @Cast("const mx_uint*") IntBuffer input_shape_indptr,
                                       @Cast("const mx_uint*") IntBuffer input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      PointerPointer out);
 public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Const Pointer param_bytes,
                                       int param_size,
@@ -5055,7 +5055,7 @@ public static native int MXPredCreateMultiThread(String symbol_json_str,
                                       @Cast("const mx_uint*") int[] input_shape_indptr,
                                       @Cast("const mx_uint*") int[] input_shape_data,
                                       int num_threads,
-                                      @ByPtrPtr PredictorHandle out);
+                                      @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 
 /**
  * \brief Change the input shape of an existing predictor.
@@ -5077,25 +5077,43 @@ public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
                   @Cast("const mx_uint*") IntPointer input_shape_indptr,
                   @Cast("const mx_uint*") IntPointer input_shape_data,
                   PredictorHandle handle,
-                  @ByPtrPtr PredictorHandle out);
+                  PointerPointer out);
 public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
                   @Cast("const char**") @ByPtrPtr BytePointer input_keys,
                   @Cast("const mx_uint*") IntPointer input_shape_indptr,
                   @Cast("const mx_uint*") IntPointer input_shape_data,
                   PredictorHandle handle,
-                  @ByPtrPtr PredictorHandle out);
+                  PointerPointer out);
 public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
                   @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
                   @Cast("const mx_uint*") IntBuffer input_shape_indptr,
                   @Cast("const mx_uint*") IntBuffer input_shape_data,
                   PredictorHandle handle,
-                  @ByPtrPtr PredictorHandle out);
+                  @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
                   @Cast("const char**") @ByPtrPtr byte[] input_keys,
                   @Cast("const mx_uint*") int[] input_shape_indptr,
                   @Cast("const mx_uint*") int[] input_shape_data,
                   PredictorHandle handle,
-                  @ByPtrPtr PredictorHandle out);
+                  PointerPointer out);
+public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
+                  @Cast("const char**") @ByPtrPtr BytePointer input_keys,
+                  @Cast("const mx_uint*") IntPointer input_shape_indptr,
+                  @Cast("const mx_uint*") IntPointer input_shape_data,
+                  PredictorHandle handle,
+                  @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
+public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
+                  @Cast("const char**") @ByPtrPtr ByteBuffer input_keys,
+                  @Cast("const mx_uint*") IntBuffer input_shape_indptr,
+                  @Cast("const mx_uint*") IntBuffer input_shape_data,
+                  PredictorHandle handle,
+                  PointerPointer out);
+public static native int MXPredReshape(@Cast("mx_uint") int num_input_nodes,
+                  @Cast("const char**") @ByPtrPtr byte[] input_keys,
+                  @Cast("const mx_uint*") int[] input_shape_indptr,
+                  @Cast("const mx_uint*") int[] input_shape_data,
+                  PredictorHandle handle,
+                  @Cast("PredictorHandle*") @ByPtrPtr PredictorHandle out);
 /**
  * \brief Get the shape of output node.
  *  The returned shape_data and shape_ndim is only valid before next call to MXPred function.
