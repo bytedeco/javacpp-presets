@@ -9721,11 +9721,6 @@ public static native int _Py_CheckRecursionLimit(); public static native void _P
 
 // #else /* !WITH_THREAD */
 
-// #define Py_BEGIN_ALLOW_THREADS {
-// #define Py_BLOCK_THREADS
-// #define Py_UNBLOCK_THREADS
-// #define Py_END_ALLOW_THREADS }
-
 // #endif /* !WITH_THREAD */
 
 // #ifndef Py_LIMITED_API
@@ -9969,8 +9964,6 @@ public static final int FVS_HAVE_SPEC = 0x4;
 @NoException public static native void _PyImport_AcquireLock();
 @NoException public static native int _PyImport_ReleaseLock();
 // #else
-// #define _PyImport_AcquireLock()
-// #define _PyImport_ReleaseLock() 1
 // #endif
 
 @NoException public static native void _PyImport_ReInitLock();
