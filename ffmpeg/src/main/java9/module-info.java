@@ -1,5 +1,6 @@
 module org.bytedeco.ffmpeg {
   requires transitive org.bytedeco.javacpp;
+  exports org.bytedeco.ffmpeg;
   exports org.bytedeco.ffmpeg.global;
   exports org.bytedeco.ffmpeg.avcodec;
   exports org.bytedeco.ffmpeg.avdevice;

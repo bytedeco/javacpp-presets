@@ -197,6 +197,9 @@
             <resourcePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/</resourcePath>
             <resourcePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/</resourcePath>
           </resourcePaths>
+          <executablePaths>
+            <executablePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</executablePath>
+          </executablePaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/javacpp/${javacpp.platform}${javacpp.platform.extension}/</buildResource>
