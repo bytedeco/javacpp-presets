@@ -2,12 +2,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import org.bytedeco.javacpp.*;
-import org.bytedeco.qt.QtCore.*;
-import org.bytedeco.qt.QtGui.*;
-import org.bytedeco.qt.QtWidgets.*;
-import static org.bytedeco.qt.global.QtCore.*;
-import static org.bytedeco.qt.global.QtGui.*;
-import static org.bytedeco.qt.global.QtWidgets.*;
+import org.bytedeco.qt.Qt5Core.*;
+import org.bytedeco.qt.Qt5Gui.*;
+import org.bytedeco.qt.Qt5Widgets.*;
+import static org.bytedeco.qt.global.Qt5Core.*;
+import static org.bytedeco.qt.global.Qt5Gui.*;
+import static org.bytedeco.qt.global.Qt5Widgets.*;
 
 /**
  * @author Greg Hart
@@ -20,7 +20,7 @@ public class SystemTrayIconExample {
   private static Window window;
 
   public static void main(String[] args) {
-    String path = Loader.load(org.bytedeco.qt.global.QtCore.class);
+    String path = Loader.load(org.bytedeco.qt.global.Qt5Core.class);
     argc = new IntPointer(new int[]{3});
     argv = new PointerPointer("systray", "-platformpluginpath", new File(path).getParent(), null);
 

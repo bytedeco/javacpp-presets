@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Greg Hart
+ * Copyright (C) 2019 Greg Hart, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -68,7 +68,8 @@ abstract class QtInfoMapper implements InfoMapper, LoadEnabled {
 
   @Override
   public void init(ClassProperties properties) {
-    String libraryName = getClass().getSimpleName().replace("Preset", "");
+    String libraryName = getClass().getSimpleName();
+    String moduleName = libraryName.replace("Qt5", "Qt");
     log.finest("Initial properties for " + libraryName + " preset: " + properties);
 
     // Set library name
@@ -94,7 +95,7 @@ abstract class QtInfoMapper implements InfoMapper, LoadEnabled {
       String include = includes.get(i);
       if (!include.contains("/")) {
         String filename = include.endsWith(".h") ? include : include.toLowerCase() + ".h";
-        includes.set(i, libraryName + "/" + filename);
+        includes.set(i, moduleName + "/" + filename);
       }
     }
 
