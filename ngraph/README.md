@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of nGraph ported to Java from the C++ source file at:
 
- * https://ngraph.nervanasys.com/docs/latest/howto/execute.html
+ * https://ngraph.nervanasys.com/index.html/core/constructing-graphs/execute.html
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ABC.java` source files below, simply execute on the command line:
 ```bash

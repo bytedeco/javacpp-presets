@@ -54,8 +54,8 @@ public class ABC {
         t_c.write(new FloatPointer(v_c), 0, v_c.length * 4);
 
         // Invoke the function
-        backend.compile(f);
-        backend.call(f, new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
+        Executable exec = backend.compile(f);
+        exec.call(new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
 
         // Get the result
         float[] r = new float[2 * 3];
