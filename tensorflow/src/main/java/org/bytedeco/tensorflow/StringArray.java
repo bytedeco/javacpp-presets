@@ -42,6 +42,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
     private native void allocate(String s);
     public native @Name("operator=") @ByRef StringArray put(@ByRef StringArray str);
     public native @Name("operator=") @ByRef StringArray put(String str);
+    public native @Name("operator=") @ByRef StringArray put(@Cast("const char*") BytePointer str);
     @Override public StringArray position(long position) {
         return (StringArray)super.position(position);
     }
