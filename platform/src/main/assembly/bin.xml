@@ -24,6 +24,7 @@
       </includes>
       <excludes>
         <exclude>**/cppbuild/**</exclude>
+        <exclude>**/src/**</exclude>
       </excludes>
     </fileSet>
     <fileSet>

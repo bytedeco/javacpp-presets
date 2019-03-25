@@ -1,29 +1,40 @@
---- openssl-1.1.1a/Configurations/15-android.conf	2018-11-20 22:35:37.000000000 +0900
-+++ openssl-1.1.1/Configurations/15-android.conf	2018-09-11 21:48:19.000000000 +0900
-@@ -24,12 +24,7 @@
+diff -ruN openssl-1.1.1b/Configurations/15-android.conf openssl-1.1.1b-android/Configurations/15-android.conf
+--- openssl-1.1.1b/Configurations/15-android.conf	2019-02-26 23:15:30.000000000 +0900
++++ openssl-1.1.1b-android/Configurations/15-android.conf	2019-03-24 22:36:52.544514506 +0900
+@@ -22,20 +22,9 @@
+                 return $android_ndk = { bn_ops => "BN_AUTO" };
+             }
  
-             my $ndk = $ENV{ANDROID_NDK};
-             die "\$ANDROID_NDK is not defined"  if (!$ndk);
+-            my $ndk_var;
+-            my $ndk;
+-            foreach (qw(ANDROID_NDK_HOME ANDROID_NDK)) {
+-                $ndk_var = $_;
+-                $ndk = $ENV{$ndk_var};
+-                last if defined $ndk;
+-            }
+-            die "\$ANDROID_NDK_HOME is not defined"  if (!$ndk);
 -            if (!-d "$ndk/platforms" && !-f "$ndk/AndroidVersion.txt") {
 -                # $ndk/platforms is traditional "all-inclusive" NDK, while
 -                # $ndk/AndroidVersion.txt is so-called standalone toolchain
 -                # tailored for specific target down to API level.
--                die "\$ANDROID_NDK=$ndk is invalid";
+-                die "\$ANDROID_NDK_HOME=$ndk is invalid";
 -            }
++            my $ndk = $ENV{ANDROID_NDK};
++            die "\$ANDROID_NDK is not defined"  if (!$ndk);
 +            die "\$ANDROID_NDK=$ndk is invalid" if (!-d "$ndk/platforms");
              $ndk = canonpath($ndk);
  
              my $ndkver = undef;
-@@ -45,18 +40,10 @@
+@@ -51,18 +40,10 @@
                  close $fh;
              }
  
 -            my ($sysroot, $api, $arch);
--
--            $config{target} =~ m|[^-]+-([^-]+)$|;	# split on dash
--            $arch = $1;
 +            my $sysroot;
  
+-            $config{target} =~ m|[^-]+-([^-]+)$|;	# split on dash
+-            $arch = $1;
+-
 -            if ($sysroot = $ENV{CROSS_SYSROOT}) {
 -                $sysroot =~ m|/android-([0-9]+)/arch-(\w+)/?$|;
 -                ($api, $arch) = ($1, $2);
@@ -36,7 +47,7 @@
  
                  # see if user passed -D__ANDROID_API__=N
                  foreach (@{$useradd{CPPDEFINES}}, @{$user{CPPFLAGS}}) {
-@@ -72,17 +59,19 @@
+@@ -78,17 +59,19 @@
                                       } glob("$ndk/platforms/android-$api");
                  die "no $ndk/platforms/android-$api" if ($#platforms < 0);
  
@@ -60,7 +71,12 @@
              if (which("clang") =~ m|^$ndk/.*/prebuilt/([^/]+)/|) {
                  my $host=$1;
                  # harmonize with gcc default
-@@ -94,23 +83,6 @@
+@@ -96,27 +79,10 @@
+                 (my $tridefault = $triarch) =~ s/^arm-/$arm-/;
+                 (my $tritools   = $triarch) =~ s/(?:x|i6)86(_64)?-.*/x86$1/;
+                 $cflags .= " -target $tridefault "
+-                        .  "-gcc-toolchain \$($ndk_var)/toolchains"
++                        .  "-gcc-toolchain \$(ANDROID_NDK)/toolchains"
                          .  "/$tritools-4.9/prebuilt/$host";
                  $user{CC} = "clang" if ($user{CC} !~ m|clang|);
                  $user{CROSS_COMPILE} = undef;
@@ -84,3 +100,20 @@
              } elsif ($user{CC} eq "clang") {
                  die "no NDK clang on \$PATH";
              } else {
+@@ -133,13 +99,13 @@
+                 die "no $incroot/$triarch" if (!-d "$incroot/$triarch");
+                 $incroot =~ s|^$ndk/||;
+                 $cppflags  = "-D__ANDROID_API__=$api";
+-                $cppflags .= " -isystem \$($ndk_var)/$incroot/$triarch";
+-                $cppflags .= " -isystem \$($ndk_var)/$incroot";
++                $cppflags .= " -isystem \$(ANDROID_NDK)/$incroot/$triarch";
++                $cppflags .= " -isystem \$(ANDROID_NDK)/$incroot";
+             }
+ 
+             $sysroot =~ s|^$ndk/||;
+             $android_ndk = {
+-                cflags   => "$cflags --sysroot=\$($ndk_var)/$sysroot",
++                cflags   => "$cflags --sysroot=\$(ANDROID_NDK)/$sysroot",
+                 cppflags => $cppflags,
+                 bn_ops   => $arch =~ m/64$/ ? "SIXTY_FOUR_BIT_LONG"
+                                             : "BN_LLONG",
