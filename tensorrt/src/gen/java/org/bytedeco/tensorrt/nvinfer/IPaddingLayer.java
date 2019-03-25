@@ -19,6 +19,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  The padding layer adds zero-padding at the start and end of the input tensor. It only supports padding along the two innermost dimensions.
  *  Applying negative padding results in cropping of the input.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPaddingLayer extends ILayer {

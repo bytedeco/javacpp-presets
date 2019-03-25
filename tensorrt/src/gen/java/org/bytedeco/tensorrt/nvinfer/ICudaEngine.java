@@ -16,6 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class ICudaEngine
  * 
  *  \brief An engine for executing inference on a built network.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ICudaEngine extends Pointer {
@@ -238,5 +240,17 @@ public class ICudaEngine extends Pointer {
      * 
      *  @see IExecutionContext::setDeviceMemory()
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native @Cast("size_t") long getDeviceMemorySize();
+
+    /**
+     *  \brief Return true if engine can be refit.
+     * 
+     *  @see nvinfer1::createInferRefitter()
+     *  */
+    public native @Cast("bool") boolean isRefittable();
 }

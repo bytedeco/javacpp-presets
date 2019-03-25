@@ -16,6 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class IBuilder
  * 
  *  \brief Builds an engine from a network definition.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IBuilder extends Pointer {
@@ -367,8 +369,7 @@ public class IBuilder extends Pointer {
     
     //!
     //!
-    public native int getMaxDLABatchSize(DeviceType deviceType);
-    public native int getMaxDLABatchSize(@Cast("nvinfer1::DeviceType") int deviceType);
+    public native int getMaxDLABatchSize();
 
     /**
      *  \brief Sets the builder to use GPU if a layer that was supposed to run on DLA can not run on DLA.
@@ -379,6 +380,37 @@ public class IBuilder extends Pointer {
     //!
     //!
     public native void allowGPUFallback(@Cast("bool") boolean setFallBackMode);
+
+    /**
+     *  \brief Returns number of DLA hardware cores accessible.
+     *  */
+    
+    
+    //!
+    //!
+    public native int getNbDLACores();
+
+    /**
+     *  \brief Set the DLA core that the engine must execute on.
+     *  @param dlaCore The DLA core to execute the engine on (0 to N-1, where N is the maximum number of DLA cores present on the device). Default value is 0.
+     *  DLA Core is not a property of the engine that is preserved by serialization: when the engine is deserialized it will be associated with the DLA core which is configured for the runtime.
+     *  @see IRuntime::setDLACore() getDLACore()
+     *  */
+    
+    
+    //!
+    //!
+    public native void setDLACore(int dlaCore);
+
+    /**
+     *  \brief Get the DLA core that the engine executes on.
+     *  @return If setDLACore is called, returns DLA core from 0 to N-1, else returns 0.
+     *  */
+    
+    
+    //!
+    //!
+    public native int getDLACore();
 
     /**
      *  \brief Resets the builder state
@@ -460,6 +492,26 @@ public class IBuilder extends Pointer {
      * 
      *  @see setStrictTypeConstraints()
      *  */
+    
+    
+    //!
+    //!
     public native @Cast("bool") boolean getStrictTypeConstraints();
 
+    /**
+     *  Set whether engines will be refittable.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setRefittable(@Cast("bool") boolean canRefit);
+
+    /**
+     *  \brief Query whether or not engines will be refittable.
+     * 
+     *  @see getRefittable()
+     *  */
+    public native @Cast("bool") boolean getRefittable();
 }

@@ -35,6 +35,7 @@ public class IProfiler extends Pointer {
      *  @param ms The time in milliseconds to execute the layer.
      *  */
     @Virtual(true) public native void reportLayerTime(String layerName, float ms);
+
     
     /** Default native constructor. */
     public IProfiler() { super((Pointer)null); allocate(); }

@@ -19,7 +19,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 // Parsed from NvInferPlugin.h
 
 /*
- * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2019 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -197,7 +197,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 
 /**
  *  \brief The Grid Anchor Generator plugin layer generates the prior boxes of
- *  designated sizes and aspect ratios across all dimensions {@code  (H \times W) } for all feature maps.
+ *  designated sizes and aspect ratios across all dimensions (H x W) for all feature maps.
  *  GridAnchorParameters defines a set of parameters for creating the GridAnchorGenerator plugin layer.
  *  @deprecated . This plugin is superseded by createAnchorGeneratorPlugin()
  *  */
@@ -219,7 +219,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
     CENTER_SIZE(1),
     /** Use box centers and size. */
     CORNER_SIZE(2),
-    /** Use box centers and size but flip x and y co-ordinates. */
+    /** Use box centers and size but flip x and y coordinates. */
     TF_CENTER(3);
 
     public final int value;
@@ -249,7 +249,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
  *  More particularly, this Concat plugin layer also implements the "ignoring the batch dimension" switch. If turned on, all the input tensors will be treated as if their batch sizes were 1.
  *  @param concatAxis Axis along which to concatenate. Can't be the "N" dimension.
  *  @param ignoreBatch If true, all the input tensors will be treated as if their batch sizes were 1.
- *  @deprecated . This plugin is superseded by createConcatPluginV2()
+ *  @deprecated . This plugin is superseded by native TensorRT concatenation layer
  *  */
 @Namespace("nvinfer1::plugin") public static native INvPlugin createConcatPlugin(int concatAxis, @Cast("bool") boolean ignoreBatch);
 
@@ -290,7 +290,14 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 
 
 @Namespace("nvinfer1::plugin") public static native INvPlugin createYOLORegionPlugin(@ByVal RegionParameters params);
+
+
+//!
+//!
 @Namespace("nvinfer1::plugin") public static native INvPlugin createYOLORegionPlugin(@Const Pointer data, @Cast("size_t") long length);
+// Targeting ../nvinfer_plugin/NMSParameters.java
+
+
 
  // end plugin namespace
  // end nvinfer1 namespace
@@ -313,7 +320,7 @@ public class nvinfer_plugin extends org.bytedeco.tensorrt.presets.nvinfer_plugin
 
 //!
 //!
-public static native IPluginExt createRPNROIPlugin(int featureStride, int preNmsTop,
+public static native IPluginV2 createRPNROIPlugin(int featureStride, int preNmsTop,
                                                                 int nmsMaxOut, float iouThreshold, float minBoxSize,
                                                                 float spatialScale, @ByVal DimsHW pooling,
                                                                 @ByVal Weights anchorRatios, @ByVal Weights anchorScales);
@@ -330,10 +337,10 @@ public static native IPluginExt createRPNROIPlugin(int featureStride, int preNms
 
 //!
 //!
-public static native IPluginExt createNormalizePlugin(@Const Weights scales, @Cast("bool") boolean acrossSpatial, @Cast("bool") boolean channelShared, float eps);
+public static native IPluginV2 createNormalizePlugin(@Const Weights scales, @Cast("bool") boolean acrossSpatial, @Cast("bool") boolean channelShared, float eps);
 
 /**
- *  \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions {@code  (H \times W) }.
+ *  \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions (H x W).
  *  PriorBoxParameters defines a set of parameters for creating the PriorBox plugin layer.
  *  Registered plugin type "PriorBox_TRT". Registered plugin version "1".
  *  */
@@ -341,11 +348,11 @@ public static native IPluginExt createNormalizePlugin(@Const Weights scales, @Ca
 
 //!
 //!
-public static native IPluginExt createPriorBoxPlugin(@ByVal PriorBoxParameters param);
+public static native IPluginV2 createPriorBoxPlugin(@ByVal PriorBoxParameters param);
 
 /**
  *  \brief The Grid Anchor Generator plugin layer generates the prior boxes of
- *  designated sizes and aspect ratios across all dimensions {@code  (H \times W) } for all feature maps.
+ *  designated sizes and aspect ratios across all dimensions (H x W) for all feature maps.
  *  GridAnchorParameters defines a set of parameters for creating the GridAnchorGenerator plugin layer.
  *  Registered plugin type "GridAnchor_TRT". Registered plugin version "1".
  *  */
@@ -353,7 +360,7 @@ public static native IPluginExt createPriorBoxPlugin(@ByVal PriorBoxParameters p
 
 //!
 //!
-public static native IPluginExt createAnchorGeneratorPlugin(GridAnchorParameters param, int numLayers);
+public static native IPluginV2 createAnchorGeneratorPlugin(GridAnchorParameters param, int numLayers);
 
 /**
  *  \brief The DetectionOutput plugin layer generates the detection output based on location and confidence predictions by doing non maximum suppression.
@@ -364,21 +371,7 @@ public static native IPluginExt createAnchorGeneratorPlugin(GridAnchorParameters
 
 //!
 //!
-public static native IPluginExt createNMSPlugin(@ByVal DetectionOutputParameters param);
-
-/**
- *  \brief The Concat plugin layer basically performs the concatention for 4D tensors. Unlike the Concatenation layer in early version of TensorRT,
- *  it allows the user to specify the axis along which to concatenate. The axis can be 1 (across channel), 2 (across H), or 3 (across W).
- *  More particularly, this Concat plugin layer also implements the "ignoring the batch dimension" switch. If turned on, all the input tensors will be treated as if their batch sizes were 1.
- *  Registered plugin type "Concat_TRT". Registered plugin version "1".
- *  @param concatAxis Axis along which to concatenate. Can't be the "N" dimension.
- *  @param ignoreBatch If true, all the input tensors will be treated as if their batch sizes were 1.
- *  */
-
-
-//!
-//!
-public static native IPluginExt createConcatPluginV2(int concatAxis, @Cast("bool") boolean ignoreBatch);
+public static native IPluginV2 createNMSPlugin(@ByVal DetectionOutputParameters param);
 
 /**
  *  \brief The LReLu plugin layer performs leaky ReLU for 4D tensors. Give an input value x, the PReLU layer computes the output as x if x > 0 and negative_slope //! x if x <= 0.
@@ -389,36 +382,92 @@ public static native IPluginExt createConcatPluginV2(int concatAxis, @Cast("bool
 
 //!
 //!
-public static native IPluginExt createLReLUPlugin(float negSlope);
+public static native IPluginV2 createLReLUPlugin(float negSlope);
 
 /**
- *  \brief The Reorg plugin layer maps the 512x26x26 feature map onto a 2048x13x13 feature map, so that it can be concatenated with the feature maps at 13x13 resolution.
+ *  \brief The Reorg plugin reshapes input of shape CxHxW into a (C*stride*stride)x(H/stride)x(W/stride) shape, used in YOLOv2.
+ *  It does that by taking 1 x stride x stride slices from tensor and flattening them into (stridexstride) x 1 x 1 shape.
  *  Registered plugin type "Reorg_TRT". Registered plugin version "1".
- *  @param stride Strides in H and W.
+ *  @param stride Strides in H and W, it should divide both H and W. Also stride * stride should be less than or equal to C.
  *  */
 
 
 //!
-public static native IPluginExt createReorgPlugin(int stride);
+//!
+public static native IPluginV2 createReorgPlugin(int stride);
 
 /**
  *  \brief The Region plugin layer performs region proposal calculation: generate 5 bounding boxes per cell (for yolo9000, generate 3 bounding boxes per cell).
  *  For each box, calculating its probablities of objects detections from 80 pre-defined classifications (yolo9000 has 9416 pre-defined classifications,
  *  and these 9416 items are organized as work-tree structure).
  *  RegionParameters defines a set of parameters for creating the Region plugin layer.
- *  Registered plugin type "Region_TRT". Registered plugin version "1". */
-
+ *  Registered plugin type "Region_TRT". Registered plugin version "1".
+ *  */
 
 
 //!
 //!
-public static native IPluginExt createRegionPlugin(@ByVal RegionParameters params);
+public static native IPluginV2 createRegionPlugin(@ByVal RegionParameters params);
 
 /**
- *  \brief Register all the existing TensorRT plugins to the Plugin Registry.
- *  This function should be called before accessing the Plugin Registry.
+ *  \brief The Clip Plugin performs a clip operation on the input tensor. It
+ *  clips the tensor values to a specified min and max. Any value less than clipMin are set to clipMin.
+ *  Any values greater than clipMax are set to clipMax. For example, this plugin can be used
+ *  to perform a Relu6 operation by specifying clipMin=0.0 and clipMax=6.0
+ *  Registered plugin type "Clip_TRT". Registered plugin version "1".
+ *  @param layerName The name of the TensorRT layer.
+ *  @param clipMin The minimum value to clip to.
+ *  @param clipMax The maximum value to clip to.
  *  */
-public static native void registerAllTensorRTPlugins(); // extern "C"
+
+
+//!
+//!
+//!
+public static native IPluginV2 createClipPlugin(String layerName, float clipMin, float clipMax);
+public static native IPluginV2 createClipPlugin(@Cast("const char*") BytePointer layerName, float clipMin, float clipMax);
+
+/**
+ *  \brief The BatchedNMS Plugin performs non_max_suppression on the input boxes, per batch, across all classes.
+ *  It greedily selects a subset of bounding boxes in descending order of
+ *  score. Prunes away boxes that have a high intersection-over-union (IOU)
+ *  overlap with previously selected boxes. Bounding boxes are supplied as [y1, x1, y2, x2],
+ *  where (y1, x1) and (y2, x2) are the coordinates of any
+ *  diagonal pair of box corners and the coordinates can be provided as normalized
+ *  (i.e., lying in the interval [0, 1]) or absolute.
+ *  The plugin expects two inputs.
+ *  Input0 is expected to be 4-D float boxes tensor of shape [batch_size, num_boxes,
+ *  q, 4], where q can be either 1 (if shareLocation is true) or num_classes.
+ *  Input1 is expected to be a 3-D float scores tensor of shape [batch_size, num_boxes, num_classes]
+ *  representing a single score corresponding to each box.
+ *  The plugin returns four outputs.
+ *  num_detections : A [batch_size] int32 tensor indicating the number of valid
+ *  detections per batch item. Can be less than keepTopK. Only the top num_detections[i] entries in
+ *  nmsed_boxes[i], nmsed_scores[i] and nmsed_classes[i] are valid.
+ *  nmsed_boxes : A [batch_size, max_detections, 4] float32 tensor containing
+ *  the co-ordinates of non-max suppressed boxes.
+ *  nmsed_scores : A [batch_size, max_detections] float32 tensor containing the
+ *  scores for the boxes.
+ *  nmsed_classes :  A [batch_size, max_detections] float32 tensor containing the
+ *  classes for the boxes.
+ * 
+ *  Registered plugin type "BatchedNMS_TRT". Registered plugin version "1".
+ *  */
+
+
+//!
+//!
+public static native IPluginV2 createBatchedNMSPlugin(@ByVal NMSParameters param);
+
+/**
+ *  \brief Initialize and register all the existing TensorRT plugins to the Plugin Registry with an optional namespace.
+ *  The plugin library author should ensure that this function name is unique to the library.
+ *  This function should be called once before accessing the Plugin Registry.
+ *  @param logger Logger object to print plugin registration information
+ *  @param libNamespace Namespace used to register all the plugins in this library
+ *  */
+public static native @Cast("bool") boolean initLibNvInferPlugins(Pointer logger, String libNamespace);
+public static native @Cast("bool") boolean initLibNvInferPlugins(Pointer logger, @Cast("const char*") BytePointer libNamespace); // extern "C"
 
 // #endif // NV_INFER_PLUGIN_H
 

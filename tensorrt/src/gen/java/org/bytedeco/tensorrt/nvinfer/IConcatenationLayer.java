@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The output channel size is the sum of the channel sizes of the inputs.
  *  The other output sizes are the same as the other input sizes,
  *  which must all match.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IConcatenationLayer extends ILayer {

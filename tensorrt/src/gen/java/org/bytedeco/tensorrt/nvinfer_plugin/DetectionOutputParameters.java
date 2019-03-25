@@ -16,6 +16,7 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 /**
  *  \brief The DetectionOutput plugin layer generates the detection output based on location and confidence predictions by doing non maximum suppression.
+ *  This plugin first decodes the bounding boxes based on the anchors generated. It then performs non_max_suppression on the decoded bouding boxes.
  *  DetectionOutputParameters defines a set of parameters for creating the DetectionOutput plugin layer.
  *  It contains:
  *  @param shareLocation If true, bounding box are shared among different classes.

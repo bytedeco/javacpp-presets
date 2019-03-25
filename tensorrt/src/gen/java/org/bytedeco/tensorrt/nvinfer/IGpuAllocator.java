@@ -52,5 +52,14 @@ public class IGpuAllocator extends Pointer {
      * 
      *  @param memory The acquired memory.
      *  */
+    
+    
+    //!
+    //!
     public native @Name("free") void _free(Pointer memory);
+
+    /**
+     *  Destructor declared virtual as general good practice for a class with virtual methods.
+     *  TensorRT never calls the destructor for an IGpuAllocator defined by the application.
+     *  */
 }

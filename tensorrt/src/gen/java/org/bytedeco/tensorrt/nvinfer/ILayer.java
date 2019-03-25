@@ -16,6 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class ILayer
  * 
  *  \brief Base class for all layer classes in a network definition.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ILayer extends Pointer {
@@ -79,7 +81,7 @@ public class ILayer extends Pointer {
      * 
      *  @param index The index of the input tensor.
      * 
-     *  @return The input tensor, or nullptr if the index is out of range.
+     *  @return The input tensor, or nullptr if the index is out of range or the tensor is optional(\ref IRNNLayer and \ref IRNNv2Layer).
      *  */
     
     
@@ -100,7 +102,7 @@ public class ILayer extends Pointer {
     /**
      *  \brief Get the layer output corresponding to the given index.
      * 
-     *  @return The indexed output tensor, or nullptr if the index is out of range.
+     *  @return The indexed output tensor, or nullptr if the index is out of range or the tensor is optional(\ref IRNNLayer and \ref IRNNv2Layer).
      *  */
     
     
@@ -121,13 +123,11 @@ public class ILayer extends Pointer {
      *  */
     
     
-    
     //!
     //!
     //!
     //!
     public native void setInput(int index, @ByRef ITensor tensor);
-
 
     /**
      *  \brief Set the computational precision of this layer

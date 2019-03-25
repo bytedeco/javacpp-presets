@@ -15,7 +15,7 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 
 /**
- *  \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions {@code  (H \times W) }.
+ *  \brief The PriorBox plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions (H x W).
  *  PriorBoxParameters defines a set of parameters for creating the PriorBox plugin layer.
  *  It contains:
  *  @param minSize Minimum box size in pixels. Can not be nullptr.

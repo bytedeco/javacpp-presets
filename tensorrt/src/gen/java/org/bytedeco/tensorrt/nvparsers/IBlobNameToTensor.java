@@ -22,6 +22,8 @@ import static org.bytedeco.tensorrt.global.nvparsers.*;
  *  \note The lifetime of IBlobNameToTensor is the same as the lifetime of its parent ICaffeParser.
  * 
  *  @see nvcaffeparser1::ICaffeParser
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvcaffeparser1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
 public class IBlobNameToTensor extends Pointer {

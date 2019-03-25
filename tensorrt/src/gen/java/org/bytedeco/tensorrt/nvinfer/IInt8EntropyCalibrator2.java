@@ -13,16 +13,16 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
 /**
- *  Entropy calibrator. This is the Legacy Entropy calibrator. It is less complicated than the legacy calibrator and produces better results.
+ *  Entropy calibrator 2. This is the preferred calibrator. This is the required calibrator for DLA, as it supports per activation tensor scaling.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IInt8EntropyCalibrator extends IInt8Calibrator {
+public class IInt8EntropyCalibrator2 extends IInt8Calibrator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IInt8EntropyCalibrator(Pointer p) { super(p); }
+    public IInt8EntropyCalibrator2(Pointer p) { super(p); }
 
     /**
-     *  Signal that this is the entropy calibrator.
+     *  Signal that this is the entropy calibrator 2.
      *  */
     public native CalibrationAlgoType getAlgorithm();
 }

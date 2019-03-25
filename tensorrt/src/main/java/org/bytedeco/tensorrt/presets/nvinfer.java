@@ -76,13 +76,13 @@ public class nvinfer implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
-               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "TENSORRTAPI").cppTypes().annotations())
+               .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
                .put(new Info("nvinfer1::EnumMax").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
-                             "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator").purify())
+                             "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator", "nvinfer1::IInt8EntropyCalibrator2").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger").purify().virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(

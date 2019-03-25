@@ -16,6 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class ITopKLayer
  * 
  *  \brief Layer that represents a TopK reduction.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ITopKLayer extends ILayer {

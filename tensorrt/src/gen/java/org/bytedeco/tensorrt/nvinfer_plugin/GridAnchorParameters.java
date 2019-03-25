@@ -15,7 +15,7 @@ import static org.bytedeco.tensorrt.global.nvinfer_plugin.*;
 
 
 /**
- *  \brief The Anchor Generator plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions {@code  (H \times W) }.
+ *  \brief The Anchor Generator plugin layer generates the prior boxes of designated sizes and aspect ratios across all dimensions (H x W).
  *  GridAnchorParameters defines a set of parameters for creating the plugin layer for all feature maps.
  *  It contains:
  *  @param minScale Scale of anchors corresponding to finest resolution.

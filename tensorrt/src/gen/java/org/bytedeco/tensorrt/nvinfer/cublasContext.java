@@ -20,6 +20,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  and methods. Use the index on the left to navigate the documentation.
  * 
  *  Please see the accompanying user guide and samples for higher-level information and general advice on using TensorRT.
+ *  TensorRT Versioning follows Semantic Versioning Guidelines specified here: https://semver.org/
  * 
  <p>
  * 

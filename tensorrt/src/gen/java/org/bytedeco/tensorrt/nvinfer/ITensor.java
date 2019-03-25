@@ -18,6 +18,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief A tensor in a network definition.
  * 
  *  to remove a tensor from a network definition, use INetworkDefinition::removeTensor()
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ITensor extends Pointer {
@@ -137,21 +139,39 @@ public class ITensor extends Pointer {
     //!
     //!
     //!
+    //!
     public native DataType getType();
 
     /**
-     *  \brief Set user calibration scales
+     *  \brief Set dynamic range for the tensor
      * 
      *  Currently, only symmetric ranges are supported.
      *  Therefore, the larger of the absolute values of the provided bounds is used.
      * 
-     *  @return Whether the dynamic range was set successfully
+     *  @return Whether the dynamic range was set successfully.
+     * 
+     *  Requires that min and max be finite, and min <= max.
      *  */
     
     
     //!
     //!
+    //!
+    //!
     public native @Cast("bool") boolean setDynamicRange(float min, float max);
+
+    /**
+     *  \brief Get dynamic range for the tensor
+     * 
+     *  @return maximal absolute value of the dynamic range, -1.0f if no dynamic range is set.
+     * 
+     *  @deprecated This interface is superceded by getDynamicRangeMin and getDynamicRangeMax.
+     *  */
+    
+    
+    //!
+    //!
+    public native float getDynamicRange();
 
     /**
      *  \brief Whether the tensor is a network input.
@@ -228,6 +248,51 @@ public class ITensor extends Pointer {
      * 
      *  @see getLocation()
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native void setLocation(TensorLocation location);
     public native void setLocation(@Cast("nvinfer1::TensorLocation") int location);
+
+    /**
+     *  \brief Query whether dynamic range is set.
+     * 
+     *  @return True if dynamic range is set, false otherwise.
+     *  */
+    
+    
+    //!
+    //!
+    public native @Cast("bool") boolean dynamicRangeIsSet();
+
+    /**
+     *  \brief Undo effect of setDynamicRange.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void resetDynamicRange();
+
+    /**
+     *  \brief Get minimum of dynamic range.
+     * 
+     *  @return Minimum of dynamic range, or quiet NaN if range was not set.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native float getDynamicRangeMin();
+
+    /**
+     *  \brief Get maximum of dynamic range.
+     * 
+     *  @return Maximum of dynamic range, or quiet NaN if range was not set.
+     *  */
+    public native float getDynamicRangeMax();
 }

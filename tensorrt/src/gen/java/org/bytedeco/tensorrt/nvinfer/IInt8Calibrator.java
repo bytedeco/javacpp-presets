@@ -49,7 +49,7 @@ public class IInt8Calibrator extends Pointer {
      * 
      *  The batch size of the input must match the batch size returned by getBatchSize().
      * 
-     *  @param bindings An array of pointers to device memory that must be set to the memory containing each network input data.
+     *  @param bindings An array of pointers to device memory that must be updated to point to device memory containing each network input data.
      *  @param names The names of the network input for each pointer in the binding array.
      *  @param nbBindings The number of pointers in the bindings array.
      *  @return False if there are no more batches for calibration.

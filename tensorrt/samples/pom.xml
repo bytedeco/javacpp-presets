@@ -10,14 +10,20 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>5.0-1.5-SNAPSHOT</version>
+            <version>5.1-1.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
             <version>10.1-7.5-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorrt</artifactId>
+            <version>5.1-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
 

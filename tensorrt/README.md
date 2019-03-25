@@ -1,11 +1,19 @@
 JavaCPP Presets for TensorRT
 ============================
 
+License Agreements
+------------------
+By downloading these archives, you agree to the terms of the license agreements for NVIDIA software included in the archives.
+
+### TensorRT
+To view the license for TensorRT included in these archives, click [here](https://developer.download.nvidia.com/compute/machine-learning/tensorrt/docs/5.1/rc/TensorRT-SLA.pdf)
+
+
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorRT 5.0  https://developer.nvidia.com/tensorrt
+ * TensorRT 5.1  https://developer.nvidia.com/tensorrt
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,14 +50,20 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt-platform</artifactId>
-            <version>5.0-1.5-SNAPSHOT</version>
+            <version>5.1-1.5-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA and cuDNN -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
             <version>10.1-7.5-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorrt</artifactId>
+            <version>5.1-1.5-SNAPSHOT</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
 

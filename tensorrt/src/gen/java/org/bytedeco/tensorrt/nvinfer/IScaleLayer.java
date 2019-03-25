@@ -31,6 +31,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \note The input tensor for this layer is required to have a minimum of 3 dimensions.
  * 
  *  @see ScaleMode
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IScaleLayer extends ILayer {

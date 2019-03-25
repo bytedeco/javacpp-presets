@@ -17,7 +17,7 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 // Parsed from NvInfer.h
 
 /*
- * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2019 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -74,29 +74,35 @@ public class nvinfer extends org.bytedeco.tensorrt.presets.nvinfer {
 /** TensorRT major version. */
 public static final int NV_TENSORRT_MAJOR = 5;
 /** TensorRT minor version. */
-public static final int NV_TENSORRT_MINOR = 0;
+public static final int NV_TENSORRT_MINOR = 1;
 /** TensorRT patch version. */
-public static final int NV_TENSORRT_PATCH = 0;
+public static final int NV_TENSORRT_PATCH = 2;
 /** TensorRT build number. */
-public static final int NV_TENSORRT_BUILD = 10;
+public static final int NV_TENSORRT_BUILD = 2;
 
 /** Shared object library major version number. */
 public static final int NV_TENSORRT_SONAME_MAJOR = 5;
 /** Shared object library minor version number. */
-public static final int NV_TENSORRT_SONAME_MINOR = 0;
+public static final int NV_TENSORRT_SONAME_MINOR = 1;
 /** Shared object library patch version number. */
-public static final int NV_TENSORRT_SONAME_PATCH = 0;
+public static final int NV_TENSORRT_SONAME_PATCH = 2;
 
 // #if __cplusplus > 201103L
 // #define _TENSORRT_FINAL final
+// #define _TENSORRT_OVERRIDE override
 // #else
+// #define _TENSORRT_FINAL
 
 
 /** Defines which symbols are exported */
-// #define _TENSORRT_FINAL
+// #define _TENSORRT_OVERRIDE
 // #endif
 // #ifdef TENSORRT_BUILD_LIB
+// #ifdef _MSC_VER
+// #define TENSORRTAPI __declspec(dllexport)
+// #else
 // #define TENSORRTAPI __attribute__((visibility("default")))
+// #endif
 // #else
 
 
@@ -169,11 +175,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 @Namespace("nvinfer1") public enum DeviceType {
     /** GPU Device */
     kGPU(0),
-    kDLA(1),
-    /** DLA core 0 */
-    kDLA0(kDLA),
-    /** DLA Core 1 */
-    kDLA1(kDLA.value + 1);
+    /** DLA Core */
+    kDLA(1);
 
     public final int value;
     private DeviceType(int v) { this.value = v; }
@@ -251,7 +254,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     kPOOLING(3),
     /** LRN layer. */
     kLRN(4),
-    /** Scale Layer. */
+    /** Scale layer. */
     kSCALE(5),
     /** SoftMax layer. */
     kSOFTMAX(6),
@@ -263,30 +266,34 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     kELEMENTWISE(9),
     /** Plugin layer. */
     kPLUGIN(10),
-    /** RNN Layer. */
+    /** RNN layer. */
     kRNN(11),
-    /** UnaryOp Operation Layer. */
+    /** UnaryOp operation Layer. */
     kUNARY(12),
-    /** Padding Layer. */
+    /** Padding layer. */
     kPADDING(13),
-    /** Shuffle Layer. */
+    /** Shuffle layer. */
     kSHUFFLE(14),
     /** Reduce layer. */
     kREDUCE(15),
-    /** TopK Layer. */
+    /** TopK layer. */
     kTOPK(16),
-    /** Gather Layer. */
+    /** Gather layer. */
     kGATHER(17),
-    /** Matrix Multiply Layer. */
+    /** Matrix multiply layer. */
     kMATRIX_MULTIPLY(18),
-    /** Ragged softmax Layer. */
+    /** Ragged softmax layer. */
     kRAGGED_SOFTMAX(19),
-    /** Constant Layer. */
+    /** Constant layer. */
     kCONSTANT(20),
     /** RNNv2 layer. */
     kRNN_V2(21),
     /** Identity layer. */
-    kIDENTITY(22);
+    kIDENTITY(22),
+    /** PluginV2 layer. */
+    kPLUGIN_V2(23),
+    /** Slice layer. */
+    kSLICE(24);
 
     public final int value;
     private LayerType(int v) { this.value = v; }
@@ -339,7 +346,25 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     /** Sigmoid activation. */
     kSIGMOID(1),
     /** TanH activation. */
-    kTANH(2);
+    kTANH(2),
+    /** LeakyRelu activation: x>=0 ? x : alpha * x. */
+    kLEAKY_RELU(3),
+    /** Elu activation: x>=0 ? x : alpha * (exp(x) - 1). */
+    kELU(4),
+    /** Selu activation: x>0 ? beta * x : beta * (alpha*exp(x) - alpha) */
+    kSELU(5),
+    /** Softsign activation: x / (1+|x|) */
+    kSOFTSIGN(6),
+    /** Parametric softplus activation: alpha*log(exp(beta*x)+1) */
+    kSOFTPLUS(7),
+    /** Clip activation: max(alpha, min(beta, x)) */
+    kCLIP(8),
+    /** Hard sigmoid activation: max(0, min(1, alpha*x+beta)) */
+    kHARD_SIGMOID(9),
+    /** Scaled tanh activation: alpha*tanh(beta*x) */
+    kSCALED_TANH(10),
+    /** Thresholded ReLU activation: x>alpha : x : 0 */
+    kTHRESHOLDED_RELU(11);
 
     public final int value;
     private ActivationType(int v) { this.value = v; }
@@ -379,7 +404,7 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
 
 /**
- *  \brief Controls how scale is applied in a Scale layer.
+ *  \brief Controls how shift, scale and power are applied in a Scale layer.
  * 
  *  @see IScaleLayer
  *  */
@@ -647,13 +672,20 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *  \brief Format of the input/output tensors.
  * 
  *  @see IPluginExt::getPluginFormats()
+ * 
+ *  For more information about data formats, see the topic "Data Format Description" located in the
+ *  TensorRT Developer Guide (https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html).
  *  */
 @Namespace("nvinfer1") public enum PluginFormat {
     /** NCHW. */
     kNCHW((byte)0),
-    /** NCHW with 2-element packed channels. */
+
+    /** NCHW with 2-element packed channels.  For a tensor with dimensions {N, C, H, W},
+     *  the memory layout is equivalent to a C array with dimensions [N][(C+1)/2][H][W][2],
+     *  with the tensor coordinates (n,c,h,w) mapping to array subscript [n][c/2][h][w][c%2]. */
     kNC2HW2((byte)1),
-    /** NHWC with 8-element packed channels (C must be a multiple of 8). */
+
+    /** NHWC where C must be a multiple of 8. */
     kNHWC8((byte)2);
 
     public final byte value;
@@ -670,7 +702,16 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 // Targeting ../nvinfer/IPluginExt.java
 
 
+// Targeting ../nvinfer/IPluginV2.java
+
+
+// Targeting ../nvinfer/IPluginV2Ext.java
+
+
 // Targeting ../nvinfer/IPluginLayer.java
+
+
+// Targeting ../nvinfer/IPluginV2Layer.java
 
 
 
@@ -736,7 +777,33 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
     /** Absolute value. */
     kABS(4),
     /** Negation. */
-    kNEG(5);
+    kNEG(5),
+    /** Sine. */
+    kSIN(6),
+    /** Cosine. */
+    kCOS(7),
+    /** Tangent. */
+    kTAN(8),
+    /** Hyperbolic sine. */
+    kSINH(9),
+    /** Hyperbolic cosine. */
+    kCOSH(10),
+    /** Inverse sine. */
+    kASIN(11),
+    /** Inverse cosine. */
+    kACOS(12),
+    /** Inverse tangent. */
+    kATAN(13),
+    /** Inverse hyperbolic sine. */
+    kASINH(14),
+    /** Inverse hyperbolic cosine. */
+    kACOSH(15),
+    /** Inverse hyperbolic tangent. */
+    kATANH(16),
+    /** Ceiling. */
+    kCEIL(17),
+    /** Floor. */
+    kFLOOR(18);
 
     public final int value;
     private UnaryOperation(int v) { this.value = v; }
@@ -782,6 +849,9 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 // Targeting ../nvinfer/IShuffleLayer.java
 
 
+// Targeting ../nvinfer/ISliceLayer.java
+
+
 
 /**
  *  \enum TopKOperation
@@ -803,6 +873,34 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
 
 // Targeting ../nvinfer/ITopKLayer.java
+
+
+
+/**
+ *  \enum MatrixOperation
+ * 
+ *  \brief Enumerates the operations that may be performed on a tensor
+ *         by IMatrixMultiplyLayer before multiplication.
+ *  */
+@Namespace("nvinfer1") public enum MatrixOperation {
+    /** Treat x as a matrix if it has two dimensions, or as a collection of
+     *  matrices if x has more than two dimensions, where the last two dimensions
+     *  are the matrix dimensions.  x must have at least two dimensions. */
+    kNONE(0),
+
+    /** Like kNONE, but transpose the matrix dimensions. */
+    kTRANSPOSE(1),
+
+    /** Treat x as a vector if it has one dimension, or as a collection of
+     *  vectors if x has more than one dimension.  x must have at least one dimension. */
+    kVECTOR(2);
+
+    public final int value;
+    private MatrixOperation(int v) { this.value = v; }
+    private MatrixOperation(MatrixOperation e) { this.value = e.value; }
+    public MatrixOperation intern() { for (MatrixOperation e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
 
 // Targeting ../nvinfer/IMatrixMultiplyLayer.java
@@ -837,7 +935,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
  *  */
 @Namespace("nvinfer1") public enum CalibrationAlgoType {
     kLEGACY_CALIBRATION(0),
-    kENTROPY_CALIBRATION(1);
+    kENTROPY_CALIBRATION(1),
+    kENTROPY_CALIBRATION_2(2);
 
     public final int value;
     private CalibrationAlgoType(int v) { this.value = v; }
@@ -853,6 +952,9 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 // Targeting ../nvinfer/IInt8EntropyCalibrator.java
 
 
+// Targeting ../nvinfer/IInt8EntropyCalibrator2.java
+
+
 // Targeting ../nvinfer/IInt8LegacyCalibrator.java
 
 
@@ -860,6 +962,36 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
 
 // Targeting ../nvinfer/IBuilder.java
+
+
+
+/**
+ *  \enum WeightsRole
+ *  \brief How a layer uses particular Weights.
+ * 
+ *  The power weights of an IScaleLayer are omitted.  Refitting those is not supported.
+ *  */
+@Namespace("nvinfer1") public enum WeightsRole {
+    /** kernel for IConvolutionLayer, IDeconvolutionLayer, or IFullyConnectedLayer */
+    kKERNEL(0),
+    /** bias for IConvolutionLayer, IDeconvolutionLayer, or IFullyConnectedLayer */
+    kBIAS(1),
+    /** shift part of IScaleLayer */
+    kSHIFT(2),
+    /** scale part of IScaleLayer */
+    kSCALE(3),
+    /** weights for IConstantLayer */
+    kCONSTANT(4);
+
+    public final int value;
+    private WeightsRole(int v) { this.value = v; }
+    private WeightsRole(WeightsRole e) { this.value = e.value; }
+    public WeightsRole intern() { for (WeightsRole e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+// Targeting ../nvinfer/IRefitter.java
 
 
 // Targeting ../nvinfer/IPluginFactory.java
@@ -878,6 +1010,8 @@ public static final int NV_TENSORRT_VERSION = NV_TENSORRT_VERSION(); // major, m
 
 /** Internal C entry point for creating IBuilder. */
 public static native Pointer createInferBuilder_INTERNAL(Pointer logger, int version);
+/** Internal C entry point for creating IRefitter. */
+public static native Pointer createInferRefitter_INTERNAL(Pointer engine, Pointer logger, int version);
 /** Internal C entry point for creating IRuntime.
 <p>
 //!
@@ -922,6 +1056,18 @@ public static native IPluginRegistry getPluginRegistry();
 @Namespace("nvinfer1") public static native IBuilder createInferBuilder(@ByRef ILogger logger);
 
 /**
+ *  \brief Create an instance of an IRefitter class.
+ * 
+ *  This class is the logging class for the refitter.
+ *  */
+
+
+//!
+//!
+//!
+@Namespace("nvinfer1") public static native IRefitter createInferRefitter(@ByRef ICudaEngine engine, @ByRef ILogger logger);
+
+/**
  *  \brief Create an instance of an IRuntime class.
  * 
  *  This class is the logging class for the runtime.
@@ -936,8 +1082,8 @@ public static native IPluginRegistry getPluginRegistry();
  *  library to the registry.
  *  */
 
-// #define REGISTER_TENSORRT_PLUGIN(name) static PluginRegistrar<name> pluginRegistrar##name{}
-
+// #define REGISTER_TENSORRT_PLUGIN(name)
+//     static nvinfer1::PluginRegistrar<name> pluginRegistrar##name {}
 
 
 // #endif
@@ -946,7 +1092,7 @@ public static native IPluginRegistry getPluginRegistry();
 // Parsed from NvUtils.h
 
 /*
- * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2019 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *

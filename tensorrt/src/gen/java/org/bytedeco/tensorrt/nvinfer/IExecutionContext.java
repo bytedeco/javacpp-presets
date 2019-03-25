@@ -19,6 +19,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  Multiple execution contexts may exist for one ICudaEngine instance, allowing the same
  *  engine to be used for the execution of multiple batches simultaneously.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IExecutionContext extends Pointer {
@@ -29,7 +31,7 @@ public class IExecutionContext extends Pointer {
     /**
      *  \brief Synchronously execute inference on a batch.
      * 
-     *  This method requires a array of input and output buffers. The mapping from tensor names to indices can be queried using ICudaEngine::getBindingIndex()
+     *  This method requires an array of input and output buffers. The mapping from tensor names to indices can be queried using ICudaEngine::getBindingIndex()
      *  @param batchSize The batch size. This is at most the value supplied when the engine was built.
      *  @param bindings An array of pointers to input and output buffers for the network.
      * 
@@ -50,7 +52,7 @@ public class IExecutionContext extends Pointer {
     /**
      *  \brief Asynchronously execute inference on a batch.
      * 
-     *  This method requires a array of input and output buffers. The mapping from tensor names to indices can be queried using ICudaEngine::getBindingIndex()
+     *  This method requires an array of input and output buffers. The mapping from tensor names to indices can be queried using ICudaEngine::getBindingIndex()
      *  @param batchSize The batch size. This is at most the value supplied when the engine was built.
      *  @param bindings An array of pointers to input and output buffers for the network.
      *  @param stream A cuda stream on which the inference kernels will be enqueued

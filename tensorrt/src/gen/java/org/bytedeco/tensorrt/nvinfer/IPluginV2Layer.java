@@ -13,35 +13,24 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
 /**
- *  \class IUnaryLayer
+ *  \class IPluginV2Layer
  * 
- *  \brief Layer that represents an unary operation.
+ *  \brief Layer type for pluginV2
+ * 
+ *  @see IPluginV2
  * 
  *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
-public class IUnaryLayer extends ILayer {
+public class IPluginV2Layer extends ILayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public IUnaryLayer(Pointer p) { super(p); }
+    public IPluginV2Layer(Pointer p) { super(p); }
 
     /**
-     *  \brief Set the unary operation for the layer.
+     *  \brief Get the plugin for the layer.
      * 
-     *  @see getOperation(), UnaryOperation
+     *  @see IPluginV2
      *  */
-    
-    
-    //!
-    //!
-    //!
-    public native void setOperation(UnaryOperation op);
-    public native void setOperation(@Cast("nvinfer1::UnaryOperation") int op);
-
-    /**
-     *  \brief Get the unary operation for the layer.
-     * 
-     *  @see setOperation(), UnaryOperation
-     *  */
-    public native UnaryOperation getOperation();
+    public native @ByRef IPluginV2 getPlugin();
 }

@@ -18,6 +18,8 @@ import static org.bytedeco.tensorrt.global.nvparsers.*;
  *  \class IUffParser
  * 
  *  \brief Class used for parsing models described using the UFF format.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvuffparser") @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
 public class IUffParser extends Pointer {
@@ -29,8 +31,7 @@ public class IUffParser extends Pointer {
      *  \brief Register an input name of a UFF network with the associated Dimensions.
      * 
      *  @param inputName Input name.
-     *  @param inputDims Input Dimensions, always provide your dimensions in CHW even if your network
-     *                   input was in HWC in yout original framework.
+     *  @param inputDims Input dimensions.
      *  @param inputOrder Input order on which the framework input was originally.
      *  */
     
@@ -147,5 +148,15 @@ public class IUffParser extends Pointer {
      * 
      *  @param factory Pointer to an instance of the user implmentation of IPluginFactoryExt.
      *  */
+    
+    
+    //!
+    //!
     public native void setPluginFactoryExt(IUffPluginFactoryExt factory);
+
+    /**
+     *  \brief Set the namespace used to lookup and create plugins in the network.
+     *  */
+    public native void setPluginNamespace(String libNamespace);
+    public native void setPluginNamespace(@Cast("const char*") BytePointer libNamespace);
 }

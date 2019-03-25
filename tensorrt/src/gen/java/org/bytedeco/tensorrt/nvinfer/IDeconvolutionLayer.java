@@ -18,6 +18,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief A deconvolution layer in a network definition.
  * 
  *  The output size is defined using the formula set by INetworkDefinition::setDeconvolutionOutputDimensionsFormula().
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IDeconvolutionLayer extends ILayer {
@@ -225,4 +227,61 @@ public class IDeconvolutionLayer extends ILayer {
      *  @see getBiasWeights()
      *  */
     public native @ByVal Weights getBiasWeights();
+    /**
+     *  \brief Set the pre-padding.
+     * 
+     *  The start of input will be zero-padded by this number of elements in the height and width directions.
+     * 
+     *  Default: 0
+     * 
+     *  If executing this layer on DLA, both height and width of padding must be in the range [0,15].
+     * 
+     *  @see getPadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setPrePadding(@ByVal Dims padding);
+
+    /**
+     *  \brief Get the pre-padding.
+     * 
+     *  @see setPrePadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal Dims getPrePadding();
+
+    /**
+     *  \brief Set the post-padding.
+     * 
+     *  The end of the input will be zero-padded by this number of elements in the height and width directions.
+     * 
+     *  Default: (0,0)
+     * 
+     *  If executing this layer on DLA, both height and width of padding must be in the range [0,15].
+     * 
+     *  @see getPadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setPostPadding(@ByVal Dims padding);
+
+    /**
+     *  \brief Get the padding.
+     * 
+     *  @see setPadding()
+     *  */
+    public native @ByVal Dims getPostPadding();
 }

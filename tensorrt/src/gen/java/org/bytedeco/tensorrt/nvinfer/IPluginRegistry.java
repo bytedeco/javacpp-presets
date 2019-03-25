@@ -12,6 +12,21 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
+/**
+ *  \class IPluginRegistry
+ * 
+ *  \brief Single registration point for all plugins in an application. It is
+ *  used to find plugin implementations during engine deserialization.
+ *  Internally, the plugin registry is considered to be a singleton so all
+ *  plugins in an application are part of the same global registry.
+ *  Note that the plugin registry is only supported for plugins of type
+ *  IPluginV2 and should also have a corresponding IPluginCreator implementation.
+ * 
+ *  @see IPluginV2 and IPluginCreator
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
+ *  */
+
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginRegistry extends Pointer {
     static { Loader.load(); }
@@ -20,17 +35,18 @@ public class IPluginRegistry extends Pointer {
 
     /**
      *  \brief Register a plugin creator. Returns false if one with same type
-     *  is already registered
+     *  is already registered.
      *  */
     
     
     //!
     //!
-    public native @Cast("bool") boolean registerCreator(@ByRef IPluginCreator arg0);
+    public native @Cast("bool") boolean registerCreator(@ByRef IPluginCreator creator, String pluginNamespace);
+    public native @Cast("bool") boolean registerCreator(@ByRef IPluginCreator creator, @Cast("const char*") BytePointer pluginNamespace);
 
     /**
      *  \brief Return all the registered plugin creators and the number of
-     *  registered plugin creators. Returns nullptr if none found
+     *  registered plugin creators. Returns nullptr if none found.
      *  */
     
     
@@ -39,8 +55,11 @@ public class IPluginRegistry extends Pointer {
     public native @Cast("nvinfer1::IPluginCreator*const*") PointerPointer getPluginCreatorList(IntPointer numCreators);
 
     /**
-     *  \brief Return plugin creator based on type and version
+     *  \brief Return plugin creator based on plugin type, version and
+     *  namespace associated with plugin during network creation.
      *  */
+    public native IPluginCreator getPluginCreator(String pluginType, String pluginVersion, String pluginNamespace/*=""*/);
     public native IPluginCreator getPluginCreator(String pluginType, String pluginVersion);
+    public native IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginType, @Cast("const char*") BytePointer pluginVersion, @Cast("const char*") BytePointer pluginNamespace/*=""*/);
     public native IPluginCreator getPluginCreator(@Cast("const char*") BytePointer pluginType, @Cast("const char*") BytePointer pluginVersion);
 }

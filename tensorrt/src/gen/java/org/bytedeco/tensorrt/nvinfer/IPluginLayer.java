@@ -18,6 +18,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief Layer type for plugins.
  * 
  *  @see IPluginExt
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginLayer extends ILayer {

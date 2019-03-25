@@ -12,13 +12,6 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 
-/** \class IShuffleLayer
- * 
- *  \brief Layer type for shuffling data.
- * 
- *  This class shuffles data by applying in sequence: a transpose operation, a reshape operation
- *  and a second transpose operation. The dimension types of the output are those of the reshape dimension.
- *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class Permutation extends Pointer {
     static { Loader.load(); }

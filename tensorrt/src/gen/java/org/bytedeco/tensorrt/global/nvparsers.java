@@ -19,7 +19,7 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 // Parsed from NvCaffeParser.h
 
 /*
- * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2019 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -87,6 +87,9 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 // Targeting ../nvparsers/IPluginFactoryExt.java
 
 
+// Targeting ../nvparsers/IPluginFactoryV2.java
+
+
 // Targeting ../nvparsers/ICaffeParser.java
 
 
@@ -113,13 +116,14 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 @Namespace("nvcaffeparser1") public static native void shutdownProtobufLibrary();
 
 
+public static native Pointer createNvCaffeParser_INTERNAL();
 // #endif
 
 
 // Parsed from NvUffParser.h
 
 /*
- * Copyright 1993-2018 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2019 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -174,8 +178,8 @@ public class nvparsers extends org.bytedeco.tensorrt.presets.nvparsers {
 
 //Current supported Universal Framework Format (UFF) version for the parser.
 public static final int UFF_REQUIRED_VERSION_MAJOR = 0;
-public static final int UFF_REQUIRED_VERSION_MINOR = 4;
-public static final int UFF_REQUIRED_VERSION_PATCH = 0;
+public static final int UFF_REQUIRED_VERSION_MINOR = 6;
+public static final int UFF_REQUIRED_VERSION_PATCH = 3;
 
 /**
  *  \enum UffInputOrder
@@ -257,6 +261,8 @@ public static final int UFF_REQUIRED_VERSION_PATCH = 0;
  *  */
 
 
+
+public static native Pointer createNvUffParser_INTERNAL();
 
 // #endif /* !NV_UFF_PARSER_H */
 

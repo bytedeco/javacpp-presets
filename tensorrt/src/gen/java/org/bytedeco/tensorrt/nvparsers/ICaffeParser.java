@@ -13,20 +13,20 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
-
 /**
  *  \class ICaffeParser
  * 
  *  \brief Class used for parsing Caffe models.
  * 
  *  Allows users to export models trained using Caffe to TRT.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvcaffeparser1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
 public class ICaffeParser extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ICaffeParser(Pointer p) { super(p); }
-
 
     /**
      *  \brief Parse a prototxt file and a binaryproto Caffe model to extract
@@ -48,15 +48,50 @@ public class ICaffeParser extends Pointer {
     //!
     //!
     //!
-    //!
     public native @Const IBlobNameToTensor parse(String deploy,
-                                                  String model,
-                                                  @ByRef INetworkDefinition network,
-                                                  DataType weightType);
+                                               String model,
+                                               @ByRef INetworkDefinition network,
+                                               DataType weightType);
     public native @Const IBlobNameToTensor parse(@Cast("const char*") BytePointer deploy,
-                                                  @Cast("const char*") BytePointer model,
-                                                  @ByRef INetworkDefinition network,
-                                                  @Cast("nvinfer1::DataType") int weightType);
+                                               @Cast("const char*") BytePointer model,
+                                               @ByRef INetworkDefinition network,
+                                               @Cast("nvinfer1::DataType") int weightType);
+
+    /**
+     *  \brief Parse a deploy prototxt a binaryproto Caffe model from memory buffers to extract
+     *    network configuration and weights associated with the network, respectively.
+     * 
+     *  @param deployBuffer The plain text deploy prototxt used to define the network configuration.
+     *  @param deployLength The length of the deploy buffer.
+     *  @param modelBuffer The binaryproto Caffe memory buffer that contains the weights associated with the network.
+     *  @param modelLength The length of the model buffer.
+     *  @param network Network in which the CaffeParser will fill the layers.
+     *  @param weightType The type to which the weights will transformed.
+     * 
+     *  @return A pointer to an IBlobNameToTensor object that contains the extracted data.
+     * 
+     *  @see nvcaffeparser1::IBlobNameToTensor
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @Const IBlobNameToTensor parseBuffers(String deployBuffer,
+                                                      @Cast("std::size_t") long deployLength,
+                                                      String modelBuffer,
+                                                      @Cast("std::size_t") long modelLength,
+                                                      @ByRef INetworkDefinition network,
+                                                      DataType weightType);
+    public native @Const IBlobNameToTensor parseBuffers(@Cast("const char*") BytePointer deployBuffer,
+                                                      @Cast("std::size_t") long deployLength,
+                                                      @Cast("const char*") BytePointer modelBuffer,
+                                                      @Cast("std::size_t") long modelLength,
+                                                      @ByRef INetworkDefinition network,
+                                                      @Cast("nvinfer1::DataType") int weightType);
 
     /**
      *  \brief Parse and extract data stored in binaryproto file.
@@ -119,5 +154,27 @@ public class ICaffeParser extends Pointer {
     /**
      *  \brief Destroy this ICaffeParser object.
      *  */
+    
+    
+    //!
+    //!
+    //!
     public native void destroy();
+
+    /**
+     *  \brief Set the IPluginFactoryV2 used to create the user defined pluginV2 objects.
+     * 
+     *  @param factory Pointer to an instance of the user implmentation of IPluginFactoryV2.
+     *  */
+    
+    
+    //!
+    //!
+    public native void setPluginFactoryV2(IPluginFactoryV2 factory);
+
+    /**
+     *  \brief Set the namespace used to lookup and create plugins in the network.
+     *  */
+    public native void setPluginNamespace(String libNamespace);
+    public native void setPluginNamespace(@Cast("const char*") BytePointer libNamespace);
 }

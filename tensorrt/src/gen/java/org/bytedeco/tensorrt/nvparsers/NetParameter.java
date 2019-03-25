@@ -13,10 +13,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 
 import static org.bytedeco.tensorrt.global.nvparsers.*;
 
-    @Namespace("ditcaffe") @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
+@Namespace("ditcaffe") @Opaque @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
 public class NetParameter extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public NetParameter() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public NetParameter(Pointer p) { super(p); }
-    }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public NetParameter() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NetParameter(Pointer p) { super(p); }
+}

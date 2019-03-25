@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  This layer applies a per-channel softmax to its input.
  * 
  *  The output size is the same as the input size.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class ISoftMaxLayer extends ILayer {

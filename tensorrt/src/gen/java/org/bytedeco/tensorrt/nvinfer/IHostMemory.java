@@ -19,6 +19,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  * 
  *  The memory allocated via the host memory object is owned by the library and will
  *  be de-allocated when the destroy method is called.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IHostMemory extends Pointer {

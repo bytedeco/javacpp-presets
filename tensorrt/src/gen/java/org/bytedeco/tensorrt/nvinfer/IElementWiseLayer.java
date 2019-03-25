@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  This layer applies a per-element binary operation between corresponding elements of two tensors.
  * 
  *  The input dimensions of the two input tensors must be equal, and the output tensor is the same size as each input.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IElementWiseLayer extends ILayer {

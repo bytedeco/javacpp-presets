@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  This layer applies a per-element activation function to its input.
  * 
  *  The output has the same shape as the input.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IActivationLayer extends ILayer {
@@ -46,4 +48,52 @@ public class IActivationLayer extends ILayer {
      *  @see setActivationType(), ActivationType
      *  */
     public native ActivationType getActivationType();
+    /**
+     *  \brief Set the alpha parameter (must be finite).
+     * 
+     *  This parameter is used by the following activations:
+     *  LeakyRelu, Elu, Selu, Softplus, Clip, HardSigmoid, ScaledTanh,
+     *  ThresholdedRelu.
+     * 
+     *  It is ignored by the other activations.
+     * 
+     *  @see getAlpha(), setBeta() */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    public native void setAlpha(float alpha);
+
+    /**
+     *  \brief Set the beta parameter (must be finite).
+     * 
+     *  This parameter is used by the following activations:
+     *  Selu, Softplus, Clip, HardSigmoid, ScaledTanh.
+     * 
+     *  It is ignored by the other activations.
+     * 
+     *  @see getBeta(), setAlpha() */
+    
+    
+    //!
+    //!
+    public native void setBeta(float beta);
+
+    /**
+     *  \brief Get the alpha parameter.
+     * 
+     *  @see getBeta(), setAlpha() */
+    
+    
+    //!
+    //!
+    public native float getAlpha();
+
+    /**
+     *  \brief Get the beta parameter.
+     * 
+     *  @see getAlpha(), setBeta() */
+    public native float getBeta();
 }

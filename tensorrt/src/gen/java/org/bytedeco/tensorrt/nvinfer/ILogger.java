@@ -38,8 +38,10 @@ public class ILogger extends Pointer {
         kERROR(1),
         /** An application error has been discovered, but TensorRT has recovered or fallen back to a default. */
         kWARNING(2),
-        /** Informational messages. */
-        kINFO(3);
+        /** Informational messages with instructional information. */
+        kINFO(3),
+        /** Verbose messages with debugging information. */
+        kVERBOSE(4);
 
         public final int value;
         private Severity(int v) { this.value = v; }
@@ -55,6 +57,7 @@ public class ILogger extends Pointer {
      *  @param msg The log message, null terminated.
      *  */
     @Virtual(true) public native void log(Severity severity, String msg);
+
     
     /** Default native constructor. */
     public ILogger() { super((Pointer)null); allocate(); }

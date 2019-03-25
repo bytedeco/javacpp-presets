@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  This layer applies an RNN operation on the inputs.
  * 
  *  @deprecated This interface is superseded by IRNNv2Layer.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IRNNLayer extends ILayer {
@@ -426,7 +428,7 @@ public class IRNNLayer extends ILayer {
      *   - H - The number of mini-batches for each time sequence.
      *   - W - The size of the per layer hidden states, it must match getHiddenSize().
      * 
-     *  The amount of space required is doubled if getDirection() is ::kBIDIRECTION with the bidirectional states coming after the unidirectional states.
+     *  If getDirection() is ::kBIDIRECTION, the amount of space required is doubled and C is equal to getLayerCount() * 2.
      * 
      *  If hidden is not specified, then the initial hidden state is set to zero.
      * 
@@ -468,7 +470,7 @@ public class IRNNLayer extends ILayer {
      * 
      *  If \p cell is not specified, then the initial cell state is set to zero.
      * 
-     *  The amount of space required is doubled if getDirection() is ::kBIDIRECTION with the bidirectional states coming after the unidirectional states.
+     *  If getDirection() is ::kBIDIRECTION, the amount of space required is doubled and C is equal to getLayerCount() * 2.
      * 
      *  The cell state only affects LSTM RNN's.
      * 

@@ -37,7 +37,10 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  the remaining dimensions match the dimensions of the input tensor. For example:
  * 
  *  - If the input tensor has shape {@code {C, H, W}}, then the output tensor will have shape {@code {K, 1, 1}}.
- *  - If the input tensor has shape {@code {P, C, H, W}}, then the output tensor will have shape {@code {P, K, 1, 1}}. */
+ *  - If the input tensor has shape {@code {P, C, H, W}}, then the output tensor will have shape {@code {P, K, 1, 1}}.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
+ *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IFullyConnectedLayer extends ILayer {
     static { Loader.load(); }

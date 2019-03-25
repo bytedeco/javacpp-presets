@@ -155,7 +155,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
   if [ "$PROJ" == "tensorrt" ]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1l9W2_vtYftijNave2OTitCepqyHrZu_- $HOME/downloads/tensorrt.tar.gz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1Q7ljbnIO1xz1hhCveOt3i4hln1K458Dk $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi

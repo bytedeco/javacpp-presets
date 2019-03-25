@@ -16,7 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class IPluginFactory
  * 
  *  \brief Plugin factory for deserialization.
- *  */
+ * 
+ *  This Interface is guaranteed not to change for the same major version of TensorRT. */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IPluginFactory extends Pointer {
     static { Loader.load(); }

@@ -16,6 +16,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \class INetworkDefinition
  * 
  *  \brief A network definition for input to the builder.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class INetworkDefinition extends Pointer {
@@ -72,7 +74,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IConvolutionLayer
      * 
-     *  @return The new convolution layer, or null if it could not be created.
+     *  @return The new convolution layer, or nullptr if it could not be created.
      *  */
     
     
@@ -93,10 +95,11 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IFullyConnectedLayer
      * 
-     *  @return The new fully connected layer, or null if it could not be created.
+     *  @return The new fully connected layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -110,9 +113,12 @@ public class INetworkDefinition extends Pointer {
      *  @param input The input tensor to the layer.
      *  @param type The type of activation function to apply.
      * 
+     *  Note that the setAlpha() and setBeta() methods must be used on the
+     *  output for activations that require these parameters.
+     * 
      *  @see IActivationLayer ActivationType
      * 
-     *  @return The new activation layer, or null if it could not be created.
+     *  @return The new activation layer, or nullptr if it could not be created.
      *  */
     
     
@@ -133,7 +139,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IPoolingLayer PoolingType
      * 
-     *  @return The new pooling layer, or null if it could not be created.
+     *  @return The new pooling layer, or nullptr if it could not be created.
      *  */
     
     
@@ -156,7 +162,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see ILRNLayer
      * 
-     *  @return The new LRN layer, or null if it could not be created.
+     *  @return The new LRN layer, or nullptr if it could not be created.
      *  */
     
     
@@ -184,7 +190,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IScaleLayer
      * 
-     *  @return The new Scale layer, or null if it could not be created.
+     *  @return The new Scale layer, or nullptr if it could not be created.
      *  */
     
     
@@ -200,7 +206,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see ISoftMaxLayer
      * 
-     *  @return The new SoftMax layer, or null if it could not be created.
+     *  @return The new SoftMax layer, or nullptr if it could not be created.
      *  */
     
     
@@ -220,7 +226,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IConcatenationLayer
      * 
-     *  @return The new concatenation layer, or null if it could not be created.
+     *  @return The new concatenation layer, or nullptr if it could not be created.
      * 
      *  \warning All tensors must have the same dimensions for all dimensions except for channel.
      *  */
@@ -245,7 +251,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IDeconvolutionLayer
      * 
-     *  @return The new deconvolution layer, or null if it could not be created.
+     *  @return The new deconvolution layer, or nullptr if it could not be created.
      *  */
     
     
@@ -275,10 +281,11 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IElementWiseLayer
      * 
-     *  @return The new elementwise layer, or null if it could not be created.
+     *  @return The new elementwise layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -346,8 +353,9 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @deprecated IRNNLayer is superseded by IRNNv2Layer. Use addRNNv2() instead.
      * 
-     *  @return The new RNN layer, or null if it could not be created.
      *  @see IRNNLayer
+     * 
+     *  @return The new RNN layer, or nullptr if it could not be created.
      *  */
     
     
@@ -368,7 +376,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IPluginLayer
      * 
-     *  @return the new plugin layer, or null if it could not be created.
+     *  @return the new plugin layer, or nullptr if it could not be created.
      *  */
     
     
@@ -388,7 +396,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IUnaryLayer
      * 
-     *  @return The new unary layer, or null if it could not be created
+     *  @return The new unary layer, or nullptr if it could not be created
      *  */
     
     //!
@@ -406,10 +414,11 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IPaddingLayer
      * 
-     *  @return the new padding layer, or null if it could not be created.
+     *  @return The new padding layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -421,7 +430,9 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param input The input tensor to the layer.
      * 
-     *  @return The new shuffle layer, or null if it could not be created.
+     *  @see IShuffleLayer
+     * 
+     *  @return The new shuffle layer, or nullptr if it could not be created.
      *  */
     
     
@@ -563,7 +574,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param index The index of the layer.
      * 
-     *  @return The layer, or null if the index is out of range.
+     *  @return The layer, or nullptr if the index is out of range.
      * 
      *  @see getNbLayers()
      *  */
@@ -596,7 +607,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param index The index of the input tensor.
      * 
-     *  @return The input tensor, or null if the index is out of range.
+     *  @return The input tensor, or nullptr if the index is out of range.
      * 
      *  @see getNbInputs()
      *  */
@@ -629,7 +640,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param index The index of the output tensor.
      * 
-     *  @return The output tensor, or null if the index is out of range.
+     *  @return The output tensor, or nullptr if the index is out of range.
      * 
      *  @see getNbOutputs()
      *  */
@@ -660,10 +671,12 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IReduceLayer
      * 
-     *  @return The new reduce layer, or null if it could not be created.
+     *  @return The new reduce layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
+    //!
     //!
     //!
     //!
@@ -698,6 +711,10 @@ public class INetworkDefinition extends Pointer {
      *         Bit 1 corresponds to the H dimension boolean.
      *         Bit 2 corresponds to the W dimension boolean.
      *         Note that TopK reduction is currently only permitted over one dimension.
+     * 
+     *  @see ITopKLayer
+     * 
+     *  @return The new TopK layer, or nullptr if it could not be created.
      *  */
     
     
@@ -718,7 +735,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IGatherLayer
      * 
-     *  @return The new gather layer, or null if it could not be created.
+     *  @return The new gather layer, or nullptr if it could not be created.
      *  */
     
     
@@ -737,7 +754,7 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IRaggedSoftMaxLayer
      * 
-     *  @return The new RaggedSoftMax layer, or null if it could not be created.
+     *  @return The new RaggedSoftMax layer, or nullptr if it could not be created.
      *  */
     
     
@@ -752,13 +769,38 @@ public class INetworkDefinition extends Pointer {
      *  \brief Add a MatrixMultiply layer to the network.
      * 
      *  @param input0 The first input tensor (commonly A).
+     *  @param op0 The operation to apply to input0.
+     *  @param input1 The second input tensor (commonly B).
+     *  @param op1 The operation to apply to input1.
+     * 
+     *  @see IMatrixMultiplyLayer
+     * 
+     *  @return The new matrix multiply layer, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native IMatrixMultiplyLayer addMatrixMultiply(@ByRef ITensor input0, MatrixOperation op0, @ByRef ITensor input1, MatrixOperation op1);
+    public native IMatrixMultiplyLayer addMatrixMultiply(@ByRef ITensor input0, @Cast("nvinfer1::MatrixOperation") int op0, @ByRef ITensor input1, @Cast("nvinfer1::MatrixOperation") int op1);
+
+    /**
+     *  \brief Add a MatrixMultiply layer to the network.
+     * 
+     *  @param input0 The first input tensor (commonly A).
      *  @param transpose0 If true, op(input0)=transpose(input0), else op(input0)=input0.
      *  @param input1 The second input tensor (commonly B).
      *  @param transpose1 If true, op(input1)=transpose(input1), else op(input1)=input1.
      * 
      *  @see IMatrixMultiplyLayer
      * 
-     *  @return The new matrix multiply layer, or null if it could not be created.
+     *  @return The new matrix multiply layer, or nullptr if it could not be created.
+     * 
+     *  @deprecated This interface is superseded by the overload that replaces bool with MatrixOperation.
      *  */
     
     
@@ -777,10 +819,11 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @see IConstantLayer
      * 
-     *  @return The new constant layer, or null if it could not be created.
+     *  @return The new constant layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -846,11 +889,15 @@ public class INetworkDefinition extends Pointer {
      *  {@code {N1, ..., Np, L, H}}:
      * 
      *   - {@code N1..Np} are the index dimensions specified by the input tensor
-     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount()
-     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize() if getDirection is ::kUNIDIRECTION, and 2x getHiddenSize() otherwise.
+     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount() if getDirection is ::kUNIDIRECTION,
+     *      and 2x getLayerCount() if getDirection is ::kBIDIRECTION. In the bi-directional
+     *      case, layer {@code l}'s final forward hidden state is stored in {@code L = 2*l}, and
+     *      final backward hidden state is stored in {@code L= 2*l + 1}.
+     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize().
      * 
-     *  @return The new RNN layer, or null if it could not be created.
      *  @see IRNNv2Layer
+     * 
+     *  @return The new RNN layer, or nullptr if it could not be created.
      *  */
     
     
@@ -869,12 +916,13 @@ public class INetworkDefinition extends Pointer {
      *  @param nbInputs The number of input tensors.
      *  @param plugin The layer plugin.
      * 
-     *  @return The new plugin layer, or null if it could not be created.
-     * 
      *  @see IPluginLayer
+     * 
+     *  @return The new plugin layer, or nullptr if it could not be created.
      *  */
     
     
+    //!
     //!
     //!
     //!
@@ -887,7 +935,9 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param input The input tensor to the layer.
      * 
-     *  @return The new plugin layer, or null if it could not be created.
+     *  @see IIdentityLayer
+     * 
+     *  @return The new identity layer, or nullptr if it could not be created.
      *  */
     
     
@@ -902,13 +952,12 @@ public class INetworkDefinition extends Pointer {
      * 
      *  @param tensor the tensor to remove
      * 
-     *  it is illegal to remove a tensor that is the input or output of a layer.
+     *  It is illegal to remove a tensor that is the input or output of a layer.
      *  if this method is called with such a tensor, a warning will be emitted on the log
      *  and the call will be ignored.
      *  */
     
     
-    //!
     //!
     //!
     //!
@@ -921,7 +970,51 @@ public class INetworkDefinition extends Pointer {
      *  @param tensor The tensor to unmark as an output tensor.
      * 
      *  see markOutput()
-     * 
      *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
     public native void unmarkOutput(@ByRef ITensor tensor);
+
+    /**
+     *  \brief Add a plugin layer to the network using the IPluginV2 interface.
+     * 
+     *  @param inputs The input tensors to the layer.
+     *  @param nbInputs The number of input tensors.
+     *  @param plugin The layer plugin.
+     * 
+     *  @see IPluginV2Layer
+     * 
+     *  @return The new plugin layer, or nullptr if it could not be created.
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native IPluginV2Layer addPluginV2(@Cast("nvinfer1::ITensor*const*") PointerPointer inputs, int nbInputs, @ByRef IPluginV2 plugin);
+    public native IPluginV2Layer addPluginV2(@ByPtrPtr ITensor inputs, int nbInputs, @ByRef IPluginV2 plugin);
+
+    /**
+     *  \brief Add a slice layer to the network.
+     * 
+     *  @param input The input tensor to the layer.
+     *  @param start The start offset
+     *  @param size The output dimension
+     *  @param stride The slicing stride
+     * 
+     *  Positive, negative, zero stride values, and combinations of them in different dimensions are allowed.
+     * 
+     *  @see ISliceLayer
+     * 
+     *  @return The new slice layer, or nullptr if it could not be created.
+     *  */
+    public native ISliceLayer addSlice(@ByRef ITensor input, @ByVal Dims start, @ByVal Dims size, @ByVal Dims stride);
 }

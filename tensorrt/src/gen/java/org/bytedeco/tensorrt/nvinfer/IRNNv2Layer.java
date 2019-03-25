@@ -18,6 +18,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief An RNN layer in a network definition, version 2.
  * 
  *  This layer supersedes IRNNLayer.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IRNNv2Layer extends ILayer {
@@ -214,8 +216,11 @@ public class IRNNv2Layer extends ILayer {
      *  The \p hidden ITensor should have the dimensions {@code {N1, ..., Np, L, H}}, where:
      * 
      *   - {@code N1..Np} are the index dimensions specified by the input tensor
-     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount()
-     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize() if getDirection is ::kUNIDIRECTION, and 2x getHiddenSize() otherwise.
+     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount() if getDirection is ::kUNIDIRECTION,
+     *      and 2x getLayerCount() if getDirection is ::kBIDIRECTION. In the bi-directional
+     *      case, layer {@code l}'s final forward hidden state is stored in {@code L = 2*l}, and
+     *      final backward hidden state is stored in {@code L= 2*l + 1}.
+     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize().
      *  */
     
     
@@ -242,8 +247,11 @@ public class IRNNv2Layer extends ILayer {
      *  The \p cell ITensor should have the dimensions {@code {N1, ..., Np, L, H}}, where:
      * 
      *   - {@code N1..Np} are the index dimensions specified by the input tensor
-     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount()
-     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize() if getDirection is ::kUNIDIRECTION, and 2x getHiddenSize() otherwise.
+     *   - {@code L} is the number of layers in the RNN, equal to getLayerCount() if getDirection is ::kUNIDIRECTION,
+     *      and 2x getLayerCount() if getDirection is ::kBIDIRECTION. In the bi-directional
+     *      case, layer {@code l}'s final forward hidden state is stored in {@code L = 2*l}, and
+     *      final backward hidden state is stored in {@code L= 2*l + 1}.
+     *   - {@code H} is the hidden state for each layer, equal to getHiddenSize().
      * 
      *  It is an error to call setCellState() on an RNN layer that is not configured with RNNOperation::kLSTM.
      *  */

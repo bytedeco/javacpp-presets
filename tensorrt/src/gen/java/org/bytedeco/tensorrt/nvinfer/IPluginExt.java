@@ -75,36 +75,6 @@ public class IPluginExt extends IPlugin {
      * 
      *  The dimensions passed here do not include the outermost batch size (i.e. for 2-D image networks, they will be 3-dimensional CHW dimensions).
      *  */
-    
-    
-    //!
-    //!
     public native void configureWithFormat(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs, DataType type, PluginFormat format, int maxBatchSize);
     public native void configureWithFormat(@Const Dims inputDims, int nbInputs, @Const Dims outputDims, int nbOutputs, @Cast("nvinfer1::DataType") int type, @Cast("nvinfer1::PluginFormat") byte format, int maxBatchSize);
-
-    /**
-     *  \brief Return the plugin type. Should match the plugin name returned by the corresponding plugin creator */
-    // \see IPluginCreator::getPluginName()
-    /** */
-    
-    
-    //!
-    //!
-    public native String getPluginType();
-
-    /**
-     *  \brief Return the plugin version. Should match the plugin version returned by the corresponding plugin creator */
-    // \see IPluginCreator::getPluginVersion()
-    /** */
-    public native String getPluginVersion();
-
-    ////!
-    ////! \brief Destroy the plugin object. This will be called when the network, builder or engine is destroyed.
-    ////!
-    public native void destroy();
-
-    ////!
-    ////! \brief Clone the plugin object. This copies over internal plugin parameters and returns a new plugin object with these parameters
-    ////!
-    public native IPluginExt clone();
 }

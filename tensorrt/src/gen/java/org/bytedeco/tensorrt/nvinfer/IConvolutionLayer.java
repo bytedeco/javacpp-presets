@@ -22,6 +22,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  The HW output size of the convolution is set according to the \p INetworkCustomDimensions set in INetworkDefinition::setCustomConvolutionDimensions().
  * 
  *  An optional bias argument is supported, which adds a per-channel constant to each value in the output.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IConvolutionLayer extends ILayer {
@@ -131,7 +133,7 @@ public class IConvolutionLayer extends ILayer {
     public native void setPadding(@ByVal DimsHW padding);
 
     /**
-     *  \brief Get the padding of the convolution.
+     *  \brief Get the padding of the convolution. If the padding is asymmetric, the pre-padding is returned.
      * 
      *  @see setPadding()
      *  */
@@ -143,7 +145,7 @@ public class IConvolutionLayer extends ILayer {
     //!
     //!
     //!
-    public native @ByVal DimsHW getPadding(); // padding defaults to 0
+    public native @ByVal DimsHW getPadding();
 
     /**
      *  \brief Set the number of groups for a convolution.
@@ -255,4 +257,61 @@ public class IConvolutionLayer extends ILayer {
      *  @see setDilation()
      *  */
     public native @ByVal DimsHW getDilation();
+    /**
+     *  \brief Set the pre-padding.
+     * 
+     *  The start of input will be zero-padded by this number of elements in the height and width directions.
+     * 
+     *  Default: 0
+     * 
+     *  If executing this layer on DLA, both height and width of padding must be in the range [0,15].
+     * 
+     *  @see getPrePadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setPrePadding(@ByVal Dims padding);
+
+    /**
+     *  \brief Get the pre-padding.
+     * 
+     *  @see setPrePadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    public native @ByVal Dims getPrePadding();
+
+    /**
+     *  \brief Set the post-padding.
+     * 
+     *  The end of the input will be zero-padded by this number of elements in the height and width directions.
+     * 
+     *  Default: (0,0)
+     * 
+     *  If executing this layer on DLA, both height and width of padding must be in the range [0,15].
+     * 
+     *  @see getPostPadding()
+     *  */
+    
+    
+    //!
+    //!
+    //!
+    public native void setPostPadding(@ByVal Dims padding);
+
+    /**
+     *  \brief Get the post-padding.
+     * 
+     *  @see setPostPadding()
+     *  */
+    public native @ByVal Dims getPostPadding();
 }

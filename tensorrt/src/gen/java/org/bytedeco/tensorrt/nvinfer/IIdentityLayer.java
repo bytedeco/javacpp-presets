@@ -17,6 +17,8 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
  *  \brief A layer that represents the identity function.
  * 
  *  If tensor precision is being explicitly specified, it can be used to transform from one precision to another.
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvinfer1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvinfer.class)
 public class IIdentityLayer extends ILayer {

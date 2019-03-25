@@ -15,7 +15,7 @@ import static org.bytedeco.tensorrt.global.nvinfer.*;
 /**
  *  \class IPluginCreator
  * 
- *  \brief Plugin creator class for user implemented layers
+ *  \brief Plugin creator class for user implemented layers.
  * 
  *  @see IPlugin and IPluginFactory
  *  */
@@ -27,7 +27,7 @@ public class IPluginCreator extends Pointer {
     public IPluginCreator(Pointer p) { super(p); }
 
     /**
-     *  \brief Return the version of the API the plugin creator was compiled with
+     *  \brief Return the version of the API the plugin creator was compiled with.
      *  */
     
     
@@ -36,7 +36,7 @@ public class IPluginCreator extends Pointer {
     public native int getTensorRTVersion();
 
     /**
-     *  \brief Return the plugin name
+     *  \brief Return the plugin name.
      *  */
     
     
@@ -45,7 +45,7 @@ public class IPluginCreator extends Pointer {
     public native String getPluginName();
 
     /**
-     *  \brief Return the plugin version
+     *  \brief Return the plugin version.
      *  */
     
     
@@ -54,7 +54,7 @@ public class IPluginCreator extends Pointer {
     public native String getPluginVersion();
 
     /**
-     *  \brief Return a list of fields that needs to be passed to createPlugin
+     *  \brief Return a list of fields that needs to be passed to createPlugin.
      *  @see PluginFieldCollection
      *  */
     
@@ -64,18 +64,41 @@ public class IPluginCreator extends Pointer {
     public native @Const PluginFieldCollection getFieldNames();
 
     /**
-     *  \brief \Return a plugin object. Return nullptr in case of error
+     *  \brief Return a plugin object. Return nullptr in case of error.
      *  */
     
     
     //!
     //!
-    public native IPluginExt createPlugin(String name, @Const PluginFieldCollection fc);
-    public native IPluginExt createPlugin(@Cast("const char*") BytePointer name, @Const PluginFieldCollection fc);
+    public native IPluginV2 createPlugin(String name, @Const PluginFieldCollection fc);
+    public native IPluginV2 createPlugin(@Cast("const char*") BytePointer name, @Const PluginFieldCollection fc);
 
     /**
-     *  \brief \Called during deserialization of plugin layer. Return a plugin object
+     *  \brief Called during deserialization of plugin layer. Return a plugin object.
      *  */
-    public native IPluginExt deserializePlugin(String name, @Const Pointer serialData, @Cast("size_t") long serialLength);
-    public native IPluginExt deserializePlugin(@Cast("const char*") BytePointer name, @Const Pointer serialData, @Cast("size_t") long serialLength);
+    
+    
+    //!
+    //!
+    //!
+    public native IPluginV2 deserializePlugin(String name, @Const Pointer serialData, @Cast("size_t") long serialLength);
+    public native IPluginV2 deserializePlugin(@Cast("const char*") BytePointer name, @Const Pointer serialData, @Cast("size_t") long serialLength);
+
+    /**
+     *  \brief Set the namespace of the plugin creator based on the plugin
+     *  library it belongs to. This can be set while registering the plugin creator.
+     * 
+     *  @see IPluginRegistry::registerCreator()
+     *  */
+    
+    
+    //!
+    //!
+    public native void setPluginNamespace(String pluginNamespace);
+    public native void setPluginNamespace(@Cast("const char*") BytePointer pluginNamespace);
+
+    /**
+     *  \brief Return the namespace of the plugin creator object.
+     *  */
+    public native String getPluginNamespace();
 }

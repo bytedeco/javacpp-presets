@@ -20,6 +20,8 @@ import static org.bytedeco.tensorrt.global.nvparsers.*;
  *  \brief Object used to store and query data extracted from a binaryproto file using the ICaffeParser.
  * 
  *  @see nvcaffeparser1::ICaffeParser
+ * 
+ *  \warning Do not inherit from this class, as doing so will break forward-compatibility of the API and ABI.
  *  */
 @Namespace("nvcaffeparser1") @Properties(inherit = org.bytedeco.tensorrt.presets.nvparsers.class)
 public class IBinaryProtoBlob extends Pointer {
