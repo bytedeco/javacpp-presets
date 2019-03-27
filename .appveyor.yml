@@ -118,6 +118,9 @@ test_script:
     - 'echo no tests'
 
 on_finish:
+    - 'fsutil fsinfo drives'
+    - 'fsutil volume diskfree c:'
+    - 'fsutil volume diskfree d:'
 #    uncomment this for the RDP session to remain active after the build ends
 #    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
