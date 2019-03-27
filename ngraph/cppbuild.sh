@@ -46,7 +46,7 @@ sedinplace '/In-source builds are not allowed/d' CMakeLists.txt
 sedinplace 's/set(NGRAPH_FORWARD_CMAKE_ARGS/set(NGRAPH_FORWARD_CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib/g' CMakeLists.txt
 $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=lib -DNGRAPH_UNIT_TEST_ENABLE=FALSE -DNGRAPH_TOOLS_ENABLE=FALSE -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DNGRAPH_ONNXIFI_ENABLE=TRUE .
 make -j $MAKEJ
-make install
+make install/strip
 
 cp onnx/bin/libonnxifi.so ../lib/
 cp onnx/src/onnx/onnxifi.h ../include/ngraph/frontend/onnxifi/
