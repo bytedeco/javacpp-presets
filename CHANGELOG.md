@@ -1,4 +1,5 @@
 
+ * Bundle Vector Mathematical Library (VML) in redist artifacts of the presets for MKL ([issue #705](https://github.com/bytedeco/javacpp-presets/issues/705))
  * Add `org.bytedeco.tensorflow.StringArray.put(BytePointer)` method to change character encoding ([issue bytedeco/javacpp#293](https://github.com/bytedeco/javacpp/issues/293))
  * Bundle `ffmpeg` and `ffprobe` programs, executable via `Loader.load()` for convenience ([issue bytedeco/javacv#307](https://github.com/bytedeco/javacv/issues/307))
  * Add functions related to threading missing from presets for CPython
