@@ -100,11 +100,11 @@ init:
 #    - wmic pagefileset create name="C:\pagefile.sys"
     - wmic pagefileset where name="C:\\pagefile.sys" set InitialSize=8192,MaximumSize=8192
     - wmic pagefileset list /format:list
-    - ps: write-host "Restarting..."
-    - ps: sleep 5
-    - ps: restart-computer -f
-    - ps: sleep 5
-    - ps: write-host "Restarted."
+#    - ps: write-host "Restarting..."
+#    - ps: sleep 5
+#    - ps: restart-computer -f
+#    - ps: sleep 5
+#    - ps: write-host "Restarted."
     - wmic pagefile list /format:list
 
 install:
@@ -120,7 +120,6 @@ test_script:
 on_finish:
     - 'fsutil fsinfo drives'
     - 'fsutil volume diskfree c:'
-    - 'fsutil volume diskfree d:'
 #    uncomment this for the RDP session to remain active after the build ends
 #    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
