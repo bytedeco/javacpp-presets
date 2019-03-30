@@ -42,6 +42,10 @@ matrix:
         env: PROJ=tensorflow OS=android-arm
         install: true
         script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpu_features OS=android-arm
+        install: true
+        script: ./ci/install-travis.sh
 
       - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=android-arm64
@@ -65,6 +69,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=tensorflow OS=android-arm64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpu_features OS=android-arm64
         install: true
         script: ./ci/install-travis.sh
 
@@ -92,6 +100,10 @@ matrix:
         env: PROJ=tensorflow OS=android-x86
         install: true
         script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpu_features OS=android-x86
+        install: true
+        script: ./ci/install-travis.sh
 
       - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=android-x86_64
@@ -115,6 +127,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=tensorflow OS=android-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpu_features OS=android-x86_64
         install: true
         script: ./ci/install-travis.sh
 
@@ -175,7 +191,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=systems OS=linux-armhf
+        env: PROJ=cpu_features,systems OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
 
@@ -212,7 +228,7 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=systems OS=linux-ppc64le
+        env: PROJ=cpu_features,systems OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
 
@@ -277,7 +293,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=systems OS=linux-x86
+        env: PROJ=cpu_features,systems OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
 
@@ -374,7 +390,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=systems OS=linux-x86_64
+        env: PROJ=cpu_features,systems OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
 
@@ -485,7 +501,7 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode8.3
-        env: PROJ=systems OS=macosx-x86_64
+        env: PROJ=cpu_features,systems OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
 
