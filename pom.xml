@@ -609,6 +609,7 @@
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -720,6 +721,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -766,6 +768,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -812,6 +815,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -858,6 +862,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>tensorflow</module>
+        <module>cpu_features</module>
       </modules>
       <properties>
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
@@ -1040,6 +1045,7 @@
         <module>gsl</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1086,6 +1092,7 @@
         <module>gsl</module>
         <module>leptonica</module>
         <module>tesseract</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1133,6 +1140,7 @@
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1190,6 +1198,7 @@
         <module>ale</module>
         <module>liquidfun</module>
         <module>skia</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1256,6 +1265,7 @@
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1318,6 +1328,7 @@
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1372,6 +1383,7 @@
         <module>tesseract</module>
         <module>ale</module>
         <module>liquidfun</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>
@@ -1433,6 +1445,7 @@
         <module>tensorflow</module>
         <module>ale</module>
         <module>liquidfun</module>
+        <module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>

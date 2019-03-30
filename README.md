@@ -144,6 +144,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.12.2  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
+ * cpu_features 0.2.0  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

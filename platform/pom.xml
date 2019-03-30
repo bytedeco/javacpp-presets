@@ -51,6 +51,7 @@
     <module>../liquidfun/platform</module>
     <module>../qt/platform</module>
     <module>../skia/platform</module>
+    <module>../cpu_features/platform</module>
     <module>../systems/platform</module>
   </modules>
 
@@ -240,6 +241,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>skia-platform</artifactId>
       <version>1.68.0-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>cpu_features-platform</artifactId>
+      <version>0.2.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
