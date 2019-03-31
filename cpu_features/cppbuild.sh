@@ -44,11 +44,15 @@ case $PLATFORM in
         make install
         ;;
     linux-x86)
+        sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
+        sedinplace 's/AT_HWCAP2/26/g' src/hwcaps.c
         CC="gcc -m32 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j4
         make install
         ;;
     linux-x86_64)
+        sedinplace 's/sys\/auxv.h/linux\/auxvec.h/g' src/hwcaps.c
+        sedinplace 's/AT_HWCAP2/26/g' src/hwcaps.c
         CC="gcc -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DCMAKE_INSTALL_LIBDIR="lib" .
         make -j4
         make install
