@@ -4,6 +4,9 @@ import static org.bytedeco.gsl.global.gsl.*;
 
 public class Demo {
     public static void main(String[] args) {
+        /* try to use MKL when available */
+        System.setProperty("org.bytedeco.openblas.load", "mkl");
+
         gsl_rng_type T;
         gsl_rng r;
 

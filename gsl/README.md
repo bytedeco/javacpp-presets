@@ -44,6 +44,39 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>gsl-platform</artifactId>
             <version>2.5-1.5-SNAPSHOT</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled full version of MKL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.3-1.5-SNAPSHOT</version>
+            <classifier>linux-x86-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.3-1.5-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.3-1.5-SNAPSHOT</version>
+            <classifier>macosx-x86_64-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.3-1.5-SNAPSHOT</version>
+            <classifier>windows-x86-redist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl</artifactId>
+            <version>2019.3-1.5-SNAPSHOT</version>
+            <classifier>windows-x86_64-redist</classifier>
+        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>
@@ -59,6 +92,9 @@ import static org.bytedeco.gsl.global.gsl.*;
 
 public class Demo {
     public static void main(String[] args) {
+        /* try to use MKL when available */
+        System.setProperty("org.bytedeco.openblas.load", "mkl");
+
         gsl_rng_type T;
         gsl_rng r;
 
