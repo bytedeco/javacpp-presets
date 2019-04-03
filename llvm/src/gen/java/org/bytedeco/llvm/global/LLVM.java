@@ -60,6 +60,12 @@ public class LLVM extends org.bytedeco.llvm.presets.LLVM {
 // Targeting ../LLVM/LLVMMetadataRef.java
 
 
+// Targeting ../LLVM/LLVMNamedMDNodeRef.java
+
+
+// Targeting ../LLVM/LLVMValueMetadataEntry.java
+
+
 // Targeting ../LLVM/LLVMBuilderRef.java
 
 
@@ -243,6 +249,8 @@ public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
  * \{
  */
 
+/** External users depend on the following values being stable. It is not safe
+/** to reorder them. */
 /** enum LLVMOpcode */
 public static final int
   /* Terminator Instructions */
@@ -253,6 +261,9 @@ public static final int
   LLVMInvoke         = 5,
   /* removed 6 due to API changes */
   LLVMUnreachable    = 7,
+
+  /* Standard Unary Operators */
+  LLVMFNeg           = 66,
 
   /* Standard Binary Operators */
   LLVMAdd            = 8,
@@ -784,6 +795,23 @@ public static native void LLVMContextSetYieldCallback(LLVMContextRef C, LLVMYiel
                                  Pointer OpaqueHandle);
 
 /**
+ * Retrieve whether the given context is set to discard all value names.
+ *
+ * @see LLVMContext::shouldDiscardValueNames()
+ */
+public static native @Cast("LLVMBool") int LLVMContextShouldDiscardValueNames(LLVMContextRef C);
+
+/**
+ * Set whether the given context discards all value names.
+ *
+ * If true, only the names of GlobalValue objects will be available in the IR.
+ * This can be used to save memory and runtime, especially in release mode.
+ *
+ * @see LLVMContext::setDiscardValueNames()
+ */
+public static native void LLVMContextSetDiscardValueNames(LLVMContextRef C, @Cast("LLVMBool") int Discard);
+
+/**
  * Destroy a context instance.
  *
  * This should be called for every call to LLVMContextCreate() or memory
@@ -1158,6 +1186,68 @@ public static native LLVMTypeRef LLVMGetTypeByName(LLVMModuleRef M, @Cast("const
 public static native LLVMTypeRef LLVMGetTypeByName(LLVMModuleRef M, String Name);
 
 /**
+ * Obtain an iterator to the first NamedMDNode in a Module.
+ *
+ * @see llvm::Module::named_metadata_begin()
+ */
+public static native LLVMNamedMDNodeRef LLVMGetFirstNamedMetadata(LLVMModuleRef M);
+
+/**
+ * Obtain an iterator to the last NamedMDNode in a Module.
+ *
+ * @see llvm::Module::named_metadata_end()
+ */
+public static native LLVMNamedMDNodeRef LLVMGetLastNamedMetadata(LLVMModuleRef M);
+
+/**
+ * Advance a NamedMDNode iterator to the next NamedMDNode.
+ *
+ * Returns NULL if the iterator was already at the end and there are no more
+ * named metadata nodes.
+ */
+public static native LLVMNamedMDNodeRef LLVMGetNextNamedMetadata(LLVMNamedMDNodeRef NamedMDNode);
+
+/**
+ * Decrement a NamedMDNode iterator to the previous NamedMDNode.
+ *
+ * Returns NULL if the iterator was already at the beginning and there are
+ * no previous named metadata nodes.
+ */
+public static native LLVMNamedMDNodeRef LLVMGetPreviousNamedMetadata(LLVMNamedMDNodeRef NamedMDNode);
+
+/**
+ * Retrieve a NamedMDNode with the given name, returning NULL if no such
+ * node exists.
+ *
+ * @see llvm::Module::getNamedMetadata()
+ */
+public static native LLVMNamedMDNodeRef LLVMGetNamedMetadata(LLVMModuleRef M,
+                                        @Cast("const char*") BytePointer Name, @Cast("size_t") long NameLen);
+public static native LLVMNamedMDNodeRef LLVMGetNamedMetadata(LLVMModuleRef M,
+                                        String Name, @Cast("size_t") long NameLen);
+
+/**
+ * Retrieve a NamedMDNode with the given name, creating a new node if no such
+ * node exists.
+ *
+ * @see llvm::Module::getOrInsertNamedMetadata()
+ */
+public static native LLVMNamedMDNodeRef LLVMGetOrInsertNamedMetadata(LLVMModuleRef M,
+                                                @Cast("const char*") BytePointer Name,
+                                                @Cast("size_t") long NameLen);
+public static native LLVMNamedMDNodeRef LLVMGetOrInsertNamedMetadata(LLVMModuleRef M,
+                                                String Name,
+                                                @Cast("size_t") long NameLen);
+
+/**
+ * Retrieve the name of a NamedMDNode.
+ *
+ * @see llvm::NamedMDNode::getName()
+ */
+public static native @Cast("const char*") BytePointer LLVMGetNamedMetadataName(LLVMNamedMDNodeRef NamedMD,
+                                     @Cast("size_t*") SizeTPointer NameLen);
+
+/**
  * Obtain the number of operands for named metadata in a module.
  *
  * @see llvm::Module::getNamedMetadata()
@@ -1191,6 +1281,48 @@ public static native void LLVMAddNamedMetadataOperand(LLVMModuleRef M, @Cast("co
                                  LLVMValueRef Val);
 public static native void LLVMAddNamedMetadataOperand(LLVMModuleRef M, String Name,
                                  LLVMValueRef Val);
+
+/**
+ * Return the directory of the debug location for this value, which must be
+ * an llvm::Instruction, llvm::GlobalVariable, or llvm::Function.
+ *
+ * @see llvm::Instruction::getDebugLoc()
+ * @see llvm::GlobalVariable::getDebugInfo()
+ * @see llvm::Function::getSubprogram()
+ */
+public static native @Cast("const char*") BytePointer LLVMGetDebugLocDirectory(LLVMValueRef Val, @Cast("unsigned*") IntPointer Length);
+public static native String LLVMGetDebugLocDirectory(LLVMValueRef Val, @Cast("unsigned*") IntBuffer Length);
+public static native @Cast("const char*") BytePointer LLVMGetDebugLocDirectory(LLVMValueRef Val, @Cast("unsigned*") int[] Length);
+
+/**
+ * Return the filename of the debug location for this value, which must be
+ * an llvm::Instruction, llvm::GlobalVariable, or llvm::Function.
+ *
+ * @see llvm::Instruction::getDebugLoc()
+ * @see llvm::GlobalVariable::getDebugInfo()
+ * @see llvm::Function::getSubprogram()
+ */
+public static native @Cast("const char*") BytePointer LLVMGetDebugLocFilename(LLVMValueRef Val, @Cast("unsigned*") IntPointer Length);
+public static native String LLVMGetDebugLocFilename(LLVMValueRef Val, @Cast("unsigned*") IntBuffer Length);
+public static native @Cast("const char*") BytePointer LLVMGetDebugLocFilename(LLVMValueRef Val, @Cast("unsigned*") int[] Length);
+
+/**
+ * Return the line number of the debug location for this value, which must be
+ * an llvm::Instruction, llvm::GlobalVariable, or llvm::Function.
+ *
+ * @see llvm::Instruction::getDebugLoc()
+ * @see llvm::GlobalVariable::getDebugInfo()
+ * @see llvm::Function::getSubprogram()
+ */
+public static native @Cast("unsigned") int LLVMGetDebugLocLine(LLVMValueRef Val);
+
+/**
+ * Return the column number of the debug location for this value, which must be
+ * an llvm::Instruction.
+ *
+ * @see llvm::Instruction::getDebugLoc()
+ */
+public static native @Cast("unsigned") int LLVMGetDebugLocColumn(LLVMValueRef Val);
 
 /**
  * Add a function to a module under a specified name.
@@ -1558,6 +1690,13 @@ public static native @Cast("LLVMBool") int LLVMIsPackedStruct(LLVMTypeRef Struct
 public static native @Cast("LLVMBool") int LLVMIsOpaqueStruct(LLVMTypeRef StructTy);
 
 /**
+ * Determine whether a structure is literal.
+ *
+ * @see llvm::StructType::isLiteral()
+ */
+public static native @Cast("LLVMBool") int LLVMIsLiteralStruct(LLVMTypeRef StructTy);
+
+/**
  * \}
  */
 
@@ -1745,6 +1884,7 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(ConstantVector)
 //       macro(GlobalValue)
 //         macro(GlobalAlias)
+//         macro(GlobalIFunc)
 //         macro(GlobalObject)
 //           macro(Function)
 //           macro(GlobalVariable)
@@ -1754,7 +1894,9 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(CallInst)
 //         macro(IntrinsicInst)
 //           macro(DbgInfoIntrinsic)
-//             macro(DbgDeclareInst)
+//             macro(DbgVariableIntrinsic)
+//               macro(DbgDeclareInst)
+//             macro(DbgLabelInst)
 //           macro(MemIntrinsic)
 //             macro(MemCpyInst)
 //             macro(MemMoveInst)
@@ -1771,16 +1913,15 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(SelectInst)
 //       macro(ShuffleVectorInst)
 //       macro(StoreInst)
-//       macro(TerminatorInst)
-//         macro(BranchInst)
-//         macro(IndirectBrInst)
-//         macro(InvokeInst)
-//         macro(ReturnInst)
-//         macro(SwitchInst)
-//         macro(UnreachableInst)
-//         macro(ResumeInst)
-//         macro(CleanupReturnInst)
-//         macro(CatchReturnInst)
+//       macro(BranchInst)
+//       macro(IndirectBrInst)
+//       macro(InvokeInst)
+//       macro(ReturnInst)
+//       macro(SwitchInst)
+//       macro(UnreachableInst)
+//       macro(ResumeInst)
+//       macro(CleanupReturnInst)
+//       macro(CatchReturnInst)
 //       macro(FuncletPadInst)
 //         macro(CatchPadInst)
 //         macro(CleanupPadInst)
@@ -1908,6 +2049,7 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAConstantVector(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAGlobalValue(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAGlobalAlias(LLVMValueRef Val);
+        public static native LLVMValueRef LLVMIsAGlobalIFunc(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAGlobalObject(LLVMValueRef Val);
           public static native LLVMValueRef LLVMIsAFunction(LLVMValueRef Val);
           public static native LLVMValueRef LLVMIsAGlobalVariable(LLVMValueRef Val);
@@ -1917,7 +2059,9 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsACallInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsAIntrinsicInst(LLVMValueRef Val);
           public static native LLVMValueRef LLVMIsADbgInfoIntrinsic(LLVMValueRef Val);
-            public static native LLVMValueRef LLVMIsADbgDeclareInst(LLVMValueRef Val);
+            public static native LLVMValueRef LLVMIsADbgVariableIntrinsic(LLVMValueRef Val);
+              public static native LLVMValueRef LLVMIsADbgDeclareInst(LLVMValueRef Val);
+            public static native LLVMValueRef LLVMIsADbgLabelInst(LLVMValueRef Val);
           public static native LLVMValueRef LLVMIsAMemIntrinsic(LLVMValueRef Val);
             public static native LLVMValueRef LLVMIsAMemCpyInst(LLVMValueRef Val);
             public static native LLVMValueRef LLVMIsAMemMoveInst(LLVMValueRef Val);
@@ -1934,16 +2078,15 @@ public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsASelectInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAShuffleVectorInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAStoreInst(LLVMValueRef Val);
-      public static native LLVMValueRef LLVMIsATerminatorInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsABranchInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsAIndirectBrInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsAInvokeInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsAReturnInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsASwitchInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsAUnreachableInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsAResumeInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsACleanupReturnInst(LLVMValueRef Val);
-        public static native LLVMValueRef LLVMIsACatchReturnInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsABranchInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAIndirectBrInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAInvokeInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAReturnInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsASwitchInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAUnreachableInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsAResumeInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsACleanupReturnInst(LLVMValueRef Val);
+      public static native LLVMValueRef LLVMIsACatchReturnInst(LLVMValueRef Val);
       public static native LLVMValueRef LLVMIsAFuncletPadInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsACatchPadInst(LLVMValueRef Val);
         public static native LLVMValueRef LLVMIsACleanupPadInst(LLVMValueRef Val);
@@ -2407,12 +2550,22 @@ public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstGEP(LLVMValueRef ConstantVal,
                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                           @ByPtrPtr LLVMValueRef ConstantIndices, @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                           @Cast("LLVMValueRef*") PointerPointer ConstantIndices, @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @ByPtrPtr LLVMValueRef ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstInBoundsGEP(LLVMValueRef ConstantVal,
                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
                                   @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                                   @ByPtrPtr LLVMValueRef ConstantIndices,
+                                   @Cast("unsigned") int NumIndices);
+public static native LLVMValueRef LLVMConstInBoundsGEP2(LLVMTypeRef Ty, LLVMValueRef ConstantVal,
+                                   @Cast("LLVMValueRef*") PointerPointer ConstantIndices,
+                                   @Cast("unsigned") int NumIndices);
 public static native LLVMValueRef LLVMConstTrunc(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstSExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
 public static native LLVMValueRef LLVMConstZExt(LLVMValueRef ConstantVal, LLVMTypeRef ToType);
@@ -2502,6 +2655,14 @@ public static native void LLVMSetDLLStorageClass(LLVMValueRef Global, @Cast("LLV
 public static native @Cast("LLVMUnnamedAddr") int LLVMGetUnnamedAddress(LLVMValueRef Global);
 public static native void LLVMSetUnnamedAddress(LLVMValueRef Global, @Cast("LLVMUnnamedAddr") int UnnamedAddr);
 
+/**
+ * Returns the "value type" of a global value.  This differs from the formal
+ * type of a global value which is always a pointer type.
+ *
+ * @see llvm::GlobalValue::getValueType()
+ */
+public static native LLVMTypeRef LLVMGlobalGetValueType(LLVMValueRef Global);
+
 /** Deprecated: Use LLVMGetUnnamedAddress instead. */
 public static native @Cast("LLVMBool") int LLVMHasUnnamedAddr(LLVMValueRef Global);
 /** Deprecated: Use LLVMSetUnnamedAddress instead. */
@@ -2531,6 +2692,57 @@ public static native @Cast("unsigned") int LLVMGetAlignment(LLVMValueRef V);
  * @see llvm::GlobalValue::setAlignment()
  */
 public static native void LLVMSetAlignment(LLVMValueRef V, @Cast("unsigned") int Bytes);
+
+/**
+ * Sets a metadata attachment, erasing the existing metadata attachment if
+ * it already exists for the given kind.
+ *
+ * @see llvm::GlobalObject::setMetadata()
+ */
+public static native void LLVMGlobalSetMetadata(LLVMValueRef Global, @Cast("unsigned") int Kind,
+                           LLVMMetadataRef MD);
+
+/**
+ * Erases a metadata attachment of the given kind if it exists.
+ *
+ * @see llvm::GlobalObject::eraseMetadata()
+ */
+public static native void LLVMGlobalEraseMetadata(LLVMValueRef Global, @Cast("unsigned") int Kind);
+
+/**
+ * Removes all metadata attachments from this value.
+ *
+ * @see llvm::GlobalObject::clearMetadata()
+ */
+public static native void LLVMGlobalClearMetadata(LLVMValueRef Global);
+
+/**
+ * Retrieves an array of metadata entries representing the metadata attached to
+ * this value. The caller is responsible for freeing this array by calling
+ * \c LLVMDisposeValueMetadataEntries.
+ *
+ * @see llvm::GlobalObject::getAllMetadata()
+ */
+public static native LLVMValueMetadataEntry LLVMGlobalCopyAllMetadata(LLVMValueRef Value,
+                                                  @Cast("size_t*") SizeTPointer NumEntries);
+
+/**
+ * Destroys value metadata entries.
+ */
+public static native void LLVMDisposeValueMetadataEntries(LLVMValueMetadataEntry Entries);
+
+/**
+ * Returns the kind of a value metadata entry at a specific index.
+ */
+public static native @Cast("unsigned") int LLVMValueMetadataEntriesGetKind(LLVMValueMetadataEntry Entries,
+                                         @Cast("unsigned") int Index);
+
+/**
+ * Returns the underlying metadata node of a value metadata entry at a
+ * specific index.
+ */
+public static native LLVMMetadataRef LLVMValueMetadataEntriesGetMetadata(LLVMValueMetadataEntry Entries,
+                                    @Cast("unsigned") int Index);
 
 /**
  * \}
@@ -2690,6 +2902,64 @@ public static native void LLVMSetPersonalityFn(LLVMValueRef Fn, LLVMValueRef Per
  * @see llvm::Function::getIntrinsicID()
  */
 public static native @Cast("unsigned") int LLVMGetIntrinsicID(LLVMValueRef Fn);
+
+/**
+ * Create or insert the declaration of an intrinsic.  For overloaded intrinsics,
+ * parameter types must be provided to uniquely identify an overload.
+ *
+ * @see llvm::Intrinsic::getDeclaration()
+ */
+public static native LLVMValueRef LLVMGetIntrinsicDeclaration(LLVMModuleRef Mod,
+                                         @Cast("unsigned") int ID,
+                                         @ByPtrPtr LLVMTypeRef ParamTypes,
+                                         @Cast("size_t") long ParamCount);
+public static native LLVMValueRef LLVMGetIntrinsicDeclaration(LLVMModuleRef Mod,
+                                         @Cast("unsigned") int ID,
+                                         @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
+                                         @Cast("size_t") long ParamCount);
+
+/**
+ * Retrieves the type of an intrinsic.  For overloaded intrinsics, parameter
+ * types must be provided to uniquely identify an overload.
+ *
+ * @see llvm::Intrinsic::getType()
+ */
+public static native LLVMTypeRef LLVMIntrinsicGetType(LLVMContextRef Ctx, @Cast("unsigned") int ID,
+                                 @ByPtrPtr LLVMTypeRef ParamTypes, @Cast("size_t") long ParamCount);
+public static native LLVMTypeRef LLVMIntrinsicGetType(LLVMContextRef Ctx, @Cast("unsigned") int ID,
+                                 @Cast("LLVMTypeRef*") PointerPointer ParamTypes, @Cast("size_t") long ParamCount);
+
+/**
+ * Retrieves the name of an intrinsic.
+ *
+ * @see llvm::Intrinsic::getName()
+ */
+public static native @Cast("const char*") BytePointer LLVMIntrinsicGetName(@Cast("unsigned") int ID, @Cast("size_t*") SizeTPointer NameLength);
+
+/**
+ * Copies the name of an overloaded intrinsic identified by a given list of
+ * parameter types.
+ *
+ * Unlike LLVMIntrinsicGetName, the caller is responsible for freeing the
+ * returned string.
+ *
+ * @see llvm::Intrinsic::getName()
+ */
+public static native @Cast("const char*") BytePointer LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID,
+                                            @ByPtrPtr LLVMTypeRef ParamTypes,
+                                            @Cast("size_t") long ParamCount,
+                                            @Cast("size_t*") SizeTPointer NameLength);
+public static native String LLVMIntrinsicCopyOverloadedName(@Cast("unsigned") int ID,
+                                            @Cast("LLVMTypeRef*") PointerPointer ParamTypes,
+                                            @Cast("size_t") long ParamCount,
+                                            @Cast("size_t*") SizeTPointer NameLength);
+
+/**
+ * Obtain if the intrinsic identified by the given ID is overloaded.
+ *
+ * @see llvm::Intrinsic::isOverloaded()
+ */
+public static native @Cast("LLVMBool") int LLVMIntrinsicIsOverloaded(@Cast("unsigned") int ID);
 
 /**
  * Obtain the calling function of a function.
@@ -3008,7 +3278,7 @@ public static native LLVMValueRef LLVMGetBasicBlockParent(LLVMBasicBlockRef BB);
  * If the basic block does not have a terminator (it is not well-formed
  * if it doesn't), then NULL is returned.
  *
- * The returned LLVMValueRef corresponds to a llvm::TerminatorInst.
+ * The returned LLVMValueRef corresponds to an llvm::Instruction.
  *
  * @see llvm::BasicBlock::getTerminator()
  */
@@ -3066,6 +3336,16 @@ public static native LLVMBasicBlockRef LLVMGetPreviousBasicBlock(LLVMBasicBlockR
  * @see llvm::Function::getEntryBlock()
  */
 public static native LLVMBasicBlockRef LLVMGetEntryBasicBlock(LLVMValueRef Fn);
+
+/**
+ * Create a new basic block without inserting it into a function.
+ *
+ * @see llvm::BasicBlock::Create()
+ */
+public static native LLVMBasicBlockRef LLVMCreateBasicBlockInContext(LLVMContextRef C,
+                                                @Cast("const char*") BytePointer Name);
+public static native LLVMBasicBlockRef LLVMCreateBasicBlockInContext(LLVMContextRef C,
+                                                String Name);
 
 /**
  * Append a basic block to the end of a function.
@@ -3199,6 +3479,15 @@ public static native LLVMValueRef LLVMGetMetadata(LLVMValueRef Val, @Cast("unsig
 public static native void LLVMSetMetadata(LLVMValueRef Val, @Cast("unsigned") int KindID, LLVMValueRef Node);
 
 /**
+ * Returns the metadata associated with an instruction value, but filters out
+ * all the debug locations.
+ *
+ * @see llvm::Instruction::getAllMetadataOtherThanDebugLoc()
+ */
+public static native LLVMValueMetadataEntry LLVMInstructionGetAllMetadataOtherThanDebugLoc(LLVMValueRef Instr,
+                                               @Cast("size_t*") SizeTPointer NumEntries);
+
+/**
  * Obtain the basic block to which an instruction belongs.
  *
  * @see llvm::Instruction::getParent()
@@ -3281,6 +3570,15 @@ public static native @Cast("LLVMRealPredicate") int LLVMGetFCmpPredicate(LLVMVal
 public static native LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
 
 /**
+ * Determine whether an instruction is a terminator. This routine is named to
+ * be compatible with historical functions that did this by querying the
+ * underlying C++ type.
+ *
+ * @see llvm::Instruction::isTerminator()
+ */
+public static native LLVMValueRef LLVMIsATerminatorInst(LLVMValueRef Inst);
+
+/**
  * \defgroup LLVMCCoreValueInstructionCall Call Sites and Invocations
  *
  * Functions in this group apply to instructions that refer to call
@@ -3348,6 +3646,13 @@ public static native void LLVMRemoveCallSiteStringAttribute(LLVMValueRef C, @Cas
                                        @Cast("const char*") BytePointer K, @Cast("unsigned") int KLen);
 public static native void LLVMRemoveCallSiteStringAttribute(LLVMValueRef C, @Cast("LLVMAttributeIndex") int Idx,
                                        String K, @Cast("unsigned") int KLen);
+
+/**
+ * Obtain the function type called by this instruction.
+ *
+ * @see llvm::CallBase::getFunctionType()
+ */
+public static native LLVMTypeRef LLVMGetCalledFunctionType(LLVMValueRef C);
 
 /**
  * Obtain the pointer to the function invoked by this instruction.
@@ -3427,8 +3732,8 @@ public static native void LLVMSetUnwindDest(LLVMValueRef InvokeInst, LLVMBasicBl
 /**
  * \defgroup LLVMCCoreValueInstructionTerminator Terminators
  *
- * Functions in this group only apply to instructions that map to
- * llvm::TerminatorInst instances.
+ * Functions in this group only apply to instructions for which
+ * LLVMIsATerminatorInst returns true.
  *
  * \{
  */
@@ -3436,21 +3741,21 @@ public static native void LLVMSetUnwindDest(LLVMValueRef InvokeInst, LLVMBasicBl
 /**
  * Return the number of successors that this terminator has.
  *
- * @see llvm::TerminatorInst::getNumSuccessors
+ * @see llvm::Instruction::getNumSuccessors
  */
 public static native @Cast("unsigned") int LLVMGetNumSuccessors(LLVMValueRef Term);
 
 /**
  * Return the specified successor.
  *
- * @see llvm::TerminatorInst::getSuccessor
+ * @see llvm::Instruction::getSuccessor
  */
 public static native LLVMBasicBlockRef LLVMGetSuccessor(LLVMValueRef Term, @Cast("unsigned") int i);
 
 /**
  * Update the specified successor to point at the provided block.
  *
- * @see llvm::TerminatorInst::setSuccessor
+ * @see llvm::Instruction::setSuccessor
  */
 public static native void LLVMSetSuccessor(LLVMValueRef Term, @Cast("unsigned") int i, LLVMBasicBlockRef block);
 
@@ -3647,6 +3952,8 @@ public static native LLVMValueRef LLVMBuildSwitch(LLVMBuilderRef arg0, LLVMValue
                              LLVMBasicBlockRef Else, @Cast("unsigned") int NumCases);
 public static native LLVMValueRef LLVMBuildIndirectBr(LLVMBuilderRef B, LLVMValueRef Addr,
                                  @Cast("unsigned") int NumDests);
+// LLVMBuildInvoke is deprecated in favor of LLVMBuildInvoke2, in preparation
+// for opaque pointer types.
 public static native LLVMValueRef LLVMBuildInvoke(LLVMBuilderRef arg0, LLVMValueRef Fn,
                              @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
@@ -3655,6 +3962,14 @@ public static native LLVMValueRef LLVMBuildInvoke(LLVMBuilderRef arg0, LLVMValue
                              @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
                              String Name);
+public static native LLVMValueRef LLVMBuildInvoke2(LLVMBuilderRef arg0, LLVMTypeRef Ty, LLVMValueRef Fn,
+                              @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
+                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
+                              @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildInvoke2(LLVMBuilderRef arg0, LLVMTypeRef Ty, LLVMValueRef Fn,
+                              @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
+                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
+                              String Name);
 public static native LLVMValueRef LLVMBuildUnreachable(LLVMBuilderRef arg0);
 
 /* Exception Handling */
@@ -3889,6 +4204,35 @@ public static native LLVMValueRef LLVMBuildArrayMalloc(LLVMBuilderRef arg0, LLVM
                                   LLVMValueRef Val, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildArrayMalloc(LLVMBuilderRef arg0, LLVMTypeRef Ty,
                                   LLVMValueRef Val, String Name);
+
+/**
+ * Creates and inserts a memset to the specified pointer and the 
+ * specified value.
+ *
+ * @see llvm::IRRBuilder::CreateMemSet()
+ */
+public static native LLVMValueRef LLVMBuildMemSet(LLVMBuilderRef B, LLVMValueRef Ptr,
+                             LLVMValueRef Val, LLVMValueRef Len,
+                             @Cast("unsigned") int Align);
+/**
+ * Creates and inserts a memcpy between the specified pointers.
+ *
+ * @see llvm::IRRBuilder::CreateMemCpy()
+ */
+public static native LLVMValueRef LLVMBuildMemCpy(LLVMBuilderRef B, 
+                             LLVMValueRef Dst, @Cast("unsigned") int DstAlign,
+                             LLVMValueRef Src, @Cast("unsigned") int SrcAlign,
+                             LLVMValueRef Size);
+/**
+ * Creates and inserts a memmove between the specified pointers.
+ *
+ * @see llvm::IRRBuilder::CreateMemMove()
+ */
+public static native LLVMValueRef LLVMBuildMemMove(LLVMBuilderRef B, 
+                              LLVMValueRef Dst, @Cast("unsigned") int DstAlign,
+                              LLVMValueRef Src, @Cast("unsigned") int SrcAlign,
+                              LLVMValueRef Size);
+
 public static native LLVMValueRef LLVMBuildAlloca(LLVMBuilderRef arg0, LLVMTypeRef Ty, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildAlloca(LLVMBuilderRef arg0, LLVMTypeRef Ty, String Name);
 public static native LLVMValueRef LLVMBuildArrayAlloca(LLVMBuilderRef arg0, LLVMTypeRef Ty,
@@ -3896,11 +4240,19 @@ public static native LLVMValueRef LLVMBuildArrayAlloca(LLVMBuilderRef arg0, LLVM
 public static native LLVMValueRef LLVMBuildArrayAlloca(LLVMBuilderRef arg0, LLVMTypeRef Ty,
                                   LLVMValueRef Val, String Name);
 public static native LLVMValueRef LLVMBuildFree(LLVMBuilderRef arg0, LLVMValueRef PointerVal);
+// LLVMBuildLoad is deprecated in favor of LLVMBuildLoad2, in preparation for
+// opaque pointer types.
 public static native LLVMValueRef LLVMBuildLoad(LLVMBuilderRef arg0, LLVMValueRef PointerVal,
                            @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildLoad(LLVMBuilderRef arg0, LLVMValueRef PointerVal,
                            String Name);
+public static native LLVMValueRef LLVMBuildLoad2(LLVMBuilderRef arg0, LLVMTypeRef Ty,
+                            LLVMValueRef PointerVal, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildLoad2(LLVMBuilderRef arg0, LLVMTypeRef Ty,
+                            LLVMValueRef PointerVal, String Name);
 public static native LLVMValueRef LLVMBuildStore(LLVMBuilderRef arg0, LLVMValueRef Val, LLVMValueRef Ptr);
+// LLVMBuildGEP, LLVMBuildInBoundsGEP, and LLVMBuildStructGEP are deprecated in
+// favor of LLVMBuild*GEP2, in preparation for opaque pointer types.
 public static native LLVMValueRef LLVMBuildGEP(LLVMBuilderRef B, LLVMValueRef Pointer,
                           @ByPtrPtr LLVMValueRef Indices, @Cast("unsigned") int NumIndices,
                           @Cast("const char*") BytePointer Name);
@@ -3917,6 +4269,24 @@ public static native LLVMValueRef LLVMBuildStructGEP(LLVMBuilderRef B, LLVMValue
                                 @Cast("unsigned") int Idx, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildStructGEP(LLVMBuilderRef B, LLVMValueRef Pointer,
                                 @Cast("unsigned") int Idx, String Name);
+public static native LLVMValueRef LLVMBuildGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                           LLVMValueRef Pointer, @ByPtrPtr LLVMValueRef Indices,
+                           @Cast("unsigned") int NumIndices, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                           LLVMValueRef Pointer, @Cast("LLVMValueRef*") PointerPointer Indices,
+                           @Cast("unsigned") int NumIndices, String Name);
+public static native LLVMValueRef LLVMBuildInBoundsGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                                   LLVMValueRef Pointer, @ByPtrPtr LLVMValueRef Indices,
+                                   @Cast("unsigned") int NumIndices, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildInBoundsGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                                   LLVMValueRef Pointer, @Cast("LLVMValueRef*") PointerPointer Indices,
+                                   @Cast("unsigned") int NumIndices, String Name);
+public static native LLVMValueRef LLVMBuildStructGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                                 LLVMValueRef Pointer, @Cast("unsigned") int Idx,
+                                 @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildStructGEP2(LLVMBuilderRef B, LLVMTypeRef Ty,
+                                 LLVMValueRef Pointer, @Cast("unsigned") int Idx,
+                                 String Name);
 public static native LLVMValueRef LLVMBuildGlobalString(LLVMBuilderRef B, @Cast("const char*") BytePointer Str,
                                    @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildGlobalString(LLVMBuilderRef B, String Str,
@@ -4003,14 +4373,22 @@ public static native LLVMValueRef LLVMBuildPointerCast(LLVMBuilderRef arg0, LLVM
                                   LLVMTypeRef DestTy, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildPointerCast(LLVMBuilderRef arg0, LLVMValueRef Val,
                                   LLVMTypeRef DestTy, String Name);
-public static native LLVMValueRef LLVMBuildIntCast(LLVMBuilderRef arg0, LLVMValueRef Val,
-                              LLVMTypeRef DestTy, @Cast("const char*") BytePointer Name);
-public static native LLVMValueRef LLVMBuildIntCast(LLVMBuilderRef arg0, LLVMValueRef Val,
-                              LLVMTypeRef DestTy, String Name);
+public static native LLVMValueRef LLVMBuildIntCast2(LLVMBuilderRef arg0, LLVMValueRef Val,
+                               LLVMTypeRef DestTy, @Cast("LLVMBool") int IsSigned,
+                               @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildIntCast2(LLVMBuilderRef arg0, LLVMValueRef Val,
+                               LLVMTypeRef DestTy, @Cast("LLVMBool") int IsSigned,
+                               String Name);
 public static native LLVMValueRef LLVMBuildFPCast(LLVMBuilderRef arg0, LLVMValueRef Val,
                              LLVMTypeRef DestTy, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildFPCast(LLVMBuilderRef arg0, LLVMValueRef Val,
                              LLVMTypeRef DestTy, String Name);
+
+/** Deprecated: This cast is always signed. Use LLVMBuildIntCast2 instead. */
+public static native LLVMValueRef LLVMBuildIntCast(LLVMBuilderRef arg0, LLVMValueRef Val,
+                              LLVMTypeRef DestTy, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildIntCast(LLVMBuilderRef arg0, LLVMValueRef Val,
+                              LLVMTypeRef DestTy, String Name);
 
 /* Comparisons */
 public static native LLVMValueRef LLVMBuildICmp(LLVMBuilderRef arg0, @Cast("LLVMIntPredicate") int Op,
@@ -4029,12 +4407,20 @@ public static native LLVMValueRef LLVMBuildFCmp(LLVMBuilderRef arg0, @Cast("LLVM
 /* Miscellaneous instructions */
 public static native LLVMValueRef LLVMBuildPhi(LLVMBuilderRef arg0, LLVMTypeRef Ty, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildPhi(LLVMBuilderRef arg0, LLVMTypeRef Ty, String Name);
+// LLVMBuildCall is deprecated in favor of LLVMBuildCall2, in preparation for
+// opaque pointer types.
 public static native LLVMValueRef LLVMBuildCall(LLVMBuilderRef arg0, LLVMValueRef Fn,
                            @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
                            @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildCall(LLVMBuilderRef arg0, LLVMValueRef Fn,
                            @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
                            String Name);
+public static native LLVMValueRef LLVMBuildCall2(LLVMBuilderRef arg0, LLVMTypeRef arg1, LLVMValueRef Fn,
+                            @ByPtrPtr LLVMValueRef Args, @Cast("unsigned") int NumArgs,
+                            @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildCall2(LLVMBuilderRef arg0, LLVMTypeRef arg1, LLVMValueRef Fn,
+                            @Cast("LLVMValueRef*") PointerPointer Args, @Cast("unsigned") int NumArgs,
+                            String Name);
 public static native LLVMValueRef LLVMBuildSelect(LLVMBuilderRef arg0, LLVMValueRef If,
                              LLVMValueRef Then, LLVMValueRef Else,
                              @Cast("const char*") BytePointer Name);
@@ -5088,7 +5474,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, 
  * \{
  */
 
-public static final int LTO_API_VERSION = 22;
+public static final int LTO_API_VERSION = 23;
 
 /**
  * @since prior to LTO_API_VERSION=3
@@ -5855,6 +6241,15 @@ public static native void thinlto_codegen_set_cache_size_bytes(thinlto_code_gen_
                                                  @Cast("unsigned") int max_size_bytes);
 
 /**
+ * Same as thinlto_codegen_set_cache_size_bytes, except the maximum size is in
+ * megabytes (2^20 bytes).
+ *
+ * @since LTO_API_VERSION=23
+ */
+public static native void thinlto_codegen_set_cache_size_megabytes(thinlto_code_gen_t cg,
+                                         @Cast("unsigned") int max_size_megabytes);
+
+/**
  * Sets the maximum number of files in the cache directory. An unspecified
  * default value will be applied. A value of 0 will be ignored.
  *
@@ -6270,16 +6665,20 @@ public static final int
     LLVMRelocDefault = 0,
     LLVMRelocStatic = 1,
     LLVMRelocPIC = 2,
-    LLVMRelocDynamicNoPic = 3;
+    LLVMRelocDynamicNoPic = 3,
+    LLVMRelocROPI = 4,
+    LLVMRelocRWPI = 5,
+    LLVMRelocROPI_RWPI = 6;
 
 /** enum LLVMCodeModel */
 public static final int
     LLVMCodeModelDefault = 0,
     LLVMCodeModelJITDefault = 1,
-    LLVMCodeModelSmall = 2,
-    LLVMCodeModelKernel = 3,
-    LLVMCodeModelMedium = 4,
-    LLVMCodeModelLarge = 5;
+    LLVMCodeModelTiny = 2,
+    LLVMCodeModelSmall = 3,
+    LLVMCodeModelKernel = 4,
+    LLVMCodeModelMedium = 5,
+    LLVMCodeModelLarge = 6;
 
 /** enum LLVMCodeGenFileType */
 public static final int
@@ -6723,7 +7122,7 @@ public static native void LLVMDisposeMCJITMemoryManager(LLVMMCJITMemoryManagerRe
 
 public static native LLVMJITEventListenerRef LLVMCreateGDBRegistrationListener();
 public static native LLVMJITEventListenerRef LLVMCreateIntelJITEventListener();
-
+public static native LLVMJITEventListenerRef LLVMCreateOProfileJITEventListener();
 public static native LLVMJITEventListenerRef LLVMCreatePerfJITEventListener();
 
 /**
@@ -6945,9 +7344,6 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 /** See llvm::createAggressiveDCEPass function. */
 public static native void LLVMAddAggressiveDCEPass(LLVMPassManagerRef PM);
 
-/** See llvm::createAggressiveInstCombinerPass function. */
-public static native void LLVMAddAggressiveInstCombinerPass(LLVMPassManagerRef PM);
-
 /** See llvm::createBitTrackingDCEPass function. */
 public static native void LLVMAddBitTrackingDCEPass(LLVMPassManagerRef PM);
 
@@ -7004,6 +7400,9 @@ public static native void LLVMAddLoopUnrollAndJamPass(LLVMPassManagerRef PM);
 
 /** See llvm::createLoopUnswitchPass function. */
 public static native void LLVMAddLoopUnswitchPass(LLVMPassManagerRef PM);
+
+/** See llvm::createLowerAtomicPass function. */
+public static native void LLVMAddLowerAtomicPass(LLVMPassManagerRef PM);
 
 /** See llvm::createMemCpyOptPass function. */
 public static native void LLVMAddMemCpyOptPass(LLVMPassManagerRef PM);
@@ -7062,6 +7461,9 @@ public static native void LLVMAddScopedNoAliasAAPass(LLVMPassManagerRef PM);
 
 /** See llvm::createBasicAliasAnalysisPass function */
 public static native void LLVMAddBasicAliasAnalysisPass(LLVMPassManagerRef PM);
+
+/** See llvm::createUnifyFunctionExitNodesPass function */
+public static native void LLVMAddUnifyFunctionExitNodesPass(LLVMPassManagerRef PM);
 
 /**
  * \}

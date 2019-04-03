@@ -40,5 +40,4 @@ public class BOX extends Pointer {
     public native @Cast("l_int32") int h(); public native BOX h(int h);
     /** reference count (1 if no clones)  */
     public native @Cast("l_uint32") int refcount(); public native BOX refcount(int refcount);
-
 }

@@ -51,7 +51,7 @@ import static org.bytedeco.leptonica.global.lept.*;
  *         struct PixaComp
  *
  *   (2) This file has definitions for:
- *         Colors for RGB
+ *         Colors for RGBA
  *         Colors for drawing boxes
  *         Perceptual color weights
  *         Colormap conversion flags
@@ -83,6 +83,7 @@ import static org.bytedeco.leptonica.global.lept.*;
  *         Flags for modifying box boundaries using a second box
  *         Handling overlapping bounding boxes in boxa
  *         Flags for replacing invalid boxes
+ *         Flags for box corners
  *         Horizontal warp
  *         Pixel selection for resampling
  *         Thinning flags
@@ -93,11 +94,12 @@ import static org.bytedeco.leptonica.global.lept.*;
  *         Region flags (inclusion, exclusion)
  *         Flags for adding text to a pix
  *         Flags for plotting on a pix
+ *         Flags for making simple masks
  *         Flags for selecting display program
  *         Flags in the 'special' pix field for non-default operations
  *         Handling negative values in conversion to unsigned int
  *         Relative to zero flags
- *         Flags for adding or removing traling slash from string
+ *         Flags for adding or removing trailing slash from string
  *
  *   (3) This file has typedefs for the pix allocator and deallocator functions
  *         alloc_fn()

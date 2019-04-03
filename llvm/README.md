@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 7.0.1  http://llvm.org/
+ * LLVM 8.0.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -46,7 +46,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>7.0.1-1.5-SNAPSHOT</version>
+            <version>8.0.0-1.5-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

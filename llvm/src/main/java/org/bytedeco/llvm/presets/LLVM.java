@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>", "<llvm-c/LinkTimeOptimizer.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
-    compiler = "cpp11", link = {"LLVM-7", "LTO"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
+    compiler = "cpp11", link = {"LLVM-8", "LTO"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
 public class LLVM implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
@@ -40,6 +40,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaqueValue").pointerTypes("LLVMValueRef"))
                .put(new Info("LLVMOpaqueBasicBlock").pointerTypes("LLVMBasicBlockRef"))
                .put(new Info("LLVMOpaqueMetadata").pointerTypes("LLVMMetadataRef"))
+               .put(new Info("LLVMOpaqueNamedMDNode").pointerTypes("LLVMNamedMDNodeRef"))
                .put(new Info("LLVMOpaqueBuilder").pointerTypes("LLVMBuilderRef"))
                .put(new Info("LLVMOpaqueModuleProvider").pointerTypes("LLVMModuleProviderRef"))
                .put(new Info("LLVMOpaqueMemoryBuffer").pointerTypes("LLVMMemoryBufferRef"))
@@ -71,6 +72,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMValueRef").valueTypes("LLVMValueRef").pointerTypes("@ByPtrPtr LLVMValueRef", "@Cast(\"LLVMValueRef*\") PointerPointer"))
                .put(new Info("LLVMBasicBlockRef").valueTypes("LLVMBasicBlockRef").pointerTypes("@ByPtrPtr LLVMBasicBlockRef", "@Cast(\"LLVMBasicBlockRef*\") PointerPointer"))
                .put(new Info("LLVMMetadataRef").valueTypes("LLVMMetadataRef").pointerTypes("@ByPtrPtr LLVMMetadataRef", "@Cast(\"LLVMMetadataRef*\") PointerPointer"))
+               .put(new Info("LLVMNamedMDNodeRef").valueTypes("LLVMNamedMDNodeRef").pointerTypes("@ByPtrPtr LLVMNamedMDNodeRef", "@Cast(\"LLVMNamedMDNodeRef*\") PointerPointer"))
                .put(new Info("LLVMBuilderRef").valueTypes("LLVMBuilderRef").pointerTypes("@ByPtrPtr LLVMBuilderRef", "@Cast(\"LLVMBuilderRef*\") PointerPointer"))
                .put(new Info("LLVMModuleProviderRef").valueTypes("LLVMModuleProviderRef").pointerTypes("@ByPtrPtr LLVMModuleProviderRef", "@Cast(\"LLVMModuleProviderRef*\") PointerPointer"))
                .put(new Info("LLVMMemoryBufferRef").valueTypes("LLVMMemoryBufferRef").pointerTypes("@ByPtrPtr LLVMMemoryBufferRef", "@Cast(\"LLVMMemoryBufferRef*\") PointerPointer"))

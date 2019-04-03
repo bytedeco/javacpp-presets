@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>leptonica</javacpp.moduleId>
-    <revision>1.77.0-${project.parent.version}</revision>
+    <revision>1.78.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

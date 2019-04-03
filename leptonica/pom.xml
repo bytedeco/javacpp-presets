@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for Leptonica</name>
 
   <properties>
-    <revision>1.77.0-${project.parent.version}</revision>
+    <revision>1.78.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

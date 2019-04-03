@@ -539,7 +539,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
  * compatible, thus CINDEX_VERSION_MAJOR is expected to remain stable.
  */
 public static final int CINDEX_VERSION_MAJOR = 0;
-public static final int CINDEX_VERSION_MINOR = 49;
+public static final int CINDEX_VERSION_MINOR = 50;
 
 // #define CINDEX_VERSION_ENCODE(major, minor) (
 //       ((major) * 10000)
@@ -610,7 +610,6 @@ public static final int
  */
 /** enum CXCursor_ExceptionSpecificationKind */
 public static final int
-
   /**
    * The cursor has no exception specification.
    */
@@ -1810,7 +1809,17 @@ public static final int
    *
    * The function bodies of the main file are not skipped.
    */
-  CXTranslationUnit_LimitSkipFunctionBodiesToPreamble = 0x800;
+  CXTranslationUnit_LimitSkipFunctionBodiesToPreamble = 0x800,
+
+  /**
+   * Used to indicate that attributed types should be included in CXType.
+   */
+  CXTranslationUnit_IncludeAttributedTypes = 0x1000,
+
+  /**
+   * Used to indicate that implicit attributes should be visited.
+   */
+  CXTranslationUnit_VisitImplicitAttributes = 0x2000;
 
 /**
  * Returns the set of flags that is suitable for parsing a translation
@@ -3138,7 +3147,25 @@ public static final int
   CXCursor_VisibilityAttr                = 417,
   CXCursor_DLLExport                     = 418,
   CXCursor_DLLImport                     = 419,
-  CXCursor_LastAttr                      = CXCursor_DLLImport,
+  CXCursor_NSReturnsRetained             = 420,
+  CXCursor_NSReturnsNotRetained          = 421,
+  CXCursor_NSReturnsAutoreleased         = 422,
+  CXCursor_NSConsumesSelf                = 423,
+  CXCursor_NSConsumed                    = 424,
+  CXCursor_ObjCException                 = 425,
+  CXCursor_ObjCNSObject                  = 426,
+  CXCursor_ObjCIndependentClass          = 427,
+  CXCursor_ObjCPreciseLifetime           = 428,
+  CXCursor_ObjCReturnsInnerPointer       = 429,
+  CXCursor_ObjCRequiresSuper             = 430,
+  CXCursor_ObjCRootClass                 = 431,
+  CXCursor_ObjCSubclassingRestricted     = 432,
+  CXCursor_ObjCExplicitProtocolImpl      = 433,
+  CXCursor_ObjCDesignatedInitializer     = 434,
+  CXCursor_ObjCRuntimeVisible            = 435,
+  CXCursor_ObjCBoxable                   = 436,
+  CXCursor_FlagEnum                      = 437,
+  CXCursor_LastAttr                      = CXCursor_FlagEnum,
 
   /* Preprocessing */
   CXCursor_PreprocessingDirective        = 500,
@@ -3808,7 +3835,25 @@ public static final int
   CXType_OCLSampler = 157,
   CXType_OCLEvent = 158,
   CXType_OCLQueue = 159,
-  CXType_OCLReserveID = 160;
+  CXType_OCLReserveID = 160,
+
+  CXType_ObjCObject = 161,
+  CXType_ObjCTypeParam = 162,
+  CXType_Attributed = 163,
+
+  CXType_OCLIntelSubgroupAVCMcePayload = 164,
+  CXType_OCLIntelSubgroupAVCImePayload = 165,
+  CXType_OCLIntelSubgroupAVCRefPayload = 166,
+  CXType_OCLIntelSubgroupAVCSicPayload = 167,
+  CXType_OCLIntelSubgroupAVCMceResult = 168,
+  CXType_OCLIntelSubgroupAVCImeResult = 169,
+  CXType_OCLIntelSubgroupAVCRefResult = 170,
+  CXType_OCLIntelSubgroupAVCSicResult = 171,
+  CXType_OCLIntelSubgroupAVCImeResultSingleRefStreamout = 172,
+  CXType_OCLIntelSubgroupAVCImeResultDualRefStreamout = 173,
+  CXType_OCLIntelSubgroupAVCImeSingleRefStreamin = 174,
+
+  CXType_OCLIntelSubgroupAVCImeDualRefStreamin = 175;
 
 /**
  * Describes the calling convention of a function type
@@ -3833,6 +3878,7 @@ public static final int
   CXCallingConv_Swift = 13,
   CXCallingConv_PreserveMost = 14,
   CXCallingConv_PreserveAll = 15,
+  CXCallingConv_AArch64VectorCall = 16,
 
   CXCallingConv_Invalid = 100,
   CXCallingConv_Unexposed = 200;
@@ -4163,6 +4209,43 @@ public static native int clang_getNumArgTypes(@ByVal CXType T);
 public static native @ByVal CXType clang_getArgType(@ByVal CXType T, @Cast("unsigned") int i);
 
 /**
+ * Retrieves the base type of the ObjCObjectType.
+ *
+ * If the type is not an ObjC object, an invalid type is returned.
+ */
+public static native @ByVal CXType clang_Type_getObjCObjectBaseType(@ByVal CXType T);
+
+/**
+ * Retrieve the number of protocol references associated with an ObjC object/id.
+ *
+ * If the type is not an ObjC object, 0 is returned.
+ */
+public static native @Cast("unsigned") int clang_Type_getNumObjCProtocolRefs(@ByVal CXType T);
+
+/**
+ * Retrieve the decl for a protocol reference for an ObjC object/id.
+ *
+ * If the type is not an ObjC object or there are not enough protocol
+ * references, an invalid cursor is returned.
+ */
+public static native @ByVal CXCursor clang_Type_getObjCProtocolDecl(@ByVal CXType T, @Cast("unsigned") int i);
+
+/**
+ * Retreive the number of type arguments associated with an ObjC object.
+ *
+ * If the type is not an ObjC object, 0 is returned.
+ */
+public static native @Cast("unsigned") int clang_Type_getNumObjCTypeArgs(@ByVal CXType T);
+
+/**
+ * Retrieve a type argument associated with an ObjC object.
+ *
+ * If the type is not an ObjC or the index is not valid,
+ * an invalid type is returned.
+ */
+public static native @ByVal CXType clang_Type_getObjCTypeArg(@ByVal CXType T, @Cast("unsigned") int i);
+
+/**
  * Return 1 if the CXType is a variadic function type, and 0 otherwise.
  */
 public static native @Cast("unsigned") int clang_isFunctionTypeVariadic(@ByVal CXType T);
@@ -4234,6 +4317,33 @@ public static native @ByVal CXType clang_Type_getNamedType(@ByVal CXType T);
  * @return non-zero if transparent and zero otherwise.
  */
 public static native @Cast("unsigned") int clang_Type_isTransparentTagTypedef(@ByVal CXType T);
+
+/** enum CXTypeNullabilityKind */
+public static final int
+  /**
+   * Values of this type can never be null.
+   */
+  CXTypeNullability_NonNull = 0,
+  /**
+   * Values of this type can be null.
+   */
+  CXTypeNullability_Nullable = 1,
+  /**
+   * Whether values of this type can be null is (explicitly)
+   * unspecified. This captures a (fairly rare) case where we
+   * can't conclude anything about the nullability of the type even
+   * though it has been considered.
+   */
+  CXTypeNullability_Unspecified = 2,
+  /**
+   * Nullability is not applicable to this type.
+   */
+  CXTypeNullability_Invalid = 3;
+
+/**
+ * Retrieve the nullability kind of a pointer type.
+ */
+public static native @Cast("CXTypeNullabilityKind") int clang_Type_getNullability(@ByVal CXType T);
 
 /**
  * List the possible error codes for \c clang_Type_getSizeOf,
@@ -4313,6 +4423,13 @@ public static native long clang_Type_getSizeOf(@ByVal CXType T);
  */
 public static native long clang_Type_getOffsetOf(@ByVal CXType T, @Cast("const char*") BytePointer S);
 public static native long clang_Type_getOffsetOf(@ByVal CXType T, String S);
+
+/**
+ * Return the type that was modified by this attributed type.
+ *
+ * If the type is not an attributed type, an invalid type is returned.
+ */
+public static native @ByVal CXType clang_Type_getModifiedType(@ByVal CXType T);
 
 /**
  * Return the offset of the field represented by the Cursor.
@@ -4855,6 +4972,18 @@ public static final int
  */
 public static native @Cast("unsigned") int clang_Cursor_getObjCPropertyAttributes(@ByVal CXCursor C,
                                                              @Cast("unsigned") int reserved);
+
+/**
+ * Given a cursor that represents a property declaration, return the
+ * name of the method that implements the getter.
+ */
+public static native @ByVal CXString clang_Cursor_getObjCPropertyGetterName(@ByVal CXCursor C);
+
+/**
+ * Given a cursor that represents a property declaration, return the
+ * name of the method that implements the setter, if any.
+ */
+public static native @ByVal CXString clang_Cursor_getObjCPropertySetterName(@ByVal CXCursor C);
 
 /**
  * 'Qualifiers' written next to the return and parameter types in
@@ -5948,9 +6077,14 @@ public static final int
   CXCompletionContext_NaturalLanguage = 1 << 21,
 
   /**
+   * #include file completions should be included in the results.
+   */
+  CXCompletionContext_IncludedFile = 1 << 22,
+
+  /**
    * The current context is unknown, so set all contexts.
    */
-  CXCompletionContext_Unknown = ((1 << 22) - 1);
+  CXCompletionContext_Unknown = ((1 << 23) - 1);
 
 /**
  * Returns a default set of code-completion options that can be
