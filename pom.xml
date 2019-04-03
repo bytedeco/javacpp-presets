@@ -594,6 +594,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1251,6 +1252,7 @@
         <module>gsl</module>
         <module>llvm</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1316,6 +1318,7 @@
         <module>gsl</module>
         <module>llvm</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1436,6 +1439,7 @@
         <module>fftw</module>
         <module>gsl</module>
         <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>

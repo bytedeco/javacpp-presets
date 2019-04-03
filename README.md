@@ -127,6 +127,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.6.x  https://www.python.org/downloads/
+ * NumPy 1.16.2  https://github.com/numpy/numpy
  * LLVM 7.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.77.0  http://www.leptonica.org/download.html

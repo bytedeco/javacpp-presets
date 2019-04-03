@@ -36,6 +36,7 @@
     <module>../fftw/platform</module>
     <module>../gsl/platform</module>
     <module>../cpython/platform</module>
+    <module>../numpy/platform</module>
     <module>../llvm/platform</module>
     <module>../libpostal/platform</module>
     <module>../leptonica/platform</module>
@@ -166,6 +167,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
       <version>3.6-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>numpy-platform</artifactId>
+      <version>1.16.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

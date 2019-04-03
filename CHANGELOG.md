@@ -11,7 +11,7 @@
  * Add basic mapping of stdio streams to presets for GSL since it relies on them for serialization
  * Fix crash in Leptonica on CentOS 6 by downgrading to libpng 1.5.30 ([issue #680](https://github.com/bytedeco/javacpp-presets/issues/680))
  * Add `GetComponentImagesExample`, `IteratorOverClassifierChoicesExample`, `OrientationAndScriptDetectionExample`, and `ResultIteratorExample` for Tesseract ([pull #673](https://github.com/bytedeco/javacpp-presets/pull/673) and [pull #675](https://github.com/bytedeco/javacpp-presets/pull/675))
- * Add presets for NCCL 2.4.2, nGraph 0.15.0 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12.2 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674)), and cpu_features 0.2.0 ([issue #526](https://github.com/bytedeco/javacpp-presets/issues/526))
+ * Add presets for NumPy 1.16.2, NCCL 2.4.2, nGraph 0.15.0 ([pull #642](https://github.com/bytedeco/javacpp-presets/pull/642)), Qt 5.12.2 ([pull #674](https://github.com/bytedeco/javacpp-presets/pull/674)), and cpu_features 0.2.0 ([issue #526](https://github.com/bytedeco/javacpp-presets/issues/526))
  * Upgrade presets for FFmpeg 4.1.2, libfreenect 0.5.7, HDF5 1.10.5, MKL 2019.3, MKL-DNN 0.18.1, ARPACK-NG 3.7.0, CUDA 10.1, cuDNN 7.5, MXNet 1.4.0, TensorFlow 1.13.1, TensorRT 5.1, ONNX 1.4.1 ([pull #676](https://github.com/bytedeco/javacpp-presets/pull/676)), LiquidFun, Skia 1.68.0, and their dependencies including NCCL
  * Build OpenCV without UI when environment variable `HEADLESS=yes` ([pull #667](https://github.com/bytedeco/javacpp-presets/pull/667))
 
