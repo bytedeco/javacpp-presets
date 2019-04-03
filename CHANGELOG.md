@@ -1,4 +1,5 @@
 
+ * Include `setlocale()` in presets for Tesseract to work around issues with locale ([issue #694](https://github.com/bytedeco/javacpp-presets/issues/694))
  * Bundle the `python` program, executable via `Loader.load()` for convenience
  * Bundle Vector Mathematical Library (VML) in redist artifacts of the presets for MKL ([issue #705](https://github.com/bytedeco/javacpp-presets/issues/705))
  * Add `org.bytedeco.tensorflow.StringArray.put(BytePointer)` method to change character encoding ([issue bytedeco/javacpp#293](https://github.com/bytedeco/javacpp/issues/293))

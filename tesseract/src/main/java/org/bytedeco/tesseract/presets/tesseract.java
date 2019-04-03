@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,8 +22,11 @@
 
 package org.bytedeco.tesseract.presets;
 
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.annotation.MemberGetter;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
@@ -37,13 +40,14 @@ import org.bytedeco.leptonica.presets.lept;
 @Properties(target = "org.bytedeco.tesseract", global = "org.bytedeco.tesseract.global.tesseract", inherit = lept.class, value = {
     @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
-        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"},
+        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
         compiler = "cpp11", link = "tesseract@.4"/*, resource = {"include", "lib"}*/),
     @Platform(value = "android", link = "tesseract"),
     @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-4") })
 public class tesseract implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",
+        infoMap.put(new Info("locale.h").skip())
+               .put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",
                              "TESS_API", "TESS_LOCAL", "_TESS_FILE_BASENAME_", "TESS_CALL").cppTypes().annotations().cppText(""))
                .put(new Info("STRING_IS_PROTECTED").define(false))
                .put(new Info("BOOL").cast().valueTypes("boolean").pointerTypes("BoolPointer").define())
@@ -103,4 +107,14 @@ public class tesseract implements InfoMapper {
                              "tesseract::ResultIterator::kComplexWord", "tesseract::ResultIterator::kMinorRunEnd", "tesseract::ResultIterator::kMinorRunStart",
                              "UNICHAR::utf8_step", "UNICHAR::utf8_str", "UNICHAR::first_uni", "UNICHAR::UNICHAR(char*, int)", "UNICHAR::UNICHAR(int)").skip());
     }
+
+    public static native @MemberGetter int LC_ALL();
+    public static native @MemberGetter int LC_COLLATE();
+    public static native @MemberGetter int LC_CTYPE();
+    public static native @MemberGetter int LC_MONETARY();
+    public static native @MemberGetter int LC_NUMERIC();
+    public static native @MemberGetter int LC_TIME();
+
+    public static native String setlocale(int category, String locale);
+    public static native @Cast("char*") BytePointer setlocale(int category, @Cast("const char*") BytePointer locale);
 }
