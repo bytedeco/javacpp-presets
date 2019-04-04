@@ -167,13 +167,13 @@ public class SystemTrayIconExample {
       iconComboBox = new QComboBox();
       try {
         iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
-            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/bad.png")).getAbsolutePath())),
+            "https://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/bad.png")).getAbsolutePath())),
             tr("Bad"));
         iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
-            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/heart.png")).getAbsolutePath())),
+            "https://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/heart.png")).getAbsolutePath())),
             tr("Heart"));
         iconComboBox.addItem(new QIcon(QString.fromStdString(Loader.cacheResource(new URL(
-            "http://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/trash.png")).getAbsolutePath())),
+            "https://code.qt.io/cgit/qt/qtbase.git/plain/examples/widgets/desktop/systray/images/trash.png")).getAbsolutePath())),
             tr("Trash"));
       } catch (IOException e) {
         e.printStackTrace();
