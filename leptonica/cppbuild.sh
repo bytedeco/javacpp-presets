@@ -71,7 +71,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --disable-zstd --without-x
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -110,7 +110,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --disable-zstd --without-x
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -149,7 +149,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --disable-zstd --without-x
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -187,7 +187,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --disable-zstd --without-x
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -224,7 +224,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -259,7 +259,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -296,7 +296,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --disable-zstd --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -333,7 +333,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=aarch64-linux-gnu
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --disable-zstd --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -377,7 +377,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BFLAGS --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -412,7 +412,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -446,7 +446,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
@@ -479,7 +479,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 --disable-lzma
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 --disable-lzma --disable-zstd
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP

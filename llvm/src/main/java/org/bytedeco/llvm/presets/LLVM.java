@@ -99,6 +99,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMPassManagerBuilderRef").valueTypes("LLVMPassManagerBuilderRef").pointerTypes("@ByPtrPtr LLVMPassManagerBuilderRef", "@Cast(\"LLVMPassManagerBuilderRef*\") PointerPointer"))
 
                .put(new Info("defined(_MSC_VER) && !defined(inline)").define(false))
-               .put(new Info("LLVMDumpType", "LLVMCreateOprofileJITEventListener", "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer").skip());
+               .put(new Info("LLVMDumpType", "LLVMConstGEP2", "LLVMConstInBoundsGEP2", "LLVMCreateOprofileJITEventListener",
+                             "llvm_optimize_modules", "llvm_destroy_optimizer", "llvm_read_object_file", "llvm_create_optimizer").skip());
     }
 }

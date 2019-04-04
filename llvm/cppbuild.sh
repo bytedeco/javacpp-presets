@@ -22,6 +22,7 @@ cd tools
 tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz || tar --totals -xf ../../../cfe-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
+sedinplace '/Generating libLLVM is not supported on MSVC/d' llvm-shlib/CMakeLists.txt
 cd ../build
 
 case $PLATFORM in
@@ -52,7 +53,7 @@ case $PLATFORM in
         make install > /dev/null
         ;;
     windows-x86)
-        $CMAKE -G "Visual Studio 14 2015" -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
+        $CMAKE -G "Visual Studio 14 2015" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd Release/lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
@@ -67,7 +68,7 @@ case $PLATFORM in
         cd ../llvm-$LLVM_VERSION.src/build
         ;;
     windows-x86_64)
-        $CMAKE -G "Visual Studio 14 2015 Win64" -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
+        $CMAKE -G "Visual Studio 14 2015 Win64" -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON -Thost=x64 -DLLVM_USE_CRT_RELEASE=MD -DCMAKE_INSTALL_PREFIX=../.. -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLLVM_ENABLE_DIA_SDK=OFF -DLIBXML2_LIBRARIES= -DLLVM_INCLUDE_TESTS=OFF -DPYTHON_EXECUTABLE="C:/Python27/python.exe" ..
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
         cd Release/lib/
         [ -f LLVM.lib ] || lib.exe /OUT:LLVM.lib LLVM*.lib
