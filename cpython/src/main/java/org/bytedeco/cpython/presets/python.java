@@ -183,7 +183,7 @@ public class python implements InfoMapper {
                              "!defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
-               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD").define(true))
+               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD").cppTypes().define(true))
 
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX",
                              "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T",
