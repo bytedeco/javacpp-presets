@@ -43,8 +43,9 @@ import org.bytedeco.javacpp.tools.InfoMap;
                 "QGuiApplication"
             },
             link = "Qt5Gui@.5",
-            preload = {"Qt5DBus@.5", "Qt5Gui@.5", "Qt5XcbQpa@.5", "qmacstyle", "qgtk3", "qxdgdesktopportal",
-                       "qcocoa", "qxcb", "qlinuxfb", "qminimalegl", "qminimal", "qoffscreen",
+            preload = {"Qt5DBus@.5", "Qt5Gui@.5", "Qt5XcbQpa@.5", "Qt5Widgets@.5", "Qt5PrintSupport@.5",
+                       "qmacstyle", "qcocoa", "cocoaprintersupport", "qgtk3", "qxdgdesktopportal",
+                       "qxcb", "qlinuxfb", "qminimalegl", "qminimal", "qoffscreen",
                        "composeplatforminputcontextplugin", "ibusplatforminputcontextplugin",
                        "qxcb-egl-integration", "qxcb-glx-integration", "qgif", "qico", "qjpeg",
                        "qevdevkeyboardplugin", "qevdevmouseplugin", "qevdevtabletplugin", "qevdevtouchplugin"}
