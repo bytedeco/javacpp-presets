@@ -55,6 +55,8 @@ case $PLATFORM in
         export PYTHONPATH=$INSTALL_PATH/lib/python3.6/site-packages
         mkdir -p $PYTHONPATH
         python3 setup.py build -j $MAKEJ install --prefix $INSTALL_PATH
+        # need to add RPATH so it can find MKL in cache
+        for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
         ;;
     windows-*)
         export PYTHONPATH=$INSTALL_PATH/lib/site-packages
