@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5-SNAPSHOT</version>
+  <version>1.5</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -1250,9 +1250,9 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
-        <module>llvm</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1316,9 +1316,9 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
-        <module>llvm</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
         <module>tesseract</module>

@@ -22,10 +22,9 @@
 
 package org.bytedeco.opencv;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-
-import org.bytedeco.javacpp.Loader;
 
 import org.bytedeco.opencv.presets.*;
 

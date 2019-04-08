@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.13.1-1.5-SNAPSHOT</version>
+            <version>1.13.1-1.5</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5-SNAPSHOT</version>
+            <version>1.13.1-1.5</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5-SNAPSHOT</version>
+            <version>1.13.1-1.5</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5-SNAPSHOT</version>
+            <version>1.13.1-1.5</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
@@ -71,19 +71,19 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5-SNAPSHOT</version>
+            <version>10.1-7.5-1.5</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 
