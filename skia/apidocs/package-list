@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.skia
+org.bytedeco.skia.global
+org.bytedeco.skia.presets

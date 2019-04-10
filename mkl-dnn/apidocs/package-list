@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.mkldnn
+org.bytedeco.mkldnn.global
+org.bytedeco.mkldnn.presets

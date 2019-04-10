@@ -1,2 +1,11 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.ffmpeg
+org.bytedeco.ffmpeg.avcodec
+org.bytedeco.ffmpeg.avdevice
+org.bytedeco.ffmpeg.avfilter
+org.bytedeco.ffmpeg.avformat
+org.bytedeco.ffmpeg.avutil
+org.bytedeco.ffmpeg.global
+org.bytedeco.ffmpeg.postproc
+org.bytedeco.ffmpeg.presets
+org.bytedeco.ffmpeg.swresample
+org.bytedeco.ffmpeg.swscale

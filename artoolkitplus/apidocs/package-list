@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.artoolkitplus
+org.bytedeco.artoolkitplus.global
+org.bytedeco.artoolkitplus.presets

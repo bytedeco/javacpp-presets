@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.spinnaker.Spinnaker_C
+org.bytedeco.spinnaker.global
+org.bytedeco.spinnaker.presets

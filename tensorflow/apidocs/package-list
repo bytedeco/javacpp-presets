@@ -1,6 +1,6 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.helper
-org.bytedeco.javacpp.presets
+org.bytedeco.tensorflow
+org.bytedeco.tensorflow.global
+org.bytedeco.tensorflow.presets
 org.tensorflow
 org.tensorflow.contrib.android
 org.tensorflow.examples

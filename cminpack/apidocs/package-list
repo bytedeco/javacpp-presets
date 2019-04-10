@@ -1,2 +1,2 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.cminpack.global
+org.bytedeco.cminpack.presets

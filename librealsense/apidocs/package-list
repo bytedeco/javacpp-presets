@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.librealsense
+org.bytedeco.librealsense.global
+org.bytedeco.librealsense.presets

@@ -1,2 +1,4 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.flycapture.FlyCapture2
+org.bytedeco.flycapture.FlyCapture2_C
+org.bytedeco.flycapture.global
+org.bytedeco.flycapture.presets

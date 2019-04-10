@@ -1,2 +1,3 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.caffe
+org.bytedeco.caffe.global
+org.bytedeco.caffe.presets

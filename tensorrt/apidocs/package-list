@@ -1,2 +1,5 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.tensorrt.global
+org.bytedeco.tensorrt.nvinfer
+org.bytedeco.tensorrt.nvinfer_plugin
+org.bytedeco.tensorrt.nvparsers
+org.bytedeco.tensorrt.presets

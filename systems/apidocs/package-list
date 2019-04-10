@@ -1,2 +1,5 @@
-org.bytedeco.javacpp
-org.bytedeco.javacpp.presets
+org.bytedeco.systems.global
+org.bytedeco.systems.linux
+org.bytedeco.systems.macosx
+org.bytedeco.systems.presets
+org.bytedeco.systems.windows

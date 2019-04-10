@@ -1,0 +1,6 @@
+org.bytedeco.qt.Qt5Core
+org.bytedeco.qt.Qt5Gui
+org.bytedeco.qt.Qt5Widgets
+org.bytedeco.qt.global
+org.bytedeco.qt.helper
+org.bytedeco.qt.presets
