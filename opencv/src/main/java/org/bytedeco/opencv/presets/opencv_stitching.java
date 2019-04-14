@@ -40,17 +40,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
             "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
             "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-            link = "opencv_stitching@.4.0", preload = {"opencv_cuda@.4.0", "opencv_cudaarithm@.4.0", "opencv_cudafilters@.4.0",
-            "opencv_cudaimgproc@.4.0", "opencv_cudafeatures2d@.4.0", "opencv_cudalegacy@.4.0", "opencv_cudawarping@.4.0"}),
+            link = "opencv_stitching@.4.1", preload = {"opencv_cuda@.4.1", "opencv_cudaarithm@.4.1", "opencv_cudafilters@.4.1",
+            "opencv_cudaimgproc@.4.1", "opencv_cudafeatures2d@.4.1", "opencv_cudalegacy@.4.1", "opencv_cudawarping@.4.1"}),
         @Platform(value = "ios", preload = "libopencv_stitching"),
-        @Platform(value = "windows", link = "opencv_stitching401", preload = {"opencv_cuda401", "opencv_cudaarithm401", "opencv_cudafilters401",
-            "opencv_cudaimgproc401", "opencv_cudafeatures2d401", "opencv_cudalegacy401", "opencv_cudawarping401"})},
+        @Platform(value = "windows", link = "opencv_stitching410", preload = {"opencv_cuda410", "opencv_cudaarithm410", "opencv_cudafilters410",
+            "opencv_cudaimgproc410", "opencv_cudafeatures2d410", "opencv_cudalegacy410", "opencv_cudawarping410"})},
     target = "org.bytedeco.opencv.opencv_stitching",
     global = "org.bytedeco.opencv.global.opencv_stitching"
 )
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("override").annotations()) // we are not exposing all subclasses, so disable override annotation
+               .put(new Info("cv::detail::BlocksCompensator").purify())
                .put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalWarper").pointerTypes("DetailSphericalWarper").base("RotationWarper"))
                .put(new Info("cv::detail::CylindricalWarper").pointerTypes("DetailCylindricalWarper").base("RotationWarper"))

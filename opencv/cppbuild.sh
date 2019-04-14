@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.0.1
+OPENCV_VERSION=4.1.0
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -22,7 +22,6 @@ cd opencv_contrib-$OPENCV_VERSION
 patch -Np1 < ../../../opencv_contrib.patch
 
 cd ../opencv-$OPENCV_VERSION
-patch -Np1 < ../../../opencv-cuda.patch
 patch -Np1 < ../../../opencv.patch
 
 # work around the toolchain for Android not supporting Clang with libc++ properly
