@@ -1,4 +1,6 @@
 
+ * Upgrade presets for OpenCV 4.1.0
+
 ### April 11, 2019 version 1.5
  * Include `setlocale()` in presets for Tesseract to work around issues with locale ([issue #694](https://github.com/bytedeco/javacpp-presets/issues/694))
  * Bundle the `python` program, executable via `Loader.load()` for convenience

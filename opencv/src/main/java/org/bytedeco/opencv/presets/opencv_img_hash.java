@@ -42,10 +42,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<opencv2/img_hash/phash.hpp>",
                 "<opencv2/img_hash/radial_variance_hash.hpp>",
             },
-            link = "opencv_img_hash@.4.0"
+            link = "opencv_img_hash@.4.1"
         ),
         @Platform(value = "ios", preload = "libopencv_img_hash"),
-        @Platform(value = "windows", link = "opencv_img_hash401")
+        @Platform(value = "windows", link = "opencv_img_hash410")
     },
     target = "org.bytedeco.opencv.opencv_img_hash",
     global = "org.bytedeco.opencv.global.opencv_img_hash"
