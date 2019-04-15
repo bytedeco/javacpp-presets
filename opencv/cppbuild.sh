@@ -23,6 +23,7 @@ patch -Np1 < ../../../opencv_contrib.patch
 
 cd ../opencv-$OPENCV_VERSION
 patch -Np1 < ../../../opencv.patch
+patch -Np1 < ../../../opencv-linux-ppc64le.patch
 
 # work around the toolchain for Android not supporting Clang with libc++ properly
 sedinplace '/include_directories/d' platforms/android/android.toolchain.cmake

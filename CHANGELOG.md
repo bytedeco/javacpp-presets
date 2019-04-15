@@ -1,4 +1,5 @@
 
+ * Add presets for the `quality` module of OpenCV
  * Upgrade presets for OpenCV 4.1.0
 
 ### April 11, 2019 version 1.5
