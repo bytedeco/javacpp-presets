@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ import org.bytedeco.opencv.presets.*;
     value = {
         @Platform(preload = {"opencv_cuda@.4.1", "opencv_cudaarithm@.4.1", "opencv_cudafilters@.4.1", "opencv_cudaimgproc@.4.1", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda400", "opencv_cudaarithm400", "opencv_cudafilters400", "opencv_cudaimgproc400", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda410", "opencv_cudaarithm410", "opencv_cudafilters410", "opencv_cudaimgproc410", "opencv_java"}),
     }
 )
 public class opencv_java {
