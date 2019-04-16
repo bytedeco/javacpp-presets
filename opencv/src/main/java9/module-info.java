@@ -4,6 +4,7 @@ module org.bytedeco.opencv {
 
   exports org.bytedeco.opencv;
   exports org.bytedeco.opencv.global;
+  exports org.bytedeco.opencv.presets to org.bytedeco.javacpp;
   exports org.bytedeco.opencv.opencv_aruco;
   exports org.bytedeco.opencv.opencv_bgsegm;
   exports org.bytedeco.opencv.opencv_bioinspired;
