@@ -14,6 +14,22 @@ download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
+
+OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -f "$P/include/openblas_config.h" ]]; then
+            OPENBLAS_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
+export OpenBLAS_HOME=$OPENBLAS_PATH
+
 echo "Decompressing archives..."
 tar --totals -xzf ../opencv-$OPENCV_VERSION.tar.gz
 tar --totals -xzf ../opencv_contrib-$OPENCV_VERSION.tar.gz
@@ -51,7 +67,7 @@ sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/col
 BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
-WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=OFF -DWITH_OPENCL=ON -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON"
+WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON"
 
 # support headless
 if [[ "${HEADLESS:-no}" == "yes" ]]; then

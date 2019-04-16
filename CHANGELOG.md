@@ -1,4 +1,5 @@
 
+ * Link OpenCV with OpenBLAS/MKL to accelerate some matrix operations
  * Add presets for the `quality` module of OpenCV
  * Upgrade presets for OpenCV 4.1.0
 

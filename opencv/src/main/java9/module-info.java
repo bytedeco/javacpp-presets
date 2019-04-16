@@ -1,5 +1,6 @@
 module org.bytedeco.opencv {
   requires transitive org.bytedeco.javacpp;
+  requires transitive org.bytedeco.openblas;
 
   exports org.bytedeco.opencv;
   exports org.bytedeco.opencv.global;
@@ -29,6 +30,7 @@ module org.bytedeco.opencv {
   exports org.bytedeco.opencv.opencv_phase_unwrapping;
   exports org.bytedeco.opencv.opencv_photo;
   exports org.bytedeco.opencv.opencv_plot;
+  exports org.bytedeco.opencv.opencv_quality;
   exports org.bytedeco.opencv.opencv_saliency;
   exports org.bytedeco.opencv.opencv_shape;
   exports org.bytedeco.opencv.opencv_stitching;
