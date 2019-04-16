@@ -1,4 +1,5 @@
 
+ * Load the symbols from the `python` library globally as often required by Python libraries ([issue ContinuumIO/anaconda-issues#6401](https://github.com/ContinuumIO/anaconda-issues/issues/6401))
  * Link OpenCV with OpenBLAS/MKL to accelerate some matrix operations
  * Add presets for the `quality` module of OpenCV
  * Upgrade presets for OpenCV 4.1.0
