@@ -120,13 +120,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "fileutils.h",
 //                "pyfpe.h",
             },
-            link = "python3.6m@.1.0"
+            link = "python3.6m@.1.0!"
         ),
         @Platform(
             value = "macosx",
             includepath = "/Library/Frameworks/Python.framework/Versions/3.6/Headers/",
             linkpath = "/Library/Frameworks/Python.framework/Versions/3.6/lib/",
-            link = "python3.6"
+            link = "python3.6!"
         ),
         @Platform(
             value = "windows",
