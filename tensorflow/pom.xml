@@ -86,6 +86,8 @@
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_absl/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/zlib_archive/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/grpc/include/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/farmhash_archive/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/nsync/public/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/protobuf_archive/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
@@ -93,6 +95,8 @@
             <includePath>${tensorflow.path}/../build/</includePath>
             <includePath>${tensorflow.path}/../build/abseil/src/abseil/</includePath>
             <includePath>${tensorflow.path}/../build/zlib/src/zlib/</includePath>
+            <includePath>${tensorflow.path}/../build/grpc/src/grpc/src/</includePath>
+            <includePath>${tensorflow.path}/../build/farmhash/src/farmhash/src/</includePath>
             <includePath>${tensorflow.path}/../build/nsync/src/nsync/public/</includePath>
             <includePath>${tensorflow.path}/../build/protobuf/src/protobuf/src/</includePath>
             <includePath>${tensorflow.path}/../build/eigen/src/eigen/</includePath>
