@@ -132,13 +132,10 @@ import java.util.List;
                         "tensorflow/core/util/tensor_slice_util.h",
                         "tensorflow/core/util/tensor_slice_reader.h",
                         "tensorflow/core/util/tensor_bundle/tensor_bundle.h",
-                        "tensorflow/core/protobuf/tensorflow_server.pb.h",
-                        "tensorflow/core/distributed_runtime/server_lib.h",
                         "tensorflow/c/tf_status_helper.h",
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
-                        "tensorflow/c/python_api.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -165,17 +162,33 @@ import java.util.List;
                         "tensorflow/core/graph/default_device.h",
                         "tensorflow/core/graph/graph_constructor.h",
                         "tensorflow/core/graph/gradients.h",
+                        "tensorflow/core/protobuf/saver.pb.h",
+                        "tensorflow/core/protobuf/meta_graph.pb.h",
+                        "tensorflow_adapters.h",
+
                         "tensorflow/cc/framework/scope.h",
                         "tensorflow/cc/framework/ops.h",
                         "tensorflow/core/framework/op_gen_lib.h",
 //                        "tensorflow/cc/framework/cc_op_gen.h",
                         "tensorflow/cc/framework/gradients.h",
-                        "tensorflow/core/protobuf/saver.pb.h",
-                        "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow/cc/saved_model/loader.h",
                         "tensorflow/cc/saved_model/tag_constants.h",
                         "tensorflow/cc/saved_model/signature_constants.h",
-                        "tensorflow_adapters.h",
+                        "tensorflow/core/framework/collective.h",
+                        "tensorflow/core/platform/fingerprint.h",
+                        "tensorflow/core/distributed_runtime/server_lib.h",
+                        "tensorflow/core/distributed_runtime/eager/eager_client.h",
+                        "tensorflow/core/protobuf/eager_service.pb.h",
+                        "tensorflow/core/protobuf/tensorflow_server.pb.h",
+                        "tensorflow/core/common_runtime/eager/attr_builder.h",
+                        "tensorflow/core/common_runtime/eager/context.h",
+                        "tensorflow/core/common_runtime/eager/eager_executor.h",
+                        "tensorflow/core/common_runtime/eager/eager_operation.h",
+                        "tensorflow/core/common_runtime/eager/kernel_and_device.h",
+                        "tensorflow/core/common_runtime/eager/tensor_handle.h",
+                        "tensorflow/c/eager/c_api.h",
+                        "tensorflow/c/eager/c_api_internal.h",
+                        "tensorflow/c/python_api.h",
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",
                         "tensorflow/cc/ops/array_ops.h",
@@ -446,6 +459,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::unordered_set<tensorflow::string>").pointerTypes("StringUnorderedSet").define())
                .put(new Info("std::vector<tensorflow::StringPiece>").pointerTypes("StringPieceVector").define())
                .put(new Info("std::vector<std::string>", "std::vector<tensorflow::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntIntVector").define())
                .put(new Info("std::vector<std::pair<unsigned,unsigned> >").pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
                .put(new Info("std::condition_variable", "std::mutex", "std::type_info", "std::unique_lock<std::mutex>", "Eigen::Allocator",
@@ -536,7 +550,13 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::RewriterConfig_CustomGraphOptimizer_ParameterMapEntryDefaultTypeInternal", "tensorflow::ScopedAllocatorOptionsDefaultTypeInternal",
                              "tensorflow::ConfigProto_ExperimentalDefaultTypeInternal", "tensorflow::RunOptions_ExperimentalDefaultTypeInternal",
                              "tensorflow::KernelDefDefaultTypeInternal", "tensorflow::KernelListDefaultTypeInternal", "tensorflow::KernelDef_AttrConstraintDefaultTypeInternal",
-                             "tensorflow::NodeDef_ExperimentalDebugInfoDefaultTypeInternal", "tensorflow::ServerDefDefaultTypeInternal").skip())
+                             "tensorflow::NodeDef_ExperimentalDebugInfoDefaultTypeInternal", "tensorflow::ServerDefDefaultTypeInternal", "tensorflow::eager::CloseContextRequestDefaultTypeInternal",
+                             "tensorflow::eager::CloseContextResponseDefaultTypeInternal", "tensorflow::eager::CreateContextRequestDefaultTypeInternal", "tensorflow::eager::CreateContextResponseDefaultTypeInternal",
+                             "tensorflow::eager::EnqueueRequestDefaultTypeInternal", "tensorflow::eager::EnqueueResponseDefaultTypeInternal", "tensorflow::eager::KeepAliveRequestDefaultTypeInternal",
+                             "tensorflow::eager::KeepAliveResponseDefaultTypeInternal", "tensorflow::eager::OperationDefaultTypeInternal", "tensorflow::eager::Operation_AttrsEntry_DoNotUseDefaultTypeInternal",
+                             "tensorflow::eager::QueueItemDefaultTypeInternal", "tensorflow::eager::QueueResponseDefaultTypeInternal", "tensorflow::eager::RegisterFunctionRequestDefaultTypeInternal",
+                             "tensorflow::eager::RegisterFunctionResponseDefaultTypeInternal", "tensorflow::eager::RemoteTensorHandleDefaultTypeInternal", "tensorflow::eager::SendTensorRequestDefaultTypeInternal",
+                             "tensorflow::eager::SendTensorResponseDefaultTypeInternal", "tensorflow::eager::WaitQueueDoneRequestDefaultTypeInternal", "tensorflow::eager::WaitQueueDoneResponseDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -552,7 +572,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::pair<tensorflow::Allocator*,tensorflow::TrackingAllocator*>").pointerTypes("WrappedAllocator").define())
                .put(new Info("std::tuple<size_t,size_t,size_t>").cast().pointerTypes("SizeTPointer"))
                .put(new Info("std::unique_ptr<tensorflow::Device>").valueTypes("@MoveUniquePtr Device").pointerTypes("@UniquePtr Device"))
+               .put(new Info("std::unique_ptr<tensorflow::DeviceMgr>", "std::unique_ptr<const tensorflow::DeviceMgr>").valueTypes("@MoveUniquePtr DeviceMgr").pointerTypes("@UniquePtr DeviceMgr"))
+               .put(new Info("std::unique_ptr<tensorflow::OpKernel>").valueTypes("@MoveUniquePtr OpKernel").pointerTypes("@UniquePtr OpKernel"))
+               .put(new Info("std::unique_ptr<tensorflow::TensorShape>").valueTypes("@MoveUniquePtr TensorShape").pointerTypes("@UniquePtr TensorShape"))
                .put(new Info("std::unique_ptr<tensorflow::ServerInterface>").valueTypes("@MoveUniquePtr ServerInterface").pointerTypes("@UniquePtr ServerInterface"))
+               .put(new Info("std::unique_ptr<tensorflow::CollectiveExecutor::Handle>").valueTypes("@MoveUniquePtr CollectiveExecutor.Handle").pointerTypes("@UniquePtr CollectiveExecutor.Handle"))
+               .put(new Info("std::unique_ptr<tensorflow::eager::EagerClientCache>").valueTypes("@MoveUniquePtr EagerClientCache").pointerTypes("@UniquePtr EagerClientCache"))
                .put(new Info("std::unique_ptr<tensorflow::kernel_factory::OpKernelFactory>").valueTypes("@MoveUniquePtr OpKernelFactory").pointerTypes("@UniquePtr OpKernelFactory"))
                .put(new Info("std::unique_ptr<tensorflow::port::StringListDecoder>").valueTypes("@MoveUniquePtr StringListDecoder").pointerTypes("@UniquePtr StringListDecoder"))
                .put(new Info("std::unique_ptr<tensorflow::port::StringListEncoder>").valueTypes("@MoveUniquePtr StringListEncoder").pointerTypes("@UniquePtr StringListEncoder"))
@@ -743,7 +768,15 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
         infoMap.put(new Info("std::vector<tensorflow::OpDef>").pointerTypes("OpDefVector").define());
         if (!android) {
-            infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define());
+            infoMap.put(new Info("std::vector<tensorflow::Output>").pointerTypes("OutputVector").define())
+                   .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::TensorHandle*,4>").pointerTypes("TensorHandleVector").define())
+                   .put(new Info("std::vector<tensorflow::CollectiveImplementationInterface*>").pointerTypes("CollectiveImplementationVector").define())
+                   .put(new Info("tensorflow::gtl::FlatMap<tensorflow::string,tensorflow::Device*,StringPieceHasher>").pointerTypes("DeviceMap").define())
+                   .put(new Info("tensorflow::gtl::FlatMap<tensorflow::string,tensorflow::uint64>").pointerTypes("RemoteContexts").define())
+                   .put(new Info("tensorflow::EagerContext::device_map").javaText("public native DeviceMap device_map();"))
+                   .put(new Info("tensorflow::eager::Operation").pointerTypes("Eager_Operation"))
+                   .put(new Info("TFE_Context::context").javaText("@MemberGetter public native @ByRef EagerContext context();"))
+                   .put(new Info("TFE_Op::operation").javaText("@MemberGetter public native @ByRef EagerOperation operation();"));
         }
 
         String[] consts = {"unsigned char", "short", "int", "long long", "float", "double", "bool", "std::string", "tensorflow::StringPiece"};

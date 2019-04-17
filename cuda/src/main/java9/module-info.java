@@ -1,6 +1,7 @@
 module org.bytedeco.cuda {
   requires transitive org.bytedeco.javacpp;
   exports org.bytedeco.cuda.global;
+  exports org.bytedeco.cuda.presets;
   exports org.bytedeco.cuda.cublas;
   exports org.bytedeco.cuda.cudart;
   exports org.bytedeco.cuda.cudnn;
