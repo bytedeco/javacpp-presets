@@ -4,7 +4,7 @@ module org.bytedeco.mxnet {
   requires transitive org.bytedeco.openblas;
   requires transitive org.bytedeco.opencv;
   exports org.bytedeco.mxnet.global;
-  exports org.bytedeco.mxnet.presets to org.bytedeco.javacpp;
+  exports org.bytedeco.mxnet.presets;
   exports org.bytedeco.mxnet;
 
   exports org.apache.mxnet;

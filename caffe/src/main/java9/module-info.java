@@ -4,6 +4,6 @@ module org.bytedeco.caffe {
   requires transitive org.bytedeco.opencv;
   requires transitive org.bytedeco.openblas;
   exports org.bytedeco.caffe.global;
-  exports org.bytedeco.caffe.presets to org.bytedeco.javacpp;
+  exports org.bytedeco.caffe.presets;
   exports org.bytedeco.caffe;
 }

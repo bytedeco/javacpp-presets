@@ -2,7 +2,7 @@ module org.bytedeco.tensorflow {
   requires transitive org.bytedeco.javacpp;
   requires transitive org.bytedeco.mkldnn;
   exports org.bytedeco.tensorflow.global;
-  exports org.bytedeco.tensorflow.presets to org.bytedeco.javacpp;
+  exports org.bytedeco.tensorflow.presets;
   exports org.bytedeco.tensorflow;
 
   exports org.tensorflow;
