@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-export PYTHON_BIN_PATH=$(which python)
+export PYTHON_BIN_PATH=$(which python3)
 export USE_DEFAULT_PYTHON_LIB_PATH=1
 export CC_OPT_FLAGS=-O3
 export TF_NEED_MKL=0
@@ -70,6 +70,9 @@ sed -i="" "s/const string tag/string tag/g" tensorflow/core/util/tensor_slice_se
 # Remove comment lines containing characters that lead to encoding errors
 sedinplace '/\(foo\|bar\|ops.withSubScope\)/d' tensorflow/java/src/gen/java/org/tensorflow/processor/OperatorProcessor.java
 
+# https://github.com/tensorflow/tensorflow/issues/26155
+patch -Np1 < ../../../tensorflow-cuda.patch || true
+
 export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
@@ -87,6 +90,9 @@ fi
 
 export BUILDTARGETS="//tensorflow:libtensorflow_cc.so //tensorflow/java:tensorflow"
 export BUILDFLAGS=
+if [[ "$EXTENSION" =~ python ]]; then
+    export BUILDTARGETS="//tensorflow/tools/pip_package:build_pip_package //tensorflow/java:tensorflow"
+fi
 
 case $PLATFORM in
     android-arm)
@@ -146,7 +152,7 @@ case $PLATFORM in
         patch -Np1 < ../../../tensorflow-java.patch
         sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
-        export PYTHON_BIN_PATH=$(which python.exe)
+        export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
         export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/"
         # try not to use /WHOLEARCHIVE as it crashes link.exe
         export NO_WHOLE_ARCHIVE_OPTION=1
@@ -224,5 +230,19 @@ sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java
 # add ops files we cannot get with CMake for Windows
 # patch -Np1 -d ../java < ../../../tensorflow-java-ops.patch || true
+
+if [[ "$EXTENSION" =~ python ]]; then
+    # adjust the directory structure a bit to facilitate packaging in JAR files
+    ln -snf tensorflow-$TENSORFLOW_VERSION/bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/org_tensorflow ../python
+    ln -sf python/_pywrap_tensorflow_internal.so bazel-bin/tensorflow/libtensorflow_cc.so
+    ln -sf external/absl_py/absl/ ../python/
+    ln -sf external/astor_archive/astor/ ../python/
+    ln -sf external/gast_archive/gast/ ../python/
+    ln -sf external/protobuf_archive/python/google/ ../python/
+    ln -sf external/six_archive/six.py ../python/
+    ln -sf external/termcolor_archive/termcolor.py ../python/
+    pip3 install --target=../python/ keras_applications==1.0.6 --no-deps
+    pip3 install --target=../python/ keras_preprocessing==1.0.5 --no-deps
+fi
 
 cd ../..

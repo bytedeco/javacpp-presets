@@ -1,6 +1,6 @@
-diff -ruN tensorflow-1.8.0/tensorflow/BUILD tensorflow-1.8.0-java/tensorflow/BUILD
---- tensorflow-1.8.0/tensorflow/BUILD  2018-04-28 01:36:49.000000000 +0900
-+++ tensorflow-1.8.0-java/tensorflow/BUILD     2018-09-06 16:24:21.762107604 +0900
+diff -ruN tensorflow-1.13.1/tensorflow/BUILD tensorflow-1.13.1-python/tensorflow/BUILD
+--- tensorflow-1.13.1/tensorflow/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/BUILD	2019-04-16 16:59:27.399866082 +0900
 @@ -2,7 +2,7 @@
  # TensorFlow is a computational framework, primarily for use in machine
  # learning applications.
@@ -10,10 +10,7 @@ diff -ruN tensorflow-1.8.0/tensorflow/BUILD tensorflow-1.8.0-java/tensorflow/BUI
  
  licenses(["notice"])  # Apache 2.0
  
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-java/tensorflow/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-java/tensorflow/BUILD	2018-10-20 19:19:05.999338515 +0900
-@@ -449,15 +449,11 @@
+@@ -489,15 +489,11 @@
  tf_cc_shared_object(
      name = "libtensorflow_cc.so",
      linkopts = select({
@@ -31,7 +28,7 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-java/tens
          ],
      }),
      visibility = ["//visibility:public"],
-@@ -465,12 +461,32 @@
+@@ -505,12 +501,32 @@
          "//tensorflow:tf_exported_symbols.lds",
          "//tensorflow:tf_version_script.lds",
          "//tensorflow/c:c_api",
@@ -64,10 +61,10 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/BUILD tensorflow-1.12.0-rc0-java/tens
      ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/c/BUILD tensorflow-1.12.0-rc0-java/tensorflow/c/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/c/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-java/tensorflow/c/BUILD	2018-10-20 19:18:26.883365406 +0900
-@@ -292,7 +292,7 @@
+diff -ruN tensorflow-1.13.1/tensorflow/c/BUILD tensorflow-1.13.1-python/tensorflow/c/BUILD
+--- tensorflow-1.13.1/tensorflow/c/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/c/BUILD	2019-04-16 16:59:27.400866081 +0900
+@@ -414,7 +414,7 @@
      name = "python_api",
      srcs = ["python_api.cc"],
      hdrs = ["python_api.h"],
@@ -76,9 +73,9 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/c/BUILD tensorflow-1.12.0-rc0-java/te
      deps = [
          ":c_api",
          ":c_api_internal",
-diff -ruN tensorflow-1.8.0/tensorflow/core/BUILD tensorflow-1.8.0-java/tensorflow/core/BUILD
---- tensorflow-1.8.0/tensorflow/core/BUILD     2018-04-28 01:36:49.000000000 +0900
-+++ tensorflow-1.8.0-java/tensorflow/core/BUILD        2018-09-06 16:24:59.417135685 +0900
+diff -ruN tensorflow-1.13.1/tensorflow/core/BUILD tensorflow-1.13.1-python/tensorflow/core/BUILD
+--- tensorflow-1.13.1/tensorflow/core/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/core/BUILD	2019-04-16 16:59:27.402866080 +0900
 @@ -63,10 +63,7 @@
  # //tensorflow/tensorflow.bzl) will include the necessary symbols in binary
  # build targets.
@@ -91,7 +88,7 @@ diff -ruN tensorflow-1.8.0/tensorflow/core/BUILD tensorflow-1.8.0-java/tensorflo
  
  licenses(["notice"])  # Apache 2.0
  
-@@ -2549,6 +2546,7 @@
+@@ -2620,6 +2617,7 @@
  
  tf_cuda_library(
      name = "framework_internal_impl",
@@ -99,10 +96,10 @@ diff -ruN tensorflow-1.8.0/tensorflow/core/BUILD tensorflow-1.8.0-java/tensorflo
      srcs = FRAMEWORK_INTERNAL_PRIVATE_HEADERS + glob(
          [
              "example/**/*.cc",
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.12.0-rc0-java/tensorflow/core/framework/tensor.h
---- tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-java/tensorflow/core/framework/tensor.h	2018-10-20 19:18:26.884365406 +0900
-@@ -118,6 +118,11 @@
+diff -ruN tensorflow-1.13.1/tensorflow/core/framework/tensor.h tensorflow-1.13.1-python/tensorflow/core/framework/tensor.h
+--- tensorflow-1.13.1/tensorflow/core/framework/tensor.h	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/core/framework/tensor.h	2019-04-16 16:59:27.403866079 +0900
+@@ -192,6 +192,11 @@
    /// are not valid.
    Tensor(Tensor&& other);
  
@@ -114,7 +111,7 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    ~Tensor();
  
    /// Returns the data type.
-@@ -523,11 +528,6 @@
+@@ -602,11 +607,6 @@
    friend class NumpyTensorBuffer;  // For access to the private constructor
                                     // taking the buffer.
  
@@ -126,9 +123,9 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.
    bool CanUseDMA() const;
  
    // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/BUILD tensorflow-1.12.0-rc0-java/tensorflow/java/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/java/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-java/tensorflow/java/BUILD	2018-10-20 23:43:04.252229845 +0900
+diff -ruN tensorflow-1.13.1/tensorflow/java/BUILD tensorflow-1.13.1-python/tensorflow/java/BUILD
+--- tensorflow-1.13.1/tensorflow/java/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/java/BUILD	2019-04-16 16:59:27.404866078 +0900
 @@ -1,7 +1,7 @@
  # Description:
  # TensorFlow Java API.
@@ -146,9 +143,9 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/BUILD tensorflow-1.12.0-rc0-java
      javacopts = JAVACOPTS,
      plugins = [":processor"],
      visibility = ["//visibility:public"],
-diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.12.0-rc0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.12.0-rc0/tensorflow/java/src/main/native/BUILD	2018-10-09 03:36:57.000000000 +0900
-+++ tensorflow-1.12.0-rc0-java/tensorflow/java/src/main/native/BUILD	2018-10-20 19:18:26.884365406 +0900
+diff -ruN tensorflow-1.13.1/tensorflow/java/src/main/native/BUILD tensorflow-1.13.1-python/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.13.1/tensorflow/java/src/main/native/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/java/src/main/native/BUILD	2019-04-16 16:59:27.405866077 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),
@@ -157,3 +154,34 @@ diff -ruN tensorflow-1.12.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow
      includes = select({
          "//tensorflow:android": [],
          "//conditions:default": ["."],
+diff -ruN tensorflow-1.13.1/tensorflow/python/BUILD tensorflow-1.13.1-python/tensorflow/python/BUILD
+--- tensorflow-1.13.1/tensorflow/python/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/python/BUILD	2019-04-16 16:59:27.407866076 +0900
+@@ -4115,6 +4115,11 @@
+         "//tensorflow/c:python_api",
+         "//tensorflow/c:tf_status_helper",
+         "//tensorflow/c/eager:c_api",
++        "//tensorflow/cc:cc_ops",
++        "//tensorflow/cc:client_session",
++        "//tensorflow/cc:scope",
++        "//tensorflow/cc/profiler",
++        "//tensorflow/java/src/main/native:native",
+         "//tensorflow/core/distributed_runtime/rpc:grpc_rpc_factory_registration",
+         "//tensorflow/core/distributed_runtime/rpc:grpc_server_lib",
+         "//tensorflow/core/distributed_runtime/rpc:grpc_session",
+diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-python/tensorflow/tensorflow.bzl
+--- tensorflow-1.13.1/tensorflow/tensorflow.bzl	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-python/tensorflow/tensorflow.bzl	2019-04-16 17:00:52.286798088 +0900
+@@ -1666,12 +1666,9 @@
+     )
+     extra_linkopts = select({
+         "@local_config_cuda//cuda:darwin": [
+-            "-Wl,-exported_symbols_list,$(location %s.lds)" % vscriptname,
+         ],
+         clean_dep("//tensorflow:windows"): [],
+         "//conditions:default": [
+-            "-Wl,--version-script",
+-            "$(location %s.lds)" % vscriptname,
+         ],
+     })
+     extra_deps += select({
