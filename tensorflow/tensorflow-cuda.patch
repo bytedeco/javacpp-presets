@@ -1,6 +1,18 @@
+diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl
+--- tensorflow-1.13.1/tensorflow/tensorflow.bzl	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl	2019-04-21 11:49:55.971293594 +0900
+@@ -315,7 +315,7 @@
+         )
+ 
+ def _make_search_paths(prefix, levels_to_root):
+-    return ",".join(
++    return "-rpath,/usr/local/cuda/lib/," + ",".join(
+         [
+             "-rpath,%s/%s" % (prefix, "/".join([".."] * search_level))
+             for search_level in range(levels_to_root + 1)
 diff -ruN tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD
 --- tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD	2019-02-26 05:37:04.000000000 +0900
-+++ tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD	2019-04-18 23:39:12.098739189 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD	2019-04-21 11:08:39.348616764 +0900
 @@ -220,7 +220,6 @@
          "//conditions:default": [],
      }) + if_cuda([
@@ -11,7 +23,7 @@ diff -ruN tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD tensorflow-1.13.1
          "//third_party/mkl_dnn:LICENSE",
 diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tensorflow/workspace.bzl
 --- tensorflow-1.13.1/tensorflow/workspace.bzl	2019-02-26 05:37:04.000000000 +0900
-+++ tensorflow-1.13.1-cuda/tensorflow/workspace.bzl	2019-04-18 23:39:24.571742762 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/workspace.bzl	2019-04-21 11:08:39.349616764 +0900
 @@ -359,6 +359,7 @@
          name = "protobuf_archive",
          sha256 = PROTOBUF_SHA256,
@@ -38,7 +50,7 @@ diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tens
              "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
 diff -ruN tensorflow-1.13.1/third_party/protobuf/cuda.patch tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch
 --- tensorflow-1.13.1/third_party/protobuf/cuda.patch	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch	2019-04-18 23:39:24.572742763 +0900
++++ tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch	2019-04-21 11:08:39.350616764 +0900
 @@ -0,0 +1,35 @@
 +diff --git a/src/google/protobuf/map.h b/src/google/protobuf/map.h
 +index 40f35e92..1af91f9c 100644
