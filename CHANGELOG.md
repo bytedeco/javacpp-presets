@@ -5,7 +5,7 @@
  * Load the symbols from the `python` library globally as often required by Python libraries ([issue ContinuumIO/anaconda-issues#6401](https://github.com/ContinuumIO/anaconda-issues/issues/6401))
  * Link OpenCV with OpenBLAS/MKL to accelerate some matrix operations
  * Add presets for the `quality` module of OpenCV
- * Upgrade presets for OpenCV 4.1.0
+ * Upgrade presets for OpenCV 4.1.0, nGraph 0.18.1
 
 ### April 11, 2019 version 1.5
  * Include `setlocale()` in presets for Tesseract to work around issues with locale ([issue #694](https://github.com/bytedeco/javacpp-presets/issues/694))
