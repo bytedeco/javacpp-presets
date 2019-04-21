@@ -66,10 +66,10 @@ public class DeviceInfo extends Pointer {
     public native int maxThreadsPerBlock();
 
     /** maximum size of each dimension of a block */
-    public native @ByVal Point3i maxThreadsDim();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxThreadsDim();
 
     /** maximum size of each dimension of a grid */
-    public native @ByVal Point3i maxGridSize();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxGridSize();
 
     /** clock frequency in kilohertz */
     public native int clockRate();
@@ -125,52 +125,52 @@ public class DeviceInfo extends Pointer {
     public native int maxTexture1DLinear();
 
     /** maximum 2D texture dimensions */
-    public native @ByVal Point maxTexture2D();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxTexture2D();
 
     /** maximum 2D mipmapped texture dimensions */
-    public native @ByVal Point maxTexture2DMipmap();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxTexture2DMipmap();
 
     /** maximum dimensions (width, height, pitch) for 2D textures bound to pitched memory */
-    public native @ByVal Point3i maxTexture2DLinear();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxTexture2DLinear();
 
     /** maximum 2D texture dimensions if texture gather operations have to be performed */
-    public native @ByVal Point maxTexture2DGather();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxTexture2DGather();
 
     /** maximum 3D texture dimensions */
-    public native @ByVal Point3i maxTexture3D();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxTexture3D();
 
     /** maximum Cubemap texture dimensions */
     public native int maxTextureCubemap();
 
     /** maximum 1D layered texture dimensions */
-    public native @ByVal Point maxTexture1DLayered();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxTexture1DLayered();
 
     /** maximum 2D layered texture dimensions */
-    public native @ByVal Point3i maxTexture2DLayered();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxTexture2DLayered();
 
     /** maximum Cubemap layered texture dimensions */
-    public native @ByVal Point maxTextureCubemapLayered();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxTextureCubemapLayered();
 
     /** maximum 1D surface size */
     public native int maxSurface1D();
 
     /** maximum 2D surface dimensions */
-    public native @ByVal Point maxSurface2D();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxSurface2D();
 
     /** maximum 3D surface dimensions */
-    public native @ByVal Point3i maxSurface3D();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxSurface3D();
 
     /** maximum 1D layered surface dimensions */
-    public native @ByVal Point maxSurface1DLayered();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxSurface1DLayered();
 
     /** maximum 2D layered surface dimensions */
-    public native @ByVal Point3i maxSurface2DLayered();
+    public native @ByVal @Cast("cv::Vec3i*") Point3i maxSurface2DLayered();
 
     /** maximum Cubemap surface dimensions */
     public native int maxSurfaceCubemap();
 
     /** maximum Cubemap layered surface dimensions */
-    public native @ByVal Point maxSurfaceCubemapLayered();
+    public native @ByVal @Cast("cv::Vec2i*") Point maxSurfaceCubemapLayered();
 
     /** alignment requirements for surfaces */
     public native @Cast("size_t") long surfaceAlignment();

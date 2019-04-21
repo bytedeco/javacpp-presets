@@ -1660,20 +1660,20 @@ the use of this software, even if advised of the possibility of such damage.
  * This function return the image of a ChArUco marker, ready to be printed.
  */
 // TODO cannot be exported yet; conversion from/to Vec4i is not wrapped in core
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal Mat img, int marginSize/*=0*/,
                                    int borderBits/*=1*/);
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal Mat img);
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal UMat img, int marginSize/*=0*/,
                                    int borderBits/*=1*/);
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal UMat img);
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal GpuMat img, int marginSize/*=0*/,
                                    int borderBits/*=1*/);
-@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal Scalar4i ids, int squareLength,
+@Namespace("cv::aruco") public static native void drawCharucoDiamond(@Ptr Dictionary dictionary, @ByVal @Cast("cv::Vec4i*") Scalar4i ids, int squareLength,
                                    int markerLength, @ByVal GpuMat img);
 
 

@@ -18,8 +18,8 @@ public class Vec2fVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Vec2fVector(Pointer p) { super(p); }
-    public Vec2fVector(FloatPointer value) { this(1); put(0, value); }
-    public Vec2fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec2fVector(Point2f value) { this(1); put(0, value); }
+    public Vec2fVector(Point2f ... array) { this(array.length); put(array); }
     public Vec2fVector()       { allocate();  }
     public Vec2fVector(long n) { allocate(n); }
     private native void allocate();
@@ -31,10 +31,10 @@ public class Vec2fVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @Cast("cv::Vec2f*") @ByRef FloatPointer get(@Cast("size_t") long i);
-    public native Vec2fVector put(@Cast("size_t") long i, FloatPointer value);
+    @Index(function = "at") public native @Cast("cv::Vec2f*") @ByRef Point2f get(@Cast("size_t") long i);
+    public native Vec2fVector put(@Cast("size_t") long i, Point2f value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec2f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec2f*") @ByRef Point2f value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -44,11 +44,11 @@ public class Vec2fVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @Cast("cv::Vec2f*") @ByRef @Const FloatPointer get();
+        public native @Name("operator*") @Cast("cv::Vec2f*") @ByRef @Const Point2f get();
     }
 
-    public FloatPointer[] get() {
-        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+    public Point2f[] get() {
+        Point2f[] array = new Point2f[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
         for (int i = 0; i < array.length; i++) {
             array[i] = get(i);
         }
@@ -58,22 +58,22 @@ public class Vec2fVector extends Pointer {
         return java.util.Arrays.toString(get());
     }
 
-    public FloatPointer pop_back() {
+    public Point2f pop_back() {
         long size = size();
-        FloatPointer value = get(size - 1);
+        Point2f value = get(size - 1);
         resize(size - 1);
         return value;
     }
-    public Vec2fVector push_back(FloatPointer value) {
+    public Vec2fVector push_back(Point2f value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public Vec2fVector put(FloatPointer value) {
+    public Vec2fVector put(Point2f value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public Vec2fVector put(FloatPointer ... array) {
+    public Vec2fVector put(Point2f ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);

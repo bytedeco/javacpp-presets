@@ -18,8 +18,8 @@ public class Vec4fVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Vec4fVector(Pointer p) { super(p); }
-    public Vec4fVector(FloatPointer value) { this(1); put(0, value); }
-    public Vec4fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec4fVector(Scalar4f value) { this(1); put(0, value); }
+    public Vec4fVector(Scalar4f ... array) { this(array.length); put(array); }
     public Vec4fVector()       { allocate();  }
     public Vec4fVector(long n) { allocate(n); }
     private native void allocate();
@@ -31,10 +31,10 @@ public class Vec4fVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @Cast("cv::Vec4f*") @ByRef FloatPointer get(@Cast("size_t") long i);
-    public native Vec4fVector put(@Cast("size_t") long i, FloatPointer value);
+    @Index(function = "at") public native @Cast("cv::Vec4f*") @ByRef Scalar4f get(@Cast("size_t") long i);
+    public native Vec4fVector put(@Cast("size_t") long i, Scalar4f value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec4f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec4f*") @ByRef Scalar4f value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -44,11 +44,11 @@ public class Vec4fVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @Cast("cv::Vec4f*") @ByRef @Const FloatPointer get();
+        public native @Name("operator*") @Cast("cv::Vec4f*") @ByRef @Const Scalar4f get();
     }
 
-    public FloatPointer[] get() {
-        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+    public Scalar4f[] get() {
+        Scalar4f[] array = new Scalar4f[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
         for (int i = 0; i < array.length; i++) {
             array[i] = get(i);
         }
@@ -58,22 +58,22 @@ public class Vec4fVector extends Pointer {
         return java.util.Arrays.toString(get());
     }
 
-    public FloatPointer pop_back() {
+    public Scalar4f pop_back() {
         long size = size();
-        FloatPointer value = get(size - 1);
+        Scalar4f value = get(size - 1);
         resize(size - 1);
         return value;
     }
-    public Vec4fVector push_back(FloatPointer value) {
+    public Vec4fVector push_back(Scalar4f value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public Vec4fVector put(FloatPointer value) {
+    public Vec4fVector put(Scalar4f value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public Vec4fVector put(FloatPointer ... array) {
+    public Vec4fVector put(Scalar4f ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);

@@ -352,12 +352,16 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                .put(new Info("cv::RotatedRect").pointerTypes("RotatedRect").base("FloatPointer"))
                .put(new Info("cv::Scalar_<double>").pointerTypes("Scalar").base("AbstractScalar"))
                .put(new Info("cv::Scalar_<int>").pointerTypes("Scalar4i").base("IntPointer"))
+               .put(new Info("cv::Scalar_<float>").pointerTypes("Scalar4f").base("FloatPointer"))
 
-               .put(new Info("cv::Vec2i").pointerTypes("Point"))
-               .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
-               .put(new Info("cv::Vec3i").pointerTypes("Point3i"))
-               .put(new Info("cv::Vec3d").pointerTypes("Point3d"))
-               .put(new Info("cv::Vec4i").pointerTypes("Scalar4i"))
+               .put(new Info("cv::Vec2i").cast().pointerTypes("Point"))
+               .put(new Info("cv::Vec2f").cast().pointerTypes("Point2f"))
+               .put(new Info("cv::Vec2d").cast().pointerTypes("Point2d"))
+               .put(new Info("cv::Vec3i").cast().pointerTypes("Point3i"))
+               .put(new Info("cv::Vec3f").cast().pointerTypes("Point3f"))
+               .put(new Info("cv::Vec3d").cast().pointerTypes("Point3d"))
+               .put(new Info("cv::Vec4i").cast().pointerTypes("Scalar4i"))
+               .put(new Info("cv::Vec4f").cast().pointerTypes("Scalar4f"))
 
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))

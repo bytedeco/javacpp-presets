@@ -50,7 +50,7 @@ public class opencv_imgproc implements InfoMapper {
                .put(new Info("CvContourScanner").valueTypes("CvContourScanner").pointerTypes("@ByPtrPtr CvContourScanner"))
                .put(new Info("cvCalcBackProject").cppTypes("void", "IplImage**", "CvArr*", "CvHistogram*"))
                .put(new Info("cvCalcBackProjectPatch").cppTypes("void", "IplImage**", "CvArr*", "CvSize", "CvHistogram*", "int", "double"))
-               .put(new Info("cv::Vec2f", "cv::Vec3f", "cv::Vec4f", "cv::Vec4i", "cv::Vec6f").cast().pointerTypes("FloatPointer"))
+               .put(new Info("cv::Vec6f").cast().pointerTypes("FloatPointer"))
                .put(new Info("std::vector<cv::Vec2f>").pointerTypes("Vec2fVector").define())
                .put(new Info("std::vector<cv::Vec3f>").pointerTypes("Vec3fVector").define())
                .put(new Info("std::vector<cv::Vec4f>").pointerTypes("Vec4fVector").define())

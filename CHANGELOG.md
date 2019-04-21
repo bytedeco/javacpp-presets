@@ -1,4 +1,5 @@
 
+ * Fix and refine mapping for `HoughLines`, `HoughLinesP`, and `HoughCircles` ([issue #717](https://github.com/bytedeco/javacpp-presets/issues/717))
  * Add Python-enabled builds for TensorFlow via the `-python` and `-python-gpu` extensions
  * Map the C/C++ API supporting eager execution in the presets for TensorFlow
  * Load the symbols from the `python` library globally as often required by Python libraries ([issue ContinuumIO/anaconda-issues#6401](https://github.com/ContinuumIO/anaconda-issues/issues/6401))

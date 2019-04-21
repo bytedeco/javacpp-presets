@@ -1395,26 +1395,26 @@ public static final int
 *
 * The function calculates coordinates of line segment corresponded by point in Hough space.
 */
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal Mat srcImgInfo,
                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
                                    int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal Mat srcImgInfo );
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal UMat srcImgInfo,
                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
                                    int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal UMat srcImgInfo );
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal GpuMat srcImgInfo,
                                    int angleRange/*=cv::ximgproc::ARO_315_135*/,
                                    int makeSkew/*=cv::ximgproc::HDO_DESKEW*/,
                                    int rules/*=cv::ximgproc::RO_IGNORE_BORDERS*/ );
-@Namespace("cv::ximgproc") public static native @ByVal Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
+@Namespace("cv::ximgproc") public static native @ByVal @Cast("cv::Vec4i*") Scalar4i HoughPoint2Line(@Const @ByRef Point houghPoint,
                                    @ByVal GpuMat srcImgInfo );
 
  // namespace cv::ximgproc
