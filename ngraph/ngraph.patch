@@ -1,7 +1,7 @@
-diff -ruN ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.15.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp
---- ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.cpp	2019-03-07 04:11:15.000000000 +0900
-+++ ngraph-0.15.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp	2019-03-10 18:46:47.809974751 +0900
-@@ -32,18 +32,10 @@
+diff -ruN ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp
+--- ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.cpp	2019-04-11 03:46:07.000000000 +0900
++++ ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp	2019-04-12 21:02:25.093051724 +0900
+@@ -34,18 +34,10 @@
          {
              namespace error
              {
@@ -23,7 +23,7 @@ diff -ruN ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.15.0-p
                      {
                      }
                  };
-@@ -51,12 +43,12 @@
+@@ -53,20 +45,17 @@
              } // namespace error
          }     // namespace detail
  
@@ -31,15 +31,24 @@ diff -ruN ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.15.0-p
 +        std::shared_ptr<Function> import_onnx_model(const std::string& data, const Weights& weights)
          {
              onnx::ModelProto model_proto;
+             // Try parsing input as a binary protobuf message
 -            if (!model_proto.ParseFromIstream(&sin))
 +            if (!model_proto.ParseFromString(data))
              {
--                throw detail::error::stream_parse{sin};
-+                throw detail::error::data_parse{data};
+-                // Rewind to the beginning and clear stream state.
+-                sin.clear();
+-                sin.seekg(0);
+-                google::protobuf::io::IstreamInputStream iistream(&sin);
++                google::protobuf::io::ArrayInputStream iistream(data.data(), data.size());
+                 // Try parsing input as a prototxt message
+                 if (!google::protobuf::TextFormat::Parse(&iistream, &model_proto))
+                 {
+-                    throw detail::error::stream_parse{sin};
++                    throw detail::error::data_parse{data};
+                 }
              }
-             Model model{model_proto};
-             Graph graph{model_proto.graph(), model, weights};
-@@ -69,16 +61,6 @@
+ 
+@@ -81,16 +70,6 @@
              return function;
          }
  
@@ -56,9 +65,9 @@ diff -ruN ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.15.0-p
          void register_operator(const std::string& name,
                                 std::int64_t version,
                                 const std::string& domain,
-diff -ruN ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.15.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp
---- ngraph-0.15.0/src/ngraph/frontend/onnx_import/onnx.hpp	2019-03-07 04:11:15.000000000 +0900
-+++ ngraph-0.15.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp	2019-03-10 18:45:34.829649836 +0900
+diff -ruN ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp
+--- ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.hpp	2019-04-11 03:46:07.000000000 +0900
++++ ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp	2019-04-12 20:59:22.724355142 +0900
 @@ -73,19 +73,7 @@
          ///                   and providing through this parameters is invalid (the weights from
          ///                   the model  will take precedence).
