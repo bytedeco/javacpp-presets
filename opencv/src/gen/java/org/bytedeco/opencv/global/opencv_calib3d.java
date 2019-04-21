@@ -597,21 +597,21 @@ sequence of rotations about the three principal axes that results in the same or
 object, e.g. see \cite Slabaugh . Returned tree rotation matrices and corresponding three Euler angles
 are only one of the possible solutions.
  */
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ,
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat Qx,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat Qy,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") Mat Qz);
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ);
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal UMat src, @ByVal UMat mtxR, @ByVal UMat mtxQ,
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ);
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal UMat src, @ByVal UMat mtxR, @ByVal UMat mtxQ,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat Qx,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat Qy,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") UMat Qz);
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal UMat src, @ByVal UMat mtxR, @ByVal UMat mtxQ);
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ,
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal UMat src, @ByVal UMat mtxR, @ByVal UMat mtxQ);
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qx,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qy,
                                 @ByVal(nullValue = "cv::OutputArray(cv::noArray())") GpuMat Qz);
-@Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ);
+@Namespace("cv") public static native @ByVal @Cast("cv::Vec3d*") Point3d RQDecomp3x3( @ByVal GpuMat src, @ByVal GpuMat mtxR, @ByVal GpuMat mtxQ);
 
 /** \brief Decomposes a projection matrix into a rotation matrix and a camera matrix.
 <p>
