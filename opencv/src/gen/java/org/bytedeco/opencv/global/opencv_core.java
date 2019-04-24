@@ -6820,6 +6820,9 @@ public static final String cvFuncName = "";
 // Targeting ../opencv_core/Scalar4i.java
 
 
+// Targeting ../opencv_core/Scalar4f.java
+
+
 
 // Targeting ../opencv_core/KeyPoint.java
 

@@ -126,9 +126,9 @@ public class EM extends StatModel {
     the sample. First element is an index of the most probable mixture component for the given
     sample.
      */
-    public native @ByVal Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
-    public native @ByVal Point2d predict2(@ByVal UMat sample, @ByVal UMat probs);
-    public native @ByVal Point2d predict2(@ByVal GpuMat sample, @ByVal GpuMat probs);
+    public native @ByVal @Cast("cv::Vec2d*") Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
+    public native @ByVal @Cast("cv::Vec2d*") Point2d predict2(@ByVal UMat sample, @ByVal UMat probs);
+    public native @ByVal @Cast("cv::Vec2d*") Point2d predict2(@ByVal GpuMat sample, @ByVal GpuMat probs);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
     <p>

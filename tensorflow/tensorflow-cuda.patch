@@ -1,0 +1,89 @@
+diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl
+--- tensorflow-1.13.1/tensorflow/tensorflow.bzl	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl	2019-04-21 11:49:55.971293594 +0900
+@@ -315,7 +315,7 @@
+         )
+ 
+ def _make_search_paths(prefix, levels_to_root):
+-    return ",".join(
++    return "-rpath,/usr/local/cuda/lib/," + ",".join(
+         [
+             "-rpath,%s/%s" % (prefix, "/".join([".."] * search_level))
+             for search_level in range(levels_to_root + 1)
+diff -ruN tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD
+--- tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD	2019-04-21 11:08:39.348616764 +0900
+@@ -220,7 +220,6 @@
+         "//conditions:default": [],
+     }) + if_cuda([
+         "@cub_archive//:LICENSE.TXT",
+-        "@local_config_nccl//:LICENSE",
+     ]) + if_mkl([
+         "//third_party/mkl:LICENSE",
+         "//third_party/mkl_dnn:LICENSE",
+diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tensorflow/workspace.bzl
+--- tensorflow-1.13.1/tensorflow/workspace.bzl	2019-02-26 05:37:04.000000000 +0900
++++ tensorflow-1.13.1-cuda/tensorflow/workspace.bzl	2019-04-21 11:08:39.349616764 +0900
+@@ -359,6 +359,7 @@
+         name = "protobuf_archive",
+         sha256 = PROTOBUF_SHA256,
+         strip_prefix = PROTOBUF_STRIP_PREFIX,
++        patch_file = clean_dep("//third_party/protobuf:cuda.patch"),
+         system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
+         system_link_files = {
+             "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
+@@ -373,6 +374,7 @@
+         name = "com_google_protobuf",
+         sha256 = PROTOBUF_SHA256,
+         strip_prefix = PROTOBUF_STRIP_PREFIX,
++        patch_file = clean_dep("//third_party/protobuf:cuda.patch"),
+         system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
+         system_link_files = {
+             "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
+@@ -384,6 +386,7 @@
+         name = "com_google_protobuf_cc",
+         sha256 = PROTOBUF_SHA256,
+         strip_prefix = PROTOBUF_STRIP_PREFIX,
++        patch_file = clean_dep("//third_party/protobuf:cuda.patch"),
+         system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
+         system_link_files = {
+             "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
+diff -ruN tensorflow-1.13.1/third_party/protobuf/cuda.patch tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch
+--- tensorflow-1.13.1/third_party/protobuf/cuda.patch	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch	2019-04-21 11:08:39.350616764 +0900
+@@ -0,0 +1,35 @@
++diff --git a/src/google/protobuf/map.h b/src/google/protobuf/map.h
++index 40f35e92..1af91f9c 100644
++--- a/src/google/protobuf/map.h
+++++ b/src/google/protobuf/map.h
++@@ -425,10 +425,10 @@ class Map {
++         node_ = NULL;
++         for (bucket_index_ = start_bucket; bucket_index_ < m_->num_buckets_;
++              bucket_index_++) {
++-          if (m_->TableEntryIsNonEmptyList(bucket_index_)) {
+++          if ((*m_).TableEntryIsNonEmptyList(bucket_index_)) {
++             node_ = static_cast<Node*>(m_->table_[bucket_index_]);
++             break;
++-          } else if (m_->TableEntryIsTree(bucket_index_)) {
+++          } else if ((*m_).TableEntryIsTree(bucket_index_)) {
++             Tree* tree = static_cast<Tree*>(m_->table_[bucket_index_]);
++             GOOGLE_DCHECK(!tree->empty());
++             node_ = NodePtrFromKeyPtr(*tree->begin());
++@@ -487,7 +487,7 @@ class Map {
++           return true;
++         // Less common: the bucket is a linked list with node_ somewhere in it,
++         // but not at the head.
++-        if (m_->TableEntryIsNonEmptyList(bucket_index_)) {
+++        if ((*m_).TableEntryIsNonEmptyList(bucket_index_)) {
++           Node* l = static_cast<Node*>(m_->table_[bucket_index_]);
++           while ((l = l->next) != NULL) {
++             if (l == node_) {
++@@ -501,7 +501,7 @@ class Map {
++         // find-like method that compares Node* instead of const Key&.
++         iterator_base i(m_->find(*KeyPtrFromNodePtr(node_), it));
++         bucket_index_ = i.bucket_index_;
++-        return m_->TableEntryIsList(bucket_index_);
+++        return (*m_).TableEntryIsList(bucket_index_);
++       }
++ 
++       Node* node_;

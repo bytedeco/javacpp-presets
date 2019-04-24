@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * nGraph 0.15.0  https://ai.intel.com/intel-ngraph/
+ * nGraph 0.18.1  https://ai.intel.com/intel-ngraph/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.ngraph</groupId>
     <artifactId>abc</artifactId>
-    <version>1.5</version>
+    <version>1.5.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ABC</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.15.0-1.5</version>
+            <version>0.18.1-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

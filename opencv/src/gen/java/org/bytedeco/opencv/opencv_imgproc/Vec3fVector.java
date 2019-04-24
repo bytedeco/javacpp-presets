@@ -18,8 +18,8 @@ public class Vec3fVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Vec3fVector(Pointer p) { super(p); }
-    public Vec3fVector(FloatPointer value) { this(1); put(0, value); }
-    public Vec3fVector(FloatPointer ... array) { this(array.length); put(array); }
+    public Vec3fVector(Point3f value) { this(1); put(0, value); }
+    public Vec3fVector(Point3f ... array) { this(array.length); put(array); }
     public Vec3fVector()       { allocate();  }
     public Vec3fVector(long n) { allocate(n); }
     private native void allocate();
@@ -31,10 +31,10 @@ public class Vec3fVector extends Pointer {
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @Cast("cv::Vec3f*") @ByRef FloatPointer get(@Cast("size_t") long i);
-    public native Vec3fVector put(@Cast("size_t") long i, FloatPointer value);
+    @Index(function = "at") public native @Cast("cv::Vec3f*") @ByRef Point3f get(@Cast("size_t") long i);
+    public native Vec3fVector put(@Cast("size_t") long i, Point3f value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec3f*") @ByRef FloatPointer value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @Cast("cv::Vec3f*") @ByRef Point3f value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -44,11 +44,11 @@ public class Vec3fVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @Cast("cv::Vec3f*") @ByRef @Const FloatPointer get();
+        public native @Name("operator*") @Cast("cv::Vec3f*") @ByRef @Const Point3f get();
     }
 
-    public FloatPointer[] get() {
-        FloatPointer[] array = new FloatPointer[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+    public Point3f[] get() {
+        Point3f[] array = new Point3f[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
         for (int i = 0; i < array.length; i++) {
             array[i] = get(i);
         }
@@ -58,22 +58,22 @@ public class Vec3fVector extends Pointer {
         return java.util.Arrays.toString(get());
     }
 
-    public FloatPointer pop_back() {
+    public Point3f pop_back() {
         long size = size();
-        FloatPointer value = get(size - 1);
+        Point3f value = get(size - 1);
         resize(size - 1);
         return value;
     }
-    public Vec3fVector push_back(FloatPointer value) {
+    public Vec3fVector push_back(Point3f value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public Vec3fVector put(FloatPointer value) {
+    public Vec3fVector put(Point3f value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public Vec3fVector put(FloatPointer ... array) {
+    public Vec3fVector put(Point3f ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);

@@ -21,7 +21,6 @@ sudo chown -R travis:travis $HOME
 du -csh $HOME/* $HOME/.m2/* $HOME/.cache/* $HOME/.ccache/* $HOME/downloads/*
 curl https://bootstrap.pypa.io/get-pip.py | sudo python
 sudo pip install requests
-export PYTHON_BIN_PATH=$(which python) # For tensorflow
 touch $HOME/vars.list
 
 export MAKEJ=2
@@ -60,7 +59,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-setuptools numpy swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -147,6 +146,12 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
         export TEST_TMPDIR=$HOME/.cache/bazel
         echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
+
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install --upgrade pip"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/bin/pip /usr/bin/pip3"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user numpy"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_applications==1.0.6 --no-deps"
+        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_preprocessing==1.0.5 --no-deps"
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
@@ -247,7 +252,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "cpython onnx " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
+      if [[ "cpython mxnet tensorflow onnx " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
@@ -305,6 +310,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         fi
         sudo bash $HOME/bazel.sh
         export TEST_TMPDIR=$HOME/.cache/bazel
+
+        pip3 install -U --user numpy
+        pip3 install -U --user keras_applications==1.0.6 --no-deps
+        pip3 install -U --user keras_preprocessing==1.0.5 --no-deps
      fi
 fi  
 

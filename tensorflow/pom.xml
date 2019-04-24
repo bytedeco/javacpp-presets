@@ -159,6 +159,9 @@
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_cuda/**</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/_solib_*/**</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*python*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*iomp5*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*msvcr120*</exclude>

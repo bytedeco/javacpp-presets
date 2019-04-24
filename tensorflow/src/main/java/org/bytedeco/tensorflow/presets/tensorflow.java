@@ -41,6 +41,8 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 import org.bytedeco.javacpp.tools.Logger;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -214,6 +216,13 @@ import java.util.List;
                 value = {"linux-x86_64", "macosx-x86_64"},
                 extension = "-gpu"),
         @Platform(
+                value = {"linux-x86_64", "macosx-x86_64"},
+                extension = {"-python", "-python-gpu"},
+                link = "tensorflow_cc#",
+                preload = {"iomp5", "mklml", "mklml_intel", "python3.6m@.1.0!", "python3.6!", "tensorflow_framework", ":python/tensorflow/python/_pywrap_tensorflow_internal.so"},
+                resource = "python",
+                preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"}),
+        @Platform(
                 value = "windows",
                 link = {"Advapi32#", "mklml"},
 // old hacks for the now obsolete CMake build
@@ -372,6 +381,23 @@ import java.util.List;
         target = "org.bytedeco.tensorflow",
         global = "org.bytedeco.tensorflow.global.tensorflow")
 public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
+
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/tensorflow/" + Loader.getPlatform() + extension + "/python/")}. */
+    public static File cachePackage() throws IOException {
+        String path = Loader.load(tensorflow.class);
+        if (path != null) {
+            int i = path.indexOf("/org/bytedeco/tensorflow/" + Loader.getPlatform());
+            int j = path.lastIndexOf("/");
+            return Loader.cacheResource(path.substring(i, j) + "/python/");
+        }
+        return null;
+    }
+
+    /** Returns {@code {Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/"), cachePackage()}}. */
+    public static File[] cachePackages() throws IOException {
+        return new File[] {Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/"), cachePackage()};
+    }
+
     private Logger logger;
     private java.util.Properties properties;
     private String encoding;
@@ -391,11 +417,40 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
 
-        // Only apply this at load time since we don't want to copy the CUDA libraries here
-        if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
+        // Only apply this at load time
+        if (!Loader.isLoadLibraries()) {
             return;
         }
+
+        // Let users enable loading of the full version of MKL
+        String load = System.getProperty("org.bytedeco.openblas.load",
+                      System.getProperty("org.bytedeco.mklml.load", "")).toLowerCase();
+
         int i = 0;
+        if (load.equals("mkl") || load.equals("mkl_rt")) {
+            String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
+                             "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt"};
+            for (i = 0; i < libs.length; i++) {
+                preloads.add(i, libs[i] + "#" + libs[i]);
+            }
+            load = "mkl_rt";
+            resources.add("/org/bytedeco/mkl/");
+        }
+
+        if (load.length() > 0) {
+            if (platform.startsWith("linux")) {
+                preloads.add(i, load + "#mklml_intel");
+            } else if (platform.startsWith("macosx")) {
+                preloads.add(i, load + "#mklml");
+            } else if (platform.startsWith("windows")) {
+                preloads.add(i, load + "#mklml");
+            }
+        }
+
+        // Only apply this at load time since we don't want to copy the CUDA libraries here
+        if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
+            return;
+        }
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl"};
         for (String lib : libs) {
             switch (platform) {

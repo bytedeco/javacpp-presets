@@ -128,7 +128,6 @@ if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
 fi 
 
 if [ "$PROJ" == "tensorflow" ]; then
-       /c/Python27/python -m pip install numpy
        curl -L http://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip -o swigwin-3.0.12.zip
        unzip -o swigwin-3.0.12.zip -d /c/
 
@@ -138,6 +137,10 @@ if [ "$PROJ" == "tensorflow" ]; then
          echo "Download failed here, so can't proceed with the build.. Failing.."
          exit 1
        fi
+
+       /c/Python36-x64/python -m pip install -U --user numpy
+       /c/Python36-x64/python -m pip install -U --user keras_applications==1.0.6 --no-deps
+       /c/Python36-x64/python -m pip install -U --user keras_preprocessing==1.0.5 --no-deps
 fi
 
 # copy Python 3.6 back to default installation directory
