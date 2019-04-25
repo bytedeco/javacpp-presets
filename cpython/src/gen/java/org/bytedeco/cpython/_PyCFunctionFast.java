@@ -15,6 +15,5 @@ public class _PyCFunctionFast extends FunctionPointer {
     public    _PyCFunctionFast(Pointer p) { super(p); }
     protected _PyCFunctionFast() { allocate(); }
     private native void allocate();
-    public native PyObject call(PyObject self, @ByPtrPtr PyObject args,
-                                       @Cast("Py_ssize_t") long nargs, PyObject kwnames);
+    public native PyObject call(PyObject arg0, @ByPtrPtr PyObject arg1, @Cast("Py_ssize_t") long arg2);
 }

@@ -27,8 +27,8 @@ public class _slice extends Pointer {
             @Name("v.Slice.lower") public native _expr v_Slice_lower(); public native _slice v_Slice_lower(_expr setter);
             @Name("v.Slice.upper") public native _expr v_Slice_upper(); public native _slice v_Slice_upper(_expr setter);
             @Name("v.Slice.step") public native _expr v_Slice_step(); public native _slice v_Slice_step(_expr setter);
-        
+
             @Name("v.ExtSlice.dims") public native asdl_seq v_ExtSlice_dims(); public native _slice v_ExtSlice_dims(asdl_seq setter);
-        
+
             @Name("v.Index.value") public native _expr v_Index_value(); public native _slice v_Index_value(_expr setter);
 }

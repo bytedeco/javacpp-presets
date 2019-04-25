@@ -6,7 +6,7 @@ diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-cuda/ten
  
  def _make_search_paths(prefix, levels_to_root):
 -    return ",".join(
-+    return "-rpath,/usr/local/cuda/lib/," + ",".join(
++    return "-rpath,/usr/local/cuda/lib/,-rpath,/usr/local/cuda/lib64/," + ",".join(
          [
              "-rpath,%s/%s" % (prefix, "/".join([".."] * search_level))
              for search_level in range(levels_to_root + 1)

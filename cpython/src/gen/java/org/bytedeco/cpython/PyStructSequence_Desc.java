@@ -24,8 +24,8 @@ public class PyStructSequence_Desc extends Pointer {
         return (PyStructSequence_Desc)super.position(position);
     }
 
-    public native @Cast("char*") BytePointer name(); public native PyStructSequence_Desc name(BytePointer setter);
-    public native @Cast("char*") BytePointer doc(); public native PyStructSequence_Desc doc(BytePointer setter);
+    @MemberGetter public native @Cast("const char*") BytePointer name();
+    @MemberGetter public native @Cast("const char*") BytePointer doc();
     public native PyStructSequence_Field fields(); public native PyStructSequence_Desc fields(PyStructSequence_Field setter);
     public native int n_in_sequence(); public native PyStructSequence_Desc n_in_sequence(int setter);
 }

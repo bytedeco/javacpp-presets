@@ -38,4 +38,5 @@ public class PyGenObject extends Pointer {
     public native PyObject gi_name(); public native PyGenObject gi_name(PyObject setter);
     /* Qualified name of the generator. */
     public native PyObject gi_qualname(); public native PyGenObject gi_qualname(PyObject setter);
+    public native @ByRef _PyErr_StackItem gi_exc_state(); public native PyGenObject gi_exc_state(_PyErr_StackItem setter);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@
 
 package org.bytedeco.cpython.presets;
 
+import java.io.File;
+import java.io.IOException;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -36,8 +39,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(
     value = {
         @Platform(
-            includepath = "/usr/include/python3.6m/",
-            linkpath = "/usr/lib64/",
             cinclude = {
                 "Python.h",
                 "patchlevel.h",
@@ -93,6 +94,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "codecs.h",
                 "pyerrors.h",
                 "pyarena.h",
+                "pythread.h",
                 "pystate.h",
                 "modsupport.h",
                 "ceval.h",
@@ -120,28 +122,59 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "fileutils.h",
 //                "pyfpe.h",
             },
-            link = "python3.6m@.1.0!"
+            link = "python3.7m@.1.0!",
+            resource = {"include", "lib", "bin", "share"}
         ),
         @Platform(
             value = "macosx",
-            includepath = "/Library/Frameworks/Python.framework/Versions/3.6/Headers/",
-            linkpath = "/Library/Frameworks/Python.framework/Versions/3.6/lib/",
-            link = "python3.6!"
+            link = "python3.7m!"
         ),
         @Platform(
             value = "windows",
-            includepath = "C:/Program Files/Python36/include/",
-            linkpath = "C:/Program Files/Python36/libs/",
-            preloadpath = "C:/Program Files/Python36/",
-            link = "python36",
-            preload = "python36"
+            link = "python37",
+            preload = {"api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
+                       "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
+                       "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
+                       "api-ms-win-core-string-l1-1-0", "api-ms-win-core-errorhandling-l1-1-0", "api-ms-win-core-timezone-l1-1-0", "api-ms-win-core-file-l1-1-0",
+                       "api-ms-win-core-namedpipe-l1-1-0", "api-ms-win-core-handle-l1-1-0", "api-ms-win-core-file-l2-1-0", "api-ms-win-core-heap-l1-1-0",
+                       "api-ms-win-core-libraryloader-l1-1-0", "api-ms-win-core-synch-l1-1-0", "api-ms-win-core-processthreads-l1-1-0",
+                       "api-ms-win-core-processenvironment-l1-1-0", "api-ms-win-core-datetime-l1-1-0", "api-ms-win-core-localization-l1-2-0",
+                       "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
+                       "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
+                       "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
+                       "vcruntime140", "msvcp140", "concrt140", "vcomp140", "python3"}
+        ),
+        @Platform(
+            value = "windows-x86",
+            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
+                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
+                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}
+        ),
+        @Platform(
+            value = "windows-x86_64",
+            preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
+                           "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
+                           "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}
         ),
     },
     target = "org.bytedeco.cpython",
-    global = "org.bytedeco.cpython.global.python"
+    global = "org.bytedeco.cpython.global.python",
+    helper = "org.bytedeco.cpython.helper.python"
 )
 @NoException
 public class python implements InfoMapper {
+
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
+    public static File cachePackage() throws IOException {
+        return Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/");
+    }
+
+    /** Returns {@code {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")}} where {@code File f = cachePackage()}. */
+    public static File[] cachePackages() throws IOException {
+        File f = cachePackage();
+        return new File[] {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")};
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("Python-ast.h").linePatterns("#define Module.*",
                                                           "int PyAST_Check.*").skip())
@@ -150,7 +183,7 @@ public class python implements InfoMapper {
                              "copysign", "hypot", "timezone", "daylight", "tzname",
                              "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented",
                              "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T",
-                             "PY_FORMAT_SIZE_T", "Py_MEMCPY", "PyMODINIT_FUNC", "Py_VA_COPY",
+                             "PY_FORMAT_SIZE_T", "Py_MEMCPY", "_Py_HOT_FUNCTION", "_Py_NO_INLINE", "PyMODINIT_FUNC", "Py_VA_COPY",
                              "__inline__", "Py_HUGE_VAL", "Py_FORCE_DOUBLE", "Py_NAN",
                              "PyMem_Del", "PyMem_DEL", "PyDescr_COMMON", "PY_UNICODE_TYPE",
                              "PyObject_MALLOC", "PyObject_REALLOC", "PyObject_FREE", "PyObject_Del", "PyObject_DEL",
@@ -161,11 +194,17 @@ public class python implements InfoMapper {
                              "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec",
                              "PyException_HEAD", "_Py_NO_RETURN", "Py_Ellipsis",
                              "PyObject_Length", "PySequence_Length", "PySequence_In", "PyMapping_Length",
-                             "Py_ALLOW_RECURSION", "Py_END_ALLOW_RECURSION",
+                             "PY_TIMEOUT_T", "_PyCoreConfig_INIT", "_PyMainInterpreterConfig_INIT", "_PyThreadState_Current",
+                             "Py_ALLOW_RECURSION", "Py_END_ALLOW_RECURSION", "NATIVE_TSS_KEY_T",
                              "Py_BEGIN_ALLOW_THREADS", "Py_END_ALLOW_THREADS",
                              "Py_BLOCK_THREADS", "Py_UNBLOCK_THREADS", "PyOS_strnicmp", "PyOS_stricmp").cppTypes().annotations())
 
-               .put(new Info("HAVE_GCC_ASM_FOR_X87",
+               .put(new Info("Py_DEPRECATED").cppText("#define Py_DEPRECATED() deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+
+               .put(new Info("Py_BUILD_CORE", "defined(Py_BUILD_CORE)",
+                             "HAVE_FORK",
+                             "HAVE_GCC_ASM_FOR_X87",
                              "defined(_MSC_VER) && !defined(_WIN64)",
                              "HAVE_GCC_ASM_FOR_MC68881",
                              "HAVE__GETPTY",
@@ -188,7 +227,7 @@ public class python implements InfoMapper {
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX",
                              "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T",
                              "PY_SIZE_MAX", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
-                             "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE").translate(false))
+                             "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE").cppTypes("long long").translate(false))
 
                .put(new Info("PyHash_FuncDef").purify())
 
@@ -200,6 +239,7 @@ public class python implements InfoMapper {
                .put(new Info("_dictkeysobject").cast().pointerTypes("PyDictKeysObject"))
                .put(new Info("_gc_head").cast().pointerTypes("PyGC_Head"))
                .put(new Info("_traceback").cast().pointerTypes("PyTracebackObject"))
+               .put(new Info("_err_stackitem").cast().pointerTypes("_PyErr_StackItem"))
                .put(new Info("_co_extra_state").cast().pointerTypes("__PyCodeExtraState"))
                .put(new Info("_node").cast().pointerTypes("node"))
 
@@ -210,7 +250,8 @@ public class python implements InfoMapper {
                              "_PyBytes_InsertThousandsGrouping", "_PyUnicode_DecodeUnicodeInternal",
                              "_PyFloat_Repr", "_PyFloat_Digits", "_PyFloat_DigitsInit",
                              "PySortWrapper_Type", "PyCmpWrapper_Type", "_PyGen_yf", "_PyAIterWrapper_New",
-                             "_PyCoro_GetAwaitableIter", "_PyAsyncGenValueWrapperNew", "PyAsyncGen_ClearFreeLists",
+                             "_PyTime_FromTimeval", "_PyAIterWrapper_Type", "_PyErr_WarnUnawaitedCoroutine", "_PyErr_GetTopmostException",
+                             "PyInit__imp", "_PyCoro_GetAwaitableIter", "_PyAsyncGenValueWrapperNew", "PyAsyncGen_ClearFreeLists",
                              "PyStructSequence_UnnamedField", "PySignal_SetWakeupFd",
                              "_PyArg_Fini", "PyInit_imp", "PyNullImporter_Type", "PyBuffer_SizeFromFormat",
                              "__PyCodeExtraState::co_extra_freefuncs", "_PyDict_NewKeysForClass", "_PyDictView_New",

@@ -12,12 +12,12 @@ import static org.bytedeco.cpython.global.python.*;
 
 /* Long integer representation.
    The absolute value of a number is equal to
-   	SUM(for i=0 through abs(ob_size)-1) ob_digit[i] * 2**(SHIFT*i)
+        SUM(for i=0 through abs(ob_size)-1) ob_digit[i] * 2**(SHIFT*i)
    Negative numbers are represented with ob_size < 0;
    zero is represented by ob_size == 0.
    In a normalized number, ob_digit[abs(ob_size)-1] (the most significant
    digit) is never zero.  Also, in all cases, for all valid i,
-   	0 <= ob_digit[i] <= MASK.
+        0 <= ob_digit[i] <= MASK.
    The allocation function takes care of allocating extra memory
    so that ob_digit[0] ... ob_digit[abs(ob_size)-1] are actually available.
 
@@ -40,7 +40,7 @@ public class _longobject extends Pointer {
         return (_longobject)super.position(position);
     }
 
-	public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject setter);
-	public native @Cast("digit") int ob_digit(int i); public native _longobject ob_digit(int i, int setter);
-	@MemberGetter public native @Cast("digit*") IntPointer ob_digit();
+    public native @ByRef PyVarObject ob_base(); public native _longobject ob_base(PyVarObject setter);
+    public native @Cast("digit") int ob_digit(int i); public native _longobject ob_digit(int i, int setter);
+    @MemberGetter public native @Cast("digit*") IntPointer ob_digit();
 }

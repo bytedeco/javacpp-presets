@@ -30,9 +30,9 @@ public class PyMemberDef extends Pointer {
         return (PyMemberDef)super.position(position);
     }
 
-    public native @Cast("char*") BytePointer name(); public native PyMemberDef name(BytePointer setter);
+    @MemberGetter public native @Cast("const char*") BytePointer name();
     public native int type(); public native PyMemberDef type(int setter);
     public native @Cast("Py_ssize_t") long offset(); public native PyMemberDef offset(long setter);
     public native int flags(); public native PyMemberDef flags(int setter);
-    public native @Cast("char*") BytePointer doc(); public native PyMemberDef doc(BytePointer setter);
+    @MemberGetter public native @Cast("const char*") BytePointer doc();
 }

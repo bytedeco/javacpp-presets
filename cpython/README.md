@@ -1,11 +1,16 @@
 JavaCPP Presets for CPython
 ===========================
 
+License Agreements
+------------------
+By downloading these archives, you agree to the [terms and conditions for accessing or otherwise using Python](https://docs.python.org/3/license.html).
+
+
 Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CPython 3.6  https://www.python.org/
+ * CPython 3.7.3  https://www.python.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -15,6 +20,8 @@ Documentation
 Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/cpython/apidocs/
+
+&lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage
@@ -34,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cpython</groupId>
     <artifactId>simple</artifactId>
-    <version>1.5</version>
+    <version>1.5.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
     </properties>
@@ -42,7 +49,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.6-1.5</version>
+            <version>3.7.3-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -58,7 +65,9 @@ import org.bytedeco.cpython.*;
 import static org.bytedeco.cpython.global.python.*;
 
 public class Simple {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        Py_SetPath(cachePackages());
+
         Pointer program = Py_DecodeLocale(Simple.class.getSimpleName(), null);
         if (program == null) {
             System.err.println("Fatal error: cannot get class name");

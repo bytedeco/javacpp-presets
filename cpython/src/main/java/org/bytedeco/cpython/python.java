@@ -41,21 +41,24 @@ import org.bytedeco.javacpp.annotation.Properties;
     inherit = org.bytedeco.cpython.presets.python.class,
     value = {
         @Platform(
-            executablepath = "/usr/bin/",
-            executable = "python3.6"
+            executable = "python3.7"
         ),
         @Platform(
             value = "macosx",
-            executablepath = "/Library/Frameworks/Python.framework/Versions/3.6/bin/",
-            executable = "python3.6"
+            executable = "python3.7"
         ),
         @Platform(
             value = "windows",
-            executablepath = "C:/Program Files/Python36/",
             executable = "python"
         ),
     }
 )
 public class python {
-    static { Loader.load(); }
+    static {
+        try {
+            org.bytedeco.cpython.presets.python.cachePackage();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

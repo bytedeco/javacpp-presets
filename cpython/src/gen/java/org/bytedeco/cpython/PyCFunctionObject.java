@@ -8,7 +8,9 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+// #endif
 
+// #ifndef Py_LIMITED_API
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyCFunctionObject extends Pointer {
     static { Loader.load(); }

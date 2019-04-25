@@ -39,6 +39,7 @@ public class PyAsyncGenObject extends Pointer {
     public native PyObject ag_name(); public native PyAsyncGenObject ag_name(PyObject setter);
     /* Qualified name of the generator. */
     public native PyObject ag_qualname(); public native PyAsyncGenObject ag_qualname(PyObject setter);
+    public native @ByRef _PyErr_StackItem ag_exc_state(); public native PyAsyncGenObject ag_exc_state(_PyErr_StackItem setter);
     public native PyObject ag_finalizer(); public native PyAsyncGenObject ag_finalizer(PyObject setter);
 
     /* Flag is set to 1 when hooks set up by sys.set_asyncgen_hooks

@@ -24,6 +24,6 @@ public class PyInstanceMethodObject extends Pointer {
         return (PyInstanceMethodObject)super.position(position);
     }
 
-	public native @ByRef PyObject ob_base(); public native PyInstanceMethodObject ob_base(PyObject setter);
-	public native PyObject func(); public native PyInstanceMethodObject func(PyObject setter);
+    public native @ByRef PyObject ob_base(); public native PyInstanceMethodObject ob_base(PyObject setter);
+    public native PyObject func(); public native PyInstanceMethodObject func(PyObject setter);
 }

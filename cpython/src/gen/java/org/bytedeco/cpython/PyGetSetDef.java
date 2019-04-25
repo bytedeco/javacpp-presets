@@ -24,9 +24,9 @@ public class PyGetSetDef extends Pointer {
         return (PyGetSetDef)super.position(position);
     }
 
-    public native @Cast("char*") BytePointer name(); public native PyGetSetDef name(BytePointer setter);
+    @MemberGetter public native @Cast("const char*") BytePointer name();
     public native getter get(); public native PyGetSetDef get(getter setter);
     public native setter set(); public native PyGetSetDef set(setter setter);
-    public native @Cast("char*") BytePointer doc(); public native PyGetSetDef doc(BytePointer setter);
+    @MemberGetter public native @Cast("const char*") BytePointer doc();
     public native Pointer closure(); public native PyGetSetDef closure(Pointer setter);
 }

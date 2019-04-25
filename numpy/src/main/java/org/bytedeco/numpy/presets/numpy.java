@@ -24,6 +24,7 @@ package org.bytedeco.numpy.presets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -84,6 +85,14 @@ public class numpy implements InfoMapper {
     /** Returns {@code Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/")}. */
     public static File cachePackage() throws IOException {
         return Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/");
+    }
+
+    /** Returns {@code {python.cachePackages(), numpy.cachePackage()}}. */
+    public static File[] cachePackages() throws IOException {
+        File[] path = org.bytedeco.cpython.global.python.cachePackages();
+        path = Arrays.copyOf(path, path.length + 1);
+        path[path.length - 1] = cachePackage();
+        return path;
     }
 
     public void map(InfoMap infoMap) {

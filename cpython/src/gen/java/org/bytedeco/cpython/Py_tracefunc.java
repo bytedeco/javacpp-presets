@@ -8,6 +8,8 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+// #endif   /* !Py_LIMITED_API */
+
 
 /* State unique per thread */
 

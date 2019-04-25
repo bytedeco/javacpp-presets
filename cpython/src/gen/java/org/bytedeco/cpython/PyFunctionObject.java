@@ -37,17 +37,17 @@ public class PyFunctionObject extends Pointer {
     }
 
     public native @ByRef PyObject ob_base(); public native PyFunctionObject ob_base(PyObject setter);
-    public native PyObject func_code(); public native PyFunctionObject func_code(PyObject setter);	/* A code object, the __code__ attribute */
-    public native PyObject func_globals(); public native PyFunctionObject func_globals(PyObject setter);	/* A dictionary (other mappings won't do) */
-    public native PyObject func_defaults(); public native PyFunctionObject func_defaults(PyObject setter);	/* NULL or a tuple */
-    public native PyObject func_kwdefaults(); public native PyFunctionObject func_kwdefaults(PyObject setter);	/* NULL or a dict */
-    public native PyObject func_closure(); public native PyFunctionObject func_closure(PyObject setter);	/* NULL or a tuple of cell objects */
-    public native PyObject func_doc(); public native PyFunctionObject func_doc(PyObject setter);		/* The __doc__ attribute, can be anything */
-    public native PyObject func_name(); public native PyFunctionObject func_name(PyObject setter);	/* The __name__ attribute, a string object */
-    public native PyObject func_dict(); public native PyFunctionObject func_dict(PyObject setter);	/* The __dict__ attribute, a dict or NULL */
-    public native PyObject func_weakreflist(); public native PyFunctionObject func_weakreflist(PyObject setter);	/* List of weak references */
-    public native PyObject func_module(); public native PyFunctionObject func_module(PyObject setter);	/* The __module__ attribute, can be anything */
-    public native PyObject func_annotations(); public native PyFunctionObject func_annotations(PyObject setter);	/* Annotations, a dict or NULL */
+    public native PyObject func_code(); public native PyFunctionObject func_code(PyObject setter);        /* A code object, the __code__ attribute */
+    public native PyObject func_globals(); public native PyFunctionObject func_globals(PyObject setter);     /* A dictionary (other mappings won't do) */
+    public native PyObject func_defaults(); public native PyFunctionObject func_defaults(PyObject setter);    /* NULL or a tuple */
+    public native PyObject func_kwdefaults(); public native PyFunctionObject func_kwdefaults(PyObject setter);  /* NULL or a dict */
+    public native PyObject func_closure(); public native PyFunctionObject func_closure(PyObject setter);     /* NULL or a tuple of cell objects */
+    public native PyObject func_doc(); public native PyFunctionObject func_doc(PyObject setter);         /* The __doc__ attribute, can be anything */
+    public native PyObject func_name(); public native PyFunctionObject func_name(PyObject setter);        /* The __name__ attribute, a string object */
+    public native PyObject func_dict(); public native PyFunctionObject func_dict(PyObject setter);        /* The __dict__ attribute, a dict or NULL */
+    public native PyObject func_weakreflist(); public native PyFunctionObject func_weakreflist(PyObject setter); /* List of weak references */
+    public native PyObject func_module(); public native PyFunctionObject func_module(PyObject setter);      /* The __module__ attribute, can be anything */
+    public native PyObject func_annotations(); public native PyFunctionObject func_annotations(PyObject setter); /* Annotations, a dict or NULL */
     public native PyObject func_qualname(); public native PyFunctionObject func_qualname(PyObject setter);    /* The qualified name */
 
     /* Invariant:
