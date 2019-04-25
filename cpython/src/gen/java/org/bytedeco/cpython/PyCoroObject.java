@@ -38,4 +38,6 @@ public class PyCoroObject extends Pointer {
     public native PyObject cr_name(); public native PyCoroObject cr_name(PyObject setter);
     /* Qualified name of the generator. */
     public native PyObject cr_qualname(); public native PyCoroObject cr_qualname(PyObject setter);
+    public native @ByRef _PyErr_StackItem cr_exc_state(); public native PyCoroObject cr_exc_state(_PyErr_StackItem setter);
+    public native PyObject cr_origin(); public native PyCoroObject cr_origin(PyObject setter);
 }

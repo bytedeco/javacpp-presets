@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #endif
+// #endif   /* !Py_LIMITED_API */
 
 /* Signals */
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)

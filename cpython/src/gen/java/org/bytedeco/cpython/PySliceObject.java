@@ -36,5 +36,5 @@ public class PySliceObject extends Pointer {
     public native @ByRef PyObject ob_base(); public native PySliceObject ob_base(PyObject setter);
     public native PyObject start(); public native PySliceObject start(PyObject setter);
     public native PyObject stop(); public native PySliceObject stop(PyObject setter);
-    public native PyObject step(); public native PySliceObject step(PyObject setter);	/* not NULL */
+    public native PyObject step(); public native PySliceObject step(PyObject setter);      /* not NULL */
 }

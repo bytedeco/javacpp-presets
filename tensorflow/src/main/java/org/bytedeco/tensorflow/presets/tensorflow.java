@@ -43,6 +43,7 @@ import org.bytedeco.javacpp.tools.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -218,8 +219,8 @@ import java.util.List;
         @Platform(
                 value = {"linux-x86_64", "macosx-x86_64"},
                 extension = {"-python", "-python-gpu"},
-                link = "tensorflow_cc#",
-                preload = {"iomp5", "mklml", "mklml_intel", "python3.6m@.1.0!", "python3.6!", "tensorflow_framework", ":python/tensorflow/python/_pywrap_tensorflow_internal.so"},
+                link = "tensorflow_cc##",
+                preload = {"iomp5", "mklml", "mklml_intel", "python3.7m@.1.0!", "python3.7!", "tensorflow_framework", ":python/tensorflow/python/_pywrap_tensorflow_internal.so"},
                 resource = "python",
                 preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"}),
         @Platform(
@@ -384,6 +385,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/tensorflow/" + Loader.getPlatform() + extension + "/python/")}. */
     public static File cachePackage() throws IOException {
+        Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(tensorflow.class);
         if (path != null) {
             int i = path.indexOf("/org/bytedeco/tensorflow/" + Loader.getPlatform());
@@ -393,9 +395,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         return null;
     }
 
-    /** Returns {@code {Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/"), cachePackage()}}. */
+    /** Returns {@code {numpy.cachePackages(), tensorflow.cachePackage()}}. */
     public static File[] cachePackages() throws IOException {
-        return new File[] {Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/"), cachePackage()};
+        File[] path = org.bytedeco.numpy.global.numpy.cachePackages();
+        path = Arrays.copyOf(path, path.length + 1);
+        path[path.length - 1] = cachePackage();
+        return path;
     }
 
     private Logger logger;

@@ -16,6 +16,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/numpy/apidocs/
 
+&lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
+
 
 Sample Usage
 ------------
@@ -86,9 +88,8 @@ public class MatMul {
         /* try to use MKL when available */
         System.setProperty("org.bytedeco.openblas.load", "mkl");
 
+        Py_SetPath(org.bytedeco.numpy.global.numpy.cachePackages());
         Py_Initialize();
-        String path = cachePackage().getAbsolutePath();
-        PyList_Insert(PySys_GetObject("path"), 0, PyUnicode_FromString(path));
         if (_import_array() < 0) {
             System.err.println("numpy.core.multiarray failed to import");
             PyErr_Print();
