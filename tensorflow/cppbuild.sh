@@ -33,7 +33,7 @@ export TF_CUDA_VERSION=10.1
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.4
-export TF_TENSORRT_VERSION=5.0.0
+export TF_TENSORRT_VERSION=5.1
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
@@ -167,6 +167,10 @@ case $PLATFORM in
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
+        if [[ -f /usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache ]]; then
+            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        fi
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
@@ -181,6 +185,10 @@ case $PLATFORM in
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:${LD_LIBRARY_PATH:-}
         export PATH=$DYLD_LIBRARY_PATH:$PATH
+        if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
+            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        fi
         ;;
     windows-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch

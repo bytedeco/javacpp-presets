@@ -215,12 +215,9 @@ import java.util.List;
                 link = "tensorflow_cc", preload = {"iomp5", "mklml", "mklml_intel", "tensorflow_framework"}, preloadresource = "/org/bytedeco/mkldnn/"),
         @Platform(
                 value = {"linux-x86_64", "macosx-x86_64"},
-                extension = "-gpu"),
-        @Platform(
-                value = {"linux-x86_64", "macosx-x86_64"},
-                extension = {"-python", "-python-gpu"},
+                extension = {"-gpu", "-python", "-python-gpu"},
                 link = "tensorflow_cc##",
-                preload = {"iomp5", "mklml", "mklml_intel", "python3.7m@.1.0!", "python3.7!", "tensorflow_framework", ":python/tensorflow/python/_pywrap_tensorflow_internal.so"},
+                preload = {"iomp5", "mklml", "mklml_intel", "python3.7m@.1.0!", "python3.7!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so"},
                 resource = "python",
                 preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"}),
         @Platform(

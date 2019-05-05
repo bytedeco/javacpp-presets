@@ -6,7 +6,7 @@ while true; do uptime; sleep 60; done &
 
 # Abort before the maximum build time to be able to save the cache
 # (needs to be less than 2 hours for this to work on Mac as well)
-(sleep 7000; sudo killall -s SIGINT java; sudo killall bazel) &
+(sleep 6600; sudo killall -s SIGINT java; sudo killall bazel) &
 
 # Allocate a swapfile on Linux as it's not enabled by default
 sudo fallocate -l 4GB /swapfile
@@ -27,6 +27,9 @@ export MAKEJ=2
 echo "export MAKEJ=2" | tee --append $HOME/vars.list
 
 # Try to use ccache to speed up the build
+curl -L https://github.com/ccache/ccache/releases/download/v3.7/ccache-3.7.tar.gz -o $HOME/ccache-3.7.tar.gz
+tar xvf $HOME/ccache-3.7.tar.gz -C $HOME
+patch -Np1 -d $HOME/ccache-3.7/ < $TRAVIS_BUILD_DIR/ci/ccache-cuda.patch
 export CCACHE_DIR=$HOME/.ccache
 export PATH=/usr/lib64/ccache/:/usr/lib/ccache/:$PATH
 echo "export CCACHE_DIR=$HOME/.ccache" | tee --append $HOME/vars.list
@@ -74,6 +77,11 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.1; done"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
+
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda-10.1/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
+
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3*" # not required for GCC 7+
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "source scl_source enable $SCL_ENABLE || true; gcc --version"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "gpg --version"
@@ -299,6 +307,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
         # work around issues with CUDA 10.1
         for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.1.dylib}; done
+
+        cd $HOME/ccache-3.7/; ./configure; make; sudo make install; cd $TRAVIS_BUILD_DIR
+        echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler "$@"' | sudo tee /usr/local/cuda/bin/nvcccache
+        sudo chmod 755 /usr/local/cuda/bin/nvcccache
       fi
 
       if [ "$PROJ" == "tensorflow" ]; then

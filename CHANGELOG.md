@@ -1,5 +1,5 @@
 
- * Bundle complete binary packages of CPython itself for convenience
+ * Bundle complete binary packages of CPython itself for convenience ([issue #712](https://github.com/bytedeco/javacpp-presets/issues/712))
  * Fix and refine mapping for `HoughLines`, `HoughLinesP`, and `HoughCircles` ([issue #717](https://github.com/bytedeco/javacpp-presets/issues/717))
  * Add Python-enabled builds for TensorFlow via the `-python` and `-python-gpu` extensions
  * Map the C/C++ API supporting eager execution in the presets for TensorFlow
