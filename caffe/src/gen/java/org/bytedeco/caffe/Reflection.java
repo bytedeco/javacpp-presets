@@ -70,15 +70,12 @@ public class Reflection extends Pointer {
 
   // Get the UnknownFieldSet for the message.  This contains fields which
   // were seen when the Message was parsed but were not recognized according
-  // to the Message's definition. For proto3 protos, this method will always
-  // return an empty UnknownFieldSet.
+  // to the Message's definition.
   public native @Const @ByRef UnknownFieldSet GetUnknownFields(
         @Const @ByRef Message message);
   // Get a mutable pointer to the UnknownFieldSet for the message.  This
   // contains fields which were seen when the Message was parsed but were not
-  // recognized according to the Message's definition. For proto3 protos, this
-  // method will return a valid mutable UnknownFieldSet pointer but modifying
-  // it won't affect the serialized bytes of the message.
+  // recognized according to the Message's definition.
   public native UnknownFieldSet MutableUnknownFields(Message message);
 
   // Estimate the amount of memory used by the message object.
@@ -202,7 +199,7 @@ public class Reflection extends Pointer {
   // *scratch and return that.
   //
   // Note:  It is perfectly reasonable and useful to write code like:
-  //     str = reflection->GetStringReference(field, &str);
+  //     str = reflection->GetStringReference(message, field, &str);
   //   This line would ensure that only one copy of the string is made
   //   regardless of the field's underlying representation.  When initializing
   //   a newly-constructed string, though, it's just as fast and more readable
@@ -240,9 +237,12 @@ public class Reflection extends Pointer {
                            @Const FieldDescriptor field,
                            @Const EnumValueDescriptor value);
   // Set an enum field's value with an integer rather than EnumValueDescriptor.
-  // If the value does not correspond to a known enum value, either behavior is
-  // undefined (for proto2 messages), or the value is accepted silently for
-  // messages with new unknown-enum-value semantics.
+  // For proto3 this is just setting the enum field to the value specified, for
+  // proto2 it's more complicated. If value is a known enum value the field is
+  // set as usual. If the value is unknown then it is added to the unknown field
+  // set. Note this matches the behavior of parsing unknown enum values.
+  // If multiple calls with unknown values happen than they are all added to the
+  // unknown field set in order of the calls.
   public native void SetEnumValue(Message message,
                               @Const FieldDescriptor field,
                               int value);
@@ -365,9 +365,12 @@ public class Reflection extends Pointer {
                                  @Const FieldDescriptor field, int index,
                                  @Const EnumValueDescriptor value);
   // Set an enum field's value with an integer rather than EnumValueDescriptor.
-  // If the value does not correspond to a known enum value, either behavior is
-  // undefined (for proto2 messages), or the value is accepted silently for
-  // messages with new unknown-enum-value semantics.
+  // For proto3 this is just setting the enum field to the value specified, for
+  // proto2 it's more complicated. If value is a known enum value the field is
+  // set as usual. If the value is unknown then it is added to the unknown field
+  // set. Note this matches the behavior of parsing unknown enum values.
+  // If multiple calls with unknown values happen than they are all added to the
+  // unknown field set in order of the calls.
   public native void SetRepeatedEnumValue(Message message,
                                       @Const FieldDescriptor field, int index,
                                       int value);
@@ -403,10 +406,13 @@ public class Reflection extends Pointer {
   public native void AddEnum(Message message,
                            @Const FieldDescriptor field,
                            @Const EnumValueDescriptor value);
-  // Set an enum field's value with an integer rather than EnumValueDescriptor.
-  // If the value does not correspond to a known enum value, either behavior is
-  // undefined (for proto2 messages), or the value is accepted silently for
-  // messages with new unknown-enum-value semantics.
+  // Add an integer value to a repeated enum field rather than
+  // EnumValueDescriptor. For proto3 this is just setting the enum field to the
+  // value specified, for proto2 it's more complicated. If value is a known enum
+  // value the field is set as usual. If the value is unknown then it is added
+  // to the unknown field set. Note this matches the behavior of parsing unknown
+  // enum values. If multiple calls with unknown values happen than they are all
+  // added to the unknown field set in order of the calls.
   public native void AddEnumValue(Message message,
                               @Const FieldDescriptor field,
                               int value);
@@ -418,7 +424,7 @@ public class Reflection extends Pointer {
                                 @Const FieldDescriptor field);
 
   // Appends an already-allocated object 'new_entry' to the repeated field
-  // specifyed by 'field' passing ownership to the message.
+  // specified by 'field' passing ownership to the message.
   // TODO(tmarek): Make virtual after all subclasses have been
   // updated.
   public native void AddAllocatedMessage(Message message,
@@ -448,7 +454,7 @@ public class Reflection extends Pointer {
   // long as the message is not destroyed.
   //
   // Note that to use this method users need to include the header file
-  // "google/protobuf/reflection.h" (which defines the RepeatedFieldRef
+  // "net/proto2/public/reflection.h" (which defines the RepeatedFieldRef
   // class templates).
 
   // Like GetRepeatedFieldRef() but return an object that can also be used

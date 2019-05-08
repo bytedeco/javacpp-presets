@@ -23,6 +23,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
 import static org.bytedeco.caffe.global.caffe.*;
 
 
+
 // TODO(ckennelly):  Add a static assertion to ensure that these masks do not
 // conflict with wiretypes.
 

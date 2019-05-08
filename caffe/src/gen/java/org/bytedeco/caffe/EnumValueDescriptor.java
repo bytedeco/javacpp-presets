@@ -34,6 +34,7 @@ public class EnumValueDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EnumValueDescriptor(Pointer p) { super(p); }
 
+
   public native @StdString BytePointer name();  // Name of this enum constant.
   public native int index();           // Index within the enums's Descriptor.
   public native int number();          // Numeric value of this enum constant.
@@ -50,11 +51,10 @@ public class EnumValueDescriptor extends Pointer {
   // The type of this value.  Never NULL.
   public native @Const EnumDescriptor type();
 
-  // Get options for this enum value.  These are specified in the .proto file
-  // by adding text like "[foo = 1234]" after an enum value definition.
-  // Allowed options are defined by EnumValueOptions in
-  // google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // Get options for this enum value.  These are specified in the .proto file by
+  // adding text like "[foo = 1234]" after an enum value definition.  Allowed
+  // options are defined by EnumValueOptions in descriptor.proto, and any
+  // available extensions of that message.
   public native @Const @ByRef EnumValueOptions options();
 
   // See Descriptor::CopyTo().

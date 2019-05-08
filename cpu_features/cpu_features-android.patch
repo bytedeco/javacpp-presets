@@ -11,7 +11,7 @@ diff -ruN cpu_features-0.2.0/android-arm64.cmake cpu_features-0.2.0-android/andr
 +# cmake -DCMAKE_TOOLCHAIN_FILE=android-arm64.cmake -DCMAKE_INSTALL_PREFIX=..
 +
 +set(CMAKE_SYSTEM_NAME UnixPaths)
-+set(CMAKE_SYSTEM_PROCESSOR arm64)
++set(CMAKE_SYSTEM_PROCESSOR aarch64)
 +set(ANDROID TRUE)
 +
 +set(CMAKE_C_COMPILER   "$ENV{ANDROID_CC}")
@@ -71,7 +71,7 @@ diff -ruN cpu_features-0.2.0/android-x86_64.cmake cpu_features-0.2.0-android/and
 +# cmake -DCMAKE_TOOLCHAIN_FILE=android-x86_64.cmake -DCMAKE_INSTALL_PREFIX=..
 +
 +set(CMAKE_SYSTEM_NAME UnixPaths)
-+set(CMAKE_SYSTEM_PROCESSOR atom64)
++set(CMAKE_SYSTEM_PROCESSOR x86_64)
 +set(ANDROID TRUE)
 +
 +set(CMAKE_C_COMPILER   "$ENV{ANDROID_CC}")
@@ -99,7 +99,7 @@ diff -ruN cpu_features-0.2.0/android-x86.cmake cpu_features-0.2.0-android/androi
 +# cmake -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_INSTALL_PREFIX=..
 +
 +set(CMAKE_SYSTEM_NAME UnixPaths)
-+set(CMAKE_SYSTEM_PROCESSOR atom)
++set(CMAKE_SYSTEM_PROCESSOR i686)
 +set(ANDROID TRUE)
 +
 +set(CMAKE_C_COMPILER   "$ENV{ANDROID_CC}")

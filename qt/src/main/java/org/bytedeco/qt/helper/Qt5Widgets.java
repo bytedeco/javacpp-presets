@@ -40,7 +40,7 @@ import org.bytedeco.qt.Qt5Widgets.*;
 public class Qt5Widgets extends org.bytedeco.qt.presets.Qt5Widgets {
 
 //  static {
-//    File framework = new File("/usr/local/Cellar/qt/5.12.2/lib/QtWidgets.framework/QtWidgets");
+//    File framework = new File("/usr/local/Cellar/qt/5.12.3/lib/QtWidgets.framework/QtWidgets");
 //    if (framework.exists()) {
 //      System.load(framework.getAbsolutePath());
 //    }
