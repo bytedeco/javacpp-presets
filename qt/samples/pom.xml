@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.qt</groupId>
     <artifactId>gettingstarted</artifactId>
-    <version>1.5</version>
+    <version>1.5.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>GettingStarted</exec.mainClass>
     </properties>
@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>qt-platform</artifactId>
-            <version>5.12.2-1.5</version>
+            <version>5.12.3-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

@@ -48,19 +48,19 @@ case $PLATFORM in
         ;;
 esac
 
-GLOG=0.3.5
-GFLAGS=2.2.1
-PROTO=3.6.1
-LEVELDB=1.20
+GLOG=0.4.0
+GFLAGS=2.2.2
+PROTO=3.7.1
+LEVELDB=1.22
 SNAPPY=1.1.7
-LMDB=0.9.22
-BOOST=1_68_0
+LMDB=0.9.23
+BOOST=1_70_0
 CAFFE_VERSION=1.0
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
 download https://github.com/gflags/gflags/archive/v$GFLAGS.tar.gz gflags-$GFLAGS.tar.gz
 download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-cpp-$PROTO.tar.gz protobuf-$PROTO.tar.gz
-download https://github.com/google/leveldb/archive/v$LEVELDB.tar.gz leveldb-$LEVELDB.tar.gz
+download https://github.com/google/leveldb/archive/$LEVELDB.tar.gz leveldb-$LEVELDB.tar.gz
 download https://github.com/google/snappy/archive/$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
@@ -106,6 +106,7 @@ export CFLAGS="-fPIC"
 export CXXFLAGS="-fPIC"
 
 cd glog-$GLOG
+./autogen.sh
 ./configure "--prefix=$INSTALL_PATH" --disable-shared
 make -j $MAKEJ
 make install
@@ -124,11 +125,10 @@ make install
 cd ..
 
 cd leveldb-$LEVELDB
-mkdir -p out-static/db out-static/helpers out-static/port out-static/table out-static/util
-mkdir -p out-shared/db out-shared/helpers out-shared/port out-shared/table out-shared/util
+sedinplace 's/cmake_minimum_required.*/cmake_policy(SET CMP0048 NEW)/g' CMakeLists.txt
+"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" .
 make -j $MAKEJ
-cp -a out-static/libleveldb.a "$INSTALL_PATH/lib"
-cp -a include/leveldb "$INSTALL_PATH/include/"
+make install
 cd ..
 
 cd snappy-$SNAPPY

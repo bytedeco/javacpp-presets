@@ -22,6 +22,7 @@ import static org.bytedeco.hdf5.global.hdf5.*;
 
 import static org.bytedeco.caffe.global.caffe.*;
 
+
 @Namespace("google::protobuf::io") @Opaque @Properties(inherit = org.bytedeco.caffe.presets.caffe.class)
 public class CodedInputStream extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

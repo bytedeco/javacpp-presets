@@ -31,6 +31,7 @@ public class OneofDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneofDescriptor(Pointer p) { super(p); }
 
+
   public native @StdString BytePointer name();       // Name of this oneof.
   public native @StdString BytePointer full_name();  // Fully-qualified name of the oneof.
 

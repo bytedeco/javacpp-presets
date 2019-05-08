@@ -34,6 +34,7 @@ public class MethodDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MethodDescriptor(Pointer p) { super(p); }
 
+
   // Name of this method, not including containing scope.
   public native @StdString BytePointer name();
   // The fully-qualified name of the method, scope delimited by periods.
@@ -59,8 +60,7 @@ public class MethodDescriptor extends Pointer {
   // Get options for this method.  These are specified in the .proto file by
   // placing lines like "option foo = 1234;" in curly-braces after a method
   // declaration.  Allowed options are defined by MethodOptions in
-  // google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // descriptor.proto, and any available extensions of that message.
   public native @Const @ByRef MethodOptions options();
 
   // See Descriptor::CopyTo().

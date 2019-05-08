@@ -33,8 +33,9 @@ public class FileDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileDescriptor(Pointer p) { super(p); }
 
+
   // The filename, relative to the source tree.
-  // e.g. "google/protobuf/descriptor.proto"
+  // e.g. "foo/bar/baz.proto"
   public native @StdString BytePointer name();
 
   // The package, e.g. "google.protobuf.compiler".
@@ -96,8 +97,7 @@ public class FileDescriptor extends Pointer {
   // Get options for this file.  These are specified in the .proto file by
   // placing lines like "option foo = 1234;" at the top level, outside of any
   // other definitions.  Allowed options are defined by FileOptions in
-  // google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // descriptor.proto, and any available extensions of that message.
   public native @Const @ByRef FileOptions options();
 
   // Syntax of this file.

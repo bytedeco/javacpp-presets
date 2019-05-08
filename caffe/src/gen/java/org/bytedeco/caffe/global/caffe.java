@@ -204,11 +204,6 @@ public class caffe extends org.bytedeco.caffe.presets.caffe {
 // #include <google/protobuf/stubs/macros.h>
 // #include <google/protobuf/stubs/platform_macros.h>
 
-// TODO(liujisi): Remove the following includes after the include clean-up.
-// #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/stubs/mutex.h>
-// #include <google/protobuf/stubs/callback.h>
-
 // #ifndef PROTOBUF_USE_EXCEPTIONS
 // #if defined(_MSC_VER) && defined(_CPPUNWIND)
   public static final int PROTOBUF_USE_EXCEPTIONS = 1;
@@ -228,8 +223,7 @@ public class caffe extends org.bytedeco.caffe.presets.caffe {
 // #include <pthread.h>
 // #endif
 
-// #if defined(_WIN32) && defined(GetMessage)
-// #endif
+// #include <google/protobuf/port_def.inc>
 
 
 
@@ -238,14 +232,10 @@ public class caffe extends org.bytedeco.caffe.presets.caffe {
 
 // The current version, represented as a single integer to make comparison
 // easier:  major * 10^6 + minor * 10^3 + micro
-public static final int GOOGLE_PROTOBUF_VERSION = 3006001;
+public static final int GOOGLE_PROTOBUF_VERSION = 3007001;
 
 // A suffix string for alpha, beta or rc releases. Empty for stable releases.
 public static final String GOOGLE_PROTOBUF_VERSION_SUFFIX = "";
-
-// The minimum library version which works with the current version of the
-// headers.
-public static final int GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION = 3006001;
 
 // The minimum header version which works with the current version of
 // the library.  This constant should only be used by protoc's C++ code
@@ -255,7 +245,7 @@ public static final int kMinHeaderVersionForLibrary = kMinHeaderVersionForLibrar
 
 // The minimum protoc version which works with the current version of the
 // headers.
-public static final int GOOGLE_PROTOBUF_MIN_PROTOC_VERSION = 3006001;
+public static final int GOOGLE_PROTOBUF_MIN_PROTOC_VERSION = 3007000;
 
 // The minimum header version which works with the current version of
 // protoc.  This constant should only be used in VerifyVersion().
@@ -265,9 +255,9 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // Verifies that the headers and libraries are compatible.  Use the macro
 // below to call this.
 @Namespace("google::protobuf::internal") public static native void VerifyVersion(int headerVersion, int minLibraryVersion,
-                                      @Cast("const char*") BytePointer filename);
+                                   @Cast("const char*") BytePointer filename);
 @Namespace("google::protobuf::internal") public static native void VerifyVersion(int headerVersion, int minLibraryVersion,
-                                      String filename);
+                                   String filename);
 
 // Converts a numeric version number to a string.
 @Namespace("google::protobuf::internal") public static native @StdString BytePointer VersionString(int version);
@@ -309,12 +299,15 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 //
 // Optimized for: all structurally valid and no byte copying is done.
 //
-@Namespace("google::protobuf::internal") public static native @Cast("char*") BytePointer UTF8CoerceToStructurallyValid(
-    @Const @ByRef StringPiece str, @Cast("char*") BytePointer dst, @Cast("char") byte replace_char);
-@Namespace("google::protobuf::internal") public static native @Cast("char*") ByteBuffer UTF8CoerceToStructurallyValid(
-    @Const @ByRef StringPiece str, @Cast("char*") ByteBuffer dst, @Cast("char") byte replace_char);
-@Namespace("google::protobuf::internal") public static native @Cast("char*") byte[] UTF8CoerceToStructurallyValid(
-    @Const @ByRef StringPiece str, @Cast("char*") byte[] dst, @Cast("char") byte replace_char);
+@Namespace("google::protobuf::internal") public static native @Cast("char*") BytePointer UTF8CoerceToStructurallyValid(@Const @ByRef StringPiece str,
+                                                    @Cast("char*") BytePointer dst,
+                                                    @Cast("char") byte replace_char);
+@Namespace("google::protobuf::internal") public static native @Cast("char*") ByteBuffer UTF8CoerceToStructurallyValid(@Const @ByRef StringPiece str,
+                                                    @Cast("char*") ByteBuffer dst,
+                                                    @Cast("char") byte replace_char);
+@Namespace("google::protobuf::internal") public static native @Cast("char*") byte[] UTF8CoerceToStructurallyValid(@Const @ByRef StringPiece str,
+                                                    @Cast("char*") byte[] dst,
+                                                    @Cast("char") byte replace_char);
 
   // namespace internal
 
@@ -357,6 +350,8 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
   // namespace protobuf
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
 
 // #endif  // GOOGLE_PROTOBUF_COMMON_H__
 
@@ -412,14 +407,17 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #endif
 
 // #include <google/protobuf/arena_impl.h>
-// #include <google/protobuf/stubs/port.h>
-// #include <type_traits>  // defined below
+// #include <google/protobuf/port.h>
+// #include <type_traits>
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif  // defined below
 
   // namespace protobuf
-
-@Namespace("google::quality_webanswers") public static native void TempPrivateWorkAround(ArenaOptions arena_options);
-
-  // namespace quality_webanswers          // defined below        // defined in message.h
+  // namespace google          // defined below        // defined in message.h
 
 @Namespace("google::protobuf::arena_metrics") public static native void EnableArenaMetrics(ArenaOptions options);
 
@@ -441,7 +439,7 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 // Support for non-RTTI environments. (The metrics hooks API uses type
 // information.)
-// #ifndef GOOGLE_PROTOBUF_NO_RTTI
+// #if PROTOBUF_RTTI
 // #define RTTI_TYPE_ID(type) (&typeid(type))
 // #else
 // #define RTTI_TYPE_ID(type) (NULL)
@@ -453,8 +451,10 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #undef RTTI_TYPE_ID
 
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_ARENA_H__
 
 
@@ -524,10 +524,16 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #include <google/protobuf/stubs/mutex.h>
 // #include <google/protobuf/stubs/once.h>
 
+// #include <google/protobuf/port_def.inc>
+
 // TYPE_BOOL is defined in the MacOS's ConditionalMacros.h.
 // #ifdef TYPE_BOOL
 // #undef TYPE_BOOL
 // #endif  // TYPE_BOOL
+
+// #ifdef SWIG
+// #define PROTOBUF_EXPORT
+// #endif
 // Targeting ../DescriptorDatabase.java
 
 
@@ -612,6 +618,8 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // Targeting ../CommandLineInterface.java
 
 
+// Defined in helpers.h
+  // namespace cpp
 
 // Targeting ../DescriptorTest.java
 
@@ -668,7 +676,7 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 // Strings fields are stored as pointers but returned as const references.
 // #define PROTOBUF_DEFINE_STRING_ACCESSOR(CLASS, FIELD)
-//   inline const string& CLASS::FIELD() const { return *FIELD##_; }
+//   inline const std::string& CLASS::FIELD() const { return *FIELD##_; }
 
 // Arrays take an index parameter, obviously.
 // #define PROTOBUF_DEFINE_ARRAY_ACCESSOR(CLASS, FIELD, TYPE)
@@ -868,8 +876,10 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_DESCRIPTOR_H__
 
 
@@ -917,11 +927,20 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 // #include <climits>
+// #include <string>
 // #include <google/protobuf/stubs/common.h>
 // #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/stubs/once.h>
 // #include <google/protobuf/arena.h>
-// #include <google/protobuf/stubs/port.h>
+// #include <google/protobuf/stubs/once.h>
+// #include <google/protobuf/port.h>
+// #include <google/protobuf/stubs/strutil.h>
+
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif
 // Targeting ../CodedInputStream.java
 
 
@@ -935,6 +954,7 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
 
+  // namespace io
 // Targeting ../RepeatedPtrFieldBase.java
 
 
@@ -945,8 +965,50 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
 
-// #ifndef SWIG
-// #endif  // SWIG
+// We compute sizes as size_t but cache them as int.  This function converts a
+// computed size to a cached size.  Since we don't proceed with serialization
+// if the total size was > INT_MAX, it is not important what this function
+// returns for inputs > INT_MAX.  However this case should not error or
+// GOOGLE_CHECK-fail, because the full size_t resolution is still returned from
+// ByteSizeLong() and checked against INT_MAX; we can catch the overflow
+// there.
+@Namespace("google::protobuf::internal") public static native int ToCachedSize(@Cast("size_t") long size);
+
+// We mainly calculate sizes in terms of size_t, but some functions that
+// compute sizes return "int".  These int sizes are expected to always be
+// positive. This function is more efficient than casting an int to size_t
+// directly on 64-bit platforms because it avoids making the compiler emit a
+// sign extending instruction, which we don't want and don't want to pay for.
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long FromIntSize(int size);
+
+// For cases where a legacy function returns an integer size.  We GOOGLE_DCHECK()
+// that the conversion will fit within an integer; if this is false then we
+// are losing information.
+@Namespace("google::protobuf::internal") public static native int ToIntSize(@Cast("size_t") long size);
+
+// This type wraps a variable whose constructor and destructor are explicitly
+// called. It is particularly useful for a global variable, without its
+// constructor and destructor run on start and end of the program lifetime.
+// This circumvents the initial construction order fiasco, while keeping
+// the address of the empty string a compile time constant.
+//
+// Pay special attention to the initialization state of the object.
+// 1. The object is "uninitialized" to begin with.
+// 2. Call DefaultConstruct() only if the object is uninitialized.
+//    After the call, the object becomes "initialized".
+// 3. Call get() and get_mutable() only if the object is initialized.
+// 4. Call Destruct() only if the object is initialized.
+//    After the call, the object becomes uninitialized.
+
+// Default empty string object. Don't use this directly. Instead, call
+// GetEmptyString() to get the reference.
+
+
+@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyStringAlreadyInited();
+
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString BytePointer str);
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString String str);
+
 
 // Targeting ../MessageLite.java
 
@@ -954,19 +1016,30 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
 
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
 
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
+
+
+
+
+// Targeting ../BoundedZCIS.java
+
+
+
+
+
+
+
+
+
   // namespace internal
 
 
-  // namespace protobuf
 
+  // namespace protobuf
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 
@@ -1089,15 +1162,22 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #include <type_traits>
 // #include <vector>
 
-// #include <google/protobuf/arena.h>
-// #include <google/protobuf/message_lite.h>
-
+// #include <google/protobuf/stubs/casts.h>
 // #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/arena.h>
 // #include <google/protobuf/descriptor.h>
+// #include <google/protobuf/message_lite.h>
+// #include <google/protobuf/port.h>
 
 
 // #define GOOGLE_PROTOBUF_HAS_ONEOF
 // #define GOOGLE_PROTOBUF_HAS_ARENAS
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif
 
 // Defined in this file.
 // Targeting ../MapKey.java
@@ -1127,6 +1207,13 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // Targeting ../CelMapReflectionFriend.java
 
   // field_backed_map_impl.cc
+
+// Targeting ../MapFieldPrinterHelper.java
+
+   // text_format.cc
+
+// Targeting ../ReflectionAccessor.java
+
 
 // Targeting ../ReflectionOps.java
 
@@ -1162,39 +1249,51 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
 // #define DECLARE_GET_REPEATED_FIELD(TYPE)
-// template<>
-// LIBPROTOBUF_EXPORT
-// const RepeatedField<TYPE>& Reflection::GetRepeatedField<TYPE>(
-//     const Message& message, const FieldDescriptor* field) const;
+//   template <>
+//   PROTOBUF_EXPORT const RepeatedField<TYPE>&
+//   Reflection::GetRepeatedField<TYPE>(const Message& message,
+//                                      const FieldDescriptor* field) const;
 // 
-// template<>
-// LIBPROTOBUF_EXPORT
-// RepeatedField<TYPE>* Reflection::MutableRepeatedField<TYPE>(
-//     Message* message, const FieldDescriptor* field) const;
+//   template <>
+//   PROTOBUF_EXPORT RepeatedField<TYPE>* Reflection::MutableRepeatedField<TYPE>(
+//       Message * message, const FieldDescriptor* field) const;
 
 
 
+  
 
 
+  
 
 
+  
 
 
+  
 
 
+  
 
 
+  
 
 
-
-
-
-
-
-
-
+  
 
 // #undef DECLARE_GET_REPEATED_FIELD
+
+// Tries to downcast this message to a generated message type.  Returns NULL if
+// this class is not an instance of T.  This works even if RTTI is disabled.
+//
+// This also has the effect of creating a strong reference to T that will
+// prevent the linker from stripping it out at link time.  This can be important
+// if you are using a DynamicMessageFactory that delegates to the generated
+// factory.
+
+// Legacy functions, to preserve compatibility with existing callers.
+// These had a slightly different signature, so we have to adjust "T".
+
+  // namespace internal
 
 // =============================================================================
 // Implementation details for {Get,Mutable}RawRepeatedPtrField.  We provide
@@ -1218,8 +1317,10 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 
 
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_MESSAGE_H__
 
 
@@ -1368,6 +1469,12 @@ public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc(
 // #define PROTOBUF_CONSTEXPR_VAR
 // #endif  // !_clang
 
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif
+
+// #include <google/protobuf/port_def.inc>
+
 // Processing-type masks.
 @Namespace("google::protobuf::internal") @MemberGetter public static native @Cast("const unsigned char") byte kOneofMask();
 public static final byte kOneofMask = kOneofMask();
@@ -1386,6 +1493,10 @@ public static final byte kInvalidMask = kInvalidMask();
 
 /** enum google::protobuf::internal::ProcessingTypes */
 public static final int
+  TYPE_STRING_CORD = 19,
+  TYPE_STRING_STRING_PIECE = 20,
+  TYPE_BYTES_CORD = 21,
+  TYPE_BYTES_STRING_PIECE = 22,
   TYPE_STRING_INLINED = 23,
   TYPE_BYTES_INLINED = 24,
   TYPE_MAP = 25;
@@ -1410,11 +1521,19 @@ public static final int
                                  CodedInputStream input);
 @Namespace("google::protobuf::internal") public static native @Cast("bool") boolean MergePartialFromCodedStreamLite(MessageLite msg, @Const @ByRef ParseTable table,
                                  CodedInputStream input);
+// Targeting ../CompareHelper.java
+
+
+// Targeting ../CompareMapKey.java
+
+
 
   // namespace internal
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_GENERATED_MESSAGE_TABLE_DRIVEN_H__
 
 
@@ -1426,21 +1545,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_caffe_2eproto
 // #define PROTOBUF_INCLUDED_caffe_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -1454,10 +1574,11 @@ public static final int
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_caffe_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_caffe_2eproto
+
 // Internal implementation detail -- do not use these members.
-@Namespace("protobuf_caffe_2eproto") public static native void AddDescriptors();
-  // namespace protobuf_caffe_2eproto
+public static native void AddDescriptors_caffe_2eproto();
   // namespace caffe
 
 
@@ -2372,9 +2493,6 @@ public static final int
 
 
 
-
-
-
 // repeated float data = 5 [packed = true];
 
 
@@ -2417,11 +2535,7 @@ public static final int
 
 
 
-
-
 // optional int32 channels = 2 [default = 0];
-
-
 
 
 
@@ -2433,11 +2547,7 @@ public static final int
 
 
 
-
-
 // optional int32 width = 4 [default = 0];
-
-
 
 
 
@@ -2466,11 +2576,7 @@ public static final int
 
 
 
-
-
 // optional int32 height = 2;
-
-
 
 
 
@@ -2482,11 +2588,7 @@ public static final int
 
 
 
-
-
 // optional bytes data = 4;
-
-
 
 
 
@@ -2500,8 +2602,6 @@ public static final int
 
 
 // optional int32 label = 5;
-
-
 
 
 
@@ -2522,15 +2622,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // FillerParameter
 
 // optional string type = 1 [default = "constant"];
-
-
 
 
 
@@ -2549,11 +2645,7 @@ public static final int
 
 
 
-
-
 // optional float min = 3 [default = 0];
-
-
 
 
 
@@ -2565,11 +2657,7 @@ public static final int
 
 
 
-
-
 // optional float mean = 5 [default = 0];
-
-
 
 
 
@@ -2581,11 +2669,7 @@ public static final int
 
 
 
-
-
 // optional int32 sparse = 7 [default = -1];
-
-
 
 
 
@@ -2597,15 +2681,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // NetParameter
 
 // optional string name = 1;
-
-
 
 
 
@@ -2661,8 +2741,6 @@ public static final int
 
 
 
-
-
 // optional .caffe.NetState state = 6;
 
 
@@ -2671,12 +2749,7 @@ public static final int
 
 
 
-
-
-
 // optional bool debug_info = 7 [default = false];
-
-
 
 
 
@@ -2709,8 +2782,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -2727,12 +2798,7 @@ public static final int
 
 
 
-
-
-
 // optional string train_net = 1;
-
-
 
 
 
@@ -2772,9 +2838,6 @@ public static final int
 
 
 
-
-
-
 // repeated .caffe.NetParameter test_net_param = 22;
 
 
@@ -2785,9 +2848,6 @@ public static final int
 
 
 // optional .caffe.NetState train_state = 26;
-
-
-
 
 
 
@@ -2819,11 +2879,7 @@ public static final int
 
 
 
-
-
 // optional bool test_compute_loss = 19 [default = false];
-
-
 
 
 
@@ -2835,11 +2891,7 @@ public static final int
 
 
 
-
-
 // optional float base_lr = 5;
-
-
 
 
 
@@ -2851,11 +2903,7 @@ public static final int
 
 
 
-
-
 // optional int32 average_loss = 33 [default = 1];
-
-
 
 
 
@@ -2867,19 +2915,13 @@ public static final int
 
 
 
-
-
 // optional int32 iter_size = 36 [default = 1];
 
 
 
 
 
-
-
 // optional string lr_policy = 8;
-
-
 
 
 
@@ -2898,11 +2940,7 @@ public static final int
 
 
 
-
-
 // optional float power = 10;
-
-
 
 
 
@@ -2914,19 +2952,13 @@ public static final int
 
 
 
-
-
 // optional float weight_decay = 12;
 
 
 
 
 
-
-
 // optional string regularization_type = 29 [default = "L2"];
-
-
 
 
 
@@ -2940,8 +2972,6 @@ public static final int
 
 
 // optional int32 stepsize = 13;
-
-
 
 
 
@@ -2962,19 +2992,13 @@ public static final int
 
 
 
-
-
 // optional int32 snapshot = 14 [default = 0];
 
 
 
 
 
-
-
 // optional string snapshot_prefix = 15;
-
-
 
 
 
@@ -2993,11 +3017,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.SolverParameter.SnapshotFormat snapshot_format = 37 [default = BINARYPROTO];
-
-
 
 
 
@@ -3009,11 +3029,7 @@ public static final int
 
 
 
-
-
 // optional int32 device_id = 18 [default = 0];
-
-
 
 
 
@@ -3025,11 +3041,7 @@ public static final int
 
 
 
-
-
 // optional string type = 40 [default = "SGD"];
-
-
 
 
 
@@ -3048,11 +3060,7 @@ public static final int
 
 
 
-
-
 // optional float momentum2 = 39 [default = 0.999];
-
-
 
 
 
@@ -3064,11 +3072,7 @@ public static final int
 
 
 
-
-
 // optional bool debug_info = 23 [default = false];
-
-
 
 
 
@@ -3080,19 +3084,13 @@ public static final int
 
 
 
-
-
 // optional .caffe.SolverParameter.SolverType solver_type = 30 [default = SGD];
 
 
 
 
 
-
-
 // optional bool layer_wise_reduce = 41 [default = true];
-
-
 
 
 
@@ -3108,11 +3106,7 @@ public static final int
 
 
 
-
-
 // optional string learned_net = 2;
-
-
 
 
 
@@ -3140,8 +3134,6 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // NetState
@@ -3152,11 +3144,7 @@ public static final int
 
 
 
-
-
 // optional int32 level = 2 [default = 0];
-
-
 
 
 
@@ -3191,19 +3179,13 @@ public static final int
 
 
 
-
-
 // optional int32 min_level = 2;
 
 
 
 
 
-
-
 // optional int32 max_level = 3;
-
-
 
 
 
@@ -3256,8 +3238,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -3272,19 +3252,13 @@ public static final int
 
 
 
-
-
 // optional float lr_mult = 3 [default = 1];
 
 
 
 
 
-
-
 // optional float decay_mult = 4 [default = 1];
-
-
 
 
 
@@ -3299,8 +3273,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -3310,8 +3282,6 @@ public static final int
 
 
 // optional string type = 2;
-
-
 
 
 
@@ -3363,8 +3333,6 @@ public static final int
 
 
 // optional .caffe.Phase phase = 10;
-
-
 
 
 
@@ -3432,13 +3400,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.LossParameter loss_param = 101;
-
-
-
 
 
 
@@ -3454,13 +3416,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ArgMaxParameter argmax_param = 103;
-
-
-
 
 
 
@@ -3476,13 +3432,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.BiasParameter bias_param = 141;
-
-
-
 
 
 
@@ -3498,13 +3448,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ContrastiveLossParameter contrastive_loss_param = 105;
-
-
-
 
 
 
@@ -3520,13 +3464,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.CropParameter crop_param = 144;
-
-
-
 
 
 
@@ -3542,13 +3480,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.DropoutParameter dropout_param = 108;
-
-
-
 
 
 
@@ -3564,13 +3496,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.EltwiseParameter eltwise_param = 110;
-
-
-
 
 
 
@@ -3586,13 +3512,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.EmbedParameter embed_param = 137;
-
-
-
 
 
 
@@ -3608,13 +3528,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.FlattenParameter flatten_param = 135;
-
-
-
 
 
 
@@ -3630,13 +3544,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.HDF5OutputParameter hdf5_output_param = 113;
-
-
-
 
 
 
@@ -3652,13 +3560,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ImageDataParameter image_data_param = 115;
-
-
-
 
 
 
@@ -3674,13 +3576,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.InnerProductParameter inner_product_param = 117;
-
-
-
 
 
 
@@ -3696,13 +3592,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.LogParameter log_param = 134;
-
-
-
 
 
 
@@ -3718,13 +3608,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.MemoryDataParameter memory_data_param = 119;
-
-
-
 
 
 
@@ -3740,13 +3624,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ParameterParameter parameter_param = 145;
-
-
-
 
 
 
@@ -3762,13 +3640,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.PowerParameter power_param = 122;
-
-
-
 
 
 
@@ -3784,13 +3656,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.PythonParameter python_param = 130;
-
-
-
 
 
 
@@ -3806,13 +3672,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ReductionParameter reduction_param = 136;
-
-
-
 
 
 
@@ -3828,13 +3688,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ReshapeParameter reshape_param = 133;
-
-
-
 
 
 
@@ -3850,13 +3704,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.SigmoidParameter sigmoid_param = 124;
-
-
-
 
 
 
@@ -3872,13 +3720,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.SPPParameter spp_param = 132;
-
-
-
 
 
 
@@ -3894,13 +3736,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.TanHParameter tanh_param = 127;
-
-
-
 
 
 
@@ -3916,9 +3752,6 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.TileParameter tile_param = 138;
 
 
@@ -3927,13 +3760,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.WindowDataParameter window_data_param = 129;
-
-
-
 
 
 
@@ -3951,11 +3778,7 @@ public static final int
 
 
 
-
-
 // optional bool mirror = 2 [default = false];
-
-
 
 
 
@@ -3967,11 +3790,7 @@ public static final int
 
 
 
-
-
 // optional string mean_file = 4;
-
-
 
 
 
@@ -3999,11 +3818,7 @@ public static final int
 
 
 
-
-
 // optional bool force_gray = 7 [default = false];
-
-
 
 
 
@@ -4019,19 +3834,13 @@ public static final int
 
 
 
-
-
 // optional .caffe.LossParameter.NormalizationMode normalization = 3 [default = VALID];
 
 
 
 
 
-
-
 // optional bool normalize = 2;
-
-
 
 
 
@@ -4047,19 +3856,13 @@ public static final int
 
 
 
-
-
 // optional int32 axis = 2 [default = 1];
 
 
 
 
 
-
-
 // optional int32 ignore_label = 3;
-
-
 
 
 
@@ -4075,19 +3878,13 @@ public static final int
 
 
 
-
-
 // optional uint32 top_k = 2 [default = 1];
 
 
 
 
 
-
-
 // optional int32 axis = 3;
-
-
 
 
 
@@ -4103,11 +3900,7 @@ public static final int
 
 
 
-
-
 // optional uint32 concat_dim = 1 [default = 1];
-
-
 
 
 
@@ -4123,19 +3916,13 @@ public static final int
 
 
 
-
-
 // optional float moving_average_fraction = 2 [default = 0.999];
 
 
 
 
 
-
-
 // optional float eps = 3 [default = 1e-05];
-
-
 
 
 
@@ -4151,20 +3938,13 @@ public static final int
 
 
 
-
-
 // optional int32 num_axes = 2 [default = 1];
 
 
 
 
 
-
-
 // optional .caffe.FillerParameter filler = 3;
-
-
-
 
 
 
@@ -4182,11 +3962,7 @@ public static final int
 
 
 
-
-
 // optional bool legacy_version = 2 [default = false];
-
-
 
 
 
@@ -4202,11 +3978,7 @@ public static final int
 
 
 
-
-
 // optional bool bias_term = 2 [default = true];
-
-
 
 
 
@@ -4254,11 +4026,7 @@ public static final int
 
 
 
-
-
 // optional uint32 pad_w = 10 [default = 0];
-
-
 
 
 
@@ -4270,11 +4038,7 @@ public static final int
 
 
 
-
-
 // optional uint32 kernel_w = 12;
-
-
 
 
 
@@ -4286,11 +4050,7 @@ public static final int
 
 
 
-
-
 // optional uint32 stride_w = 14;
-
-
 
 
 
@@ -4302,12 +4062,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.FillerParameter weight_filler = 7;
-
-
-
 
 
 
@@ -4323,12 +4078,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ConvolutionParameter.Engine engine = 15 [default = DEFAULT];
-
-
 
 
 
@@ -4340,11 +4090,7 @@ public static final int
 
 
 
-
-
 // optional bool force_nd_im2col = 17 [default = false];
-
-
 
 
 
@@ -4355,8 +4101,6 @@ public static final int
 // CropParameter
 
 // optional int32 axis = 1 [default = 2];
-
-
 
 
 
@@ -4380,8 +4124,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -4396,11 +4138,7 @@ public static final int
 
 
 
-
-
 // optional uint32 rand_skip = 7 [default = 0];
-
-
 
 
 
@@ -4412,19 +4150,13 @@ public static final int
 
 
 
-
-
 // optional float scale = 2 [default = 1];
 
 
 
 
 
-
-
 // optional string mean_file = 3;
-
-
 
 
 
@@ -4443,11 +4175,7 @@ public static final int
 
 
 
-
-
 // optional bool mirror = 6 [default = false];
-
-
 
 
 
@@ -4459,11 +4187,7 @@ public static final int
 
 
 
-
-
 // optional uint32 prefetch = 10 [default = 4];
-
-
 
 
 
@@ -4474,8 +4198,6 @@ public static final int
 // DropoutParameter
 
 // optional float dropout_ratio = 1 [default = 0.5];
-
-
 
 
 
@@ -4549,8 +4271,6 @@ public static final int
 
 
 
-
-
 // repeated float coeff = 2;
 
 
@@ -4566,15 +4286,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // ELUParameter
 
 // optional float alpha = 1 [default = 1];
-
-
 
 
 
@@ -4590,19 +4306,13 @@ public static final int
 
 
 
-
-
 // optional uint32 input_dim = 2;
 
 
 
 
 
-
-
 // optional bool bias_term = 3 [default = true];
-
-
 
 
 
@@ -4616,13 +4326,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.FillerParameter bias_filler = 5;
-
-
-
 
 
 
@@ -4640,19 +4344,13 @@ public static final int
 
 
 
-
-
 // optional float scale = 2 [default = 1];
 
 
 
 
 
-
-
 // optional float shift = 3 [default = 0];
-
-
 
 
 
@@ -4668,11 +4366,7 @@ public static final int
 
 
 
-
-
 // optional int32 end_axis = 2 [default = -1];
-
-
 
 
 
@@ -4683,8 +4377,6 @@ public static final int
 // HDF5DataParameter
 
 // optional string source = 1;
-
-
 
 
 
@@ -4703,11 +4395,7 @@ public static final int
 
 
 
-
-
 // optional bool shuffle = 3 [default = false];
-
-
 
 
 
@@ -4718,8 +4406,6 @@ public static final int
 // HDF5OutputParameter
 
 // optional string file_name = 1;
-
-
 
 
 
@@ -4742,15 +4428,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // ImageDataParameter
 
 // optional string source = 1;
-
-
 
 
 
@@ -4769,11 +4451,7 @@ public static final int
 
 
 
-
-
 // optional uint32 rand_skip = 7 [default = 0];
-
-
 
 
 
@@ -4785,11 +4463,7 @@ public static final int
 
 
 
-
-
 // optional uint32 new_height = 9 [default = 0];
-
-
 
 
 
@@ -4801,11 +4475,7 @@ public static final int
 
 
 
-
-
 // optional bool is_color = 11 [default = true];
-
-
 
 
 
@@ -4817,11 +4487,7 @@ public static final int
 
 
 
-
-
 // optional string mean_file = 3;
-
-
 
 
 
@@ -4840,19 +4506,13 @@ public static final int
 
 
 
-
-
 // optional bool mirror = 6 [default = false];
 
 
 
 
 
-
-
 // optional string root_folder = 12 [default = ""];
-
-
 
 
 
@@ -4874,8 +4534,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -4885,8 +4543,6 @@ public static final int
 
 
 // optional int32 axis = 2 [default = 1];
-
-
 
 
 
@@ -4902,20 +4558,13 @@ public static final int
 
 
 
-
-
 // optional bool bias_term = 2 [default = true];
 
 
 
 
 
-
-
 // optional .caffe.FillerParameter weight_filler = 3;
-
-
-
 
 
 
@@ -4931,20 +4580,13 @@ public static final int
 
 
 
-
-
-
 // optional int32 axis = 5 [default = 1];
 
 
 
 
 
-
-
 // optional bool transpose = 6 [default = false];
-
-
 
 
 
@@ -4973,19 +4615,13 @@ public static final int
 
 
 
-
-
 // optional float scale = 2 [default = 1];
 
 
 
 
 
-
-
 // optional float shift = 3 [default = 0];
-
-
 
 
 
@@ -5001,11 +4637,7 @@ public static final int
 
 
 
-
-
 // optional float alpha = 2 [default = 1];
-
-
 
 
 
@@ -5017,11 +4649,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.LRNParameter.NormRegion norm_region = 4 [default = ACROSS_CHANNELS];
-
-
 
 
 
@@ -5033,11 +4661,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.LRNParameter.Engine engine = 6 [default = DEFAULT];
-
-
 
 
 
@@ -5053,11 +4677,7 @@ public static final int
 
 
 
-
-
 // optional uint32 channels = 2;
-
-
 
 
 
@@ -5069,11 +4689,7 @@ public static final int
 
 
 
-
-
 // optional uint32 width = 4;
-
-
 
 
 
@@ -5089,19 +4705,13 @@ public static final int
 
 
 
-
-
 // optional bool across_channels = 2 [default = false];
 
 
 
 
 
-
-
 // optional float eps = 3 [default = 1e-09];
-
-
 
 
 
@@ -5119,16 +4729,11 @@ public static final int
 
 
 
-
-
-
 // -------------------------------------------------------------------
 
 // PoolingParameter
 
 // optional .caffe.PoolingParameter.PoolMethod pool = 1 [default = MAX];
-
-
 
 
 
@@ -5140,11 +4745,7 @@ public static final int
 
 
 
-
-
 // optional uint32 pad_h = 9 [default = 0];
-
-
 
 
 
@@ -5156,11 +4757,7 @@ public static final int
 
 
 
-
-
 // optional uint32 kernel_size = 2;
-
-
 
 
 
@@ -5172,11 +4769,7 @@ public static final int
 
 
 
-
-
 // optional uint32 kernel_w = 6;
-
-
 
 
 
@@ -5188,11 +4781,7 @@ public static final int
 
 
 
-
-
 // optional uint32 stride_h = 7;
-
-
 
 
 
@@ -5204,19 +4793,13 @@ public static final int
 
 
 
-
-
 // optional .caffe.PoolingParameter.Engine engine = 11 [default = DEFAULT];
 
 
 
 
 
-
-
 // optional bool global_pooling = 12 [default = false];
-
-
 
 
 
@@ -5232,11 +4815,7 @@ public static final int
 
 
 
-
-
 // optional float scale = 2 [default = 1];
-
-
 
 
 
@@ -5248,15 +4827,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // PythonParameter
 
 // optional string module = 1;
-
-
 
 
 
@@ -5274,8 +4849,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -5285,8 +4858,6 @@ public static final int
 
 
 // optional string param_str = 3 [default = ""];
-
-
 
 
 
@@ -5305,8 +4876,6 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // RecurrentParameter
@@ -5317,12 +4886,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.FillerParameter weight_filler = 2;
-
-
-
 
 
 
@@ -5338,20 +4902,13 @@ public static final int
 
 
 
-
-
-
 // optional bool debug_info = 4 [default = false];
 
 
 
 
 
-
-
 // optional bool expose_hidden = 5 [default = false];
-
-
 
 
 
@@ -5367,19 +4924,13 @@ public static final int
 
 
 
-
-
 // optional int32 axis = 2 [default = 0];
 
 
 
 
 
-
-
 // optional float coeff = 3 [default = 1];
-
-
 
 
 
@@ -5395,11 +4946,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.ReLUParameter.Engine engine = 2 [default = DEFAULT];
-
-
 
 
 
@@ -5417,20 +4964,13 @@ public static final int
 
 
 
-
-
-
 // optional int32 axis = 2 [default = 0];
 
 
 
 
 
-
-
 // optional int32 num_axes = 3 [default = -1];
-
-
 
 
 
@@ -5446,11 +4986,7 @@ public static final int
 
 
 
-
-
 // optional int32 num_axes = 2 [default = 1];
-
-
 
 
 
@@ -5464,21 +5000,13 @@ public static final int
 
 
 
-
-
-
 // optional bool bias_term = 4 [default = false];
 
 
 
 
 
-
-
 // optional .caffe.FillerParameter bias_filler = 5;
-
-
-
 
 
 
@@ -5496,15 +5024,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // SliceParameter
 
 // optional int32 axis = 3 [default = 1];
-
-
 
 
 
@@ -5525,8 +5049,6 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // SoftmaxParameter
@@ -5537,11 +5059,7 @@ public static final int
 
 
 
-
-
 // optional int32 axis = 2 [default = 1];
-
-
 
 
 
@@ -5557,8 +5075,6 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // TileParameter
@@ -5569,11 +5085,7 @@ public static final int
 
 
 
-
-
 // optional int32 tiles = 2;
-
-
 
 
 
@@ -5589,15 +5101,11 @@ public static final int
 
 
 
-
-
 // -------------------------------------------------------------------
 
 // WindowDataParameter
 
 // optional string source = 1;
-
-
 
 
 
@@ -5616,11 +5124,7 @@ public static final int
 
 
 
-
-
 // optional string mean_file = 3;
-
-
 
 
 
@@ -5639,11 +5143,7 @@ public static final int
 
 
 
-
-
 // optional uint32 crop_size = 5 [default = 0];
-
-
 
 
 
@@ -5655,11 +5155,7 @@ public static final int
 
 
 
-
-
 // optional float fg_threshold = 7 [default = 0.5];
-
-
 
 
 
@@ -5671,11 +5167,7 @@ public static final int
 
 
 
-
-
 // optional float fg_fraction = 9 [default = 0.25];
-
-
 
 
 
@@ -5687,11 +5179,7 @@ public static final int
 
 
 
-
-
 // optional string crop_mode = 11 [default = "warp"];
-
-
 
 
 
@@ -5710,11 +5198,7 @@ public static final int
 
 
 
-
-
 // optional string root_folder = 13 [default = ""];
-
-
 
 
 
@@ -5737,19 +5221,13 @@ public static final int
 
 
 
-
-
 // optional .caffe.SPPParameter.PoolMethod pool = 2 [default = MAX];
 
 
 
 
 
-
-
 // optional .caffe.SPPParameter.Engine engine = 6 [default = DEFAULT];
-
-
 
 
 
@@ -5802,8 +5280,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -5831,8 +5307,6 @@ public static final int
 
 
 // optional .caffe.V1LayerParameter.LayerType type = 5;
-
-
 
 
 
@@ -5910,13 +5384,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ArgMaxParameter argmax_param = 23;
-
-
-
 
 
 
@@ -5932,13 +5400,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ContrastiveLossParameter contrastive_loss_param = 40;
-
-
-
 
 
 
@@ -5954,13 +5416,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.DataParameter data_param = 11;
-
-
-
 
 
 
@@ -5976,13 +5432,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.DummyDataParameter dummy_data_param = 26;
-
-
-
 
 
 
@@ -5998,13 +5448,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ExpParameter exp_param = 41;
-
-
-
 
 
 
@@ -6020,13 +5464,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.HDF5OutputParameter hdf5_output_param = 14;
-
-
-
 
 
 
@@ -6042,13 +5480,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ImageDataParameter image_data_param = 15;
-
-
-
 
 
 
@@ -6064,13 +5496,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.InnerProductParameter inner_product_param = 17;
-
-
-
 
 
 
@@ -6086,13 +5512,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.MemoryDataParameter memory_data_param = 22;
-
-
-
 
 
 
@@ -6108,13 +5528,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.PoolingParameter pooling_param = 19;
-
-
-
 
 
 
@@ -6130,13 +5544,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.ReLUParameter relu_param = 30;
-
-
-
 
 
 
@@ -6152,13 +5560,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.SoftmaxParameter softmax_param = 39;
-
-
-
 
 
 
@@ -6174,13 +5576,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.TanHParameter tanh_param = 37;
-
-
-
 
 
 
@@ -6196,13 +5592,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.WindowDataParameter window_data_param = 20;
-
-
-
 
 
 
@@ -6218,9 +5608,6 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.LossParameter loss_param = 42;
 
 
@@ -6229,13 +5616,7 @@ public static final int
 
 
 
-
-
-
 // optional .caffe.V0LayerParameter layer = 1;
-
-
-
 
 
 
@@ -6252,8 +5633,6 @@ public static final int
 
 
 
-
-
 // #if LANG_CXX11
 // #endif
 
@@ -6263,8 +5642,6 @@ public static final int
 
 
 // optional string type = 2;
-
-
 
 
 
@@ -6283,20 +5660,13 @@ public static final int
 
 
 
-
-
 // optional bool biasterm = 4 [default = true];
 
 
 
 
 
-
-
 // optional .caffe.FillerParameter weight_filler = 5;
-
-
-
 
 
 
@@ -6312,12 +5682,7 @@ public static final int
 
 
 
-
-
-
 // optional uint32 pad = 7 [default = 0];
-
-
 
 
 
@@ -6329,11 +5694,7 @@ public static final int
 
 
 
-
-
 // optional uint32 group = 9 [default = 1];
-
-
 
 
 
@@ -6345,11 +5706,7 @@ public static final int
 
 
 
-
-
 // optional .caffe.V0LayerParameter.PoolMethod pool = 11 [default = MAX];
-
-
 
 
 
@@ -6361,11 +5718,7 @@ public static final int
 
 
 
-
-
 // optional uint32 local_size = 13 [default = 5];
-
-
 
 
 
@@ -6377,11 +5730,7 @@ public static final int
 
 
 
-
-
 // optional float beta = 15 [default = 0.75];
-
-
 
 
 
@@ -6393,11 +5742,7 @@ public static final int
 
 
 
-
-
 // optional string source = 16;
-
-
 
 
 
@@ -6416,11 +5761,7 @@ public static final int
 
 
 
-
-
 // optional string meanfile = 18;
-
-
 
 
 
@@ -6439,19 +5780,13 @@ public static final int
 
 
 
-
-
 // optional uint32 cropsize = 20 [default = 0];
 
 
 
 
 
-
-
 // optional bool mirror = 21 [default = false];
-
-
 
 
 
@@ -6490,11 +5825,7 @@ public static final int
 
 
 
-
-
 // optional float det_fg_threshold = 54 [default = 0.5];
-
-
 
 
 
@@ -6506,11 +5837,7 @@ public static final int
 
 
 
-
-
 // optional float det_fg_fraction = 56 [default = 0.25];
-
-
 
 
 
@@ -6522,11 +5849,7 @@ public static final int
 
 
 
-
-
 // optional string det_crop_mode = 59 [default = "warp"];
-
-
 
 
 
@@ -6545,11 +5868,7 @@ public static final int
 
 
 
-
-
 // optional int32 new_channels = 61 [default = 0];
-
-
 
 
 
@@ -6561,11 +5880,7 @@ public static final int
 
 
 
-
-
 // optional int32 new_width = 63 [default = 0];
-
-
 
 
 
@@ -6577,20 +5892,13 @@ public static final int
 
 
 
-
-
 // optional uint32 concat_dim = 65 [default = 1];
 
 
 
 
 
-
-
 // optional .caffe.HDF5OutputParameter hdf5_output_param = 1001;
-
-
-
 
 
 
@@ -6610,12 +5918,7 @@ public static final int
 
 
 
-
-
-
 // optional bool channel_shared = 2 [default = false];
-
-
 
 
 
@@ -6779,6 +6082,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_caffe_2eproto
 
 

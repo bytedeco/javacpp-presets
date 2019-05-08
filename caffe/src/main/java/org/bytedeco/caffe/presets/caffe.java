@@ -103,9 +103,10 @@ public class caffe implements LoadEnabled, InfoMapper {
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPROTOBUF_EXPORT", "LIBPROTOC_EXPORT", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_VERIFY_VERSION", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE",
-                             "GOOGLE_ATTRIBUTE_DEPRECATED", "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR").cppTypes().annotations())
+                             "GOOGLE_ATTRIBUTE_DEPRECATED", "GOOGLE_DLOG", "NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK", "PROTOBUF_CONSTEXPR", "PROTOBUF_CONSTEXPR_VAR",
+                             "PROTOBUF_EXPORT", "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_NOINLINE").cppTypes().annotations())
                .put(new Info("NDEBUG", "CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG", "USE_CUDNN").define())
-               .put(new Info("defined(_WIN32) && defined(GetMessage)", "LANG_CXX11").define(false))
+               .put(new Info("defined(_WIN32) && defined(GetMessage)", "LANG_CXX11", "GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER").define(false))
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t", "cudnnStatus_t", "cudnnDataType_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
@@ -123,7 +124,8 @@ public class caffe implements LoadEnabled, InfoMapper {
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
-                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "protobuf_caffe_2eproto::TableStruct",
+                             "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
+                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "protobuf_caffe_2eproto::TableStruct", "TableStruct_caffe_2eproto",
                              "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip())
 
                .put(new Info("caffe::AccuracyParameterDefaultTypeInternal", "caffe::ArgMaxParameterDefaultTypeInternal", "caffe::BatchNormParameterDefaultTypeInternal",

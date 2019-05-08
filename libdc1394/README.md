@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * libdc1394 2.2.5  http://damien.douxchamps.net/ieee1394/libdc1394/
+ * libdc1394 2.2.6  http://damien.douxchamps.net/ieee1394/libdc1394/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.libdc1394</groupId>
     <artifactId>grabcolorimage</artifactId>
-    <version>1.5</version>
+    <version>1.5.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>GrabColorImage</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>libdc1394-platform</artifactId>
-            <version>2.2.5-1.5</version>
+            <version>2.2.6-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

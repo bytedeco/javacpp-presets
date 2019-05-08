@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBDC1394_VERSION=2.2.5
+LIBDC1394_VERSION=2.2.6
 download http://downloads.sourceforge.net/project/libdc1394/libdc1394-2/$LIBDC1394_VERSION/libdc1394-$LIBDC1394_VERSION.tar.gz libdc1394-$LIBDC1394_VERSION.tar.gz
 if [[ "$PLATFORM" == windows* ]]; then
     download http://www.cs.cmu.edu/~iwan/1394/downloads/1394camera646.exe 1394camera646.exe
@@ -54,7 +54,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
-        patch -Np1 < ../../../libdc1394-$LIBDC1394_VERSION-macosx.patch
+        patch -Np1 < ../../../libdc1394-macosx.patch
         LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS="-L/usr/local/lib/ -lusb-1.0" ./configure --prefix=$INSTALL_PATH --disable-sdltest
         make -j4
         make install-strip

@@ -23,15 +23,14 @@ import static org.bytedeco.hdf5.global.hdf5.*;
 import static org.bytedeco.caffe.global.caffe.*;
 
 
-// Describes an RPC service.  To get the ServiceDescriptor for a service,
-// call Service::GetDescriptor().  Generated service classes also have a
-// static method called descriptor() which returns the type's
-// ServiceDescriptor.  Use DescriptorPool to construct your own descriptors.
+// Describes an RPC service. Use DescriptorPool to construct your own
+// descriptors.
 @Namespace("google::protobuf") @NoOffset @Properties(inherit = org.bytedeco.caffe.presets.caffe.class)
 public class ServiceDescriptor extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ServiceDescriptor(Pointer p) { super(p); }
+
 
   // The name of the service, not including its containing scope.
   public native @StdString BytePointer name();
@@ -45,9 +44,8 @@ public class ServiceDescriptor extends Pointer {
 
   // Get options for this service type.  These are specified in the .proto file
   // by placing lines like "option foo = 1234;" in the service definition.
-  // Allowed options are defined by ServiceOptions in
-  // google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // Allowed options are defined by ServiceOptions in descriptor.proto, and any
+  // available extensions of that message.
   public native @Const @ByRef ServiceOptions options();
 
   // The number of methods this service defines.

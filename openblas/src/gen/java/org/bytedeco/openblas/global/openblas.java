@@ -37,7 +37,7 @@ public static final int OPENBLAS_DLOCAL_BUFFER_SIZE = 4096;
 public static final int OPENBLAS_CLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_ZLOCAL_BUFFER_SIZE = 8192;
 public static final int OPENBLAS_GEMM_MULTITHREAD_THRESHOLD = 4;
-public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.5 ";
+public static final String OPENBLAS_VERSION = " OpenBLAS 0.3.6 ";
 /*This is only for "make install" target.*/
 
 // #if defined(OPENBLAS_OS_WINNT) || defined(OPENBLAS_OS_CYGWIN_NT) || defined(OPENBLAS_OS_INTERIX)
@@ -199,6 +199,11 @@ public static native double cblas_dasum(@Cast("const blasint") int n, @Const dou
 public static native float cblas_scasum(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 public static native double cblas_dzasum(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 
+
+
+
+
+
 public static native float cblas_snrm2(@Cast("const blasint") int N, @Const FloatPointer X, @Cast("const blasint") int incX);
 public static native float cblas_snrm2(@Cast("const blasint") int N, @Const FloatBuffer X, @Cast("const blasint") int incX);
 public static native float cblas_snrm2(@Cast("const blasint") int N, @Const float[] X, @Cast("const blasint") int incX);
@@ -216,6 +221,16 @@ public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") in
 public static native @Cast("size_t") long cblas_idamax(@Cast("const blasint") int n, @Const double[] x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_icamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
 public static native @Cast("size_t") long cblas_izamax(@Cast("const blasint") int n, @Const Pointer x, @Cast("const blasint") int incx);
+
+
+
+
+
+
+
+
+
+
 
 
 

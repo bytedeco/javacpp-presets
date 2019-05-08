@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for libdc1394</name>
 
   <properties>
-    <revision>2.2.5-${project.parent.version}</revision>
+    <revision>2.2.6-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
