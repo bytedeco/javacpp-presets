@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.helloworld</groupId>
+    <artifactId>HelloWorldTest</artifactId>
+    <version>1.0</version>
+    <properties>
+        <exec.mainClass>HelloWorldTest</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>helloworld-platform</artifactId>
+            <version>1.0-1.5</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
