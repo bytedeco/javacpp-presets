@@ -9,7 +9,7 @@
         <version>1.5.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.bytedeco</groupId>
+    <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>helloworld</artifactId>
     <version>${revision}</version>
     <name>JavaCPP Presets for helloworld</name>
