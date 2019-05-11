@@ -15,8 +15,7 @@ public class helloworld extends org.bytedeco.helloworld.presets.helloworld {
 
 // #ifndef helloworld_h__
 // #define helloworld_h__
-
-public static native @Cast("char*") BytePointer getHelloWorldMessage();
+    public static native @Cast("char*") BytePointer getHelloWorldMessage();
 
 // #endif // helloworld_h__
 
