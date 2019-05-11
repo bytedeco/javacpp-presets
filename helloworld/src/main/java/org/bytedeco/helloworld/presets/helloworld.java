@@ -8,12 +8,15 @@ import org.bytedeco.javacpp.tools.*;
         global = "org.bytedeco.helloworld.global.helloworld",
         value = {
             @Platform(
-                    value = {"linux-x86", "linux-x86_64", "windows-x86", "windows-x86_64"},
+                    value = {
+                        "linux-x86",
+                        "linux-x86_64",
+                        "windows-x86",
+                        "windows-x86_64"
+                    },
                     include = "helloworld.h",
-                    resource = {"include", "lib"}
-            ),
-            @Platform(value = {"linux-x86", "linux-x86_64"}, link = "libhelloworld"),
-            @Platform(value = {"windows-x86", "windows-x86_64"}, link = "libhelloworld")
+                    link = "helloworld"
+            )
         }
 )
 public class helloworld implements InfoMapper {

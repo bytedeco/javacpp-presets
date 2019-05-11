@@ -46,20 +46,20 @@ case $PLATFORM in
     windows-x86)
         mkdir -p build
         cd build
-        gcc -m32 ../helloworld.c -shared -o libhelloworld.dll
+        gcc -m32 ../helloworld.c -shared -o helloworld.dll
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib
-        cp libhelloworld.dll ../../lib
+        cp helloworld.dll ../../lib
         ;;
     windows-x86_64)
         mkdir -p build
         cd build
-        gcc -m64 ../helloworld.c -shared -o libhelloworld.dll
+        gcc -m64 ../helloworld.c -shared -o helloworld.dll
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib
-        cp libhelloworld.dll ../../lib
+        cp helloworld.dll ../../lib
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
