@@ -92,7 +92,7 @@ public class hdf5 implements InfoMapper {
                      + "}\n"))
 
                .put(new Info("H5::visit_operator_t").valueTypes("visit_operator_t").pointerTypes("@ByPtrPtr visit_operator_t").javaText(
-                       "public class visit_operator_t extends FunctionPointer {\n"
+                       "public static class visit_operator_t extends FunctionPointer {\n"
                      + "    static { Loader.load(); }\n"
                      + "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n"
                      + "    public    visit_operator_t(Pointer p) { super(p); }\n"

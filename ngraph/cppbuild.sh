@@ -44,6 +44,7 @@ patch -Np1 < ../../../ngraph.patch
 
 sedinplace '/In-source builds are not allowed/d' CMakeLists.txt
 sedinplace 's/set(NGRAPH_FORWARD_CMAKE_ARGS/set(NGRAPH_FORWARD_CMAKE_ARGS -DCMAKE_INSTALL_LIBDIR=lib/g' CMakeLists.txt
+sedinplace 's/"-DARCH_OPT_FLAGS=.*/"-DARCH_OPT_FLAGS=-Wno-error"/g' cmake/external_mkldnn.cmake
 sedinplace '/NGRAPH_VERSION_PARTS/d' CMakeLists.txt
 $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=lib -DNGRAPH_UNIT_TEST_ENABLE=FALSE -DNGRAPH_TOOLS_ENABLE=FALSE -DNGRAPH_ONNX_IMPORT_ENABLE=ON -DNGRAPH_ONNXIFI_ENABLE=TRUE .
 make -j $MAKEJ
