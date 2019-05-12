@@ -177,6 +177,13 @@ case $PLATFORM in
         export BINARY=32
         export TARGET=ARMV6
         ;;
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc -mabi=lp64"
+        export FC="aarch64-linux-gnu-gfortran"
+        export LDFLAGS="-Wl,-z,noexecstack"
+        export BINARY=64
+        export TARGET=ARMV8
+        ;;
     macosx-*)
         patch -Np1 < ../../../OpenBLAS-macosx.patch
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
