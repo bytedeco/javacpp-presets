@@ -51,8 +51,8 @@ public class mkldnn implements InfoMapper {
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
 
-               .put(new Info("mkldnn_dims_t").cppTypes("const int*"))
-               .put(new Info("mkldnn_strides_t").cppTypes("const long*"))
+               .put(new Info("mkldnn_dims_t").cppTypes("int* const"))
+               .put(new Info("mkldnn_strides_t").cppTypes("ptrdiff_t* const"))
                .put(new Info("mkldnn_engine_t").valueTypes("mkldnn_engine").pointerTypes("@ByPtrPtr mkldnn_engine", "@Cast(\"mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_engine_t").valueTypes("@Const mkldnn_engine").pointerTypes("@Const @ByPtrPtr mkldnn_engine", "@Cast(\"const_mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("mkldnn_primitive_desc_iterator_t").valueTypes("mkldnn_primitive_desc_iterator").pointerTypes("@ByPtrPtr mkldnn_primitive_desc_iterator", "@Cast(\"mkldnn_primitive_desc_iterator_t*\") PointerPointer"))

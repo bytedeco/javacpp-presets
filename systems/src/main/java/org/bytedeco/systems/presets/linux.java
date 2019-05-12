@@ -152,8 +152,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("__locale_data", "module", "sigcontext", "__spawn_action", "timex", "pt_regs",
                              "_fpreg", "_fpstate", "_fpxreg", "_libc_fpstate", "_libc_fpxreg", "_libc_xmmreg", "_xmmreg").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
-               .put(new Info("gregset_t").cppTypes("const long long*"))
-               .put(new Info("fpregset_t").cppTypes("const void*"))
+               .put(new Info("gregset_t", "fpregset_t").cppTypes("void* const"))
 
                .put(new Info("__locale_struct").pointerTypes("locale_t"))
                .put(new Info("__locale_t").valueTypes("locale_t"))

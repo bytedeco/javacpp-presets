@@ -26,8 +26,8 @@ diff -ruN librealsense-1.12.1/src/types.h librealsense-1.12.1-patch/src/types.h
  const int RS_USER_QUEUE_SIZE = 20;
 diff -ruN librealsense-1.12.1/src/uvc-v4l2.cpp librealsense-1.12.1-patch/src/uvc-v4l2.cpp
 --- librealsense-1.12.1/src/uvc-v4l2.cpp	2016-12-27 16:17:15.000000000 +0900
-+++ librealsense-1.12.1-patch/src/uvc-v4l2.cpp	2018-11-13 13:55:05.665190624 +0900
-@@ -30,8 +30,8 @@
++++ librealsense-1.12.1-patch/src/uvc-v4l2.cpp	2019-05-12 10:11:13.958571979 +0900
+@@ -30,8 +30,9 @@
  #include <sys/stat.h>
  #include <sys/mman.h>
  #include <sys/ioctl.h>
@@ -35,6 +35,7 @@ diff -ruN librealsense-1.12.1/src/uvc-v4l2.cpp librealsense-1.12.1-patch/src/uvc
 -#include <linux/uvcvideo.h>
 +#include "video.h"
 +#include "uvcvideo.h"
++#include <sys/sysmacros.h>
  #include <linux/videodev2.h>
  
  #pragma GCC diagnostic ignored "-Wpedantic"
