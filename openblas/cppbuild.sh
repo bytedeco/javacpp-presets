@@ -178,8 +178,8 @@ case $PLATFORM in
         export TARGET=ARMV6
         ;;
     linux-arm64)
-        export CC="aarch64-linux-gnu-gcc-7 -mabi=lp64"
-        export FC="aarch64-linux-gnu-gfortran-7"
+        export CC="aarch64-linux-gnu-gcc -mabi=lp64"
+        export FC="aarch64-linux-gnu-gfortran"
         export LDFLAGS="-Wl,-z,noexecstack"
         export BINARY=64
         export TARGET=ARMV8
