@@ -53,7 +53,7 @@ public class FunctionLibraryRuntime extends Pointer {
     // between a set of libraries (e.g. by allowing a
     // `FunctionLibraryDefinition` to store an `outer_scope` pointer
     // and implementing name resolution across libraries).
-    @MemberGetter public native @Const FunctionLibraryDefinition overlay_lib();
+    public native @Const FunctionLibraryDefinition overlay_lib(); public native InstantiateOptions overlay_lib(FunctionLibraryDefinition setter);
 
     // This interface is EXPERIMENTAL and subject to change.
     //

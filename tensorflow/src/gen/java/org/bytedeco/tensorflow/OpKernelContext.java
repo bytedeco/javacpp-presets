@@ -66,7 +66,7 @@ public class OpKernelContext extends Pointer {
     public native @Cast("bool") boolean record_tensor_accesses(); public native Params record_tensor_accesses(boolean setter);
 
     // Array indexed by output number for this node
-    @MemberGetter public native @Const AllocatorAttributes output_attr_array();
+    public native @Const AllocatorAttributes output_attr_array(); public native Params output_attr_array(AllocatorAttributes setter);
 
     // Shared resources accessible by this op kernel invocation.
     public native ResourceMgr resource_manager(); public native Params resource_manager(ResourceMgr setter);
@@ -94,13 +94,13 @@ public class OpKernelContext extends Pointer {
     public native CancellationManager cancellation_manager(); public native Params cancellation_manager(CancellationManager setter);
 
     // Inputs to this op kernel.
-    @MemberGetter public native @Const TensorValueVector inputs();
+    public native @Const TensorValueVector inputs(); public native Params inputs(TensorValueVector setter);
     public native @Cast("bool") boolean is_input_dead(); public native Params is_input_dead(boolean setter);
 
-    @MemberGetter public native @Const AllocatorAttributesVector input_alloc_attrs();
+    public native @Const AllocatorAttributesVector input_alloc_attrs(); public native Params input_alloc_attrs(AllocatorAttributesVector setter);
 
     // Device contexts.
-    @MemberGetter public native @Const DeviceContextInlinedVector input_device_contexts();
+    public native @Const DeviceContextInlinedVector input_device_contexts(); public native Params input_device_contexts(DeviceContextInlinedVector setter);
     public native DeviceContext op_device_context(); public native Params op_device_context(DeviceContext setter);
 
     // Control-flow op supports.
@@ -122,7 +122,7 @@ public class OpKernelContext extends Pointer {
     @MemberGetter public static native int kNoReservation();
     public static final int kNoReservation = kNoReservation();
     // Values in [0,...) represent reservations for the indexed output.
-    @MemberGetter public native @Const IntPointer forward_from_array();
+    public native @Const IntPointer forward_from_array(); public native Params forward_from_array(IntPointer setter);
   }
 
   // params must outlive the OpKernelContext.

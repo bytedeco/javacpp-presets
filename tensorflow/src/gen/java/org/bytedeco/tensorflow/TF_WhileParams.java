@@ -34,5 +34,5 @@ public class TF_WhileParams extends Pointer {
 
   // Unique null-terminated name for this while loop. This is used as a prefix
   // for created operations.
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native TF_WhileParams name(BytePointer setter);
 }
