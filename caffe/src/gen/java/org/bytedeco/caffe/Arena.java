@@ -49,7 +49,7 @@ import static org.bytedeco.caffe.global.caffe.*;
 //
 // - The type T must have (at least) two constructors: a constructor with no
 //   arguments, called when a T is allocated on the heap; and a constructor with
-//   a google::protobuf::Arena* argument, called when a T is allocated on an arena. If the
+//   a Arena* argument, called when a T is allocated on an arena. If the
 //   second constructor is called with a NULL arena pointer, it must be
 //   equivalent to invoking the first (no-argument) constructor.
 //
@@ -70,7 +70,9 @@ import static org.bytedeco.caffe.global.caffe.*;
 //   arg1, arg2).
 //
 // This protocol is implemented by all arena-enabled proto2 message classes as
-// well as RepeatedPtrField.
+// well as protobuf container types like RepeatedPtrField and Map. The protocol
+// is internal to protobuf and is not guaranteed to be stable. Non-proto types
+// should not rely on this protocol.
 //
 // Do NOT subclass Arena. This class will be marked as final when C++11 is
 // enabled.

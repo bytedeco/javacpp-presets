@@ -32,6 +32,7 @@ public class EnumDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EnumDescriptor(Pointer p) { super(p); }
 
+
   // The name of this enum type in the containing scope.
   public native @StdString BytePointer name();
 
@@ -64,8 +65,8 @@ public class EnumDescriptor extends Pointer {
 
   // Get options for this enum type.  These are specified in the .proto file by
   // placing lines like "option foo = 1234;" in the enum definition.  Allowed
-  // options are defined by EnumOptions in google/protobuf/descriptor.proto,
-  // and any available extensions of that message.
+  // options are defined by EnumOptions in descriptor.proto, and any available
+  // extensions of that message.
   public native @Const @ByRef EnumOptions options();
 
   // See Descriptor::CopyTo().

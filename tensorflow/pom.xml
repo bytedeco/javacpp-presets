@@ -23,6 +23,12 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>numpy</artifactId>
+      <version>1.16.3-${project.parent.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
       <version>0.18.1-${project.parent.version}</version>
     </dependency>
@@ -79,8 +85,30 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>numpy-platform</artifactId>
+            <version>1.16.3-${project.parent.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
+          <classPaths>
+            <classPath>${basedir}/../openblas/target/classes/</classPath>
+            <classPath>${basedir}/../cpython/target/classes/</classPath>
+            <classPath>${basedir}/../numpy/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
           <includePaths>
+            <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/openblas/include/</includePath>
+            <includePath>${basedir}/../openblas/target/classes/org/bytedeco/openblas/include/</includePath>
+            <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
+            <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
+            <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
+            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${tensorflow.path}/</includePath>
             <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
@@ -103,32 +131,65 @@
             <includePath>${basedir}/target/classes/org/bytedeco/tensorflow/include/</includePath>
           </includePaths>
           <linkPaths>
-             <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
-             <linkPath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/mkl_windows/lib/</linkPath>
-             <linkPath>${tensorflow.path}/../build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/base/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/types/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/numeric/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/strings/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/fft2d/src/fft2d/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/lmdb/src/lmdb-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/gif/src/gif-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/jpeg/src/jpeg-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/png/src/png-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/nsync/src/nsync/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/protobuf/src/protobuf/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/re2/src/re2/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/mkl/src/mkl/lib/</linkPath>
-             <linkPath>${tensorflow.path}/../build/mkldnn/src/mkldnn/src/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
-             <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
+            <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${tensorflow.path}/bazel-bin/tensorflow/</linkPath>
+            <linkPath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/mkl_windows/lib/</linkPath>
+            <linkPath>${tensorflow.path}/../build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/base/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/types/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/numeric/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/abseil/src/abseil-build/absl/strings/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/double_conversion/src/double_conversion/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/zlib/src/zlib/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/grpc/src/grpc/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/farmhash/src/farmhash/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/fft2d/src/fft2d/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/lmdb/src/lmdb-build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/gif/src/gif-build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/jpeg/src/jpeg-build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/png/src/png-build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/nsync/src/nsync/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/protobuf/src/protobuf/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/re2/src/re2/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/snappy/src/snappy/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/sqlite/src/sqlite-build/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/mkl/src/mkl/lib/</linkPath>
+            <linkPath>${tensorflow.path}/../build/mkldnn/src/mkldnn/src/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/tf_cc_op_gen_main.dir/Release/</linkPath>
+            <linkPath>${tensorflow.path}/../build/tf_c_python_api.dir/Release/</linkPath>
           </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          </preloadPaths>
+          <buildResources>
+            <buildResource>/${javacpp.platform.library.path}/</buildResource>
+            <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
+          </buildResources>
+          <includeResources>
+            <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/include/</includeResource>
+            <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/cpython/include/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/numpy/include/</includeResource>
+            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/include/</includeResource>
+          </includeResources>
+          <linkResources>
+            <linkResource>/${javacpp.platform.library.path}/</linkResource>
+            <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
+          </linkResources>
         </configuration>
         <executions>
           <execution>

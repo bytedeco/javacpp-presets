@@ -8,7 +8,8 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
-// #else
+
+
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyThreadState extends Pointer {
     static { Loader.load(); }
@@ -36,6 +37,8 @@ public class PyThreadState extends Pointer {
                         to handle the runtime error. */
     public native @Cast("char") byte recursion_critical(); public native PyThreadState recursion_critical(byte setter); /* The current calls must not cause
                                 a stack overflow. */
+    public native int stackcheck_counter(); public native PyThreadState stackcheck_counter(int setter);
+
     /* 'tracing' keeps track of the execution depth when tracing/profiling.
        This is to prevent the actual trace/profile code from being recorded in
        the trace/profile. */
@@ -47,20 +50,26 @@ public class PyThreadState extends Pointer {
     public native PyObject c_profileobj(); public native PyThreadState c_profileobj(PyObject setter);
     public native PyObject c_traceobj(); public native PyThreadState c_traceobj(PyObject setter);
 
+    /* The exception currently being raised */
     public native PyObject curexc_type(); public native PyThreadState curexc_type(PyObject setter);
     public native PyObject curexc_value(); public native PyThreadState curexc_value(PyObject setter);
     public native PyObject curexc_traceback(); public native PyThreadState curexc_traceback(PyObject setter);
 
-    public native PyObject exc_type(); public native PyThreadState exc_type(PyObject setter);
-    public native PyObject exc_value(); public native PyThreadState exc_value(PyObject setter);
-    public native PyObject exc_traceback(); public native PyThreadState exc_traceback(PyObject setter);
+    /* The exception currently being handled, if no coroutines/generators
+     * are present. Always last element on the stack referred to be exc_info.
+     */
+    public native @ByRef _PyErr_StackItem exc_state(); public native PyThreadState exc_state(_PyErr_StackItem setter);
+
+    /* Pointer to the top of the stack of the exceptions currently
+     * being handled */
+    public native _PyErr_StackItem exc_info(); public native PyThreadState exc_info(_PyErr_StackItem setter);
 
     public native PyObject dict(); public native PyThreadState dict(PyObject setter);  /* Stores per-thread state */
 
     public native int gilstate_counter(); public native PyThreadState gilstate_counter(int setter);
 
     public native PyObject async_exc(); public native PyThreadState async_exc(PyObject setter); /* Asynchronous exception to raise */
-    public native long thread_id(); public native PyThreadState thread_id(long setter); /* Thread id where this tstate was created */
+    public native @Cast("unsigned long") long thread_id(); public native PyThreadState thread_id(long setter); /* Thread id where this tstate was created */
 
     public native int trash_delete_nesting(); public native PyThreadState trash_delete_nesting(int setter);
     public native PyObject trash_delete_later(); public native PyThreadState trash_delete_later(PyObject setter);
@@ -99,16 +108,19 @@ public class PyThreadState extends Pointer {
     public native On_delete_Pointer on_delete(); public native PyThreadState on_delete(On_delete_Pointer setter);
     public native Pointer on_delete_data(); public native PyThreadState on_delete_data(Pointer setter);
 
+    public native int coroutine_origin_tracking_depth(); public native PyThreadState coroutine_origin_tracking_depth(int setter);
+
     public native PyObject coroutine_wrapper(); public native PyThreadState coroutine_wrapper(PyObject setter);
     public native int in_coroutine_wrapper(); public native PyThreadState in_coroutine_wrapper(int setter);
 
-    /* Now used from PyInterpreterState, kept here for ABI
-       compatibility with PyThreadState */
-    
-    
-
     public native PyObject async_gen_firstiter(); public native PyThreadState async_gen_firstiter(PyObject setter);
     public native PyObject async_gen_finalizer(); public native PyThreadState async_gen_finalizer(PyObject setter);
+
+    public native PyObject context(); public native PyThreadState context(PyObject setter);
+    public native @Cast("uint64_t") long context_ver(); public native PyThreadState context_ver(long setter);
+
+    /* Unique thread state id. */
+    public native @Cast("uint64_t") long id(); public native PyThreadState id(long setter);
 
     /* XXX signal handlers should also be here */
 

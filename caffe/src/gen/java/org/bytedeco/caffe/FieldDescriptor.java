@@ -42,6 +42,7 @@ public class FieldDescriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FieldDescriptor(Pointer p) { super(p); }
 
+
   // Identifies a field type.  0 is reserved for errors.  The order is weird
   // for historical reasons.  Types 12 and up are new in proto2.
   /** enum google::protobuf::FieldDescriptor::Type */
@@ -227,9 +228,8 @@ public class FieldDescriptor extends Pointer {
   // Get the FieldOptions for this field.  This includes things listed in
   // square brackets after the field definition.  E.g., the field:
   //   optional string text = 1 [ctype=CORD];
-  // has the "ctype" option set.  Allowed options are defined by FieldOptions
-  // in google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // has the "ctype" option set.  Allowed options are defined by FieldOptions in
+  // descriptor.proto, and any available extensions of that message.
   public native @Const @ByRef FieldOptions options();
 
   // See Descriptor::CopyTo().

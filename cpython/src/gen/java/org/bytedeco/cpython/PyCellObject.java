@@ -25,6 +25,6 @@ public class PyCellObject extends Pointer {
         return (PyCellObject)super.position(position);
     }
 
-	public native @ByRef PyObject ob_base(); public native PyCellObject ob_base(PyObject setter);
-	public native PyObject ob_ref(); public native PyCellObject ob_ref(PyObject setter);	/* Content of the cell or NULL when empty */
+    public native @ByRef PyObject ob_base(); public native PyCellObject ob_base(PyObject setter);
+    public native PyObject ob_ref(); public native PyCellObject ob_ref(PyObject setter);       /* Content of the cell or NULL when empty */
 }

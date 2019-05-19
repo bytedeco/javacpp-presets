@@ -1,7 +1,7 @@
 JavaCPP Presets
 ===============
 
-[![Join the chat at https://gitter.im/bytedeco/javacpp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bytedeco/javacpp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/) <sup>Android, iOS, Linux, Mac OS X:</sup> [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) <sup>Windows:</sup> [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
+[![Gitter](https://badges.gitter.im/bytedeco/javacpp.svg)](https://gitter.im/bytedeco/javacpp) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.bytedeco/javacpp-presets) [![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/org.bytedeco/javacpp-presets.svg)](http://bytedeco.org/builds/) <sup>Android, iOS, Linux, Mac OS X:</sup> [![Travis CI](https://travis-ci.org/bytedeco/javacpp-presets.svg?branch=master)](https://travis-ci.org/bytedeco/javacpp-presets) <sup>Windows:</sup> [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/bytedeco/javacpp-presets?branch=master&svg=true)](https://ci.appveyor.com/project/bytedeco/javacpp-presets)
 
 
 Introduction
@@ -121,13 +121,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.3  https://software.intel.com/intel-mkl
  * MKL-DNN 0.18.1  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.5  http://www.openblas.net/
+ * OpenBLAS 0.3.6  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.6.x  https://www.python.org/downloads/
- * NumPy 1.16.2  https://github.com/numpy/numpy
+ * CPython 3.7.3  https://www.python.org/downloads/
+ * NumPy 1.16.3  https://github.com/numpy/numpy
  * LLVM 8.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
@@ -140,12 +140,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.13.1  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.4.1  https://github.com/onnx/onnx
+ * ONNX 1.5.0  https://github.com/onnx/onnx
  * nGraph 0.18.1  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.12.2  https://download.qt.io/archive/qt/
+ * Qt 5.12.3  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
- * cpu_features 0.2.0  https://github.com/google/cpu_features
+ * cpu_features 0.3.0  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

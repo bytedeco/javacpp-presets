@@ -13,8 +13,8 @@ if [[ $PLATFORM == windows* ]]; then
     exit 1
 fi
 
-export ONNX=1.4.1
-export PROTO=3.6.1
+export ONNX=1.5.0
+export PROTO=3.7.1
 export PYBIND=2.2.4
 
 download https://github.com/onnx/onnx/archive/v$ONNX.tar.gz onnx-$ONNX.tar.gz

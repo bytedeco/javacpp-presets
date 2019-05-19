@@ -8,6 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.cpython.global.python.*;
 
+/* Note: _PyMainInterpreterConfig_INIT sets other fields to 0/NULL */
 
 @Properties(inherit = org.bytedeco.cpython.presets.python.class)
 public class PyInterpreterState extends Pointer {
@@ -28,11 +29,26 @@ public class PyInterpreterState extends Pointer {
     public native _is next(); public native PyInterpreterState next(_is setter);
     public native _ts tstate_head(); public native PyInterpreterState tstate_head(_ts setter);
 
+    public native @Cast("int64_t") long id(); public native PyInterpreterState id(long setter);
+    public native @Cast("int64_t") long id_refcount(); public native PyInterpreterState id_refcount(long setter);
+    public native PyThread_type_lock id_mutex(); public native PyInterpreterState id_mutex(PyThread_type_lock setter);
+
     public native PyObject modules(); public native PyInterpreterState modules(PyObject setter);
     public native PyObject modules_by_index(); public native PyInterpreterState modules_by_index(PyObject setter);
     public native PyObject sysdict(); public native PyInterpreterState sysdict(PyObject setter);
     public native PyObject builtins(); public native PyInterpreterState builtins(PyObject setter);
     public native PyObject importlib(); public native PyInterpreterState importlib(PyObject setter);
+
+    /* Used in Python/sysmodule.c. */
+    public native int check_interval(); public native PyInterpreterState check_interval(int setter);
+
+    /* Used in Modules/_threadmodule.c. */
+    public native long num_threads(); public native PyInterpreterState num_threads(long setter);
+    /* Support for runtime thread stack size tuning.
+       A value of 0 means using the platform's default stack size
+       or the size specified by the THREAD_STACK_SIZE macro. */
+    /* Used in Python/thread.c. */
+    public native @Cast("size_t") long pythread_stacksize(); public native PyInterpreterState pythread_stacksize(long setter);
 
     public native PyObject codec_search_path(); public native PyInterpreterState codec_search_path(PyObject setter);
     public native PyObject codec_search_cache(); public native PyInterpreterState codec_search_cache(PyObject setter);
@@ -40,6 +56,8 @@ public class PyInterpreterState extends Pointer {
     public native int codecs_initialized(); public native PyInterpreterState codecs_initialized(int setter);
     public native int fscodec_initialized(); public native PyInterpreterState fscodec_initialized(int setter);
 
+    public native @ByRef _PyCoreConfig core_config(); public native PyInterpreterState core_config(_PyCoreConfig setter);
+    public native @ByRef _PyMainInterpreterConfig config(); public native PyInterpreterState config(_PyMainInterpreterConfig setter);
 // #ifdef HAVE_DLOPEN
 // #endif
 
@@ -47,4 +65,24 @@ public class PyInterpreterState extends Pointer {
     public native PyObject import_func(); public native PyInterpreterState import_func(PyObject setter);
     /* Initialized to PyEval_EvalFrameDefault(). */
     public native _PyFrameEvalFunction eval_frame(); public native PyInterpreterState eval_frame(_PyFrameEvalFunction setter);
+
+    public native @Cast("Py_ssize_t") long co_extra_user_count(); public native PyInterpreterState co_extra_user_count(long setter);
+    public native freefunc co_extra_freefuncs(int i); public native PyInterpreterState co_extra_freefuncs(int i, freefunc setter);
+    @MemberGetter public native @ByPtrPtr freefunc co_extra_freefuncs();
+
+// #ifdef HAVE_FORK
+// #endif
+    /* AtExit module */
+    public static class Pyexitfunc_PyObject extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Pyexitfunc_PyObject(Pointer p) { super(p); }
+        protected Pyexitfunc_PyObject() { allocate(); }
+        private native void allocate();
+        public native void call(PyObject arg0);
+    }
+    public native Pyexitfunc_PyObject pyexitfunc(); public native PyInterpreterState pyexitfunc(Pyexitfunc_PyObject setter);
+    public native PyObject pyexitmodule(); public native PyInterpreterState pyexitmodule(PyObject setter);
+
+    public native @Cast("uint64_t") long tstate_next_unique_id(); public native PyInterpreterState tstate_next_unique_id(long setter);
 }

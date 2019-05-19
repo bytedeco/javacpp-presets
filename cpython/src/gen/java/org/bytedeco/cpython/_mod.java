@@ -25,10 +25,10 @@ public class _mod extends Pointer {
 
     public native @Cast("_mod_kind") int kind(); public native _mod kind(int setter);
             @Name("v.Module.body") public native asdl_seq v_Module_body(); public native _mod v_Module_body(asdl_seq setter);
-        
+
             @Name("v.Interactive.body") public native asdl_seq v_Interactive_body(); public native _mod v_Interactive_body(asdl_seq setter);
-        
+
             @Name("v.Expression.body") public native _expr v_Expression_body(); public native _mod v_Expression_body(_expr setter);
-        
+
             @Name("v.Suite.body") public native asdl_seq v_Suite_body(); public native _mod v_Suite_body(asdl_seq setter);
 }

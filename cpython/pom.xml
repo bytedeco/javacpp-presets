@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for CPython</name>
 
   <properties>
-    <revision>3.6-${project.parent.version}</revision>
+    <revision>3.7.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -36,9 +36,36 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/python3.7/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/python3.7m/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+          </linkPaths>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javacpp-${javacpp.platform}</id>
+            <phase>package</phase>
+            <configuration>
+              <excludes>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/*.exp</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/*.lib</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/*.obj</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/**/*.a</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/lib/libpython*</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/lib/python*.dll</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/bin/python*.dll</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.moditect</groupId>

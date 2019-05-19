@@ -27,7 +27,7 @@ public class TF_ImportGraphDefResults extends Pointer {
 
   public native @StdVector TF_Output return_tensors(); public native TF_ImportGraphDefResults return_tensors(TF_Output setter);
   public native @Cast("TF_Operation**") @StdVector PointerPointer return_nodes(); public native TF_ImportGraphDefResults return_nodes(PointerPointer setter);
-  @MemberGetter public native @Cast("const char**") @StdVector PointerPointer missing_unused_key_names();
+  public native @Cast("const char**") @StdVector PointerPointer missing_unused_key_names(); public native TF_ImportGraphDefResults missing_unused_key_names(PointerPointer setter);
   public native @StdVector IntPointer missing_unused_key_indexes(); public native TF_ImportGraphDefResults missing_unused_key_indexes(IntPointer setter);
 
   // Backing memory for missing_unused_key_names values.

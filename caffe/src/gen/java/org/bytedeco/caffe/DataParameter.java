@@ -72,16 +72,19 @@ public class DataParameter extends Message {
   public native @Cast("bool") final boolean IsInitialized();
 
   public native @Cast("size_t") final long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") final boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native final void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") final BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") final ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") final byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native final int GetCachedSize();
 
   public native @ByVal final Metadata GetMetadata();

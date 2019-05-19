@@ -23,6 +23,12 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>numpy-platform</artifactId>
+      <version>1.16.3-${project.parent.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
       <version>0.18.1-${project.parent.version}</version>
     </dependency>

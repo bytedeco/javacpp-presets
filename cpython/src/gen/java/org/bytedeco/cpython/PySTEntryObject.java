@@ -49,6 +49,5 @@ public class PySTEntryObject extends Pointer {
     public native int ste_col_offset(); public native PySTEntryObject ste_col_offset(int setter);      /* offset of first line of block */
     public native int ste_opt_lineno(); public native PySTEntryObject ste_opt_lineno(int setter);      /* lineno of last exec or import * */
     public native int ste_opt_col_offset(); public native PySTEntryObject ste_opt_col_offset(int setter);  /* offset of last exec or import * */
-    public native int ste_tmpname(); public native PySTEntryObject ste_tmpname(int setter);         /* counter for listcomp temp vars */
     public native symtable ste_table(); public native PySTEntryObject ste_table(symtable setter);
 }

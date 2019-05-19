@@ -33,7 +33,7 @@ export TF_CUDA_VERSION=10.1
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.4
-export TF_TENSORRT_VERSION=5.0.0
+export TF_TENSORRT_VERSION=5.1
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
@@ -48,6 +48,35 @@ download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.t
 
 mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
+INSTALL_PATH=`pwd`
+
+CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
+OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
+
+if [[ -n "${BUILD_PATH:-}" ]]; then
+    PREVIFS="$IFS"
+    IFS="$BUILD_PATH_SEPARATOR"
+    for P in $BUILD_PATH; do
+        if [[ -f "$P/include/python3.7m/Python.h" ]]; then
+            CPYTHON_PATH="$P"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/bin/python3.7"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/python3.7m/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
+            export USE_DEFAULT_PYTHON_LIB_PATH=0
+            chmod +x "$PYTHON_BIN_PATH"
+        elif [[ -f "$P/include/openblas_config.h" ]]; then
+            OPENBLAS_PATH="$P"
+        elif [[ -f "$P/python/numpy/core/include/numpy/arrayobject.h" ]]; then
+            NUMPY_PATH="$P"
+        fi
+    done
+    IFS="$PREVIFS"
+fi
+
+CPYTHON_PATH="${CPYTHON_PATH//\\//}"
+OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
+NUMPY_PATH="${NUMPY_PATH//\\//}"
 
 echo "Decompressing archives"
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
@@ -92,6 +121,11 @@ export BUILDTARGETS="//tensorflow:libtensorflow_cc.so //tensorflow/java:tensorfl
 export BUILDFLAGS=
 if [[ "$EXTENSION" =~ python ]]; then
     export BUILDTARGETS="//tensorflow/tools/pip_package:build_pip_package //tensorflow/java:tensorflow"
+    export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
+    export PYTHONPATH="$NUMPY_PATH/python/"
+    ln -sf $OPENBLAS_PATH/libopenblas.* $NUMPY_PATH/
+    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_applications==1.0.6 --no-deps
+    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 case $PLATFORM in
@@ -130,9 +164,13 @@ case $PLATFORM in
     linux-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
         export TF_NEED_MKL=1
-        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --copt=-m64 --linkopt=-m64 --linkopt=-s"
+        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
+        if [[ -f /usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache ]]; then
+            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        fi
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
@@ -142,11 +180,15 @@ case $PLATFORM in
         # allows us to use ccache with Bazel
         export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
         export TF_NEED_MKL=1
-        export BUILDFLAGS="--config=mkl --config=nonccl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
+        export BUILDFLAGS="--config=mkl --config=nonccl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --action_env LD_LIBRARY_PATH --action_env DYLD_LIBRARY_PATH --linkopt=-install_name --linkopt=@rpath/libtensorflow_cc.so --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export DYLD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/extras/CUPTI/lib
-        export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
+        export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:${LD_LIBRARY_PATH:-}
         export PATH=$DYLD_LIBRARY_PATH:$PATH
+        if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
+            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        fi
         ;;
     windows-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch

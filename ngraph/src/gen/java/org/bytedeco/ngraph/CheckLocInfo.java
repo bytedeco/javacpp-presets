@@ -25,7 +25,7 @@ public class CheckLocInfo extends Pointer {
             return (CheckLocInfo)super.position(position);
         }
     
-        @MemberGetter public native @Cast("const char*") BytePointer file();
+        public native @Cast("const char*") BytePointer file(); public native CheckLocInfo file(BytePointer setter);
         public native int line(); public native CheckLocInfo line(int setter);
-        @MemberGetter public native @Cast("const char*") BytePointer check_string();
+        public native @Cast("const char*") BytePointer check_string(); public native CheckLocInfo check_string(BytePointer setter);
     }

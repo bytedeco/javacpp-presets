@@ -1,0 +1,13 @@
+diff -ruN --binary Python-3.7.3/PCbuild/python.props Python-3.7.3-windows/PCbuild/python.props
+--- Python-3.7.3/PCbuild/python.props	2019-03-26 05:21:05.000000000 +0900
++++ Python-3.7.3-windows/PCbuild/python.props	2019-04-24 14:47:41.805499707 +0900
+@@ -81,8 +81,7 @@
+     <_RegistryVersion Condition="$(_RegistryVersion) != '' and !$(_RegistryVersion.EndsWith('.0'))">$(_RegistryVersion).0</_RegistryVersion>
+ 
+     <!-- The minimum allowed SDK version to use for building -->
+-    <DefaultWindowsSDKVersion>10.0.10586.0</DefaultWindowsSDKVersion>
+-    <DefaultWindowsSDKVersion Condition="$([System.Version]::Parse($(_RegistryVersion))) > $([System.Version]::Parse($(DefaultWindowsSDKVersion)))">$(_RegistryVersion)</DefaultWindowsSDKVersion>
++    <DefaultWindowsSDKVersion>$(_RegistryVersion)</DefaultWindowsSDKVersion>
+   </PropertyGroup>
+   
+   <PropertyGroup Condition="$(WindowsTargetPlatformVersion) == ''">

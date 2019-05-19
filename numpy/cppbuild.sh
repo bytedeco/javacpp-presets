@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.16.2
+NUMPY_VERSION=1.16.3
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -21,7 +21,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/Python.h" ]]; then
+        if [[ $(find "$P" -name Python.h) ]]; then
             CPYTHON_PATH="$P"
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
@@ -45,24 +45,30 @@ echo "include_dirs = $OPENBLAS_PATH/include/"     >> site.cfg
 case $PLATFORM in
     linux-*)
         # setup.py won't pick up the right libgfortran.so.4 without this
-        export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/"
-        export PYTHONPATH=$INSTALL_PATH/lib64/python3.6/site-packages
-        mkdir -p $PYTHONPATH
-        python3 setup.py build -j $MAKEJ install --prefix $INSTALL_PATH
+        export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
+        export PYTHONPATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+        mkdir -p "$PYTHONPATH"
+        chmod +x "$CPYTHON_PATH/bin/python3.7"
+        "$CPYTHON_PATH/bin/python3.7" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
-        export PYTHONPATH=$INSTALL_PATH/lib/python3.6/site-packages
-        mkdir -p $PYTHONPATH
-        python3 setup.py build -j $MAKEJ install --prefix $INSTALL_PATH
+        export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
+        export PYTHONPATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+        mkdir -p "$PYTHONPATH"
+        chmod +x "$CPYTHON_PATH/bin/python3.7"
+        "$CPYTHON_PATH/bin/python3.7" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
         ;;
     windows-*)
-        export PYTHONPATH=$INSTALL_PATH/lib/site-packages
-        mkdir -p $PYTHONPATH
-        # setup.py doesn't accept absolute paths on Windows
-        "/C/Program Files/Python36/python" setup.py build -j $MAKEJ install --prefix ..
+        CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+        OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
+        export PATH="$PATH:$OPENBLAS_PATH/:$CPYTHON_PATH/"
+        export PYTHONPATH="$INSTALL_PATH/lib/site-packages/"
+        mkdir -p "$PYTHONPATH"
+        # setup.py install doesn't accept absolute paths on Windows
+        "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

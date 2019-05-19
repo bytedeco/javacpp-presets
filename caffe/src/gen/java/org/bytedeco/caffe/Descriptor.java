@@ -34,6 +34,7 @@ public class Descriptor extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Descriptor(Pointer p) { super(p); }
 
+
   // The name of the message type, not including its scope.
   public native @StdString BytePointer name();
 
@@ -57,9 +58,8 @@ public class Descriptor extends Pointer {
 
   // Get options for this message type.  These are specified in the .proto file
   // by placing lines like "option foo = 1234;" in the message definition.
-  // Allowed options are defined by MessageOptions in
-  // google/protobuf/descriptor.proto, and any available extensions of that
-  // message.
+  // Allowed options are defined by MessageOptions in descriptor.proto, and any
+  // available extensions of that message.
   public native @Const @ByRef MessageOptions options();
 
   // Write the contents of this Descriptor into the given DescriptorProto.

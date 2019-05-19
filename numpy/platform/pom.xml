@@ -17,19 +17,19 @@
 
   <properties>
     <javacpp.moduleId>numpy</javacpp.moduleId>
-    <revision>1.16.2-${project.parent.version}</revision>
+    <revision>1.16.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas-platform</artifactId>
-      <version>0.3.5-${project.parent.version}</version>
+      <version>0.3.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.6-${project.parent.version}</version>
+      <version>3.7.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

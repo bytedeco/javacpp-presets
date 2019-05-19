@@ -15,19 +15,19 @@
   <name>JavaCPP Presets for NumPy</name>
 
   <properties>
-    <revision>1.16.2-${project.parent.version}</revision>
+    <revision>1.16.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>openblas</artifactId>
-      <version>0.3.5-${project.parent.version}</version>
+      <version>0.3.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython</artifactId>
-      <version>3.6-${project.parent.version}</version>
+      <version>3.7.3-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -50,23 +50,23 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.5-${project.parent.version}</version>
+            <version>0.3.6-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.6-${project.parent.version}</version>
+            <version>3.7.3-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>openblas</artifactId>
-            <version>0.3.5-${project.parent.version}</version>
+            <version>0.3.6-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython</artifactId>
-            <version>3.6-${project.parent.version}</version>
+            <version>3.7.3-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
         </dependencies>
@@ -84,6 +84,8 @@
             <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
             <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.7/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/python3.7m/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/python/numpy/core/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/python/numpy/core/include/numpy/</includePath>
           </includePaths>
@@ -108,6 +110,8 @@
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/include/</includeResource>
             <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.7/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/python3.7m/</includeResource>
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/</linkResource>

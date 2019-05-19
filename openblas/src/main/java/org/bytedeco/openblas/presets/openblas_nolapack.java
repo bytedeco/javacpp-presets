@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016-2018 Samuel Audet
+ * Copyright (C) 2016-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -132,6 +132,9 @@ public class openblas_nolapack implements LoadEnabled, InfoMapper {
             "cblas_caxpby", "cblas_daxpby", "cblas_saxpby", "cblas_zaxpby",
             // not exported by OpenBLAS
             "cblas_cgemm3m", "cblas_zgemm3m", "cblas_xerbla", "cblas_icamin", "cblas_idamin", "cblas_isamin", "cblas_izamin",
+            "cblas_ssum", "cblas_dsum", "cblas_scsum", "cblas_dzsum",
+            "cblas_ismax", "cblas_idmax", "cblas_icmax", "cblas_izmax",
+            "cblas_ismin", "cblas_idmin", "cblas_icmin", "cblas_izmin",
             // not implemented by MKL
             "openblas_set_num_threads", "goto_set_num_threads", "openblas_get_num_threads", "openblas_get_num_procs",
             "openblas_get_config", "openblas_get_corename", "openblas_get_parallel", "cblas_cdotc", "cblas_cdotu", "cblas_cgeadd",

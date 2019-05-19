@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.5
+OPENBLAS_VERSION=0.3.6
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -176,6 +176,13 @@ case $PLATFORM in
         export LDFLAGS="-Wl,-z,noexecstack"
         export BINARY=32
         export TARGET=ARMV6
+        ;;
+    linux-arm64)
+        export CC="aarch64-linux-gnu-gcc -mabi=lp64"
+        export FC="aarch64-linux-gnu-gfortran"
+        export LDFLAGS="-Wl,-z,noexecstack"
+        export BINARY=64
+        export TARGET=ARMV8
         ;;
     macosx-*)
         patch -Np1 < ../../../OpenBLAS-macosx.patch

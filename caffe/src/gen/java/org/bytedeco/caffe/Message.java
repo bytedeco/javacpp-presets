@@ -45,12 +45,12 @@ public class Message extends MessageLite {
   // Construct a new instance of the same type.  Ownership is passed to the
   // caller.  (This is also defined in MessageLite, but is defined again here
   // for return-type covariance.)
-  public native Message New();
+  public native @Override Message New();
 
   // Construct a new instance on the arena. Ownership is passed to the caller
   // if arena is a NULL. Default implementation allows for API compatibility
   // during the Arena transition.
-  public native Message New(Arena arena);
+  public native @Override Message New(Arena arena);
 
   // Make this message into a copy of the given message.  The given message
   // must have the same descriptor, but need not necessarily be the same class.
@@ -76,7 +76,7 @@ public class Message extends MessageLite {
 
   // Like FindInitializationErrors, but joins all the strings, delimited by
   // commas, and returns them.
-  public native @StdString BytePointer InitializationErrorString();
+  public native @StdString @Override BytePointer InitializationErrorString();
 
   // Clears all unknown fields from this message and all embedded messages.
   // Normally, if unknown tag numbers are encountered when parsing a message,
@@ -147,17 +147,18 @@ public class Message extends MessageLite {
   // These methods are pure-virtual in MessageLite, but Message provides
   // reflection-based default implementations.
 
-  public native @StdString BytePointer GetTypeName();
-  public native void Clear();
-  public native @Cast("bool") boolean IsInitialized();
-  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
-  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
-  public native @Cast("size_t") long ByteSizeLong();
-  public native void SerializeWithCachedSizes(CodedOutputStream output);
+  public native @StdString @Override BytePointer GetTypeName();
+  public native @Override void Clear();
+  public native @Cast("bool") @Override boolean IsInitialized();
+  public native @Override void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
+// #if !GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  public native @Cast("bool") @Override boolean MergePartialFromCodedStream(CodedInputStream input);
+// #endif
+  public native @Cast("size_t") @Override long ByteSizeLong();
+  public native @Override void SerializeWithCachedSizes(CodedOutputStream output);
 
   // Introspection ---------------------------------------------------
 
-  // Typedef for backwards-compatibility.
 
   // Get a non-owning pointer to a Descriptor for this message's type.  This
   // describes what fields the message contains, the types of those fields, etc.

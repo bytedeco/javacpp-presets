@@ -17,6 +17,7 @@ Java API documentation is available here:
  * http://bytedeco.org/javacpp-presets/tensorflow/apidocs/
 
 &lowast; Call `Loader.load(org.bytedeco.tensorflow.presets.tensorflow.class)` before using the API in the `org.tensorflow` package.
+&lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage
@@ -91,7 +92,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.16.2-1.5.1-SNAPSHOT</version>
+            <version>1.16.3-1.5.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
