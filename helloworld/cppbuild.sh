@@ -7,28 +7,21 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-HELLOWORLD_VERSION=1.0
+HELLOWORLD_VERSION=master
+download https://github.com/matteodg/helloworld/archive/$HELLOWORLD_VERSION.tar.gz helloworld-$HELLOWORLD_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-
-if [[ -e "helloworld-$HELLOWORLD_VERSION" ]]; then
-    cd helloworld-$HELLOWORLD_VERSION
-    git fetch
-    git pull
-else
-#    git clone https://github.com/matteodg/helloworld.git -b $HELLOWORLD_VERSION helloworld-$HELLOWORLD_VERSION
-    git clone https://github.com/matteodg/helloworld.git -b master helloworld-$HELLOWORLD_VERSION
-    cd helloworld-$HELLOWORLD_VERSION
-fi
-
+echo "Decompressing archives..."
+#tar --totals -xzf ../helloworld-$HELLOWORLD_VERSION.tar.gz
+cd helloworld-$HELLOWORLD_VERSION
 
 case $PLATFORM in
     linux-x86)
         mkdir -p build
         cd build
-        gcc -m32 ../helloworld.c -shared -o libhelloworld.so
+        gcc -m32 -fPIC ../helloworld.c -shared -o libhelloworld.so
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib
@@ -37,16 +30,25 @@ case $PLATFORM in
     linux-x86_64)
         mkdir -p build
         cd build
-        gcc ../helloworld.c -shared -o libhelloworld.so
+        gcc -m64 -fPIC ../helloworld.c -shared -o libhelloworld.so
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib
         cp libhelloworld.so ../../lib
         ;;
+    macosx-*)
+        mkdir -p build
+        cd build
+        clang -fPIC ../helloworld.c -shared -o libhelloworld.dylib
+        mkdir -p ../../include
+        cp ../helloworld.h ../../include
+        mkdir -p ../../lib
+        cp libhelloworld.dylib ../../lib
+        ;;
     windows-x86)
         mkdir -p build
         cd build
-        gcc -m32 ../helloworld.c -shared -o helloworld.dll
+        gcc -m32 -fPIC ../helloworld.c -shared -o helloworld.dll
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib
@@ -55,7 +57,7 @@ case $PLATFORM in
     windows-x86_64)
         mkdir -p build
         cd build
-        gcc -m64 ../helloworld.c -shared -o helloworld.dll
+        gcc -m64 -fPIC ../helloworld.c -shared -o helloworld.dll
         mkdir -p ../../include
         cp ../helloworld.h ../../include
         mkdir -p ../../lib

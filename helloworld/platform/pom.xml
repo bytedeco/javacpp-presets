@@ -10,7 +10,7 @@
     <relativePath>../../</relativePath>
   </parent>
 
-  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <groupId>org.bytedeco</groupId>
   <artifactId>helloworld-platform</artifactId>
   <version>${revision}</version>
   <name>JavaCPP Presets Platform for helloworld</name>
@@ -37,6 +37,12 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
