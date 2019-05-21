@@ -431,7 +431,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         int i = 0;
         if (load.equals("mkl") || load.equals("mkl_rt")) {
             String[] libs = {"iomp5", "libiomp5md", "mkl_core", "mkl_avx", "mkl_avx2", "mkl_avx512", "mkl_avx512_mic",
-                             "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_rt"};
+                             "mkl_def", "mkl_mc", "mkl_mc3", "mkl_intel_lp64", "mkl_intel_thread", "mkl_gnu_thread", "mkl_rt"};
             for (i = 0; i < libs.length; i++) {
                 preloads.add(i, libs[i] + "#" + libs[i]);
             }
