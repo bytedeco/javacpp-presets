@@ -1,4 +1,5 @@
 
+ * Add missing `mkl_gnu_thread` preload in presets for OpenBLAS, MKL-DNN, and TensorFlow ([pull #729](https://github.com/bytedeco/javacpp-presets/pull/729))
  * Overload `Tensor.create()` factory methods for TensorFlow with handy `long... shape` ([issue bytedeco/javacpp#301](https://github.com/bytedeco/javacpp/issues/301))
  * Add build for `linux-arm64` to presets for OpenBLAS ([pull #726](https://github.com/bytedeco/javacpp-presets/pull/726))
  * Bundle complete binary packages of CPython itself for convenience ([issue #712](https://github.com/bytedeco/javacpp-presets/issues/712))
