@@ -285,11 +285,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_mac.dmg -o $HOME/cuda_10.1.105_mac.dmg
+        curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_mac.dmg -o $HOME/cuda_10.1.168_mac.dmg
         curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-osx-x64-v7.5.0.56.tgz -o $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda_10.1.105_mac.dmg
+        hdiutil mount $HOME/cuda_10.1.168_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
