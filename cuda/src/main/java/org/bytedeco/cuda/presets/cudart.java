@@ -56,6 +56,7 @@ public class cudart implements InfoMapper {
                              "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__", "__CUDA_HOSTDEVICE_FP16_DECL__").cppTypes().annotations().cppText(""))
 
                .put(new Info("__CUDA_DEPRECATED").cppText("#define __CUDA_DEPRECATED deprecated").cppTypes())
+               .put(new Info("CUSPARSE_DEPRECATED").cppText("#define CUSPARSE_DEPRECATED(new_func) deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
@@ -76,7 +77,8 @@ public class cudart implements InfoMapper {
                              "!defined(__CUDACC__) && !defined(__CUDABE__) && defined(__arm__) &&"
                        + "    defined(__ARM_PCS_VFP) && __GNUC__ == 4 && __GNUC_MINOR__ == 6",
                              "!defined(__CUDACC__) && !defined(__CUDACC_RTC__) && !defined(__CUDABE__) &&"
-                       + "    defined(_WIN32) && !defined(_WIN64)", "defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)").define(false))
+                       + "    defined(_WIN32) && !defined(_WIN64)", "defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)",
+                             "!defined(DISABLE_CUSPARSE_DEPRECATED)").define(false))
                .put(new Info("__CUDA_FP16_DECL__", "__float_simpl_sinf(float)", "__float_simpl_cosf(float)",
                              "__internal_trig_reduction_kernel", "__internal_sin_cos_kernel", "cuDeviceGetP2PAttribute",
                              "cuMemRangeGetAttribute", "cuMemRangeGetAttributes", "float2::__cuda_gnu_arm_ice_workaround", "cuDeviceGetLuid").skip())

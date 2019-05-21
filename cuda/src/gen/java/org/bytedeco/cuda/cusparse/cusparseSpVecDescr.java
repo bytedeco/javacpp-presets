@@ -12,10 +12,12 @@ import static org.bytedeco.cuda.global.cudart.*;
 import static org.bytedeco.cuda.global.cusparse.*;
 
 
+//------------------------------------------------------------------------------
+
 @Opaque @Properties(inherit = org.bytedeco.cuda.presets.cusparse.class)
-public class bsrsm2Info extends Pointer {
+public class cusparseSpVecDescr extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public bsrsm2Info() { super((Pointer)null); }
+    public cusparseSpVecDescr() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public bsrsm2Info(Pointer p) { super(p); }
+    public cusparseSpVecDescr(Pointer p) { super(p); }
 }
