@@ -62,6 +62,8 @@ public class Type extends Pointer {
             public native @Cast("bool") boolean is_signed();
             public native @Cast("bool") boolean is_quantized();
             public native @Cast("size_t") long bitwidth();
+            // The name of this type, the enum name of this type
+            public native @StdString BytePointer get_type_name();
             public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Type other);
             public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Type other);
             public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Type other);

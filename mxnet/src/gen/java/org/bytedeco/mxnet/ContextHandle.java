@@ -20,14 +20,11 @@ import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 import static org.bytedeco.mxnet.global.mxnet.*;
 
-@Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
-public class ExecutorMonitorCallback extends FunctionPointer {
-    static { Loader.load(); }
+/** \brief handle to Context */
+@Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
+public class ContextHandle extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ContextHandle() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    ExecutorMonitorCallback(Pointer p) { super(p); }
-    protected ExecutorMonitorCallback() { allocate(); }
-    private native void allocate();
-    public native void call(@Cast("const char*") BytePointer arg0,
-                                        NDArrayHandle arg1,
-                                        Pointer arg2);
+    public ContextHandle(Pointer p) { super(p); }
 }

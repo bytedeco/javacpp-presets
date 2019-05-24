@@ -9,28 +9,28 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.ngraph.global.ngraph.*;
 
-@Name("std::vector<std::shared_ptr<ngraph::op::Parameter> >") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
-public class NgraphParameterVector extends Pointer {
+@Name("std::vector<std::shared_ptr<ngraph::Function> >") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+public class FunctionVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NgraphParameterVector(Pointer p) { super(p); }
-    public NgraphParameterVector(Parameter value) { this(1); put(0, value); }
-    public NgraphParameterVector(Parameter ... array) { this(array.length); put(array); }
-    public NgraphParameterVector()       { allocate();  }
-    public NgraphParameterVector(long n) { allocate(n); }
+    public FunctionVector(Pointer p) { super(p); }
+    public FunctionVector(Function value) { this(1); put(0, value); }
+    public FunctionVector(Function ... array) { this(array.length); put(array); }
+    public FunctionVector()       { allocate();  }
+    public FunctionVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef NgraphParameterVector put(@ByRef NgraphParameterVector x);
+    public native @Name("operator=") @ByRef FunctionVector put(@ByRef FunctionVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
     public void clear() { resize(0); }
     public native void resize(@Cast("size_t") long n);
 
-    @Index(function = "at") public native @SharedPtr Parameter get(@Cast("size_t") long i);
-    public native NgraphParameterVector put(@Cast("size_t") long i, Parameter value);
+    @Index(function = "at") public native @SharedPtr Function get(@Cast("size_t") long i);
+    public native FunctionVector put(@Cast("size_t") long i, Function value);
 
-    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Parameter value);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Function value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -40,11 +40,11 @@ public class NgraphParameterVector extends Pointer {
 
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
-        public native @Name("operator*") @SharedPtr @Const Parameter get();
+        public native @Name("operator*") @SharedPtr @Const Function get();
     }
 
-    public Parameter[] get() {
-        Parameter[] array = new Parameter[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+    public Function[] get() {
+        Function[] array = new Function[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
         for (int i = 0; i < array.length; i++) {
             array[i] = get(i);
         }
@@ -54,22 +54,22 @@ public class NgraphParameterVector extends Pointer {
         return java.util.Arrays.toString(get());
     }
 
-    public Parameter pop_back() {
+    public Function pop_back() {
         long size = size();
-        Parameter value = get(size - 1);
+        Function value = get(size - 1);
         resize(size - 1);
         return value;
     }
-    public NgraphParameterVector push_back(Parameter value) {
+    public FunctionVector push_back(Function value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public NgraphParameterVector put(Parameter value) {
+    public FunctionVector put(Function value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public NgraphParameterVector put(Parameter ... array) {
+    public FunctionVector put(Function ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);

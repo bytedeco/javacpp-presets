@@ -20,14 +20,13 @@ import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 import static org.bytedeco.mxnet.global.mxnet.*;
 
+/** \brief Engine synchronous operation */
 @Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
-public class ExecutorMonitorCallback extends FunctionPointer {
+public class EngineSyncFunc extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    ExecutorMonitorCallback(Pointer p) { super(p); }
-    protected ExecutorMonitorCallback() { allocate(); }
+    public    EngineSyncFunc(Pointer p) { super(p); }
+    protected EngineSyncFunc() { allocate(); }
     private native void allocate();
-    public native void call(@Cast("const char*") BytePointer arg0,
-                                        NDArrayHandle arg1,
-                                        Pointer arg2);
+    public native void call(Pointer arg0, Pointer arg1);
 }

@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.18.1-${project.version}</version>
+      <version>0.19-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -206,7 +206,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.4.0-${project.version}</version>
+      <version>1.4.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ngraph-platform</artifactId>
-      <version>0.18.1-${project.version}</version>
+      <version>0.19.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

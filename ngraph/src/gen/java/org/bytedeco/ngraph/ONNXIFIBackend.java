@@ -11,10 +11,10 @@ import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief ONNXIFI extensions to nGraph backend */
         @Name("ngraph::onnxifi::Backend") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
-public class NgraphONNXIFIBackend extends Pointer {
+public class ONNXIFIBackend extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public NgraphONNXIFIBackend(Pointer p) { super(p); }
+            public ONNXIFIBackend(Pointer p) { super(p); }
         
             
             
@@ -23,5 +23,5 @@ public class NgraphONNXIFIBackend extends Pointer {
             
 
             public native @StdString BytePointer get_type();
-            public native @SharedPtr Executable compile(@SharedPtr Function function);
+            public native @SharedPtr Executable compile(@Const @SharedPtr @ByRef Function function);
         }

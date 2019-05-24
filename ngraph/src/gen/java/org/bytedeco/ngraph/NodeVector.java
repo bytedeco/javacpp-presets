@@ -9,26 +9,72 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.ngraph.global.ngraph.*;
 
+@Name("std::vector<std::shared_ptr<ngraph::Node> >") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+public class NodeVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NodeVector(Pointer p) { super(p); }
+    public NodeVector(Node value) { this(1); put(0, value); }
+    public NodeVector(Node ... array) { this(array.length); put(array); }
+    public NodeVector()       { allocate();  }
+    public NodeVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef NodeVector put(@ByRef NodeVector x);
 
-    /** \brief Zero or more nodes. */
-    @Namespace("ngraph") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
-public class NodeVector extends NgraphNodeVector {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public NodeVector(Pointer p) { super(p); }
-    
+    public boolean empty() { return size() == 0; }
+    public native long size();
+    public void clear() { resize(0); }
+    public native void resize(@Cast("size_t") long n);
 
-        public NodeVector(@Const @ByRef NgraphNodeVector nodes) { super((Pointer)null); allocate(nodes); }
-        private native void allocate(@Const @ByRef NgraphNodeVector nodes);
+    @Index(function = "at") public native @SharedPtr Node get(@Cast("size_t") long i);
+    public native NodeVector put(@Cast("size_t") long i, Node value);
 
-        public NodeVector(@Const @ByRef NodeVector nodes) { super((Pointer)null); allocate(nodes); }
-        private native void allocate(@Const @ByRef NodeVector nodes);
+    public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Node value);
+    public native @ByVal Iterator erase(@ByVal Iterator pos);
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
 
-        public NodeVector(@Cast("size_t") long size) { super((Pointer)null); allocate(size); }
-        private native void allocate(@Cast("size_t") long size);
-
-        public native @ByRef @Name("operator =") NodeVector put(@Const @ByRef NodeVector other);
-
-        public NodeVector() { super((Pointer)null); allocate(); }
-        private native void allocate();
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*") @SharedPtr @Const Node get();
     }
+
+    public Node[] get() {
+        Node[] array = new Node[size() < Integer.MAX_VALUE ? (int)size() : Integer.MAX_VALUE];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = get(i);
+        }
+        return array;
+    }
+    @Override public String toString() {
+        return java.util.Arrays.toString(get());
+    }
+
+    public Node pop_back() {
+        long size = size();
+        Node value = get(size - 1);
+        resize(size - 1);
+        return value;
+    }
+    public NodeVector push_back(Node value) {
+        long size = size();
+        resize(size + 1);
+        return put(size, value);
+    }
+    public NodeVector put(Node value) {
+        if (size() != 1) { resize(1); }
+        return put(0, value);
+    }
+    public NodeVector put(Node ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+

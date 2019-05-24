@@ -22,8 +22,6 @@ public class PassConfig extends Pointer {
         return (PassConfig)super.position(position);
     }
 
-    public PassConfig(@Cast("ngraph::pass::CompilationMode") int mode/*=ngraph::pass::CompilationMode::DEX*/) { super((Pointer)null); allocate(mode); }
-    private native void allocate(@Cast("ngraph::pass::CompilationMode") int mode/*=ngraph::pass::CompilationMode::DEX*/);
     public PassConfig() { super((Pointer)null); allocate(); }
     private native void allocate();
     public native @Const @ByRef StringBoolMap get_enables();
@@ -36,5 +34,4 @@ public class PassConfig extends Pointer {
     public native void set_pass_attribute(@StdString String name, @Cast("bool") boolean enable);
     public native @Cast("bool") boolean get_pass_attribute(@StdString BytePointer name);
     public native @Cast("bool") boolean get_pass_attribute(@StdString String name);
-    public native @Cast("ngraph::pass::CompilationMode") int get_compilation_mode();
 }

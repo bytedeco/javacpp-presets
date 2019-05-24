@@ -71,13 +71,13 @@ public class mklml extends org.bytedeco.mkldnn.presets.mklml {
 // #ifndef _MKL_VERSION_H_
 // #define _MKL_VERSION_H_
 
-public static final int __INTEL_MKL_BUILD_DATE = 20190220;
+public static final int __INTEL_MKL_BUILD_DATE = 20190502;
 
 public static final int __INTEL_MKL__ = 2019;
 public static final int __INTEL_MKL_MINOR__ = 0;
-public static final int __INTEL_MKL_UPDATE__ = 3;
+public static final int __INTEL_MKL_UPDATE__ = 5;
 
-public static final int INTEL_MKL_VERSION = 20190003;
+public static final int INTEL_MKL_VERSION = 20190005;
 
 // #endif
 
