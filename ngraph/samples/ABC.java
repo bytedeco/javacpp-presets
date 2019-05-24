@@ -31,8 +31,8 @@ public class ABC {
         Op t1 = new Multiply(t0, c);
 
         // Make the function
-        Function f = new Function(new NodeVector(new NgraphNodeVector(t1)),
-                                  new ParameterVector(new NgraphParameterVector(a, b, c)));
+        Function f = new Function(new NodeVector(t1),
+                                  new ParameterVector(a, b, c));
 
         // Create the backend
         Backend backend = Backend.create("CPU");
@@ -55,7 +55,7 @@ public class ABC {
 
         // Invoke the function
         Executable exec = backend.compile(f);
-        exec.call(new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
+        exec.call(new TensorVector(t_result), new TensorVector(t_a, t_b, t_c));
 
         // Get the result
         float[] r = new float[2 * 3];

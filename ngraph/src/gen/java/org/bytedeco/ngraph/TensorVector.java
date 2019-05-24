@@ -10,17 +10,17 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 @Name("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
-public class NgraphTensorVector extends Pointer {
+public class TensorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public NgraphTensorVector(Pointer p) { super(p); }
-    public NgraphTensorVector(Tensor value) { this(1); put(0, value); }
-    public NgraphTensorVector(Tensor ... array) { this(array.length); put(array); }
-    public NgraphTensorVector()       { allocate();  }
-    public NgraphTensorVector(long n) { allocate(n); }
+    public TensorVector(Pointer p) { super(p); }
+    public TensorVector(Tensor value) { this(1); put(0, value); }
+    public TensorVector(Tensor ... array) { this(array.length); put(array); }
+    public TensorVector()       { allocate();  }
+    public TensorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
-    public native @Name("operator=") @ByRef NgraphTensorVector put(@ByRef NgraphTensorVector x);
+    public native @Name("operator=") @ByRef TensorVector put(@ByRef TensorVector x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
@@ -28,7 +28,7 @@ public class NgraphTensorVector extends Pointer {
     public native void resize(@Cast("size_t") long n);
 
     @Index(function = "at") public native @SharedPtr Tensor get(@Cast("size_t") long i);
-    public native NgraphTensorVector put(@Cast("size_t") long i, Tensor value);
+    public native TensorVector put(@Cast("size_t") long i, Tensor value);
 
     public native @ByVal Iterator insert(@ByVal Iterator pos, @SharedPtr Tensor value);
     public native @ByVal Iterator erase(@ByVal Iterator pos);
@@ -60,16 +60,16 @@ public class NgraphTensorVector extends Pointer {
         resize(size - 1);
         return value;
     }
-    public NgraphTensorVector push_back(Tensor value) {
+    public TensorVector push_back(Tensor value) {
         long size = size();
         resize(size + 1);
         return put(size, value);
     }
-    public NgraphTensorVector put(Tensor value) {
+    public TensorVector put(Tensor value) {
         if (size() != 1) { resize(1); }
         return put(0, value);
     }
-    public NgraphTensorVector put(Tensor ... array) {
+    public TensorVector put(Tensor ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);

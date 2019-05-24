@@ -15,15 +15,13 @@ public class PerformanceCounter extends Pointer {
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public PerformanceCounter(Pointer p) { super(p); }
         
-            public PerformanceCounter(@Cast("const char*") BytePointer n, @Cast("size_t") long us, @Cast("size_t") long calls) { super((Pointer)null); allocate(n, us, calls); }
-            private native void allocate(@Cast("const char*") BytePointer n, @Cast("size_t") long us, @Cast("size_t") long calls);
-            public PerformanceCounter(String n, @Cast("size_t") long us, @Cast("size_t") long calls) { super((Pointer)null); allocate(n, us, calls); }
-            private native void allocate(String n, @Cast("size_t") long us, @Cast("size_t") long calls);
-            public native @StdString BytePointer name();
+            public PerformanceCounter(@Const @Cast("const ngraph::Node*") @SharedPtr @ByRef Node n, @Cast("size_t") long us, @Cast("size_t") long calls) { super((Pointer)null); allocate(n, us, calls); }
+            private native void allocate(@Const @Cast("const ngraph::Node*") @SharedPtr @ByRef Node n, @Cast("size_t") long us, @Cast("size_t") long calls);
+            public native @Cast("const ngraph::Node*") @SharedPtr @ByVal Node get_node();
             public native @Cast("size_t") long total_microseconds();
             public native @Cast("size_t") long microseconds();
             public native @Cast("size_t") long call_count();
-            public native @StdString BytePointer m_name(); public native PerformanceCounter m_name(BytePointer setter);
+            public native @Cast("const ngraph::Node*") @SharedPtr @ByRef Node m_node(); public native PerformanceCounter m_node(Node setter);
             public native @Cast("size_t") long m_total_microseconds(); public native PerformanceCounter m_total_microseconds(long setter);
             public native @Cast("size_t") long m_call_count(); public native PerformanceCounter m_call_count(long setter);
         }

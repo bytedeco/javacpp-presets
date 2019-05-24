@@ -16,14 +16,14 @@ public class CPU_Executable extends Executable {
                 /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                 public CPU_Executable(Pointer p) { super(p); }
             
-                public CPU_Executable(@SharedPtr Function func,
+                public CPU_Executable(@SharedPtr @ByVal Function func,
                                                @ByRef PassConfig pass_config,
                                                @Cast("bool") boolean performance_counters_enabled) { super((Pointer)null); allocate(func, pass_config, performance_counters_enabled); }
-                private native void allocate(@SharedPtr Function func,
+                private native void allocate(@SharedPtr @ByVal Function func,
                                                @ByRef PassConfig pass_config,
                                                @Cast("bool") boolean performance_counters_enabled);
-                public native @Cast("bool") boolean call(@Const @ByRef NgraphTensorVector outputs,
-                                          @Const @ByRef NgraphTensorVector inputs);
+                public native @Cast("bool") boolean call(@Const @ByRef TensorVector outputs,
+                                          @Const @ByRef TensorVector inputs);
 
                 public native @SharedPtr CPU_CallFrame get_call_frame();
 

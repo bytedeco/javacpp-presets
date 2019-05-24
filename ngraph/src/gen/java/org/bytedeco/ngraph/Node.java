@@ -41,7 +41,7 @@ public class Node extends Pointer {
          *  Conversion must be sound. That means that if as_constants returns a non-empty vector,
          *  the value of each constant in the vector must be exactly the value that would have
          *  been returned for the corresponding output at runtime. */
-        public native @ByVal NgraphOpConstantVector as_constants();
+        public native @ByVal OpConstantVector as_constants();
         /** \brief Get the string name for the type of the node, such as {@code Add} or {@code Multiply}.
          *         The class name, must not contain spaces as it is used for codegen.
          *  @return A const reference to the node's type name */
@@ -80,6 +80,7 @@ public class Node extends Pointer {
          *  DynReshape must be evaluated statically in order for the output shape to be
          *  determined.) By default, all inputs are marked as shape-irrelevant. Overrides of
          *  validate_and_infer_types should call this function to mark shape-relevant inputs. */
+        // TODO(amprocte): should be protected
         
         ///
         public native void set_input_is_relevant_to_shape(@Cast("size_t") long i, @Cast("bool") boolean relevant/*=true*/);
@@ -95,9 +96,11 @@ public class Node extends Pointer {
          *  of this writing, the only example of this is ShapeOf.) By default, all inputs are
          *  marked as value-relevant. Overrides of validate_and_infer_types should call this
          *  function to mark value-irrelevant inputs. */
+        // TODO(amprocte): should be protected
         public native void set_input_is_relevant_to_value(@Cast("size_t") long i, @Cast("bool") boolean relevant/*=true*/);
         public native void set_input_is_relevant_to_value(@Cast("size_t") long i);
 
+        // TODO(amprocte): should this be protected?
         public native void set_output_type(@Cast("size_t") long i,
                                      @Const @ByRef Type element_type,
                                      @Const @ByRef PartialShape pshape);
@@ -108,17 +111,11 @@ public class Node extends Pointer {
         public native @Cast("bool") boolean is_null();
         public native @Cast("bool") boolean is_op();
         public native @Cast("bool") boolean is_commutative();
+        public native @Cast("bool") boolean is_dynamic();
         public native @Cast("size_t") long get_instance_id();
         
         public native @Cast("std::ostream*") @ByRef Pointer write_short_description(@Cast("std::ostream*") @ByRef Pointer arg0);
         public native @Cast("std::ostream*") @ByRef Pointer write_long_description(@Cast("std::ostream*") @ByRef Pointer arg0);
-
-        // TODO: Deprecate
-        // TODO: Deprecate
-        // Deprecated
-        // TODO: Remove from unit tests.
-        // Deprecated
-        // TODO: Remove from unit tests.
 
         /** Get control dependencies registered on the node */
 
@@ -126,31 +123,44 @@ public class Node extends Pointer {
 
         public native void remove_control_dependency(@SharedPtr @ByVal Node node);
 
-        /** Returns the number of outputs on the for the node. */
+        /** Returns the number of outputs from the node. */
         public native @Cast("size_t") long get_output_size();
 
         /** Returns the element type for output i */
+        // TODO: deprecate in favor of node->output(i).get_element_type()
         public native @Const @ByRef Type get_output_element_type(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its element type */
+        // TODO: deprecate in favor of node->output(0).get_element_type() with a suitable check in
+        // the calling code, or updates to the calling code if it is making an invalid assumption
+        // of only one output.
         public native @Const @ByRef Type get_element_type();
 
         /** Returns the shape for output i */
+        // TODO: deprecate in favor of node->output(i).get_shape()
         public native @Const @ByRef Shape get_output_shape(@Cast("size_t") long i);
 
         /** Returns the partial shape for output i */
         public native @Const @ByRef PartialShape get_output_partial_shape(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its shape */
+        // TODO: deprecate in favor of node->output(0).get_shape() with a suitable check in the
+        // calling code, or updates to the calling code if it is making an invalid assumption of
+        // only one output.
         public native @Const @ByRef Shape get_shape();
 
         /** Returns the tensor for output i */
         public native @ByRef DescriptorTensor get_output_tensor(@Cast("size_t") long i);
 
+        /** Returns the tensor name for output i */
+        public native @StdString BytePointer get_output_tensor_name(@Cast("size_t") long i);
+
         /** Checks that there is exactly one output and returns its tensor. */
         public native @ByRef DescriptorTensor get_output_tensor();
 
         /** Returns the tensor of output i */
+        // TODO: Investigate whether this really needs to be shared_ptr. If so, we'll need a
+        // replacement in Output.
         public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its tensor. */
@@ -162,13 +172,19 @@ public class Node extends Pointer {
         public native @Cast("size_t") long get_input_size();
 
         /** Returns the element type of input i */
+        // TODO: deprecate in favor of node->input(i).get_element_type()
         public native @Const @ByRef Type get_input_element_type(@Cast("size_t") long i);
 
         /** Returns the shape of input i */
+        // TODO: deprecate in favor of node->input(i).get_shape()
         public native @Const @ByRef Shape get_input_shape(@Cast("size_t") long i);
 
         /** Returns the partial shape of input i */
+        // TODO: deprecate in favor of node->input(i).get_partial_shape()
         public native @Const @ByRef PartialShape get_input_partial_shape(@Cast("size_t") long i);
+
+        /** Returns the tensor name for input i */
+        public native @StdString BytePointer get_input_tensor_name(@Cast("size_t") long i);
 
         public native @ByVal NodeVector get_arguments();
 
@@ -176,7 +192,7 @@ public class Node extends Pointer {
 
         public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
 
-        public native @ByVal NgraphFunctionVector get_functions();
+        public native @ByVal FunctionVector get_functions();
 
         /** True if this and node have one output with same element type and shape */
         
@@ -200,12 +216,6 @@ public class Node extends Pointer {
         // to be used when nodes are replaced
         public native void merge_provenance_tags_from(@Const @Cast("const ngraph::Node*") @SharedPtr @ByRef Node source);
 
-        /** Get input descriptor that is connected to src */
-        public native Input get_input_from(@Const @SharedPtr @ByRef Node src);
-
-        /** Get ouput descriptor that outputs to dst */
-        public native Output get_output_to(@Const @SharedPtr @ByRef Node dst);
-
         /** Get all the nodes that uses the current node */
         public native @ByVal NodeVector get_users(@Cast("bool") boolean check_is_used/*=false*/);
         public native @ByVal NodeVector get_users();
@@ -215,4 +225,30 @@ public class Node extends Pointer {
         public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Node other);
         @MemberGetter public static native @Cast("const size_t") long placement_invalid();
         public static final long placement_invalid = placement_invalid();
+
+        /** @return A vector containing a handle for each of this node's inputs, in order. */
+        // TODO: Rename to get_inputs()?
+        public native @ByVal NodeInputVector inputs();
+
+        /** @return A vector containing a handle for each of this node's inputs, in order. */
+
+        /** @return A vector containing a handle for each of this node's outputs, in order. */
+        // TODO: Rename to get_outputs()?
+        public native @ByVal NodeOutputVector outputs();
+
+        /** @return A vector containing a handle for each of this node's outputs, in order. */
+
+        /** @return A handle to the {@code input_index}th input of this node.
+         *  @throws std::out_of_range if the node does not have at least {@code input_index+1} inputs. */
+        public native @ByVal NodeInput input(@Cast("size_t") long input_index);
+
+        /** @return A handle to the {@code input_index}th input of this node.
+         *  @throws std::out_of_range if the node does not have at least {@code input_index+1} inputs. */
+
+        /** @return A handle to the {@code output_index}th output of this node.
+         *  @throws std::out_of_range if the node does not have at least {@code output_index+1} outputs. */
+        public native @ByVal NodeOutput output(@Cast("size_t") long output_index);
+
+        /** @return A handle to the {@code output_index}th output of this node.
+         *  @throws std::out_of_range if the node does not have at least {@code output_index+1} outputs. */
     }

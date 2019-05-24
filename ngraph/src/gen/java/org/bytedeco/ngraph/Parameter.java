@@ -40,4 +40,7 @@ public class Parameter extends Op {
 
             public native @Cast("bool") boolean get_cacheable();
             public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+
+            public native @Cast("bool") boolean is_relevant_to_shapes();
+            public native void set_is_relevant_to_shapes(@Cast("bool") boolean is_relevant);
         }

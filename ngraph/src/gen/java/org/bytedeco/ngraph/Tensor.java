@@ -73,6 +73,4 @@ public class Tensor extends Pointer {
             /** \brief copy bytes directly from source to this tensor
              *  @param source The source tensor */
             public native void copy_from(@Const @ByRef Tensor source);
-
-            public native @Const Backend get_parent();
         }

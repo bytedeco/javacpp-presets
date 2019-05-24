@@ -130,6 +130,24 @@ public class mxnet extends org.bytedeco.mxnet.presets.mxnet {
 // Targeting ../DLManagedTensorHandle.java
 
 
+// Targeting ../ContextHandle.java
+
+
+// Targeting ../EngineFnPropertyHandle.java
+
+
+// Targeting ../EngineVarHandle.java
+
+
+// Targeting ../EngineAsyncFunc.java
+
+
+// Targeting ../EngineSyncFunc.java
+
+
+// Targeting ../EngineFuncParamDeleter.java
+
+
 // Targeting ../ExecutorMonitorCallback.java
 
 
@@ -1857,9 +1875,7 @@ public static native int MXInvokeCachedOpEx(CachedOpHandle handle,
                                  int[] num_outputs,
                                  @Cast("NDArrayHandle**") @ByPtrPtr PointerPointer outputs,
                                  @Const @ByPtrPtr int[] out_stypes);
-/**
- * \brief invoke cached operator
- */
+
 //--------------------------------------------
 // Part 3: symbolic configuration generation
 //--------------------------------------------
@@ -4716,6 +4732,73 @@ public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared
 public static native int MXNDArrayCreateFromSharedMem(int shared_pid, int shared_id, @Cast("const mx_uint*") int[] shape,
                                            @Cast("mx_uint") int ndim, int dtype, @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out);
 
+/**
+  * \brief Push an asynchronous operation to the engine.
+  * @param async_func Execution function whici takes a parameter on_complete
+  *                   that must be called when the execution ompletes.
+  * @param func_param The parameter set on calling async_func, can be NULL.
+  * @param deleter The callback to free func_param, can be NULL.
+  * @param ctx_handle Execution context.
+  * @param const_vars_handle The variables that current operation will use
+  *                          but not mutate.
+  * @param num_const_vars The number of const_vars.
+  * @param mutable_vars_handle The variables that current operation will mutate.
+  * @param num_mutable_vars The number of mutable_vars.
+  * @param prop_handle Property of the function.
+  * @param priority Priority of the action, as hint to the engine.
+  * @param opr_name The operation name.
+  * @param wait Whether this is a WaitForVar operation.
+  */
+public static native int MXEnginePushAsync(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                EngineVarHandle const_vars_handle, int num_const_vars,
+                                EngineVarHandle mutable_vars_handle, int num_mutable_vars,
+                                EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/,
+                                @Cast("bool") boolean wait/*=false*/);
+public static native int MXEnginePushAsync(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                EngineVarHandle const_vars_handle, int num_const_vars,
+                                EngineVarHandle mutable_vars_handle, int num_mutable_vars);
+public static native int MXEnginePushAsync(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                EngineVarHandle const_vars_handle, int num_const_vars,
+                                EngineVarHandle mutable_vars_handle, int num_mutable_vars,
+                                EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                int priority/*=0*/, String opr_name/*=NULL*/,
+                                @Cast("bool") boolean wait/*=false*/);
+
+/**
+  * \brief Push a synchronous operation to the engine.
+  * @param sync_func Execution function that executes the operation.
+  * @param func_param The parameter set on calling sync_func, can be NULL.
+  * @param deleter The callback to free func_param, can be NULL.
+  * @param ctx_handle Execution context.
+  * @param const_vars_handle The variables that current operation will use
+  *                          but not mutate.
+  * @param num_const_vars The number of const_vars.
+  * @param mutable_vars_handle The variables that current operation will mutate.
+  * @param num_mutable_vars The number of mutable_vars.
+  * @param prop_handle Property of the function.
+  * @param priority Priority of the action, as hint to the engine.
+  * @param opr_name The operation name.
+  */
+public static native int MXEnginePushSync(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               EngineVarHandle const_vars_handle, int num_const_vars,
+                               EngineVarHandle mutable_vars_handle, int num_mutable_vars,
+                               EngineFnPropertyHandle prop_handle/*=NULL*/,
+                               int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/);
+public static native int MXEnginePushSync(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               EngineVarHandle const_vars_handle, int num_const_vars,
+                               EngineVarHandle mutable_vars_handle, int num_mutable_vars);
+public static native int MXEnginePushSync(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               EngineVarHandle const_vars_handle, int num_const_vars,
+                               EngineVarHandle mutable_vars_handle, int num_mutable_vars,
+                               EngineFnPropertyHandle prop_handle/*=NULL*/,
+                               int priority/*=0*/, String opr_name/*=NULL*/);
 
 // #ifdef __cplusplus
 // #endif  // __cplusplus

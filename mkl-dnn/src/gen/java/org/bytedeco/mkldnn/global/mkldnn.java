@@ -261,124 +261,174 @@ public static final int
     /* Opaque data types, are not to be used explicitly */
 
     /* data */
-    mkldnn_nCw8c = 33,
-    mkldnn_nCw16c = 34,
-    mkldnn_nChw8c = 35,
-    mkldnn_nChw16c = 36,
-    mkldnn_nCdhw8c = 37,
-    mkldnn_nCdhw16c = 38,
+    mkldnn_nCw4c = 33,
+    mkldnn_nCw8c = 34,
+    mkldnn_nCw16c = 35,
+    mkldnn_nChw4c = 36,
+    mkldnn_nChw8c = 37,
+    mkldnn_nChw16c = 38,
+    mkldnn_nCdhw4c = 39,
+    mkldnn_nCdhw8c = 40,
+    mkldnn_nCdhw16c = 41,
 
     /* weights, 3D */
-    mkldnn_Owi8o = 39,
-    mkldnn_OIw8i8o = 40,
-    mkldnn_OIw8o8i = 41,
-    mkldnn_OIw16i16o = 42,
-    mkldnn_OIw16o16i = 43,
-    mkldnn_Oiw16o = 44,
-    mkldnn_Owi16o = 45,
-    mkldnn_OIw8i16o2i = 46,
-    mkldnn_OIw8o16i2o = 47,
-    mkldnn_IOw16o16i = 48,
+    mkldnn_Owi4o = 42,
+    mkldnn_OIw4i4o = 43,
+    mkldnn_Owi8o = 44,
+    mkldnn_OIw8i8o = 45,
+    mkldnn_OIw8o8i = 46,
+    mkldnn_OIw16i16o = 47,
+    mkldnn_OIw16o16i = 48,
+    mkldnn_Oiw4o = 49,
+    mkldnn_Oiw16o = 50,
+    mkldnn_Owi16o = 51,
+    mkldnn_OIw8i16o2i = 52,
+    mkldnn_OIw8o16i2o = 53,
+    mkldnn_IOw16o16i = 54,
+    mkldnn_OIw4i16o4i = 55,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * and containing the values:
+     * O[i:0,OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
+    mkldnn_OIw4i16o4i_s8s8 = 56,
 
     /* weights, 4D */
     /** weights format with additional buffer
      * size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwio_s8s8 = 49,
-    mkldnn_oIhw8i = 50,
-    mkldnn_oIhw16i = 51,
-    mkldnn_OIhw8i8o = 52,
-    mkldnn_OIhw16i16o = 53,
-    mkldnn_OIhw4i16o4i = 54,
+    mkldnn_hwio_s8s8 = 57,
+    mkldnn_oIhw8i = 58,
+    mkldnn_oIhw16i = 59,
+    mkldnn_OIhw4i4o = 60,
+    mkldnn_OIhw8i8o = 61,
+    mkldnn_OIhw16i16o = 62,
+    mkldnn_OIhw4i16o4i = 63,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_OIhw4i16o4i_s8s8 = 55,
-    mkldnn_OIhw8i16o2i = 56,
-    mkldnn_OIhw8o16i2o = 57,
-    mkldnn_OIhw8o8i = 58,
-    mkldnn_OIhw16o16i = 59,
-    mkldnn_IOhw16o16i = 60,
-    mkldnn_Oihw8o = 61,
-    mkldnn_Oihw16o = 62,
-    mkldnn_Ohwi8o = 63,
-    mkldnn_Ohwi16o = 64,
-    mkldnn_OhIw16o4i = 65,
+    mkldnn_OIhw4i16o4i_s8s8 = 64,
+    mkldnn_OIhw8i16o2i = 65,
+    mkldnn_OIhw8o16i2o = 66,
+    mkldnn_OIhw8o8i = 67,
+    mkldnn_OIhw16o16i = 68,
+    mkldnn_IOhw16o16i = 69,
+    mkldnn_Oihw8o = 70,
+    mkldnn_Oihw4o = 71,
+    mkldnn_Oihw16o = 72,
+    mkldnn_Ohwi8o = 73,
+    mkldnn_Ohwi4o = 74,
+    mkldnn_Ohwi16o = 75,
+    mkldnn_OhIw16o4i = 76,
 
     /* weights, 5D */
-    mkldnn_oIdhw8i = 66,
-    mkldnn_oIdhw16i = 67,
-    mkldnn_OIdhw8i8o = 68,
-    mkldnn_OIdhw8o8i = 69,
-    mkldnn_Odhwi8o = 70,
-    mkldnn_OIdhw16i16o = 71,
-    mkldnn_OIdhw16o16i = 72,
-    mkldnn_Oidhw16o = 73,
-    mkldnn_Odhwi16o = 74,
-    mkldnn_OIdhw8i16o2i = 75,
+    mkldnn_oIdhw8i = 77,
+    mkldnn_oIdhw16i = 78,
+    mkldnn_OIdhw4i4o = 79,
+    mkldnn_Odhwi4o = 80,
+    mkldnn_OIdhw8i8o = 81,
+    mkldnn_OIdhw8o8i = 82,
+    mkldnn_Odhwi8o = 83,
+    mkldnn_OIdhw16i16o = 84,
+    mkldnn_OIdhw16o16i = 85,
+    mkldnn_Oidhw4o = 86,
+    mkldnn_Oidhw16o = 87,
+    mkldnn_Odhwi16o = 88,
+    mkldnn_OIdhw8i16o2i = 89,
 
     /* weights w/ groups, 4D */
-    mkldnn_gOwi8o = 76,
-    mkldnn_gOIw8o8i = 77,
-    mkldnn_gOIw8i8o = 78,
-    mkldnn_gOIw16i16o = 79,
-    mkldnn_gOIw16o16i = 80,
-    mkldnn_gOiw16o = 81,
-    mkldnn_gOwi16o = 82,
-    mkldnn_gOIw8i16o2i = 83,
-    mkldnn_gOIw8o16i2o = 84,
-    mkldnn_gIOw16o16i = 85,
+    mkldnn_gOwi4o = 90,
+    mkldnn_gOIw4i4o = 91,
+    mkldnn_gOwi8o = 92,
+    mkldnn_gOIw8o8i = 93,
+    mkldnn_gOIw8i8o = 94,
+    mkldnn_gOIw16i16o = 95,
+    mkldnn_gOIw16o16i = 96,
+    mkldnn_gOiw4o = 97,
+    mkldnn_gOiw16o = 98,
+    mkldnn_gOwi16o = 99,
+    mkldnn_gOIw8i16o2i = 100,
+    mkldnn_gOIw8o16i2o = 101,
+    mkldnn_gIOw16o16i = 102,
+    mkldnn_gOIw4i16o4i = 103,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * multiplied by number of groups and containing the values:
+     * O[i:0,G*OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
+    mkldnn_gOIw4i16o4i_s8s8 = 104,
+    mkldnn_Goiw16g = 105,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of groups and containing the values:
+     * O[i:0,G] = -128 * SUM(w:0,W)(weights(i,i,w))*/
+    mkldnn_Goiw16g_s8s8 = 106,
 
     /* weights w/ groups, 5D */
     /** weights format with additional buffer
      * size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwigo_s8s8 = 86,
-    mkldnn_gOIhw8i8o = 87,
-    mkldnn_gOIhw16i16o = 88,
-    mkldnn_gOIhw4i16o4i = 89,
+    mkldnn_hwigo_s8s8 = 107,
+    mkldnn_gOIhw4i4o = 108,
+    mkldnn_gOIhw8i8o = 109,
+    mkldnn_gOIhw16i16o = 110,
+    mkldnn_gOIhw4i16o4i = 111,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw4i16o4i_s8s8 = 90,
-    mkldnn_gOIhw8i16o2i = 91,
-    mkldnn_gOIhw8o16i2o = 92,
-    mkldnn_gOIhw8o8i = 93,
-    mkldnn_gOIhw16o16i = 94,
-    mkldnn_gIOhw16o16i = 95,
-    mkldnn_gOihw8o = 96,
-    mkldnn_gOihw16o = 97,
-    mkldnn_gOhwi8o = 98,
-    mkldnn_gOhwi16o = 99,
-    mkldnn_Goihw8g = 100,
-    mkldnn_Goihw16g = 101,
+    mkldnn_gOIhw4i16o4i_s8s8 = 112,
+    mkldnn_gOIhw2i8o4i = 113,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * multiplied by number of groups and containing the values:
+     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_gOIhw2i8o4i_s8s8 = 114,
+    mkldnn_gOIhw8i16o2i = 115,
+    mkldnn_gOIhw8o16i2o = 116,
+    mkldnn_gOIhw4o4i = 117,
+    /** blocked weights format with additional buffer
+     * with size equal to the number of output channels
+     * and containing the values:
+     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
+    mkldnn_gOIhw4o4i_s8s8 = 118,
+    mkldnn_gOIhw8o8i = 119,
+    mkldnn_gOIhw16o16i = 120,
+    mkldnn_gIOhw16o16i = 121,
+    mkldnn_gOihw8o = 122,
+    mkldnn_gOihw4o = 123,
+    mkldnn_gOihw16o = 124,
+    mkldnn_gOhwi8o = 125,
+    mkldnn_gOhwi4o = 126,
+    mkldnn_gOhwi16o = 127,
+    mkldnn_Goihw8g = 128,
+    mkldnn_Goihw16g = 129,
     /** blocked weights format with additional buffer
      * with size equal to the number of groups and containing the values:
      * O[i:0,G] = -128 * SUM(h:0,H;w:0,W)(weights(i,i,h,w))*/
-    mkldnn_Goihw16g_s8s8 = 102,
-    mkldnn_gOhIw16o4i = 103,
+    mkldnn_Goihw16g_s8s8 = 130,
+    mkldnn_gOhIw16o4i = 131,
 
     /* weights w/ groups, 6D */
-    mkldnn_gOIdhw8i8o = 104,
-    mkldnn_gOIdhw8o8i = 105,
-    mkldnn_gOdhwi8o = 106,
-    mkldnn_gOIdhw8i16o2i = 107,
-    mkldnn_gOIdhw16i16o = 108,
-    mkldnn_gOIdhw16o16i = 109,
-    mkldnn_gOidhw16o = 110,
-    mkldnn_gOdhwi16o = 111,
+    mkldnn_gOIdhw4i4o = 132,
+    mkldnn_gOdhwi4o = 133,
+    mkldnn_gOIdhw8i8o = 134,
+    mkldnn_gOIdhw8o8i = 135,
+    mkldnn_gOdhwi8o = 136,
+    mkldnn_gOIdhw8i16o2i = 137,
+    mkldnn_gOIdhw16i16o = 138,
+    mkldnn_gOIdhw16o16i = 139,
+    mkldnn_gOidhw4o = 140,
+    mkldnn_gOidhw16o = 141,
+    mkldnn_gOdhwi16o = 142,
 
-    mkldnn_wino_fmt = 112,
+    mkldnn_wino_fmt = 143,
 
-    mkldnn_rnn_packed = 113,
+    mkldnn_rnn_packed = 144,
 
     /** Just a sentinel, not real memory format. Must be changed after new
      * format is added. */
-    mkldnn_format_last = 114;
+    mkldnn_format_last = 145;
 
 /** Kinds of padding. Define how to interpret the data in padding regions. */
 /** enum mkldnn_padding_kind_t */
@@ -2926,16 +2976,25 @@ public static native @Const mkldnn_version_t mkldnn_version();
 /** \} */
 
 /** \addtogroup c_api_blas BLAS functions
+ * A subset of Basic Linear ALgebra (BLAS) functions to perform
+ * matrix-matrix multiplication.
  * \{ */
 
-/** SGEMM performs matrix-matrix multiplication operation
- * C := alpha*op( A )*op( B ) + beta*C,
- * where  op( X ) is one of
- * op( X ) = X or op( X ) = X**T,
- * alpha and beta are scalars, and A, B and C are matrices, with op( A )
- * an m by k matrix, op( B ) a k by n matrix and C an m by n matrix.
+/** SGEMM performs a matrix-matrix multiplication operation defined as
+ *
+ * C := alpha*op( A )*op( B ) + beta*C
+ *
+ * where
+ *  - op( X ) is one of op( X ) = X or op( X ) = X**T,
+ *  - alpha and beta are scalars,
+ *  - A, B and C are matrices, with op( A ) an m by k matrix, op( B ) a k by n matrix
+ *    and C an m by n matrix.
+ *
+ * The matrices are assumed to be stored in column-major order (the elements
+ * in a matrix columns are contiguous in memory).
+ *
  * \note
- *      The API is different compared with the standard BLAS routine
+ *      The API is different from the standard BLAS routine
  *      because it returns mkldnn_status_t for error handling.
  *      XERBLA is not supported: no error message will be printed
  *      in case of incorrect parameters. */
@@ -2974,16 +3033,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, St
  * operation and add the result to a scalar-matrix product. For the final
  * result, a vector is added to each row or column of the output matrix.
  * The operation is defined as:
+ *
  * C := alpha*(op(A) + A_offset) * (op(B) + B_offset) + beta*C + C_offset
- * where op( X ) = X or op( X ) = X**T,
- * A_offset is an m-by-k matrix with every element equal to the value oa,
- * B_offset is an k-by-n matrix with every element equal to the value ob,
- * C_offset is an m-by-n matrix defined by the oc array, size len:
- * if offsetc = F: len must be at least 1
- * if offsetc = C: len must be at least max(1, m)
- * if offsetc = R: len must be at least max(1, n)
- * alpha and beta are scalars, and A, B and C are matrices, with op( A )
- * an m-by-k matrix, op( B ) a k-by-n matrix and C an m-by-n matrix.
+ *
+ * where
+ *  - op( X ) = X or op( X ) = X**T,
+ *  - A_offset is an m-by-k matrix with every element equal to the value oa,
+ *  - B_offset is an k-by-n matrix with every element equal to the value ob,
+ *  - C_offset is an m-by-n matrix defined by the oc array, size len:
+ *    - if offsetc = F: len must be at least 1
+ *    - if offsetc = C: len must be at least max(1, m)
+ *    - if offsetc = R: len must be at least max(1, n)
+ *  - alpha and beta are scalars, and A, B and C are matrices, with op( A )
+ *    an m-by-k matrix, op( B ) a k-by-n matrix and C an m-by-n matrix.
+ *
+ * The matrices are assumed to be stored in column-major order (the elements
+ * in a matrix columns are contiguous in memory).
+ *
  * \note
  *      The API is different compared with the standard BLAS routine
  *      because it returns mkldnn_status_t for error handling.
