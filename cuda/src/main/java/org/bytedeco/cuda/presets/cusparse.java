@@ -57,7 +57,19 @@ public class cusparse implements InfoMapper {
                .put(new Info("csru2csrInfo_t").valueTypes("csru2csrInfo").pointerTypes("@ByPtrPtr csru2csrInfo"))
                .put(new Info("cusparseColorInfo_t").valueTypes("cusparseColorInfo").pointerTypes("@ByPtrPtr cusparseColorInfo"))
                .put(new Info("pruneInfo_t").valueTypes("pruneInfo").pointerTypes("@ByPtrPtr pruneInfo"))
+               .put(new Info("cusparseSpVecDescr_t").valueTypes("cusparseSpVecDescr").pointerTypes("@ByPtrPtr cusparseSpVecDescr"))
+               .put(new Info("cusparseDnVecDescr_t").valueTypes("cusparseDnVecDescr").pointerTypes("@ByPtrPtr cusparseDnVecDescr"))
                .put(new Info("cusparseSpMatDescr_t").valueTypes("cusparseSpMatDescr").pointerTypes("@ByPtrPtr cusparseSpMatDescr"))
-               .put(new Info("cusparseDnMatDescr_t").valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"));
+               .put(new Info("cusparseDnMatDescr_t").valueTypes("cusparseDnMatDescr").pointerTypes("@ByPtrPtr cusparseDnMatDescr"))
+               .put(new Info("cusparseCreateSpVec", "cusparseDestroySpVec", "cusparseSpVecGet", "cusparseSpVecGetIndexBase",
+                             "cusparseSpVecGetValues", "cusparseSpVecSetValues", "cusparseCreateDnVec", "cusparseDestroyDnVec",
+                             "cusparseDnVecGet", "cusparseDnVecGetValues", "cusparseDnVecSetValues", "cusparseCreateCoo",
+                             "cusparseCreateCsr", "cusparseCreateCooAoS", "cusparseDestroySpMat", "cusparseCooGet",
+                             "cusparseCooAoSGet", "cusparseCsrGet", "cusparseSpMatGetFormat", "cusparseSpMatGetIndexBase",
+                             "cusparseSpMatGetValues", "cusparseSpMatSetValues", "cusparseSpMatSetStridedBatch", "cusparseSpMatGetStridedBatch",
+                             "cusparseCreateDnMat", "cusparseDestroyDnMat", "cusparseDnMatGet", "cusparseDnMatGetValues",
+                             "cusparseDnMatSetValues", "cusparseDnMatSetStridedBatch", "cusparseDnMatGetStridedBatch", "cusparseSpVV",
+                             "cusparseSpVV_bufferSize", "cusparseSpMV", "cusparseSpMV_bufferSize", "cusparseSpMM",
+                             "cusparseSpMM_bufferSize").skip());
     }
 }
