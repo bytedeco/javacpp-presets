@@ -22,7 +22,6 @@
 
 package org.bytedeco.tensorrt.presets;
 
-import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;

@@ -22,6 +22,7 @@
 
 package org.bytedeco.mkl.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -55,6 +56,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                     "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"}) })
 @NoException
 public class mkl_rt implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "mkl"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("MKL_INT", "MKL_INT64", "MKL_UINT", "MKL_UINT64", "MKL_LONG", "MKL_DECLSPEC", "MKL_CALL_CONV", "INTEL_API_DEF",
                              "MKL_UINT8", "MKL_INT8", "MKL_INT16", "MKL_INT32",

@@ -163,6 +163,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 @NoException
 public class python implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
     public static File cachePackage() throws IOException {
@@ -188,7 +189,7 @@ public class python implements InfoMapper {
                              "PyMem_Del", "PyMem_DEL", "PyDescr_COMMON", "PY_UNICODE_TYPE",
                              "PyObject_MALLOC", "PyObject_REALLOC", "PyObject_FREE", "PyObject_Del", "PyObject_DEL",
                              "_PyUnicode_AsStringAndSize", "_PyUnicode_AsString",
-                             "PyLong_FromPid", "PyLong_AsPid", "PyLong_AsLong",
+                             "PyLong_FromPid", "PyLong_AsPid", "PyLong_AS_LONG",
                              "Py_False", "Py_True", "Py_RETURN_TRUE", "Py_RETURN_FALSE", "Py_RETURN_NAN",
                              "PyObject_HEAD", "PyObject_VAR_HEAD", "Py_RETURN_NONE", "Py_RETURN_NOTIMPLEMENTED",
                              "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec",

@@ -22,17 +22,9 @@
 
 package org.bytedeco.ngraph.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
-import org.bytedeco.javacpp.FunctionPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Properties(target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
     value = {"linux", "macosx"},
@@ -89,6 +81,8 @@ import java.lang.annotation.Target;
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
 public class ngraph implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "ngraph"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.ngraph.Function;"))
 //               .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))

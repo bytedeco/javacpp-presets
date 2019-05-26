@@ -26,11 +26,11 @@ public class _PyArg_Parser extends Pointer {
         return (_PyArg_Parser)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer format();
+    public native @Cast("const char*") BytePointer format(); public native _PyArg_Parser format(BytePointer setter);
     @MemberGetter public native @Cast("const char*") BytePointer keywords(int i);
     @MemberGetter public native @Cast("const char*const*") PointerPointer keywords();
-    @MemberGetter public native @Cast("const char*") BytePointer fname();
-    @MemberGetter public native @Cast("const char*") BytePointer custom_msg();
+    public native @Cast("const char*") BytePointer fname(); public native _PyArg_Parser fname(BytePointer setter);
+    public native @Cast("const char*") BytePointer custom_msg(); public native _PyArg_Parser custom_msg(BytePointer setter);
     public native int pos(); public native _PyArg_Parser pos(int setter);            /* number of positional-only arguments */
     public native int min(); public native _PyArg_Parser min(int setter);            /* minimal number of arguments */
     public native int max(); public native _PyArg_Parser max(int setter);            /* maximal number of positional arguments */

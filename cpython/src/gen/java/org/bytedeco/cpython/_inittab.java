@@ -24,7 +24,7 @@ public class _inittab extends Pointer {
         return (_inittab)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();           /* ASCII encoded string */
+    public native @Cast("const char*") BytePointer name(); public native _inittab name(BytePointer setter);           /* ASCII encoded string */
     public static class PyObject_Initfunc extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

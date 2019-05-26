@@ -22,6 +22,7 @@
 
 package org.bytedeco.fftw.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -39,6 +40,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows", preload = {"libfftw3-3", "libfftw3f-3"}) })
 @NoException
 public class fftw3 implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "fftw"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!defined(FFTW_NO_Complex) && defined(_Complex_I) && defined(complex) && defined(I)").define(false))
                .put(new Info("FFTW_EXTERN", "FFTW_CDECL").cppTypes().annotations())

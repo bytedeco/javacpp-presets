@@ -46,6 +46,6 @@ public class _Py_Identifier extends Pointer {
     }
 
     public native _Py_Identifier next(); public native _Py_Identifier next(_Py_Identifier setter);
-    @MemberGetter public native @Cast("const char*") BytePointer string();
+    public native @Cast("const char*") BytePointer string(); public native _Py_Identifier string(BytePointer setter);
     public native PyObject object(); public native _Py_Identifier object(PyObject setter);
 }

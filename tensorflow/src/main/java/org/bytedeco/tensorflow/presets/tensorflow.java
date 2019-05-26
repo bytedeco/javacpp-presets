@@ -379,6 +379,7 @@ import java.util.List;
         target = "org.bytedeco.tensorflow",
         global = "org.bytedeco.tensorflow.global.tensorflow")
 public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "tensorflow"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/tensorflow/" + Loader.getPlatform() + extension + "/python/")}. */
     public static File cachePackage() throws IOException {

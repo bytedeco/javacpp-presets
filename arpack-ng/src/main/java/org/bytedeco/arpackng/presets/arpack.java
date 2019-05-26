@@ -22,6 +22,7 @@
 
 package org.bytedeco.arpackng.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -44,6 +45,8 @@ import org.bytedeco.openblas.presets.openblas;
     global = "org.bytedeco.arpackng.global.arpack")
 @NoException
 public class arpack implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "arpack-ng"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("INTERFACE64").define(false))
                .put(new Info("a_int", "a_uint").cppTypes())

@@ -58,6 +58,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                                                        "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
 public class RealSense implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "librealsense"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
                .put(new Info("std::timed_mutex").cast().pointerTypes("Pointer"))

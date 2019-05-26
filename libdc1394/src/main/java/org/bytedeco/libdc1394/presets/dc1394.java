@@ -49,6 +49,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         preload = {"libdc1394-22", "1394camera", "libusb-1.0"}) })
 @NoException
 public class dc1394 implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "libdc1394"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("poll.h").skip())
                .put(new Info("restrict").cppTypes())

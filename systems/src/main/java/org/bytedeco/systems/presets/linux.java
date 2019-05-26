@@ -23,14 +23,10 @@
 package org.bytedeco.systems.presets;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.List;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -57,6 +53,7 @@ import org.bytedeco.javacpp.tools.Logger;
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;

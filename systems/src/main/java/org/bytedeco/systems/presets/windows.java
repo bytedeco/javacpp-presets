@@ -22,11 +22,7 @@
 
 package org.bytedeco.systems.presets;
 
-import java.nio.ByteBuffer;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -53,6 +49,7 @@ import org.bytedeco.javacpp.tools.Logger;
         target = "org.bytedeco.systems.windows", global = "org.bytedeco.systems.global.windows")
 @NoException
 public class windows implements BuildEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;

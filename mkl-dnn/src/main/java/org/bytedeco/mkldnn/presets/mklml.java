@@ -62,6 +62,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.mkldnn.global.mklml")
 @NoException
 public class mklml implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "mkl-dnn"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

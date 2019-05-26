@@ -67,6 +67,7 @@ import org.bytedeco.openblas.presets.*;
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
 public class caffe implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "caffe"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

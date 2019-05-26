@@ -28,8 +28,8 @@ public class PyModuleDef extends Pointer {
     }
 
   public native @ByRef PyModuleDef_Base m_base(); public native PyModuleDef m_base(PyModuleDef_Base setter);
-  @MemberGetter public native @Cast("const char*") BytePointer m_name();
-  @MemberGetter public native @Cast("const char*") BytePointer m_doc();
+  public native @Cast("const char*") BytePointer m_name(); public native PyModuleDef m_name(BytePointer setter);
+  public native @Cast("const char*") BytePointer m_doc(); public native PyModuleDef m_doc(BytePointer setter);
   public native @Cast("Py_ssize_t") long m_size(); public native PyModuleDef m_size(long setter);
   public native PyMethodDef m_methods(); public native PyModuleDef m_methods(PyMethodDef setter);
   public native PyModuleDef_Slot m_slots(); public native PyModuleDef m_slots(PyModuleDef_Slot setter);

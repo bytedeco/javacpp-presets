@@ -26,7 +26,7 @@ public class _PyInitError extends Pointer {
         return (_PyInitError)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer prefix();
-    @MemberGetter public native @Cast("const char*") BytePointer msg();
+    public native @Cast("const char*") BytePointer prefix(); public native _PyInitError prefix(BytePointer setter);
+    public native @Cast("const char*") BytePointer msg(); public native _PyInitError msg(BytePointer setter);
     public native int user_err(); public native _PyInitError user_err(int setter);
 }

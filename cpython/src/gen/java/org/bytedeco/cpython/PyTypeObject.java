@@ -25,7 +25,7 @@ public class PyTypeObject extends Pointer {
     }
 
     public native @ByRef PyVarObject ob_base(); public native PyTypeObject ob_base(PyVarObject setter);
-    @MemberGetter public native @Cast("const char*") BytePointer tp_name(); /* For printing, in format "<module>.<name>" */
+    public native @Cast("const char*") BytePointer tp_name(); public native PyTypeObject tp_name(BytePointer setter); /* For printing, in format "<module>.<name>" */
     public native @Cast("Py_ssize_t") long tp_basicsize(); public native PyTypeObject tp_basicsize(long setter);
     public native @Cast("Py_ssize_t") long tp_itemsize(); public native PyTypeObject tp_itemsize(long setter); /* For allocation */
 
@@ -59,7 +59,7 @@ public class PyTypeObject extends Pointer {
     /* Flags to define presence of optional/expanded features */
     public native @Cast("unsigned long") long tp_flags(); public native PyTypeObject tp_flags(long setter);
 
-    @MemberGetter public native @Cast("const char*") BytePointer tp_doc(); /* Documentation string */
+    public native @Cast("const char*") BytePointer tp_doc(); public native PyTypeObject tp_doc(BytePointer setter); /* Documentation string */
 
     /* Assigned meaning in release 2.0 */
     /* call function for all accessible objects */

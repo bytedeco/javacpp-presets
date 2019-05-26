@@ -61,6 +61,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "ios", preload = "libopenblas") })
 @NoException
 public class openblas_nolapack implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "openblas"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

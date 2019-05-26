@@ -22,6 +22,7 @@
 
 package org.bytedeco.cuda.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -49,6 +50,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "cuda"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__",
                              "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__", "__CUDA_HOSTDEVICE__",

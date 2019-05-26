@@ -21,6 +21,7 @@
  */
 package org.bytedeco.liquidfun.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -76,9 +77,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               link = "liquidfun@.2.3.0")
 })
 public class liquidfun implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "liquidfun"); }
 
-    public void map(InfoMap infoMap)
-{
+    public void map(InfoMap infoMap) {
         infoMap
         .put(new Info("b2_maxFloat").skip())
         .put(new Info("b2_epsilon").skip())

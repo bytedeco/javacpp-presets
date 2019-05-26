@@ -22,6 +22,7 @@
 
 package org.bytedeco.ffmpeg.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.MemberGetter;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -50,6 +51,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     }
 )
 public class avutil implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "ffmpeg"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("NAN", "INFINITY").cppTypes("double"))

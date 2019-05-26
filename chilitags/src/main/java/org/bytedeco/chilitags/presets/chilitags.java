@@ -22,6 +22,7 @@
 
 package org.bytedeco.chilitags.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -39,6 +40,8 @@ import org.bytedeco.opencv.presets.opencv_video;
     inherit = {opencv_calib3d.class, opencv_video.class}, target = "org.bytedeco.chilitags",
                                                           global = "org.bytedeco.chilitags.global.chilitags")
 public class chilitags implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "chilitags"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
 
