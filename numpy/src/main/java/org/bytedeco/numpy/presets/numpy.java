@@ -81,6 +81,7 @@ import org.bytedeco.openblas.presets.*;
 )
 @NoException
 public class numpy implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "numpy"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/numpy/" + Loader.getPlatform() + "/python/")}. */
     public static File cachePackage() throws IOException {

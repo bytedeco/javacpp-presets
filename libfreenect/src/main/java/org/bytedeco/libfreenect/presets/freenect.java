@@ -45,6 +45,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows-x86_64", preload = "libusb0") })
 @NoException
 public class freenect implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "libfreenect"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FREENECTAPI", "FREENECTAPI_SYNC").cppTypes().annotations());
     }

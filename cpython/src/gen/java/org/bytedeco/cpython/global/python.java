@@ -1434,13 +1434,13 @@ public static final int HAVE_UTIME_H = 1;
 /* #undef HAVE_UUID_ENC_BE */
 
 /* Define if uuid_generate_time_safe() exists. */
-/* #undef HAVE_UUID_GENERATE_TIME_SAFE */
+public static final int HAVE_UUID_GENERATE_TIME_SAFE = 1;
 
 /* Define to 1 if you have the <uuid.h> header file. */
 /* #undef HAVE_UUID_H */
 
 /* Define to 1 if you have the <uuid/uuid.h> header file. */
-/* #undef HAVE_UUID_UUID_H */
+public static final int HAVE_UUID_UUID_H = 1;
 
 /* Define to 1 if you have the `wait3' function. */
 public static final int HAVE_WAIT3 = 1;
@@ -1494,7 +1494,7 @@ public static final int HAVE_ZLIB_COPY = 1;
 
 /* Define to 1 if `major', `minor', and `makedev' are declared in
    <sysmacros.h>. */
-/* #undef MAJOR_IN_SYSMACROS */
+public static final int MAJOR_IN_SYSMACROS = 1;
 
 /* Define if mvwdelch in curses.h is an expression. */
 /* #undef MVWDELCH_IS_EXPRESSION */
@@ -7831,6 +7831,7 @@ public static native @ByRef PyTypeObject PyLong_Type(); public static native voi
 @NoException public static native PyObject PyLong_FromSize_t(@Cast("size_t") long arg0);
 @NoException public static native PyObject PyLong_FromSsize_t(@Cast("Py_ssize_t") long arg0);
 @NoException public static native PyObject PyLong_FromDouble(double arg0);
+@NoException public static native long PyLong_AsLong(PyObject arg0);
 @NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, IntPointer arg1);
 @NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, IntBuffer arg1);
 @NoException public static native long PyLong_AsLongAndOverflow(PyObject arg0, int[] arg1);
@@ -9340,9 +9341,9 @@ public static final String PY_STDIOTEXTMODE = "b";
 /* The default encoding used by the platform file system APIs
    If non-NULL, this is different than the default encoding for strings
 */
-@MemberGetter public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncoding();
+public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncoding(); public static native void Py_FileSystemDefaultEncoding(BytePointer setter);
 // #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
-@MemberGetter public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncodeErrors();
+public static native @Cast("const char*") BytePointer Py_FileSystemDefaultEncodeErrors(); public static native void Py_FileSystemDefaultEncodeErrors(BytePointer setter);
 // #endif
 public static native int Py_HasFileSystemDefaultEncoding(); public static native void Py_HasFileSystemDefaultEncoding(int setter);
 
@@ -10274,7 +10275,7 @@ Copyright (c) Corporation for National Research Initiatives.
 // #endif
 
 // #ifndef Py_LIMITED_API
-@MemberGetter public static native @Cast("const char*") BytePointer Py_hexdigits();
+public static native @Cast("const char*") BytePointer Py_hexdigits(); public static native void Py_hexdigits(BytePointer setter);
 // #endif
 
 // #ifdef __cplusplus
@@ -11495,7 +11496,7 @@ public static final String PYTHON_ABI_STRING = "3";
 // #endif /* New in 3.5 */
 
 // #ifndef Py_LIMITED_API
-@MemberGetter public static native @Cast("const char*") BytePointer _Py_PackageContext();
+public static native @Cast("const char*") BytePointer _Py_PackageContext(); public static native void _Py_PackageContext(BytePointer setter);
 // #endif
 
 // #ifdef __cplusplus
@@ -12039,7 +12040,7 @@ public static native _inittab PyImport_Inittab(); public static native void PyIm
 /* Embedding apps may change this pointer to point to their favorite
    collection of frozen modules: */
 
-@MemberGetter public static native @Const _frozen PyImport_FrozenModules();
+public static native @Const _frozen PyImport_FrozenModules(); public static native void PyImport_FrozenModules(_frozen setter);
 // #endif
 
 // #ifdef __cplusplus

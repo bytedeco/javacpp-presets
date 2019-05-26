@@ -24,6 +24,7 @@ package org.bytedeco.qt.presets;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -57,6 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
     }
 )
 public class Qt5Core extends QtInfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "qt"); }
 
   @Override
   public void map(InfoMap infoMap) {

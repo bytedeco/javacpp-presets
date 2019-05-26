@@ -22,6 +22,7 @@
 
 package org.bytedeco.libpostal.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -44,6 +45,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     global = "org.bytedeco.libpostal.global.postal"
 )
 public class postal implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "libpostal"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBPOSTAL_EXPORT").cppTypes().annotations())
                .put(new Info("libpostal_normalized_tokens").skip())

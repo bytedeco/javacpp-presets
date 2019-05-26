@@ -31,7 +31,7 @@ public class PyHash_FuncDef extends Pointer {
         public native @Cast("Py_hash_t") long call(@Const Pointer arg0, @Cast("Py_ssize_t") long arg1);
     }
     @MemberGetter public native @Const Hash_Pointer_long hash();
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native PyHash_FuncDef name(BytePointer setter);
     @MemberGetter public native int hash_bits();
     @MemberGetter public native int seed_bits();
 }

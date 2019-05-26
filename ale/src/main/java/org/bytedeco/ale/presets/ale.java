@@ -22,11 +22,7 @@
 
 package org.bytedeco.ale.presets;
 
-import java.nio.ByteBuffer;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -52,6 +48,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(value = "windows-x86_64", preload = {"SDL", "libale"}, preloadpath = "/mingw64/bin")},
     target = "org.bytedeco.ale", global = "org.bytedeco.ale.global.ale")
 public class ale implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "ale"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("DEBUGGER_SUPPORT", "CHEATCODE_SUPPORT").define(false))
                .put(new Info("BSPF_strcasecmp", "BSPF_strncasecmp", "BSPF_snprintf", "BSPF_vsnprintf").cppTypes())

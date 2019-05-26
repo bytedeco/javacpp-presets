@@ -24,11 +24,11 @@ public class wrapperbase extends Pointer {
         return (wrapperbase)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native wrapperbase name(BytePointer setter);
     public native int offset(); public native wrapperbase offset(int setter);
     public native Pointer function(); public native wrapperbase function(Pointer setter);
     public native wrapperfunc wrapper(); public native wrapperbase wrapper(wrapperfunc setter);
-    @MemberGetter public native @Cast("const char*") BytePointer doc();
+    public native @Cast("const char*") BytePointer doc(); public native wrapperbase doc(BytePointer setter);
     public native int flags(); public native wrapperbase flags(int setter);
     public native PyObject name_strobj(); public native wrapperbase name_strobj(PyObject setter);
 }

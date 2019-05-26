@@ -22,6 +22,7 @@
 
 package org.bytedeco.llvm.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
 
@@ -33,6 +34,8 @@ import org.bytedeco.javacpp.tools.*;
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
     compiler = "cpp11", link = {"LLVM-8", "LTO"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
 public class LLVM implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "llvm"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
                .put(new Info("LLVMOpaqueModule").pointerTypes("LLVMModuleRef"))
