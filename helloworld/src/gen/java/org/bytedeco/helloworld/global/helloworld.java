@@ -15,7 +15,33 @@ public class helloworld extends org.bytedeco.helloworld.presets.helloworld {
 
 // #ifndef helloworld_h__
 // #define helloworld_h__
-    public static native @Cast("char*") BytePointer getHelloWorldMessage();
+    public static native @Cast("bool") boolean getBool();
+    public static native void printBool(@Cast("bool") boolean value);
+
+    public static native @Cast("char") byte getByte();
+    public static native void printByte(@Cast("char") byte value);
+
+    public static native @Cast("wchar_t") char getChar();
+    public static native void printChar(@Cast("wchar_t") char value);
+    public static native void printChar(@Cast("wchar_t") int value);
+
+    public static native short getShort();
+    public static native void printShort(short value);
+
+    public static native int getInt();
+    public static native void printInt(int value);
+
+    public static native long getLong();
+    public static native void printLong(long value);
+
+    public static native @Cast("char*") BytePointer getAsciiString();
+    public static native void printAsciiString(@Cast("char*") BytePointer value);
+    public static native void printAsciiString(@Cast("char*") ByteBuffer value);
+    public static native void printAsciiString(@Cast("char*") byte[] value);
+
+    public static native @Cast("wchar_t*") CharPointer getUnicodeString();
+    public static native void printUnicodeString(@Cast("wchar_t*") CharPointer value);
+    public static native void printUnicodeString(@Cast("wchar_t*") IntPointer value);
 
 // #endif // helloworld_h__
 

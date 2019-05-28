@@ -1,5 +1,3 @@
-package src.main.java.helloworld;
-
 import org.bytedeco.helloworld.global.helloworld;
 import org.bytedeco.javacpp.BytePointer;
 
