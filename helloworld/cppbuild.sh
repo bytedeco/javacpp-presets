@@ -8,52 +8,23 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 HELLOWORLD_VERSION=master
-download https://github.com/matteodg/helloworld/archive/$HELLOWORLD_VERSION.tar.gz helloworld-$HELLOWORLD_VERSION.tar.gz
+download https://github.com/matteodg/helloworld/archive/$HELLOWORLD_VERSION.zip helloworld-$HELLOWORLD_VERSION.zip
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
-tar --totals -xzf ../helloworld-$HELLOWORLD_VERSION.tar.gz
+unzip -o ../helloworld-$HELLOWORLD_VERSION.zip
 cd helloworld-$HELLOWORLD_VERSION
 
-mkdir -p build
-cd build
 case $PLATFORM in
-    linux-x86)
-        gcc -m32 -fPIC ../helloworld.c -shared -o libhelloworld.so
-        mkdir -p ../../include
-        cp ../helloworld.h ../../include
-        mkdir -p ../../lib
-        cp libhelloworld.so ../../lib
-        ;;
-    linux-x86_64)
-        gcc -m64 -fPIC ../helloworld.c -shared -o libhelloworld.so
-        mkdir -p ../../include
-        cp ../helloworld.h ../../include
-        mkdir -p ../../lib
-        cp libhelloworld.so ../../lib
-        ;;
-    macosx-*)
-        clang -fPIC ../helloworld.c -shared -o libhelloworld.dylib
-        mkdir -p ../../include
-        cp ../helloworld.h ../../include
-        mkdir -p ../../lib
-        cp libhelloworld.dylib ../../lib
-        ;;
-    windows-x86)
-        gcc -m32 -fPIC ../helloworld.c -shared -o helloworld.dll
-        mkdir -p ../../include
-        cp ../helloworld.h ../../include
-        mkdir -p ../../lib
-        cp helloworld.dll ../../lib
-        ;;
-    windows-x86_64)
-        gcc -m64 -fPIC ../helloworld.c -shared -o helloworld.dll
-        mkdir -p ../../include
-        cp ../helloworld.h ../../include
-        mkdir -p ../../lib
-        cp helloworld.dll ../../lib
+    linux-x86|linux-x86_64|macosx-*|windows-x86|windows-x86_64)
+        aclocal
+        autoconf
+        automake --add-missing
+        ./configure --prefix=$INSTALL_PATH
+        make
+        make install
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
