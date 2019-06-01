@@ -1336,6 +1336,7 @@
         <module>skia</module>
         <module>cpu_features</module>
         <module>systems</module>
+        <module>helloworld</module>
       </modules>
       <properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
