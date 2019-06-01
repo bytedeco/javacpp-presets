@@ -13,7 +13,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 /** Computes the minimum along segments of a tensor.
  * 
  *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  [the section on segmentation](https://tensorflow.org/api_docs/python/tf/math#Segmentation)
  *  for an explanation of segments.
  * 
  *  Computes a tensor such that
@@ -25,6 +25,15 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/SegmentMin.png" alt>
  *  </div>
+ * 
+ *  For example:
+ * 
+ *  <pre>{@code
+ *  c = tf.constant([[1,2,3,4], [4, 3, 2, 1], [5,6,7,8]])
+ *  tf.segment_min(c, tf.constant([0, 0, 1]))
+ *  # ==> [[1, 2, 2, 1],
+ *  #      [5, 6, 7, 8]]
+ *  }</pre>
  * 
  *  Arguments:
  *  * scope: A Scope object

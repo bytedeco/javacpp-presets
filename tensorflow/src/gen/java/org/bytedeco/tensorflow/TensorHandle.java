@@ -19,28 +19,35 @@ public class TensorHandle extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorHandle(Pointer p) { super(p); }
 
-  public TensorHandle(@Const @ByRef Tensor t, Device d, Device op_device, EagerContext ctx) { super((Pointer)null); allocate(t, d, op_device, ctx); }
-  private native void allocate(@Const @ByRef Tensor t, Device d, Device op_device, EagerContext ctx);
-
-  public TensorHandle(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device, @Cast("tensorflow::DataType") int dtype,
-                 EagerContext ctx) { super((Pointer)null); allocate(node_id, d, op_device, dtype, ctx); }
-  private native void allocate(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device, @Cast("tensorflow::DataType") int dtype,
+  public TensorHandle(@Const @ByRef Tensor t, Device d, Device op_device,
+                 EagerContext ctx) { super((Pointer)null); allocate(t, d, op_device, ctx); }
+  private native void allocate(@Const @ByRef Tensor t, Device d, Device op_device,
                  EagerContext ctx);
+  public TensorHandle(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device,
+                 Device resource_device, @Cast("tensorflow::DataType") int dtype, EagerContext ctx) { super((Pointer)null); allocate(node_id, d, op_device, resource_device, dtype, ctx); }
+  private native void allocate(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device,
+                 Device resource_device, @Cast("tensorflow::DataType") int dtype, EagerContext ctx);
 
   // Remote tensor handle constructor.
   public TensorHandle(@Cast("tensorflow::int64") long op_id, int output_num, @Cast("tensorflow::uint64") long remote_shape_node_id,
                  @Cast("tensorflow::DataType") int dtype, @ByVal Fn call_on_destroy, Device d,
-                 Device op_device, EagerContext ctx) { super((Pointer)null); allocate(op_id, output_num, remote_shape_node_id, dtype, call_on_destroy, d, op_device, ctx); }
+                 Device op_device, Device resource_device, EagerContext ctx) { super((Pointer)null); allocate(op_id, output_num, remote_shape_node_id, dtype, call_on_destroy, d, op_device, resource_device, ctx); }
   private native void allocate(@Cast("tensorflow::int64") long op_id, int output_num, @Cast("tensorflow::uint64") long remote_shape_node_id,
                  @Cast("tensorflow::DataType") int dtype, @ByVal Fn call_on_destroy, Device d,
-                 Device op_device, EagerContext ctx);
+                 Device op_device, Device resource_device, EagerContext ctx);
+
+  // Symbolic tensor constructor.
+  public TensorHandle(@ByVal OutputGraphNode symbolic_tensor, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(symbolic_tensor, dtype); }
+  private native void allocate(@ByVal OutputGraphNode symbolic_tensor, @Cast("tensorflow::DataType") int dtype);
 
   public native @ByVal Status Tensor(@Cast("const tensorflow::Tensor**") PointerPointer t);
   public native @ByVal Status Tensor(@Const @ByPtrPtr Tensor t);
 
-  public native Device device();
+  public native @ByVal Status TensorValue(TensorValue t);
 
+  public native Device device();
   public native Device op_device();
+  public native Device resource_device();
 
   public native @ByVal Status TensorAndDevice(@Cast("const tensorflow::Tensor**") PointerPointer tensor,
                            @Cast("tensorflow::Device**") PointerPointer device,
@@ -85,4 +92,15 @@ public class TensorHandle extends Pointer {
   public native void SetRemoteShape(@MoveUniquePtr TensorShape remote_shape);
 
   public native @Cast("bool") boolean OnHostCPU();
+
+  public native @Cast("bool") boolean IsRemote();
+
+  public native OutputGraphNode getSymbolicTensor();
+
+  public native @StdString BytePointer DebugString();
+
+  // If this TensorHandle is 1) a local tensor, and 2) a resource variable,
+  // return data type and shape of the resource variable.
+  public native @ByVal Status GetResourceVariableDtypeAndShape(
+        DataTypeTensorShapePair result);
 }

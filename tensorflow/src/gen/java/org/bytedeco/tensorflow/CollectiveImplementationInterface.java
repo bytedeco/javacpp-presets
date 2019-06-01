@@ -23,7 +23,8 @@ public class CollectiveImplementationInterface extends Pointer {
 
   // Initializes the portions of `col_params` specific to this
   // implementation.  Called exactly once for every Collective instance during
-  // the CollectiveParams resolution process when the graph is first executed.
+  // the CollectiveParams resolution process when the graph is first executed,
+  // at the end of `CompleteInstanceLocal()`.
   // NOTE(ayushd): This is effectively a static function because it modifies the
   // `col_params` passed in and should not manipulate any data members.  However
   // because it is virtual and needs to be implemented by every derived class we
@@ -35,6 +36,13 @@ public class CollectiveImplementationInterface extends Pointer {
   // CollectiveContext passed in must outlive the CollectiveImplementation
   // object.
   public native @ByVal Status InitializeCollectiveContext(CollectiveContext col_ctx);
+
+  // Performs collective implementation specific group initialization.  The
+  // intention is to do group-specific initialization of runtime details for the
+  // collective implementation.  Currently used only to set `communicator_key`
+  // in techniques which use a communicator for distributed collectives (NCCL).
+  public native @ByVal Status InitializeCollectiveGroupRuntimeDetails(
+        CollGroupRuntimeDetails col_group_runtime_details);
 
   // Processes and moves data according to the logic of this Collective
   // implementation.  Relies on appropriate initialization of op-specific

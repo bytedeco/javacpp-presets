@@ -69,6 +69,10 @@ public class ResourceHandle extends Pointer {
   public native @Cast("bool") boolean ParseFromString(@StdString String s);
 
   public native @StdString BytePointer DebugString();
+
+  // GUID for anonymous resources. Resources with this shared_name will have
+  // their shared_name replaced with a GUID at creation time
+  @MemberGetter public static native @Cast("const char*") BytePointer ANONYMOUS_NAME();
   public native @StdString BytePointer device_(); public native ResourceHandle device_(BytePointer setter);
   public native @StdString BytePointer container_(); public native ResourceHandle container_(BytePointer setter);
   public native @StdString BytePointer name_(); public native ResourceHandle name_(BytePointer setter);

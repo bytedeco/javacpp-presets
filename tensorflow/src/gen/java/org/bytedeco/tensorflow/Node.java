@@ -114,6 +114,11 @@ public class Node extends Pointer {
 
   public native @Cast("bool") boolean IsMetadata();
   public native @Cast("bool") boolean IsFakeParam();
+  public native @Cast("bool") boolean IsPartitionedCall();
+  // Is this node a function input
+  public native @Cast("bool") boolean IsArg();
+  // Is this node a function output
+  public native @Cast("bool") boolean IsRetval();
 
   public native void ClearAttr(@StdString BytePointer name);
   public native void ClearAttr(@StdString String name);

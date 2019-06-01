@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.13.1  http://www.tensorflow.org/
+ * TensorFlow 1.14.0-rc0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -45,30 +45,30 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
+        <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
@@ -87,6 +87,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>10.1-7.5-1.5.1-SNAPSHOT</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorrt</artifactId>
+            <version>5.1-1.5.1-SNAPSHOT</version>
+            <classifier>linux-x86_64-redist</classifier>
+        </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
         <dependency>
@@ -97,25 +103,25 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>linux-x86_64-python</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>macosx-x86_64-python</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>linux-x86_64-python-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-rc0-1.5.1-SNAPSHOT</version>
             <classifier>macosx-x86_64-python-gpu</classifier>
         </dependency>
 

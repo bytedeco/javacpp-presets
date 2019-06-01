@@ -63,6 +63,15 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // Targeting ../StringTensorInfoMap.java
 
 
+// Targeting ../IntFunctionDef_ArgAttrsMap.java
+
+
+// Targeting ../StringStructuredValueMap.java
+
+
+// Targeting ../StringSavedConcreteFunctionMap.java
+
+
 // Targeting ../StringAttrValueMap.java
 
 
@@ -78,6 +87,9 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // Targeting ../RemoteContexts.java
 
 
+// Targeting ../StringFlatSet.java
+
+
 // Targeting ../StringList.java
 
 
@@ -85,6 +97,9 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
 // Targeting ../SafeTensorIdTensorIdMap.java
+
+
+// Targeting ../TF_OutputTensorHandleMap.java
 
 
 // Targeting ../StringSet.java
@@ -153,6 +168,9 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // Targeting ../CollectiveImplementationVector.java
 
 
+// Targeting ../TensorHandleTF_OutputPairVector.java
+
+
 // Targeting ../LongLongPair.java
 
 
@@ -177,10 +195,16 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // Targeting ../TensorSlideStringPair.java
 
 
+// Targeting ../DataTypeTensorShapePair.java
+
+
 // Targeting ../NodeIndexPair.java
 
 
 // Targeting ../StringSliceInfoMap.java
+
+
+// Targeting ../StringIntUnorderedMap.java
 
 
 // Targeting ../VarToShapeMap.java
@@ -193,6 +217,12 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
 // Targeting ../StringNodeMap.java
+
+
+// Targeting ../IntTensorShapeMap.java
+
+
+// Targeting ../IntDataTypeTensorShapePairMap.java
 
 
 // Targeting ../StringUnorderedSet.java
@@ -249,14 +279,17 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // #endif
 
 // #include <google/protobuf/arena_impl.h>
-// #include <google/protobuf/stubs/port.h>
-// #include <type_traits>  // defined below
+// #include <google/protobuf/port.h>
+// #include <type_traits>
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif  // defined below
 
   // namespace protobuf
-
-
-
-  // namespace quality_webanswers          // defined below        // defined in message.h
+  // namespace google          // defined below        // defined in message.h
 
 
 
@@ -278,7 +311,7 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 // Support for non-RTTI environments. (The metrics hooks API uses type
 // information.)
-// #ifndef GOOGLE_PROTOBUF_NO_RTTI
+// #if PROTOBUF_RTTI
 // #define RTTI_TYPE_ID(type) (&typeid(type))
 // #else
 // #define RTTI_TYPE_ID(type) (NULL)
@@ -290,8 +323,10 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // #undef RTTI_TYPE_ID
 
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_ARENA_H__
 
 
@@ -339,11 +374,20 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 // #include <climits>
+// #include <string>
 // #include <google/protobuf/stubs/common.h>
 // #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/stubs/once.h>
 // #include <google/protobuf/arena.h>
-// #include <google/protobuf/stubs/port.h>
+// #include <google/protobuf/stubs/once.h>
+// #include <google/protobuf/port.h>
+// #include <google/protobuf/stubs/strutil.h>
+
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif
 // Targeting ../CodedInputStream.java
 
 
@@ -357,6 +401,7 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
 
+  // namespace io
 // Targeting ../RepeatedPtrFieldBase.java
 
 
@@ -367,8 +412,50 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
 
-// #ifndef SWIG
-// #endif  // SWIG
+// We compute sizes as size_t but cache them as int.  This function converts a
+// computed size to a cached size.  Since we don't proceed with serialization
+// if the total size was > INT_MAX, it is not important what this function
+// returns for inputs > INT_MAX.  However this case should not error or
+// GOOGLE_CHECK-fail, because the full size_t resolution is still returned from
+// ByteSizeLong() and checked against INT_MAX; we can catch the overflow
+// there.
+@Namespace("google::protobuf::internal") public static native int ToCachedSize(@Cast("size_t") long size);
+
+// We mainly calculate sizes in terms of size_t, but some functions that
+// compute sizes return "int".  These int sizes are expected to always be
+// positive. This function is more efficient than casting an int to size_t
+// directly on 64-bit platforms because it avoids making the compiler emit a
+// sign extending instruction, which we don't want and don't want to pay for.
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long FromIntSize(int size);
+
+// For cases where a legacy function returns an integer size.  We GOOGLE_DCHECK()
+// that the conversion will fit within an integer; if this is false then we
+// are losing information.
+@Namespace("google::protobuf::internal") public static native int ToIntSize(@Cast("size_t") long size);
+
+// This type wraps a variable whose constructor and destructor are explicitly
+// called. It is particularly useful for a global variable, without its
+// constructor and destructor run on start and end of the program lifetime.
+// This circumvents the initial construction order fiasco, while keeping
+// the address of the empty string a compile time constant.
+//
+// Pay special attention to the initialization state of the object.
+// 1. The object is "uninitialized" to begin with.
+// 2. Call DefaultConstruct() only if the object is uninitialized.
+//    After the call, the object becomes "initialized".
+// 3. Call get() and get_mutable() only if the object is initialized.
+// 4. Call Destruct() only if the object is initialized.
+//    After the call, the object becomes uninitialized.
+
+// Default empty string object. Don't use this directly. Instead, call
+// GetEmptyString() to get the reference.
+
+
+@Namespace("google::protobuf::internal") public static native @StdString BytePointer GetEmptyStringAlreadyInited();
+
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString BytePointer str);
+@Namespace("google::protobuf::internal") public static native @Cast("size_t") long StringSpaceUsedExcludingSelfLong(@StdString String str);
+
 
 // Targeting ../MessageLite.java
 
@@ -376,19 +463,30 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
 
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean GetProto3PreserveUnknownsDefault();
 
-// DO NOT USE: For migration only. Will be removed when Proto3 defaults to
-// preserve unknowns.
-@Namespace("google::protobuf::internal") public static native void SetProto3PreserveUnknownsDefault(@Cast("bool") boolean preserve);
+
+
+
+
+// Targeting ../BoundedZCIS.java
+
+
+
+
+
+
+
+
+
   // namespace internal
 
 
-  // namespace protobuf
 
+  // namespace protobuf
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
+
 // #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
 
 
@@ -439,7 +537,16 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 // #include <vector>
 // #include <google/protobuf/stubs/common.h>
 // #include <google/protobuf/stubs/logging.h>
-// #include <google/protobuf/message_lite.h>         // coded_stream.h        // coded_stream.h      // zero_copy_stream.h
+// #include <google/protobuf/parse_context.h>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/message_lite.h>
+// #include <google/protobuf/port.h>
+
+// #include <google/protobuf/port_def.inc>
+
+// #ifdef SWIG
+// #error "You cannot SWIG proto headers"
+// #endif         // coded_stream.h        // coded_stream.h      // zero_copy_stream.h
   
 // Targeting ../InternalMetadataWithArena.java
 
@@ -505,8 +612,9 @@ public class tensorflow extends org.bytedeco.tensorflow.presets.tensorflow {
 
 
   // namespace protobuf
-
   // namespace google
+
+// #include <google/protobuf/port_undef.inc>
 // #endif  // GOOGLE_PROTOBUF_UNKNOWN_FIELD_SET_H__
 
 
@@ -755,12 +863,7 @@ limitations under the License.
 // #error Define the appropriate PLATFORM_<foo> macro for this platform
 // #endif
 
-// Define tensorflow::string to refer to appropriate platform specific type.
-// TODO(josh11b): Move this into the platform/*/integral_types.h files
-// above, and rename them platform/*/types.h.
-// #if defined(PLATFORM_GOOGLE)
-// #else
-// #endif
+// Alias tensorflow::string to std::string.
 
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint8") byte kuint8max();
 public static final byte kuint8max = kuint8max();
@@ -1006,9 +1109,19 @@ limitations under the License.
 // Returns true if GOOGLE_CUDA is defined.
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsGoogleCudaEnabled();
 
-// Returns true if GOOGLE_CUDA is defined, and the given CUDA version supports
-// half-precision matrix multiplications and convolution operations.
-@Namespace("tensorflow") public static native @Cast("bool") boolean CudaSupportsHalfMatMulAndConv();
+// Returns true if TENSORFLOW_USE_ROCM is defined. (i.e. TF is built with ROCm)
+@Namespace("tensorflow") public static native @Cast("bool") boolean IsBuiltWithROCm();
+
+// Returns true if either
+//
+//   GOOGLE_CUDA is defined, and the given CUDA version supports
+//   half-precision matrix multiplications and convolution operations.
+//
+//     OR
+//
+//   TENSORFLOW_USE_ROCM is defined
+//
+@Namespace("tensorflow") public static native @Cast("bool") boolean GpuSupportsHalfMatMulAndConv();
 
 // Returns true if INTEL_MKL is defined
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsMklEnabled();
@@ -1026,21 +1139,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -1052,14 +1166,13 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
-// Targeting ../TableStruct.java
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
 
-
-@Namespace("protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto") public static native void AddDescriptors();
-  // namespace protobuf_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
-  // namespace error
-  // namespace tensorflow
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto();
+  // namespace protobuf
+  // namespace google
 
 /** enum tensorflow::error::Code */
 public static final int
@@ -1080,9 +1193,13 @@ public static final int
   INTERNAL = 13,
   UNAVAILABLE = 14,
   DATA_LOSS = 15,
-  DO_NOT_USE_RESERVED_FOR_FUTURE_EXPANSION_USE_DEFAULT_IN_SWITCH_INSTEAD_ = 20,
-  Code_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  Code_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  DO_NOT_USE_RESERVED_FOR_FUTURE_EXPANSION_USE_DEFAULT_IN_SWITCH_INSTEAD_ = 20;
+@Name("tensorflow::error::Code_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int Code_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  Code_INT_MIN_SENTINEL_DO_NOT_USE_ = Code_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::error::Code_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int Code_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  Code_INT_MAX_SENTINEL_DO_NOT_USE_ = Code_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_IsValid(int value);
 @Namespace("tensorflow::error") @MemberGetter public static native @Cast("const tensorflow::error::Code") int Code_MIN();
 @Namespace("tensorflow::error") @MemberGetter public static native @Cast("const tensorflow::error::Code") int Code_MAX();
@@ -1129,7 +1246,133 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2flib_2fcore_2ferror_5fcodes_2eproto
+
+
+// Parsed from tensorflow/core/lib/core/errors.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_LIB_CORE_ERRORS_H_
+// #define TENSORFLOW_CORE_LIB_CORE_ERRORS_H_
+
+// #include <sstream>
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/strings/str_util.h"
+// #include "tensorflow/core/lib/strings/strcat.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
+
+// The DECLARE_ERROR macro below only supports types that can be converted
+// into StrCat's AlphaNum. For the other types we rely on a slower path
+// through std::stringstream. To add support of a new type, it is enough to
+// make sure there is an operator<<() for it:
+//
+//   std::ostream& operator<<(std::ostream& os, const MyType& foo) {
+//     os << foo.ToString();
+//     return os;
+//   }
+// Eventually absl::strings will have native support for this and we will be
+// able to completely remove PrepareForStrCat().
+
+
+
+  // namespace internal
+
+// Append some context to an error message.  Each time we append
+// context put it on a new line, since it is possible for there
+// to be several layers of additional context.
+
+// For propagating errors when calling a function.
+// #define TF_RETURN_IF_ERROR(...)
+//   do {
+//     const ::tensorflow::Status _status = (__VA_ARGS__);
+//     if (TF_PREDICT_FALSE(!_status.ok())) return _status;
+//   } while (0)
+
+// #define TF_RETURN_WITH_CONTEXT_IF_ERROR(expr, ...)
+//   do {
+//     ::tensorflow::Status _status = (expr);
+//     if (TF_PREDICT_FALSE(!_status.ok())) {
+//       ::tensorflow::errors::AppendToMessage(&_status, __VA_ARGS__);
+//       return _status;
+//     }
+//   } while (0)
+
+// Convenience functions for generating and using error status.
+// Example usage:
+//   status.Update(errors::InvalidArgument("The ", foo, " isn't right."));
+//   if (errors::IsInvalidArgument(status)) { ... }
+//   switch (status.code()) { case error::INVALID_ARGUMENT: ... }
+
+// #define DECLARE_ERROR(FUNC, CONST)
+//   template <typename... Args>
+//   ::tensorflow::Status FUNC(Args... args) {
+//     return ::tensorflow::Status(
+//         ::tensorflow::error::CONST,
+//         ::tensorflow::strings::StrCat(
+//             ::tensorflow::errors::internal::PrepareForStrCat(args)...));
+//   }
+//   inline bool Is##FUNC(const ::tensorflow::Status& status) {
+//     return status.code() == ::tensorflow::error::CONST;
+//   }
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsCancelled(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsInvalidArgument(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsNotFound(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsAlreadyExists(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsResourceExhausted(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsUnavailable(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsFailedPrecondition(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsOutOfRange(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsUnimplemented(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsInternal(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsAborted(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsDeadlineExceeded(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsDataLoss(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsUnknown(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsPermissionDenied(@Const @ByRef Status status);
+  @Namespace("tensorflow::errors") public static native @Cast("bool") boolean IsUnauthenticated(@Const @ByRef Status status);
+
+// #undef DECLARE_ERROR
+
+// Produces a formatted string pattern from the name which can uniquely identify
+// this node upstream to produce an informative error message. The pattern
+// followed is: {{node <name>}}
+// Note: The pattern below determines the regex _NODEDEF_NAME_RE in the file
+// tensorflow/python/client/session.py
+// LINT.IfChange
+@Namespace("tensorflow::errors") public static native @StdString BytePointer FormatNodeNameForError(@StdString BytePointer name);
+@Namespace("tensorflow::errors") public static native @StdString String FormatNodeNameForError(@StdString String name);
+// LINT.ThenChange(//tensorflow/python/client/session.py)
+// LINT.IfChange
+@Namespace("tensorflow::errors") public static native @StdString BytePointer FormatColocationNodeForError(@StdString BytePointer name);
+@Namespace("tensorflow::errors") public static native @StdString String FormatColocationNodeForError(@StdString String name);
+// LINT.ThenChange(//tensorflow/python/framework/error_interpolation.py)
+
+@Namespace("tensorflow::errors") public static native @StdString BytePointer FormatFunctionForError(@StdString BytePointer name);
+@Namespace("tensorflow::errors") public static native @StdString String FormatFunctionForError(@StdString String name);
+
+// The CanonicalCode() for non-errors.
+
+  // namespace errors
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_LIB_CORE_ERRORS_H_
 
 
 // Parsed from tensorflow/core/platform/logging.h
@@ -1155,7 +1398,7 @@ limitations under the License.
 // #include "tensorflow/core/platform/platform.h"  // To pick up PLATFORM_define
 
 // #if defined(PLATFORM_GOOGLE) || defined(PLATFORM_GOOGLE_ANDROID) ||
-//     defined(GOOGLE_LOGGING)
+//     defined(GOOGLE_LOGGING) || defined(__EMSCRIPTEN__)
 // #include "tensorflow/core/platform/google/build_config/logging.h"
 // #else
 // #include "tensorflow/core/platform/default/logging.h"
@@ -1206,6 +1449,9 @@ limitations under the License.
 // #if defined(__clang__)
 // Only clang supports warn_unused_result as a type annotation.
 // Targeting ../Status.java
+
+
+// Targeting ../StatusGroup.java
 
 
 
@@ -1313,6 +1559,7 @@ limitations under the License.
 // #include <string>
 
 // #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/io/zlib_compression_options.h"
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/platform/file_system.h"
@@ -1434,6 +1681,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/io/zlib_compression_options.h"
 // #include "tensorflow/core/lib/io/zlib_outputbuffer.h"
 // #endif  // IS_SLIM_BUILD
+// #include "tensorflow/core/platform/cord.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"
 // Targeting ../RecordWriterOptions.java
@@ -1446,6 +1694,9 @@ limitations under the License.
 
 
 
+
+// #if defined(PLATFORM_GOOGLE)
+// #endif
 
   // namespace io
   // namespace tensorflow
@@ -1482,20 +1733,27 @@ limitations under the License.
 // TensorFlow code should use the ::tensorflow::protobuf namespace to
 // refer to all protobuf APIs.
 
-// #if defined(PLATFORM_GOOGLE) && !defined(USE_DEFAULT_PROTOBUF)
-// #include "tensorflow/core/platform/google/protobuf.h"
-// #else
-// #include "tensorflow/core/platform/default/protobuf.h"
+// #ifndef TENSORFLOW_LITE_PROTOS
 // #endif
+
+// #include "google/protobuf/io/coded_stream.h"
+// #include "google/protobuf/io/zero_copy_stream.h"
+// #include "google/protobuf/io/zero_copy_stream_impl_lite.h"
+// #include "google/protobuf/arena.h"
+// #include "google/protobuf/map.h"
+// #include "google/protobuf/repeated_field.h"
+@Namespace("tensorflow") public static native @Cast("const char*") BytePointer kProtobufInt64Typename(); public static native void kProtobufInt64Typename(BytePointer setter);
+@Namespace("tensorflow") public static native @Cast("const char*") BytePointer kProtobufUint64Typename(); public static native void kProtobufUint64Typename(BytePointer setter);
+
 // Parses a protocol buffer contained in a string in the binary wire format.
 // Returns true on success. Note: Unlike protobuf's builtin ParseFromString,
 // this function has no size restrictions on the total size of the encoded
 // protocol buffer.
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(MessageLite proto,
                          @StdString BytePointer serialized);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(MessageLite proto,
                          @StdString String serialized);
-@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(@Cast("tensorflow::protobuf::MessageLite*") MessageLite proto, @Const Pointer serialized,
+@Namespace("tensorflow") public static native @Cast("bool") boolean ParseProtoUnlimited(MessageLite proto, @Const Pointer serialized,
                          @Cast("size_t") long size);
 
 // Returns the string value for the value of a string or bytes protobuf field.
@@ -1505,6 +1763,9 @@ limitations under the License.
 // Set <dest> to <src>. Swapping is allowed, as <src> does not need to be
 // preserved.
 @Namespace("tensorflow") public static native void SetProtobufStringSwapAllowed(@StdString @Cast({"char*", "std::string*"}) BytePointer src, @StdString @Cast({"char*", "std::string*"}) BytePointer dest);
+
+// #if defined(TENSORFLOW_PROTOBUF_USES_CORD)
+// #endif  // defined(TENSORFLOW_PROTOBUF_USES_CORD)
 
   // namespace tensorflow
 
@@ -1724,21 +1985,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -1754,15 +2016,11 @@ limitations under the License.
 // #include <google/protobuf/map_field_inl.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fexample_2ffeature_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fexample_2ffeature_2eproto
-// Targeting ../FeatureLists_FeatureListEntry_DoNotUse.java
-
-
-// Targeting ../Features_FeatureEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fexample_2ffeature_2eproto();
   // namespace tensorflow
 
 
@@ -1870,7 +2128,6 @@ limitations under the License.
 
 
 
-
 // .tensorflow.FloatList float_list = 2;
 
 
@@ -1881,9 +2138,7 @@ limitations under the License.
 
 
 
-
 // .tensorflow.Int64List int64_list = 3;
-
 
 
 
@@ -1959,6 +2214,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2ffeature_2eproto
 
 
@@ -1970,21 +2226,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -1998,9 +2255,11 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/example/feature.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fexample_2fexample_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fexample_2fexample_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fexample_2fexample_2eproto();
   // namespace tensorflow
 
 
@@ -2031,7 +2290,6 @@ limitations under the License.
 
 
 
-
 // -------------------------------------------------------------------
 
 // SequenceExample
@@ -2044,9 +2302,7 @@ limitations under the License.
 
 
 
-
 // .tensorflow.FeatureLists feature_lists = 2;
-
 
 
 
@@ -2066,6 +2322,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fexample_2fexample_2eproto
 
 
@@ -2077,21 +2334,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -2104,9 +2362,11 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto();
   // namespace tensorflow
 
 
@@ -2321,6 +2581,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fdebug_2eproto
 
 
@@ -2332,21 +2593,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -2362,12 +2624,11 @@ limitations under the License.
 // #include <google/protobuf/map_field_inl.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
-// Targeting ../JobDef_TasksEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto();
   // namespace tensorflow
 
 
@@ -2443,7 +2704,127 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fcluster_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/verifier_config.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/verifier_config.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fverifier_5fconfig_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fverifier_5fconfig_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/generated_enum_reflection.h>
+// #include <google/protobuf/unknown_field_set.h>
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fverifier_5fconfig_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fverifier_5fconfig_2eproto();
+  // namespace tensorflow
+
+  // namespace protobuf
+  // namespace google
+
+/** enum tensorflow::VerifierConfig_Toggle */
+public static final int
+  VerifierConfig_Toggle_DEFAULT = 0,
+  VerifierConfig_Toggle_ON = 1,
+  VerifierConfig_Toggle_OFF = 2;
+@Name("tensorflow::VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_ = VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_ = VerifierConfig_Toggle_VerifierConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_();
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_IsValid(int value);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VerifierConfig_Toggle") int VerifierConfig_Toggle_Toggle_MIN();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VerifierConfig_Toggle") int VerifierConfig_Toggle_Toggle_MAX();
+@Namespace("tensorflow") @MemberGetter public static native int VerifierConfig_Toggle_Toggle_ARRAYSIZE();
+
+@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer VerifierConfig_Toggle_descriptor();
+@Namespace("tensorflow") public static native @StdString BytePointer VerifierConfig_Toggle_Name(@Cast("tensorflow::VerifierConfig_Toggle") int value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VerifierConfig_Toggle*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString String name, @Cast("tensorflow::VerifierConfig_Toggle*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VerifierConfig_Toggle*") int... value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString String name, @Cast("tensorflow::VerifierConfig_Toggle*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VerifierConfig_Toggle*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VerifierConfig_Toggle_Parse(
+    @StdString String name, @Cast("tensorflow::VerifierConfig_Toggle*") int... value);
+// Targeting ../VerifierConfig.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// VerifierConfig
+
+// int64 verification_timeout_in_ms = 1;
+
+
+
+
+// .tensorflow.VerifierConfig.Toggle structure_verifier = 2;
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+
+  // namespace protobuf
+  // namespace google
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fverifier_5fconfig_2eproto
 
 
 // Parsed from tensorflow/core/protobuf/rewriter_config.pb.h
@@ -2454,21 +2835,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -2485,13 +2867,13 @@ limitations under the License.
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
+// #include "tensorflow/core/protobuf/verifier_config.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
-// Targeting ../RewriterConfig_CustomGraphOptimizer_ParameterMapEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto();
   // namespace tensorflow
 
 
@@ -2506,9 +2888,13 @@ public static final int
   RewriterConfig_Toggle_DEFAULT = 0,
   RewriterConfig_Toggle_ON = 1,
   RewriterConfig_Toggle_OFF = 2,
-  RewriterConfig_Toggle_AGGRESSIVE = 3,
-  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  RewriterConfig_Toggle_AGGRESSIVE = 3;
+@Name("tensorflow::RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_ = RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_ = RewriterConfig_Toggle_RewriterConfig_Toggle_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_Toggle_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_Toggle") int RewriterConfig_Toggle_Toggle_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_Toggle") int RewriterConfig_Toggle_Toggle_MAX();
@@ -2532,9 +2918,13 @@ public static final int
 public static final int
   RewriterConfig_NumIterationsType_DEFAULT_NUM_ITERS = 0,
   RewriterConfig_NumIterationsType_ONE = 1,
-  RewriterConfig_NumIterationsType_TWO = 2,
-  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  RewriterConfig_NumIterationsType_TWO = 2;
+@Name("tensorflow::RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_ = RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_ = RewriterConfig_NumIterationsType_RewriterConfig_NumIterationsType_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_NumIterationsType_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_NumIterationsType") int RewriterConfig_NumIterationsType_NumIterationsType_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_NumIterationsType") int RewriterConfig_NumIterationsType_NumIterationsType_MAX();
@@ -2562,9 +2952,13 @@ public static final int
   RewriterConfig_MemOptType_SWAPPING_HEURISTICS = 4,
   RewriterConfig_MemOptType_RECOMPUTATION_HEURISTICS = 5,
   RewriterConfig_MemOptType_SCHEDULING_HEURISTICS = 6,
-  RewriterConfig_MemOptType_HEURISTICS = 3,
-  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  RewriterConfig_MemOptType_HEURISTICS = 3;
+@Name("tensorflow::RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_ = RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_ = RewriterConfig_MemOptType_RewriterConfig_MemOptType_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean RewriterConfig_MemOptType_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_MemOptType") int RewriterConfig_MemOptType_MemOptType_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RewriterConfig_MemOptType") int RewriterConfig_MemOptType_MemOptType_MAX();
@@ -2733,6 +3127,16 @@ public static final int
 
 
 
+// .tensorflow.RewriterConfig.Toggle implementation_selector = 22;
+
+
+
+
+// .tensorflow.RewriterConfig.Toggle auto_mixed_precision = 23;
+
+
+
+
 // bool disable_meta_optimizer = 19;
 
 
@@ -2782,14 +3186,12 @@ public static final int
 
 
 
-
 // bool fail_on_optimizer_errors = 21;
 
 
 
 
 // .tensorflow.ScopedAllocatorOptions scoped_allocator_opts = 16;
-
 
 
 
@@ -2828,6 +3230,22 @@ public static final int
 
 
 
+// .tensorflow.VerifierConfig inter_optimizer_verifier_config = 300;
+
+
+
+
+
+
+
+// .tensorflow.VerifierConfig post_optimization_verifier_config = 301;
+
+
+
+
+
+
+
 // #ifdef __GNUC__
 //   #pragma GCC diagnostic pop
 // #endif  // __GNUC__
@@ -2852,6 +3270,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2frewriter_5fconfig_2eproto
 
 
@@ -2863,21 +3282,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -2896,23 +3316,17 @@ public static final int
 // #include "tensorflow/core/framework/cost_graph.pb.h"
 // #include "tensorflow/core/framework/graph.pb.h"
 // #include "tensorflow/core/framework/step_stats.pb.h"
-// #include "tensorflow/core/protobuf/debug.pb.h"
 // #include "tensorflow/core/protobuf/cluster.pb.h"
+// #include "tensorflow/core/protobuf/debug.pb.h"
 // #include "tensorflow/core/protobuf/rewriter_config.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
-// Targeting ../CallableOptions_FeedDevicesEntry_DoNotUse.java
-
-
-// Targeting ../CallableOptions_FetchDevicesEntry_DoNotUse.java
-
-
-// Targeting ../ConfigProto_DeviceCountEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto();
   // namespace tensorflow
+
 
 
 
@@ -2936,9 +3350,13 @@ public static final int
 /** enum tensorflow::OptimizerOptions_Level */
 public static final int
   OptimizerOptions_Level_L1 = 0,
-  OptimizerOptions_Level_L0 = -1,
-  OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  OptimizerOptions_Level_L0 = -1;
+@Name("tensorflow::OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_ = OptimizerOptions_Level_OptimizerOptions_Level_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_ = OptimizerOptions_Level_OptimizerOptions_Level_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_Level") int OptimizerOptions_Level_Level_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_Level") int OptimizerOptions_Level_Level_MAX();
@@ -2963,9 +3381,13 @@ public static final int
   OptimizerOptions_GlobalJitLevel_DEFAULT = 0,
   OptimizerOptions_GlobalJitLevel_OFF = -1,
   OptimizerOptions_GlobalJitLevel_ON_1 = 1,
-  OptimizerOptions_GlobalJitLevel_ON_2 = 2,
-  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  OptimizerOptions_GlobalJitLevel_ON_2 = 2;
+@Name("tensorflow::OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = OptimizerOptions_GlobalJitLevel_OptimizerOptions_GlobalJitLevel_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_GlobalJitLevel_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_GlobalJitLevel") int OptimizerOptions_GlobalJitLevel_GlobalJitLevel_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::OptimizerOptions_GlobalJitLevel") int OptimizerOptions_GlobalJitLevel_GlobalJitLevel_MAX();
@@ -2990,9 +3412,13 @@ public static final int
   RunOptions_TraceLevel_NO_TRACE = 0,
   RunOptions_TraceLevel_SOFTWARE_TRACE = 1,
   RunOptions_TraceLevel_HARDWARE_TRACE = 2,
-  RunOptions_TraceLevel_FULL_TRACE = 3,
-  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  RunOptions_TraceLevel_FULL_TRACE = 3;
+@Name("tensorflow::RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_ = RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_ = RunOptions_TraceLevel_RunOptions_TraceLevel_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean RunOptions_TraceLevel_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RunOptions_TraceLevel") int RunOptions_TraceLevel_TraceLevel_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::RunOptions_TraceLevel") int RunOptions_TraceLevel_TraceLevel_MAX();
@@ -3044,6 +3470,9 @@ public static final int
 
 
 // Targeting ../RunOptions.java
+
+
+// Targeting ../RunMetadata_FunctionGraphs.java
 
 
 // Targeting ../RunMetadata.java
@@ -3112,6 +3541,26 @@ public static final int
 
 
 
+
+
+
+
+// bool timestamped_allocator = 5;
+
+
+
+
+// int32 kernel_tracker_max_interval = 7;
+
+
+
+
+// int32 kernel_tracker_max_bytes = 8;
+
+
+
+
+// int32 kernel_tracker_max_pending = 9;
 
 
 
@@ -3189,7 +3638,6 @@ public static final int
 
 
 
-
 // -------------------------------------------------------------------
 
 // OptimizerOptions
@@ -3242,7 +3690,6 @@ public static final int
 
 
 
-
 // int64 build_cost_model = 4;
 
 
@@ -3274,7 +3721,6 @@ public static final int
 
 
 // .tensorflow.RewriterConfig rewrite_options = 10;
-
 
 
 
@@ -3381,6 +3827,31 @@ public static final int
 
 
 
+// bool collective_deterministic_sequential_execution = 6;
+
+
+
+
+// bool collective_nccl = 7;
+
+
+
+
+// bool share_session_state_in_clusterspec_propagation = 8;
+
+
+
+
+// bool disable_thread_spinning = 9;
+
+
+
+
+// bool share_cluster_devices_in_session = 10;
+
+
+
+
 // -------------------------------------------------------------------
 
 // ConfigProto
@@ -3450,7 +3921,6 @@ public static final int
 
 
 
-
 // bool allow_soft_placement = 7;
 
 
@@ -3462,7 +3932,6 @@ public static final int
 
 
 // .tensorflow.GraphOptions graph_options = 10;
-
 
 
 
@@ -3485,9 +3954,7 @@ public static final int
 
 
 
-
 // .tensorflow.ClusterDef cluster_def = 14;
-
 
 
 
@@ -3501,7 +3968,6 @@ public static final int
 
 
 // .tensorflow.ConfigProto.Experimental experimental = 16;
-
 
 
 
@@ -3556,7 +4022,6 @@ public static final int
 
 
 
-
 // bool report_tensor_allocations_upon_oom = 7;
 
 
@@ -3565,6 +4030,33 @@ public static final int
 // .tensorflow.RunOptions.Experimental experimental = 8;
 
 
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunMetadata_FunctionGraphs
+
+// repeated .tensorflow.GraphDef partition_graphs = 1;
+
+
+
+
+
+
+
+// .tensorflow.GraphDef pre_optimization_graph = 2;
+
+
+
+
+
+
+
+// .tensorflow.GraphDef post_optimization_graph = 3;
 
 
 
@@ -3584,7 +4076,6 @@ public static final int
 
 
 
-
 // .tensorflow.CostGraphDef cost_graph = 2;
 
 
@@ -3593,8 +4084,16 @@ public static final int
 
 
 
-
 // repeated .tensorflow.GraphDef partition_graphs = 3;
+
+
+
+
+
+
+
+// repeated .tensorflow.RunMetadata.FunctionGraphs function_graphs = 4;
+
 
 
 
@@ -3716,7 +4215,6 @@ public static final int
 
 
 
-
 // repeated .tensorflow.TensorConnection tensor_connection = 5;
 
 
@@ -3778,6 +4276,8 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -3791,6 +4291,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fconfig_2eproto
 
 
@@ -3802,21 +4303,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -3831,9 +4333,11 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto();
   // namespace tensorflow
 
 
@@ -3889,7 +4393,6 @@ public static final int
 
 
 // .tensorflow.TensorShapeProto shape = 3;
-
 
 
 
@@ -4047,6 +4550,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fcost_5fgraph_2eproto
 
 
@@ -4058,21 +4562,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -4083,14 +4588,20 @@ public static final int
 // #include <google/protobuf/message.h>
 // #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/map.h>  // IWYU pragma: export
+// #include <google/protobuf/map_entry.h>
+// #include <google/protobuf/map_field_inl.h>
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/allocation_description.pb.h"
 // #include "tensorflow/core/framework/tensor_description.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto();
   // namespace tensorflow
+
 
 
 
@@ -4115,6 +4626,7 @@ public static final int
 // Targeting ../NodeExecStats.java
 
 
+// -------------------------------------------------------------------
 // Targeting ../DeviceStepStats.java
 
 
@@ -4200,7 +4712,6 @@ public static final int
 
 
 // .tensorflow.TensorDescription tensor_description = 3;
-
 
 
 
@@ -4349,7 +4860,6 @@ public static final int
 
 
 
-
 // int64 all_start_nanos = 13;
 
 
@@ -4377,6 +4887,8 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 // DeviceStepStats
 
 // string device = 1;
@@ -4398,6 +4910,12 @@ public static final int
 
 
 
+
+
+
+
+
+// map<uint32, string> thread_names = 3;
 
 
 
@@ -4431,6 +4949,8 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -4438,6 +4958,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fstep_5fstats_2eproto
 
 
@@ -4449,21 +4970,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -4476,9 +4998,11 @@ public static final int
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fversions_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fversions_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fversions_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -4526,6 +5050,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fversions_2eproto
 
 
@@ -4583,9 +5108,13 @@ limitations under the License.
 
 // #include <functional>
 // #include <memory>
+
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"
+// Targeting ../ThreadPoolInterface.java
+
+
 
 // Targeting ../ThreadPool.java
 
@@ -4605,21 +5134,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -4632,9 +5162,11 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -4703,12 +5235,13 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fallocation_5fdescription_2eproto
 
 
-// Parsed from tensorflow/core/platform/default/string_coding.h
+// Parsed from tensorflow/core/platform/tensor_coding.h
 
-/* Copyright 2018 The TensorFlow Authors. All Rights Reserved.
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -4722,16 +5255,59 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
-// #ifndef TENSORFLOW_CORE_PLATFORM_DEFAULT_STRING_CODING_H_
-// #define TENSORFLOW_CORE_PLATFORM_DEFAULT_STRING_CODING_H_
 
-// IWYU pragma: private, include "third_party/tensorflow/core/platform/tensor_coding.h"
-// IWYU pragma: friend third_party/tensorflow/core/platform/tensor_coding.h
+// Helper routines for encoding/decoding tensor contents.
+// #ifndef TENSORFLOW_PLATFORM_TENSOR_CODING_H_
+// #define TENSORFLOW_PLATFORM_TENSOR_CODING_H_
 
-// #include "tensorflow/core/lib/core/coding.h"
-// #include "tensorflow/core/lib/strings/strcat.h"
+// #include <string>
+// #include "tensorflow/core/lib/core/refcount.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/platform/platform.h"
 // #include "tensorflow/core/platform/protobuf.h"
 // #include "tensorflow/core/platform/types.h"
+
+// Store src contents in *out.  If backing memory for src is shared with *out,
+// will ref obj during the call and will arrange to unref obj when no
+// longer needed.
+@Namespace("tensorflow::port") public static native void AssignRefCounted(@StringPiece BytePointer src, @Cast("tensorflow::core::RefCounted*") Pointer obj, @StdString @Cast({"char*", "std::string*"}) BytePointer out);
+@Namespace("tensorflow::port") public static native void AssignRefCounted(@StringPiece String src, @Cast("tensorflow::core::RefCounted*") Pointer obj, @StdString @Cast({"char*", "std::string*"}) BytePointer out);
+
+// Copy contents of src to dst[0,src.size()-1].
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString BytePointer src, @Cast("char*") BytePointer dst);
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString String src, @Cast("char*") ByteBuffer dst);
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString BytePointer src, @Cast("char*") byte[] dst);
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString String src, @Cast("char*") BytePointer dst);
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString BytePointer src, @Cast("char*") ByteBuffer dst);
+@Namespace("tensorflow::port") public static native void CopyToArray(@StdString String src, @Cast("char*") byte[] dst);
+
+// Copy subrange [pos:(pos + n)) from src to dst. If pos >= src.size() the
+// result is empty. If pos + n > src.size() the subrange [pos, size()) is
+// copied.
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString BytePointer src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") BytePointer dst);
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString String src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") ByteBuffer dst);
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString BytePointer src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") byte[] dst);
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString String src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") BytePointer dst);
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString BytePointer src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") ByteBuffer dst);
+@Namespace("tensorflow::port") public static native void CopySubrangeToArray(@StdString String src, @Cast("size_t") long pos, @Cast("size_t") long n,
+                                @Cast("char*") byte[] dst);
+
+// Store encoding of strings[0..n-1] in *out.
+@Namespace("tensorflow::port") public static native void EncodeStringList(@StdString @Cast({"char*", "std::string*"}) BytePointer strings, @Cast("tensorflow::int64") long n, @StdString @Cast({"char*", "std::string*"}) BytePointer out);
+
+// Decode n strings from src and store in strings[0..n-1].
+// Returns true if successful, false on parse error.
+@Namespace("tensorflow::port") public static native @Cast("bool") boolean DecodeStringList(@StdString BytePointer src, @StdString @Cast({"char*", "std::string*"}) BytePointer strings, @Cast("tensorflow::int64") long n);
+@Namespace("tensorflow::port") public static native @Cast("bool") boolean DecodeStringList(@StdString String src, @StdString @Cast({"char*", "std::string*"}) BytePointer strings, @Cast("tensorflow::int64") long n);
+
+// Assigns base[0..bytes-1] to *s
+@Namespace("tensorflow::port") public static native void CopyFromArray(@StdString @Cast({"char*", "std::string*"}) BytePointer s, @Cast("const char*") BytePointer base, @Cast("size_t") long bytes);
+@Namespace("tensorflow::port") public static native void CopyFromArray(@StdString @Cast({"char*", "std::string*"}) BytePointer s, String base, @Cast("size_t") long bytes);
 // Targeting ../StringListEncoder.java
 
 
@@ -4743,10 +5319,13 @@ limitations under the License.
 @Namespace("tensorflow::port") public static native @MoveUniquePtr StringListDecoder NewStringListDecoder(@StdString BytePointer in);
 @Namespace("tensorflow::port") public static native @MoveUniquePtr StringListDecoder NewStringListDecoder(@StdString String in);
 
+// #if defined(TENSORFLOW_PROTOBUF_USES_CORD)
+// #endif  // defined(TENSORFLOW_PROTOBUF_USES_CORD)
+
   // namespace port
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_CORE_PLATFORM_DEFAULT_STRING_CODING_H_
+// #endif  // TENSORFLOW_PLATFORM_TENSOR_CODING_H_
 
 
 // Parsed from tensorflow/core/framework/resource_handle.h
@@ -4813,17 +5392,17 @@ limitations under the License.
 
 // #include <stdlib.h>
 
+// #include <functional>
 // #include <limits>
 
+// #include "absl/strings/string_view.h"
+// #include "absl/types/optional.h"
 // #include "tensorflow/core/framework/numeric_types.h"
-// #include "tensorflow/core/framework/resource_handle.h"
 // #include "tensorflow/core/framework/type_traits.h"
 // #include "tensorflow/core/platform/logging.h"
-// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/numa.h"
 // #include "tensorflow/core/platform/types.h"
-// Targeting ../Variant.java
-
-
 // Targeting ../AllocationAttributes.java
 
 
@@ -4831,20 +5410,6 @@ limitations under the License.
 
 
 // Targeting ../Allocator.java
-
-
-
-// Allocator-specific constructors and destructors are used for
-// strings
-
-
-
-
-
-
-
-
-
 
 
 // Targeting ../AllocatorWrapper.java
@@ -4855,9 +5420,16 @@ limitations under the License.
 
 
 // Returns a trivial implementation of Allocator, which is a process singleton.
-// Access through this function is only intended for use in tests and auxiliary
-// processing.  Performance sensitive uses should always obtain allocators from
-// ProcessState.
+// Access through this function is only intended for use by restricted parts
+// of the infrastructure.
+@Namespace("tensorflow") public static native Allocator cpu_allocator_base();
+
+// If available, calls ProcessState::GetCPUAllocator(numa_node).
+// If not, falls back to cpu_allocator_base().
+// Intended for use in contexts where ProcessState is not visible at
+// compile time. Where ProcessState is visible, it's preferable to
+// call it directly.
+@Namespace("tensorflow") public static native Allocator cpu_allocator(int numa_node/*=port::kNUMANoAffinity*/);
 @Namespace("tensorflow") public static native Allocator cpu_allocator();
 
 // If 'enable' is true, the default CPU allocator implementation will collect
@@ -4886,21 +5458,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -4913,9 +5486,11 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto();
   // namespace tensorflow
 
 
@@ -4988,6 +5563,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fshape_2eproto
 
 
@@ -4999,21 +5575,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -5025,10 +5602,13 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/generated_enum_reflection.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftypes_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ftypes_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ftypes_2eproto
-  // namespace tensorflow
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ftypes_2eproto();
+  // namespace protobuf
+  // namespace google
 
 /** enum tensorflow::DataType */
 public static final int
@@ -5078,9 +5658,13 @@ public static final int
   DT_RESOURCE_REF = 120,
   DT_VARIANT_REF = 121,
   DT_UINT32_REF = 122,
-  DT_UINT64_REF = 123,
-  DataType_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  DataType_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  DT_UINT64_REF = 123;
+@Name("tensorflow::DataType_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int DataType_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  DataType_INT_MIN_SENTINEL_DO_NOT_USE_ = DataType_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::DataType_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int DataType_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  DataType_INT_MAX_SENTINEL_DO_NOT_USE_ = DataType_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean DataType_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::DataType") int DataType_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::DataType") int DataType_MAX();
@@ -5118,6 +5702,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftypes_2eproto
 
 
@@ -5129,21 +5714,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -5156,9 +5742,11 @@ public static final int
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -5252,6 +5840,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fresource_5fhandle_2eproto
 
 
@@ -5263,21 +5852,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -5293,9 +5883,11 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ftensor_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ftensor_2eproto();
   // namespace tensorflow
 
 
@@ -5324,7 +5916,6 @@ public static final int
 
 
 // .tensorflow.TensorShapeProto tensor_shape = 2;
-
 
 
 
@@ -5535,6 +6126,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_2eproto
 
 
@@ -5546,21 +6138,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -5576,9 +6169,11 @@ public static final int
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/allocation_description.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -5610,9 +6205,7 @@ public static final int
 
 
 
-
 // .tensorflow.AllocationDescription allocation_description = 4;
-
 
 
 
@@ -5630,6 +6223,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fdescription_2eproto
 
 
@@ -5772,11 +6366,15 @@ limitations under the License.
 // #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_UTIL_H_
 // #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_UTIL_H_
 
+// #include <algorithm>
+// #include <vector>
+
 // #include "tensorflow/core/framework/tensor.h"
 // #include "tensorflow/core/framework/tensor.pb.h"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
-
-// #include <vector>
+// #include "tensorflow/core/framework/type_traits.h"
+// #include "tensorflow/core/platform/protobuf.h"
+// #include "tensorflow/core/platform/types.h"
 
 // DeepCopy returns a tensor whose contents are a deep copy of the
 // contents of 'other'.  This function is intended only for
@@ -5786,6 +6384,10 @@ limitations under the License.
 // REQUIRES: 'other' must be a Tensor of a copy-able type if
 //           'other' is not appropriately memory-aligned.
 @Namespace("tensorflow::tensor") public static native @ByVal Tensor DeepCopy(@Const @ByRef Tensor other);
+
+// Deep copies input to output.  This function is similar to above, but assumes
+// that the memory for the output has already been allocated.
+@Namespace("tensorflow::tensor") public static native void DeepCopy(@Const @ByRef Tensor input, Tensor output);
 
 // Concatenates 'tensors' into a single tensor, along their 0th dimension.
 //
@@ -5816,15 +6418,73 @@ limitations under the License.
 @Namespace("tensorflow::tensor::internal") public static native void SetTensorProtoShape(@Cast("size_t*") @StdVector SizeTPointer shape,
                          TensorShapeProto shape_proto);
 
-// Defines value type dependent methods to manipulate `TensorProto`.
-// Class specializations has to define following methods:
-//   static DataType GetDataType()
-//   static void AddValue(Type value, TensorProto* proto)
+// #define DEFINE_PROTO_FIELD_HELPER(TYPE, FIELDNAME)
+//   template <>
+//   class TensorProtoFieldHelper<TYPE> : public std::true_type {
+//    public:
+//     typedef decltype(
+//         std::declval<TensorProto>().FIEDNAME##_val(0)) FieldType;
+//     typedef decltype(
+//         std::declval<TensorProto>().FIEDNAME##_val()) RepeatedFieldType;
+//     typedef decltype(std::declval<TensorProto>().mutable_##FIELDNAME##_val())
+//         MutableRepeatedFieldType;
+//     static MutableRepeatedFieldType GetMutableField(TensorProto* proto) {
+//       return proto->mutable_##FIELDNAME##_val();
+//     }
+//     static RepeatedFieldType& GetField(const TensorProto& proto) {
+//       return proto.FIEDNAME##_val();
+//     }
+//   }
+
+// The argument pairs in the following macro instantiations encode the
+// mapping from C++ type ($1) to repeated field name "$2_val" used for storing
+// values in TensorProto. See tensorflow/core/framework/tensor.proto.
+
+// #undef DEFINE_PROTO_HELPER
+// Targeting ../CopyHelper.java
+
+
+
+// Overloads for complex types that store real and imaginary parts
+// at indices 2*i and 2*i+1 in float or double field.
+
+// Helper class to extract and insert values into TensorProto represented as
+// repeated fields.
+
+// Specialization for string.
+
   // namespace internal
 
 // Creates a 'TensorProto' with specified shape and values.
 // The dtype and a field to represent data values of the returned 'TensorProto'
 // are determined based on type of the 'values' parameter.
+
+// Converts values in tensor to run-length encoded compressed form.
+//
+// The elements of a tensor can be stored in a TensorProto in one of the
+// following two forms:
+// 1. As a raw byte string in the field `tensor_content` containing the
+//    serialized in-memory representation of the tensor.
+// 2. As values of a repeated field depending on the datatype, e.g. that
+//    values of a DT_FLOAT tensor would be stored in the repeated field
+//    `float_val`.
+// Storage scheme 2 may use a simple form of run-length encoding to compress
+// data: If the values contains a tail of identical values, the repeated field
+// will be truncated such that the number of values in the repeated field is
+// less than the number of elements implied by the field`tensor_shape`. The
+// original tensor can be recovered by repeating the final value in the repeated
+// field.
+//
+// The TensorProto will be compressed if a) the tensor contains at least
+// min_num_elements elements and b) the compressed tensor proto is would be at
+// most the size of the original tensor proto divided by min_compression_ratio.
+//
+// Returns true if the tensor was compressed.
+@Namespace("tensorflow::tensor") public static native @Cast("bool") boolean CompressTensorProtoInPlace(@Cast("tensorflow::int64") long min_num_elements,
+                                float min_compression_ratio,
+                                TensorProto tensor);
+
+@Namespace("tensorflow::tensor") public static native @Cast("bool") boolean CompressTensorProtoInPlace(TensorProto tensor);
 
   // namespace tensor
   // namespace tensorflow
@@ -5899,6 +6559,9 @@ limitations under the License.
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/mem.h"
 // #include "tensorflow/core/platform/types.h"
+// Targeting ../TensorCord.java
+
+
 // Targeting ../Var.java
 
 
@@ -5988,21 +6651,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -6021,12 +6685,11 @@ limitations under the License.
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
-// Targeting ../NameAttrList_AttrEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto();
   // namespace tensorflow
 
 
@@ -6195,9 +6858,7 @@ limitations under the License.
 
 
 
-
 // .tensorflow.TensorProto tensor = 8;
-
 
 
 
@@ -6216,9 +6877,7 @@ limitations under the License.
 
 
 
-
 // .tensorflow.NameAttrList func = 10;
-
 
 
 
@@ -6291,6 +6950,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fattr_5fvalue_2eproto
 
 
@@ -6302,21 +6962,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -6333,12 +6994,11 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
-// Targeting ../NodeDef_AttrEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto();
   // namespace tensorflow
 
 
@@ -6471,7 +7131,6 @@ limitations under the License.
 
 
 
-
 // #ifdef __GNUC__
 //   #pragma GCC diagnostic pop
 // #endif  // __GNUC__
@@ -6486,6 +7145,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fnode_5fdef_2eproto
 
 
@@ -6497,21 +7157,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -6526,9 +7187,11 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto();
   // namespace tensorflow
 
 
@@ -6543,9 +7206,13 @@ public static final int
   ApiDef_Visibility_DEFAULT_VISIBILITY = 0,
   ApiDef_Visibility_VISIBLE = 1,
   ApiDef_Visibility_SKIP = 2,
-  ApiDef_Visibility_HIDDEN = 3,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  ApiDef_Visibility_HIDDEN = 3;
+@Name("tensorflow::ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_ = ApiDef_Visibility_ApiDef_Visibility_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_ = ApiDef_Visibility_ApiDef_Visibility_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean ApiDef_Visibility_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::ApiDef_Visibility") int ApiDef_Visibility_Visibility_MAX();
@@ -6700,7 +7367,6 @@ public static final int
 
 
 // .tensorflow.AttrValue default_value = 3;
-
 
 
 
@@ -6919,6 +7585,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fapi_5fdef_2eproto
 
 
@@ -6930,21 +7597,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -6959,9 +7627,11 @@ public static final int
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto();
   // namespace tensorflow
 
 
@@ -7123,7 +7793,6 @@ public static final int
 
 
 
-
 // string description = 4;
 
 
@@ -7150,7 +7819,6 @@ public static final int
 
 
 // .tensorflow.AttrValue allowed_values = 7;
-
 
 
 
@@ -7195,6 +7863,27 @@ public static final int
 
 
 
+// repeated string control_output = 20;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
 // repeated .tensorflow.OpDef.AttrDef attr = 4;
 
 
@@ -7205,7 +7894,6 @@ public static final int
 
 
 // .tensorflow.OpDeprecation deprecation = 8;
-
 
 
 
@@ -7319,6 +8007,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fop_5fdef_2eproto
 
 
@@ -7330,21 +8019,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -7363,16 +8053,16 @@ public static final int
 // #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/op_def.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ffunction_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ffunction_2eproto
-// Targeting ../FunctionDef_AttrEntry_DoNotUse.java
-
-
-// Targeting ../FunctionDef_RetEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ffunction_2eproto();
   // namespace tensorflow
+
+
+
+
 
 
 
@@ -7382,6 +8072,14 @@ public static final int
   // namespace google
 // Targeting ../FunctionDefLibrary.java
 
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+// Targeting ../FunctionDef_ArgAttrs.java
+
+
+// -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
 
@@ -7427,6 +8125,21 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// FunctionDef_ArgAttrs
+
+// map<string, .tensorflow.AttrValue> attr = 1;
+
+
+
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // FunctionDef
 
 // .tensorflow.OpDef signature = 1;
@@ -7437,8 +8150,13 @@ public static final int
 
 
 
-
 // map<string, .tensorflow.AttrValue> attr = 5;
+
+
+
+
+// map<uint32, .tensorflow.FunctionDef.ArgAttrs> arg_attr = 7;
+
 
 
 
@@ -7452,6 +8170,12 @@ public static final int
 
 
 // map<string, string> ret = 4;
+
+
+
+
+
+// map<string, string> control_ret = 6;
 
 
 
@@ -7502,6 +8226,14 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -7509,6 +8241,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ffunction_2eproto
 
 
@@ -7520,21 +8253,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -7550,9 +8284,11 @@ public static final int
 // #include "tensorflow/core/framework/function.pb.h"
 // #include "tensorflow/core/framework/versions.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fgraph_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fgraph_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fgraph_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -7587,14 +8323,12 @@ public static final int
 
 
 
-
 // int32 version = 3 [deprecated = true];
 
 
 
 
 // .tensorflow.FunctionDefLibrary library = 2;
-
 
 
 
@@ -7612,6 +8346,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fgraph_2eproto
 
 
@@ -7693,6 +8428,9 @@ limitations under the License.
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/types.h"
+// Targeting ../Variant.java
+
+
 
 // MemoryType is used to describe whether input or output Tensors of
 // an OpKernel should reside in "Host memory" (e.g., CPU memory) or
@@ -7715,8 +8453,9 @@ public static final int
 
 
 
-// #if GOOGLE_CUDA
-// #endif  // GOOGLE_CUDA
+// #if (defined(GOOGLE_CUDA) && GOOGLE_CUDA) ||
+//     (defined(TENSORFLOW_USE_ROCM) && TENSORFLOW_USE_ROCM)
+// #endif  // GOOGLE_CUDA || TENSORFLOW_USE_ROCM
 
 // #ifdef TENSORFLOW_USE_SYCL
 // #endif  // TENSORFLOW_USE_SYCL
@@ -7857,6 +8596,12 @@ public static final int kDataTypeRefOffset = 100;
 // DEVICE_MEMORY otherwise.
 @Namespace("tensorflow") public static native @Cast("tensorflow::MemoryType") int MTypeFromDType(@Cast("const tensorflow::DataType") int dtype);
 
+// Returns HOST_MEMORY if `dtype` is always on host, DEVICE_MEMORY otherwise.
+// The reason we have MTypeFromDType() and MTypeFromDTypeIntsOnDevice(): for
+// GPUs, we would like to keep int operations on host for performance concerns.
+// But for TPUs (and other devices), int operations are placed on device.
+@Namespace("tensorflow") public static native @Cast("tensorflow::MemoryType") int MTypeFromDTypeIntsOnDevice(@Cast("const tensorflow::DataType") int dtype);
+
 // Types that always sit on host: DT_STRING, DT_STRING_REF, DT_RESOURCE.
 // For DT_RESOURCE, the handle always sits on host (even if the underlying
 // object has device-allocated resources).
@@ -7913,21 +8658,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -7941,9 +8687,11 @@ limitations under the License.
 // #include <google/protobuf/unknown_field_set.h>
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto();
   // namespace tensorflow
 
 
@@ -7986,7 +8734,6 @@ limitations under the License.
 
 
 // .tensorflow.AttrValue allowed_values = 2;
-
 
 
 
@@ -8105,6 +8852,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fkernel_5fdef_2eproto
 
 
@@ -8169,7 +8917,6 @@ limitations under the License.
 
 // #include <unordered_map>
 // #include "tensorflow/core/framework/allocator.h"
-// #include "tensorflow/core/lib/core/refcount.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/thread_annotations.h"
@@ -8206,10 +8953,11 @@ limitations under the License.
 // #ifndef TENSORFLOW_CORE_FRAMEWORK_OP_KERNEL_H_
 // #define TENSORFLOW_CORE_FRAMEWORK_OP_KERNEL_H_
 
+// #include <atomic>
 // #include <functional>
-
 // #include <utility>
 // #include <vector>
+
 // #include "tensorflow/core/framework/allocator.h"
 // #include "tensorflow/core/framework/cancellation.h"
 // #include "tensorflow/core/framework/control_flow.h"
@@ -8217,6 +8965,7 @@ limitations under the License.
 // #include "tensorflow/core/framework/graph.pb.h"
 // #include "tensorflow/core/framework/kernel_def.pb.h"
 // #include "tensorflow/core/framework/kernel_def_builder.h"
+// #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/node_def_util.h"
 // #include "tensorflow/core/framework/op.h"  // TODO(b/62899350): Remove
 // #include "tensorflow/core/framework/rendezvous.h"
@@ -8237,6 +8986,7 @@ limitations under the License.
 // #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/profile_utils/cpu_utils.h"
 // #include "tensorflow/core/platform/thread_annotations.h"
 // #include "tensorflow/core/platform/types.h"
 // Targeting ../ThreadPoolDevice.java
@@ -8351,7 +9101,7 @@ limitations under the License.
 //           * def has all attrs specified (e.g. using AddDefaultsToNodeDef()).
 @Namespace("tensorflow") public static native @ByVal Status SupportedDeviceTypesForNode(
     @StdVector DeviceType prioritized_types, @Const @ByRef NodeDef def,
-    @Cast("tensorflow::PrioritizedDeviceTypeVector*") AllocatorAttributesVector device_types);
+    @Cast("tensorflow::PrioritizedDeviceTypeVector*") TensorValueVector device_types);
 
 // Returns a message with a description of the kernels registered for op
 // `op_name`.
@@ -8413,6 +9163,29 @@ limitations under the License.
 
 // Checks whether a given kernel is registered on device_type.
 @Namespace("tensorflow") public static native @Cast("bool") boolean KernelDefAvailable(@Const @ByRef DeviceType device_type, @Const @ByRef NodeDef node_def);
+
+// If node of node_name, experimental_debug_info, node_op, node_device and
+// node_attrs has a corresponding kernel registered on device_type, returns OK
+// and fill in the kernel def and kernel_class_name. <def> and
+// <kernel_class_name> may be null.
+@Namespace("tensorflow") public static native @ByVal Status FindKernelDef(
+    @Const @ByRef DeviceType device_type, @StringPiece BytePointer node_name,
+    @Cast("bool") boolean has_experimental_debug_info,
+    @Const @ByRef NodeDef_ExperimentalDebugInfo experimental_debug_info,
+    @StringPiece BytePointer node_op, @StringPiece BytePointer node_device, @ByVal AttrSlice node_attrs,
+    @Cast("const tensorflow::KernelDef**") PointerPointer def, @StdString @Cast({"char*", "std::string*"}) BytePointer kernel_class_name);
+@Namespace("tensorflow") public static native @ByVal Status FindKernelDef(
+    @Const @ByRef DeviceType device_type, @StringPiece BytePointer node_name,
+    @Cast("bool") boolean has_experimental_debug_info,
+    @Const @ByRef NodeDef_ExperimentalDebugInfo experimental_debug_info,
+    @StringPiece BytePointer node_op, @StringPiece BytePointer node_device, @ByVal AttrSlice node_attrs,
+    @Const @ByPtrPtr KernelDef def, @StdString @Cast({"char*", "std::string*"}) BytePointer kernel_class_name);
+@Namespace("tensorflow") public static native @ByVal Status FindKernelDef(
+    @Const @ByRef DeviceType device_type, @StringPiece String node_name,
+    @Cast("bool") boolean has_experimental_debug_info,
+    @Const @ByRef NodeDef_ExperimentalDebugInfo experimental_debug_info,
+    @StringPiece String node_op, @StringPiece String node_device, @ByVal AttrSlice node_attrs,
+    @Const @ByPtrPtr KernelDef def, @StdString @Cast({"char*", "std::string*"}) BytePointer kernel_class_name);
 
 // If node_def has a corresponding kernel registered on device_type,
 // returns OK and fill in the kernel def and kernel_class_name. <def> and
@@ -8709,21 +9482,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -8736,9 +9510,11 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto();
   // namespace tensorflow
 
 
@@ -8830,7 +9606,6 @@ limitations under the License.
 
 
 
-
 // -------------------------------------------------------------------
 
 // DeviceAttributes
@@ -8879,7 +9654,6 @@ limitations under the License.
 
 
 
-
 // fixed64 incarnation = 6;
 
 
@@ -8916,6 +9690,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fdevice_5fattributes_2eproto
 
 
@@ -9020,21 +9795,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -9047,9 +9823,11 @@ limitations under the License.
 // #include <google/protobuf/extension_set.h>  // IWYU pragma: export
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto();
   // namespace tensorflow
 
 
@@ -9112,6 +9890,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2ftensor_5fslice_2eproto
 
 
@@ -9231,8 +10010,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
-// #define TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
+// #ifndef TENSORFLOW_CORE_UTIL_TENSOR_SLICE_UTIL_H_
+// #define TENSORFLOW_CORE_UTIL_TENSOR_SLICE_UTIL_H_
 
 // #include "tensorflow/core/framework/tensor_shape.h"
 // #include "tensorflow/core/framework/tensor_slice.h"
@@ -9271,7 +10050,7 @@ public static final int kTensorSliceMaxRank = kTensorSliceMaxRank();
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_UTIL_TENSOR_SLICE_UTIL_H_
+// #endif  // TENSORFLOW_CORE_UTIL_TENSOR_SLICE_UTIL_H_
 
 
 // Parsed from tensorflow/core/util/tensor_slice_reader.h
@@ -9467,6 +10246,839 @@ limitations under the License.
 // #endif  // TENSORFLOW_CORE_UTIL_TENSOR_BUNDLE_TENSOR_BUNDLE_H_
 
 
+// Parsed from tensorflow/core/framework/summary.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/framework/summary.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fsummary_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fsummary_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/tensor.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fsummary_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fsummary_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../SummaryDescription.java
+
+
+// Targeting ../HistogramProto.java
+
+
+// Targeting ../SummaryMetadata_PluginData.java
+
+
+// Targeting ../SummaryMetadata.java
+
+
+// Targeting ../Summary_Image.java
+
+
+// Targeting ../Summary_Audio.java
+
+
+// Targeting ../Summary_Value.java
+
+
+// Targeting ../Summary.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// SummaryDescription
+
+// string type_hint = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// HistogramProto
+
+// double min = 1;
+
+
+
+
+// double max = 2;
+
+
+
+
+// double num = 3;
+
+
+
+
+// double sum = 4;
+
+
+
+
+// double sum_squares = 5;
+
+
+
+
+// repeated double bucket_limit = 6 [packed = true];
+
+
+
+
+
+
+
+
+// repeated double bucket = 7 [packed = true];
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SummaryMetadata_PluginData
+
+// string plugin_name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bytes content = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SummaryMetadata
+
+// .tensorflow.SummaryMetadata.PluginData plugin_data = 1;
+
+
+
+
+
+
+
+
+// string display_name = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string summary_description = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Summary_Image
+
+// int32 height = 1;
+
+
+
+
+// int32 width = 2;
+
+
+
+
+// int32 colorspace = 3;
+
+
+
+
+// bytes encoded_image_string = 4;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Summary_Audio
+
+// float sample_rate = 1;
+
+
+
+
+// int64 num_channels = 2;
+
+
+
+
+// int64 length_frames = 3;
+
+
+
+
+// bytes encoded_audio_string = 4;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string content_type = 5;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Summary_Value
+
+// string node_name = 7;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string tag = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.SummaryMetadata metadata = 9;
+
+
+
+
+
+
+
+
+// float simple_value = 2;
+
+
+
+
+
+
+// bytes obsolete_old_style_histogram = 3;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.Summary.Image image = 4;
+
+
+
+
+
+
+
+
+
+// .tensorflow.HistogramProto histo = 5;
+
+
+
+
+
+
+
+
+
+// .tensorflow.Summary.Audio audio = 6;
+
+
+
+
+
+
+
+
+
+// .tensorflow.TensorProto tensor = 8;
+
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// Summary
+
+// repeated .tensorflow.Summary.Value value = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fsummary_2eproto
+
+
+// Parsed from tensorflow/core/lib/monitoring/counter.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_LIB_MONITORING_COUNTER_H_
+// #define TENSORFLOW_CORE_LIB_MONITORING_COUNTER_H_
+
+// clang-format off
+// Required for IS_MOBILE_PLATFORM
+// #include "tensorflow/core/platform/platform.h"
+// clang-format on
+
+// We replace this implementation with a null implementation for mobile
+// platforms.
+// #ifdef IS_MOBILE_PLATFORM
+// #include "tensorflow/core/lib/monitoring/mobile_counter.h"
+// #else
+
+// #include <array>
+// #include <atomic>
+// #include <map>
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/monitoring/collection_registry.h"
+// #include "tensorflow/core/lib/monitoring/metric_def.h"
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// Targeting ../CounterCell.java
+
+
+
+// A stateful class for updating a cumulative integer metric.
+//
+// This class encapsulates a set of values (or a single value for a label-less
+// metric). Each value is identified by a tuple of labels. The class allows the
+// user to increment each value.
+//
+// Counter allocates storage and maintains a cell for each value. You can
+// retrieve an individual cell using a label-tuple and update it separately.
+// This improves performance since operations related to retrieval, like
+// map-indexing and locking, are avoided.
+//
+// This class is thread-safe.
+
+////
+//  Implementation details follow. API readers may skip.
+////
+
+
+
+
+
+
+
+
+
+  // namespace monitoring
+  // namespace tensorflow
+
+// #endif  // IS_MOBILE_PLATFORM
+// #endif  // TENSORFLOW_CORE_LIB_MONITORING_COUNTER_H_
+
+
+// Parsed from tensorflow/core/lib/monitoring/gauge.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_LIB_MONITORING_GAUGE_H_
+// #define TENSORFLOW_CORE_LIB_MONITORING_GAUGE_H_
+
+// clang-format off
+// Required for IS_MOBILE_PLATFORM
+// #include "tensorflow/core/platform/platform.h"
+// clang-format on
+
+// We replace this implementation with a null implementation for mobile
+// platforms.
+// #ifdef IS_MOBILE_PLATFORM
+// #include "tensorflow/core/lib/monitoring/mobile_gauge.h"
+// #else
+
+// #include <array>
+// #include <atomic>
+// #include <map>
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/monitoring/collection_registry.h"
+// #include "tensorflow/core/lib/monitoring/metric_def.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/platform/types.h"
+// Targeting ../BoolGaugeCell.java
+
+
+// Targeting ../IntGaugeCell.java
+
+
+// Targeting ../StringGaugeCell.java
+
+
+
+// Explicit specialization of GaugeCell<int64>. Compared to the primary
+// template, it uses atomic values as opposed to mutex. This class is
+// thread-safe.
+
+// Explicit specialization of GaugeCell<bool>. Compared to the primary
+// template, it uses atomic values as opposed to mutex. This class is
+// thread-safe.
+
+// A stateful class for updating a gauge-like metric. Allowed ValueType are
+// int64, string and bool.
+//
+// This class encapsulates a set of values (or a single value for a label-less
+// metric). Each value is identified by a tuple of labels. The class allows the
+// user to set each value.
+//
+// Gauge allocates storage and maintains a cell for each value. You can
+// retrieve an individual cell using a label-tuple and update it separately.
+// This improves performance since operations related to retrieval, like
+// map-indexing and locking, are avoided.
+//
+// This class is thread-safe.
+
+////
+//  Implementation details follow. API readers may skip.
+////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace monitoring
+  // namespace tensorflow
+
+// #endif  // IS_MOBILE_PLATFORM
+// #endif  // TENSORFLOW_CORE_LIB_MONITORING_GAUGE_H_
+
+
+// Parsed from tensorflow/core/lib/monitoring/sampler.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_LIB_MONITORING_SAMPLER_H_
+// #define TENSORFLOW_CORE_LIB_MONITORING_SAMPLER_H_
+
+// clang-format off
+// Required for IS_MOBILE_PLATFORM
+// #include "tensorflow/core/platform/platform.h"
+// clang-format on
+
+// We replace this implementation with a null implementation for mobile
+// platforms.
+// #ifdef IS_MOBILE_PLATFORM
+// #include "tensorflow/core/lib/monitoring/mobile_sampler.h"
+// #else
+
+// #include <float.h>
+
+// #include <map>
+
+// #include "tensorflow/core/framework/summary.pb.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/histogram/histogram.h"
+// #include "tensorflow/core/lib/monitoring/collection_registry.h"
+// #include "tensorflow/core/lib/monitoring/metric_def.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// Targeting ../SamplerCell.java
+
+
+// Targeting ../Buckets.java
+
+
+
+// A stateful class for updating a cumulative histogram metric.
+//
+// This class encapsulates a set of histograms (or a single histogram for a
+// label-less metric) configured with a list of increasing bucket boundaries.
+// Each histogram is identified by a tuple of labels. The class allows the
+// user to add a sample to each histogram value.
+//
+// Sampler allocates storage and maintains a cell for each value. You can
+// retrieve an individual cell using a label-tuple and update it separately.
+// This improves performance since operations related to retrieval, like
+// map-indexing and locking, are avoided.
+//
+// This class is thread-safe.
+
+////
+//  Implementation details follow. API readers may skip.
+////
+
+
+
+
+
+
+
+
+
+  // namespace monitoring
+  // namespace tensorflow
+
+// #endif  // IS_MOBILE_PLATFORM
+// #endif  // TENSORFLOW_CORE_LIB_MONITORING_SAMPLER_H_
+
+
+// Parsed from tensorflow/core/profiler/internal/profiler_interface.h
+
+/* Copyright 2016 The TensorFlow Authors All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_CORE_PROFILER_INTERNAL_PROFILER_INTERFACE_H_
+// #define TENSORFLOW_CORE_PROFILER_INTERNAL_PROFILER_INTERFACE_H_
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
+// Targeting ../ProfilerContext.java
+
+
+// Targeting ../ProfilerInterface.java
+
+
+
+
+// Targeting ../ProfilerFactory.java
+
+
+
+@Namespace("tensorflow") public static native void RegisterProfilerFactory(@ByVal @Cast("tensorflow::ProfilerFactory") ProfilerFactory factory);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_PROFILER_INTERNAL_PROFILER_INTERFACE_H_
+
+
+// Parsed from tensorflow/core/profiler/lib/profiler_session.h
+
+/* Copyright 2018 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_CORE_PROFILER_LIB_PROFILER_SESSION_H_
+// #define TENSORFLOW_CORE_PROFILER_LIB_PROFILER_SESSION_H_
+
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/profiler/internal/profiler_interface.h"
+// Targeting ../ProfilerSession.java
+
+
+
+  // namespace tensorflow
+// #endif  // TENSORFLOW_CORE_PROFILER_LIB_PROFILER_SESSION_H_
+
+
+// Parsed from tensorflow/c/tf_attrtype.h
+
+/* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef TENSORFLOW_C_TF_ATTRTYPE_H_
+// #define TENSORFLOW_C_TF_ATTRTYPE_H_
+
+// #ifdef __cplusplus
+// #endif
+
+// TF_AttrType describes the type of the value of an attribute on an operation.
+/** enum TF_AttrType */
+public static final int
+  TF_ATTR_STRING = 0,
+  TF_ATTR_INT = 1,
+  TF_ATTR_FLOAT = 2,
+  TF_ATTR_BOOL = 3,
+  TF_ATTR_TYPE = 4,
+  TF_ATTR_SHAPE = 5,
+  TF_ATTR_TENSOR = 6,
+  TF_ATTR_PLACEHOLDER = 7,
+  TF_ATTR_FUNC = 8;
+
+// #ifdef __cplusplus /* end extern "C" */
+// #endif
+
+// #endif  // TENSORFLOW_C_TF_ATTRTYPE_H_
+
+
 // Parsed from tensorflow/c/tf_status_helper.h
 
 /* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
@@ -9562,6 +11174,8 @@ limitations under the License.
 
 // #include <stddef.h>
 // #include <stdint.h>
+
+// #include "tensorflow/c/tf_attrtype.h"
 
 // --------------------------------------------------------------------------
 // C API for TensorFlow.
@@ -9799,6 +11413,49 @@ public static native @Cast("size_t") long TF_TensorByteSize(@Const TF_Tensor arg
 
 // Return a pointer to the underlying data buffer.
 public static native Pointer TF_TensorData(@Const TF_Tensor arg0);
+
+// Returns the number of elements in the tensor.
+public static native @Cast("int64_t") long TF_TensorElementCount(@Const TF_Tensor tensor);
+
+// Copy the internal data representation of `from` to `to`. `new_dims` and
+// `num_new_dims` specify the new shape of the `to` tensor, `type` specifies its
+// data type. On success, *status is set to TF_OK and the two tensors share the
+// same data buffer.
+//
+// This call requires that the `from` tensor and the given type and shape (dims
+// and num_dims) are "compatible" (i.e. they occupy the same number of bytes).
+// Specifically, given from_type_size = TF_DataTypeSize(TF_TensorType(from)):
+//
+// ShapeElementCount(dims, num_dims) * TF_DataTypeSize(type)
+//
+// must equal
+//
+// TF_TensorElementCount(from) * from_type_size
+//
+// where TF_ShapeElementCount would be the number of elements in a tensor with
+// the given shape.
+//
+// In addition, this function requires:
+//   * TF_DataTypeSize(TF_TensorType(from)) != 0
+//   * TF_DataTypeSize(type) != 0
+//
+// If any of the requirements are not met, *status is set to
+// TF_INVALID_ARGUMENT.
+public static native void TF_TensorBitcastFrom(@Const TF_Tensor from,
+                                                @Cast("TF_DataType") int type, TF_Tensor to,
+                                                @Cast("const int64_t*") LongPointer new_dims,
+                                                int num_new_dims,
+                                                TF_Status status);
+public static native void TF_TensorBitcastFrom(@Const TF_Tensor from,
+                                                @Cast("TF_DataType") int type, TF_Tensor to,
+                                                @Cast("const int64_t*") LongBuffer new_dims,
+                                                int num_new_dims,
+                                                TF_Status status);
+public static native void TF_TensorBitcastFrom(@Const TF_Tensor from,
+                                                @Cast("TF_DataType") int type, TF_Tensor to,
+                                                @Cast("const int64_t*") long[] new_dims,
+                                                int num_new_dims,
+                                                TF_Status status);
 
 // --------------------------------------------------------------------------
 // Encode the string `src` (`src_len` bytes long) into `dst` in the format
@@ -10193,6 +11850,13 @@ public static native void TF_SetAttrTypeList(TF_OperationDescription desc,
                                               String attr_name,
                                               @Cast("const TF_DataType*") int[] values,
                                               int num_values);
+public static native void TF_SetAttrPlaceholder(TF_OperationDescription desc,
+                                                 @Cast("const char*") BytePointer attr_name,
+                                                 @Cast("const char*") BytePointer placeholder);
+public static native void TF_SetAttrPlaceholder(TF_OperationDescription desc,
+                                                 String attr_name,
+                                                 String placeholder);
+
 // Set a 'func' attribute to the specified name.
 // `value` must point to a string of length `length` bytes.
 public static native void TF_SetAttrFuncName(TF_OperationDescription desc,
@@ -10414,19 +12078,6 @@ public static native int TF_OperationGetControlOutputs(
 public static native int TF_OperationGetControlOutputs(
     TF_Operation oper, @ByPtrPtr TF_Operation control_outputs,
     int max_control_outputs);
-
-// TF_AttrType describes the type of the value of an attribute on an operation.
-/** enum TF_AttrType */
-public static final int
-  TF_ATTR_STRING = 0,
-  TF_ATTR_INT = 1,
-  TF_ATTR_FLOAT = 2,
-  TF_ATTR_BOOL = 3,
-  TF_ATTR_TYPE = 4,
-  TF_ATTR_SHAPE = 5,
-  TF_ATTR_TENSOR = 6,
-  TF_ATTR_PLACEHOLDER = 7,
-  TF_ATTR_FUNC = 8;
 // Targeting ../TF_AttrMetadata.java
 
 
@@ -11339,6 +12990,76 @@ public static native TF_Function TF_GraphToFunction(
     int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr byte[] output_names,
     @Const TF_FunctionOptions opts, String description, TF_Status status);
 
+// Similar to TF_GraphToFunction but allows specifying control outputs of the
+// function.
+//
+//  The arguments of TF_GraphToFunction have the same meaning, but the new
+//  arguments are as follows:
+//
+//    ncontrol_outputs: Number of control outputs of the function.
+//    control_outputs: vector of TF_Operation objects to be marked as control
+//      outputs of the function. Operations marked as control outputs are
+//      guaranteed to execute.
+//    control_output_names: Optional. If not nullptr, vector of strings, one
+//      per control output, with their names to be added to the function's
+//      OpDef.
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, @Cast("const char*") BytePointer fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Cast("const TF_Operation*const*") PointerPointer opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") PointerPointer output_names,
+    int ncontrol_outputs, @Cast("const TF_Operation*const*") PointerPointer control_outputs,
+    @Cast("const char*const*") PointerPointer control_output_names, @Const TF_FunctionOptions opts,
+    @Cast("const char*") BytePointer description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, @Cast("const char*") BytePointer fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr BytePointer output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr BytePointer control_output_names, @Const TF_FunctionOptions opts,
+    @Cast("const char*") BytePointer description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, String fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr ByteBuffer output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr ByteBuffer control_output_names, @Const TF_FunctionOptions opts,
+    String description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, @Cast("const char*") BytePointer fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr byte[] output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr byte[] control_output_names, @Const TF_FunctionOptions opts,
+    @Cast("const char*") BytePointer description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, String fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr BytePointer output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr BytePointer control_output_names, @Const TF_FunctionOptions opts,
+    String description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, @Cast("const char*") BytePointer fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr ByteBuffer output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr ByteBuffer control_output_names, @Const TF_FunctionOptions opts,
+    @Cast("const char*") BytePointer description, TF_Status status);
+public static native TF_Function TF_GraphToFunctionWithControlOutputs(
+    @Const TF_Graph fn_body, String fn_name,
+    @Cast("unsigned char") byte append_hash_to_fn_name, int num_opers,
+    @Const @ByPtrPtr TF_Operation opers, int ninputs, @Const TF_Output inputs,
+    int noutputs, @Const TF_Output outputs, @Cast("const char*const*") @ByPtrPtr byte[] output_names,
+    int ncontrol_outputs, @Const @ByPtrPtr TF_Operation control_outputs,
+    @Cast("const char*const*") @ByPtrPtr byte[] control_output_names, @Const TF_FunctionOptions opts,
+    String description, TF_Status status);
+
 // Returns the name of the graph function.
 // The return value points to memory that is only usable until the next
 // mutation to *func.
@@ -11920,6 +13641,16 @@ public static native @Cast("const char*") BytePointer TF_ServerTarget(TF_Server 
 // Destroy an in-process TensorFlow server, frees memory. If server is running
 // it will be stopped and joined.
 public static native void TF_DeleteServer(TF_Server server);
+// Targeting ../Listener_BytePointer.java
+
+
+public static native void TF_RegisterLogListener(
+    Listener_BytePointer listener);
+// Targeting ../Listener_String.java
+
+
+public static native void TF_RegisterLogListener(
+    Listener_String listener);
 
 // #ifdef __cplusplus /* end extern "C" */
 // #endif
@@ -11955,10 +13686,14 @@ limitations under the License.
 // #include <unordered_map>
 // #include <vector>
 
-// #ifndef __ANDROID__
-// #include "tensorflow/core/distributed_runtime/server_lib.h"
+// clang-format off
+// Required for IS_MOBILE_PLATFORM
+// #include "tensorflow/core/platform/platform.h"
+// clang-format on
+
+// #if !defined(IS_MOBILE_PLATFORM) && !defined(IS_SLIM_BUILD)
 // #include "tensorflow/core/framework/op_gen_lib.h"
-// #endif
+// #endif  // !defined(IS_MOBILE_PLATFORM) && !defined(IS_SLIM_BUILD)
 // #include "tensorflow/core/common_runtime/shape_refiner.h"
 // #include "tensorflow/core/framework/tensor.h"
 // #include "tensorflow/core/framework/tensor_shape.h"
@@ -12023,7 +13758,8 @@ limitations under the License.
 
 @Namespace("tensorflow") public static native TF_Tensor TF_TensorFromTensor(@Const @ByRef Tensor src, TF_Status status);
 
-@Namespace("tensorflow") public static native @ByVal Status MessageToBuffer(@Cast("const tensorflow::protobuf::Message*") @ByRef MessageLite in, TF_Buffer out);
+@Namespace("tensorflow") public static native @ByVal Status MessageToBuffer(@Cast("const tensorflow::protobuf::MessageLite*") @ByRef MessageLite in,
+                       TF_Buffer out);
 
 // Set the shapes and types of the output's handle.
 //
@@ -12064,6 +13800,8 @@ limitations under the License.
                     String mutation_type);
 
 @Namespace("tensorflow") public static native @Cast("bool") boolean ExtendSessionGraphHelper(TF_Session session, TF_Status status);
+
+
 
   // end namespace tensorflow
 
@@ -12349,11 +14087,11 @@ limitations under the License.
 // #define TENSORFLOW_GRAPH_EDGESET_H_
 
 // #include <stddef.h>
-// #include <set>
+
+// #include "tensorflow/core/lib/gtl/flatset.h"
+// #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"
-
-// #include "tensorflow/core/platform/logging.h"
 // Targeting ../EdgeSet.java
 
 
@@ -12463,20 +14201,27 @@ limitations under the License.
 // #define TENSORFLOW_CORE_FRAMEWORK_FUNCTION_H_
 
 // #include <vector>
+
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // #include "tensorflow/core/framework/attr_value_util.h"
 // #include "tensorflow/core/framework/function.pb.h"
 // #include "tensorflow/core/framework/node_def_util.h"
 // #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/op_kernel.h"
 // #include "tensorflow/core/framework/selective_registration.h"
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/gtl/flatmap.h"
 // #include "tensorflow/core/lib/hash/hash.h"
+// #include "tensorflow/core/lib/random/random.h"
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/protobuf.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
 // Targeting ../CancellationManager.java
+
+
+// Targeting ../DeviceSet.java
 
 
 // Targeting ../Rendezvous.java
@@ -12572,6 +14317,9 @@ limitations under the License.
 
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::FunctionLibraryRuntime::Handle") long kInvalidHandle();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::FunctionLibraryRuntime::LocalHandle") long kInvalidLocalHandle();
+// Targeting ../CustomKernelCreator.java
+
+
 // Targeting ../DistributedFunctionLibraryRuntime.java
 
 
@@ -12707,6 +14455,9 @@ limitations under the License.
 
 
 
+@Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os,
+                         @Const @ByRef DeviceNameUtils.ParsedName x);
+
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CORE_UTIL_DEVICE_NAME_UTILS_H_
@@ -12822,6 +14573,7 @@ limitations under the License.
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/graph/graph.h"
 // #include "tensorflow/core/graph/types.h"
+// #include "tensorflow/core/lib/core/errors.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"
@@ -12898,7 +14650,9 @@ limitations under the License.
 // #include <unordered_map>
 
 // #include "tensorflow/core/common_runtime/device_mgr.h"
+// #include "tensorflow/core/common_runtime/device_set.h"
 // #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/protobuf/config.pb.h"
 // Targeting ../ProcessFunctionLibraryRuntime.java
@@ -12954,7 +14708,9 @@ limitations under the License.
 // #include <functional>
 // #include <string>
 // #include <vector>
+
 // #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/op.h"
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/graph/edgeset.h"
@@ -12970,7 +14726,13 @@ limitations under the License.
 
 // Targeting ../WhileContext.java
 
-    // Declared below
+
+// Targeting ../NeighborIter.java
+
+
+// Targeting ../NodeIter.java
+
+
 // Targeting ../NodeProperties.java
 
 
@@ -13032,12 +14794,13 @@ limitations under the License.
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsScopedAllocator(@Const Node n);
 
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsHostMemoryPreserving(@Const Node node);
-// Targeting ../NodeIter.java
 
+// NOTE: We declare Reference type of NodeIter and NeighborIter as Node* (see
+// https://en.cppreference.com/w/cpp/iterator/iterator).
 
-// Targeting ../NeighborIter.java
+// Iterator for stepping through the nodes of a graph.
 
-
+// Iterator for stepping through the neighbors of a node.
 
 // IMPLEMENTATION DETAILS, PLEASE IGNORE
 
@@ -13099,8 +14862,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_GRAPH_TENSOR_ID_H_
-// #define TENSORFLOW_GRAPH_TENSOR_ID_H_
+// #ifndef TENSORFLOW_CORE_GRAPH_TENSOR_ID_H_
+// #define TENSORFLOW_CORE_GRAPH_TENSOR_ID_H_
 
 // #include <string>
 
@@ -13114,13 +14877,15 @@ limitations under the License.
 
 @Namespace("tensorflow") public static native @ByVal TensorId ParseTensorName(@StdString BytePointer name);
 @Namespace("tensorflow") public static native @ByVal TensorId ParseTensorName(@StdString String name);
+
+@Namespace("tensorflow") public static native @Cast("bool") boolean IsTensorIdControl(@Const @ByRef TensorId tensor_id);
 // Targeting ../SafeTensorId.java
 
 
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_GRAPH_TENSOR_ID_H_
+// #endif  // TENSORFLOW_CORE_GRAPH_TENSOR_ID_H_
 
 
 // Parsed from tensorflow/core/common_runtime/graph_runner.h
@@ -13268,6 +15033,7 @@ limitations under the License.
 // #include <vector>
 
 // #include "tensorflow/core/framework/attr_value_util.h"
+// #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/gtl/flatmap.h"
@@ -13291,12 +15057,20 @@ limitations under the License.
 @Namespace("tensorflow") public static native @StdString BytePointer SummarizeNode(@Const @ByRef Node node);
 @Namespace("tensorflow") public static native @StdString BytePointer SummarizeNodeDef(@Const @ByRef NodeDef node_def);
 @Namespace("tensorflow") public static native @StdString BytePointer SummarizeAttrs(@Const @ByRef NodeDef node_def);
+@Namespace("tensorflow") public static native @StdString BytePointer SummarizeAttrsHelper(@ByVal AttrSlice attrs, @StringPiece BytePointer device);
+@Namespace("tensorflow") public static native @StdString String SummarizeAttrsHelper(@ByVal AttrSlice attrs, @StringPiece String device);
 
 // Produces a formatted string pattern from the node which can uniquely identify
 // this node upstream to produce an informative error message. The pattern
 // followed is: {{node <node_name>}}
 @Namespace("tensorflow") public static native @StdString BytePointer FormatNodeForError(@Const @ByRef Node node);
 @Namespace("tensorflow") public static native @StdString BytePointer FormatNodeDefForError(@Const @ByRef NodeDef node_def);
+@Namespace("tensorflow") public static native @StdString BytePointer FormatNodeDefForError(
+    @StringPiece BytePointer node_name, @Cast("bool") boolean has_experimental_debug_info,
+    @Const @ByRef NodeDef_ExperimentalDebugInfo experimental_debug_info);
+@Namespace("tensorflow") public static native @StdString String FormatNodeDefForError(
+    @StringPiece String node_name, @Cast("bool") boolean has_experimental_debug_info,
+    @Const @ByRef NodeDef_ExperimentalDebugInfo experimental_debug_info);
 
 // Merges the original node names from the debug information of 'from' to the
 // debug information of 'to'.
@@ -13554,6 +15328,9 @@ limitations under the License.
 // REQUIRES: ValidateOpDef(op_def).ok()
 @Namespace("tensorflow") public static native @ByVal Status OutputTypesForNode(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def,
                           DataTypeVector outputs);
+@Namespace("tensorflow") public static native @ByVal Status OutputTypesForNode(@Const @ByRef AttrSlice attrs, @Const @ByRef OpDef op_def,
+                          DataTypeVector outputs);
+
 // Computes the input and output types for a specific node.
 // REQUIRES: ValidateOpDef(op_def).ok()
 @Namespace("tensorflow") public static native @ByVal Status InOutTypesForNode(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def,
@@ -13582,7 +15359,7 @@ limitations under the License.
 // space, the returned `NameRangeMap` objects borrow the input/output
 // argument names from `op_def`. The `op_def` must outlive the
 // returned `NameRangeMap` objects.
-@Namespace("tensorflow") public static native @ByVal Status NameRangesForNode(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def,
+@Namespace("tensorflow") public static native @ByVal Status NameRangesForNode(@Const @ByRef AttrSlice attrs, @Const @ByRef OpDef op_def,
                          NameRangeMap inputs, NameRangeMap outputs);
 @Namespace("tensorflow") public static native @ByVal Status NameRangesForNode(@Const @ByRef Node node, @Const @ByRef OpDef op_def,
                          NameRangeMap inputs, NameRangeMap outputs);
@@ -13603,9 +15380,15 @@ limitations under the License.
 // NodeName     = [A-Za-z0-9.], [A-Za-z0-9_./] *
 @Namespace("tensorflow") public static native @ByVal Status ValidateExternalNodeDefSyntax(@Const @ByRef NodeDef node_def);
 
-// Returns "status" with kernel's NodeDef attached as additional text
-// in the error message.
+// Returns "status" with formatted NodeDef attached as additional text
+// in the error message. If 'allow_multiple_formatted_node' is false and there
+// is already a formatted NodeDef present in 'status', we simply attach the name
+// of the NodeDef instead of the formatted string.
+@Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef NodeDef node_def,
+                 @Cast("bool") boolean allow_multiple_formatted_node/*=false*/);
 @Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef NodeDef node_def);
+@Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef Node node,
+                 @Cast("bool") boolean allow_multiple_formatted_node/*=false*/);
 @Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef Node node);
 
 // Appends the given prefix and suffix to the original node name in order to
@@ -13947,29 +15730,30 @@ limitations under the License.
 // #endif  // TENSORFLOW_CORE_GRAPH_GRADIENTS_H_
 
 
-// Parsed from tensorflow/core/protobuf/saver.pb.h
+// Parsed from tensorflow/core/framework/variable.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
-// source: tensorflow/core/protobuf/saver.proto
+// source: tensorflow/core/framework/variable.proto
 
-// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
-// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fvariable_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fvariable_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -13983,9 +15767,1396 @@ limitations under the License.
 // #include <google/protobuf/generated_enum_reflection.h>
 // #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fframework_2fvariable_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fframework_2fvariable_2eproto();
+  // namespace tensorflow
+
+
+  // namespace protobuf
+  // namespace google
+
+/** enum tensorflow::VariableSynchronization */
+public static final int
+  VARIABLE_SYNCHRONIZATION_AUTO = 0,
+  VARIABLE_SYNCHRONIZATION_NONE = 1,
+  VARIABLE_SYNCHRONIZATION_ON_WRITE = 2,
+  VARIABLE_SYNCHRONIZATION_ON_READ = 3;
+@Name("tensorflow::VariableSynchronization_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VariableSynchronization_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  VariableSynchronization_INT_MIN_SENTINEL_DO_NOT_USE_ = VariableSynchronization_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::VariableSynchronization_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VariableSynchronization_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  VariableSynchronization_INT_MAX_SENTINEL_DO_NOT_USE_ = VariableSynchronization_INT_MAX_SENTINEL_DO_NOT_USE_();
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_IsValid(int value);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VariableSynchronization") int VariableSynchronization_MIN();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VariableSynchronization") int VariableSynchronization_MAX();
+@Namespace("tensorflow") @MemberGetter public static native int VariableSynchronization_ARRAYSIZE();
+
+@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer VariableSynchronization_descriptor();
+@Namespace("tensorflow") public static native @StdString BytePointer VariableSynchronization_Name(@Cast("tensorflow::VariableSynchronization") int value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableSynchronization*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString String name, @Cast("tensorflow::VariableSynchronization*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableSynchronization*") int... value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString String name, @Cast("tensorflow::VariableSynchronization*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableSynchronization*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableSynchronization_Parse(
+    @StdString String name, @Cast("tensorflow::VariableSynchronization*") int... value);
+/** enum tensorflow::VariableAggregation */
+public static final int
+  VARIABLE_AGGREGATION_NONE = 0,
+  VARIABLE_AGGREGATION_SUM = 1,
+  VARIABLE_AGGREGATION_MEAN = 2,
+  VARIABLE_AGGREGATION_ONLY_FIRST_REPLICA = 3;
+@Name("tensorflow::VariableAggregation_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VariableAggregation_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  VariableAggregation_INT_MIN_SENTINEL_DO_NOT_USE_ = VariableAggregation_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::VariableAggregation_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int VariableAggregation_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  VariableAggregation_INT_MAX_SENTINEL_DO_NOT_USE_ = VariableAggregation_INT_MAX_SENTINEL_DO_NOT_USE_();
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_IsValid(int value);
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VariableAggregation") int VariableAggregation_MIN();
+@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::VariableAggregation") int VariableAggregation_MAX();
+@Namespace("tensorflow") @MemberGetter public static native int VariableAggregation_ARRAYSIZE();
+
+@Namespace("tensorflow") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer VariableAggregation_descriptor();
+@Namespace("tensorflow") public static native @StdString BytePointer VariableAggregation_Name(@Cast("tensorflow::VariableAggregation") int value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableAggregation*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString String name, @Cast("tensorflow::VariableAggregation*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableAggregation*") int... value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString String name, @Cast("tensorflow::VariableAggregation*") IntPointer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString BytePointer name, @Cast("tensorflow::VariableAggregation*") IntBuffer value);
+@Namespace("tensorflow") public static native @Cast("bool") boolean VariableAggregation_Parse(
+    @StdString String name, @Cast("tensorflow::VariableAggregation*") int... value);
+// Targeting ../VariableDef.java
+
+
+// Targeting ../SaveSliceInfoDef.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// VariableDef
+
+// string variable_name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string initial_value_name = 6;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string initializer_name = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string snapshot_name = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.SaveSliceInfoDef save_slice_info_def = 4;
+
+
+
+
+
+
+
+
+// bool is_resource = 5;
+
+
+
+
+// bool trainable = 7;
+
+
+
+
+// .tensorflow.VariableSynchronization synchronization = 8;
+
+
+
+
+// .tensorflow.VariableAggregation aggregation = 9;
+
+
+
+
+// -------------------------------------------------------------------
+
+// SaveSliceInfoDef
+
+// string full_name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated int64 full_shape = 2;
+
+
+
+
+
+
+
+
+// repeated int64 var_offset = 3;
+
+
+
+
+
+
+
+
+// repeated int64 var_shape = 4;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+
+
+  // namespace protobuf
+  // namespace google
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fframework_2fvariable_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/trackable_object_graph.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/trackable_object_graph.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftrackable_5fobject_5fgraph_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftrackable_5fobject_5fgraph_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2ftrackable_5fobject_5fgraph_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2ftrackable_5fobject_5fgraph_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../TrackableObjectGraph_TrackableObject_ObjectReference.java
+
+
+// Targeting ../TrackableObjectGraph_TrackableObject_SerializedTensor.java
+
+
+// Targeting ../TrackableObjectGraph_TrackableObject_SlotVariableReference.java
+
+
+// Targeting ../TrackableObjectGraph_TrackableObject.java
+
+
+// Targeting ../TrackableObjectGraph.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// TrackableObjectGraph_TrackableObject_ObjectReference
+
+// int32 node_id = 1;
+
+
+
+
+// string local_name = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TrackableObjectGraph_TrackableObject_SerializedTensor
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string full_name = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string checkpoint_key = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool optional_restore = 4;
+
+
+
+
+// -------------------------------------------------------------------
+
+// TrackableObjectGraph_TrackableObject_SlotVariableReference
+
+// int32 original_variable_node_id = 1;
+
+
+
+
+// string slot_name = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int32 slot_variable_node_id = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// TrackableObjectGraph_TrackableObject
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject.ObjectReference children = 1;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject.SerializedTensor attributes = 2;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject.SlotVariableReference slot_variables = 3;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TrackableObjectGraph
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject nodes = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftrackable_5fobject_5fgraph_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/struct.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/struct.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fstruct_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fstruct_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/map.h>  // IWYU pragma: export
+// #include <google/protobuf/map_entry.h>
+// #include <google/protobuf/map_field_inl.h>
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fstruct_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fstruct_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../StructuredValue.java
+
+
+// Targeting ../NoneValue.java
+
+
+// Targeting ../ListValue.java
+
+
+// Targeting ../TupleValue.java
+
+
+// -------------------------------------------------------------------
+// Targeting ../DictValue.java
+
+
+// Targeting ../PairValue.java
+
+
+// Targeting ../NamedTupleValue.java
+
+
+// Targeting ../TensorSpecProto.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// StructuredValue
+
+// .tensorflow.NoneValue none_value = 1;
+
+
+
+
+
+
+
+// double float64_value = 11;
+
+
+
+
+
+
+// sint64 int64_value = 12;
+
+
+
+
+
+
+// string string_value = 13;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// bool bool_value = 14;
+
+
+
+
+
+
+// .tensorflow.TensorShapeProto tensor_shape_value = 31;
+
+
+
+
+
+
+// .tensorflow.DataType tensor_dtype_value = 32;
+
+
+
+
+
+
+// .tensorflow.TensorSpecProto tensor_spec_value = 33;
+
+
+
+
+
+
+
+// .tensorflow.ListValue list_value = 51;
+
+
+
+
+
+
+
+// .tensorflow.TupleValue tuple_value = 52;
+
+
+
+
+
+
+
+// .tensorflow.DictValue dict_value = 53;
+
+
+
+
+
+
+
+// .tensorflow.NamedTupleValue named_tuple_value = 54;
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// NoneValue
+
+// -------------------------------------------------------------------
+
+// ListValue
+
+// repeated .tensorflow.StructuredValue values = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TupleValue
+
+// repeated .tensorflow.StructuredValue values = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// DictValue
+
+// map<string, .tensorflow.StructuredValue> fields = 1;
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// PairValue
+
+// string key = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// .tensorflow.StructuredValue value = 2;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// NamedTupleValue
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// repeated .tensorflow.PairValue values = 2;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TensorSpecProto
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+// .tensorflow.TensorShapeProto shape = 2;
+
+
+
+
+
+
+// .tensorflow.DataType dtype = 3;
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fstruct_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/saved_object_graph.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/saved_object_graph.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaved_5fobject_5fgraph_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaved_5fobject_5fgraph_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/map.h>  // IWYU pragma: export
+// #include <google/protobuf/map_entry.h>
+// #include <google/protobuf/map_field_inl.h>
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/protobuf/trackable_object_graph.pb.h"
+// #include "tensorflow/core/protobuf/struct.pb.h"
+// #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/framework/versions.pb.h"
+// #include "tensorflow/core/framework/variable.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fsaved_5fobject_5fgraph_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fsaved_5fobject_5fgraph_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+
+// ===================================================================
+// Targeting ../SavedObjectGraph.java
+
+
+// Targeting ../SavedObject.java
+
+
+// Targeting ../SavedUserObject.java
+
+
+// Targeting ../SavedAsset.java
+
+
+// Targeting ../SavedFunction.java
+
+
+// Targeting ../SavedConcreteFunction.java
+
+
+// Targeting ../SavedBareConcreteFunction.java
+
+
+// Targeting ../SavedConstant.java
+
+
+// Targeting ../SavedVariable.java
+
+
+// Targeting ../FunctionSpec.java
+
+
+// Targeting ../SavedResource.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// SavedObjectGraph
+
+// repeated .tensorflow.SavedObject nodes = 1;
+
+
+
+
+
+
+
+
+// map<string, .tensorflow.SavedConcreteFunction> concrete_functions = 2;
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedObject
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject.ObjectReference children = 1;
+
+
+
+
+
+
+
+// repeated .tensorflow.TrackableObjectGraph.TrackableObject.SlotVariableReference slot_variables = 3;
+
+
+
+
+
+
+
+// .tensorflow.SavedUserObject user_object = 4;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedAsset asset = 5;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedFunction function = 6;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedVariable variable = 7;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedBareConcreteFunction bare_concrete_function = 8;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedConstant constant = 9;
+
+
+
+
+
+
+
+
+
+// .tensorflow.SavedResource resource = 10;
+
+
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedUserObject
+
+// string identifier = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.VersionDef version = 2;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedAsset
+
+// int32 asset_file_def_index = 1;
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedFunction
+
+// repeated string concrete_functions = 1;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// .tensorflow.FunctionSpec function_spec = 2;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedConcreteFunction
+
+// repeated int32 bound_inputs = 2;
+
+
+
+
+
+
+
+
+// .tensorflow.StructuredValue canonicalized_input_signature = 3;
+
+
+
+
+
+
+
+// .tensorflow.StructuredValue output_signature = 4;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedBareConcreteFunction
+
+// string concrete_function_name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated string argument_keywords = 2;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// int64 allowed_positional_arguments = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedConstant
+
+// string operation = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedVariable
+
+// .tensorflow.DataType dtype = 1;
+
+
+
+
+// .tensorflow.TensorShapeProto shape = 2;
+
+
+
+
+
+
+
+// bool trainable = 3;
+
+
+
+
+// .tensorflow.VariableSynchronization synchronization = 4;
+
+
+
+
+// .tensorflow.VariableAggregation aggregation = 5;
+
+
+
+
+// string name = 6;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// FunctionSpec
+
+// .tensorflow.StructuredValue fullargspec = 1;
+
+
+
+
+
+
+
+// bool is_method = 2;
+
+
+
+
+// .tensorflow.StructuredValue input_signature = 5;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SavedResource
+
+// string device = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaved_5fobject_5fgraph_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/saver.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/saver.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/generated_enum_reflection.h>
+// #include <google/protobuf/unknown_field_set.h>
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -13995,9 +17166,13 @@ limitations under the License.
 public static final int
   SaverDef_CheckpointFormatVersion_LEGACY = 0,
   SaverDef_CheckpointFormatVersion_V1 = 1,
-  SaverDef_CheckpointFormatVersion_V2 = 2,
-  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_ = kint32min,
-  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_ = kint32max;
+  SaverDef_CheckpointFormatVersion_V2 = 2;
+@Name("tensorflow::SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_();
+public static final int
+  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_ = SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MIN_SENTINEL_DO_NOT_USE_();
+@Name("tensorflow::SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_") public static native @MemberGetter int SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_();
+public static final int
+  SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_ = SaverDef_CheckpointFormatVersion_SaverDef_CheckpointFormatVersion_INT_MAX_SENTINEL_DO_NOT_USE_();
 @Namespace("tensorflow") public static native @Cast("bool") boolean SaverDef_CheckpointFormatVersion_IsValid(int value);
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::SaverDef_CheckpointFormatVersion") int SaverDef_CheckpointFormatVersion_CheckpointFormatVersion_MIN();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::SaverDef_CheckpointFormatVersion") int SaverDef_CheckpointFormatVersion_CheckpointFormatVersion_MAX();
@@ -14110,6 +17285,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fsaver_2eproto
 
 
@@ -14121,21 +17297,22 @@ public static final int
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -14155,23 +17332,14 @@ public static final int
 // #include "tensorflow/core/framework/op_def.pb.h"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/protobuf/saved_object_graph.pb.h"
 // #include "tensorflow/core/protobuf/saver.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
-// Targeting ../MetaGraphDef_CollectionDefEntry_DoNotUse.java
-
-
-// Targeting ../MetaGraphDef_SignatureDefEntry_DoNotUse.java
-
-
-// Targeting ../SignatureDef_InputsEntry_DoNotUse.java
-
-
-// Targeting ../SignatureDef_OutputsEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto();
   // namespace tensorflow
 
 
@@ -14267,9 +17435,7 @@ public static final int
 
 
 
-
 // .google.protobuf.Any any_info = 3;
-
 
 
 
@@ -14350,7 +17516,6 @@ public static final int
 
 
 
-
 // .tensorflow.GraphDef graph_def = 2;
 
 
@@ -14359,9 +17524,7 @@ public static final int
 
 
 
-
 // .tensorflow.SaverDef saver_def = 3;
-
 
 
 
@@ -14383,6 +17546,14 @@ public static final int
 
 // repeated .tensorflow.AssetFileDef asset_file_def = 6;
 
+
+
+
+
+
+
+
+// .tensorflow.SavedObjectGraph object_graph_def = 7;
 
 
 
@@ -14492,9 +17663,7 @@ public static final int
 
 
 
-
 // .tensorflow.CollectionDef.BytesList bytes_list = 2;
-
 
 
 
@@ -14514,7 +17683,6 @@ public static final int
 
 
 
-
 // .tensorflow.CollectionDef.FloatList float_list = 4;
 
 
@@ -14525,9 +17693,7 @@ public static final int
 
 
 
-
 // .tensorflow.CollectionDef.AnyList any_list = 5;
-
 
 
 
@@ -14620,14 +17786,12 @@ public static final int
 
 
 
-
 // .tensorflow.DataType dtype = 2;
 
 
 
 
 // .tensorflow.TensorShapeProto tensor_shape = 3;
-
 
 
 
@@ -14678,7 +17842,6 @@ public static final int
 // AssetFileDef
 
 // .tensorflow.TensorInfo tensor_info = 1;
-
 
 
 
@@ -14742,6 +17905,7 @@ public static final int
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmeta_5fgraph_2eproto
 
 
@@ -14773,6 +17937,7 @@ limitations under the License.
 
 // #include "absl/strings/str_cat.h"
 // #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/core/graph/graph_constructor.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 // Targeting ../Scope.java
@@ -14782,6 +17947,9 @@ limitations under the License.
 /** A helper struct to hold the scopes that would be used by a function
  *  constructing a composite op. */
 
+// Creates a node of the given operation, with the given inputs, and assigns the
+// result to output. This does not support the ability to add additional
+// attributes.
 /** \} */
 
   // namespace tensorflow
@@ -15169,34 +18337,17 @@ limitations under the License.
 // Targeting ../BufRendezvous.java
 
 
-// Targeting ../CompleteGroupRequest.java
-
-
-// Targeting ../CompleteGroupResponse.java
-
-
-// Targeting ../CompleteInstanceRequest.java
-
-
-// Targeting ../CompleteInstanceResponse.java
-
-
-// Targeting ../GetStepSequenceRequest.java
-
-
-// Targeting ../GetStepSequenceResponse.java
-
-
-// Targeting ../Op.java
-
-
 
 // Types of supported collective operations.
 /** enum tensorflow::CollectiveType */
 public static final int
   REDUCTION_COLLECTIVE = 0,
   BROADCAST_COLLECTIVE = 1,
-  UNDEFINED_COLLECTIVE = 2;
+  GATHER_COLLECTIVE = 2,
+  UNDEFINED_COLLECTIVE = 3;
+// Targeting ../CollGroupRuntimeDetails.java
+
+
 // Targeting ../CollGroupParams.java
 
 
@@ -15280,6 +18431,14 @@ limitations under the License.
 
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/types.h"
+
+// The following line is used by copybara to set or unset the USE_OSS_FARMHASH
+// preprocessor symbol as needed. Please do not remove.
+// #define USE_OSS_FARMHASH
+
+// #ifdef USE_OSS_FARMHASH
+// #else
+// #include "util/hash/farmhash_fingerprint.h"
 // Targeting ../Fprint128.java
 
 
@@ -15288,15 +18447,6 @@ limitations under the License.
 // Targeting ../Fprint128Hasher.java
 
 
-
-// This is a portable fingerprint interface for strings that will never change.
-// However, it is not suitable for cryptography.
-@Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long Fingerprint64(@StringPiece BytePointer s);
-@Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long Fingerprint64(@StringPiece String s);
-
-// 128-bit variant of Fingerprint64 above (same properties and caveats apply).
-@Namespace("tensorflow") public static native @ByVal Fprint128 Fingerprint128(@StringPiece BytePointer s);
-@Namespace("tensorflow") public static native @ByVal Fprint128 Fingerprint128(@StringPiece String s);
 // Mixes some of the bits that got propagated to the high bits back into the
 // low bits.
 @Namespace("tensorflow::internal") public static native @Cast("tensorflow::uint64") long ShiftMix(@Cast("const tensorflow::uint64") long val);
@@ -15316,13 +18466,16 @@ limitations under the License.
 // is easier to compute multicollisions.
 @Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long FingerprintCat64(@Cast("const tensorflow::uint64") long fp1, @Cast("const tensorflow::uint64") long fp2);
 
-  // namespace tensorflow
+// This is a portable fingerprint interface for strings that will never change.
+// However, it is not suitable for cryptography.
+@Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long Fingerprint64(@StringPiece BytePointer s);
+@Namespace("tensorflow") public static native @Cast("tensorflow::uint64") long Fingerprint64(@StringPiece String s);
 
-// #if defined(PLATFORM_GOOGLE) || defined(PLATFORM_GOOGLE_ANDROID)
-// #include "tensorflow/core/platform/google/fingerprint.h"
-// #else
-// #include "tensorflow/core/platform/default/fingerprint.h"
-// #endif
+// 128-bit variant of Fingerprint64 above (same properties and caveats apply).
+@Namespace("tensorflow") public static native @ByVal Fprint128 Fingerprint128(@StringPiece BytePointer s);
+@Namespace("tensorflow") public static native @ByVal Fprint128 Fingerprint128(@StringPiece String s);
+
+  // namespace tensorflow
 
 // #endif  // TENSORFLOW_CORE_PLATFORM_FINGERPRINT_H_
 
@@ -15413,21 +18566,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -15445,17 +18599,16 @@ limitations under the License.
 // #include "tensorflow/core/framework/attr_value.pb.h"
 // #include "tensorflow/core/framework/device_attributes.pb.h"
 // #include "tensorflow/core/framework/function.pb.h"
+// #include "tensorflow/core/framework/tensor.pb.h"
+// #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/framework/versions.pb.h"
 // #include "tensorflow/core/protobuf/tensorflow_server.pb.h"
-// #include "tensorflow/core/framework/tensor_shape.pb.h"
-// #include "tensorflow/core/framework/tensor.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
-// Targeting ../Operation_AttrsEntry_DoNotUse.java
-
-
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto();
   // namespace eager
   // namespace tensorflow
 
@@ -15627,9 +18780,7 @@ limitations under the License.
 
 
 
-
 // .tensorflow.eager.Operation operation = 2;
-
 
 
 
@@ -15663,7 +18814,6 @@ limitations under the License.
 
 
 
-
 // bool async = 2;
 
 
@@ -15681,8 +18831,15 @@ limitations under the License.
 
 
 
-
 // int64 rendezvous_id = 5;
+
+
+
+
+// repeated .tensorflow.DeviceAttributes cluster_device_attributes = 6;
+
+
+
 
 
 
@@ -15799,7 +18956,6 @@ limitations under the License.
 
 
 
-
 // -------------------------------------------------------------------
 
 // RegisterFunctionResponse
@@ -15890,6 +19046,7 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2feager_5fservice_2eproto
 
 
@@ -15901,21 +19058,22 @@ limitations under the License.
 // #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
 // #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
 
+// #include <limits>
 // #include <string>
 
-// #include <google/protobuf/stubs/common.h>
-
-// #if GOOGLE_PROTOBUF_VERSION < 3006001
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
 // #error This file was generated by a newer version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please update
+// #error incompatible with your Protocol Buffer headers. Please update
 // #error your headers.
 // #endif
-// #if 3006001 < GOOGLE_PROTOBUF_MIN_PROTOC_VERSION
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
 // #error This file was generated by an older version of protoc which is
-// #error incompatible with your Protocol Buffer headers.  Please
+// #error incompatible with your Protocol Buffer headers. Please
 // #error regenerate this file with a newer version of protoc.
 // #endif
 
+// #include <google/protobuf/port_undef.inc>
 // #include <google/protobuf/io/coded_stream.h>
 // #include <google/protobuf/arena.h>
 // #include <google/protobuf/arenastring.h>
@@ -15930,9 +19088,11 @@ limitations under the License.
 // #include "tensorflow/core/protobuf/config.pb.h"
 // #include "tensorflow/core/protobuf/cluster.pb.h"
 // @@protoc_insertion_point(includes)
-// #define PROTOBUF_INTERNAL_EXPORT_protobuf_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
+
 // Internal implementation detail -- do not use these members.
-  // namespace protobuf_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto();
   // namespace tensorflow
 
   // namespace protobuf
@@ -15952,7 +19112,6 @@ limitations under the License.
 // ServerDef
 
 // .tensorflow.ClusterDef cluster = 1;
-
 
 
 
@@ -15988,7 +19147,6 @@ limitations under the License.
 
 
 
-
 // string protocol = 5;
 
 
@@ -16014,7 +19172,2522 @@ limitations under the License.
 
 // @@protoc_insertion_point(global_scope)
 
+// #include <google/protobuf/port_undef.inc>
 // #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2ftensorflow_5fserver_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/named_tensor.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/named_tensor.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fnamed_5ftensor_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fnamed_5ftensor_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/tensor.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fnamed_5ftensor_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fnamed_5ftensor_2eproto();
+  // namespace tensorflow
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../NamedTensorProto.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// NamedTensorProto
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.TensorProto tensor = 2;
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fnamed_5ftensor_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/master.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/master.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmaster_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmaster_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include "tensorflow/core/framework/device_attributes.pb.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/tensor.pb.h"
+// #include "tensorflow/core/lib/core/error_codes.pb.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
+// #include "tensorflow/core/protobuf/named_tensor.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fmaster_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fmaster_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../CreateSessionRequest.java
+
+
+// Targeting ../CreateSessionResponse.java
+
+
+// Targeting ../ExtendSessionRequest.java
+
+
+// Targeting ../ExtendSessionResponse.java
+
+
+// Targeting ../RunStepRequest.java
+
+
+// Targeting ../RunStepResponse.java
+
+
+// Targeting ../PartialRunSetupRequest.java
+
+
+// Targeting ../PartialRunSetupResponse.java
+
+
+// Targeting ../CloseSessionRequest.java
+
+
+// Targeting ../CloseSessionResponse.java
+
+
+// Targeting ../ResetRequest.java
+
+
+// Targeting ../ResetResponse.java
+
+
+// Targeting ../ListDevicesRequest.java
+
+
+// Targeting ../ListDevicesResponse.java
+
+
+// Targeting ../MakeCallableRequest.java
+
+
+// Targeting ../MakeCallableResponse.java
+
+
+// Targeting ../RunCallableRequest.java
+
+
+// Targeting ../RunCallableResponse.java
+
+
+// Targeting ../ReleaseCallableRequest.java
+
+
+// Targeting ../ReleaseCallableResponse.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// CreateSessionRequest
+
+// .tensorflow.GraphDef graph_def = 1;
+
+
+
+
+
+
+
+// .tensorflow.ConfigProto config = 2;
+
+
+
+
+
+
+
+// string target = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CreateSessionResponse
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 graph_version = 2;
+
+
+
+
+// -------------------------------------------------------------------
+
+// ExtendSessionRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.GraphDef graph_def = 2;
+
+
+
+
+
+
+
+// int64 current_graph_version = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// ExtendSessionResponse
+
+// int64 new_graph_version = 4;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunStepRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated .tensorflow.NamedTensorProto feed = 2;
+
+
+
+
+
+
+
+// repeated string fetch = 3;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string target = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// .tensorflow.RunOptions options = 5;
+
+
+
+
+
+
+
+// string partial_run_handle = 6;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool store_errors_in_response_body = 7;
+
+
+
+
+// int64 request_id = 8;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunStepResponse
+
+// repeated .tensorflow.NamedTensorProto tensor = 1;
+
+
+
+
+
+
+
+// .tensorflow.RunMetadata metadata = 2;
+
+
+
+
+
+
+
+// .tensorflow.error.Code status_code = 3;
+
+
+
+
+// string status_error_message = 4;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// PartialRunSetupRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated string feed = 2;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string fetch = 3;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string target = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// int64 request_id = 5;
+
+
+
+
+// -------------------------------------------------------------------
+
+// PartialRunSetupResponse
+
+// string partial_run_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CloseSessionRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CloseSessionResponse
+
+// -------------------------------------------------------------------
+
+// ResetRequest
+
+// repeated string container = 1;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string device_filters = 2;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ResetResponse
+
+// -------------------------------------------------------------------
+
+// ListDevicesRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ListDevicesResponse
+
+// repeated .tensorflow.DeviceAttributes local_device = 1;
+
+
+
+
+
+
+
+// repeated .tensorflow.DeviceAttributes remote_device = 2;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// MakeCallableRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.CallableOptions options = 2;
+
+
+
+
+
+
+
+// int64 request_id = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// MakeCallableResponse
+
+// int64 handle = 1;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunCallableRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 handle = 2;
+
+
+
+
+// repeated .tensorflow.TensorProto feed = 3;
+
+
+
+
+
+
+
+// int64 request_id = 4;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunCallableResponse
+
+// repeated .tensorflow.TensorProto fetch = 1;
+
+
+
+
+
+
+
+// .tensorflow.RunMetadata metadata = 2;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ReleaseCallableRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 handle = 2;
+
+
+
+
+// -------------------------------------------------------------------
+
+// ReleaseCallableResponse
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fmaster_2eproto
+
+
+// Parsed from tensorflow/core/protobuf/worker.pb.h
+
+// Generated by the protocol buffer compiler.  DO NOT EDIT!
+// source: tensorflow/core/protobuf/worker.proto
+
+// #ifndef PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fworker_2eproto
+// #define PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fworker_2eproto
+
+// #include <limits>
+// #include <string>
+
+// #include <google/protobuf/port_def.inc>
+// #if PROTOBUF_VERSION < 3007000
+// #error This file was generated by a newer version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please update
+// #error your headers.
+// #endif
+// #if 3007001 < PROTOBUF_MIN_PROTOC_VERSION
+// #error This file was generated by an older version of protoc which is
+// #error incompatible with your Protocol Buffer headers. Please
+// #error regenerate this file with a newer version of protoc.
+// #endif
+
+// #include <google/protobuf/port_undef.inc>
+// #include <google/protobuf/io/coded_stream.h>
+// #include <google/protobuf/arena.h>
+// #include <google/protobuf/arenastring.h>
+// #include <google/protobuf/generated_message_table_driven.h>
+// #include <google/protobuf/generated_message_util.h>
+// #include <google/protobuf/inlined_string_field.h>
+// #include <google/protobuf/metadata.h>
+// #include <google/protobuf/message.h>
+// #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
+// #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+// #include <google/protobuf/unknown_field_set.h>
+// #include <google/protobuf/any.pb.h>
+// #include "tensorflow/core/framework/cost_graph.pb.h"
+// #include "tensorflow/core/framework/device_attributes.pb.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/step_stats.pb.h"
+// #include "tensorflow/core/framework/tensor.pb.h"
+// #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/framework/types.pb.h"
+// #include "tensorflow/core/lib/core/error_codes.pb.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
+// #include "tensorflow/core/protobuf/debug.pb.h"
+// #include "tensorflow/core/protobuf/named_tensor.pb.h"
+// #include "tensorflow/core/protobuf/tensorflow_server.pb.h"
+// @@protoc_insertion_point(includes)
+// #include <google/protobuf/port_def.inc>
+// #define PROTOBUF_INTERNAL_EXPORT_tensorflow_2fcore_2fprotobuf_2fworker_2eproto
+
+// Internal implementation detail -- do not use these members.
+public static native void AddDescriptors_tensorflow_2fcore_2fprotobuf_2fworker_2eproto();
+  // namespace tensorflow
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+  // namespace google
+// Targeting ../GetStatusRequest.java
+
+
+// Targeting ../GetStatusResponse.java
+
+
+// Targeting ../CreateWorkerSessionRequest.java
+
+
+// Targeting ../CreateWorkerSessionResponse.java
+
+
+// Targeting ../DeleteWorkerSessionRequest.java
+
+
+// Targeting ../DeleteWorkerSessionResponse.java
+
+
+// Targeting ../RegisterGraphRequest.java
+
+
+// Targeting ../RegisterGraphResponse.java
+
+
+// Targeting ../DeregisterGraphRequest.java
+
+
+// Targeting ../DeregisterGraphResponse.java
+
+
+// Targeting ../CleanupAllRequest.java
+
+
+// Targeting ../CleanupAllResponse.java
+
+
+// Targeting ../ExecutorOpts.java
+
+
+// Targeting ../RunGraphRequest.java
+
+
+// Targeting ../RunGraphResponse.java
+
+
+// Targeting ../CleanupGraphRequest.java
+
+
+// Targeting ../CleanupGraphResponse.java
+
+
+// Targeting ../RecvTensorRequest.java
+
+
+// Targeting ../RecvTensorResponse.java
+
+
+// Targeting ../MarkRecvFinishedRequest.java
+
+
+// Targeting ../MarkRecvFinishedResponse.java
+
+
+// Targeting ../LoggingRequest.java
+
+
+// Targeting ../LabeledStepStats.java
+
+
+// Targeting ../LoggingResponse.java
+
+
+// Targeting ../TraceOpts.java
+
+
+// Targeting ../TracingRequest.java
+
+
+// Targeting ../TracingResponse.java
+
+
+// Targeting ../RecvBufRequest.java
+
+
+// Targeting ../RecvBufResponse.java
+
+
+// Targeting ../CompleteGroupRequest.java
+
+
+// Targeting ../CompleteGroupResponse.java
+
+
+// Targeting ../CompleteInstanceRequest.java
+
+
+// Targeting ../CompleteInstanceResponse.java
+
+
+// Targeting ../GetStepSequenceRequest.java
+
+
+// Targeting ../StepSequence.java
+
+
+// Targeting ../GetStepSequenceResponse.java
+
+
+// ===================================================================
+
+
+// ===================================================================
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic push
+//   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
+// #endif  // __GNUC__
+// GetStatusRequest
+
+// -------------------------------------------------------------------
+
+// GetStatusResponse
+
+// repeated .tensorflow.DeviceAttributes device_attributes = 1;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CreateWorkerSessionRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// .tensorflow.ServerDef server_def = 2;
+
+
+
+
+
+
+
+// bool isolate_session_state = 3;
+
+
+
+
+// repeated .tensorflow.DeviceAttributes cluster_device_attributes = 4;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CreateWorkerSessionResponse
+
+// -------------------------------------------------------------------
+
+// DeleteWorkerSessionRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// DeleteWorkerSessionResponse
+
+// -------------------------------------------------------------------
+
+// RegisterGraphRequest
+
+// string session_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool create_worker_session_called = 6;
+
+
+
+
+// .tensorflow.GraphDef graph_def = 2;
+
+
+
+
+
+
+
+// bool has_control_flow = 3 [deprecated = true];
+
+
+
+
+// .tensorflow.GraphOptions graph_options = 4;
+
+
+
+
+
+
+
+// .tensorflow.DebugOptions debug_options = 5;
+
+
+
+
+
+
+
+// int64 collective_graph_key = 7;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RegisterGraphResponse
+
+// string graph_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// DeregisterGraphRequest
+
+// string session_handle = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool create_worker_session_called = 3;
+
+
+
+
+// string graph_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// DeregisterGraphResponse
+
+// -------------------------------------------------------------------
+
+// CleanupAllRequest
+
+// repeated string container = 1;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CleanupAllResponse
+
+// -------------------------------------------------------------------
+
+// ExecutorOpts
+
+// bool record_costs = 1;
+
+
+
+
+// bool record_timeline = 3;
+
+
+
+
+// bool record_partition_graphs = 4;
+
+
+
+
+// bool report_tensor_allocations_upon_oom = 5;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunGraphRequest
+
+// string session_handle = 8;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool create_worker_session_called = 10;
+
+
+
+
+// string graph_handle = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 step_id = 2;
+
+
+
+
+// .tensorflow.ExecutorOpts exec_opts = 5;
+
+
+
+
+
+
+
+
+// repeated .tensorflow.NamedTensorProto send = 3;
+
+
+
+
+
+
+
+// repeated string recv_key = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// bool is_partial = 6;
+
+
+
+
+// bool is_last_partial_run = 7;
+
+
+
+
+// bool store_errors_in_response_body = 9;
+
+
+
+
+// int64 request_id = 11;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RunGraphResponse
+
+// repeated .tensorflow.NamedTensorProto recv = 1;
+
+
+
+
+
+
+
+// .tensorflow.StepStats step_stats = 2;
+
+
+
+
+
+
+
+// .tensorflow.CostGraphDef cost_graph = 3;
+
+
+
+
+
+
+
+// repeated .tensorflow.GraphDef partition_graph = 4;
+
+
+
+
+
+
+
+// .tensorflow.error.Code status_code = 5;
+
+
+
+
+// string status_error_message = 6;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CleanupGraphRequest
+
+// int64 step_id = 1;
+
+
+
+
+// -------------------------------------------------------------------
+
+// CleanupGraphResponse
+
+// -------------------------------------------------------------------
+
+// RecvTensorRequest
+
+// int64 step_id = 1;
+
+
+
+
+// string rendezvous_key = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool dma_ok = 3;
+
+
+
+
+// .tensorflow.DeviceLocality client_locality = 4;
+
+
+
+
+
+
+
+// .tensorflow.DeviceLocality server_locality = 5;
+
+
+
+
+
+
+
+// .google.protobuf.Any transport_options = 6;
+
+
+
+
+
+
+
+// int64 request_id = 7;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RecvTensorResponse
+
+// .tensorflow.TensorProto tensor = 1;
+
+
+
+
+
+
+
+// bool is_dead = 2;
+
+
+
+
+// int64 send_start_micros = 3;
+
+
+
+
+// .google.protobuf.Any transport_options = 4;
+
+
+
+
+
+
+
+// bool require_ack = 5;
+
+
+
+
+// -------------------------------------------------------------------
+
+// MarkRecvFinishedRequest
+
+// int64 request_id = 1;
+
+
+
+
+// -------------------------------------------------------------------
+
+// MarkRecvFinishedResponse
+
+// -------------------------------------------------------------------
+
+// LoggingRequest
+
+// bool enable_rpc_logging = 1;
+
+
+
+
+// bool disable_rpc_logging = 4;
+
+
+
+
+// bool clear = 2;
+
+
+
+
+// repeated int64 fetch_step_id = 3;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// LabeledStepStats
+
+// int64 step_id = 1;
+
+
+
+
+// .tensorflow.StepStats step_stats = 2;
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// LoggingResponse
+
+// repeated .tensorflow.LabeledStepStats step = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TraceOpts
+
+// double duration = 1;
+
+
+
+
+// bool use_step_profiler = 2;
+
+
+
+
+// bool use_kernel_profiler = 3;
+
+
+
+
+// bool use_extended_profiler = 4;
+
+
+
+
+// bool use_gpu_profiler = 5;
+
+
+
+
+// bool use_sample_profiler = 6;
+
+
+
+
+// -------------------------------------------------------------------
+
+// TracingRequest
+
+// .tensorflow.TraceOpts options = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TracingResponse
+
+// -------------------------------------------------------------------
+
+// RecvBufRequest
+
+// int64 step_id = 1;
+
+
+
+
+// string buf_rendezvous_key = 2;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 num_bytes = 3;
+
+
+
+
+// fixed64 buf_ptr = 4;
+
+
+
+
+// .tensorflow.DeviceLocality client_locality = 5;
+
+
+
+
+
+
+
+// .tensorflow.DeviceLocality server_locality = 6;
+
+
+
+
+
+
+
+// .google.protobuf.Any transport_options = 7;
+
+
+
+
+
+
+
+// string src_device = 8;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// string dst_device = 9;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int64 request_id = 10;
+
+
+
+
+// -------------------------------------------------------------------
+
+// RecvBufResponse
+
+// fixed64 buf_ptr = 1;
+
+
+
+
+// int64 num_bytes = 2;
+
+
+
+
+// bool is_dead = 3;
+
+
+
+
+// .google.protobuf.Any transport_options = 4;
+
+
+
+
+
+
+
+// int64 send_start_micros = 5;
+
+
+
+
+// bool require_ack = 6;
+
+
+
+
+// -------------------------------------------------------------------
+
+// CompleteGroupRequest
+
+// int32 group_key = 1;
+
+
+
+
+// int32 group_size = 2;
+
+
+
+
+// string device_type = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated string device_name = 4;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// int32 collective_type = 5;
+
+
+
+
+// -------------------------------------------------------------------
+
+// CompleteGroupResponse
+
+// int32 group_key = 1;
+
+
+
+
+// int32 group_size = 2;
+
+
+
+
+// string device_type = 3;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int32 num_tasks = 4;
+
+
+
+
+// repeated string device_name = 5;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// repeated string task_name = 6;
+
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+// bytes communicator_key = 7;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// CompleteInstanceRequest
+
+// string name = 1;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// int32 type = 2;
+
+
+
+
+// .tensorflow.DataType data_type = 3;
+
+
+
+
+// .tensorflow.TensorShapeProto shape = 4;
+
+
+
+
+
+
+
+// int32 group_key = 5;
+
+
+
+
+// int32 group_size = 6;
+
+
+
+
+// int32 instance_key = 7;
+
+
+
+
+// string device_type = 8;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// repeated int32 subdiv_offset = 9;
+
+
+
+
+
+
+
+
+// string device = 10;
+
+
+
+// #if LANG_CXX11
+
+// #endif
+
+
+
+
+
+
+
+
+// bool is_source = 11;
+
+
+
+
+// -------------------------------------------------------------------
+
+// CompleteInstanceResponse
+
+// int32 instance_key = 1;
+
+
+
+
+// int32 source_rank = 2;
+
+
+
+
+// -------------------------------------------------------------------
+
+// GetStepSequenceRequest
+
+// repeated int64 graph_key = 1;
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// StepSequence
+
+// int64 graph_key = 1;
+
+
+
+
+// int64 next_step_id = 2;
+
+
+
+
+// -------------------------------------------------------------------
+
+// GetStepSequenceResponse
+
+// repeated .tensorflow.StepSequence step_sequence = 1;
+
+
+
+
+
+
+
+
+// #ifdef __GNUC__
+//   #pragma GCC diagnostic pop
+// #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+
+// @@protoc_insertion_point(namespace_scope)
+
+  // namespace tensorflow
+
+// @@protoc_insertion_point(global_scope)
+
+// #include <google/protobuf/port_undef.inc>
+// #endif  // PROTOBUF_INCLUDED_tensorflow_2fcore_2fprotobuf_2fworker_2eproto
+
+
+// Parsed from tensorflow/core/distributed_runtime/call_options.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_CALL_OPTIONS_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_CALL_OPTIONS_H_
+
+// #include <functional>
+
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/platform/types.h"
+// Targeting ../CallOptions.java
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_CALL_OPTIONS_H_
+
+
+// Parsed from tensorflow/core/distributed_runtime/message_wrappers.h
+
+/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_MESSAGE_WRAPPERS_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_MESSAGE_WRAPPERS_H_
+
+// #include "tensorflow/core/framework/allocator.h"
+// #include "tensorflow/core/framework/cost_graph.pb.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/step_stats.pb.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor.pb_text.h"
+// #include "tensorflow/core/framework/versions.pb.h"
+// #include "tensorflow/core/protobuf/config.pb.h"
+// #include "tensorflow/core/protobuf/master.pb.h"
+// #include "tensorflow/core/protobuf/worker.pb.h"
+// Targeting ../RunStepRequestWrapper.java
+
+
+// Targeting ../MutableRunStepRequestWrapper.java
+
+
+// Targeting ../InMemoryRunStepRequest.java
+
+
+// Targeting ../MutableProtoRunStepRequest.java
+
+
+// Targeting ../ProtoRunStepRequest.java
+
+
+// Targeting ../RunGraphRequestWrapper.java
+
+
+// Targeting ../MutableRunGraphRequestWrapper.java
+
+
+// Targeting ../InMemoryRunGraphRequest.java
+
+
+// Targeting ../MutableProtoRunGraphRequest.java
+
+
+// Targeting ../ProtoRunGraphRequest.java
+
+
+// Targeting ../MutableRunGraphResponseWrapper.java
+
+
+// Targeting ../InMemoryRunGraphResponse.java
+
+
+// Targeting ../OwnedProtoRunGraphResponse.java
+
+
+// Targeting ../NonOwnedProtoRunGraphResponse.java
+
+
+// Targeting ../MutableRunStepResponseWrapper.java
+
+
+// Targeting ../InMemoryRunStepResponse.java
+
+
+// Targeting ../OwnedProtoRunStepResponse.java
+
+
+// Targeting ../NonOwnedProtoRunStepResponse.java
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_MESSAGE_WRAPPERS_H_
+
+
+// Parsed from tensorflow/core/distributed_runtime/worker_interface.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_INTERFACE_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_INTERFACE_H_
+
+// #include <functional>
+
+// #include "tensorflow/core/distributed_runtime/call_options.h"
+// #include "tensorflow/core/distributed_runtime/message_wrappers.h"
+// #include "tensorflow/core/lib/core/notification.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/platform/types.h"
+// #include "tensorflow/core/protobuf/worker.pb.h"
+
+// Status callback.
+// Targeting ../TensorResponse.java
+
+
+// Targeting ../WorkerInterface.java
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_INTERFACE_H_
+
+
+// Parsed from tensorflow/core/distributed_runtime/worker_cache.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_CACHE_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_CACHE_H_
+
+// #include <string>
+// #include <vector>
+
+// #include "tensorflow/core/distributed_runtime/worker_interface.h"
+// #include "tensorflow/core/framework/device_attributes.pb.h"  // for DeviceLocality
+// #include "tensorflow/core/lib/core/status.h"
+// Targeting ../ChannelCache.java
+
+
+// Targeting ../WorkerCacheInterface.java
+
+
+  // namespace tensorflow
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_CACHE_H_
+
+
+// Parsed from tensorflow/core/distributed_runtime/worker_env.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_ENV_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_ENV_H_
+
+// #include <vector>
+// #include "tensorflow/core/platform/types.h"
+
+// Targeting ../RendezvousMgrInterface.java
+
+
+// Targeting ../SessionMgr.java
+
+
+// Targeting ../WorkerEnv.java
+
+
+
+  // end namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_ENV_H_
+
+
+// Parsed from tensorflow/core/distributed_runtime/worker_session.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_SESSION_H_
+// #define TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_SESSION_H_
+
+// #include <string>
+
+// #include "tensorflow/core/common_runtime/device_mgr.h"
+// #include "tensorflow/core/distributed_runtime/cluster_function_library_runtime.h"
+// #include "tensorflow/core/distributed_runtime/graph_mgr.h"
+// #include "tensorflow/core/distributed_runtime/worker_cache.h"
+// Targeting ../ClusterFunctionLibraryRuntime.java
+
+
+// Targeting ../GraphMgr.java
+
+
+// Targeting ../WorkerSession.java
+
+
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_DISTRIBUTED_RUNTIME_WORKER_SESSION_H_
 
 
 // Parsed from tensorflow/core/common_runtime/eager/attr_builder.h
@@ -16042,13 +21715,14 @@ limitations under the License.
 // #include <memory>
 // #include <unordered_map>
 
-// #include "tensorflow/c/c_api.h"
+// #include "tensorflow/c/tf_attrtype.h"
 // #include "tensorflow/core/common_runtime/device.h"
 // #include "tensorflow/core/framework/node_def.pb.h"
 // #include "tensorflow/core/framework/op_kernel.h"
 // #include "tensorflow/core/framework/types.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/lib/gtl/optional.h"
 // #include "tensorflow/core/platform/fingerprint.h"
 // #include "tensorflow/core/util/tensor_slice_reader_cache.h"
 
@@ -16068,29 +21742,32 @@ limitations under the License.
 // `is_function` is set to true in this case.
 @Namespace("tensorflow") public static native @ByVal Status AttrTypeMapForOp(@Cast("const char*") BytePointer op_name, @Cast("const tensorflow::AttrTypeMap**") PointerPointer out,
                         @Cast("bool*") BoolPointer is_function);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeMapForOp(@Cast("const char*") BytePointer op_name, @Cast("const tensorflow::AttrTypeMap**") @ByPtrPtr VarToShapeMap out,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeMapForOp(@Cast("const char*") BytePointer op_name, @Cast("const tensorflow::AttrTypeMap**") @ByPtrPtr StringIntUnorderedMap out,
                         @Cast("bool*") BoolPointer is_function);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeMapForOp(String op_name, @Cast("const tensorflow::AttrTypeMap**") @ByPtrPtr VarToShapeMap out,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeMapForOp(String op_name, @Cast("const tensorflow::AttrTypeMap**") @ByPtrPtr StringIntUnorderedMap out,
                         @Cast("bool*") boolean... is_function);
 
 // Looks for 'attr_name' in 'm' and sets 'out' and 'is_list'.
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString BytePointer attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString BytePointer attr_name,
                       @Cast("TF_AttrType*") IntPointer out, @Cast("unsigned char*") BytePointer is_list);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString String attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString String attr_name,
                       @Cast("TF_AttrType*") IntBuffer out, @Cast("unsigned char*") ByteBuffer is_list);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString BytePointer attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString BytePointer attr_name,
                       @Cast("TF_AttrType*") int[] out, @Cast("unsigned char*") byte[] is_list);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString String attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString String attr_name,
                       @Cast("TF_AttrType*") IntPointer out, @Cast("unsigned char*") BytePointer is_list);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString BytePointer attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString BytePointer attr_name,
                       @Cast("TF_AttrType*") IntBuffer out, @Cast("unsigned char*") ByteBuffer is_list);
-@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef VarToShapeMap m, @StdString String attr_name,
+@Namespace("tensorflow") public static native @ByVal Status AttrTypeByName(@Cast("const tensorflow::AttrTypeMap*") @ByRef StringIntUnorderedMap m, @StdString String attr_name,
                       @Cast("TF_AttrType*") int[] out, @Cast("unsigned char*") byte[] is_list);
-
-// Looks for 'attr_name' in 'm' and sets 'out' and 'is_list'.
 // Targeting ../AttrBuilder.java
 
   // namespace tensorflow
+
+
+
+
+
 
 
 
@@ -16129,16 +21806,27 @@ limitations under the License.
 // #include <string>
 // #include <vector>
 
+// clang-format off
+// Required for IS_MOBILE_PLATFORM
+// #include "tensorflow/core/platform/platform.h"
+// clang-format on
+
 // #include "tensorflow/core/common_runtime/device_factory.h"
 // #include "tensorflow/core/common_runtime/device_mgr.h"
 // #include "tensorflow/core/common_runtime/eager/eager_executor.h"
 // #include "tensorflow/core/common_runtime/eager/kernel_and_device.h"
 // #include "tensorflow/core/common_runtime/function.h"
 // #include "tensorflow/core/common_runtime/rendezvous_mgr.h"
-// #ifndef __ANDROID__
+// #include "tensorflow/core/example/example.pb.h"
+// #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/platform/env.h"
+// #if !defined(IS_MOBILE_PLATFORM)
 // #include "tensorflow/core/distributed_runtime/eager/eager_client.h"
+// #include "tensorflow/core/distributed_runtime/rendezvous_mgr_interface.h"
 // #include "tensorflow/core/distributed_runtime/server_lib.h"
-// #endif
+// #include "tensorflow/core/distributed_runtime/worker_cache.h"
+// #include "tensorflow/core/distributed_runtime/worker_env.h"
+// #endif  // !IS_MOBILE_PLATFORM
 // #include "tensorflow/core/framework/collective.h"
 // #include "tensorflow/core/framework/log_memory.h"
 // #include "tensorflow/core/framework/rendezvous.h"
@@ -16165,9 +21853,11 @@ public static final int
   // Silently copy the tensor, which has a performance cost since the operation
   // will be blocked till the copy completes. This is the default policy.
   DEVICE_PLACEMENT_SILENT = 2,
-  // Default placement policy which silently copies int32 tensors but not other
-  // dtypes.
+  // Placement policy which silently copies int32 tensors but not other dtypes.
   DEVICE_PLACEMENT_SILENT_FOR_INT32 = 3;
+// Targeting ../RunMetadataListener.java
+
+
 // Targeting ../EagerContext.java
 
 
@@ -16298,6 +21988,12 @@ limitations under the License.
 // Targeting ../KernelAndDevice.java
 
 
+// Targeting ../KernelAndDeviceOp.java
+
+
+// Targeting ../KernelAndDeviceFunc.java
+
+
 
   // namespace tensorflow
 
@@ -16335,7 +22031,6 @@ limitations under the License.
 // #include "tensorflow/core/common_runtime/device_factory.h"
 // #include "tensorflow/core/common_runtime/eager/context.h"
 // #include "tensorflow/core/common_runtime/eager/eager_executor.h"
-// #include "tensorflow/core/common_runtime/eager/kernel_and_device.h"
 // #include "tensorflow/core/common_runtime/function.h"
 // #include "tensorflow/core/common_runtime/rendezvous_mgr.h"
 // #include "tensorflow/core/framework/rendezvous.h"
@@ -16349,9 +22044,16 @@ limitations under the License.
 // #include "tensorflow/core/platform/thread_annotations.h"
 // #include "tensorflow/core/public/session_options.h"
 // #include "tensorflow/core/public/version.h"
+// Targeting ../OutputGraphNode.java
+
+
 // Targeting ../TensorHandle.java
 
 
+
+// If tensor's dtype is DT_RESOURCE, returns the device backing the resource.
+// Else, returns nullptr.
+@Namespace("tensorflow") public static native Device GetResourceDevice(@Const @ByRef Tensor t, EagerContext ctx);
 
   // namespace tensorflow
 
@@ -16635,8 +22337,17 @@ public static native @Cast("const char*") BytePointer TFE_OpGetDevice(TFE_Op op,
 public static native void TFE_OpSetXLACompilation(TFE_Op op,
                                                    @Cast("unsigned char") byte enable);
 
-public static native void TFE_OpAddInput(TFE_Op op, TFE_TensorHandle h,
+public static native void TFE_OpAddInput(TFE_Op op, TFE_TensorHandle input,
                                           TF_Status status);
+
+public static native void TFE_OpAddInputList(TFE_Op op,
+                                              @Cast("TFE_TensorHandle**") PointerPointer inputs,
+                                              int num_inputs,
+                                              TF_Status status);
+public static native void TFE_OpAddInputList(TFE_Op op,
+                                              @ByPtrPtr TFE_TensorHandle inputs,
+                                              int num_inputs,
+                                              TF_Status status);
 
 public static native @Cast("TF_AttrType") int TFE_OpGetAttrType(TFE_Op op,
                                                     @Cast("const char*") BytePointer attr_name,
@@ -16906,6 +22617,24 @@ public static native void TFE_OpSetAttrFunctionList(TFE_Op op,
                                                      @Const @ByPtrPtr TFE_Op value,
                                                      int num_values);
 
+// Returns the length (number of tensors) of the input argument `input_name`
+// found in the provided `op`.
+public static native int TFE_OpGetInputLength(TFE_Op op,
+                                               @Cast("const char*") BytePointer input_name,
+                                               TF_Status status);
+public static native int TFE_OpGetInputLength(TFE_Op op,
+                                               String input_name,
+                                               TF_Status status);
+
+// Returns the length (number of tensors) of the output argument `output_name`
+// found in the provided `op`.
+public static native int TFE_OpGetOutputLength(TFE_Op op,
+                                                @Cast("const char*") BytePointer output_name,
+                                                TF_Status status);
+public static native int TFE_OpGetOutputLength(TFE_Op op,
+                                                String output_name,
+                                                TF_Status status);
+
 // Execute the operation defined by 'op' and return handles to computed
 // tensors in `retvals`.
 //
@@ -16946,6 +22675,22 @@ public static native void TFE_ContextAddFunctionDef(
 public static native void TFE_ContextAddFunction(TFE_Context ctx,
                                                   TF_Function function,
                                                   TF_Status status);
+
+// Removes a function from the context. Once removed, you can no longer
+// TFE_Execute it or TFE_Execute any TFE_Op which has it as an attribute or any
+// other function which calls it as an attribute.
+public static native void TFE_ContextRemoveFunction(TFE_Context ctx,
+                                                     @Cast("const char*") BytePointer name,
+                                                     TF_Status status);
+public static native void TFE_ContextRemoveFunction(TFE_Context ctx,
+                                                     String name,
+                                                     TF_Status status);
+
+// Checks whether a function is registered under `name`.
+public static native @Cast("unsigned char") byte TFE_ContextHasFunction(TFE_Context ctx,
+                                                    @Cast("const char*") BytePointer name);
+public static native @Cast("unsigned char") byte TFE_ContextHasFunction(TFE_Context ctx,
+                                                    String name);
 
 // Enables tracing of RunMetadata on the ops executed from this context.
 public static native void TFE_ContextEnableRunMetadata(TFE_Context ctx);
@@ -17010,8 +22755,6 @@ limitations under the License.
 // #ifndef TENSORFLOW_C_EAGER_C_API_INTERNAL_H_
 // #define TENSORFLOW_C_EAGER_C_API_INTERNAL_H_
 
-// #include "tensorflow/c/eager/c_api.h"
-
 // #include <algorithm>
 // #include <cstddef>
 // #include <map>
@@ -17023,6 +22766,7 @@ limitations under the License.
 
 // #include "tensorflow/c/c_api.h"
 // #include "tensorflow/c/c_api_internal.h"
+// #include "tensorflow/c/eager/c_api.h"
 // #include "tensorflow/core/common_runtime/device_factory.h"
 // #include "tensorflow/core/common_runtime/eager/attr_builder.h"
 // #include "tensorflow/core/common_runtime/eager/context.h"
@@ -17032,21 +22776,17 @@ limitations under the License.
 // #include "tensorflow/core/common_runtime/eager/tensor_handle.h"
 // #include "tensorflow/core/common_runtime/function.h"
 // #include "tensorflow/core/common_runtime/rendezvous_mgr.h"
-// #include "tensorflow/core/distributed_runtime/eager/eager_client.h"
-// #include "tensorflow/core/distributed_runtime/remote_device.h"
-// #include "tensorflow/core/distributed_runtime/rpc/grpc_server_lib.h"
-// #include "tensorflow/core/distributed_runtime/rpc/grpc_worker_cache.h"
-// #include "tensorflow/core/distributed_runtime/rpc/grpc_worker_service.h"
-// #include "tensorflow/core/distributed_runtime/rpc/rpc_rendezvous_mgr.h"
-// #include "tensorflow/core/distributed_runtime/server_lib.h"
-// #include "tensorflow/core/distributed_runtime/worker_env.h"
 // #include "tensorflow/core/framework/rendezvous.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/lib/gtl/map_util.h"
 // #include "tensorflow/core/lib/gtl/stl_util.h"
+// #include "tensorflow/core/lib/monitoring/counter.h"
+// #include "tensorflow/core/lib/monitoring/gauge.h"
+// #include "tensorflow/core/lib/monitoring/sampler.h"
 // #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/thread_annotations.h"
+// #include "tensorflow/core/profiler/lib/profiler_session.h"
 // #include "tensorflow/core/public/version.h"
 // Targeting ../TFE_ContextOptions.java
 
@@ -17060,7 +22800,79 @@ limitations under the License.
 // Targeting ../TFE_TensorDebugInfo.java
 
 
+// Targeting ../TFE_OpInferenceContext.java
+
+
 // Targeting ../TFE_Op.java
+
+
+// Targeting ../TFE_ProfilerContext.java
+
+
+// Targeting ../TFE_Profiler.java
+
+
+// Targeting ../TFE_MonitoringCounterCell.java
+
+
+// Targeting ../TFE_MonitoringCounter0.java
+
+
+// Targeting ../TFE_MonitoringCounter1.java
+
+
+// Targeting ../TFE_MonitoringCounter2.java
+
+
+// Targeting ../TFE_MonitoringIntGaugeCell.java
+
+
+// Targeting ../TFE_MonitoringStringGaugeCell.java
+
+
+// Targeting ../TFE_MonitoringBoolGaugeCell.java
+
+
+// Targeting ../TFE_MonitoringIntGauge0.java
+
+
+// Targeting ../TFE_MonitoringIntGauge1.java
+
+
+// Targeting ../TFE_MonitoringIntGauge2.java
+
+
+// Targeting ../TFE_MonitoringStringGauge0.java
+
+
+// Targeting ../TFE_MonitoringStringGauge1.java
+
+
+// Targeting ../TFE_MonitoringStringGauge2.java
+
+
+// Targeting ../TFE_MonitoringBoolGauge0.java
+
+
+// Targeting ../TFE_MonitoringBoolGauge1.java
+
+
+// Targeting ../TFE_MonitoringBoolGauge2.java
+
+
+// Targeting ../TFE_MonitoringBuckets.java
+
+
+// Targeting ../TFE_MonitoringSamplerCell.java
+
+
+// Targeting ../TFE_MonitoringSampler0.java
+
+
+// Targeting ../TFE_MonitoringSampler1.java
+
+
+// Targeting ../TFE_MonitoringSampler2.java
 
 
 // Set an AttrValue on the op. Doesn't handle the list types.
@@ -17070,7 +22882,10 @@ limitations under the License.
 @Namespace("tensorflow") public static native void SetOpAttrValueScalar(TFE_Context ctx, TFE_Op op,
                           @Const @ByRef AttrValue default_value,
                           String attr_name, TF_Status status);
-  // namespace tensorflow
+
+// Targeting ../TFE_TraceContext.java
+
+
 
 // #endif  // TENSORFLOW_C_EAGER_C_API_INTERNAL_H_
 
@@ -17110,6 +22925,13 @@ limitations under the License.
              TF_Buffer attr_value_proto, TF_Status status);
 @Namespace("tensorflow") public static native void SetAttr(TF_Graph graph, TF_Operation op, String attr_name,
              TF_Buffer attr_value_proto, TF_Status status);
+
+// Clears the attr in the node_def Protocol Buffer and sets a status upon
+// completion.
+@Namespace("tensorflow") public static native void ClearAttr(TF_Graph graph, TF_Operation op, @Cast("const char*") BytePointer attr_name,
+               TF_Status status);
+@Namespace("tensorflow") public static native void ClearAttr(TF_Graph graph, TF_Operation op, String attr_name,
+               TF_Status status);
 
 @Namespace("tensorflow") public static native void SetRequestedDevice(TF_Graph graph, TF_Operation op, @Cast("const char*") BytePointer device);
 @Namespace("tensorflow") public static native void SetRequestedDevice(TF_Graph graph, TF_Operation op, String device);
@@ -17372,6 +23194,9 @@ limitations under the License.
 // Targeting ../Fill.java
 
 
+// Targeting ../Fingerprint.java
+
+
 // Targeting ../Gather.java
 
 
@@ -17555,6 +23380,9 @@ limitations under the License.
 
 
 // Targeting ../TensorScatterUpdate.java
+
+
+// Targeting ../TensorStridedSliceUpdate.java
 
 
 // Targeting ../Tile.java
@@ -17932,6 +23760,9 @@ limitations under the License.
 // Targeting ../AdjustSaturation.java
 
 
+// Targeting ../CombinedNonMaxSuppression.java
+
+
 // Targeting ../CropAndResize.java
 
 
@@ -17959,7 +23790,13 @@ limitations under the License.
 // Targeting ../DrawBoundingBoxes.java
 
 
+// Targeting ../DrawBoundingBoxesV2.java
+
+
 // Targeting ../EncodeJpeg.java
+
+
+// Targeting ../EncodeJpegVariableQuality.java
 
 
 // Targeting ../EncodePng.java
@@ -18011,6 +23848,9 @@ limitations under the License.
 
 
 // Targeting ../SampleDistortedBoundingBoxV2.java
+
+
+// Targeting ../ScaleAndTranslate.java
 
 
 
@@ -18324,6 +24164,9 @@ limitations under the License.
 // Targeting ../BatchMatMul.java
 
 
+// Targeting ../BatchMatMulV2.java
+
+
 // Targeting ../BesselI0e.java
 
 
@@ -18391,6 +24234,9 @@ limitations under the License.
 
 
 // Targeting ../Erfc.java
+
+
+// Targeting ../EuclideanNorm.java
 
 
 // Targeting ../Exp.java
@@ -18507,7 +24353,9 @@ limitations under the License.
 ///
 ///
 ///
-///
+// Targeting ../MulNoNan.java
+
+
 // Targeting ../Negate.java
 
 
@@ -18515,6 +24363,11 @@ limitations under the License.
 ///
 ///
 ///
+///
+///
+// Targeting ../NextAfter.java
+
+
 // Targeting ../NotEqual.java
 
 
@@ -18589,6 +24442,9 @@ limitations under the License.
 
 
 // Targeting ../Where3.java
+
+
+// Targeting ../SelectV2.java
 
 
 // Targeting ../Sigmoid.java
@@ -18786,7 +24642,13 @@ limitations under the License.
 // Targeting ../FusedBatchNormGradV2.java
 
 
+// Targeting ../FusedBatchNormGradV3.java
+
+
 // Targeting ../FusedBatchNormV2.java
+
+
+// Targeting ../FusedBatchNormV3.java
 
 
 // Targeting ../FusedPadConv2D.java
@@ -18855,36 +24717,6 @@ limitations under the License.
 // Targeting ../QuantizedConv2D.java
 
 
-// Targeting ../QuantizedConv2DAndRelu.java
-
-
-// Targeting ../QuantizedConv2DAndReluAndRequantize.java
-
-
-// Targeting ../QuantizedConv2DAndRequantize.java
-
-
-// Targeting ../QuantizedConv2DWithBias.java
-
-
-// Targeting ../QuantizedConv2DWithBiasAndRelu.java
-
-
-// Targeting ../QuantizedConv2DWithBiasAndReluAndRequantize.java
-
-
-// Targeting ../QuantizedConv2DWithBiasAndRequantize.java
-
-
-// Targeting ../QuantizedConv2DWithBiasSignedSumAndReluAndRequantize.java
-
-
-// Targeting ../QuantizedConv2DWithBiasSumAndRelu.java
-
-
-// Targeting ../QuantizedConv2DWithBiasSumAndReluAndRequantize.java
-
-
 // Targeting ../QuantizedMaxPool.java
 
 
@@ -18931,6 +24763,116 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CC_OPS_NN_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/nn_ops_internal.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_NN_OPS_INTERNAL_H_
+// #define TENSORFLOW_CC_OPS_NN_OPS_INTERNAL_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// Targeting ../AvgPoolGrad.java
+
+
+// Targeting ../EluGrad.java
+
+
+// Targeting ../FractionalAvgPoolGrad.java
+
+
+// Targeting ../FractionalMaxPoolGrad.java
+
+
+// Targeting ../LRNGrad.java
+
+
+// Targeting ../LeakyRelu.java
+
+
+// Targeting ../LeakyReluGrad.java
+
+
+// Targeting ../MaxPoolGrad.java
+
+
+// Targeting ../MaxPoolGradWithArgmax.java
+
+
+// Targeting ../QuantizedConv2DAndRelu.java
+
+
+// Targeting ../QuantizedConv2DAndReluAndRequantize.java
+
+
+// Targeting ../QuantizedConv2DAndRequantize.java
+
+
+// Targeting ../QuantizedConv2DPerChannel.java
+
+
+// Targeting ../QuantizedConv2DWithBias.java
+
+
+// Targeting ../QuantizedConv2DWithBiasAndRelu.java
+
+
+// Targeting ../QuantizedConv2DWithBiasAndReluAndRequantize.java
+
+
+// Targeting ../QuantizedConv2DWithBiasAndRequantize.java
+
+
+// Targeting ../QuantizedConv2DWithBiasSignedSumAndReluAndRequantize.java
+
+
+// Targeting ../QuantizedConv2DWithBiasSumAndRelu.java
+
+
+// Targeting ../QuantizedConv2DWithBiasSumAndReluAndRequantize.java
+
+
+// Targeting ../QuantizedDepthwiseConv2D.java
+
+
+// Targeting ../QuantizedDepthwiseConv2DWithBias.java
+
+
+// Targeting ../QuantizedDepthwiseConv2DWithBiasAndRelu.java
+
+
+// Targeting ../QuantizedDepthwiseConv2DWithBiasAndReluAndRequantize.java
+
+
+// Targeting ../Relu6Grad.java
+
+
+// Targeting ../ReluGrad.java
+
+
+// Targeting ../SeluGrad.java
+
+
+// Targeting ../SoftplusGrad.java
+
+
+// Targeting ../SoftsignGrad.java
+
+
+
+  // namespace internal
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_NN_OPS_INTERNAL_H_
 
 
 // Parsed from tensorflow/cc/ops/no_op.h
@@ -18982,6 +24924,9 @@ limitations under the License.
 
 
 // Targeting ../DecodeJSONExample.java
+
+
+// Targeting ../DecodePaddedRaw.java
 
 
 // Targeting ../DecodeRaw.java
@@ -19224,6 +25169,9 @@ limitations under the License.
 // Targeting ../ResourceScatterNdAdd.java
 
 
+// Targeting ../ResourceScatterNdSub.java
+
+
 // Targeting ../ResourceScatterNdUpdate.java
 
 
@@ -19314,6 +25262,9 @@ limitations under the License.
 // Targeting ../StringLength.java
 
 
+// Targeting ../StringLower.java
+
+
 // Targeting ../StringSplit.java
 
 
@@ -19330,6 +25281,9 @@ limitations under the License.
 
 
 // Targeting ../StringToHashBucketStrong.java
+
+
+// Targeting ../StringUpper.java
 
 
 // Targeting ../Substr.java

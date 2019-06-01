@@ -25,4 +25,8 @@ public class TFE_TensorHandle extends Pointer {
   private native void allocate(TensorHandle handle);
 
   public native TensorHandle handle(); public native TFE_TensorHandle handle(TensorHandle setter);
+
+  // Create a symbolic tensor.
+  public TFE_TensorHandle(@ByVal TF_Output t, @Cast("TF_DataType") int dtype) { super((Pointer)null); allocate(t, dtype); }
+  private native void allocate(@ByVal TF_Output t, @Cast("TF_DataType") int dtype);
 }

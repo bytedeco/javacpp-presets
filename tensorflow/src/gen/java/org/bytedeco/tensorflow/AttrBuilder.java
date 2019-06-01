@@ -27,7 +27,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 // AttrBuilder a;
 // a.NumInputs(2);
 // a.Set("T", TF_FLOAT);
-// uint64 cache_key = a.CacheKey("cpu:0");
+// tensorflow::Fprint128 cache_key = a.CacheKey("cpu:0");
 // const NodeDef& n = a.BuildNodeDef();
 //
 // Note that all calls to Set and NumInputs should happen before calling
@@ -51,6 +51,11 @@ public class AttrBuilder extends Pointer {
 
   // Needed to work around call to ValidateNodeDef in CreateOpKernel.
   public native @ByRef AttrBuilder NumInputs(int n);
+
+  // Retrieves the attribute value.
+  // Note that Get() can involve a linear scan of all attributes with the same
+  // value type in this Node. This is not an issue, because Get is used rarely
+  // and nodes have a small number of attributes.
 
   public native @ByVal Fprint128 CacheKey(@StdString BytePointer device);
   public native @ByVal Fprint128 CacheKey(@StdString String device);

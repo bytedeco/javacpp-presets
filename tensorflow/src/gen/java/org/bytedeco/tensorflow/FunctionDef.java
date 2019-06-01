@@ -60,22 +60,24 @@ public class FunctionDef extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
-
 
   // accessors -------------------------------------------------------
 
@@ -103,6 +105,22 @@ public class FunctionDef extends MessageLite {
   public static final int kAttrFieldNumber = kAttrFieldNumber();
   public native @Const @ByRef StringAttrValueMap attr();
   public native StringAttrValueMap mutable_attr();
+
+  // map<string, string> control_ret = 6;
+  public native int control_ret_size();
+  public native void clear_control_ret();
+  @MemberGetter public static native int kControlRetFieldNumber();
+  public static final int kControlRetFieldNumber = kControlRetFieldNumber();
+  public native @Const @ByRef StringStringMap control_ret();
+  public native StringStringMap mutable_control_ret();
+
+  // map<uint32, .tensorflow.FunctionDef.ArgAttrs> arg_attr = 7;
+  public native int arg_attr_size();
+  public native void clear_arg_attr();
+  @MemberGetter public static native int kArgAttrFieldNumber();
+  public static final int kArgAttrFieldNumber = kArgAttrFieldNumber();
+  public native @Const @ByRef IntFunctionDef_ArgAttrsMap arg_attr();
+  public native IntFunctionDef_ArgAttrsMap mutable_arg_attr();
 
   // .tensorflow.OpDef signature = 1;
   public native @Cast("bool") boolean has_signature();

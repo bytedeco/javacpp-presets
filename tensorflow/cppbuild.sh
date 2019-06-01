@@ -38,11 +38,13 @@ export GCC_HOST_COMPILER_PATH=$(which gcc)
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
-export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
+export TENSORRT_INSTALL_PATH=/usr/local/tensorrt
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
+export TF_IGNORE_MAX_BAZEL_VERSION=1
+export TF_CONFIGURE_IOS=0
 
-TENSORFLOW_VERSION=1.13.1
+TENSORFLOW_VERSION=1.14.0-rc0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -102,6 +104,11 @@ sedinplace '/\(foo\|bar\|ops.withSubScope\)/d' tensorflow/java/src/gen/java/org/
 # https://github.com/tensorflow/tensorflow/issues/26155
 patch -Np1 < ../../../tensorflow-cuda.patch || true
 
+# Work around more compile issues with CUDA 10.1
+sedinplace 's/constexpr auto kComputeInNHWC/auto kComputeInNHWC/g' tensorflow/core/kernels/conv_ops.cc
+sedinplace 's/constexpr auto kComputeInNCHW/auto kComputeInNCHW/g' tensorflow/core/kernels/conv_ops.cc
+sedinplace 's/constexpr auto get_matrix_op/auto get_matrix_op/g' tensorflow/compiler/tf2tensorrt/convert/convert_nodes.cc
+
 export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
@@ -124,8 +131,8 @@ if [[ "$EXTENSION" =~ python ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
     export PYTHONPATH="$NUMPY_PATH/python/"
     ln -sf $OPENBLAS_PATH/libopenblas.* $NUMPY_PATH/
-    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_applications==1.0.6 --no-deps
-    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_preprocessing==1.0.5 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=$CPYTHON_PATH/lib/python3.7/ keras_applications==1.0.6 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=$CPYTHON_PATH/lib/python3.7/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 case $PLATFORM in
@@ -167,15 +174,18 @@ case $PLATFORM in
         export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
-        if [[ -f /usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache ]]; then
+        if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
             sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-            sedinplace "s:%{nvcc_path}:/usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
         fi
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sedinplace 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
         sedinplace '/-lgomp/d' third_party/gpus/cuda/BUILD.tpl
+        sedinplace 's/cp -rLf/cp -RLf/g' third_party/gpus/cuda_configure.bzl
+        sedinplace 's/check_soname = version and not static/check_soname = False/g' third_party/gpus/cuda_configure.bzl
+        sedinplace 's/#if __clang__/#if 0/g' tensorflow/core/util/gpu_device_functions.h
         patch -Np1 < ../../../tensorflow-java.patch
         # allows us to use ccache with Bazel
         export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
@@ -192,7 +202,6 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
-        sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
         export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
         export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/"
@@ -202,7 +211,7 @@ case $PLATFORM in
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
         export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
-        export BUILDFLAGS="--config=mkl --copt=/arch:AVX `#--copt=/arch:AVX2` $GPU_FLAGS --copt=/machine:x64 --linkopt=/machine:x64"
+        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         export CUDA_HOME="$CUDA_TOOLKIT_PATH"
         export CUDNN_INSTALL_PATH="$CUDA_TOOLKIT_PATH"
@@ -283,8 +292,8 @@ if [[ "$EXTENSION" =~ python ]]; then
     ln -sf external/protobuf_archive/python/google/ ../python/
     ln -sf external/six_archive/six.py ../python/
     ln -sf external/termcolor_archive/termcolor.py ../python/
-    pip3 install --target=../python/ keras_applications==1.0.6 --no-deps
-    pip3 install --target=../python/ keras_preprocessing==1.0.5 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=../python/ keras_applications==1.0.6 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=../python/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 cd ../..

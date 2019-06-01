@@ -11,7 +11,8 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
 // An unordered set of edges.  Uses very little memory for small sets.
-// Unlike std::set, EdgeSet does NOT allow mutations during iteration.
+// Unlike gtl::FlatSet, EdgeSet does NOT allow mutations during
+// iteration.
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class EdgeSet extends Pointer {
     static { Loader.load(); }
