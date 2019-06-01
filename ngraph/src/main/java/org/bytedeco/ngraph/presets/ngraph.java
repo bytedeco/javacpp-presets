@@ -22,37 +22,19 @@
 
 package org.bytedeco.ngraph.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
-import org.bytedeco.javacpp.FunctionPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Properties(target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
     value = {"linux", "macosx"},
     define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
     include = {
-        "ngraph/frontend/onnxifi/backend.hpp",
-        "ngraph/frontend/onnxifi/backend_manager.hpp",
         "ngraph/descriptor/tensor.hpp",
         "ngraph/pass/pass_config.hpp",
-        "ngraph/runtime/executable.hpp",
-        "ngraph/runtime/tensor.hpp",
-        "ngraph/runtime/backend.hpp",
-        "ngraph/runtime/cpu/cpu_backend.hpp",
-//        "ngraph/runtime/cpu/cpu_external_function.hpp",
-        "ngraph/runtime/performance_counter.hpp",
         "ngraph/type/element_type.hpp",
         "ngraph/shape.hpp",
-        "ngraph/function.hpp",
-        "ngraph/node_vector.hpp",
         "ngraph/assertion.hpp",
         "ngraph/except.hpp",
         "ngraph/placement.hpp",
@@ -60,21 +42,32 @@ import java.lang.annotation.Target;
         "ngraph/strides.hpp",
         "ngraph/descriptor/input.hpp",
         "ngraph/descriptor/output.hpp",
-        "ngraph/op/op.hpp",
-        "ngraph/parameter_vector.hpp",
-        "ngraph/op/parameter.hpp",
-        "ngraph/op/constant.hpp",
-        "ngraph/op/util/binary_elementwise_arithmetic.hpp",
-        "ngraph/op/add.hpp",
-        "ngraph/op/multiply.hpp",
-        "ngraph/result_vector.hpp",
-        "ngraph/op/util/op_annotations.hpp",
-        "ngraph/autodiff/adjoints.hpp",
         "ngraph/dimension.hpp",
         "ngraph/rank.hpp",
         "ngraph/partial_shape.hpp",
         "ngraph/check.hpp",
+//        "ngraph/node_vector.hpp",
         "ngraph/node.hpp",
+        "ngraph/op/op.hpp",
+//        "ngraph/parameter_vector.hpp",
+        "ngraph/op/parameter.hpp",
+//        "ngraph/result_vector.hpp",
+        "ngraph/op/result.hpp",
+        "ngraph/op/constant.hpp",
+        "ngraph/op/util/binary_elementwise_arithmetic.hpp",
+        "ngraph/op/add.hpp",
+        "ngraph/op/multiply.hpp",
+        "ngraph/op/util/op_annotations.hpp",
+        "ngraph/function.hpp",
+        "ngraph/autodiff/adjoints.hpp",
+        "ngraph/runtime/executable.hpp",
+        "ngraph/runtime/tensor.hpp",
+        "ngraph/runtime/backend.hpp",
+        "ngraph/runtime/cpu/cpu_backend.hpp",
+//        "ngraph/runtime/cpu/cpu_external_function.hpp",
+        "ngraph/runtime/performance_counter.hpp",
+        "ngraph/frontend/onnxifi/backend.hpp",
+        "ngraph/frontend/onnxifi/backend_manager.hpp",
         "ngraph/frontend/onnxifi/onnxifi.h",
 //        "core/node.hpp",
         "ngraph/frontend/onnx_import/core/weight.hpp",
@@ -88,6 +81,8 @@ import java.lang.annotation.Target;
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
 public class ngraph implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "ngraph"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.ngraph.Function;"))
 //               .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
@@ -97,7 +92,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::shared_ptr<descriptor::Tensor>", "std::shared_ptr<ngraph::descriptor::Tensor>").annotations("@SharedPtr").pointerTypes("DescriptorTensor"))
                .put(new Info("ngraph::runtime::Tensor").purify(true)) //.purify(false).virtualize())
                .put(new Info("runtime::Handle").annotations("@SharedPtr").pointerTypes("Function"))
-               .put(new Info("ngraph::onnxifi::Backend").purify(true).pointerTypes("NgraphONNXIFIBackend"))
+               .put(new Info("ngraph::onnxifi::Backend").purify(true).pointerTypes("ONNXIFIBackend"))
                .put(new Info("ngraph::onnxifi::Backend::operator =").skip())
                .put(new Info("ngraph::element::from<char>").javaNames("fromChar"))
                .put(new Info("ngraph::element::from<bool>").javaNames("fromBool"))
@@ -132,16 +127,20 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::map<std::string,bool>").pointerTypes("StringBoolMap").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<size_t>").pointerTypes("SizeTVector").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("NgraphResultVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("ResultVector").define())
                .put(new Info("std::size_t", "size_t", "std::int64_t", "int64_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 //               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
 //               .put(new Info("std::vector<std::shared_ptr<op::Parameter> >", "std::vector<std::shared_ptr<ngraph::op::Parameter> >").pointerTypes("Pointer"))
                .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("NgraphParameterVector").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::Node> >").pointerTypes("NgraphNodeVector").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Constant> >").pointerTypes("NgraphOpConstantVector").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >", "std::vector<std::shared_ptr<runtime::Tensor> >").pointerTypes("NgraphTensorVector").define())
-               .put(new Info("std::vector<std::shared_ptr<ngraph::Function> >").pointerTypes("NgraphFunctionVector").define());
+               .put(new Info("ngraph::Input<ngraph::Node>").pointerTypes("NodeInput").define())
+               .put(new Info("ngraph::Output<ngraph::Node>").pointerTypes("NodeOutput").define())
+               .put(new Info("const std::vector<ngraph::Input<ngraph::Node> >", "std::vector<ngraph::Input<ngraph::Node> >").pointerTypes("NodeInputVector").define())
+               .put(new Info("const std::vector<ngraph::Output<ngraph::Node> >", "std::vector<ngraph::Output<ngraph::Node> >").pointerTypes("NodeOutputVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("ParameterVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::Node> >").pointerTypes("NodeVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Constant> >").pointerTypes("OpConstantVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >", "std::vector<std::shared_ptr<runtime::Tensor> >").pointerTypes("TensorVector").define())
+               .put(new Info("std::vector<std::shared_ptr<ngraph::Function> >").pointerTypes("FunctionVector").define());
 
        //TODO: std::list<std::shared_ptr<Node> >   ?
     }

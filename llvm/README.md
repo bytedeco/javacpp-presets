@@ -16,7 +16,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/llvm/apidocs/
 
-&lowast; Bindings are currently available only for the C API of LLVM.
+&lowast; Bindings are currently available only for the C APIs of LLVM and Clang.  
+&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
 
 
 Sample Usage
@@ -29,8 +30,6 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 ```bash
  $ mvn compile exec:java
 ```
-
-&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
 
 ### The `pom.xml` build file
 ```xml

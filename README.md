@@ -119,8 +119,8 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
- * MKL 2019.3  https://software.intel.com/intel-mkl
- * MKL-DNN 0.18.1  https://github.com/intel/mkl-dnn
+ * MKL 2019.4  https://software.intel.com/intel-mkl
+ * MKL-DNN 0.19  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.6  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -136,12 +136,12 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 10.1  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.5  https://developer.nvidia.com/cudnn
    * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.4.0  https://github.com/dmlc/mxnet
+ * MXNet 1.4.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.13.1  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.18.1  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.19.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.12.3  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
@@ -153,9 +153,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
 
 Once everything installed and configured, simply execute
 ```bash
-$ mvn install --projects .,opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
+$ mvn install --projects .,opencv,ffmpeg,etc. -Djavacpp.platform.root=/path/to/android-ndk/
 ```
-inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Also specify `-Djavacpp.cppbuild.skip` as option to skip the execution of the `cppbuild.sh` scripts. In addition to `-Djavacpp.platform=...`, some of the presets can also be built against CUDA with `-Djavacpp.platform.extension=-gpu`. Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
+inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `pom.xml` file itself might not get installed.** (The `-Djavacpp.platform.root=...` option is required only for Android builds.) Also specify `-Djavacpp.cppbuild.skip` as option to skip the execution of the `cppbuild.sh` scripts. In addition to `-Djavacpp.platform=...`, some of the presets can also be built against CUDA with `-Djavacpp.platform.extension=-gpu` or CPython with `-Djavacpp.platform.extension=-python`. Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
 
 ```bash
 $ cd platform
@@ -173,7 +173,7 @@ With the above in working order, the scripts get launched automatically as part 
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The only extension currently supported by some builds is `-gpu`, requiring CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 

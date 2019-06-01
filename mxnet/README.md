@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet 1.4.0  http://mxnet.incubator.apache.org/
+ * MXNet 1.4.1  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -29,7 +29,7 @@ Sample Usage
 ------------
 Here is a simple example of the predict API of MXNet ported to Java from this C++ source file and for this data:
 
- * https://github.com/apache/incubator-mxnet/blob/1.4.0/example/image-classification/predict-cpp/image-classification-predict.cc
+ * https://github.com/apache/incubator-mxnet/blob/1.4.1/example/image-classification/predict-cpp/image-classification-predict.cc
  * http://data.mxnet.io/mxnet/models/imagenet/inception-bn.tar.gz
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `ImageClassificationPredict.java` source files below, simply execute on the command line:
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.5</version>
+    <version>1.5.1-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -51,26 +51,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.4.0-1.5</version>
+            <version>1.4.1-1.5.1-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0-1.5</version>
+            <version>1.4.1-1.5.1-SNAPSHOT</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0-1.5</version>
+            <version>1.4.1-1.5.1-SNAPSHOT</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet</artifactId>
-            <version>1.4.0-1.5</version>
+            <version>1.4.1-1.5.1-SNAPSHOT</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 

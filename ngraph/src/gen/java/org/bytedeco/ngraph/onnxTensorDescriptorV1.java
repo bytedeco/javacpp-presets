@@ -41,7 +41,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    * must exactly match the ValueInfoProto.name of one of the
    * ModelProto.graph.input or ModelProto.graph.output
    */
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native onnxTensorDescriptorV1 name(BytePointer setter);
   /**
    * Data type of the elements in the tensor.
    *
@@ -89,7 +89,7 @@ public class onnxTensorDescriptorV1 extends Pointer {
    * Dimensions of the tensor.
    * For a scalar, this pointer can be NULL.
    */
-  @MemberGetter public native @Cast("const uint64_t*") IntPointer shape();
+  public native @Cast("const uint64_t*") IntPointer shape(); public native onnxTensorDescriptorV1 shape(IntPointer setter);
   /**
    * Pointers to tensor data.
    *

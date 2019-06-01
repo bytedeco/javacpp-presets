@@ -27,7 +27,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bytedeco.javacpp.ClassProperties;
@@ -91,6 +90,7 @@ import org.bytedeco.openblas.presets.*;
     helper = "org.bytedeco.opencv.helper.opencv_core"
 )
 public class opencv_core implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "opencv"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

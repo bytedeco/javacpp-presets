@@ -34,13 +34,13 @@ public class CollectiveContext extends Pointer {
                       @Cast("tensorflow::int64") long step_id, @Const Tensor input, Tensor output);
 
   public native CollectiveExecutor col_exec(); public native CollectiveContext col_exec(CollectiveExecutor setter);        // Not owned
-  @MemberGetter public native @Const DeviceMgr dev_mgr();            // Not owned
+  public native @Const DeviceMgr dev_mgr(); public native CollectiveContext dev_mgr(DeviceMgr setter);            // Not owned
   public native OpKernelContext op_ctx(); public native CollectiveContext op_ctx(OpKernelContext setter);             // Not owned
   public native OpKernelContext.Params op_params(); public native CollectiveContext op_params(OpKernelContext.Params setter);  // Not owned
   @MemberGetter public native @Const @ByRef CollectiveParams col_params();
   @MemberGetter public native @StdString BytePointer exec_key();
   @MemberGetter public native @Cast("const tensorflow::int64") long step_id();
-  @MemberGetter public native @Const Tensor input();  // Not owned
+  public native @Const Tensor input(); public native CollectiveContext input(Tensor setter);  // Not owned
   public native Tensor output(); public native CollectiveContext output(Tensor setter);       // Not owned
   public native Device device(); public native CollectiveContext device(Device setter);       // The device for which this instance labors
   @MemberGetter public native @StdString BytePointer device_name();

@@ -74,7 +74,7 @@ public class TensorSliceSet extends Pointer {
   
     public native @ByRef TensorSlice slice(); public native SliceInfo slice(TensorSlice setter);
     public native @StdString BytePointer tag(); public native SliceInfo tag(BytePointer setter);
-    @MemberGetter public native @Const FloatPointer data();
+    public native @Const FloatPointer data(); public native SliceInfo data(FloatPointer setter);
     public native @Cast("tensorflow::int64") long num_floats(); public native SliceInfo num_floats(long setter);
   }
 

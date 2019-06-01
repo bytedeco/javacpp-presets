@@ -20,7 +20,6 @@ import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 import static org.bytedeco.mxnet.global.mxnet.*;
 
-
 @Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
 public class ExecutorMonitorCallback extends FunctionPointer {
     static { Loader.load(); }

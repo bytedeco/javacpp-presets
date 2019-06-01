@@ -29,6 +29,7 @@
 
 package org.bytedeco.flycapture.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -69,6 +70,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 linkpath    = "C:/Program Files/Point Grey Research/FlyCapture2/lib64/vs2015/",
                 preloadpath = "C:/Program Files/Point Grey Research/FlyCapture2/bin64/vs2015/") })
 public class FlyCapture2 implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "flycapture"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FLYCAPTURE2_API", "FLYCAPTURE2_LOCAL",
                 "MULTISYNCLIBRARY_API", "MULTISYNCLIBRARY_LOCAL").cppTypes().annotations().cppText(""))

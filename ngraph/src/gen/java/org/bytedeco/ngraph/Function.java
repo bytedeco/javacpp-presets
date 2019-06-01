@@ -121,4 +121,7 @@ public class Function extends Pointer {
 
         public native @Cast("size_t") long get_placement();
         public native void set_placement(@Cast("size_t") long placement);
+
+        /** \brief Returns true if any of the op's defined in the function contains partial shape */
+        public native @Cast("bool") boolean is_dynamic();
     }

@@ -22,6 +22,7 @@
 
 package org.bytedeco.gsl.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.MemberGetter;
@@ -108,6 +109,8 @@ import org.bytedeco.openblas.presets.openblas;
     @Platform(value = "windows", preload = "libgsl-23") })
 @NoException
 public class gsl implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "gsl"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
                .put(new Info("FILE").pointerTypes("FILE"))

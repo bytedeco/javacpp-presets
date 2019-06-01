@@ -15,14 +15,14 @@
   <name>JavaCPP Presets for nGraph</name>
 
   <properties>
-    <revision>0.18.1-${project.parent.version}</revision>
+    <revision>0.19.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.18.1-${project.parent.version}</version>
+      <version>0.19-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

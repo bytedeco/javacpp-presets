@@ -25,9 +25,9 @@ public class PyMethodDef extends Pointer {
         return (PyMethodDef)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer ml_name();   /* The name of the built-in function/method */
+    public native @Cast("const char*") BytePointer ml_name(); public native PyMethodDef ml_name(BytePointer setter);   /* The name of the built-in function/method */
     public native PyCFunction ml_meth(); public native PyMethodDef ml_meth(PyCFunction setter);    /* The C function that implements it */
     public native int ml_flags(); public native PyMethodDef ml_flags(int setter);   /* Combination of METH_xxx flags, which mostly
                                describe the args expected by the C func */
-    @MemberGetter public native @Cast("const char*") BytePointer ml_doc();    /* The __doc__ attribute, or NULL */
+    public native @Cast("const char*") BytePointer ml_doc(); public native PyMethodDef ml_doc(BytePointer setter);    /* The __doc__ attribute, or NULL */
 }

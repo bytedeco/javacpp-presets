@@ -54,18 +54,18 @@ public class Backend extends Pointer {
     /** \brief Compiles a Function.
      *  @param func The function to compile
      *  @return compiled function or nullptr on failure */
-    public native @SharedPtr Executable compile(@SharedPtr Function func,
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                                     @Cast("bool") boolean enable_performance_data/*=false*/);
-    public native @SharedPtr Executable compile(@SharedPtr Function func);
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func);
 
     /** \brief Compiles a Function.
      *  @param func The function to compile
      *  @param pass_config Configuration object for defining compilation options
      *  @return compiled function or nullptr on failure */
-    public native @SharedPtr Executable compile(@SharedPtr Function func,
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                                     @ByRef PassConfig pass_config,
                                                     @Cast("bool") boolean enable_performance_data/*=false*/);
-    public native @SharedPtr Executable compile(@SharedPtr Function func,
+    public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                                     @ByRef PassConfig pass_config);
 
     /** \brief Test if a backend is capable of supporting an op

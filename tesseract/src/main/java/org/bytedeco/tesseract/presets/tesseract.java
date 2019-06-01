@@ -23,6 +23,7 @@
 package org.bytedeco.tesseract.presets;
 
 import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -45,6 +46,8 @@ import org.bytedeco.leptonica.presets.lept;
     @Platform(value = "android", link = "tesseract"),
     @Platform(value = "windows", link = "libtesseract", preload = "libtesseract-4") })
 public class tesseract implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "tesseract"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("locale.h").skip())
                .put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",
