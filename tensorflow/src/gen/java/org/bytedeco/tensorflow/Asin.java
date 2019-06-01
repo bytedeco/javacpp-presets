@@ -10,7 +10,24 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Computes asin of x element-wise.
+/** Computes the trignometric inverse sine of x element-wise.
+ * 
+ *  The {@code tf.math.asin} operation returns the inverse of {@code tf.math.sin}, such that
+ *  if {@code y = tf.math.sin(x)} then, {@code x = tf.math.asin(y)}.
+ * 
+ *  **Note**: The output of {@code tf.math.asin} will lie within the invertible range
+ *  of sine, i.e [-pi/2, pi/2].
+ * 
+ *  For example:
+ * 
+ *  <pre>{@code python
+ *  # Note: [1.047, 0.785] ~= [(pi/3), (pi/4)]
+ *  x = tf.constant([1.047, 0.785])
+ *  y = tf.math.sin(x) # [0.8659266, 0.7068252]
+ * 
+ *  tf.math.asin(y) # [1.047, 0.785] = x
+ *  }</pre>
+ * 
  * 
  *  Arguments:
  *  * scope: A Scope object

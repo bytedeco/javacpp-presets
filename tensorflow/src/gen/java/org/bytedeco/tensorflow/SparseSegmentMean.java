@@ -12,9 +12,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Computes the mean along sparse segments of a tensor.
  * 
- *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
- *  for an explanation of segments.
+ *  See {@code tf.sparse.segment_sum} for usage examples.
  * 
  *  Like {@code SegmentMean}, but {@code segment_ids} can have rank less than {@code data}'s first
  *  dimension, selecting a subset of dimension 0, specified by {@code indices}.

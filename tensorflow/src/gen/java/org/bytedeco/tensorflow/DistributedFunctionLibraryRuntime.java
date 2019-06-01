@@ -55,4 +55,7 @@ public class DistributedFunctionLibraryRuntime extends Pointer {
                      @Cast("tensorflow::FunctionLibraryRuntime::LocalHandle") long handle,
                      @ByVal TensorVector args, TensorVector rets,
                      @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
+
+  // DeviceMgr with *all* available devices.
+  public native DeviceMgr remote_device_mgr();
 }

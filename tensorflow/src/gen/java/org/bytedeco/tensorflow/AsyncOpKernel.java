@@ -20,14 +20,22 @@ public class AsyncOpKernel extends OpKernel {
 
   // Asynchronous compute.
   //
-  // Implementations of ComputeAsync() must run "done" to signal the
-  // completion of the computation. "context" is guaranteed to be
-  // alive until the "done" callback starts.
+  // Implementations of ComputeAsync() must ensure that `done` is (eventually)
+  // called exactly once to signal the completion of the computation. The
+  // implementation of ComputeAsync() must not block on the execution of another
+  // OpKernel. `done` may be called by the current thread, or by another thread
+  // `context` is guaranteed to stay alive until the `done` callback starts.
+  //
+  // Since it is possible that the unblocking kernel may never run (due to an
+  // error or cancellation), in most cases the AsyncOpKernel should implement
+  // cancellation support via `ctx->cancellation_manager()`.
+  //
+  // WARNING: As soon as the `done` callback starts, `context` and `this` may be
+  // deleted. No code depending on these objects should execute after the call
+  // to `done`.
   public native void ComputeAsync(OpKernelContext context, @ByVal @Cast("tensorflow::AsyncOpKernel::DoneCallback*") Fn done);
 
   public native AsyncOpKernel AsAsync();
 
   public native void Compute(OpKernelContext context);
-
-  public native @Cast("bool") boolean IsExpensive();
 }

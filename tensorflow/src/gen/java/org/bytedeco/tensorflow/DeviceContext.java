@@ -32,11 +32,13 @@ public class DeviceContext extends Pointer {
                                           Stream stream);
 
   // "cpu_tensor" is a tensor on a CPU. Copies "cpu_tensor" into
-  // "device_tensor" which is on a GPU device "device". "device_tensor"
+  // "device_tensor" which is on a non-CPU device "device". "device_tensor"
   // must be allocated to be of the same size as "cpu_tensor".
   public native void CopyCPUTensorToDevice(@Const Tensor cpu_tensor, Device device,
-                                       Tensor device_tensor,
-                                       @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+                                       Tensor device_tensor, @ByVal @Cast("tensorflow::StatusCallback*") Pointer done,
+                                       @Cast("bool") boolean sync_dst_compute/*=true*/);
+  public native void CopyCPUTensorToDevice(@Const Tensor cpu_tensor, Device device,
+                                       Tensor device_tensor, @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
 
   // Copies a tensor in this device.
   public native void CopyTensorInSameDevice(@Const Tensor input_tensor,

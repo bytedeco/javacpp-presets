@@ -38,6 +38,21 @@ public class CollectiveExecutor extends PeerAccessInterface {
 
   public native PerStepCollectiveRemoteAccess remote_access();
 
+  // `WaitForDependencies` and `Launched` are used for fine-grained control of
+  // execution order between collective instances.  These functions are intended
+  // to be called in `Run` function of collective implementations, and may be
+  // used to make part, or whole, of the collective execution ordered with
+  // respect to other collective instances.
+  //
+  // `WaitForDependencies` will block until it is safe to continue the callee's
+  // execution, where safety is defined as: ordered with respect to the
+  // collective instances defined in the callee's `wait_for` attribute.
+  public native void WaitForDependencies(@Const @ByRef CollectiveParams col_params);
+  // `Launched` unblocks the dependent collective instances by recording that
+  // this callee device has completed the critical portion of the collective
+  // execution.
+  public native void Launched(@Const @ByRef CollectiveParams col_params);
+
   // Used to designate an invalid group or instance key.
   public static native @Cast("tensorflow::int64") long kInvalidId(); public static native void kInvalidId(long setter);
 

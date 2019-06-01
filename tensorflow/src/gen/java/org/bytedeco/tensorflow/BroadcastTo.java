@@ -19,7 +19,8 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  and works its way forward.
  * 
  *  For example,
- *  <pre>{@code
+ * 
+ *  <pre>{@code python
  *  >>> x = tf.constant([1, 2, 3])
  *  >>> y = tf.broadcast_to(x, [3, 3])
  *  >>> sess.run(y)
@@ -27,6 +28,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *         [1, 2, 3],
  *         [1, 2, 3]], dtype=int32)
  *  }</pre>
+ * 
  *  In the above example, the input Tensor with the shape of {@code [1, 3]}
  *  is broadcasted to output Tensor with shape of {@code [3, 3]}.
  * 

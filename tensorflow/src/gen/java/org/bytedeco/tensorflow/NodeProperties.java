@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-        // Declared below
+         // Declared below
 @Namespace("tensorflow") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class NodeProperties extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

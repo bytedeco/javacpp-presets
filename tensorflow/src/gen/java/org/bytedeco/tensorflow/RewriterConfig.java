@@ -59,16 +59,19 @@ public class RewriterConfig extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -212,8 +215,8 @@ public class RewriterConfig extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_memory_optimizer_target_node_name_scope();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_memory_optimizer_target_node_name_scope();
   public native void set_allocated_memory_optimizer_target_node_name_scope(@StdString @Cast({"char*", "std::string*"}) BytePointer memory_optimizer_target_node_name_scope);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_memory_optimizer_target_node_name_scope();
-  public native @Deprecated void unsafe_arena_set_allocated_memory_optimizer_target_node_name_scope(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_memory_optimizer_target_node_name_scope();
+  public native void unsafe_arena_set_allocated_memory_optimizer_target_node_name_scope(
         @StdString @Cast({"char*", "std::string*"}) BytePointer memory_optimizer_target_node_name_scope);
 
   // .tensorflow.AutoParallelOptions auto_parallel = 5;
@@ -241,6 +244,32 @@ public class RewriterConfig extends MessageLite {
   public native void unsafe_arena_set_allocated_scoped_allocator_opts(
         ScopedAllocatorOptions scoped_allocator_opts);
   public native ScopedAllocatorOptions unsafe_arena_release_scoped_allocator_opts();
+
+  // .tensorflow.VerifierConfig inter_optimizer_verifier_config = 300;
+  public native @Cast("bool") boolean has_inter_optimizer_verifier_config();
+  public native void clear_inter_optimizer_verifier_config();
+  @MemberGetter public static native int kInterOptimizerVerifierConfigFieldNumber();
+  public static final int kInterOptimizerVerifierConfigFieldNumber = kInterOptimizerVerifierConfigFieldNumber();
+  public native @Const @ByRef VerifierConfig inter_optimizer_verifier_config();
+  public native VerifierConfig release_inter_optimizer_verifier_config();
+  public native VerifierConfig mutable_inter_optimizer_verifier_config();
+  public native void set_allocated_inter_optimizer_verifier_config(VerifierConfig inter_optimizer_verifier_config);
+  public native void unsafe_arena_set_allocated_inter_optimizer_verifier_config(
+        VerifierConfig inter_optimizer_verifier_config);
+  public native VerifierConfig unsafe_arena_release_inter_optimizer_verifier_config();
+
+  // .tensorflow.VerifierConfig post_optimization_verifier_config = 301;
+  public native @Cast("bool") boolean has_post_optimization_verifier_config();
+  public native void clear_post_optimization_verifier_config();
+  @MemberGetter public static native int kPostOptimizationVerifierConfigFieldNumber();
+  public static final int kPostOptimizationVerifierConfigFieldNumber = kPostOptimizationVerifierConfigFieldNumber();
+  public native @Const @ByRef VerifierConfig post_optimization_verifier_config();
+  public native VerifierConfig release_post_optimization_verifier_config();
+  public native VerifierConfig mutable_post_optimization_verifier_config();
+  public native void set_allocated_post_optimization_verifier_config(VerifierConfig post_optimization_verifier_config);
+  public native void unsafe_arena_set_allocated_post_optimization_verifier_config(
+        VerifierConfig post_optimization_verifier_config);
+  public native VerifierConfig unsafe_arena_release_post_optimization_verifier_config();
 
   // .tensorflow.RewriterConfig.Toggle layout_optimizer = 1;
   public native void clear_layout_optimizer();
@@ -367,4 +396,18 @@ public class RewriterConfig extends MessageLite {
   public static final int kPinToHostOptimizationFieldNumber = kPinToHostOptimizationFieldNumber();
   public native @Cast("tensorflow::RewriterConfig_Toggle") int pin_to_host_optimization();
   public native void set_pin_to_host_optimization(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // .tensorflow.RewriterConfig.Toggle implementation_selector = 22;
+  public native void clear_implementation_selector();
+  @MemberGetter public static native int kImplementationSelectorFieldNumber();
+  public static final int kImplementationSelectorFieldNumber = kImplementationSelectorFieldNumber();
+  public native @Cast("tensorflow::RewriterConfig_Toggle") int implementation_selector();
+  public native void set_implementation_selector(@Cast("tensorflow::RewriterConfig_Toggle") int value);
+
+  // .tensorflow.RewriterConfig.Toggle auto_mixed_precision = 23;
+  public native void clear_auto_mixed_precision();
+  @MemberGetter public static native int kAutoMixedPrecisionFieldNumber();
+  public static final int kAutoMixedPrecisionFieldNumber = kAutoMixedPrecisionFieldNumber();
+  public native @Cast("tensorflow::RewriterConfig_Toggle") int auto_mixed_precision();
+  public native void set_auto_mixed_precision(@Cast("tensorflow::RewriterConfig_Toggle") int value);
 }

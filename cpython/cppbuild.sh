@@ -26,7 +26,7 @@ case $PLATFORM in
         make install
         ;;
     macosx-*)
-        ./configure --prefix=$INSTALL_PATH --enable-shared LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../lib/'
+        ./configure --prefix=$INSTALL_PATH --enable-shared --with-openssl="$(brew --prefix openssl@1.1)" LDFLAGS='-s -Wl,-rpath,@loader_path/,-rpath,@loader_path/../lib/'
         sedinplace 's:-install_name,$(prefix)/lib/:-install_name,@rpath/:g' Makefile
         make -j $MAKEJ
         make install

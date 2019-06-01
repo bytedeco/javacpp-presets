@@ -78,6 +78,7 @@ public class OpKernelContext extends Pointer {
     // Mechanism used by this op kernel invocation to communicate with
     // computations running on other devices.
     public native Rendezvous rendezvous(); public native Params rendezvous(Rendezvous setter);
+    public native @Cast("const std::function<tensorflow::Status(const int64,const DeviceMgr*,Rendezvous**r)>*") Pointer create_rendezvous(); public native Params create_rendezvous(Pointer setter);
 
     // Mechanism for executing a collective op that needs to coordinate
     // with parallel instances running on other devices.
@@ -85,6 +86,9 @@ public class OpKernelContext extends Pointer {
 
     // The session state for this op.
     public native SessionState session_state(); public native Params session_state(SessionState setter);
+
+    // Unique session identifier. Can be empty.
+    public native @StdString BytePointer session_handle(); public native Params session_handle(BytePointer setter);
 
     // The tensor store for this op.
     public native TensorStore tensor_store(); public native Params tensor_store(TensorStore setter);
@@ -123,13 +127,17 @@ public class OpKernelContext extends Pointer {
     public static final int kNoReservation = kNoReservation();
     // Values in [0,...) represent reservations for the indexed output.
     public native @Const IntPointer forward_from_array(); public native Params forward_from_array(IntPointer setter);
+
+    // For tracking actively running deferred ops.
+    @MemberSetter public native Params inc_num_deferred_ops_function(@ByVal Fn fn);
+    @MemberSetter public native Params dec_num_deferred_ops_function(@ByVal Fn fn);
   }
 
   // params must outlive the OpKernelContext.
   public OpKernelContext(Params params) { super((Pointer)null); allocate(params); }
   private native void allocate(Params params);
-  public OpKernelContext(Params params, int noutputs) { super((Pointer)null); allocate(params, noutputs); }
-  private native void allocate(Params params, int noutputs);
+  public OpKernelContext(Params params, int num_outputs) { super((Pointer)null); allocate(params, num_outputs); }
+  private native void allocate(Params params, int num_outputs);
 
   public native Env env();
 
@@ -545,11 +553,18 @@ public class OpKernelContext extends Pointer {
   // An op kernel communicates with outside environment through
   // Rendezvous Send() and Recv().
   public native Rendezvous rendezvous();
+  public native @ByVal Status create_rendezvous(@Cast("const tensorflow::int64") long step_id, @Const DeviceMgr device_mgr,
+                             @Cast("Rendezvous**") PointerPointer r);
+  public native @ByVal Status create_rendezvous(@Cast("const tensorflow::int64") long step_id, @Const DeviceMgr device_mgr,
+                             @ByPtrPtr Rendezvous r);
 
   public native CollectiveExecutor collective_executor();
 
   // An op kernel can access the session state it belongs to.
   public native SessionState session_state();
+
+  // Unique identifier of the session it belongs to. Can be empty.
+  public native @StdString BytePointer session_handle();
 
   // An op kernel can access the tensor store of the run it belongs to.
   public native TensorStore tensor_store();
@@ -597,7 +612,7 @@ public class OpKernelContext extends Pointer {
 
   // Cancellation.
   //
-  // EXPERIMENTAL. See the implementation in tensorflow::TensorQueue for an
+  // EXPERIMENTAL. See the implementation in tensorflow::FIFOQueue for an
   // example of how to use this API.
   public native CancellationManager cancellation_manager();
 
@@ -614,7 +629,7 @@ public class OpKernelContext extends Pointer {
   // Retrieve list of referenced tensors in out_vector. Once this is
   // called, it is not legal to reference any more tensors.  Should
   // not be called from Op kernels.
-  public native void retrieve_accessed_tensors(@Cast("tensorflow::TensorReferenceVector*") AllocatorAttributesVector out_vector);
+  public native void retrieve_accessed_tensors(@Cast("tensorflow::TensorReferenceVector*") TensorValueVector out_vector);
 
   // Per-step container for use by white-listed internal ops.
   public native ScopedStepContainer step_container();
@@ -662,4 +677,20 @@ public class OpKernelContext extends Pointer {
   public native void clear_recorded_memory();
 
   public native @Cast("bool") boolean input_is_ref(int index);
+
+  public native void set_record_memory_consumption(@Cast("bool") boolean v);
+
+  // Used by OpKernel implementations to track actively running deferred ops.
+  //
+  // A deferred op is one whose Compute method returns (or whose ComputeAsync
+  // method invokes the callback) when work is scheduled onto a device. At that
+  // point, we don't know when the work will actually complete (or if it has
+  // already completed) on the device. These functions allow the executor to
+  // track the status of deferred ops and act accordingly.
+  //
+  // Deferred OpKernel implementations must use these methods to get two
+  // functions. It then must call these two functions in pairs, before and after
+  // device execution, respectively.
+  
+  
 }

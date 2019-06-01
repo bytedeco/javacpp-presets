@@ -10,11 +10,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Given a quantized tensor described by (input, input_min, input_max), outputs a
+/** Computes a range that covers the actual values present in a quantized tensor.
  * 
- *  range that covers the actual values present in that tensor.  This op is
- *  typically used to produce the requested_output_min and requested_output_max for
- *  Requantize.
+ *  Given a quantized tensor described by {@code (input, input_min, input_max)}, outputs a
+ *  range that covers the actual values present in that tensor. This op is typically
+ *  used to produce the {@code requested_output_min} and {@code requested_output_max} for
+ *  {@code Requantize}.
  * 
  *  Arguments:
  *  * scope: A Scope object

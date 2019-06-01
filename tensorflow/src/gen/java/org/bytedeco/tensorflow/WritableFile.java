@@ -58,11 +58,30 @@ public class WritableFile extends Pointer {
   ///
   public native @ByVal Status Flush();
 
+  // \brief Returns the name of the file.
+  /**
+   *  This is an optional operation that may not be implemented by every
+   *  filesystem. */
+  
+  ///
+  public native @ByVal Status Name(@StringPiece @Cast({"char*", "StringPiece*"}) BytePointer result);
+
   /** \brief Syncs contents of file to filesystem.
    * 
    *  This waits for confirmation from the filesystem that the contents
    *  of the file have been persisted to the filesystem; if the OS
    *  or machine crashes after a successful Sync, the contents should
    *  be properly saved. */
+  
+  ///
   public native @ByVal Status Sync();
+
+  /** \brief Retrieves the current write position in the file, or -1 on
+   *  error.
+   * 
+   *  This is an optional operation, subclasses may choose to return
+   *  errors::Unimplemented. */
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") LongPointer position);
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") LongBuffer position);
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") long... position);
 }

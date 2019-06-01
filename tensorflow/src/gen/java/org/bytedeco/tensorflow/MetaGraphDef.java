@@ -60,16 +60,19 @@ public class MetaGraphDef extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -141,4 +144,17 @@ public class MetaGraphDef extends MessageLite {
   public native void unsafe_arena_set_allocated_saver_def(
         SaverDef saver_def);
   public native SaverDef unsafe_arena_release_saver_def();
+
+  // .tensorflow.SavedObjectGraph object_graph_def = 7;
+  public native @Cast("bool") boolean has_object_graph_def();
+  public native void clear_object_graph_def();
+  @MemberGetter public static native int kObjectGraphDefFieldNumber();
+  public static final int kObjectGraphDefFieldNumber = kObjectGraphDefFieldNumber();
+  public native @Const @ByRef SavedObjectGraph object_graph_def();
+  public native SavedObjectGraph release_object_graph_def();
+  public native SavedObjectGraph mutable_object_graph_def();
+  public native void set_allocated_object_graph_def(SavedObjectGraph object_graph_def);
+  public native void unsafe_arena_set_allocated_object_graph_def(
+        SavedObjectGraph object_graph_def);
+  public native SavedObjectGraph unsafe_arena_release_object_graph_def();
 }

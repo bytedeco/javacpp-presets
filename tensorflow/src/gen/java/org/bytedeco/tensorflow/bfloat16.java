@@ -104,6 +104,10 @@ public class bfloat16 extends Pointer {
 
   public static native @ByVal bfloat16 lowest();
 
+  public static native @ByVal bfloat16 min_positive_normal();
+
+  public native @Cast("bool") boolean IsZero();
+
   public native @Cast("uint16_t") short value(); public native bfloat16 value(short setter);
 
   // A value that represents "not a number".

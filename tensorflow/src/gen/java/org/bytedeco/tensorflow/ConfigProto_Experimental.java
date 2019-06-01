@@ -60,16 +60,19 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -92,8 +95,8 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_collective_group_leader();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_collective_group_leader();
   public native void set_allocated_collective_group_leader(@StdString @Cast({"char*", "std::string*"}) BytePointer collective_group_leader);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_group_leader();
-  public native @Deprecated void unsafe_arena_set_allocated_collective_group_leader(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_group_leader();
+  public native void unsafe_arena_set_allocated_collective_group_leader(
         @StdString @Cast({"char*", "std::string*"}) BytePointer collective_group_leader);
 
   // string executor_type = 3;
@@ -110,8 +113,8 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_executor_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_executor_type();
   public native void set_allocated_executor_type(@StdString @Cast({"char*", "std::string*"}) BytePointer executor_type);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_executor_type();
-  public native @Deprecated void unsafe_arena_set_allocated_executor_type(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_executor_type();
+  public native void unsafe_arena_set_allocated_executor_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer executor_type);
 
   // int32 recv_buf_max_chunk = 4;
@@ -127,4 +130,39 @@ public class ConfigProto_Experimental extends MessageLite {
   public static final int kUseNumaAffinityFieldNumber = kUseNumaAffinityFieldNumber();
   public native @Cast("bool") boolean use_numa_affinity();
   public native void set_use_numa_affinity(@Cast("bool") boolean value);
+
+  // bool collective_deterministic_sequential_execution = 6;
+  public native void clear_collective_deterministic_sequential_execution();
+  @MemberGetter public static native int kCollectiveDeterministicSequentialExecutionFieldNumber();
+  public static final int kCollectiveDeterministicSequentialExecutionFieldNumber = kCollectiveDeterministicSequentialExecutionFieldNumber();
+  public native @Cast("bool") boolean collective_deterministic_sequential_execution();
+  public native void set_collective_deterministic_sequential_execution(@Cast("bool") boolean value);
+
+  // bool collective_nccl = 7;
+  public native void clear_collective_nccl();
+  @MemberGetter public static native int kCollectiveNcclFieldNumber();
+  public static final int kCollectiveNcclFieldNumber = kCollectiveNcclFieldNumber();
+  public native @Cast("bool") boolean collective_nccl();
+  public native void set_collective_nccl(@Cast("bool") boolean value);
+
+  // bool share_session_state_in_clusterspec_propagation = 8;
+  public native void clear_share_session_state_in_clusterspec_propagation();
+  @MemberGetter public static native int kShareSessionStateInClusterspecPropagationFieldNumber();
+  public static final int kShareSessionStateInClusterspecPropagationFieldNumber = kShareSessionStateInClusterspecPropagationFieldNumber();
+  public native @Cast("bool") boolean share_session_state_in_clusterspec_propagation();
+  public native void set_share_session_state_in_clusterspec_propagation(@Cast("bool") boolean value);
+
+  // bool disable_thread_spinning = 9;
+  public native void clear_disable_thread_spinning();
+  @MemberGetter public static native int kDisableThreadSpinningFieldNumber();
+  public static final int kDisableThreadSpinningFieldNumber = kDisableThreadSpinningFieldNumber();
+  public native @Cast("bool") boolean disable_thread_spinning();
+  public native void set_disable_thread_spinning(@Cast("bool") boolean value);
+
+  // bool share_cluster_devices_in_session = 10;
+  public native void clear_share_cluster_devices_in_session();
+  @MemberGetter public static native int kShareClusterDevicesInSessionFieldNumber();
+  public static final int kShareClusterDevicesInSessionFieldNumber = kShareClusterDevicesInSessionFieldNumber();
+  public native @Cast("bool") boolean share_cluster_devices_in_session();
+  public native void set_share_cluster_devices_in_session(@Cast("bool") boolean value);
 }

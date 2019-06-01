@@ -17,13 +17,18 @@ public class TFE_Op extends Pointer {
     public TFE_Op(Pointer p) { super(p); }
 
   public TFE_Op(TFE_Context ctx, @Cast("const char*") BytePointer op, @Cast("bool") boolean is_function,
-           @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
+           @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t,
+           TFE_OpInferenceContext inference_ctx) { super((Pointer)null); allocate(ctx, op, is_function, t, inference_ctx); }
   private native void allocate(TFE_Context ctx, @Cast("const char*") BytePointer op, @Cast("bool") boolean is_function,
-           @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t);
+           @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t,
+           TFE_OpInferenceContext inference_ctx);
   public TFE_Op(TFE_Context ctx, String op, @Cast("bool") boolean is_function,
-           @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
+           @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t,
+           TFE_OpInferenceContext inference_ctx) { super((Pointer)null); allocate(ctx, op, is_function, t, inference_ctx); }
   private native void allocate(TFE_Context ctx, String op, @Cast("bool") boolean is_function,
-           @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t);
+           @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t,
+           TFE_OpInferenceContext inference_ctx);
 
   @MemberGetter public native @ByRef EagerOperation operation();
+  public native @MoveUniquePtr TFE_OpInferenceContext inference_ctx(); public native TFE_Op inference_ctx(TFE_OpInferenceContext setter);
 }

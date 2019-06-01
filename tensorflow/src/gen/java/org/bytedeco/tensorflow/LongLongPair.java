@@ -20,7 +20,7 @@ public class LongLongPair extends Pointer {
     public native @Name("operator=") @ByRef LongLongPair put(@ByRef LongLongPair x);
 
 
-    @MemberGetter public native long first(); public native LongLongPair first(long first);
+    @MemberGetter public native @Cast("google::protobuf::uint64") long first(); public native LongLongPair first(long first);
     @MemberGetter public native @Cast("google::protobuf::uint64") long second();  public native LongLongPair second(long second);
 
     public LongLongPair put(long firstValue, long secondValue) {

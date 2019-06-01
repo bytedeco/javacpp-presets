@@ -13,7 +13,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 /** Computes the sum along sparse segments of a tensor.
  * 
  *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  [the section on segmentation](https://tensorflow.org/api_docs/python/tf/math#Segmentation)
  *  for an explanation of segments.
  * 
  *  Like {@code SegmentSum}, but {@code segment_ids} can have rank less than {@code data}'s first

@@ -10,10 +10,11 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Decode the first frame of a GIF-encoded image to a uint8 tensor.
+/** Decode the frame(s) of a GIF-encoded image to a uint8 tensor.
  * 
- *  GIF with frame or transparency compression are not supported
- *  convert animated GIF from compressed to uncompressed by:
+ *  GIF images with frame or transparency compression are not supported.
+ *  On Linux and MacOS systems, convert animated GIFs from compressed to
+ *  uncompressed by running:
  * 
  *      convert $src.gif -coalesce $dst.gif
  * 
@@ -25,7 +26,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  * contents: 0-D.  The GIF-encoded image.
  * 
  *  Returns:
- *  * {@code Output}: 4-D with shape {@code [num_frames, height, width, 3]}. RGB order */
+ *  * {@code Output}: 4-D with shape {@code [num_frames, height, width, 3]}. RGB channel order. */
 @Namespace("tensorflow::ops") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class DecodeGif extends Pointer {
     static { Loader.load(); }

@@ -10,6 +10,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
+// #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+// #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
 @Namespace("google::protobuf::internal") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class RepeatedPtrFieldBase extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

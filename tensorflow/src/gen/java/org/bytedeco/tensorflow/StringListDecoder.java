@@ -15,16 +15,12 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 // order to retrieve the length of all the strings in the sequence. For each
 // size returned a call to Data() is expected and will return the actual
 // string.
-@Namespace("tensorflow::port") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+@Namespace("tensorflow::port") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class StringListDecoder extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringListDecoder(Pointer p) { super(p); }
 
-  public StringListDecoder(@StdString BytePointer in) { super((Pointer)null); allocate(in); }
-  private native void allocate(@StdString BytePointer in);
-  public StringListDecoder(@StdString String in) { super((Pointer)null); allocate(in); }
-  private native void allocate(@StdString String in);
 
   // Populates the given vector with the lengths of each string in the sequence
   // being decoded. Upon returning the vector is guaranteed to contain as many

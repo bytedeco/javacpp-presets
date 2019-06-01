@@ -18,6 +18,17 @@ public class RandomAccessFile extends Pointer {
     public RandomAccessFile(Pointer p) { super(p); }
 
 
+  /** \brief Returns the name of the file.
+   * 
+   *  This is an optional operation that may not be implemented by every
+   *  filesystem. */
+  
+  ///
+  ///
+  ///
+  ///
+  public native @ByVal Status Name(@StringPiece @Cast({"char*", "StringPiece*"}) BytePointer result);
+
   /** \brief Reads up to {@code n} bytes from the file starting at {@code offset}.
    * 
    *  {@code scratch[0..n-1]} may be written by this routine.  Sets {@code *result}

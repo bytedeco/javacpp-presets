@@ -57,13 +57,39 @@ public class GatherV2 extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GatherV2(Pointer p) { super(p); }
 
+  /** Optional attribute setters for GatherV2 */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to 0 */
+    public native @ByVal Attrs BatchDims(@Cast("tensorflow::int64") long x);
+
+    public native @Cast("tensorflow::int64") long batch_dims_(); public native Attrs batch_dims_(long setter);
+  }
   public GatherV2(@Const @ByRef Scope scope, @ByVal Input params,
            @ByVal Input indices, @ByVal Input axis) { super((Pointer)null); allocate(scope, params, indices, axis); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input params,
            @ByVal Input indices, @ByVal Input axis);
+  public GatherV2(@Const @ByRef Scope scope, @ByVal Input params,
+           @ByVal Input indices, @ByVal Input axis, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, params, indices, axis, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input params,
+           @ByVal Input indices, @ByVal Input axis, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs BatchDims(@Cast("tensorflow::int64") long x);
 
   public native @ByRef Operation operation(); public native GatherV2 operation(Operation setter);
   public native @ByRef Output output(); public native GatherV2 output(Output setter);

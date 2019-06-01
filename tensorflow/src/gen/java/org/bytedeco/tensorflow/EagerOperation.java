@@ -16,13 +16,13 @@ public class EagerOperation extends Pointer {
     public EagerOperation(Pointer p) { super(p); }
 
   public EagerOperation(EagerContext ctx, @Cast("const char*") BytePointer op,
-                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
+                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
   private native void allocate(EagerContext ctx, @Cast("const char*") BytePointer op,
-                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t);
+                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t);
   public EagerOperation(EagerContext ctx, String op,
-                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
+                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t) { super((Pointer)null); allocate(ctx, op, is_function, t); }
   private native void allocate(EagerContext ctx, String op,
-                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap t);
+                   @Cast("bool") boolean is_function, @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap t);
 
   public native @Cast("bool") boolean is_function();
 
@@ -34,9 +34,10 @@ public class EagerOperation extends Pointer {
   public native @Const @ByRef TensorHandleVector Inputs();
   public native TensorHandleVector MutableInputs();
   public native void AddInput(TensorHandle h);
+  public native void ConsumeInput(TensorHandle h);
 
   public native @StdString BytePointer Name();
-  public native @Cast("const tensorflow::AttrTypeMap*") VarToShapeMap AttrTypes();
+  public native @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap AttrTypes();
 
   public native Device Device();
   public native @ByVal Status SetDevice(@Cast("const char*") BytePointer device);
@@ -44,4 +45,6 @@ public class EagerOperation extends Pointer {
   public native void SetDevice(Device device);
 
   public native void SetUseXla(@Cast("bool") boolean use_xla);
+
+  public native @StdString BytePointer DebugString();
 }

@@ -16,7 +16,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  misisng, the {@code output} tensor at that position will be zeroed.
  * 
  *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  [the section on segmentation](https://tensorflow.org/api_docs/python/tf/sparse#Segmentation)
  *  for an explanation of segments.
  * 
  *  For example:

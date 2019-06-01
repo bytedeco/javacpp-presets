@@ -85,10 +85,10 @@ public class TensorSliceReader extends Pointer {
                      @UniquePtr Tensor out_tensor);
 
   // Returns a map from tensor name to shape.
-  public native @ByVal VarToShapeMap GetVariableToShapeMap();
+  public native @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::VarToShapeMap*") StringIntUnorderedMap GetVariableToShapeMap();
 
   // Returns a map from tensor name to data type.
-  public native @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::VarToDataTypeMap*") VarToShapeMap GetVariableToDataTypeMap();
+  public native @ByVal @Cast("tensorflow::checkpoint::TensorSliceReader::VarToDataTypeMap*") StringIntUnorderedMap GetVariableToDataTypeMap();
 
   // Returns a string containing names and shapes of all the tensors.
   public native @StdString BytePointer DebugString();

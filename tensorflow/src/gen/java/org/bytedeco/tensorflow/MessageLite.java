@@ -113,6 +113,11 @@ public class MessageLite extends Pointer {
   // Read a protocol buffer from the given zero-copy input stream, expecting
   // the message to be exactly "size" bytes long.  If successful, exactly
   // this many bytes will have been consumed from the input.
+  public native @Cast("bool") boolean MergePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
+  // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
+  // missing required fields.
+  public native @Cast("bool") boolean MergeFromBoundedZeroCopyStream(ZeroCopyInputStream input,
+                                               int size);
   public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
   // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
   // missing required fields.
@@ -154,7 +159,14 @@ public class MessageLite extends Pointer {
   //
   // MergeFromCodedStream() is just implemented as MergePartialFromCodedStream()
   // followed by IsInitialized().
+// #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+// #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
+// #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
+  // Merge a protocol buffer contained in a string.
+  public native @Cast("bool") boolean MergeFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean MergeFromString(@StdString String data);
 
 
   // Serialization ---------------------------------------------------
@@ -207,7 +219,7 @@ public class MessageLite extends Pointer {
   public native @Cast("size_t") long ByteSizeLong();
 
   // Legacy ByteSize() API.
-  public native @Deprecated int ByteSize();
+  public native int ByteSize();
 
   // Serializes the message without recomputing the size.  The message must not
   // have changed since the last call to ByteSize(), and the value returned by
@@ -241,11 +253,18 @@ public class MessageLite extends Pointer {
   // invalidated, which is too much work for an otherwise inlined setter
   // method.)
   public native int GetCachedSize();
-
-  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") BytePointer target);
-  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") ByteBuffer target);
-  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("bool") boolean deterministic,
-                                                           @Cast("google::protobuf::uint8*") byte[] target);
+  /** enum google::protobuf::MessageLite::ParseFlags */
+  public static final int
+    kMerge = 0,
+    kParse = 1,
+    kMergePartial = 2,
+    kParsePartial = 3,
+    kMergeWithAliasing = 4,
+    kParseWithAliasing = 5,
+    kMergePartialWithAliasing = 6,
+    kParsePartialWithAliasing = 7;
+  // TODO(gerbens) make this a pure abstract function
+  public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] target);
 }

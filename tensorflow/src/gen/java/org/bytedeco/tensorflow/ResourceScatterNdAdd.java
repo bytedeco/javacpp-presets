@@ -10,9 +10,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Adds sparse {@code updates} to individual values or slices within a given
- * 
- *  variable according to {@code indices}.
+/** Applies sparse addition to individual values or slices in a Variable.
  * 
  *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
@@ -26,24 +24,24 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
  *  <pre>{@code
- *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].
+ *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]]
  *  }</pre>
  * 
- *  For example, say we want to update 4 scattered elements to a rank-1 tensor to
- *  8 elements. In Python, that update would look like this:
+ *  For example, say we want to add 4 scattered elements to a rank-1 tensor to
+ *  8 elements. In Python, that addition would look like this:
  * 
  *  <pre>{@code python
- *      ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8], use_resource=True)
- *      indices = tf.constant([[4], [3], [1] ,[7]])
- *      updates = tf.constant([9, 10, 11, 12])
- *      update = tf.scatter_nd_add(ref, indices, updates)
- *      with tf.Session() as sess:
- *        print sess.run(update)
+ *  ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8], use_resource=True)
+ *  indices = tf.constant([[4], [3], [1], [7]])
+ *  updates = tf.constant([9, 10, 11, 12])
+ *  add = tf.scatter_nd_add(ref, indices, updates)
+ *  with tf.Session() as sess:
+ *    print sess.run(add)
  *  }</pre>
  * 
  *  The resulting update to ref would look like this:
  * 
- *      [1, 12, 3, 14, 14, 6, 7, 20]
+ *      [1, 13, 3, 14, 14, 6, 7, 20]
  * 
  *  See {@code tf.scatter_nd} for more details about how to make updates to
  *  slices.

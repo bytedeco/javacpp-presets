@@ -1,7 +1,34 @@
-diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl
---- tensorflow-1.13.1/tensorflow/tensorflow.bzl	2019-02-26 05:37:04.000000000 +0900
-+++ tensorflow-1.13.1-cuda/tensorflow/tensorflow.bzl	2019-05-02 16:40:39.926567899 +0900
-@@ -315,7 +315,7 @@
+diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc tensorflow-1.14.0-rc0-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc
+--- tensorflow-1.14.0-rc0/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2019-05-24 03:33:28.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/tensorflow/core/kernels/tridiagonal_solve_op_gpu.cu.cc	2019-06-01 22:39:34.973400759 +0900
+@@ -42,8 +42,11 @@
+ __global__ void SolveForSizeOneOrTwoKernel(const int m, const Scalar* diags,
+                                            const Scalar* rhs, const int num_rhs,
+                                            Scalar* x, bool* not_invertible) {
++  Scalar z(0);
+   if (m == 1) {
+-    if (diags[1] == Scalar(0)) {
++    bool b = true;
++    for(int i = 0; i < sizeof(z); i++) b &= ((char*)&diags[1])[i] == ((char*)&z)[i];
++    if (b) {
+       *not_invertible = true;
+       return;
+     }
+@@ -52,7 +55,9 @@
+     }
+   } else {
+     Scalar det = diags[2] * diags[3] - diags[0] * diags[5];
+-    if (det == Scalar(0)) {
++    bool b = true;
++    for(int i = 0; i < sizeof(z); i++) b &= ((char*)&det)[i] == ((char*)&z)[i];
++    if (b) {
+       *not_invertible = true;
+       return;
+     }
+diff -ruN tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.14.0-rc0-cuda/tensorflow/tensorflow.bzl
+--- tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl	2019-05-24 03:33:28.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/tensorflow/tensorflow.bzl	2019-05-28 09:15:27.807632106 +0900
+@@ -359,7 +359,7 @@
          )
  
  def _make_search_paths(prefix, levels_to_root):
@@ -10,10 +37,10 @@ diff -ruN tensorflow-1.13.1/tensorflow/tensorflow.bzl tensorflow-1.13.1-cuda/ten
          [
              "-rpath,%s/%s" % (prefix, "/".join([".."] * search_level))
              for search_level in range(levels_to_root + 1)
-diff -ruN tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD
---- tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD	2019-02-26 05:37:04.000000000 +0900
-+++ tensorflow-1.13.1-cuda/tensorflow/tools/pip_package/BUILD	2019-05-02 16:40:39.927567890 +0900
-@@ -220,7 +220,6 @@
+diff -ruN tensorflow-1.14.0-rc0/tensorflow/tools/pip_package/BUILD tensorflow-1.14.0-rc0-cuda/tensorflow/tools/pip_package/BUILD
+--- tensorflow-1.14.0-rc0/tensorflow/tools/pip_package/BUILD	2019-05-24 03:33:28.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/tensorflow/tools/pip_package/BUILD	2019-05-28 09:15:27.808632119 +0900
+@@ -228,7 +228,6 @@
          "//conditions:default": [],
      }) + if_cuda([
          "@cub_archive//:LICENSE.TXT",
@@ -21,18 +48,18 @@ diff -ruN tensorflow-1.13.1/tensorflow/tools/pip_package/BUILD tensorflow-1.13.1
      ]) + if_mkl([
          "//third_party/mkl:LICENSE",
          "//third_party/mkl_dnn:LICENSE",
-diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tensorflow/workspace.bzl
---- tensorflow-1.13.1/tensorflow/workspace.bzl	2019-02-26 05:37:04.000000000 +0900
-+++ tensorflow-1.13.1-cuda/tensorflow/workspace.bzl	2019-05-02 17:16:08.880886301 +0900
-@@ -136,6 +136,7 @@
+diff -ruN tensorflow-1.14.0-rc0/tensorflow/workspace.bzl tensorflow-1.14.0-rc0-cuda/tensorflow/workspace.bzl
+--- tensorflow-1.14.0-rc0/tensorflow/workspace.bzl	2019-05-24 03:33:28.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/tensorflow/workspace.bzl	2019-05-29 19:28:27.741196742 +0900
+@@ -137,6 +137,7 @@
      tf_http_archive(
-         name = "eigen_archive",
-         build_file = clean_dep("//third_party:eigen.BUILD"),
-+        patch_file = clean_dep("//third_party/eigen3:cuda.patch"),
-         sha256 = "753fbb58d0a49b6bcbcfb126ebfa2e21fc97f7471529ba835a096008ce588d8a",
-         strip_prefix = "eigen-eigen-9f48e814419e",
+         name = "com_google_absl",
+         build_file = clean_dep("//third_party:com_google_absl.BUILD"),
++        patch_file = clean_dep("//third_party:absl.patch"),
+         sha256 = "56cd3fbbbd94468a5fff58f5df2b6f9de7a0272870c61f6ca05b869934f4802a",
+         strip_prefix = "abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89",
          urls = [
-@@ -359,6 +360,7 @@
+@@ -383,6 +384,7 @@
          name = "protobuf_archive",
          sha256 = PROTOBUF_SHA256,
          strip_prefix = PROTOBUF_STRIP_PREFIX,
@@ -40,7 +67,7 @@ diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tens
          system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
          system_link_files = {
              "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
-@@ -373,6 +375,7 @@
+@@ -397,6 +399,7 @@
          name = "com_google_protobuf",
          sha256 = PROTOBUF_SHA256,
          strip_prefix = PROTOBUF_STRIP_PREFIX,
@@ -48,7 +75,7 @@ diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tens
          system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
          system_link_files = {
              "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
-@@ -384,6 +387,7 @@
+@@ -408,6 +411,7 @@
          name = "com_google_protobuf_cc",
          sha256 = PROTOBUF_SHA256,
          strip_prefix = PROTOBUF_STRIP_PREFIX,
@@ -56,13 +83,41 @@ diff -ruN tensorflow-1.13.1/tensorflow/workspace.bzl tensorflow-1.13.1-cuda/tens
          system_build_file = clean_dep("//third_party/systemlibs:protobuf.BUILD"),
          system_link_files = {
              "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
-diff -ruN tensorflow-1.13.1/third_party/eigen3/cuda.patch tensorflow-1.13.1-cuda/third_party/eigen3/cuda.patch
---- tensorflow-1.13.1/third_party/eigen3/cuda.patch	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.13.1-cuda/third_party/eigen3/cuda.patch	2019-05-02 18:14:07.900535064 +0900
-@@ -0,0 +1,12 @@
-+diff -ruN eigen-eigen-9f48e814419e/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h eigen-eigen-9f48e814419e-cuda/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
-+--- eigen-eigen-9f48e814419e/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h	2018-12-10 07:05:46.000000000 +0900
-++++ eigen-eigen-9f48e814419e-cuda/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h	2019-05-02 16:45:40.679148410 +0900
+diff -ruN tensorflow-1.14.0-rc0/third_party/absl.patch tensorflow-1.14.0-rc0-cuda/third_party/absl.patch
+--- tensorflow-1.14.0-rc0/third_party/absl.patch	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/third_party/absl.patch	2019-06-01 18:17:09.923175672 +0900
+@@ -0,0 +1,22 @@
++diff -ruN abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89/absl/container/internal/compressed_tuple.h abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89-patch/absl/container/internal/compressed_tuple.h
++--- abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89/absl/container/internal/compressed_tuple.h	2019-05-17 04:48:51.000000000 +0900
+++++ abseil-cpp-daf381e8535a1f1f1b8a75966a74e7cca63dee89-patch/absl/container/internal/compressed_tuple.h	2019-06-01 18:08:31.079239816 +0900
++@@ -167,14 +167,16 @@
++ 
++   template <int I>
++   ElemT<I>&& get() && {
+++    using s = internal_compressed_tuple::Storage<CompressedTuple, I>;
++     return std::move(*this)
++-        .internal_compressed_tuple::template Storage<CompressedTuple, I>::get();
+++        .s::get();
++   }
++ 
++   template <int I>
++   constexpr const ElemT<I>&& get() const&& {
+++    using s = internal_compressed_tuple::Storage<CompressedTuple, I>;
++     return absl::move(*this)
++-        .internal_compressed_tuple::template Storage<CompressedTuple, I>::get();
+++        .s::get();
++   }
++ };
++ 
+diff -ruN tensorflow-1.14.0-rc0/third_party/eigen3/gpu_packet_math.patch tensorflow-1.14.0-rc0-cuda/third_party/eigen3/gpu_packet_math.patch
+--- tensorflow-1.14.0-rc0/third_party/eigen3/gpu_packet_math.patch	2019-05-24 03:33:28.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/third_party/eigen3/gpu_packet_math.patch	2019-05-29 19:25:45.700068424 +0900
+@@ -40,3 +40,14 @@
+      return res;
+    }
+  };
++--- a/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
+++++ b/unsupported/Eigen/CXX11/src/Tensor/TensorRandom.h
 +@@ -15,7 +15,7 @@
 + 
 + namespace {
@@ -72,9 +127,9 @@ diff -ruN tensorflow-1.13.1/third_party/eigen3/cuda.patch tensorflow-1.13.1-cuda
 + #if defined(EIGEN_GPU_COMPILE_PHASE)
 +   // We don't support 3d kernels since we currently only use 1 and
 +   // 2d kernels.
-diff -ruN tensorflow-1.13.1/third_party/protobuf/cuda.patch tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch
---- tensorflow-1.13.1/third_party/protobuf/cuda.patch	1970-01-01 09:00:00.000000000 +0900
-+++ tensorflow-1.13.1-cuda/third_party/protobuf/cuda.patch	2019-05-02 16:40:39.928567881 +0900
+diff -ruN tensorflow-1.14.0-rc0/third_party/protobuf/cuda.patch tensorflow-1.14.0-rc0-cuda/third_party/protobuf/cuda.patch
+--- tensorflow-1.14.0-rc0/third_party/protobuf/cuda.patch	1970-01-01 09:00:00.000000000 +0900
++++ tensorflow-1.14.0-rc0-cuda/third_party/protobuf/cuda.patch	2019-05-02 16:40:39.928567881 +0900
 @@ -0,0 +1,35 @@
 +diff --git a/src/google/protobuf/map.h b/src/google/protobuf/map.h
 +index 40f35e92..1af91f9c 100644

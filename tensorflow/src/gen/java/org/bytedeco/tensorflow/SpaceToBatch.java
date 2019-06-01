@@ -69,7 +69,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  The output tensor has shape {@code [4, 1, 1, 3]} and value:
  * 
  *  <pre>{@code
- *  [[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]]]
+ *  [[[[1, 2, 3]]], [[[4, 5, 6]]], [[[7, 8, 9]]], [[[10, 11, 12]]]]
  *  }</pre>
  * 
  *  (3) For the following input of shape {@code [1, 4, 4, 1]} and block_size of 2:

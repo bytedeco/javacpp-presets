@@ -9,9 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-
-// Forward declarations.  In particular, we forward declare protos so that their
-// symbols can be removed from .so exports.
 @Namespace("tensorflow") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class Var extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

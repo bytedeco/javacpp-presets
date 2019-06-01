@@ -80,4 +80,6 @@ public class AttrSlice extends Pointer {
   public native @StdString BytePointer SummarizeNode();
 
   // Iteration over all attrs
+
+  public native @StdString BytePointer DebugString();
 }

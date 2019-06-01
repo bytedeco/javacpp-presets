@@ -26,17 +26,31 @@ public class EagerContext extends Pointer {
                  @MoveUniquePtr DeviceMgr device_mgr,
                  Rendezvous rendezvous);
 
-  public EagerContext(@Const @ByRef SessionOptions opts,
-                 @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
-                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
-                 Rendezvous rendezvous) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous); }
-  private native void allocate(@Const @ByRef SessionOptions opts,
-                 @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
-                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
-                 Rendezvous rendezvous);
+  public EagerContext(
+        @Const @ByRef SessionOptions opts, @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy,
+        @Cast("bool") boolean async, @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
+        Rendezvous rendezvous, @Const CustomKernelCreator custom_kernel_creator,
+        DistributedFunctionLibraryRuntime cluster_flr/*=nullptr*/,
+        @ByVal(nullValue = "std::function<tensorflow::Rendezvous*(const int64)>(nullptr)") RendezvousCreator rendezvous_creator) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous, custom_kernel_creator, cluster_flr, rendezvous_creator); }
+  private native void allocate(
+        @Const @ByRef SessionOptions opts, @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy,
+        @Cast("bool") boolean async, @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
+        Rendezvous rendezvous, @Const CustomKernelCreator custom_kernel_creator,
+        DistributedFunctionLibraryRuntime cluster_flr/*=nullptr*/,
+        @ByVal(nullValue = "std::function<tensorflow::Rendezvous*(const int64)>(nullptr)") RendezvousCreator rendezvous_creator);
+  public EagerContext(
+        @Const @ByRef SessionOptions opts, @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy,
+        @Cast("bool") boolean async, @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
+        Rendezvous rendezvous, @Const CustomKernelCreator custom_kernel_creator) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous, custom_kernel_creator); }
+  private native void allocate(
+        @Const @ByRef SessionOptions opts, @Cast("tensorflow::ContextDevicePlacementPolicy") int default_policy,
+        @Cast("bool") boolean async, @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
+        Rendezvous rendezvous, @Const CustomKernelCreator custom_kernel_creator);
 
   // Returns the function library runtime for the given device.
-  public native FunctionLibraryRuntime func_lib(Device d);
+  public native FunctionLibraryRuntime func_lib(@Const Device d);
+
+  public native ProcessFunctionLibraryRuntime pflr();
 
   // True if running in asynchronous mode.
   public native @Cast("bool") boolean Async();
@@ -97,6 +111,9 @@ public class EagerContext extends Pointer {
 
   public native @ByVal Status AddFunctionDef(@Const @ByRef FunctionDef fdef);
 
+  public native @ByVal Status RemoveFunction(@StdString BytePointer func);
+  public native @ByVal Status RemoveFunction(@StdString String func);
+
   public native KernelAndDevice GetCachedKernel(@ByVal Fprint128 cache_key);
 
   public native void AddKernelToCache(@ByVal Fprint128 cache_key, KernelAndDevice kernel);
@@ -105,6 +122,9 @@ public class EagerContext extends Pointer {
   public native @Cast("bool") boolean LogMemory();
 
   public native Rendezvous GetRendezvous();
+  public native Rendezvous CreateRendezvous(@Cast("const tensorflow::int64") long step_id);
+
+  public native CollectiveExecutorMgrInterface collective_executor_mgr();
   public native @MoveUniquePtr CollectiveExecutor.Handle GetCollectiveExecutorHandle();
 
   public native @Const DeviceMgr local_device_mgr();
@@ -115,9 +135,15 @@ public class EagerContext extends Pointer {
 
   // TODO(apassos) clean up RunMetadata storage.
   public native @Cast("tensorflow::mutex*") Pointer MetadataMu();
-  public native @Cast("bool") boolean ShouldStoreMetadata();
-  public native void SetShouldStoreMetadata(@Cast("bool") boolean value);
+  public native @Cast("bool") boolean ShouldStoreStepStats();
+  public native void SetShouldStoreStepStats(@Cast("bool") boolean value);
+  public native @Cast("bool") boolean ShouldStoreGraphs();
+  public native void SetShouldStoreGraphs(@Cast("bool") boolean value);
   public native RunMetadata RunMetadataProto();
+  public native void ClearRunMetadata();
+
+  public native @ByVal Status RegisterRunMetadataListener(RunMetadataListener listener);
+  public native void ClearRunMetadataListener();
 
   public native void StartStep();
   public native void EndStep();
@@ -125,7 +151,7 @@ public class EagerContext extends Pointer {
 
   public native FunctionLibraryDefinition FuncLibDef();
 
-// #ifndef __ANDROID__
+// #if !defined(IS_MOBILE_PLATFORM)
   public native @ByVal Status GetClientAndContextID(Device device, @Cast("tensorflow::eager::EagerClient**") PointerPointer client,
                                  @Cast("tensorflow::uint64*") LongPointer context_id);
   public native @ByVal Status GetClientAndContextID(Device device, @ByPtrPtr EagerClient client,
@@ -147,15 +173,21 @@ public class EagerContext extends Pointer {
   // - remote_device_mgr: A DeviceMgr* which contains all remote devices
   // (should contain no local devices).
   // - remote_contexts: A map containing task name to remote context ID.
-  public native void InitializeRemote(
-        @MoveUniquePtr ServerInterface server,
+  public native @ByVal Status InitializeRemote(
+        @MoveUniquePtr ServerInterface server, WorkerEnv worker_env,
+        @SharedPtr WorkerSession worker_session,
         @MoveUniquePtr EagerClientCache remote_eager_workers,
         @MoveUniquePtr DeviceMgr remote_device_manager,
         @Const @ByRef RemoteContexts remote_contexts, Rendezvous r,
-        DeviceMgr local_device_mgr, int keep_alive_secs);
+        DeviceMgr local_device_mgr, int keep_alive_secs,
+        DistributedFunctionLibraryRuntime cluster_flr);
 
   public native @Cast("bool") boolean HasActiveRemoteContext(@Cast("tensorflow::uint64") long context_id);
-// #endif
+
+  public native @ByVal Status StoreCollectiveOpsServer(
+        @MoveUniquePtr ServerInterface server, DeviceMgr device_mgr,
+        CollectiveExecutorMgrInterface rpc_collective_executor_mgr);
+// #endif  // IS_MOBILE_PLATFORM
 
   // If true, then tensors should be shipped across processes via the
   // EagerService.SendTensor RPC. If false, _Send/_Recv ops should be used
@@ -164,4 +196,7 @@ public class EagerContext extends Pointer {
   public native @Cast("bool") boolean PinSmallOpsToCPU();
 
   public native Env TFEnv();
+
+  // All child threads will be reset() when destructing EagerContext.
+  public native void AddChildThread(@MoveUniquePtr Thread thread);
 }

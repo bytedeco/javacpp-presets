@@ -59,16 +59,19 @@ public class GPUOptions_Experimental extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -100,9 +103,16 @@ public class GPUOptions_Experimental extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_collective_ring_order();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_collective_ring_order();
   public native void set_allocated_collective_ring_order(@StdString @Cast({"char*", "std::string*"}) BytePointer collective_ring_order);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_ring_order();
-  public native @Deprecated void unsafe_arena_set_allocated_collective_ring_order(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_collective_ring_order();
+  public native void unsafe_arena_set_allocated_collective_ring_order(
         @StdString @Cast({"char*", "std::string*"}) BytePointer collective_ring_order);
+
+  // int32 num_dev_to_dev_copy_streams = 3;
+  public native void clear_num_dev_to_dev_copy_streams();
+  @MemberGetter public static native int kNumDevToDevCopyStreamsFieldNumber();
+  public static final int kNumDevToDevCopyStreamsFieldNumber = kNumDevToDevCopyStreamsFieldNumber();
+  public native @Cast("google::protobuf::int32") int num_dev_to_dev_copy_streams();
+  public native void set_num_dev_to_dev_copy_streams(@Cast("google::protobuf::int32") int value);
 
   // bool use_unified_memory = 2;
   public native void clear_use_unified_memory();
@@ -111,10 +121,31 @@ public class GPUOptions_Experimental extends MessageLite {
   public native @Cast("bool") boolean use_unified_memory();
   public native void set_use_unified_memory(@Cast("bool") boolean value);
 
-  // int32 num_dev_to_dev_copy_streams = 3;
-  public native void clear_num_dev_to_dev_copy_streams();
-  @MemberGetter public static native int kNumDevToDevCopyStreamsFieldNumber();
-  public static final int kNumDevToDevCopyStreamsFieldNumber = kNumDevToDevCopyStreamsFieldNumber();
-  public native @Cast("google::protobuf::int32") int num_dev_to_dev_copy_streams();
-  public native void set_num_dev_to_dev_copy_streams(@Cast("google::protobuf::int32") int value);
+  // bool timestamped_allocator = 5;
+  public native void clear_timestamped_allocator();
+  @MemberGetter public static native int kTimestampedAllocatorFieldNumber();
+  public static final int kTimestampedAllocatorFieldNumber = kTimestampedAllocatorFieldNumber();
+  public native @Cast("bool") boolean timestamped_allocator();
+  public native void set_timestamped_allocator(@Cast("bool") boolean value);
+
+  // int32 kernel_tracker_max_interval = 7;
+  public native void clear_kernel_tracker_max_interval();
+  @MemberGetter public static native int kKernelTrackerMaxIntervalFieldNumber();
+  public static final int kKernelTrackerMaxIntervalFieldNumber = kKernelTrackerMaxIntervalFieldNumber();
+  public native @Cast("google::protobuf::int32") int kernel_tracker_max_interval();
+  public native void set_kernel_tracker_max_interval(@Cast("google::protobuf::int32") int value);
+
+  // int32 kernel_tracker_max_bytes = 8;
+  public native void clear_kernel_tracker_max_bytes();
+  @MemberGetter public static native int kKernelTrackerMaxBytesFieldNumber();
+  public static final int kKernelTrackerMaxBytesFieldNumber = kKernelTrackerMaxBytesFieldNumber();
+  public native @Cast("google::protobuf::int32") int kernel_tracker_max_bytes();
+  public native void set_kernel_tracker_max_bytes(@Cast("google::protobuf::int32") int value);
+
+  // int32 kernel_tracker_max_pending = 9;
+  public native void clear_kernel_tracker_max_pending();
+  @MemberGetter public static native int kKernelTrackerMaxPendingFieldNumber();
+  public static final int kKernelTrackerMaxPendingFieldNumber = kKernelTrackerMaxPendingFieldNumber();
+  public native @Cast("google::protobuf::int32") int kernel_tracker_max_pending();
+  public native void set_kernel_tracker_max_pending(@Cast("google::protobuf::int32") int value);
 }

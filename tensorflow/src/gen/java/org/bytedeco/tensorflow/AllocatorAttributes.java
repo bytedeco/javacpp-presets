@@ -64,4 +64,7 @@ public class AllocatorAttributes extends Pointer {
   // EXPERIMENTAL: If this is greater than zero, then allocation is delegated to
   // a named special-purpose allocator on the same device.
   public native int scope_id(); public native AllocatorAttributes scope_id(int setter);
+
+  // Returns a human readable representation of this.
+  public native @StdString BytePointer DebugString();
 }

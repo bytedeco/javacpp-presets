@@ -13,7 +13,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 /** Computes the maximum along segments of a tensor.
  * 
  *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  [the section on segmentation](https://tensorflow.org/api_docs/python/tf/math#Segmentation)
  *  for an explanation of segments.
  * 
  *  This operator is similar to the unsorted segment sum operator found
@@ -34,19 +34,24 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  <img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentMax.png" alt>
  *  </div>
  * 
+ *  For example:
+ * 
+ *  <pre>{@code python
+ *  c = tf.constant([[1,2,3,4], [5,6,7,8], [4,3,2,1]])
+ *  tf.unsorted_segment_max(c, tf.constant([0, 1, 0]), num_segments=2)
+ *  # ==> [[ 4,  3, 3, 4],
+ *  #       [5,  6, 7, 8]]
+ *  }</pre>
+ * 
+ * 
  *  Arguments:
  *  * scope: A Scope object
- *  * segment_ids: A tensor whose shape is a prefix of {@code data.shape}.END
- *    }
- *    out_arg {
- *      name: "output"
- *      description: <<END
- *  Has same shape as data, except for the first {@code segment_ids.rank}
- *  dimensions, which are replaced with a single dimension which has size
- *  {@code num_segments}.
+ *  * segment_ids: A tensor whose shape is a prefix of {@code data.shape}.
  * 
  *  Returns:
- *  * {@code Output}: The output tensor. */
+ *  * {@code Output}: Has same shape as data, except for the first {@code segment_ids.rank}
+ *  dimensions, which are replaced with a single dimension which has size
+ *  {@code num_segments}. */
 @Namespace("tensorflow::ops") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class UnsortedSegmentMax extends Pointer {
     static { Loader.load(); }

@@ -131,6 +131,11 @@ public class ThreadPool extends Pointer {
   // thread in the pool. Returns -1 otherwise.
   public native int CurrentThreadId();
 
+  // If ThreadPool implementation is compatible with Eigen::ThreadPoolInterface,
+  // returns a non-null pointer. The caller does not own the object the returned
+  // pointer points to, and should not attempt to delete.
+  public native ThreadPoolInterface AsEigenThreadPool();
+
   @Opaque public static class Impl extends Pointer {
       /** Empty constructor. Calls {@code super((Pointer)null)}. */
       public Impl() { super((Pointer)null); }

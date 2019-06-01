@@ -14,9 +14,8 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  * 
  *  N is the size of the segment being reduced.
  * 
- *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
- *  for an explanation of segments.
+ *  See {@code tf.sparse.segment_sum} for usage examples.
+ * 
  * 
  *  Arguments:
  *  * scope: A Scope object

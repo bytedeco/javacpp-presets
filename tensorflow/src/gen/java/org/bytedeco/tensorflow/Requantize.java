@@ -10,13 +10,14 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Convert the quantized 'input' tensor into a lower-precision 'output', using the
+/** Converts the quantized {@code input} tensor into a lower-precision {@code output}.
  * 
- *  output range specified with 'requested_output_min' and 'requested_output_max'.
+ *  Converts the quantized {@code input} tensor into a lower-precision {@code output}, using the
+ *  output range specified with {@code requested_output_min} and {@code requested_output_max}.
  * 
- *  [input_min, input_max] are scalar floats that specify the range for the float
- *  interpretation of the 'input' data. For example, if input_min is -1.0f and
- *  input_max is 1.0f, and we are dealing with quint16 quantized data, then a 0
+ *  {@code [input_min, input_max]} are scalar floats that specify the range for the float
+ *  interpretation of the {@code input} data. For example, if {@code input_min} is -1.0f and
+ *  {@code input_max} is 1.0f, and we are dealing with {@code quint16} quantized data, then a 0
  *  value in the 16-bit data should be interpreted as -1.0f, and a 65535 means 1.0f.
  * 
  *  Arguments:

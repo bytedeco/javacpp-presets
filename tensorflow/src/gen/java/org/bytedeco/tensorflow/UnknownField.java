@@ -10,6 +10,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
+// #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+// #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+
 // Represents one field in an UnknownFieldSet.
 @Namespace("google::protobuf") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class UnknownField extends Pointer {
@@ -71,10 +74,6 @@ public class UnknownField extends Pointer {
 
   // If this UnknownField contains a pointer, delete it.
   public native void Delete();
-
-  // Reset all the underlying pointers to NULL. A special function to be only
-  // used while merging from a temporary UFS.
-  public native void Reset();
 
   // Make a deep copy of any pointers in this UnknownField.
   public native void DeepCopy(@Const @ByRef UnknownField other);
