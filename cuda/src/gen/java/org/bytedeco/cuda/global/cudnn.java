@@ -73,7 +73,7 @@ public class cudnn extends org.bytedeco.cuda.presets.cudnn {
 // #define CUDNN_H_
 
 public static final int CUDNN_MAJOR = 7;
-public static final int CUDNN_MINOR = 5;
+public static final int CUDNN_MINOR = 6;
 public static final int CUDNN_PATCHLEVEL = 0;
 
 public static final int CUDNN_VERSION = (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
@@ -223,6 +223,14 @@ public static final int
 public static final int
     CUDNN_NON_DETERMINISTIC = 0,
     CUDNN_DETERMINISTIC     = 1;
+
+/*
+ * CUDNN Reorder
+ */
+/** enum cudnnReorderType_t */
+public static final int
+    CUDNN_DEFAULT_REORDER = 0,
+    CUDNN_NO_REORDER      = 1;
 
 /* Maximum supported number of tensor dimensions */
 public static final int CUDNN_DIM_MAX = 8;
@@ -452,6 +460,22 @@ public static native @Cast("cudnnStatus_t") int cudnnTransformTensorEx(cudnnCont
                        @Const Pointer beta,
                        cudnnTensorStruct destDesc,
                        Pointer destData);
+
+/* Helper function to calculate folding descriptors  for dgrad */
+public static native @Cast("cudnnStatus_t") int cudnnGetFoldedConvBackwardDataDescriptors(cudnnContext handle,
+                                          cudnnFilterStruct filterDesc,
+                                          cudnnTensorStruct diffDesc,
+                                          cudnnConvolutionStruct convDesc,
+                                          cudnnTensorStruct gradDesc,
+                                          @Cast("const cudnnTensorFormat_t") int transformFormat,
+                                          cudnnFilterStruct foldedFilterDesc,
+                                          cudnnTensorStruct paddedDiffDesc,
+                                          cudnnConvolutionStruct foldedConvDesc,
+                                          cudnnTensorStruct foldedGradDesc,
+                                          cudnnTensorTransformStruct filterFoldTransDesc,
+                                          cudnnTensorTransformStruct diffPadTransDesc,
+                                          cudnnTensorTransformStruct gradFoldTransDesc,
+                                          cudnnTensorTransformStruct gradUnfoldTransDesc);
 
 /* Tensor Bias addition : C = alpha * A + beta * C  */
 public static native @Cast("cudnnStatus_t") int cudnnAddTensor(cudnnContext handle,
@@ -685,8 +709,27 @@ public static native @Cast("cudnnStatus_t") int cudnnGetFilterNdDescriptor(cudnn
                            @Cast("cudnnTensorFormat_t*") int[] format,
                            int[] nbDims,
                            int[] filterDimA);
+public static native @Cast("cudnnStatus_t") int cudnnGetFilterSizeInBytes(cudnnFilterStruct filterDesc, @Cast("size_t*") SizeTPointer size);
+
+public static native @Cast("cudnnStatus_t") int cudnnTransformFilter(cudnnContext handle,
+                     cudnnTensorTransformStruct transDesc,
+                     @Const Pointer alpha,
+                     cudnnFilterStruct srcDesc,
+                     @Const Pointer srcData,
+                     @Const Pointer beta,
+                     cudnnFilterStruct destDesc,
+                     Pointer destData);
 
 public static native @Cast("cudnnStatus_t") int cudnnDestroyFilterDescriptor(cudnnFilterStruct filterDesc);
+
+public static native @Cast("cudnnStatus_t") int cudnnReorderFilterAndBias(cudnnContext handle,
+                          cudnnFilterStruct filterDesc,
+                          @Cast("cudnnReorderType_t") int reorderType,
+                          @Const Pointer filterData,
+                          Pointer reorderedFilterData,
+                          int reorderBias,
+                          @Const Pointer biasData,
+                          Pointer reorderedBiasData);
 
 /* Create an instance of convolution descriptor */
 public static native @Cast("cudnnStatus_t") int cudnnCreateConvolutionDescriptor(@ByPtrPtr cudnnConvolutionStruct convDesc);
@@ -702,6 +745,12 @@ public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionGroupCount(cu
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount(cudnnConvolutionStruct convDesc, IntPointer groupCount);
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount(cudnnConvolutionStruct convDesc, IntBuffer groupCount);
 public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionGroupCount(cudnnConvolutionStruct convDesc, int[] groupCount);
+
+public static native @Cast("cudnnStatus_t") int cudnnSetConvolutionReorderType(cudnnConvolutionStruct convDesc, @Cast("cudnnReorderType_t") int reorderType);
+
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionReorderType(cudnnConvolutionStruct convDesc, @Cast("cudnnReorderType_t*") IntPointer reorderType);
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionReorderType(cudnnConvolutionStruct convDesc, @Cast("cudnnReorderType_t*") IntBuffer reorderType);
+public static native @Cast("cudnnStatus_t") int cudnnGetConvolutionReorderType(cudnnConvolutionStruct convDesc, @Cast("cudnnReorderType_t*") int[] reorderType);
 
 public static native @Cast("cudnnStatus_t") int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,
                                 int pad_h,
@@ -3279,7 +3328,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetSeqDataDescriptor(cudnnS
                           IntPointer dimA,
                           @Cast("cudnnSeqDataAxis_t*") IntPointer axes,
                           @Cast("size_t*") SizeTPointer seqLengthArraySize,
-                          @Cast("size_t") long seqLengthSizeRequsted,
+                          @Cast("size_t") long seqLengthSizeRequested,
                           IntPointer seqLengthArray,
                           Pointer paddingFill);
 public static native @Cast("cudnnStatus_t") int cudnnGetSeqDataDescriptor(cudnnSeqDataStruct seqDataDesc,
@@ -3289,7 +3338,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetSeqDataDescriptor(cudnnS
                           IntBuffer dimA,
                           @Cast("cudnnSeqDataAxis_t*") IntBuffer axes,
                           @Cast("size_t*") SizeTPointer seqLengthArraySize,
-                          @Cast("size_t") long seqLengthSizeRequsted,
+                          @Cast("size_t") long seqLengthSizeRequested,
                           IntBuffer seqLengthArray,
                           Pointer paddingFill);
 public static native @Cast("cudnnStatus_t") int cudnnGetSeqDataDescriptor(cudnnSeqDataStruct seqDataDesc,
@@ -3299,7 +3348,7 @@ public static native @Cast("cudnnStatus_t") int cudnnGetSeqDataDescriptor(cudnnS
                           int[] dimA,
                           @Cast("cudnnSeqDataAxis_t*") int[] axes,
                           @Cast("size_t*") SizeTPointer seqLengthArraySize,
-                          @Cast("size_t") long seqLengthSizeRequsted,
+                          @Cast("size_t") long seqLengthSizeRequested,
                           int[] seqLengthArray,
                           Pointer paddingFill);
 
@@ -3594,16 +3643,38 @@ public static native @Cast("cudnnStatus_t") int cudnnMultiHeadAttnBackwardWeight
 /** enum cudnnCTCLossAlgo_t */
 public static final int CUDNN_CTC_LOSS_ALGO_DETERMINISTIC = 0, CUDNN_CTC_LOSS_ALGO_NON_DETERMINISTIC = 1;
 
+/* Input normalization mode for loss function */
+/** enum cudnnLossNormalizationMode_t */
+public static final int CUDNN_LOSS_NORMALIZATION_NONE = 0, CUDNN_LOSS_NORMALIZATION_SOFTMAX = 1;
+
 /*
-* Create an instance of a CTC (Connectionist Temporal Classification) loss descriptor
+* CTC (Connectionist Temporal Classification) loss descriptor create/destory/set/get functions
 */
 public static native @Cast("cudnnStatus_t") int cudnnCreateCTCLossDescriptor(@ByPtrPtr cudnnCTCLossStruct ctcLossDesc);
 
 public static native @Cast("cudnnStatus_t") int cudnnSetCTCLossDescriptor(cudnnCTCLossStruct ctcLossDesc, @Cast("cudnnDataType_t") int compType);
 
+public static native @Cast("cudnnStatus_t") int cudnnSetCTCLossDescriptorEx(cudnnCTCLossStruct ctcLossDesc,
+                            @Cast("cudnnDataType_t") int compType,
+                            @Cast("cudnnLossNormalizationMode_t") int normMode,
+                            @Cast("cudnnNanPropagation_t") int gradMode);
+
 public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(cudnnCTCLossStruct ctcLossDesc, @Cast("cudnnDataType_t*") IntPointer compType);
 public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(cudnnCTCLossStruct ctcLossDesc, @Cast("cudnnDataType_t*") IntBuffer compType);
 public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptor(cudnnCTCLossStruct ctcLossDesc, @Cast("cudnnDataType_t*") int[] compType);
+
+public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptorEx(cudnnCTCLossStruct ctcLossDesc,
+                            @Cast("cudnnDataType_t*") IntPointer compType,
+                            @Cast("cudnnLossNormalizationMode_t*") IntPointer normMode,
+                            @Cast("cudnnNanPropagation_t*") IntPointer gradMode);
+public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptorEx(cudnnCTCLossStruct ctcLossDesc,
+                            @Cast("cudnnDataType_t*") IntBuffer compType,
+                            @Cast("cudnnLossNormalizationMode_t*") IntBuffer normMode,
+                            @Cast("cudnnNanPropagation_t*") IntBuffer gradMode);
+public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossDescriptorEx(cudnnCTCLossStruct ctcLossDesc,
+                            @Cast("cudnnDataType_t*") int[] compType,
+                            @Cast("cudnnLossNormalizationMode_t*") int[] normMode,
+                            @Cast("cudnnNanPropagation_t*") int[] gradMode);
 
 public static native @Cast("cudnnStatus_t") int cudnnDestroyCTCLossDescriptor(cudnnCTCLossStruct ctcLossDesc);
 
@@ -3649,7 +3720,7 @@ public static native @Cast("cudnnStatus_t") int cudnnCTCLoss(
     @Cast("cudnnCTCLossAlgo_t") int algo,
     cudnnCTCLossStruct ctcLossDesc,
     Pointer workspace,
-    @Cast("size_t") long workSpaceSizeInBytes); /* the workspace size needed */
+    @Cast("size_t") long workSpaceSizeInBytes); /* size of the workspace */
 
 /* return the workspace size needed for ctc */
 public static native @Cast("cudnnStatus_t") int cudnnGetCTCLossWorkspaceSize(
@@ -3758,6 +3829,223 @@ public static native @Cast("cudnnStatus_t") int cudnnGetCallback(@Cast("unsigned
 public static native @Cast("cudnnStatus_t") int cudnnGetCallback(@Cast("unsigned*") IntPointer mask, @Cast("void**") @ByPtrPtr Pointer udata, @ByPtrPtr cudnnCallback_t fptr);
 public static native @Cast("cudnnStatus_t") int cudnnGetCallback(@Cast("unsigned*") IntBuffer mask, @Cast("void**") @ByPtrPtr Pointer udata, @ByPtrPtr cudnnCallback_t fptr);
 public static native @Cast("cudnnStatus_t") int cudnnGetCallback(@Cast("unsigned*") int[] mask, @Cast("void**") @ByPtrPtr Pointer udata, @ByPtrPtr cudnnCallback_t fptr);
+// Targeting ../cudnn/cudnnFusedOpsConstParamStruct.java
+
+
+// Targeting ../cudnn/cudnnFusedOpsVariantParamStruct.java
+
+
+// Targeting ../cudnn/cudnnFusedOpsPlanStruct.java
+
+
+
+/** enum cudnnFusedOps_t */
+public static final int
+    /* each op in [ ] can be disabled by passing NULL ptr */
+    /* [per channel scale], [per channel bias], [activation], convolution, [generate BN stats] */
+    CUDNN_FUSED_SCALE_BIAS_ACTIVATION_CONV_BNSTATS = 0,
+    /* [per channel scale], [per channel bias], [activation], convolutionBackwardWeights */
+    CUDNN_FUSED_SCALE_BIAS_ACTIVATION_WGRAD = 1,
+    /* utility for BN training in BN-conv fusion */
+    /* computes the equivalent scale and bias from ySum ySqSum and learned scale, bias */
+    /* optionally update running stats and generate saved stats */
+    CUDNN_FUSED_BN_FINALIZE_STATISTICS_TRAINING = 2,
+    /* utility for BN inference in BN-conv fusion */
+    /* computes the equivalent scale and bias from learned running stats and learned scale, bias */
+    CUDNN_FUSED_BN_FINALIZE_STATISTICS_INFERENCE = 3,
+    /* reserved for future use: convolution, [per channel scale], [per channel bias], [residual add], [activation] */
+    CUDNN_FUSED_CONV_SCALE_BIAS_ADD_ACTIVATION = 4,
+    /* reserved for future use: [per channel scale], [per channel bias], [residual add],  activation, bitmask */
+    CUDNN_FUSED_SCALE_BIAS_ADD_ACTIVATION_GEN_BITMASK = 5,
+    /* reserved for future use */
+    CUDNN_FUSED_DACTIVATION_FORK_DBATCHNORM = 6;
+
+/** enum cudnnFusedOpsConstParamLabel_t */
+public static final int
+    /* set XDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get XDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_XDESC = 0,
+    /* set/get XDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_XDATA_PLACEHOLDER = 1,
+    /* set/get BN_MODE: pass cudnnBatchNormMode_t* */
+    CUDNN_PARAM_BN_MODE = 2,
+    /* set CUDNN_PARAM_BN_EQSCALEBIAS_DESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get CUDNN_PARAM_BN_EQSCALEBIAS_DESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_BN_EQSCALEBIAS_DESC = 3,
+    /* set/get BN_EQSCALE_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_EQSCALE_PLACEHOLDER = 4,
+    /* set/get BN_EQBIAS_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_EQBIAS_PLACEHOLDER = 5,
+    /* set ACTIVATION_DESC: pass previously initialized cudnnActivationDescriptor_t */
+    /* get ACTIVATION_DESC: pass previously created cudnnActivationDescriptor_t */
+    CUDNN_PARAM_ACTIVATION_DESC = 6,
+    /* set CONV_DESC: pass previously initialized cudnnConvolutionDescriptor_t */
+    /* get CONV_DESC: pass previously created cudnnConvolutionDescriptor_t */
+    CUDNN_PARAM_CONV_DESC = 7,
+    /* set WDESC: pass previously initialized cudnnFilterDescriptor_t */
+    /* get WDESC: pass previously created cudnnFilterDescriptor_t */
+    CUDNN_PARAM_WDESC = 8,
+    /* set/get WDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_WDATA_PLACEHOLDER = 9,
+    /* set DWDESC: pass previously initialized cudnnFilterDescriptor_t */
+    /* get DWDESC: pass previously created cudnnFilterDescriptor_t */
+    CUDNN_PARAM_DWDESC = 10,
+    /* set/get DWDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_DWDATA_PLACEHOLDER = 11,
+    /* set YDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get YDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_YDESC = 12,
+    /* set/get YDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_YDATA_PLACEHOLDER = 13,
+    /* set DYDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get DYDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_DYDESC = 14,
+    /* set/get DYDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_DYDATA_PLACEHOLDER = 15,
+    /* set YSTATS_DESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get YSTATS_DESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_YSTATS_DESC = 16,
+    /* set/get YSUM_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_YSUM_PLACEHOLDER = 17,
+    /* set/get YSQSUM_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_YSQSUM_PLACEHOLDER = 18,
+    /* set CUDNN_PARAM_BN_SCALEBIAS_MEANVAR_DESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get CUDNN_PARAM_BN_SCALEBIAS_MEANVAR_DESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_BN_SCALEBIAS_MEANVAR_DESC = 19,
+    /* set/get CUDNN_PARAM_BN_SCALE_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_SCALE_PLACEHOLDER = 20,
+    /* set/get CUDNN_PARAM_BN_BIAS_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_BIAS_PLACEHOLDER = 21,
+    /* set/get CUDNN_PARAM_BN_SAVED_MEAN_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_SAVED_MEAN_PLACEHOLDER = 22,
+    /* set/get CUDNN_PARAM_BN_SAVED_INVSTD_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_SAVED_INVSTD_PLACEHOLDER = 23,
+    /* set/get CUDNN_PARAM_BN_RUNNING_MEAN_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_RUNNING_MEAN_PLACEHOLDER = 24,
+    /* set/get CUDNN_PARAM_BN_RUNNING_VAR_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_RUNNING_VAR_PLACEHOLDER = 25,
+
+    /* set ZDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get ZDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_ZDESC = 26,
+    /* set/get ZDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_ZDATA_PLACEHOLDER = 27,
+    /* set BN_Z_EQSCALEBIAS_DESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get BN_Z_EQSCALEBIAS_DESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_BN_Z_EQSCALEBIAS_DESC = 28,
+    /* set/get BN_Z_EQSCALE_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_Z_EQSCALE_PLACEHOLDER = 29,
+    /* set/get BN_Z_EQBIAS_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_Z_EQBIAS_PLACEHOLDER = 30,
+
+    /* set ACTIVATION_BITMASK_DESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get ACTIVATION_BITMASK_DESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_ACTIVATION_BITMASK_DESC = 31,
+    /* set/get ACTIVATION_BITMASK_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_ACTIVATION_BITMASK_PLACEHOLDER = 32,
+
+    /* set DXDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get DXDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_DXDESC = 33,
+    /* set/get DXDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_DXDATA_PLACEHOLDER = 34,
+    /* set DZDESC: pass previously initialized cudnnTensorDescriptor_t */
+    /* get DZDESC: pass previously created cudnnTensorDescriptor_t */
+    CUDNN_PARAM_DZDESC = 35,
+    /* set/get DZDATA_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_DZDATA_PLACEHOLDER = 36,
+    /* set/get CUDNN_PARAM_BN_DSCALE_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_DSCALE_PLACEHOLDER = 37,
+    /* set/get CUDNN_PARAM_BN_DBIAS_PLACEHOLDER: pass cudnnFusedOpsPointerPlaceHolder_t* */
+    CUDNN_PARAM_BN_DBIAS_PLACEHOLDER = 38;
+
+/** enum cudnnFusedOpsPointerPlaceHolder_t */
+public static final int
+    CUDNN_PTR_NULL         = 0,
+    CUDNN_PTR_ELEM_ALIGNED = 1,
+    CUDNN_PTR_16B_ALIGNED  = 2;
+
+/** enum cudnnFusedOpsVariantParamLabel_t */
+public static final int
+    /* set: pass void* pointing to dev memory */
+    /* get: pass void** pointing to host memory */
+    CUDNN_PTR_XDATA              = 0,
+    CUDNN_PTR_BN_EQSCALE         = 1,
+    CUDNN_PTR_BN_EQBIAS          = 2,
+    CUDNN_PTR_WDATA              = 3,
+    CUDNN_PTR_DWDATA             = 4,
+    CUDNN_PTR_YDATA              = 5,
+    CUDNN_PTR_DYDATA             = 6,
+    CUDNN_PTR_YSUM               = 7,
+    CUDNN_PTR_YSQSUM             = 8,
+    CUDNN_PTR_WORKSPACE          = 9,
+    CUDNN_PTR_BN_SCALE           = 10,
+    CUDNN_PTR_BN_BIAS            = 11,
+    CUDNN_PTR_BN_SAVED_MEAN      = 12,
+    CUDNN_PTR_BN_SAVED_INVSTD    = 13,
+    CUDNN_PTR_BN_RUNNING_MEAN    = 14,
+    CUDNN_PTR_BN_RUNNING_VAR     = 15,
+    CUDNN_PTR_ZDATA              = 16,
+    CUDNN_PTR_BN_Z_EQSCALE       = 17,
+    CUDNN_PTR_BN_Z_EQBIAS        = 18,
+    CUDNN_PTR_ACTIVATION_BITMASK = 19,
+    CUDNN_PTR_DXDATA             = 20,
+    CUDNN_PTR_DZDATA             = 21,
+    CUDNN_PTR_BN_DSCALE          = 22,
+    CUDNN_PTR_BN_DBIAS           = 23,
+
+    /* set/get: pass size_t* pointing to host memory */
+    CUDNN_SCALAR_SIZE_T_WORKSPACE_SIZE_IN_BYTES = 100,
+    /* set/get: pass int64_t* pointing to host memory */
+    CUDNN_SCALAR_INT64_T_BN_ACCUMULATION_COUNT = 101,
+    /* set/get: pass double* pointing to host memory */
+    CUDNN_SCALAR_DOUBLE_BN_EXP_AVG_FACTOR = 102,
+    /* set/get: pass double* pointing to host memory */
+    CUDNN_SCALAR_DOUBLE_BN_EPSILON = 103;
+
+public static native @Cast("cudnnStatus_t") int cudnnCreateFusedOpsConstParamPack(@ByPtrPtr cudnnFusedOpsConstParamStruct constPack, @Cast("cudnnFusedOps_t") int ops);
+
+public static native @Cast("cudnnStatus_t") int cudnnDestroyFusedOpsConstParamPack(cudnnFusedOpsConstParamStruct constPack);
+
+public static native @Cast("cudnnStatus_t") int cudnnSetFusedOpsConstParamPackAttribute(cudnnFusedOpsConstParamStruct constPack,
+                                        @Cast("cudnnFusedOpsConstParamLabel_t") int paramLabel,
+                                        @Const Pointer param);
+
+public static native @Cast("cudnnStatus_t") int cudnnGetFusedOpsConstParamPackAttribute(cudnnFusedOpsConstParamStruct constPack,
+                                        @Cast("cudnnFusedOpsConstParamLabel_t") int paramLabel,
+                                        Pointer param,
+                                        IntPointer isNULL);
+public static native @Cast("cudnnStatus_t") int cudnnGetFusedOpsConstParamPackAttribute(cudnnFusedOpsConstParamStruct constPack,
+                                        @Cast("cudnnFusedOpsConstParamLabel_t") int paramLabel,
+                                        Pointer param,
+                                        IntBuffer isNULL);
+public static native @Cast("cudnnStatus_t") int cudnnGetFusedOpsConstParamPackAttribute(cudnnFusedOpsConstParamStruct constPack,
+                                        @Cast("cudnnFusedOpsConstParamLabel_t") int paramLabel,
+                                        Pointer param,
+                                        int[] isNULL);
+
+public static native @Cast("cudnnStatus_t") int cudnnCreateFusedOpsVariantParamPack(@ByPtrPtr cudnnFusedOpsVariantParamStruct varPack, @Cast("cudnnFusedOps_t") int ops);
+
+public static native @Cast("cudnnStatus_t") int cudnnDestroyFusedOpsVariantParamPack(cudnnFusedOpsVariantParamStruct varPack);
+
+public static native @Cast("cudnnStatus_t") int cudnnSetFusedOpsVariantParamPackAttribute(cudnnFusedOpsVariantParamStruct varPack,
+                                          @Cast("cudnnFusedOpsVariantParamLabel_t") int paramLabel,
+                                          Pointer ptr);
+
+public static native @Cast("cudnnStatus_t") int cudnnGetFusedOpsVariantParamPackAttribute(cudnnFusedOpsVariantParamStruct varPack,
+                                          @Cast("cudnnFusedOpsVariantParamLabel_t") int paramLabel,
+                                          Pointer ptr);
+
+public static native @Cast("cudnnStatus_t") int cudnnCreateFusedOpsPlan(@ByPtrPtr cudnnFusedOpsPlanStruct plan, @Cast("cudnnFusedOps_t") int ops);
+
+public static native @Cast("cudnnStatus_t") int cudnnDestroyFusedOpsPlan(cudnnFusedOpsPlanStruct plan);
+
+public static native @Cast("cudnnStatus_t") int cudnnMakeFusedOpsPlan(cudnnContext handle,
+                      cudnnFusedOpsPlanStruct plan,
+                      cudnnFusedOpsConstParamStruct constPack,
+                      @Cast("size_t*") SizeTPointer workspaceSizeInBytes);
+
+public static native @Cast("cudnnStatus_t") int cudnnFusedOpsExecute(cudnnContext handle, cudnnFusedOpsPlanStruct plan, cudnnFusedOpsVariantParamStruct varPack);
 
 /* DEPRECATED routines to be removed next release :
    User should use the non-suffixed version (which has the API and functionality of _v6 version)

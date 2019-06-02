@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda</artifactId>
-      <version>10.1-7.5-${project.parent.version}</version>
+      <version>10.1-7.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -45,7 +45,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.5-${project.parent.version}</version>
+            <version>10.1-7.6-${project.parent.version}</version>
           </dependency>
         </dependencies>
       </plugin>
