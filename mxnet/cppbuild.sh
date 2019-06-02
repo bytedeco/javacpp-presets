@@ -26,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.4.0
+MXNET_VERSION=1.4.1
 download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -55,10 +55,10 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
 # upgrade MKL-DNN
-sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
-sedinplace 's/0.17.4/0.18.1/g' 3rdparty/mkldnn/CMakeLists.txt
-sedinplace 's/0.17.3/0.18/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
-sedinplace 's/2019.0.1.20180928/2019.0.3.20190220/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
+#sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
+#sedinplace 's/0.18.1/0.19/g' 3rdparty/mkldnn/CMakeLists.txt
+#sedinplace 's/0.18/0.19/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
+#sedinplace 's/2019.0.3.20190220/2019.0.5.20190502/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
 
 # patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk

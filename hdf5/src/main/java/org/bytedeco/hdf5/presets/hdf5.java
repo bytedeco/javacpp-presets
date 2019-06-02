@@ -22,6 +22,7 @@
 
 package org.bytedeco.hdf5.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -63,6 +64,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                                                        "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
 public class hdf5 implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "hdf5"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("H5_DLL", "H5_DLLVAR", "H5_HLDLL", "H5_DLLCPP", "H5CHECK", "H5OPEN", "H5E_ERR_CLS", "H5E_BEGIN_TRY", "H5E_END_TRY",
                              "H5G_link_t", "H5std_string").cppTypes().annotations())
@@ -92,7 +95,7 @@ public class hdf5 implements InfoMapper {
                      + "}\n"))
 
                .put(new Info("H5::visit_operator_t").valueTypes("visit_operator_t").pointerTypes("@ByPtrPtr visit_operator_t").javaText(
-                       "public class visit_operator_t extends FunctionPointer {\n"
+                       "public static class visit_operator_t extends FunctionPointer {\n"
                      + "    static { Loader.load(); }\n"
                      + "    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */\n"
                      + "    public    visit_operator_t(Pointer p) { super(p); }\n"

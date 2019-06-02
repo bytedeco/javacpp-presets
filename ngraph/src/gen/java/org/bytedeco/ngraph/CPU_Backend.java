@@ -34,14 +34,14 @@ public class CPU_Backend extends Backend {
                 public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
                                                   @Const @ByRef Shape shape);
 
-                public native @SharedPtr Executable compile(@SharedPtr Function func,
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                             @Cast("bool") boolean enable_performance_counters/*=false*/);
-                public native @SharedPtr Executable compile(@SharedPtr Function func);
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func);
 
-                public native @SharedPtr Executable compile(@SharedPtr Function func,
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                             @ByRef PassConfig pass_config,
                                             @Cast("bool") boolean enable_performance_counters/*=false*/);
-                public native @SharedPtr Executable compile(@SharedPtr Function func,
+                public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                             @ByRef PassConfig pass_config);
 
                 public native void remove_compiled_function(@SharedPtr Executable exec);

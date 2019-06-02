@@ -34,9 +34,10 @@ public class python extends org.bytedeco.cpython.presets.python {
         Loader.load(org.bytedeco.cpython.global.python.class);
         String platform = Loader.getPlatform();
         Py_FrozenFlag(1); // prevent Python from printing useless warnings
-        return platform.startsWith("windows")
-                ? new CharPointer(org.bytedeco.cpython.global.python.Py_GetPath()).getString()
-                : new IntPointer(org.bytedeco.cpython.global.python.Py_GetPath()).getString();
+        BytePointer p = Py_EncodeLocale(org.bytedeco.cpython.global.python.Py_GetPath(), null);
+        String string = p.getString();
+        PyMem_Free(p);
+        return string;
     }
 
     public static void Py_SetPath(File... path) throws IOException {
@@ -57,8 +58,8 @@ public class python extends org.bytedeco.cpython.presets.python {
             separator = File.pathSeparator;
         }
         Py_FrozenFlag(1); // prevent Python from printing useless warnings
-        org.bytedeco.cpython.global.python.Py_SetPath(platform.startsWith("windows")
-                ? new CharPointer(string)
-                : new IntPointer(string));
+        Pointer p = Py_DecodeLocale(string, null);
+        org.bytedeco.cpython.global.python.Py_SetPath(p);
+        PyMem_RawFree(p);
     }
 }

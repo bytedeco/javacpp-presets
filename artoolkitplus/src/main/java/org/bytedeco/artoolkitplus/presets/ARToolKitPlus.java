@@ -26,6 +26,7 @@
 
 package org.bytedeco.artoolkitplus.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -47,6 +48,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows-x86_64", includepath="C:/Program Files/ARToolKitPlus/include/",
         linkpath="C:/Program Files/ARToolKitPlus/lib/") })
 public class ARToolKitPlus implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "artoolkitplus"); }
+
     public void map(InfoMap infoMap) {
           infoMap.put(new Info("AR_EXPORT").cppTypes().annotations())
                  .put(new Info("defined(_MSC_VER) || defined(_WIN32_WCE)").define(false))

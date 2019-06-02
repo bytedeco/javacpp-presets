@@ -25,11 +25,8 @@ package org.bytedeco.mxnet.presets;
 import java.util.Arrays;
 import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
-import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -58,6 +55,7 @@ import org.bytedeco.opencv.presets.*;
         linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/"},
         preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "mxnet"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

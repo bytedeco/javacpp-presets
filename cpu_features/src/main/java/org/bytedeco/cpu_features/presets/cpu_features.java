@@ -22,6 +22,7 @@
 
 package org.bytedeco.cpu_features.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -54,6 +55,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 )
 @NoException
 public class cpu_features implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "cpu_features"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("defined(__cplusplus)").define())
                .put(new Info("CPU_FEATURES_START_CPP_NAMESPACE", "CPU_FEATURES_END_CPP_NAMESPACE",

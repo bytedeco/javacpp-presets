@@ -15,104 +15,37 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../StringBoolMap.java
 
 
+// Targeting ../NodeInputVector.java
+
+
+// Targeting ../NodeOutputVector.java
+
+
 // Targeting ../StringVector.java
 
 
 // Targeting ../SizeTVector.java
 
 
-// Targeting ../NgraphResultVector.java
+// Targeting ../ResultVector.java
 
 
-// Targeting ../NgraphParameterVector.java
+// Targeting ../ParameterVector.java
 
 
-// Targeting ../NgraphNodeVector.java
+// Targeting ../NodeVector.java
 
 
-// Targeting ../NgraphOpConstantVector.java
+// Targeting ../OpConstantVector.java
 
 
-// Targeting ../NgraphTensorVector.java
+// Targeting ../TensorVector.java
 
 
-// Targeting ../NgraphFunctionVector.java
+// Targeting ../FunctionVector.java
 
 
 // Targeting ../StringVoidMap.java
-
-
-// Parsed from ngraph/frontend/onnxifi/backend.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>  // std::shared_ptr
-// #include <string>  // std::string
-// #include <utility> // std::move
-// #include <vector>  // std::vector
-
-// #include "ngraph/function.hpp"
-// #include "ngraph/runtime/backend.hpp"
-// #include "ngraph/runtime/tensor.hpp"
-// Targeting ../NgraphONNXIFIBackend.java
-
-
-
-     // namespace onnxifi
-
- // namespace ngraph
-
-
-// Parsed from ngraph/frontend/onnxifi/backend_manager.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <cstddef> // std::size_t, std::uintptr_t
-// #include <map>     // std::map
-// #include <mutex>   // std::mutex
-// #include "onnxifi.h"
-
-// #include "backend.hpp"
-// #include "ngraph/runtime/backend.hpp"
-// Targeting ../BackendManager.java
-
-
-
-     // namespace onnxifi
-
- // namespace ngraph
 
 
 // Parsed from ngraph/descriptor/tensor.hpp
@@ -176,194 +109,10 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #pragma once
 
 // #include <map>
-        /** enum class ngraph::pass::CompilationMode */
-        public static final int
-            DEX = 0,    // Fast compilation using precompiled kernels
-            CODEGEN = 1; // Slower compilation for potentially faster code
     
 
 // Targeting ../PassConfig.java
 
-
-
-
-// Parsed from ngraph/runtime/executable.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-
-// #include "ngraph/function.hpp"
-// #include "ngraph/runtime/performance_counter.hpp"
-// #include "ngraph/shape.hpp"
-// #include "ngraph/type/element_type.hpp"
-    
-
-// Targeting ../Executable.java
-
-
-
-
-// Parsed from ngraph/runtime/tensor.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-// #include <vector>
-
-// #include "ngraph/descriptor/layout/tensor_layout.hpp"
-// #include "ngraph/descriptor/tensor.hpp"
-// #include "ngraph/runtime/backend.hpp"
-// #include "ngraph/shape.hpp"
-// #include "ngraph/strides.hpp"
-// #include "ngraph/type/element_type.hpp"
-// Targeting ../Value.java
-
-
-    
-// Targeting ../Tensor.java
-
-
-    
-
-
-
-// Parsed from ngraph/runtime/backend.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-
-// #include "ngraph/function.hpp"
-// #include "ngraph/pass/pass_config.hpp"
-// #include "ngraph/runtime/executable.hpp"
-// #include "ngraph/runtime/performance_counter.hpp"
-// #include "ngraph/shape.hpp"
-// #include "ngraph/type/element_type.hpp"
-    
-
-// Targeting ../Backend.java
-
-
-
-
-// Parsed from ngraph/runtime/cpu/cpu_backend.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <map>
-// #include <memory>
-
-// #include "cpu_backend_visibility.h"
-// #include "ngraph/pass/pass_config.hpp"
-// #include "ngraph/runtime/backend.hpp"
-// Targeting ../CPU_ExternalFunction.java
-
-
-// Targeting ../CPU_CallFrame.java
-
-
-// Targeting ../CPU_Backend.java
-
-
-// Targeting ../CPU_Executable.java
-
-
-        
-    
-
-
-
-// Parsed from ngraph/runtime/performance_counter.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <cstddef>
-// #include <string>
-// Targeting ../PerformanceCounter.java
-
-
-    
 
 
 
@@ -400,22 +149,24 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include "ngraph/except.hpp"
 // #include "ngraph/ngraph_visibility.hpp"
 // #include "ngraph/type/bfloat16.hpp"
+// #include "ngraph/type/float16.hpp"
         /** enum class ngraph::element::Type_t */
         public static final int
             undefined = 0,
             dynamic = 1,
             boolean_type = 2,
             bf16 = 3,
-            f32 = 4,
-            f64 = 5,
-            i8 = 6,
-            i16 = 7,
-            i32 = 8,
-            i64 = 9,
-            u8 = 10,
-            u16 = 11,
-            u32 = 12,
-            u64 = 13;
+            f16 = 4,
+            f32 = 5,
+            f64 = 6,
+            i8 = 7,
+            i16 = 8,
+            i32 = 9,
+            i64 = 10,
+            u8 = 11,
+            u16 = 12,
+            u32 = 13,
+            u64 = 14;
 // Targeting ../Type.java
 
 
@@ -423,6 +174,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type dynamic();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef @Name("boolean") Type _boolean();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type bf16();
+        @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f16();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f32();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type f64();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type i8();
@@ -459,6 +211,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint64_t>") Type fromUInt64t();
 
         @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<ngraph::bfloat16>") Type fromNGraphBFloat16();
+        
 
         @Namespace("ngraph::element") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Type obj);
     
@@ -502,74 +255,6 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 
-// Parsed from ngraph/function.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <atomic>
-// #include <initializer_list>
-// #include <list>
-// #include <memory>
-// #include <string>
-// #include <vector>
-
-// #include "ngraph/node.hpp"
-// #include "ngraph/parameter_vector.hpp"
-// #include "ngraph/result_vector.hpp"
-// Targeting ../Function.java
-
-
-
-
-
-// Parsed from ngraph/node_vector.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-// #include <vector>
-// Targeting ../Result.java
-
-
-    
-// Targeting ../NodeVector.java
-
-
-
-
-
 // Parsed from ngraph/assertion.hpp
 
 //*****************************************************************************
@@ -595,11 +280,29 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <vector>
 
 // #include "ngraph/except.hpp"
+
+// ****************************
+// Do not use this in new code!
+// ****************************
+//
+// The replacement is in ngraph/check.hpp. The system in check.hpp is much more efficient, since
+// the macros/classes here require construction of the error message string even if the assertion
+// does not fail.
+//
+// * If you have code that is calling NGRAPH_ASSERT, please replace it with NGRAPH_CHECK.
+// * If you are defining a custom exception macro, please convert it to use NGRAPH_CHECK_HELPER
+//   from check.hpp. See check.hpp for details on the new interface. In particular, note that the
+//   expected signatures for the exception class constructor is slightly different.
+//
+// TODO: remove this.
 // Targeting ../AssertionFailure.java
 
 
 
     /**
+     *  NOTE: This is a legacy class likely to be retired soon. Documentation here is preserved
+     *  for posterity.
+     * 
      *  Helper class for failed assertions. Callers should not instantiate this class directly.
      *  This class is meant to be wrapped with a macro like NGRAPH_ASSERT. This class provides
      *  two main facilities: (1) an ostream accessible via get_stream(), to which a detailed
@@ -650,21 +353,25 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 /** Asserts condition "cond" with an exception class of "T", at location "loc". */
-// #define NGRAPH_ASSERT_STREAM_WITH_LOC(T, cond, loc)
+// #define NGRAPH_ASSERT_STREAM_WITH_LOC_DO_NOT_USE_IN_NEW_CODE(T, cond, loc)
 //     ((cond) ? ::ngraph::DummyAssertionHelper().get_stream()
 //             : ::ngraph::AssertionHelper<T>(__FILE__, __LINE__, #cond, loc).get_stream())
 /** Asserts condition "cond" with an exception class of "T", and no location specified. */
-// #define NGRAPH_ASSERT_STREAM(T, cond)
+// #define NGRAPH_ASSERT_STREAM_DO_NOT_USE_IN_NEW_CODE(T, cond)
 //     ((cond) ? ::ngraph::DummyAssertionHelper().get_stream()
 //             : ::ngraph::AssertionHelper<T>(__FILE__, __LINE__, #cond).get_stream())
 /** Fails unconditionally with an exception class of "T", at location "loc". */
-// #define NGRAPH_FAIL_STREAM_WITH_LOC(T, loc)
+// #define NGRAPH_FAIL_STREAM_WITH_LOC_DO_NOT_USE_IN_NEW_CODE(T, loc)
 //     ::ngraph::AssertionHelper<T>(__FILE__, __LINE__, "", loc).get_stream()
 /** Fails unconditionally with an exception class of "T", and no location specified. */
-// #define NGRAPH_FAIL_STREAM(T) ::ngraph::AssertionHelper<T>(__FILE__, __LINE__).get_stream()
+// #define NGRAPH_FAIL_STREAM_DO_NOT_USE_IN_NEW_CODE(T)
+//     ::ngraph::AssertionHelper<T>(__FILE__, __LINE__).get_stream()
 
-// #define NGRAPH_ASSERT(cond) NGRAPH_ASSERT_STREAM(::ngraph::AssertionFailure, cond)
-// #define NGRAPH_FAIL() NGRAPH_FAIL_STREAM(::ngraph::AssertionFailure)
+/** DEPRECATED. Use NGRAPH_CHECK instead. */
+// #define NGRAPH_ASSERT(cond)
+//     NGRAPH_ASSERT_STREAM_DO_NOT_USE_IN_NEW_CODE(::ngraph::AssertionFailure, cond)
+/** DEPRECATED. Use NGRAPH_CHECK instead, with a condition of {@code false}. */
+// #define NGRAPH_FAIL() NGRAPH_FAIL_STREAM_DO_NOT_USE_IN_NEW_CODE(::ngraph::AssertionFailure)
 
 
 // Parsed from ngraph/except.hpp
@@ -869,329 +576,6 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 
-// Parsed from ngraph/op/op.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <string>
-
-// #include "ngraph/node.hpp"
-// #include "ngraph/op/util/op_annotations.hpp"
-// Targeting ../Op.java
-
-
-    
-
-
-
-// Parsed from ngraph/parameter_vector.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-// #include <vector>
-
-// #include "ngraph/op/parameter.hpp"
-// Targeting ../ParameterVector.java
-
-
-
-
-
-// Parsed from ngraph/op/parameter.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include "ngraph/op/op.hpp"
-// Targeting ../Parameter.java
-
-
-    
-
-
-
-// Parsed from ngraph/op/constant.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <cstring>
-// #include <sstream>
-
-// #include "ngraph/log.hpp"
-// #include "ngraph/node.hpp"
-// #include "ngraph/type/bfloat16.hpp"
-// #include "ngraph/type/element_type.hpp"
-// #include "ngraph/util.hpp"
-// Targeting ../Constant.java
-
-
-// Targeting ../ScalarConstantLikeBase.java
-
-
-// Targeting ../ScalarConstantLike.java
-
-
-    
-
-
-
-// Parsed from ngraph/op/util/binary_elementwise_arithmetic.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include "ngraph/op/op.hpp"
-// Targeting ../BinaryElementwiseArithmetic.java
-
-
-        
-    
-
-
-
-// Parsed from ngraph/op/add.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-
-// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
-// Targeting ../Add.java
-
-
-    
-
-    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByVal Node arg0,
-                                                @Const @SharedPtr @ByVal Node arg1);
-
-
-
-// Parsed from ngraph/op/multiply.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
-// Targeting ../Multiply.java
-
-
-    
-
-    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator *") Node multiply(@Const @SharedPtr @ByVal Node arg0,
-                                                @Const @SharedPtr @ByVal Node arg1);
-
-
-
-// Parsed from ngraph/result_vector.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <memory>
-// #include <vector>
-
-// #include "ngraph/op/result.hpp"
-// Targeting ../ResultVector.java
-
-
-
-
-
-// Parsed from ngraph/op/util/op_annotations.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include "ngraph/assertion.hpp"
-// Targeting ../oi_pair.java
-
-
-// Targeting ../OpAnnotations.java
-
-
-        
-    
-
-
-
-// Parsed from ngraph/autodiff/adjoints.hpp
-
-//*****************************************************************************
-// Copyright 2017-2019 Intel Corporation
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//*****************************************************************************
-
-// #pragma once
-
-// #include <map>
-// #include <memory>
-// #include <unordered_map>
-
-// #include "ngraph/coordinate.hpp"
-// #include "ngraph/node_vector.hpp"
-// #include "ngraph/strides.hpp"
-// Targeting ../Manager.java
-
-
-    
-// Targeting ../Adjoints.java
-
-
-    
-
-
-
 // Parsed from ngraph/dimension.hpp
 
 //*****************************************************************************
@@ -1376,19 +760,91 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 
-// TODO(amprocte): refactor so we don't have to introduce a locally-scoped variable and risk
-// shadowing here.
-// #define NGRAPH_CHECK(exc_class, ctx, check, ...)
+//
+// Helper macro for defining custom check macros, which throw custom exception classes and provide
+// useful context information (the check condition, source filename, line number, and any domain-
+// specific context information [e.g., a summary of the node that was being processed at the time
+// of the check]).
+//
+// For example (actually implemented in node.cpp), let's say we want to define a macro for
+// checking conditions during node validation, usable as follows:
+//
+//    NODE_VALIDATION_CHECK(node_being_checked,
+//                          node_being_checked->get_input_shape(0).size() == 1,
+//                          "Node must have an input rank of 1, but got ",
+//                          node_being_checked->get_input_shape(0).size(), ".");
+//
+// In case of failure, this will throw an exception of type NodeValidationFailure with a what()
+// string something like:
+//
+//      Check 'node_being_checked->get_input_shape(0).size() == 1' failed at foo.cpp:123:
+//      While validating node 'Broadcast[Broadcast_10](Reshape_9: float{1,3,4,5}) -> (??)':
+//      Node must have an input of rank 1, but got 2.
+//
+// To implement this, he first step is to define a subclass of CheckFailure (let's say it's called
+// MyFailure), which must have a constructor of the form:
+//
+//      MyFailure(const CheckLocInfo& check_loc_info,
+//                T context_info, // "T" can be any type; you'll supply a function to convert "T"
+//                                // to std::string
+//                const std::string& explanation)
+//
+// Here, we define a custom class for node validation failures as follows:
+//
+//    static std::string node_validation_failure_loc_string(const Node* node)
+//    {
+//        std::stringstream ss;
+//        ss << "While validating node '" << *node << "'";
+//        return ss.str();
+//    }
+//
+//    class NodeValidationFailure : public CheckFailure
+//    {
+//    public:
+//        NodeValidationFailure(const CheckLocInfo& check_loc_info,
+//                              const Node* node,
+//                              const std::string& explanation)
+//            : CheckFailure(check_loc_info, node_validation_failure_loc_string(node), explanation)
+//        {
+//        }
+//    };
+//
+// Then, we define the macro NODE_VALIDATION_CHECK as follows:
+//
+// #define NODE_VALIDATION_CHECK(node, cond, ...) <backslash>
+//     NGRAPH_CHECK_HELPER(::ngraph::NodeValidationFailure, (node), (cond), ##__VA_ARGS__)
+//
+// The macro NODE_VALIDATION_CHECK can now be called on any condition, with a Node* pointer
+// supplied to generate an informative error message via node_validation_failure_loc_string().
+//
+// Take care to fully qualify the exception class name in the macro body.
+//
+// The "..." may be filled with expressions of any type that has an "operator<<" overload for
+// insertion into std::ostream.
+//
+// TODO(amprocte): refactor NGRAPH_CHECK_HELPER so we don't have to introduce a locally-scoped
+// variable (ss___) and risk shadowing.
+//
+// #define NGRAPH_CHECK_HELPER(exc_class, ctx, check, ...)
 //     do
 //     {
 //         if (!(check))
 //         {
 //             ::std::stringstream ss___;
-//             ::ngraph::write_all_to_stream(ss___, __VA_ARGS__);
+//             ::ngraph::write_all_to_stream(ss___, ##__VA_ARGS__);
 //             throw exc_class(
 //                 (::ngraph::CheckLocInfo{__FILE__, __LINE__, #check}), (ctx), ss___.str());
 //         }
 //     } while (0)
+
+/** \brief Macro to check whether a boolean condition holds.
+ *  @param cond Condition to check
+ *  @param ... Additional error message info to be added to the error message via the {@code <<}
+ *             stream-insertion operator. Note that the expressions here will be evaluated lazily,
+ *             i.e., only if the {@code cond} evalutes to {@code false}.
+ *  @throws ::ngraph::CheckFailure if {@code cond} is false. */
+// #define NGRAPH_CHECK(cond, ...)
+//     NGRAPH_CHECK_HELPER(::ngraph::CheckFailure, "", (cond), ##__VA_ARGS__)
 
 
 // Parsed from ngraph/node.hpp
@@ -1423,35 +879,58 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <unordered_set>
 // #include <vector>
 
-// #include "ngraph/assertion.hpp"
 // #include "ngraph/autodiff/adjoints.hpp"
 // #include "ngraph/check.hpp"
+// #include "ngraph/coordinate.hpp"
+// #include "ngraph/deprecated.hpp"
 // #include "ngraph/descriptor/input.hpp"
 // #include "ngraph/descriptor/output.hpp"
 // #include "ngraph/descriptor/tensor.hpp"
-// #include "ngraph/node_vector.hpp"
 // #include "ngraph/placement.hpp"
-// Targeting ../GetOutputElementElimination.java
-
-
-    
+// #include "ngraph/strides.hpp"
      // namespace op
+    
 
-    @Namespace("ngraph") public static native void replace_node_users_arguments(@SharedPtr @ByVal Node target,
-                                          @SharedPtr @ByVal Node replacement);
-
-    @Namespace("ngraph") public static native void insert_new_node_between(@Const @SharedPtr @ByRef Node src_node,
-                                     @Const @SharedPtr @ByRef Node dst_node,
-                                     @Const @SharedPtr @ByRef Node new_node);
-
-    @Namespace("ngraph") public static native @StdString BytePointer node_validation_assertion_string(@Const Node node);
+    @Namespace("ngraph") public static native @StdString BytePointer node_validation_failure_loc_string(@Const Node node);
 
     @Namespace("ngraph") public static native @Const @SharedPtr @ByRef Node check_single_output_arg(@Const @SharedPtr @ByRef Node node,
                                                              @Cast("size_t") long i);
     @Namespace("ngraph") public static native @Const @ByRef NodeVector check_single_output_args(@Const @ByRef NodeVector args);
+
+    /** Alias useful for cloning */
 // Targeting ../Node.java
 
 
+// Targeting ../NodeInput.java
+
+
+// Targeting ../NodeOutput.java
+
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 // Targeting ../NodeValidationFailure.java
 
 
@@ -1463,7 +942,592 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
  // namespace ngraph
 
 // #define NODE_VALIDATION_CHECK(node, cond, ...)
-//     NGRAPH_CHECK(::ngraph::NodeValidationFailure, (node), (cond), __VA_ARGS__)
+//     NGRAPH_CHECK_HELPER(::ngraph::NodeValidationFailure, (node), (cond), ##__VA_ARGS__)
+
+
+// Parsed from ngraph/op/op.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <string>
+
+// #include "ngraph/autodiff/adjoints.hpp"
+// #include "ngraph/node.hpp"
+// #include "ngraph/op/util/op_annotations.hpp"
+// Targeting ../Op.java
+
+
+    
+
+
+
+// Parsed from ngraph/op/parameter.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/op/op.hpp"
+// Targeting ../Parameter.java
+
+
+    
+
+
+
+// Parsed from ngraph/op/result.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/op/op.hpp"
+// Targeting ../Result.java
+
+
+    
+
+
+
+// Parsed from ngraph/op/constant.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstring>
+// #include <sstream>
+
+// #include "ngraph/node.hpp"
+// #include "ngraph/runtime/aligned_buffer.hpp"
+// #include "ngraph/type/bfloat16.hpp"
+// #include "ngraph/type/element_type.hpp"
+// #include "ngraph/util.hpp"
+// Targeting ../Constant.java
+
+
+// Targeting ../ScalarConstantLikeBase.java
+
+
+// Targeting ../ScalarConstantLike.java
+
+
+    
+
+
+
+// Parsed from ngraph/op/util/binary_elementwise_arithmetic.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/op/op.hpp"
+// Targeting ../BinaryElementwiseArithmetic.java
+
+
+        
+    
+
+
+
+// Parsed from ngraph/op/add.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
+// Targeting ../Add.java
+
+
+    
+
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByVal Node arg0,
+                                                @Const @SharedPtr @ByVal Node arg1);
+
+
+
+// Parsed from ngraph/op/multiply.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include "ngraph/op/util/binary_elementwise_arithmetic.hpp"
+// Targeting ../Multiply.java
+
+
+    
+
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator *") Node multiply(@Const @SharedPtr @ByVal Node arg0,
+                                                @Const @SharedPtr @ByVal Node arg1);
+
+
+
+// Parsed from ngraph/op/util/op_annotations.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <vector>
+
+// #include "ngraph/except.hpp"
+// Targeting ../oi_pair.java
+
+
+// Targeting ../OpAnnotations.java
+
+
+        
+    
+
+
+
+// Parsed from ngraph/function.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <atomic>
+// #include <initializer_list>
+// #include <list>
+// #include <memory>
+// #include <string>
+// #include <vector>
+
+// #include "ngraph/node.hpp"
+// #include "ngraph/op/parameter.hpp"
+// #include "ngraph/op/result.hpp"
+// Targeting ../Function.java
+
+
+
+
+
+// Parsed from ngraph/autodiff/adjoints.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <map>
+// #include <memory>
+// #include <unordered_map>
+
+// #include "ngraph/coordinate.hpp"
+// #include "ngraph/strides.hpp"
+
+    // Need duplicate definition here to avoid g++ issues
+    // Keep consistent with version in node.hpp
+// Targeting ../Adjoints.java
+
+
+    
+
+
+
+// Parsed from ngraph/runtime/executable.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/runtime/performance_counter.hpp"
+// #include "ngraph/shape.hpp"
+// #include "ngraph/type/element_type.hpp"
+    
+
+// Targeting ../Executable.java
+
+
+
+
+// Parsed from ngraph/runtime/tensor.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+// #include <vector>
+
+// #include "ngraph/descriptor/layout/tensor_layout.hpp"
+// #include "ngraph/descriptor/tensor.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/shape.hpp"
+// #include "ngraph/strides.hpp"
+// #include "ngraph/type/element_type.hpp"
+// Targeting ../Value.java
+
+
+    
+// Targeting ../Tensor.java
+
+
+    
+
+
+
+// Parsed from ngraph/runtime/backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/pass/pass_config.hpp"
+// #include "ngraph/runtime/executable.hpp"
+// #include "ngraph/runtime/performance_counter.hpp"
+// #include "ngraph/shape.hpp"
+// #include "ngraph/type/element_type.hpp"
+    
+
+// Targeting ../Backend.java
+
+
+
+
+// Parsed from ngraph/runtime/cpu/cpu_backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <map>
+// #include <memory>
+
+// #include "cpu_backend_visibility.h"
+// #include "ngraph/pass/pass_config.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// Targeting ../CPU_ExternalFunction.java
+
+
+// Targeting ../CPU_CallFrame.java
+
+
+// Targeting ../CPU_Backend.java
+
+
+// Targeting ../CPU_Executable.java
+
+
+        
+    
+
+
+
+// Parsed from ngraph/runtime/performance_counter.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <string>
+
+// #include "ngraph/node.hpp"
+// Targeting ../PerformanceCounter.java
+
+
+    
+
+
+
+// Parsed from ngraph/frontend/onnxifi/backend.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <memory>  // std::shared_ptr
+// #include <string>  // std::string
+// #include <utility> // std::move
+// #include <vector>  // std::vector
+
+// #include "ngraph/function.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/runtime/tensor.hpp"
+// Targeting ../ONNXIFIBackend.java
+
+
+
+     // namespace onnxifi
+
+ // namespace ngraph
+
+
+// Parsed from ngraph/frontend/onnxifi/backend_manager.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef> // std::size_t, std::uintptr_t
+// #include <map>     // std::map
+// #include <mutex>   // std::mutex
+// #include "onnxifi.h"
+
+// #include "backend.hpp"
+// #include "ngraph/runtime/backend.hpp"
+// Targeting ../BackendManager.java
+
+
+
+     // namespace onnxifi
+
+ // namespace ngraph
 
 
 // Parsed from ngraph/frontend/onnxifi/onnxifi.h

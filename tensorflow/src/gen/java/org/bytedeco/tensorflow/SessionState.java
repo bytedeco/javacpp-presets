@@ -41,5 +41,5 @@ public class SessionState extends Pointer {
 
   public native @Cast("tensorflow::int64") long GetNewId();
 
-  @MemberGetter public static native @Cast("const char*") BytePointer kTensorHandleResourceTypeName();
+  public static native @Cast("const char*") BytePointer kTensorHandleResourceTypeName(); public static native void kTensorHandleResourceTypeName(BytePointer setter);
 }

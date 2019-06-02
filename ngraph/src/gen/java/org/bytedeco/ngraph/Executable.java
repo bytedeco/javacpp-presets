@@ -20,15 +20,15 @@ public class Executable extends Pointer {
     /** @param outputs vector of runtime::Tensor used as outputs
      *  @param inputs vector of runtime::Tensor used as inputs
      *  @return true if iteration is successful, false otherwise */
-    public native @Cast("bool") boolean call(@Const @ByRef NgraphTensorVector outputs,
-                          @Const @ByRef NgraphTensorVector inputs);
+    public native @Cast("bool") boolean call(@Const @ByRef TensorVector outputs,
+                          @Const @ByRef TensorVector inputs);
 
     /** \brief Executes a single iteration of a Function.
      *  @param outputs vector of runtime::Tensor used as outputs
      *  @param inputs vector of runtime::Tensor used as inputs
      *  @return true if iteration is successful, false otherwise */
-    public native @Cast("bool") boolean call_with_validate(@Const @ByRef NgraphTensorVector outputs,
-                                @Const @ByRef NgraphTensorVector inputs);
+    public native @Cast("bool") boolean call_with_validate(@Const @ByRef TensorVector outputs,
+                                @Const @ByRef TensorVector inputs);
 
     /** \brief Collect performance information gathered on a Function.
      *  @return Vector of PerformanceCounter information. */
@@ -37,8 +37,8 @@ public class Executable extends Pointer {
     /** \brief Validates a Function.
      *  @param outputs vector of runtime::Tensor used as outputs
      *  @param inputs vector of runtime::Tensor used as inputs */
-    public native void validate(@Const @ByRef NgraphTensorVector outputs,
-                      @Const @ByRef NgraphTensorVector inputs);
+    public native void validate(@Const @ByRef TensorVector outputs,
+                      @Const @ByRef TensorVector inputs);
 
     /** \brief Query the input Parameters
      *  @return an ngraph::op::ParameterVector of all input parameters */

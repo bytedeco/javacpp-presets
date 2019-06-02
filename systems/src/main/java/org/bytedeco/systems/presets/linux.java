@@ -23,14 +23,10 @@
 package org.bytedeco.systems.presets;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.List;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -57,6 +53,7 @@ import org.bytedeco.javacpp.tools.Logger;
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;
@@ -152,8 +149,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("__locale_data", "module", "sigcontext", "__spawn_action", "timex", "pt_regs",
                              "_fpreg", "_fpstate", "_fpxreg", "_libc_fpstate", "_libc_fpxreg", "_libc_xmmreg", "_xmmreg").cast().pointerTypes("Pointer"))
                .put(new Info("__timezone_ptr_t").cast().pointerTypes("timezone"))
-               .put(new Info("gregset_t").cppTypes("const long long*"))
-               .put(new Info("fpregset_t").cppTypes("const void*"))
+               .put(new Info("gregset_t", "fpregset_t").cppTypes("void* const"))
 
                .put(new Info("__locale_struct").pointerTypes("locale_t"))
                .put(new Info("__locale_t").valueTypes("locale_t"))

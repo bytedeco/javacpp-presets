@@ -40,7 +40,7 @@ public class PartialShape extends Pointer {
          *  <pre>{@code {.cpp}
          *  PartialShape s{2,3,4};                     // rank=3, all dimensions static
          *  PartialShape s{};                          // rank=0
-         *  PartialShape s{2,Dimension::dynamic(),3};  // rank=2, dimension 1 dynamic
+         *  PartialShape s{2,Dimension::dynamic(),3};  // rank=3, dimension 1 dynamic
          *  }</pre> */
 
         /** \brief Constructs a PartialShape with static rank from a vector of Dimension.

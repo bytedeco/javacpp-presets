@@ -22,6 +22,7 @@
 
 package org.bytedeco.leptonica.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -50,6 +51,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "windows-x86_64", preloadpath = "C:/msys64/mingw64/bin/") })
 @NoException
 public class lept implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "leptonica"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LEPT_DLL", "LIBJP2K_HEADER", "L_END_LIST").cppTypes().annotations())
                .put(new Info("PIX_NOT").cppTypes("int", "int"))

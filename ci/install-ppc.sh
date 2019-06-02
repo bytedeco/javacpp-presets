@@ -66,10 +66,10 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 2 | update-alternative
 if [[ "$PROJ" =~ cuda ]]; then
    echo "Setting up for cuda build"
    cd $HOME/
-   curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-ubuntu1804-10-1-local-10.1.105-418.39_1.0-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-10-1-local-10.1.105-418.39_1.0-1_ppc64el.deb
+   curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda-repo-ubuntu1804-10-1-local-10.1.168-418.67_1.0-1_ppc64el.deb -o $HOME/cuda-repo-ubuntu1804-10-1-local-10.1.168-418.67_1.0-1_ppc64el.deb
    curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-linux-ppc64le-v7.5.0.56.tgz -o $HOME/cudnn-10.1-linux-ppc64le-v7.5.0.56.tgz
    python $TRAVIS_BUILD_DIR/ci/gDownload.py 1J99LxwI5FBwU8u_hjLtevg9XzumjwDQj $HOME/nccl_ppc64le.txz
-   ar vx $HOME/cuda-repo-ubuntu1804-10-1-local-10.1.105-418.39_1.0-1_ppc64el.deb
+   ar vx $HOME/cuda-repo-ubuntu1804-10-1-local-10.1.168-418.67_1.0-1_ppc64el.deb
    tar xvf data.tar.xz
    mkdir $HOME/cudaFS
    cd var; find . -name *.deb | while read line; do ar vx $line; tar --totals -xf data.tar.xz -C $HOME/cudaFS; done

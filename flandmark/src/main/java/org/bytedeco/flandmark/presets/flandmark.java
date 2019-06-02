@@ -22,6 +22,7 @@
 
 package org.bytedeco.flandmark.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -37,6 +38,8 @@ import org.bytedeco.opencv.presets.opencv_imgproc;
                               link = "flandmark_static"/*, resource = {"include", "lib"}*/, compiler = "cpp11"),
     inherit = opencv_imgproc.class, target = "org.bytedeco.flandmark", global = "org.bytedeco.flandmark.global.flandmark")
 public class flandmark implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "flandmark"); }
+
     public void map(InfoMap infoMap) {
     }
 }
