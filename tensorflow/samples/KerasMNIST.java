@@ -48,6 +48,12 @@ public class KerasMNIST {
                 + "model.fit(x_train, y_train, epochs=5)\n"
                 + "model.evaluate(x_test, y_test)\n", Py_file_input, globals, globals, null);
 
+        if (PyErr_Occurred() != null) {
+            System.err.println("Python error occurred");
+            PyErr_Print();
+            System.exit(-1);
+        }
+
         long[] dims = {1, 28, 28};
         DoublePointer data = new DoublePointer(
                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -87,5 +93,11 @@ public class KerasMNIST {
         System.out.println("prediction = ");
         PyObject result = PyRun_StringFlags("model.predict_classes(sample, batch_size=1, verbose=1)",
                                             Py_single_input, globals, globals, null);
+
+        if (PyErr_Occurred() != null) {
+            System.err.println("Python error occurred");
+            PyErr_Print();
+            System.exit(-1);
+        }
     }
 }

@@ -292,6 +292,7 @@ if [[ "$EXTENSION" =~ python ]]; then
     ln -sf external/protobuf_archive/python/google/ ../python/
     ln -sf external/six_archive/six.py ../python/
     ln -sf external/termcolor_archive/termcolor.py ../python/
+    ln -sf external/wrapt/ ../python/
     $PYTHON_BIN_PATH -m pip install --target=../python/ keras_applications==1.0.6 --no-deps
     $PYTHON_BIN_PATH -m pip install --target=../python/ keras_preprocessing==1.0.5 --no-deps
 fi
