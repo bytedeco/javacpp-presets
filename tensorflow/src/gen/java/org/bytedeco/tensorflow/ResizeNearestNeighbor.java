@@ -52,7 +52,11 @@ public class ResizeNearestNeighbor extends Pointer {
      *  Defaults to false */
     public native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
 
+    /** Defaults to false */
+    public native @ByVal Attrs HalfPixelCenters(@Cast("bool") boolean x);
+
     public native @Cast("bool") boolean align_corners_(); public native Attrs align_corners_(boolean setter);
+    public native @Cast("bool") boolean half_pixel_centers_(); public native Attrs half_pixel_centers_(boolean setter);
   }
   public ResizeNearestNeighbor(@Const @ByRef Scope scope, @ByVal Input images, @ByVal Input size) { super((Pointer)null); allocate(scope, images, size); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input images, @ByVal Input size);
@@ -63,6 +67,7 @@ public class ResizeNearestNeighbor extends Pointer {
   public native Node node();
 
   public static native @ByVal Attrs AlignCorners(@Cast("bool") boolean x);
+  public static native @ByVal Attrs HalfPixelCenters(@Cast("bool") boolean x);
 
   public native @ByRef Operation operation(); public native ResizeNearestNeighbor operation(Operation setter);
   public native @ByRef Output resized_images(); public native ResizeNearestNeighbor resized_images(Output setter);

@@ -111,13 +111,34 @@ public class FunctionDefHelper extends Pointer {
     public native @ByRef StringVector arg(); public native Node arg(StringVector setter);
     public native @ByRef @Cast("std::vector<std::pair<tensorflow::string,tensorflow::FunctionDefHelper::AttrValueWrapper> >*") StringAttrPairVector attr(); public native Node attr(StringAttrPairVector setter);
     public native @ByRef StringVector dep(); public native Node dep(StringVector setter);
+    public native @StdString BytePointer device(); public native Node device(BytePointer setter);
 
     public native @ByVal NodeDef ToNodeDef();
   }
 
-  // The Create() function uses the new NodeDef field.  `ret_def`
-  // holds a mapping from the function output names from `out_def` to
-  // the node outputs from `node_def`.
+  // Creates a FunctionDef from the given parameters. Node inputs must use
+  // function encoding (node_name:output_name[:output_index]).
+  // - `ret_def` holds a mapping from the function output names from `out_def`
+  //   to the node outputs from `node_def`.
+  // - `control_ret_def` holds a mapping from the function control
+  //   output names to the nodes from `node_def`.
+  public static native @ByVal FunctionDef Create(
+        @StdString BytePointer function_name, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector in_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector out_def, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector attr_def,
+        @ArraySlice Node node_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >*") StringStringPairVector ret_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >*") StringStringPairVector control_ret_def);
+  public static native @ByVal FunctionDef Create(
+        @StdString String function_name, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector in_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector out_def, @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector attr_def,
+        @ArraySlice Node node_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >*") StringStringPairVector ret_def,
+        @ByVal @Cast("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >*") StringStringPairVector control_ret_def);
+
+  // Creates a FunctionDef from the given parameters. Node inputs must use
+  // function encoding (node_name:output_name[:output_index]).
+  // - `ret_def` holds a mapping from the function output names from `out_def`
+  //   to the node outputs from `node_def`.
   public static native @ByVal FunctionDef Create(@StdString BytePointer function_name,
                               @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector in_def,
                               @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector out_def,
@@ -131,7 +152,6 @@ public class FunctionDefHelper extends Pointer {
                               @ArraySlice Node node_def,
                               @ByVal @Cast("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >*") StringStringPairVector ret_def);
 
-  // The two Define() functions use the old FunctionDef::Node field.
   // TODO(josh11b): Get rid of these and transition to the one above.
   public static native @ByVal FunctionDef Define(@StdString BytePointer function_name,
                               @ByVal @Cast("tensorflow::gtl::ArraySlice<tensorflow::string>*") StringVector arg_def,

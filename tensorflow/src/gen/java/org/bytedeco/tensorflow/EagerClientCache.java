@@ -17,6 +17,7 @@ public class EagerClientCache extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EagerClientCache(Pointer p) { super(p); }
 
-  public native EagerClient GetClient(@StdString BytePointer target);
-  public native EagerClient GetClient(@StdString String target);
+  public native @ByVal Status GetClient(@StdString BytePointer target, @Cast("tensorflow::eager::EagerClient**") PointerPointer client);
+  public native @ByVal Status GetClient(@StdString BytePointer target, @ByPtrPtr EagerClient client);
+  public native @ByVal Status GetClient(@StdString String target, @ByPtrPtr EagerClient client);
 }

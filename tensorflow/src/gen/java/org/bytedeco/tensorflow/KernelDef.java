@@ -59,16 +59,19 @@ public class KernelDef extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -121,8 +124,8 @@ public class KernelDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_op();
   public native void set_allocated_op(@StdString @Cast({"char*", "std::string*"}) BytePointer op);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_op();
-  public native @Deprecated void unsafe_arena_set_allocated_op(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_op();
+  public native void unsafe_arena_set_allocated_op(
         @StdString @Cast({"char*", "std::string*"}) BytePointer op);
 
   // string device_type = 2;
@@ -139,8 +142,8 @@ public class KernelDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device_type();
   public native void set_allocated_device_type(@StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device_type();
-  public native @Deprecated void unsafe_arena_set_allocated_device_type(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device_type();
+  public native void unsafe_arena_set_allocated_device_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device_type);
 
   // string label = 5;
@@ -157,8 +160,8 @@ public class KernelDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_label();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_label();
   public native void set_allocated_label(@StdString @Cast({"char*", "std::string*"}) BytePointer label);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_label();
-  public native @Deprecated void unsafe_arena_set_allocated_label(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_label();
+  public native void unsafe_arena_set_allocated_label(
         @StdString @Cast({"char*", "std::string*"}) BytePointer label);
 
   // int32 priority = 6;

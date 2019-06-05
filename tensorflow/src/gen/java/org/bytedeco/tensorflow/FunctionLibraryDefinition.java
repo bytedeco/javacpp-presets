@@ -20,6 +20,17 @@ public class FunctionLibraryDefinition extends OpRegistryInterface {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionLibraryDefinition(Pointer p) { super(p); }
 
+  // Ops created for function arguments bear the name given by `kArgOp`; those
+  // created for return values bear the name given by `kRetOp`.
+  @MemberGetter public static native @Cast("const char*") BytePointer kArgOp();
+  @MemberGetter public static native @Cast("const char*") BytePointer kDeviceArgOp();
+  @MemberGetter public static native @Cast("const char*") BytePointer kRetOp();
+  @MemberGetter public static native @Cast("const char*") BytePointer kDeviceRetOp();
+  @MemberGetter public static native @Cast("const char*") BytePointer kIntsOnDeviceAttr();
+
+  @MemberGetter public static native @Cast("const char*") BytePointer kGradientOp();
+  @MemberGetter public static native @Cast("const char*") BytePointer kFuncAttr();
+
   // Note: This constructor grabs `lib_def`'s lock in shared mode.
   public FunctionLibraryDefinition(@Const @ByRef FunctionLibraryDefinition lib_def) { super((Pointer)null); allocate(lib_def); }
   private native void allocate(@Const @ByRef FunctionLibraryDefinition lib_def);
@@ -112,16 +123,6 @@ public class FunctionLibraryDefinition extends OpRegistryInterface {
   // across this library.
   public native @StdString BytePointer UniqueFunctionName(@StringPiece BytePointer prefix);
   public native @StdString String UniqueFunctionName(@StringPiece String prefix);
-
-  // Ops created for function arguments bear the name given by `kArgOp`; those
-  // created for return values bear the name given by `kRetOp`.
-  @MemberGetter public static native @Cast("const char*") BytePointer kArgOp();
-  @MemberGetter public static native @Cast("const char*") BytePointer kDeviceArgOp();
-  @MemberGetter public static native @Cast("const char*") BytePointer kRetOp();
-  @MemberGetter public static native @Cast("const char*") BytePointer kDeviceRetOp();
-
-  @MemberGetter public static native @Cast("const char*") BytePointer kGradientOp();
-  @MemberGetter public static native @Cast("const char*") BytePointer kFuncAttr();
 
   // Given a node def 'ndef', inspects attributes of the callee
   // function to derive the attribute 'value' for 'attr'. Returns OK

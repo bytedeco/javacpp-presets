@@ -59,16 +59,19 @@ public class GradientDef extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -91,8 +94,8 @@ public class GradientDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_function_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_function_name();
   public native void set_allocated_function_name(@StdString @Cast({"char*", "std::string*"}) BytePointer function_name);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_function_name();
-  public native @Deprecated void unsafe_arena_set_allocated_function_name(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_function_name();
+  public native void unsafe_arena_set_allocated_function_name(
         @StdString @Cast({"char*", "std::string*"}) BytePointer function_name);
 
   // string gradient_func = 2;
@@ -109,7 +112,7 @@ public class GradientDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_gradient_func();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_gradient_func();
   public native void set_allocated_gradient_func(@StdString @Cast({"char*", "std::string*"}) BytePointer gradient_func);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_gradient_func();
-  public native @Deprecated void unsafe_arena_set_allocated_gradient_func(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_gradient_func();
+  public native void unsafe_arena_set_allocated_gradient_func(
         @StdString @Cast({"char*", "std::string*"}) BytePointer gradient_func);
 }

@@ -187,14 +187,17 @@ public class Scope extends Pointer {
 
   // START_SKIP_DOXYGEN
 
-  /** If status() is Status::OK(), construct a Graph object using the default
+  /** If status() is Status::OK(), construct a Graph object using {@code opts} as the
    *  GraphConstructorOptions, and return Status::OK if graph construction was
    *  successful. Otherwise, return the error status. */
   // TODO(josh11b, keveman): Make this faster; right now it converts
   // Graph->GraphDef->Graph.  This cleans up the graph (e.g. adds
   // edges from the source and to the sink node, resolves back edges
   // by name), and makes sure the resulting graph is valid.
-  public native @ByVal Status ToGraph(Graph g);
+  public native @ByVal Status ToGraph(
+        Graph g, @ByVal(nullValue = "tensorflow::GraphConstructorOptions{}") GraphConstructorOptions opts);
+  public native @ByVal Status ToGraph(
+        Graph g);
 
   // Calls AddNode() using this scope's ShapeRefiner. This exists in the public
   // API to prevent custom op wrappers from needing access to shape_refiner.h or

@@ -201,7 +201,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>10.1-7.5-${project.version}</version>
+      <version>10.1-7.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -211,7 +211,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.13.1-${project.version}</version>
+      <version>1.14.0-rc0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -117,10 +117,10 @@ fi
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
        curl -L -o cuda_10.1.168_425.25_windows.exe "https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_425.25_windows.exe"
-       curl -L -o cudnn-10.1-windows7-x64-v7.5.0.56.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-windows7-x64-v7.5.0.56.zip"
+       curl -L -o cudnn-10.1-windows7-x64-v7.6.0.64.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.0/cudnn-10.1-windows7-x64-v7.6.0.64.zip"
        ./cuda_10.1.168_425.25_windows.exe -s
        sleep 60
-       unzip ./cudnn-10.1-windows7-x64-v7.5.0.56.zip
+       unzip ./cudnn-10.1-windows7-x64-v7.6.0.64.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/lib/x64
@@ -132,7 +132,7 @@ if [ "$PROJ" == "tensorflow" ]; then
        unzip -o swigwin-3.0.12.zip -d /c/
 
        echo "adding bazel for tensorflow"
-       curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
        if [ "$CURL_STATUS" != "0" ]; then
          echo "Download failed here, so can't proceed with the build.. Failing.."
          exit 1

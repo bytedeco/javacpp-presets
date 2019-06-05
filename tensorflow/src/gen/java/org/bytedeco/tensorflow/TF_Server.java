@@ -10,7 +10,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-// #ifndef __ANDROID__
+// #if !defined(IS_MOBILE_PLATFORM) && !defined(IS_SLIM_BUILD)
 @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class TF_Server extends Pointer {
     static { Loader.load(); }

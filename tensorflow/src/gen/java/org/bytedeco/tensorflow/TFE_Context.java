@@ -19,11 +19,13 @@ public class TFE_Context extends Pointer {
   public TFE_Context(@Const @ByRef SessionOptions opts,
                 @Cast("TFE_ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
-                Rendezvous rendezvous) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous); }
+                Rendezvous rendezvous,
+                @Const CustomKernelCreator custom_kernel_creator) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous, custom_kernel_creator); }
   private native void allocate(@Const @ByRef SessionOptions opts,
                 @Cast("TFE_ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
-                Rendezvous rendezvous);
+                Rendezvous rendezvous,
+                @Const CustomKernelCreator custom_kernel_creator);
 
-  @MemberGetter public native @ByRef EagerContext context();
+  public native EagerContext context(); public native TFE_Context context(EagerContext setter);
 }

@@ -15,9 +15,10 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  The polygamma function is defined as:
  * 
  * 
- *  \(\psi^{(n)}(x) = \frac{d^n}{dx^n} \psi(x)\)
+ *  \(\psi^{(a)}(x) = \frac{d^a}{dx^a} \psi(x)\)
  * 
  *  where \(\psi(x)\) is the digamma function.
+ *  The polygamma function is defined only for non-negative integer orders \a\.
  * 
  *  Arguments:
  *  * scope: A Scope object

@@ -59,16 +59,19 @@ public class RunMetadata extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
@@ -85,6 +88,15 @@ public class RunMetadata extends MessageLite {
   public native GraphDef mutable_partition_graphs(int index);
   public native @Const @ByRef GraphDef partition_graphs(int index);
   public native GraphDef add_partition_graphs();
+
+  // repeated .tensorflow.RunMetadata.FunctionGraphs function_graphs = 4;
+  public native int function_graphs_size();
+  public native void clear_function_graphs();
+  @MemberGetter public static native int kFunctionGraphsFieldNumber();
+  public static final int kFunctionGraphsFieldNumber = kFunctionGraphsFieldNumber();
+  public native RunMetadata_FunctionGraphs mutable_function_graphs(int index);
+  public native @Const @ByRef RunMetadata_FunctionGraphs function_graphs(int index);
+  public native RunMetadata_FunctionGraphs add_function_graphs();
 
   // .tensorflow.StepStats step_stats = 1;
   public native @Cast("bool") boolean has_step_stats();

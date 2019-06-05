@@ -10,7 +10,9 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-// Runtime statistics collected by an allocator.
+// Runtime statistics collected by an allocator. Exactly the same as
+// stream_executor::AllocatorStats, but independently defined to preserve the
+// mutual independence of StreamExecutor and TensorFlow.
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class AllocatorStats extends Pointer {
     static { Loader.load(); }
@@ -23,19 +25,22 @@ public class AllocatorStats extends Pointer {
         return (AllocatorStats)super.position(position);
     }
 
-  public native @Cast("tensorflow::int64") long num_allocs(); public native AllocatorStats num_allocs(long setter);        // Number of allocations.
-  public native @Cast("tensorflow::int64") long bytes_in_use(); public native AllocatorStats bytes_in_use(long setter);      // Number of bytes in use.
-  public native @Cast("tensorflow::int64") long max_bytes_in_use(); public native AllocatorStats max_bytes_in_use(long setter);  // The maximum bytes in use.
-  public native @Cast("tensorflow::int64") long max_alloc_size(); public native AllocatorStats max_alloc_size(long setter);    // The max single allocation seen.
+  public native @Cast("tensorflow::int64") long num_allocs(); public native AllocatorStats num_allocs(long setter);          // Number of allocations.
+  public native @Cast("tensorflow::int64") long bytes_in_use(); public native AllocatorStats bytes_in_use(long setter);        // Number of bytes in use.
+  public native @Cast("tensorflow::int64") long peak_bytes_in_use(); public native AllocatorStats peak_bytes_in_use(long setter);   // The peak bytes in use.
+  public native @Cast("tensorflow::int64") long largest_alloc_size(); public native AllocatorStats largest_alloc_size(long setter);  // The largest single allocation seen.
 
-  // The upper limit what the allocator can allocate, if such a limit
-  // is known. Certain allocator may return 0 to indicate the limit is
-  // unknown.
-  public native @Cast("tensorflow::int64") long bytes_limit(); public native AllocatorStats bytes_limit(long setter);
+  // The upper limit of bytes of user allocatable device memory, if such a limit
+  // is known.
+
+  // Stats for reserved memory usage.
+  public native @Cast("tensorflow::int64") long bytes_reserved(); public native AllocatorStats bytes_reserved(long setter);       // Number of bytes reserved.
+  public native @Cast("tensorflow::int64") long peak_bytes_reserved(); public native AllocatorStats peak_bytes_reserved(long setter);  // The peak number of bytes reserved.
+  // The upper limit on the number bytes of reservable memory,
+  // if such a limit is known.
 
   public AllocatorStats() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native void Clear();
   public native @StdString BytePointer DebugString();
 }

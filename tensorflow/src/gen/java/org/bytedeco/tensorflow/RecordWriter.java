@@ -44,6 +44,9 @@ public class RecordWriter extends Pointer {
   public native @ByVal Status WriteRecord(@StringPiece BytePointer slice);
   public native @ByVal Status WriteRecord(@StringPiece String slice);
 
+// #if defined(PLATFORM_GOOGLE)
+// #endif
+
   // Flushes any buffered data held by underlying containers of the
   // RecordWriter to the WritableFile. Does *not* flush the
   // WritableFile.
