@@ -248,6 +248,12 @@ case $PLATFORM in
         ;;
 esac
 
+# prevent Bazel from exceeding maximum command line length on Windows
+unset PLATFORM_ARTIFACTS
+unset PLATFORM_INCLUDEPATH
+unset PLATFORM_LINKPATH
+unset PLATFORM_PRELOADPATH
+
 bash configure
 bazel build -c opt $BUILDTARGETS --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
 
