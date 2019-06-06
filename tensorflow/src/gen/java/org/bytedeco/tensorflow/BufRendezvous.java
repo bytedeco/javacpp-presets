@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
+
 @Namespace("tensorflow") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class BufRendezvous extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

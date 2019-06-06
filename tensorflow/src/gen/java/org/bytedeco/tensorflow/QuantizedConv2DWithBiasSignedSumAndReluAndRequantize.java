@@ -19,7 +19,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  * {@code Output} output
  *  * {@code Output} min_output
  *  * {@code Output} max_output */
-@Namespace("tensorflow::ops") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+@Namespace("tensorflow::ops::internal") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class QuantizedConv2DWithBiasSignedSumAndReluAndRequantize extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -48,8 +48,14 @@ public class QuantizedConv2DWithBiasSignedSumAndReluAndRequantize extends Pointe
     public native @ByVal Attrs Dilations(@ArraySlice IntBuffer x);
     public native @ByVal Attrs Dilations(@ArraySlice int... x);
 
+    /** Defaults to [] */
+    public native @ByVal Attrs PaddingList(@ArraySlice IntPointer x);
+    public native @ByVal Attrs PaddingList(@ArraySlice IntBuffer x);
+    public native @ByVal Attrs PaddingList(@ArraySlice int... x);
+
     public native @Cast("tensorflow::DataType") int out_type_(); public native Attrs out_type_(int setter);
     public native @ArraySlice IntPointer dilations_(); public native Attrs dilations_(IntPointer setter);
+    public native @ArraySlice IntPointer padding_list_(); public native Attrs padding_list_(IntPointer setter);
   }
   public QuantizedConv2DWithBiasSignedSumAndReluAndRequantize(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input filter,
                                                        @ByVal Input bias,
@@ -320,6 +326,9 @@ public class QuantizedConv2DWithBiasSignedSumAndReluAndRequantize extends Pointe
   public static native @ByVal Attrs Dilations(@ArraySlice IntPointer x);
   public static native @ByVal Attrs Dilations(@ArraySlice IntBuffer x);
   public static native @ByVal Attrs Dilations(@ArraySlice int... x);
+  public static native @ByVal Attrs PaddingList(@ArraySlice IntPointer x);
+  public static native @ByVal Attrs PaddingList(@ArraySlice IntBuffer x);
+  public static native @ByVal Attrs PaddingList(@ArraySlice int... x);
 
   public native @ByRef Operation operation(); public native QuantizedConv2DWithBiasSignedSumAndReluAndRequantize operation(Operation setter);
   public native @ByRef Output output(); public native QuantizedConv2DWithBiasSignedSumAndReluAndRequantize output(Output setter);

@@ -392,7 +392,16 @@ public class Tensor extends AbstractTensor {
   public native @StdString BytePointer SummarizeValue(@Cast("tensorflow::int64") long max_entries);
 
   /** A human-readable summary of the tensor suitable for debugging. */
+  // `num_values` is the number of actual data values in the tensor
+  // included in the message. If the tensor might be resident in
+  // GPU/TPU memory use DeviceSafeDebugString instead.
+  public native @StdString BytePointer DebugString(int num_values);
   public native @StdString BytePointer DebugString();
+
+  // Variant of DebugString() that should be used for possibly non-CPU tensors.
+  // If the tensor is not resident on CPU, we can't read its values as
+  // DebugString() does.
+  public native @StdString BytePointer DeviceSafeDebugString();
 
   /** Fill in the {@code TensorDescription} proto with metadata about the
    *  tensor that is useful for monitoring and debugging. */
@@ -415,12 +424,43 @@ public class Tensor extends AbstractTensor {
    *  REQUIRES: {@code DataTypeCanUseMemcpy(dtype())}. */
   
   ///
+  ///
+  ///
+  ///
+  ///
+  ///
+  ///
   public native @StringPiece BytePointer tensor_data();
 
-  /** Copy the other tensor into this tensor and reshape it and reinterpret the
-   *  buffer's datatype.
+  /** Copy the other tensor into this tensor, reshape it and reinterpret the
+   *  buffer's datatype. If Status::OK() is returned, the two tensors now share
+   *  the same underlying storage.
    * 
-   *  This tensor shares other's underlying storage. */
-  public native void UnsafeCopyFromInternal(@Const @ByRef Tensor arg0, @Cast("tensorflow::DataType") int dtype,
-                                @Const @ByRef TensorShape arg2);
+   *  This call requires that the {@code other} tensor and the given type and shape
+   *  are "compatible" (i.e. they occupy the same number of bytes).
+   * 
+   *  Specifically:
+   * 
+   *  shape.num_elements() * DataTypeSize(type)
+   * 
+   *  must equal
+   * 
+   *  other.num_elements() * DataTypeSize(other.dtype())
+   * 
+   *  In addition, this function requires:
+   *    * DataTypeSize(other.dtype()) != 0
+   *    * DataTypeSize(type) != 0
+   * 
+   *  If any of the requirements are not met, errors::InvalidArgument is
+   *  returned. */
+  
+  ///
+  public native @ByVal Status BitcastFrom(@Const @ByRef Tensor other, @Cast("tensorflow::DataType") int dtype,
+                       @Const @ByRef TensorShape shape);
+
+  /** Like BitcastFrom, but CHECK fails if any preconditions are not met.
+   * 
+   *  Deprecated. Use BitcastFrom instead and check the returned Status. */
+  public native void UnsafeCopyFromInternal(@Const @ByRef Tensor other, @Cast("tensorflow::DataType") int dtype,
+                                @Const @ByRef TensorShape shape);
 }

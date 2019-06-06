@@ -65,6 +65,15 @@ public class ZlibOutputBuffer extends WritableFile {
   // will fail.
   public native @ByVal Status Close();
 
+  // Returns the name of the underlying file.
+  public native @ByVal Status Name(@StringPiece @Cast({"char*", "StringPiece*"}) BytePointer result);
+
   // Deflates any cached input, writes all output to file and syncs it.
   public native @ByVal Status Sync();
+
+  // Returns the write position in the underlying file. The position does not
+  // reflect buffered, un-flushed data.
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") LongPointer position);
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") LongBuffer position);
+  public native @ByVal Status Tell(@Cast("tensorflow::int64*") long... position);
 }

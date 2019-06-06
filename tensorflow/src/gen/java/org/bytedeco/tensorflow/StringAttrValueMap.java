@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-@Name("google::protobuf::Map<std::string,tensorflow::AttrValue>") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+@Name("protobuf::Map<tensorflow::string,tensorflow::AttrValue>") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class StringAttrValueMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

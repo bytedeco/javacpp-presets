@@ -62,7 +62,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel openssl-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -79,7 +79,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda-10.1/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3*" # not required for GCC 7+
@@ -146,7 +146,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -167,8 +167,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
-  if [ "$PROJ" == "tensorrt" ]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1Q7ljbnIO1xz1hhCveOt3i4hln1K458Dk $HOME/downloads/tensorrt.tar.gz
+  if [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1qMv0yCejWqQVt8v51ydysL2L3A51Lc8s $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi
@@ -203,7 +203,7 @@ fi
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    echo "performing brew update and install of dependencies, please wait.."
    brew update
-   brew upgrade cmake maven
+   brew upgrade cmake maven openssl@1.1
    brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 nasm yasm
 
    # Try to use ccache to speed up the build
@@ -286,7 +286,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
         curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_mac.dmg -o $HOME/cuda_10.1.168_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-osx-x64-v7.5.0.56.tgz -o $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.0/cudnn-10.1-osx-x64-v7.6.0.64.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.0.64.tgz
 
         echo "Mount dmg"
         hdiutil mount $HOME/cuda_10.1.168_mac.dmg
@@ -299,11 +299,12 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
+        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.0.64.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
         sudo cp /usr/local/cuda/lib/* /usr/local/lib/
+        sudo cp /usr/local/cuda/lib/libcuda.dylib /usr/local/cuda/lib/stubs/
 
         # work around issues with CUDA 10.1
         for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.1.dylib}; done
@@ -315,7 +316,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1

@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
+
 // -------------------------------------------------------------------
 
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
@@ -59,21 +60,25 @@ public class DeviceStepStats extends MessageLite {
   public native @Cast("bool") boolean IsInitialized();
 
   public native @Cast("size_t") long ByteSizeLong();
+//   #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+//   #else
   public native @Cast("bool") boolean MergePartialFromCodedStream(
         CodedInputStream input);
+//   #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
   public native void SerializeWithCachedSizes(
         CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") BytePointer target);
+        @Cast("google::protobuf::uint8*") BytePointer target);
   public native @Cast("google::protobuf::uint8*") ByteBuffer InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") ByteBuffer target);
+        @Cast("google::protobuf::uint8*") ByteBuffer target);
   public native @Cast("google::protobuf::uint8*") byte[] InternalSerializeWithCachedSizesToArray(
-        @Cast("bool") boolean deterministic, @Cast("google::protobuf::uint8*") byte[] target);
+        @Cast("google::protobuf::uint8*") byte[] target);
   public native int GetCachedSize();
 
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
+
 
   // accessors -------------------------------------------------------
 
@@ -85,6 +90,14 @@ public class DeviceStepStats extends MessageLite {
   public native NodeExecStats mutable_node_stats(int index);
   public native @Const @ByRef NodeExecStats node_stats(int index);
   public native NodeExecStats add_node_stats();
+
+  // map<uint32, string> thread_names = 3;
+  public native int thread_names_size();
+  public native void clear_thread_names();
+  @MemberGetter public static native int kThreadNamesFieldNumber();
+  public static final int kThreadNamesFieldNumber = kThreadNamesFieldNumber();
+  public native @Cast("const google::protobuf::Map<google::protobuf::uint32,std::string>*") @ByRef IntStringMap thread_names();
+  public native @Cast("google::protobuf::Map<google::protobuf::uint32,std::string>*") IntStringMap mutable_thread_names();
 
   // string device = 1;
   public native void clear_device();
@@ -100,7 +113,7 @@ public class DeviceStepStats extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
   public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
-  public native @Deprecated @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
-  public native @Deprecated void unsafe_arena_set_allocated_device(
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_device();
+  public native void unsafe_arena_set_allocated_device(
         @StdString @Cast({"char*", "std::string*"}) BytePointer device);
 }

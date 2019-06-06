@@ -62,6 +62,9 @@ public class cudnn implements InfoMapper {
                .put(new Info("cudnnTensorTransformDescriptor_t").valueTypes("cudnnTensorTransformStruct").pointerTypes("@ByPtrPtr cudnnTensorTransformStruct"))
                .put(new Info("cudnnSeqDataDescriptor_t").valueTypes("cudnnSeqDataStruct").pointerTypes("@ByPtrPtr cudnnSeqDataStruct"))
                .put(new Info("cudnnAttnDescriptor_t").valueTypes("cudnnAttnStruct").pointerTypes("@ByPtrPtr cudnnAttnStruct"))
+               .put(new Info("cudnnFusedOpsConstParamPack_t").valueTypes("cudnnFusedOpsConstParamStruct").pointerTypes("@ByPtrPtr cudnnFusedOpsConstParamStruct"))
+               .put(new Info("cudnnFusedOpsVariantParamPack_t").valueTypes("cudnnFusedOpsVariantParamStruct").pointerTypes("@ByPtrPtr cudnnFusedOpsVariantParamStruct"))
+               .put(new Info("cudnnFusedOpsPlan_t").valueTypes("cudnnFusedOpsPlanStruct").pointerTypes("@ByPtrPtr cudnnFusedOpsPlanStruct"))
 
                .put(new Info("cudnnSetConvolution2dDescriptor_v4").javaText(
                           " public static int cudnnSetConvolution2dDescriptor(cudnnConvolutionStruct convDesc,\n"

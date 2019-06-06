@@ -112,15 +112,7 @@ public class OpDefBuilder extends Pointer {
   // Note that currently (October 2016), python code still requires a
   // RegisterShape call to invoke this; see call_cpp_shape_fn in
   // python/framework/common_shapes.py
-  public static class Fn_InferenceContext extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Fn_InferenceContext(Pointer p) { super(p); }
-      protected Fn_InferenceContext() { allocate(); }
-      private native void allocate();
-      public native @ByVal Status call(InferenceContext arg0);
-  }
-  public native @ByRef OpDefBuilder SetShapeFn(Fn_InferenceContext fn);
+  public native @ByRef OpDefBuilder SetShapeFn(@ByVal @Cast("tensorflow::OpShapeInferenceFn*") Pointer fn);
 
   // Sets op_reg_data->op_def to the requested OpDef and
   // op_reg_data->shape_inference_fn to the requested shape inference function,

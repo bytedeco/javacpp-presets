@@ -14,6 +14,16 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  * 
  *  Note that in case of ties the identity of the return value is not guaranteed.
  * 
+ *  Usage:
+ *    <pre>{@code python
+ *    import tensorflow as tf
+ *    a = [1, 10, 26.9, 2.8, 166.32, 62.3]
+ *    b = tf.math.argmax(input = a)
+ *    c = tf.keras.backend.eval(b)
+ *    # c = 4
+ *    # here a[4] = 166.32 which is the largest element of a across axis 0
+ *    }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  *  * dimension: int32 or int64, must be in the range {@code [-rank(input), rank(input))}.

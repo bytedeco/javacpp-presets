@@ -25,7 +25,6 @@ public class TrackingAllocator extends Allocator {
   public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
   public native @Cast("size_t") long AllocatedSize(@Const Pointer ptr);
   public native @Cast("tensorflow::int64") long AllocationId(@Const Pointer ptr);
-  public native void GetStats(AllocatorStats stats);
   public native void ClearStats();
 
   // If the underlying allocator tracks allocation sizes, this returns

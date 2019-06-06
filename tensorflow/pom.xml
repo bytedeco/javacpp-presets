@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.13.1</tensorflow.version>
+    <tensorflow.version>1.14.0-rc0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
     <revision>${tensorflow.version}-${project.parent.version}</revision>
   </properties>
@@ -220,6 +220,7 @@
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_tensorrt/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_cuda/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/_solib_*/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*python*</exclude>

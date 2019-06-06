@@ -22,8 +22,8 @@ public class FileSystemRegistry extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileSystemRegistry(Pointer p) { super(p); }
 
-  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
-  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Pointer factory);
+  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") FactoryFn factory);
+  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") FactoryFn factory);
   public native FileSystem Lookup(@StdString BytePointer scheme);
   public native FileSystem Lookup(@StdString String scheme);
   public native @ByVal Status GetRegisteredFileSystemSchemes(

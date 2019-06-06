@@ -81,6 +81,14 @@ public class DeviceNameUtils extends Pointer {
     public native int id(); public native ParsedName id(int setter);
   }
   // Parses "fullname" into "*parsed". Returns true iff succeeds.
+  // Legacy names like "/cpu:0" that don't contain "device",
+  // are parsed to mean their current counterparts "/device:CPU:0". More
+  // specifically, the lower case "cpu" and "gpu" is capitalized and "device"
+  // is added. "/tpu:0" is not treated the same way - it has use the current
+  // full syntax.
+  // Also, note that lower case "cpu" and "gpu" device types in current syntax
+  // are not capitalized. For example, "/device:CPU:0" is different from
+  // "/device:cpu:0"
   public static native @Cast("bool") boolean ParseFullName(@StringPiece BytePointer fullname, ParsedName parsed);
   public static native @Cast("bool") boolean ParseFullName(@StringPiece String fullname, ParsedName parsed);
 
@@ -106,6 +114,11 @@ public class DeviceNameUtils extends Pointer {
   public static native @Cast("bool") boolean IsSpecification(@Const @ByRef ParsedName less_specific,
                                 @Const @ByRef ParsedName more_specific);
 
+  // Makes minimal changes to more_specific so that it becomes a
+  // specification of less_specific.
+  public static native void EnsureSpecification(ParsedName more_specific,
+                                    @Const @ByRef ParsedName less_specific);
+
   // Like IsSpecification, but the second argument "name" must have a
   // non-wildcard value for all of its components.
   public static native @Cast("bool") boolean IsCompleteSpecification(@Const @ByRef ParsedName pattern,
@@ -122,6 +135,10 @@ public class DeviceNameUtils extends Pointer {
   public static native @ByVal Status MergeDevNames(ParsedName target, @Const @ByRef ParsedName other);
   public static native @ByVal Status MergeDevNames(ParsedName target, @Const @ByRef ParsedName other,
                                 @Cast("bool") boolean allow_soft_placement);
+  // Same as MergeDevNames with allow_soft_placement=true, but instead of
+  // clearing conflicting fields, overrides them with `other`'s values.
+  public static native @ByVal Status MergeOverrideDevNames(ParsedName target,
+                                        @Const @ByRef ParsedName other);
 
   // Returns true iff devices identified by 'src' and 'dst' are in the
   // same address space.

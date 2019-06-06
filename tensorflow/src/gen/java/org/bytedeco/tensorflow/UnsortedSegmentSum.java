@@ -13,7 +13,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 /** Computes the sum along segments of a tensor.
  * 
  *  Read
- *  [the section on segmentation](https://tensorflow.org/api_guides/python/math_ops#Segmentation)
+ *  [the section on segmentation](https://tensorflow.org/api_docs/python/tf/math#Segmentation)
  *  for an explanation of segments.
  * 
  *  Computes a tensor such that
@@ -31,6 +31,14 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
  *  <img style="width:100%" src="https://www.tensorflow.org/images/UnsortedSegmentSum.png" alt>
  *  </div>
+ * 
+ *  <pre>{@code python
+ *  c = tf.constant([[1,2,3,4], [5,6,7,8], [4,3,2,1]])
+ *  tf.unsorted_segment_sum(c, tf.constant([0, 1, 0]), num_segments=2)
+ *  # ==> [[ 5,  5, 5, 5],
+ *  #       [5,  6, 7, 8]]
+ *  }</pre>
+ * 
  * 
  *  Arguments:
  *  * scope: A Scope object

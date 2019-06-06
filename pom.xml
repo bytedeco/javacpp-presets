@@ -729,7 +729,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
@@ -776,7 +776,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64>${javacpp.platform}</javacpp.platform.android-arm64>
@@ -823,7 +823,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
@@ -870,7 +870,7 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
@@ -1679,6 +1679,7 @@
         <os><name>linux</name></os>
       </activation>
       <properties>
+        <os.kernel>linux</os.kernel>
         <os.name>linux</os.name>
       </properties>
     </profile>
@@ -1688,6 +1689,7 @@
         <os><name>mac os x</name></os>
       </activation>
       <properties>
+        <os.kernel>darwin</os.kernel>
         <os.name>macosx</os.name>
       </properties>
     </profile>
@@ -1697,6 +1699,7 @@
         <os><family>windows</family></os>
       </activation>
       <properties>
+        <os.kernel>windows</os.kernel>
         <os.name>windows</os.name>
       </properties>
     </profile>

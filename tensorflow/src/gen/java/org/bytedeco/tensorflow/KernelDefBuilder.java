@@ -34,6 +34,13 @@ public class KernelDefBuilder extends Pointer {
   // particular type or list(type) attr (a further restriction than
   // what the Op allows).
   // Returns *this.
+
+  // Like AttrConstraint above but supports just a single value.
+
+  // Specify that this kernel supports a limited set of values for a
+  // particular type or list(type) attr (a further restriction than
+  // what the Op allows).
+  // Returns *this.
   public native @ByRef KernelDefBuilder TypeConstraint(@Cast("const char*") BytePointer attr_name,
                                      @Cast("tensorflow::DataType*") @ArraySlice IntPointer allowed);
   public native @ByRef KernelDefBuilder TypeConstraint(String attr_name,

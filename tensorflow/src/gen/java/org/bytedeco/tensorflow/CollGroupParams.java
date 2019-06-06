@@ -29,6 +29,7 @@ public class CollGroupParams extends Pointer {
   public native int group_size(); public native CollGroupParams group_size(int setter);
   public native @ByRef DeviceType device_type(); public native CollGroupParams device_type(DeviceType setter);
   public native int num_tasks(); public native CollGroupParams num_tasks(int setter);  // number of distinct tasks in group
+  public native @ByRef CollGroupRuntimeDetails runtime_details(); public native CollGroupParams runtime_details(CollGroupRuntimeDetails setter);
   public native @StdString BytePointer ToString();
   public CollGroupParams() { super((Pointer)null); allocate(); }
   private native void allocate();

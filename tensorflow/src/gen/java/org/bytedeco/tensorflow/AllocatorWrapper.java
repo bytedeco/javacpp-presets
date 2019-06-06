@@ -37,7 +37,7 @@ public class AllocatorWrapper extends Allocator {
 
   public native @Cast("bool") boolean TracksAllocationSizes();
 
-  public native @Cast("bool") boolean ShouldAllocateEmptyTensors();
+  public native @Cast("bool") boolean AllocatesOpaqueHandle();
 
   public native @Cast("size_t") long RequestedSize(@Const Pointer ptr);
 

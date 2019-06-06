@@ -51,6 +51,9 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  * normalized: indicates if the offset coordinates are normalized.
  *  * uniform_noise: indicates if the noise should be generated using a
  *  uniform distribution or a Gaussian distribution.
+ *  * noise: indicates if the noise should {@code uniform}, {@code gaussian}, or
+ *  {@code zero}. The default is {@code uniform} which means the the noise type
+ *  will be decided by {@code uniform_noise}.
  * 
  *  Returns:
  *  * {@code Output}: A tensor representing the glimpses {@code [batch_size,
@@ -97,11 +100,22 @@ public class ExtractGlimpse extends Pointer {
      *  uniform distribution or a Gaussian distribution.
      * 
      *  Defaults to true */
+    
+    ///
     public native @ByVal Attrs UniformNoise(@Cast("bool") boolean x);
+
+    /** indicates if the noise should {@code uniform}, {@code gaussian}, or
+     *  {@code zero}. The default is {@code uniform} which means the the noise type
+     *  will be decided by {@code uniform_noise}.
+     * 
+     *  Defaults to "uniform" */
+    public native @ByVal Attrs Noise(@StringPiece BytePointer x);
+    public native @ByVal Attrs Noise(@StringPiece String x);
 
     public native @Cast("bool") boolean centered_(); public native Attrs centered_(boolean setter);
     public native @Cast("bool") boolean normalized_(); public native Attrs normalized_(boolean setter);
     public native @Cast("bool") boolean uniform_noise_(); public native Attrs uniform_noise_(boolean setter);
+    public native @StringPiece BytePointer noise_(); public native Attrs noise_(BytePointer setter);
   }
   public ExtractGlimpse(@Const @ByRef Scope scope, @ByVal Input input,
                  @ByVal Input size, @ByVal Input offsets) { super((Pointer)null); allocate(scope, input, size, offsets); }
@@ -118,6 +132,8 @@ public class ExtractGlimpse extends Pointer {
   public static native @ByVal Attrs Centered(@Cast("bool") boolean x);
   public static native @ByVal Attrs Normalized(@Cast("bool") boolean x);
   public static native @ByVal Attrs UniformNoise(@Cast("bool") boolean x);
+  public static native @ByVal Attrs Noise(@StringPiece BytePointer x);
+  public static native @ByVal Attrs Noise(@StringPiece String x);
 
   public native @ByRef Operation operation(); public native ExtractGlimpse operation(Operation setter);
   public native @ByRef Output glimpse(); public native ExtractGlimpse glimpse(Output setter);

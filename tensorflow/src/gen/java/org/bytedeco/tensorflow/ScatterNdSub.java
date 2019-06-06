@@ -10,14 +10,14 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Applies sparse subtraction between {@code updates} and individual values or slices
+/** Applies sparse subtraction to individual values or slices in a Variable.
  * 
  *  within a given variable according to {@code indices}.
  * 
  *  {@code ref} is a {@code Tensor} with rank {@code P} and {@code indices} is a {@code Tensor} of rank {@code Q}.
  * 
  *  {@code indices} must be integer tensor, containing indices into {@code ref}.
- *  It must be shape \([d_0, ..., d_{Q-2}, K]\) where {@code 0 < K <= P}.
+ *  It must be shape {@code [d_0, ..., d_{Q-2}, K]} where {@code 0 < K <= P}.
  * 
  *  The innermost dimension of {@code indices} (with length {@code K}) corresponds to
  *  indices into elements (if {@code K = P}) or slices (if {@code K < P}) along the {@code K}th
@@ -25,17 +25,21 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  * 
  *  {@code updates} is {@code Tensor} of rank {@code Q-1+P-K} with shape:
  * 
- *  $$[d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]].$$
+ *  <pre>{@code
+ *  [d_0, ..., d_{Q-2}, ref.shape[K], ..., ref.shape[P-1]]
+ *  }</pre>
  * 
  *  For example, say we want to subtract 4 scattered elements from a rank-1 tensor
  *  with 8 elements. In Python, that subtraction would look like this:
  * 
- *      ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
- *      indices = tf.constant([[4], [3], [1], [7]])
- *      updates = tf.constant([9, 10, 11, 12])
- *      sub = tf.scatter_nd_sub(ref, indices, updates)
- *      with tf.Session() as sess:
- *        print sess.run(sub)
+ *  <pre>{@code python
+ *  ref = tf.Variable([1, 2, 3, 4, 5, 6, 7, 8])
+ *  indices = tf.constant([[4], [3], [1], [7]])
+ *  updates = tf.constant([9, 10, 11, 12])
+ *  sub = tf.scatter_nd_sub(ref, indices, updates)
+ *  with tf.Session() as sess:
+ *    print sess.run(sub)
+ *  }</pre>
  * 
  *  The resulting update to ref would look like this:
  * 
