@@ -44,6 +44,10 @@ public class mkldnn extends org.bytedeco.mkldnn.presets.mkldnn {
 // #define MKLDNN_TYPES_H
 
 // #ifdef __cplusplus
+// #endif
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif
 // Targeting ../mkldnn_version_t.java
 
 
@@ -85,7 +89,9 @@ public static final int
     /** 8-bit signed integer. */
     mkldnn_s8 = 5,
     /** 8-bit unsigned integer. */
-    mkldnn_u8 = 6;
+    mkldnn_u8 = 6,
+    /** bfloat 16-bit. */
+    mkldnn_bf16 = 7;
 
 /** Rounding mode */
 /** enum mkldnn_round_mode_t */
@@ -190,245 +196,264 @@ public static final int
     /** 3D weights tensor with physical layout \c oiw.
      * Logical dimensions come in the order: (o, i, w) */
     mkldnn_oiw = 14,
+    /** 3D weights tensor with physical layout \c owi.
+     * Logical dimensions come in the order: (o, i, w) */
+    mkldnn_owi = 15,
     /** 3D weights tensor with physical layout \c wio.
      * Logical dimensions come in the order: (o, i, w) */
-    mkldnn_wio = 15,
+    mkldnn_wio = 16,
     /** 4D weights tensor with physical layout \c oihw, used in Caffe.
      * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_oihw = 16,
+    mkldnn_oihw = 17,
     /** 4D weights tensor with physical layout \c hwio, used in TensorFlow.
      * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_hwio = 17,
+    mkldnn_hwio = 18,
+    /** 4D weights tensor with physical layout \c ohwi.
+     * Logical dimensions come in the order: (o, i, h, w) */
+    mkldnn_ohwi = 19,
     /** 4D weights tensor with physical layout \c ihwo.
      * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_ihwo = 18,
+    mkldnn_ihwo = 20,
     /** 4D weights tensor with physical layout \c iohw.
      * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_iohw = 19,
+    mkldnn_iohw = 21,
     /** 5D weights tensor with physical layout \c iodhw, used in Caffe.
      * Logical dimensions come in the order: (o, i, d, h, w) */
-    mkldnn_oidhw = 20,
+    mkldnn_oidhw = 22,
     /** 5D weights tensor with physical layout \c dhwio, used in TensorFlow.
      * Logical dimensions come in the order: (o, i, d, h, w) */
-    mkldnn_dhwio = 21,
+    mkldnn_dhwio = 23,
+    /** 5D weights tensor with physical layout \c odhwi.
+     * Logical dimensions come in the order: (o, i, d, h, w) */
+    mkldnn_odhwi = 24,
     /** 4D grouped weights tensor with the physical layout \c goiw.
      * Logical dimensions come in the order: (g, o, i, w) */
-    mkldnn_goiw = 22,
+    mkldnn_goiw = 25,
     /** 5D grouped weights tensor with the physical layout \c goihw,
      * used in Caffe.
      * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_goihw = 23,
+    mkldnn_goihw = 26,
     /** 5D grouped weights tensor with the physical layout \c hwigo,
      * used in TensorFlow.
      * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_hwigo = 24,
+    mkldnn_hwigo = 27,
     /** 5D grouped weights tensor with the physical layout \c giohw.
      * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_giohw = 25,
+    mkldnn_giohw = 28,
     /** 6D grouped weights tensor with the physical layout \c goidhw,
      * used in Caffe.
      * Logical dimensions come in the order: (g, o, i, d, h, w) */
-    mkldnn_goidhw = 26,
+    mkldnn_goidhw = 29,
     /** 3D RNN data tensor in the format (batch, seq_length, input channels). */
-    mkldnn_ntc = 27,
+    mkldnn_ntc = 30,
     /** 3D RNN data tensor in the format (seq_length, batch, input channels). */
-    mkldnn_tnc = 28,
+    mkldnn_tnc = 31,
     /** 5D RNN states tensor in the format (num_layers, num_directions,
      * num_states, batch, state channels). */
-    mkldnn_ldsnc = 29,
+    mkldnn_ldsnc = 32,
     /** 5D RNN weights tensor in the format (num_layers, num_directions,
      *  input_channels, num_gates, output_channels).
      *
      *  - For LSTM cells, the gates order is input, forget, candidate
      *    and output gate.
      *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldigo = 30,
+    mkldnn_ldigo = 33,
     /** 5D RNN weights tensor in the format (num_layers, num_directions,
      * num_gates, output_channels, input_channels).
      *
      *  - For LSTM cells, the gates order is input, forget, candidate
      *    and output gate.
      *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldgoi = 31,
+    mkldnn_ldgoi = 34,
     /** 4D RNN bias tensor in the format (num_layers, num_directions,
      * num_gates, output_channels).
      *
      *  - For LSTM cells, the gates order is input, forget, candidate
      *    and output gate.
      *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldgo = 32,
+    mkldnn_ldgo = 35,
 
     /* Opaque data types, are not to be used explicitly */
 
     /* data */
-    mkldnn_nCw4c = 33,
-    mkldnn_nCw8c = 34,
-    mkldnn_nCw16c = 35,
-    mkldnn_nChw4c = 36,
-    mkldnn_nChw8c = 37,
-    mkldnn_nChw16c = 38,
-    mkldnn_nCdhw4c = 39,
-    mkldnn_nCdhw8c = 40,
-    mkldnn_nCdhw16c = 41,
+    mkldnn_nCw4c = 36,
+    mkldnn_nCw8c = 37,
+    mkldnn_nCw16c = 38,
+    mkldnn_nChw4c = 39,
+    mkldnn_nChw8c = 40,
+    mkldnn_nChw16c = 41,
+    mkldnn_nCdhw4c = 42,
+    mkldnn_nCdhw8c = 43,
+    mkldnn_nCdhw16c = 44,
 
     /* weights, 3D */
-    mkldnn_Owi4o = 42,
-    mkldnn_OIw4i4o = 43,
-    mkldnn_Owi8o = 44,
-    mkldnn_OIw8i8o = 45,
-    mkldnn_OIw8o8i = 46,
-    mkldnn_OIw16i16o = 47,
-    mkldnn_OIw16o16i = 48,
-    mkldnn_Oiw4o = 49,
-    mkldnn_Oiw16o = 50,
-    mkldnn_Owi16o = 51,
-    mkldnn_OIw8i16o2i = 52,
-    mkldnn_OIw8o16i2o = 53,
-    mkldnn_IOw16o16i = 54,
-    mkldnn_OIw4i16o4i = 55,
+    mkldnn_Owi4o = 45,
+    mkldnn_OIw4i4o = 46,
+    mkldnn_Owi8o = 47,
+    mkldnn_OIw8i8o = 48,
+    mkldnn_OIw8o8i = 49,
+    mkldnn_OIw16i16o = 50,
+    mkldnn_OIw16o16i = 51,
+    mkldnn_Oiw4o = 52,
+    mkldnn_Oiw16o = 53,
+    mkldnn_Owi16o = 54,
+    mkldnn_OIw8i16o2i = 55,
+    mkldnn_OIw8o16i2o = 56,
+    mkldnn_IOw8o16i2o = 57,
+    mkldnn_IOw16o16i = 58,
+    mkldnn_OIw4i16o4i = 59,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
-    mkldnn_OIw4i16o4i_s8s8 = 56,
+    mkldnn_OIw4i16o4i_s8s8 = 60,
 
     /* weights, 4D */
     /** weights format with additional buffer
      * size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwio_s8s8 = 57,
-    mkldnn_oIhw8i = 58,
-    mkldnn_oIhw16i = 59,
-    mkldnn_OIhw4i4o = 60,
-    mkldnn_OIhw8i8o = 61,
-    mkldnn_OIhw16i16o = 62,
-    mkldnn_OIhw4i16o4i = 63,
+    mkldnn_hwio_s8s8 = 61,
+    mkldnn_oIhw8i = 62,
+    mkldnn_oIhw16i = 63,
+    mkldnn_OIhw4i4o = 64,
+    mkldnn_OIhw8i8o = 65,
+    mkldnn_OIhw16i16o = 66,
+    mkldnn_OIhw4i16o4i = 67,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_OIhw4i16o4i_s8s8 = 64,
-    mkldnn_OIhw8i16o2i = 65,
-    mkldnn_OIhw8o16i2o = 66,
-    mkldnn_OIhw8o8i = 67,
-    mkldnn_OIhw16o16i = 68,
-    mkldnn_IOhw16o16i = 69,
-    mkldnn_Oihw8o = 70,
-    mkldnn_Oihw4o = 71,
-    mkldnn_Oihw16o = 72,
-    mkldnn_Ohwi8o = 73,
-    mkldnn_Ohwi4o = 74,
-    mkldnn_Ohwi16o = 75,
-    mkldnn_OhIw16o4i = 76,
+    mkldnn_OIhw4i16o4i_s8s8 = 68,
+    mkldnn_OIhw8i16o2i = 69,
+    mkldnn_IOhw8i16o2i = 70,
+    mkldnn_OIhw8o16i2o = 71,
+    mkldnn_IOhw8o16i2o = 72,
+    mkldnn_OIhw8o8i = 73,
+    mkldnn_OIhw16o16i = 74,
+    mkldnn_IOhw16o16i = 75,
+    mkldnn_Oihw8o = 76,
+    mkldnn_Oihw4o = 77,
+    mkldnn_Oihw16o = 78,
+    mkldnn_Ohwi8o = 79,
+    mkldnn_Ohwi4o = 80,
+    mkldnn_Ohwi16o = 81,
+    mkldnn_OhIw16o4i = 82,
 
     /* weights, 5D */
-    mkldnn_oIdhw8i = 77,
-    mkldnn_oIdhw16i = 78,
-    mkldnn_OIdhw4i4o = 79,
-    mkldnn_Odhwi4o = 80,
-    mkldnn_OIdhw8i8o = 81,
-    mkldnn_OIdhw8o8i = 82,
-    mkldnn_Odhwi8o = 83,
-    mkldnn_OIdhw16i16o = 84,
-    mkldnn_OIdhw16o16i = 85,
-    mkldnn_Oidhw4o = 86,
-    mkldnn_Oidhw16o = 87,
-    mkldnn_Odhwi16o = 88,
-    mkldnn_OIdhw8i16o2i = 89,
+    mkldnn_oIdhw8i = 83,
+    mkldnn_oIdhw16i = 84,
+    mkldnn_OIdhw4i4o = 85,
+    mkldnn_Odhwi4o = 86,
+    mkldnn_OIdhw8i8o = 87,
+    mkldnn_OIdhw8o8i = 88,
+    mkldnn_Odhwi8o = 89,
+    mkldnn_OIdhw16i16o = 90,
+    mkldnn_OIdhw16o16i = 91,
+    mkldnn_Oidhw4o = 92,
+    mkldnn_Oidhw16o = 93,
+    mkldnn_Odhwi16o = 94,
+    mkldnn_OIdhw8i16o2i = 95,
+    mkldnn_OIdhw8o16i2o = 96,
+    mkldnn_IOdhw8o16i2o = 97,
 
     /* weights w/ groups, 4D */
-    mkldnn_gOwi4o = 90,
-    mkldnn_gOIw4i4o = 91,
-    mkldnn_gOwi8o = 92,
-    mkldnn_gOIw8o8i = 93,
-    mkldnn_gOIw8i8o = 94,
-    mkldnn_gOIw16i16o = 95,
-    mkldnn_gOIw16o16i = 96,
-    mkldnn_gOiw4o = 97,
-    mkldnn_gOiw16o = 98,
-    mkldnn_gOwi16o = 99,
-    mkldnn_gOIw8i16o2i = 100,
-    mkldnn_gOIw8o16i2o = 101,
-    mkldnn_gIOw16o16i = 102,
-    mkldnn_gOIw4i16o4i = 103,
+    mkldnn_gOwi4o = 98,
+    mkldnn_gOIw4i4o = 99,
+    mkldnn_gOwi8o = 100,
+    mkldnn_gOIw8o8i = 101,
+    mkldnn_gOIw8i8o = 102,
+    mkldnn_gOIw16i16o = 103,
+    mkldnn_gOIw16o16i = 104,
+    mkldnn_gOiw4o = 105,
+    mkldnn_gOiw16o = 106,
+    mkldnn_gOwi16o = 107,
+    mkldnn_gOIw8i16o2i = 108,
+    mkldnn_gOIw8o16i2o = 109,
+    mkldnn_gIOw8o16i2o = 110,
+    mkldnn_gIOw16o16i = 111,
+    mkldnn_gOIw4i16o4i = 112,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
-    mkldnn_gOIw4i16o4i_s8s8 = 104,
-    mkldnn_Goiw16g = 105,
+    mkldnn_gOIw4i16o4i_s8s8 = 113,
+    mkldnn_Goiw16g = 114,
     /** blocked weights format with additional buffer
      * with size equal to the number of groups and containing the values:
      * O[i:0,G] = -128 * SUM(w:0,W)(weights(i,i,w))*/
-    mkldnn_Goiw16g_s8s8 = 106,
+    mkldnn_Goiw16g_s8s8 = 115,
 
     /* weights w/ groups, 5D */
     /** weights format with additional buffer
      * size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwigo_s8s8 = 107,
-    mkldnn_gOIhw4i4o = 108,
-    mkldnn_gOIhw8i8o = 109,
-    mkldnn_gOIhw16i16o = 110,
-    mkldnn_gOIhw4i16o4i = 111,
+    mkldnn_hwigo_s8s8 = 116,
+    mkldnn_gOIhw4i4o = 117,
+    mkldnn_gOIhw8i8o = 118,
+    mkldnn_gOIhw16i16o = 119,
+    mkldnn_gOIhw4i16o4i = 120,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw4i16o4i_s8s8 = 112,
-    mkldnn_gOIhw2i8o4i = 113,
+    mkldnn_gOIhw4i16o4i_s8s8 = 121,
+    mkldnn_gOIhw2i8o4i = 122,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * multiplied by number of groups and containing the values:
      * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw2i8o4i_s8s8 = 114,
-    mkldnn_gOIhw8i16o2i = 115,
-    mkldnn_gOIhw8o16i2o = 116,
-    mkldnn_gOIhw4o4i = 117,
+    mkldnn_gOIhw2i8o4i_s8s8 = 123,
+    mkldnn_gOIhw8i16o2i = 124,
+    mkldnn_gIOhw8i16o2i = 125,
+    mkldnn_gOIhw8o16i2o = 126,
+    mkldnn_gIOhw8o16i2o = 127,
+    mkldnn_gOIhw4o4i = 128,
     /** blocked weights format with additional buffer
      * with size equal to the number of output channels
      * and containing the values:
      * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw4o4i_s8s8 = 118,
-    mkldnn_gOIhw8o8i = 119,
-    mkldnn_gOIhw16o16i = 120,
-    mkldnn_gIOhw16o16i = 121,
-    mkldnn_gOihw8o = 122,
-    mkldnn_gOihw4o = 123,
-    mkldnn_gOihw16o = 124,
-    mkldnn_gOhwi8o = 125,
-    mkldnn_gOhwi4o = 126,
-    mkldnn_gOhwi16o = 127,
-    mkldnn_Goihw8g = 128,
-    mkldnn_Goihw16g = 129,
+    mkldnn_gOIhw4o4i_s8s8 = 129,
+    mkldnn_gOIhw8o8i = 130,
+    mkldnn_gOIhw16o16i = 131,
+    mkldnn_gIOhw16o16i = 132,
+    mkldnn_gOihw8o = 133,
+    mkldnn_gOihw4o = 134,
+    mkldnn_gOihw16o = 135,
+    mkldnn_gOhwi8o = 136,
+    mkldnn_gOhwi4o = 137,
+    mkldnn_gOhwi16o = 138,
+    mkldnn_Goihw8g = 139,
+    mkldnn_Goihw16g = 140,
     /** blocked weights format with additional buffer
      * with size equal to the number of groups and containing the values:
      * O[i:0,G] = -128 * SUM(h:0,H;w:0,W)(weights(i,i,h,w))*/
-    mkldnn_Goihw16g_s8s8 = 130,
-    mkldnn_gOhIw16o4i = 131,
+    mkldnn_Goihw16g_s8s8 = 141,
+    mkldnn_gOhIw16o4i = 142,
 
     /* weights w/ groups, 6D */
-    mkldnn_gOIdhw4i4o = 132,
-    mkldnn_gOdhwi4o = 133,
-    mkldnn_gOIdhw8i8o = 134,
-    mkldnn_gOIdhw8o8i = 135,
-    mkldnn_gOdhwi8o = 136,
-    mkldnn_gOIdhw8i16o2i = 137,
-    mkldnn_gOIdhw16i16o = 138,
-    mkldnn_gOIdhw16o16i = 139,
-    mkldnn_gOidhw4o = 140,
-    mkldnn_gOidhw16o = 141,
-    mkldnn_gOdhwi16o = 142,
+    mkldnn_gOIdhw4i4o = 143,
+    mkldnn_gOdhwi4o = 144,
+    mkldnn_gOIdhw8i8o = 145,
+    mkldnn_gOIdhw8o8i = 146,
+    mkldnn_gOdhwi8o = 147,
+    mkldnn_gOIdhw8i16o2i = 148,
+    mkldnn_gOIdhw8o16i2o = 149,
+    mkldnn_gIOdhw8o16i2o = 150,
+    mkldnn_gOIdhw16i16o = 151,
+    mkldnn_gOIdhw16o16i = 152,
+    mkldnn_gOidhw4o = 153,
+    mkldnn_gOidhw16o = 154,
+    mkldnn_gOdhwi16o = 155,
 
-    mkldnn_wino_fmt = 143,
+    mkldnn_wino_fmt = 156,
 
-    mkldnn_rnn_packed = 144,
+    mkldnn_rnn_packed = 157,
 
     /** Just a sentinel, not real memory format. Must be changed after new
      * format is added. */
-    mkldnn_format_last = 145;
+    mkldnn_format_last = 158;
 
 /** Kinds of padding. Define how to interpret the data in padding regions. */
 /** enum mkldnn_padding_kind_t */
@@ -535,6 +560,8 @@ public static final int
     mkldnn_eltwise_soft_relu = 0x9f,
     /** Eltwise: logistic */
     mkldnn_eltwise_logistic = 0xaf,
+    /** Eltwise: exponent */
+    mkldnn_eltwise_exp = 0xbf,
     /** Max pooling */
     mkldnn_pooling_max = 0x1ff,
     /** Average pooling include padding */
@@ -3116,6 +3143,57 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String tra
         @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
         @Const byte[] ao, @Const byte[] B, @Const int[] ldb, @Const byte[] bo,
         @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
+
+/** gemm_bf16bf16f32 performs a matrix-matrix multiplication operation defined
+ * as
+ *
+ * C := alpha*op( A )*op( B ) + beta*C
+ *
+ * where
+ *  - op( X ) is one of op( X ) = X or op( X ) = X**T,
+ *  - alpha and beta are scalars,
+ *  - A, B and C are matrices, with op( A ) an m by k matrix, op( B ) a k by n
+ *    matrix and C an m by n matrix.
+ *
+ * The matrices are assumed to be stored in column-major order (the elements
+ * in a matrix columns are contiguous in memory).
+ *
+ * \note
+ *      The API is different from the standard BLAS routine
+ *      because it returns mkldnn_status_t for error handling.
+ *      XERBLA is not supported: no error message will be printed
+ *      in case of incorrect parameters. */
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
+        @Const FloatPointer alpha, @Cast("const mkldnn_bfloat16_t*") ShortPointer A, @Const IntPointer lda,
+        @Cast("const mkldnn_bfloat16_t*") ShortPointer B, @Const IntPointer ldb, @Const FloatPointer beta,
+        FloatPointer c, @Const IntPointer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
+        String transb, @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
+        @Const FloatBuffer alpha, @Cast("const mkldnn_bfloat16_t*") ShortBuffer A, @Const IntBuffer lda,
+        @Cast("const mkldnn_bfloat16_t*") ShortBuffer B, @Const IntBuffer ldb, @Const FloatBuffer beta,
+        FloatBuffer c, @Const IntBuffer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Const int[] M, @Const int[] N, @Const int[] K,
+        @Const float[] alpha, @Cast("const mkldnn_bfloat16_t*") short[] A, @Const int[] lda,
+        @Cast("const mkldnn_bfloat16_t*") short[] B, @Const int[] ldb, @Const float[] beta,
+        float[] c, @Const int[] ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
+        String transb, @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
+        @Const FloatPointer alpha, @Cast("const mkldnn_bfloat16_t*") ShortPointer A, @Const IntPointer lda,
+        @Cast("const mkldnn_bfloat16_t*") ShortPointer B, @Const IntPointer ldb, @Const FloatPointer beta,
+        FloatPointer c, @Const IntPointer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
+        @Cast("const char*") BytePointer transb, @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
+        @Const FloatBuffer alpha, @Cast("const mkldnn_bfloat16_t*") ShortBuffer A, @Const IntBuffer lda,
+        @Cast("const mkldnn_bfloat16_t*") ShortBuffer B, @Const IntBuffer ldb, @Const FloatBuffer beta,
+        FloatBuffer c, @Const IntBuffer ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
+        String transb, @Const int[] M, @Const int[] N, @Const int[] K,
+        @Const float[] alpha, @Cast("const mkldnn_bfloat16_t*") short[] A, @Const int[] lda,
+        @Cast("const mkldnn_bfloat16_t*") short[] B, @Const int[] ldb, @Const float[] beta,
+        float[] c, @Const int[] ldc);
+
 /** \} */
 
 /** \} */
@@ -3234,6 +3312,7 @@ public static final int
     eltwise_bounded_relu = mkldnn_eltwise_bounded_relu,
     eltwise_soft_relu = mkldnn_eltwise_soft_relu,
     eltwise_logistic = mkldnn_eltwise_logistic,
+    eltwise_exp = mkldnn_eltwise_exp,
     lrn_across_channels = mkldnn_lrn_across_channels,
     lrn_within_channel  = mkldnn_lrn_within_channel,
     pooling_max = mkldnn_pooling_max,

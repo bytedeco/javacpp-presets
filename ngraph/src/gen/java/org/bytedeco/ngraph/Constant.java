@@ -43,9 +43,39 @@ public class Constant extends Node {
             public Constant(@Const @ByRef Type type, @Const @ByRef Shape shape, @Const Pointer data) { super((Pointer)null); allocate(type, shape, data); }
             private native void allocate(@Const @ByRef Type type, @Const @ByRef Shape shape, @Const Pointer data);
 
+            public native void validate_and_infer_types();
+
+            /** \brief Returns the value of the constant node as a Shape object
+             *         Can only be used on element::i64 nodes and interprets
+             *         negative values as zeros. */
+            public native @ByVal Shape get_shape_val();
+            /** \brief Returns the value of the constant node as a Strides
+             *         object
+             *         Can only be used on element::i64 nodes and interprets
+             *         negative values as zeros. */
+            public native @ByVal Strides get_strides_val();
+            /** \brief Returns the value of the constant node as a Coordinate
+             *         object
+             *         Can only be used on element::i64 nodes and interprets
+             *         negative values as zeros. */
+            public native @ByVal Coordinate get_coordinate_val();
+            /** \brief Returns the value of the constant node as a
+             *         CoordinateDiff object
+             *         Can only be used on element::i64 nodes. */
+            public native @ByVal CoordinateDiff get_coordinate_diff_val();
+            /** \brief Returns the value of the constant node as an AxisVector
+             *         object
+             *         Can only be used on element::i64 nodes and interprets
+             *         negative values as zeros. */
+            public native @ByVal AxisVector get_axis_vector_val();
+            /** \brief Returns the value of the constant node as an AxisSet
+             *         object
+             *         Can only be used on element::i64 nodes and interprets
+             *         negative values as zeros.
+             *         Repeated values are allowed. */
             
             ///
-            public native void validate_and_infer_types();
+            public native @ByVal AxisSet get_axis_set_val();
 
             /** \brief Wrapper around constructing a shared_ptr of a Constant
              * 
@@ -67,4 +97,6 @@ public class Constant extends Node {
             public native @Const Pointer get_data_ptr();
 
             public native @Cast("bool") boolean is_constant();
+            public native @Cast("bool") boolean are_all_data_elements_bitwise_identical();
+            public native @StdString BytePointer convert_value_to_string(@Cast("size_t") long index);
         }

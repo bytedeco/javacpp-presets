@@ -51,12 +51,6 @@ public class GraphDefBuilder extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphDefBuilder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GraphDefBuilder(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public GraphDefBuilder position(long position) {
-        return (GraphDefBuilder)super.position(position);
-    }
 
   // Options for adding a Node to a Graph.
   @NoOffset public static class Options extends Pointer {

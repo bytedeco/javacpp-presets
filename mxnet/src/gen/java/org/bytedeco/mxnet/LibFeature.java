@@ -20,13 +20,22 @@ import static org.bytedeco.opencv.global.opencv_highgui.*;
 
 import static org.bytedeco.mxnet.global.mxnet.*;
 
+
 @Properties(inherit = org.bytedeco.mxnet.presets.mxnet.class)
-public class CustomOpInferShapeFunc extends FunctionPointer {
+public class LibFeature extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public LibFeature() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LibFeature(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    CustomOpInferShapeFunc(Pointer p) { super(p); }
-    protected CustomOpInferShapeFunc() { allocate(); }
+    public LibFeature(Pointer p) { super(p); }
     private native void allocate();
-    public native int call(int arg0, IntPointer arg1,
-                                      @ByPtrPtr IntPointer arg2, Pointer arg3);
+    private native void allocateArray(long size);
+    @Override public LibFeature position(long position) {
+        return (LibFeature)super.position(position);
+    }
+
+  public native @Cast("const char*") BytePointer name(); public native LibFeature name(BytePointer setter);
+  public native @Cast("bool") boolean enabled(); public native LibFeature enabled(boolean setter);
 }

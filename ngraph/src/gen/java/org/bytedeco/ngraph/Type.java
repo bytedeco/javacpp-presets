@@ -15,12 +15,6 @@ public class Type extends Pointer {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Type(Pointer p) { super(p); }
-            /** Native array allocator. Access with {@link Pointer#position(long)}. */
-            public Type(long size) { super((Pointer)null); allocateArray(size); }
-            private native void allocateArray(long size);
-            @Override public Type position(long position) {
-                return (Type)super.position(position);
-            }
         
             public Type() { super((Pointer)null); allocate(); }
             private native void allocate();

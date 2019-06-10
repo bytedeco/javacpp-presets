@@ -19,9 +19,18 @@ public class Multiply extends BinaryElementwiseArithmetic {
             /** \brief Constructs a multiplication operation.
              * 
              *  @param arg0 Node that produces the first input tensor.
-             *  @param arg1 Node that produces the second input tensor. */
-            public Multiply(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1);
+             *  @param arg1 Node that produces the second input tensor.
+             *  @param autob Auto broadcast specification */
+            public Multiply(@Const @SharedPtr @ByRef Node arg0,
+                                 @Const @SharedPtr @ByRef Node arg1,
+                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob) { super((Pointer)null); allocate(arg0, arg1, autob); }
+            private native void allocate(@Const @SharedPtr @ByRef Node arg0,
+                                 @Const @SharedPtr @ByRef Node arg1,
+                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob);
+            public Multiply(@Const @SharedPtr @ByRef Node arg0,
+                                 @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
+            private native void allocate(@Const @SharedPtr @ByRef Node arg0,
+                                 @Const @SharedPtr @ByRef Node arg1);
 
             public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
         }

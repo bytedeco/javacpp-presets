@@ -20,5 +20,5 @@ public class onnxGetBackendIDsFunction extends FunctionPointer {
     private native void allocate();
     public native @Cast("onnxStatus") int call(
     @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") LongPointer numBackends);
+    @Cast("size_t*") SizeTPointer numBackends);
 }
