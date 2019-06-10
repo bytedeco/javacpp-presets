@@ -22,10 +22,19 @@ public class Backend extends Pointer {
     /** \brief Create a new Backend object
      *  @param type The name of a registered backend, such as "CPU" or "GPU".
      *    To select a subdevice use "GPU:N" where s{@code N} is the subdevice number.
-     *  @return unique_ptr to a new Backend or nullptr if the named backend
+     *  @param must_support_dynamic If {@code true}, the returned {@code Backend} object
+     *     will support dynamic tensors. If the underlying backend has native
+     *     support for dynamic tensors, then that backend object will be
+     *     returned directly. Otherwise, it will be wrapped with
+     *     DynamicWrapperBackend. This feature is EXPERIMENTAL.
+     *  @return shared_ptr to a new Backend or nullptr if the named backend
      *    does not exist. */
-    public static native @UniquePtr Backend create(@StdString BytePointer type);
-    public static native @UniquePtr Backend create(@StdString String type);
+    public static native @SharedPtr Backend create(@StdString BytePointer type,
+                                               @Cast("bool") boolean must_support_dynamic/*=false*/);
+    public static native @SharedPtr Backend create(@StdString BytePointer type);
+    public static native @SharedPtr Backend create(@StdString String type,
+                                               @Cast("bool") boolean must_support_dynamic/*=false*/);
+    public static native @SharedPtr Backend create(@StdString String type);
 
     /** \brief Query the list of registered devices
      *  @return A vector of all registered devices. */
@@ -51,6 +60,16 @@ public class Backend extends Pointer {
      *  @param shape The shape of the tensor
      *  @return shared_ptr to a new backend specific tensor */
 
+    /** \brief Create a dynamic tensor specific to this backend, if the backend supports dynamic
+     *         tensors.
+     *  @param element_type The type of the tensor element
+     *  @param shape The shape of the tensor
+     *  @return shared_ptr to a new backend-specific tensor
+     *  @throws std::invalid_argument if the backend does not support dynamic tensors */
+    public native @SharedPtr @ByVal Tensor create_dynamic_tensor(@Const @ByRef Type element_type, @Const @ByRef PartialShape shape);
+
+    /** @return {@code true} if this backend supports dynamic tensors, else {@code false}. */
+    public native @Cast("bool") boolean supports_dynamic_tensors();
     /** \brief Compiles a Function.
      *  @param func The function to compile
      *  @return compiled function or nullptr on failure */
@@ -67,6 +86,11 @@ public class Backend extends Pointer {
                                                     @Cast("bool") boolean enable_performance_data/*=false*/);
     public native @SharedPtr Executable compile(@SharedPtr @ByVal Function func,
                                                     @ByRef PassConfig pass_config);
+
+    /** \brief Loads a previously saved Executable object from a stream.
+     *  @param input_stream the opened input stream containing the saved Executable
+     *  @return A compiled function or throws an exception on error */
+    public native @SharedPtr Executable load(@Cast("std::istream*") @ByRef Pointer input_stream);
 
     /** \brief Test if a backend is capable of supporting an op
      *  @param node is the op to test.
@@ -85,12 +109,12 @@ public class Backend extends Pointer {
 
     public native void remove_compiled_function(@SharedPtr Executable exec);
 
-    // \brief Return a backend specific op (that is not a core ngraph op).
-    //     The string op_name is the requested op, which a backend may or may not implement.
-    //     If unsupported, nullptr is returned, else a backend op is returned.
-    //     The variadic input is used to pass inputs that the op constructor might take
-    // \param op_name is the name of the backend specific op
-    // \returns a shared pointer to the op if found, else nullptr
+    /** \brief Return a backend specific op (that is not a core ngraph op).
+     *      The string op_name is the requested op, which a backend may or may not implement.
+     *      If unsupported, nullptr is returned, else a backend op is returned.
+     *      The variadic input is used to pass inputs that the op constructor might take
+     *  @param op_name is the name of the backend specific op
+     *  @return a shared pointer to the op if found, else nullptr */
     public native @SharedPtr @ByVal Node get_backend_op(@StdString BytePointer op_name);
     public native @SharedPtr @ByVal Node get_backend_op(@StdString String op_name);
 }

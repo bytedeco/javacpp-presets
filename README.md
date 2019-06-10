@@ -120,28 +120,28 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.4  https://software.intel.com/intel-mkl
- * MKL-DNN 0.19  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.20-rc  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.6  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.3  https://www.python.org/downloads/
- * NumPy 1.16.3  https://github.com/numpy/numpy
+ * NumPy 1.16.4  https://github.com/numpy/numpy
  * LLVM 8.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
- * Tesseract 4.0.0  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.1.0-rc2  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.1 Update 1  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6  https://developer.nvidia.com/cudnn
    * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.4.1  https://github.com/dmlc/mxnet
- * TensorFlow 1.14.0-rc0  https://github.com/tensorflow/tensorflow
+ * MXNet 1.5.0.rc0  https://github.com/dmlc/mxnet
+ * TensorFlow 1.14.0-rc1  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.19.0  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.21.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.12.3  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia

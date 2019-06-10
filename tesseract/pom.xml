@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for Tesseract</name>
 
   <properties>
-    <revision>4.0.0-${project.parent.version}</revision>
+    <revision>4.1.0-rc2-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

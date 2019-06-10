@@ -47,4 +47,8 @@ public class Executable extends Pointer {
     /** \brief Query the output Results
      *  @return an ngraph::ResultVector of all input parameters */
     public native @Const @ByRef ResultVector get_results();
+
+    /** \brief Save this compiled Executable to an output stream.
+     *     Saved stream may be read with Backend::load */
+    public native void save(@Cast("std::ostream*") @ByRef Pointer output_stream);
 }

@@ -34,6 +34,9 @@ import org.bytedeco.javacpp.tools.*;
         "ngraph/descriptor/tensor.hpp",
         "ngraph/pass/pass_config.hpp",
         "ngraph/type/element_type.hpp",
+        "ngraph/axis_set.hpp",
+        "ngraph/axis_vector.hpp",
+        "ngraph/coordinate_diff.hpp",
         "ngraph/shape.hpp",
         "ngraph/assertion.hpp",
         "ngraph/except.hpp",
@@ -54,6 +57,7 @@ import org.bytedeco.javacpp.tools.*;
 //        "ngraph/result_vector.hpp",
         "ngraph/op/result.hpp",
         "ngraph/op/constant.hpp",
+        "ngraph/op/util/attr_types.hpp",
         "ngraph/op/util/binary_elementwise_arithmetic.hpp",
         "ngraph/op/add.hpp",
         "ngraph/op/multiply.hpp",
@@ -108,6 +112,9 @@ public class ngraph implements InfoMapper {
                .put(new Info("ngraph::element::from<uint64_t>").javaNames("fromUInt64t"))
                .put(new Info("ngraph::element::from<ngraph::bfloat16>").javaNames("fromNGraphBFloat16"))
 
+               .put(new Info("NGRAPH_DEPRECATED_DOC").cppText("#define NGRAPH_DEPRECATED_DOC deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+
                .put(new Info("ngraph::op::util::BinaryElementwiseArithmetic", "ngraph::op::ScalarConstantLike").purify(true))
                .put(new Info("std::shared_ptr<ngraph::op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
                .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
@@ -125,10 +132,12 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>",
                              "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
                .put(new Info("std::map<std::string,bool>").pointerTypes("StringBoolMap").define())
+               .put(new Info("std::set<size_t>").pointerTypes("SizeTSet").define())
+               .put(new Info("std::vector<ptrdiff_t>", "std::vector<std::ptrdiff_t>").pointerTypes("PtrDiffTVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<size_t>").pointerTypes("SizeTVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("ResultVector").define())
-               .put(new Info("std::size_t", "size_t", "std::int64_t", "int64_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+               .put(new Info("std::ptrdiff_t", "ptrdiff_t", "std::size_t", "size_t", "std::int64_t", "int64_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
 //               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
 //               .put(new Info("std::vector<std::shared_ptr<op::Parameter> >", "std::vector<std::shared_ptr<ngraph::op::Parameter> >").pointerTypes("Pointer"))
                .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())

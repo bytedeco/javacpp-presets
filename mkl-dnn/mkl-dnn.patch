@@ -1,7 +1,7 @@
-diff -ruN mkl-dnn-0.19/src/cpu/cpu_engine.cpp mkl-dnn-0.19-patch/src/cpu/cpu_engine.cpp
---- mkl-dnn-0.19/src/cpu/cpu_engine.cpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/cpu_engine.cpp	2019-05-24 20:23:12.078486746 +0900
-@@ -72,6 +72,34 @@
+diff -ruN mkl-dnn-0.20-rc/src/cpu/cpu_engine.cpp mkl-dnn-0.20-rc-patch/src/cpu/cpu_engine.cpp
+--- mkl-dnn-0.20-rc/src/cpu/cpu_engine.cpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/cpu_engine.cpp	2019-06-10 13:58:13.665616263 +0900
+@@ -77,6 +77,51 @@
  
  using namespace mkldnn::impl::status;
  
@@ -33,12 +33,69 @@ diff -ruN mkl-dnn-0.19/src/cpu/cpu_engine.cpp mkl-dnn-0.19-patch/src/cpu/cpu_eng
 +template struct jit_uni_rnn_cell_postgemm_fwd<avx2, data_type::u8>;
 +template struct jit_uni_rnn_cell_postgemm_fwd<avx512_core, data_type::u8>;
 +
++template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<sse42, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<sse42, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
++        data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
++        data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<sse42, data_type::f32>;
++
  status_t cpu_engine_t::memory_primitive_desc_create(memory_pd_t **pd,
          const memory_desc_t *desc) {
      return safe_ptr_assign<memory_pd_t>(*pd,
-diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp
---- mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp	2019-05-24 20:23:07.239487389 +0900
+diff -ruN mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-0.20-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-06-10 13:58:10.834617161 +0900
+@@ -206,11 +206,6 @@
+         scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
+ }
+ 
+-template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
+-template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
+-template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_fwd_kernel<sse42, data_type::f32>;
+-
+ template <cpu_isa_t isa, data_type_t kernel_dt>
+ struct jit_uni_dw_conv_bwd_data_kernel {
+ 
+@@ -350,11 +345,6 @@
+     UNUSED(jcp);
+ }
+ 
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<sse42, data_type::f32>;
+-
+ template <cpu_isa_t isa, data_type_t kernel_dt>
+ struct jit_uni_dw_conv_bwd_weights_kernel {
+ 
+@@ -534,12 +524,6 @@
+     jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
+ }
+ 
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
+-        data_type::bf16>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
+-        data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<sse42, data_type::f32>;
+ }
+ }
+ }
+diff -ruN mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp
+--- mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp	2019-06-10 13:56:18.668652757 +0900
 @@ -172,10 +172,6 @@
  
  };
@@ -50,9 +107,9 @@ diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_1.hpp mkl-dnn-0.19-
  }
  }
  }
-diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp
---- mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp	2019-05-24 20:22:37.968491285 +0900
+diff -ruN mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp
+--- mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp	2019-06-10 13:56:18.668652757 +0900
 @@ -172,10 +172,6 @@
  
  };
@@ -64,9 +121,9 @@ diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_cell_postgemm_2.hpp mkl-dnn-0.19-
  }
  }
  }
-diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp
---- mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp	2019-05-24 20:22:28.569492537 +0900
+diff -ruN mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp
+--- mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp	2019-06-10 13:56:18.668652757 +0900
 @@ -221,10 +221,6 @@
  
  };
@@ -78,10 +135,10 @@ diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_gru_lbr_cell_postgemm.hpp mkl-dnn-0.1
  }
  }
  }
-diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp
---- mkl-dnn-0.19/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp	2019-05-24 20:22:17.576494003 +0900
-@@ -373,14 +373,6 @@
+diff -ruN mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp
+--- mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp	2019-06-10 13:56:18.669652757 +0900
+@@ -372,14 +372,6 @@
  
  };
  
@@ -96,9 +153,9 @@ diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_lstm_cell_postgemm.hpp mkl-dnn-0.19-p
  }
  }
  }
-diff -ruN mkl-dnn-0.19/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp
---- mkl-dnn-0.19/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp	2019-05-15 07:03:33.000000000 +0900
-+++ mkl-dnn-0.19-patch/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp	2019-05-24 20:22:03.484495884 +0900
+diff -ruN mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp
+--- mkl-dnn-0.20-rc/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp	2019-06-08 08:44:00.000000000 +0900
++++ mkl-dnn-0.20-rc-patch/src/cpu/rnn/jit_uni_rnn_cell_postgemm.hpp	2019-06-10 13:56:18.669652757 +0900
 @@ -280,14 +280,6 @@
  
  };

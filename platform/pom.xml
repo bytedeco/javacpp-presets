@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.19-${project.version}</version>
+      <version>0.20-rc-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -171,7 +171,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.16.3-${project.version}</version>
+      <version>1.16.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -191,7 +191,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>4.0.0-${project.version}</version>
+      <version>4.1.0-rc2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -206,12 +206,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.4.1-${project.version}</version>
+      <version>1.5.0.rc0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.14.0-rc0-${project.version}</version>
+      <version>1.14.0-rc1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ngraph-platform</artifactId>
-      <version>0.19.0-${project.version}</version>
+      <version>0.21.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

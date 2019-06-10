@@ -22,9 +22,7 @@ public class BackendManager extends Pointer {
             
             
 
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongPointer count);
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") LongBuffer count);
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") long[] count);
+            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") SizeTPointer count);
 
             
 

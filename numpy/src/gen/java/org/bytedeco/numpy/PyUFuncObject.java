@@ -54,13 +54,13 @@ public class PyUFuncObject extends Pointer {
         public native int reserved1(); public native PyUFuncObject reserved1(int setter);
 
         /* The name of the ufunc */
-        @MemberGetter public native @Cast("const char*") BytePointer name();
+        public native @Cast("const char*") BytePointer name(); public native PyUFuncObject name(BytePointer setter);
 
         /* Array of type numbers, of size ('nargs' * 'ntypes') */
         public native @Cast("char*") BytePointer types(); public native PyUFuncObject types(BytePointer setter);
 
         /* Documentation string */
-        @MemberGetter public native @Cast("const char*") BytePointer doc();
+        public native @Cast("const char*") BytePointer doc(); public native PyUFuncObject doc(BytePointer setter);
 
         public native Pointer ptr(); public native PyUFuncObject ptr(Pointer setter);
         public native PyObject obj(); public native PyUFuncObject obj(PyObject setter);

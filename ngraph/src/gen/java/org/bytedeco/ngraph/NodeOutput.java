@@ -46,6 +46,8 @@ public class NodeOutput extends Pointer {
         public native @Cast("size_t") long get_index();
         /** @return A reference to the tensor descriptor for this output. */
         public native @ByRef DescriptorTensor get_tensor();
+        /** @return A shared point to the tensor ptr for this output. */
+        public native @SharedPtr @ByVal DescriptorTensor get_tensor_ptr();
         /** @return The element type of the output referred to by this output handle. */
         public native @Const @ByRef Type get_element_type();
         /** @return The shape of the output referred to by this output handle. */

@@ -205,4 +205,9 @@ public class PartialShape extends Pointer {
          *  successful; if merging is unsuccessful, the function returns {@code false} and may make
          *  unspecified changes to {@code dst}. */
         public static native @Cast("bool") boolean merge_into(@ByRef PartialShape dst, @Const @ByRef PartialShape src);
+
+        /** \brief Try to merge one shape into another along with implicit broadcasting */
+        public static native @Cast("bool") boolean broadcast_merge_into(@ByRef PartialShape dst,
+                                                 @Const @ByRef PartialShape src,
+                                                 @Const @ByRef AutoBroadcastSpec autob);
     }

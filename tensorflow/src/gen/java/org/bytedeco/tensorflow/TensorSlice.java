@@ -19,12 +19,6 @@ public class TensorSlice extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorSlice(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TensorSlice(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TensorSlice position(long position) {
-        return (TensorSlice)super.position(position);
-    }
 
   // Construct a tensor slice: you have a number of ways:
   // -- creating an empty slice

@@ -10,10 +10,6 @@ import static org.bytedeco.mkldnn.global.mklml.*;
 
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
-// #endif
-
-// #ifndef DOXYGEN_SHOULD_SKIP_THIS
-// #endif
 
 /** \addtogroup c_api C API
  *  \{

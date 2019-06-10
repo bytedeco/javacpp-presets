@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.0.0
+TESSERACT_VERSION=4.1.0-rc2
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -135,13 +135,13 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        cp src/vs2010/port/* src/ccutil/
+        # cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="i686-w64-mingw32" CC="gcc -m32" CXX="g++ -m32 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
-        cp src/vs2010/port/* src/ccutil/
+        # cp src/vs2010/port/* src/ccutil/
         ./configure --prefix=$INSTALL_PATH --host="x86_64-w64-mingw32" CC="gcc -m64" CXX="g++ -m64 -fpermissive" LEPTONICA_CFLAGS="-I$LEPTONICA_PATH/include/leptonica/" LEPTONICA_LIBS="-L$LEPTONICA_PATH/lib/ -llept" CPPFLAGS="-I$LEPTONICA_PATH/include/" LDFLAGS="-L$LEPTONICA_PATH/lib/" LIBS="-llept"
         make -j $MAKEJ
         make install-strip

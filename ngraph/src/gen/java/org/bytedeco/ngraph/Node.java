@@ -19,34 +19,25 @@ public class Node extends Pointer {
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Node(Pointer p) { super(p); }
     
+
+        /** Sets/replaces the arguments with new arguments. */
+        public native void set_arguments(@Const @ByRef NodeVector arguments);
+        /** Sets/replaces the arguments with new arguments. */
+        public native void set_arguments(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector arguments);
+        /** Sets/replaces the arguments with new arguments. */
+        public native void set_argument(@Cast("size_t") long position, @Const @ByRef NodeOutput argument);
+
+        /** Sets the number of outputs */
+        public native void set_output_size(@Cast("size_t") long output_size);
+
         public native void revalidate_and_infer_types();
         // Called after transition
-        
-        ///
-        ///
         public native void delayed_validate_and_infer_types();
 
-        /** \brief Produce a vector of constant nodes (one for each of this node's outputs) that
-         *         can replace this node's outputs. May return an empty vector to signal that
-         *         conversion to constants is not possible or not supported.
-         *  @return If conversion is successful, a vector of op::Constant nodes, corresponding
-         *           to this node's outputs in order. If unsuccessful, an empty vector.
-         * 
-         *  Conversion does not have to be complete. That means that subclasses *may* override
-         *  as_constants, but do not have to. It is allowed for as_constants to return an empty
-         *  vector even in cases where the output values are statically computable. Thus, any user
-         *  of as_constants must allow for the possibility that conversion will fail (i.e.,
-         *  as_constants will return {}).
-         * 
-         *  Conversion must be sound. That means that if as_constants returns a non-empty vector,
-         *  the value of each constant in the vector must be exactly the value that would have
-         *  been returned for the corresponding output at runtime. */
-        public native @ByVal OpConstantVector as_constants();
         /** \brief Get the string name for the type of the node, such as {@code Add} or {@code Multiply}.
          *         The class name, must not contain spaces as it is used for codegen.
          *  @return A const reference to the node's type name */
         public native @StdString BytePointer description();
-
         /** \brief Get the unique name of the node.
          *  @return A const reference to the node's unique name. */
         public native @StdString BytePointer get_name();
@@ -186,10 +177,11 @@ public class Node extends Pointer {
         /** Returns the tensor name for input i */
         public native @StdString BytePointer get_input_tensor_name(@Cast("size_t") long i);
 
+        // Will be deprecated
         public native @ByVal NodeVector get_arguments();
-
+        // Will be deprecated
         public native @SharedPtr @ByVal Node get_argument(@Cast("size_t") long index);
-
+        // Will be replaced with an OutputVector version
         public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
 
         public native @ByVal FunctionVector get_functions();

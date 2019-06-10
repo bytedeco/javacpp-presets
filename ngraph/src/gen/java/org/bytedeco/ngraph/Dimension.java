@@ -64,9 +64,13 @@ public class Dimension extends Pointer {
          *  \li If {@code d1} and {@code d2} are static and equal, writes {@code d1} to {@code dst} and returns {@code true}.
          *  \li If {@code d1} and {@code d2} are both static and unequal, leaves {@code dst} unchanged and
          *      returns {@code false}. */
+        public static native @Cast("bool") boolean merge(@ByRef Dimension dst, @Const @ByVal Dimension d1, @Const @ByVal Dimension d2);
+
+        /** \brief Try to merge two Dimension objects together with implicit broadcasting
+         *         of unit-sized dimension to non unit-sized dimension */
         
         ///
-        public static native @Cast("bool") boolean merge(@ByRef Dimension dst, @Const @ByVal Dimension d1, @Const @ByVal Dimension d2);
+        public static native @Cast("bool") boolean broadcast_merge(@ByRef Dimension dst, @Const @ByVal Dimension d1, @Const @ByVal Dimension d2);
 
         /** \brief Check whether this dimension is capable of being merged with the argument
          *         dimension.

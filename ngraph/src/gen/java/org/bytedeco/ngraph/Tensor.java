@@ -21,6 +21,10 @@ public class Tensor extends Pointer {
              *  @return const reference to a Shape */
             public native @Const @ByRef Shape get_shape();
 
+            /** \brief Get tensor partial shape
+             *  @return const reference to a PartialShape */
+            public native @Const @ByRef PartialShape get_partial_shape();
+
             /** \brief Get tensor strides
              *  @return Strides */
             public native @ByVal Strides get_strides();
@@ -60,17 +64,19 @@ public class Tensor extends Pointer {
 
             /** \brief Write bytes directly into the tensor
              *  @param p Pointer to source of data
-             *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
              *  @param n Number of bytes to write, must be integral number of elements. */
-            public native void write(@Const Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+            public native void write(@Const Pointer p, @Cast("size_t") long n);
 
             /** \brief Read bytes directly from the tensor
              *  @param p Pointer to destination for data
-             *  @param offset Offset into tensor storage to begin writing. Must be element-aligned.
              *  @param n Number of bytes to read, must be integral number of elements. */
-            public native void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+            public native void read(Pointer p, @Cast("size_t") long n);
 
             /** \brief copy bytes directly from source to this tensor
              *  @param source The source tensor */
             public native void copy_from(@Const @ByRef Tensor source);
+
+            public native @Deprecated void write(@Const Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
+
+            public native @Deprecated void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
         }
