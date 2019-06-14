@@ -23,9 +23,7 @@
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>numpy</artifactId>
-      <version>1.16.4-${project.parent.version}</version>
-      <optional>true</optional>
+      <artifactId>javacpp</artifactId>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -34,7 +32,9 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>javacpp</artifactId>
+      <artifactId>numpy</artifactId>
+      <version>1.16.4-${project.parent.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
@@ -86,6 +86,11 @@
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <dependencies>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl-dnn-platform</artifactId>
+            <version>0.20-rc-${project.parent.version}</version>
+          </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
@@ -169,6 +174,7 @@
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/mkldnn/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>
@@ -187,6 +193,7 @@
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/libs/</linkResource>
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
           </linkResources>
@@ -220,8 +227,8 @@
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_tensorrt/**</exclude>
-                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_cuda/**</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/**/**.zip</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/_solib_*/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*python*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
@@ -278,6 +285,8 @@
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
 -->
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/FORCE:MULTIPLE</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>

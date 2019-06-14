@@ -68,7 +68,7 @@ case $PLATFORM in
         export PYTHONPATH="$INSTALL_PATH/lib/site-packages/"
         mkdir -p "$PYTHONPATH"
         # setup.py install doesn't accept absolute paths on Windows
-        "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix ..
+        "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

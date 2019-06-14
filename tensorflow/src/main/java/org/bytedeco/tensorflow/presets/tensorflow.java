@@ -263,7 +263,7 @@ import java.util.List;
                            "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
                            "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
                            "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
-                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140", "vcomp140"}),
+                           "msvcr120", "libiomp5md", "mklml", "vcruntime140", "msvcp140", "concrt140", "vcomp140", "python37"}),
         @Platform(
                 value = "windows-x86",
                 preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
@@ -276,8 +276,10 @@ import java.util.List;
                                "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
         @Platform(
                 value = "windows-x86_64",
-                extension = "-gpu",
+                extension = {"-gpu", "-python", "-python-gpu"},
                 link = {"Advapi32#", "mklml", "cudart", "cudart_static", "cuda", "cublasLt", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti"},
+                resource = "python",
+                preloadresource = {"/org/bytedeco/cpython/", "/org/bytedeco/mkldnn/"},
 // old hacks for the now obsolete CMake build
 //                link = {"absl_base", "absl_throw_delegate", "absl_bad_optional_access", "absl_int128", "absl_str_format", "str_format_internal", "absl_strings",
 //                        "Advapi32#", "double-conversion", "zlibstatic", "gpr", "grpc_unsecure", "grpc++_unsecure", "farmhash", "fft2d",
@@ -425,6 +427,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         Loader.load(org.bytedeco.cpython.global.python.class);
         String path = Loader.load(tensorflow.class);
         if (path != null) {
+            path = path.replace(File.separatorChar, '/');
             int i = path.indexOf("/org/bytedeco/tensorflow/" + Loader.getPlatform());
             int j = path.lastIndexOf("/");
             return Loader.cacheResource(path.substring(i, j) + "/python/");

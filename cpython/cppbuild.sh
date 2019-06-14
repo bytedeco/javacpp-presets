@@ -32,11 +32,11 @@ case $PLATFORM in
         make install
         ;;
     windows-*)
-        mkdir -p ../include ../lib ../bin
+        mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
         cmd.exe /c 'build.bat -p x64'
         cp amd64/python*.exe amd64/python*.dll ../../bin/
-        cp amd64/python*.lib ../../lib/
+        cp amd64/python*.lib ../../libs/
         cp amd64/*.dll amd64/*.pyd ../../lib/
         cd ..
         cp -r Lib/* ../lib/

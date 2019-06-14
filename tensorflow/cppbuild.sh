@@ -53,6 +53,7 @@ cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
+MKLDNN_PATH="$INSTALL_PATH/../../../mkl-dnn/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
 
@@ -67,6 +68,14 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
+        elif [[ -f "$P/include/Python.h" ]]; then
+            CPYTHON_PATH="$P"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/python.exe"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+            export USE_DEFAULT_PYTHON_LIB_PATH=0
+        elif [[ -f "$P/include/mkldnn.h" ]]; then
+            MKLDNN_PATH="$P"
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
         elif [[ -f "$P/python/numpy/core/include/numpy/arrayobject.h" ]]; then
@@ -77,6 +86,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
+MKLDNN_PATH="${MKLDNN_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
@@ -131,8 +141,6 @@ if [[ "$EXTENSION" =~ python ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
     export PYTHONPATH="$NUMPY_PATH/python/"
     ln -sf $OPENBLAS_PATH/libopenblas.* $NUMPY_PATH/
-    $PYTHON_BIN_PATH -m pip install --target=$CPYTHON_PATH/lib/python3.7/ keras_applications==1.0.6 --no-deps
-    $PYTHON_BIN_PATH -m pip install --target=$CPYTHON_PATH/lib/python3.7/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 case $PLATFORM in
@@ -202,8 +210,12 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
+        # https://github.com/tensorflow/tensorflow/issues/25213
+        patch -Np1 < ../../../tensorflow-windows.patch
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
-        export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
+        if [[ ! -f $PYTHON_BIN_PATH ]]; then
+            export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
+        fi
         export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/"
         # try not to use /WHOLEARCHIVE as it crashes link.exe
         export NO_WHOLE_ARCHIVE_OPTION=1
@@ -211,10 +223,17 @@ case $PLATFORM in
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
         export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
-        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
+        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         export CUDA_HOME="$CUDA_TOOLKIT_PATH"
         export CUDNN_INSTALL_PATH="$CUDA_TOOLKIT_PATH"
+        if [[ "$EXTENSION" =~ python ]]; then
+            CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+            MKLDNN_PATH=$(cygpath $MKLDNN_PATH)
+            OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
+            export BUILDTARGETS="///tensorflow/tools/pip_package:build_pip_package ///tensorflow/java:tensorflow"
+            export PATH="$CPYTHON_PATH:$MKLDNN_PATH:$OPENBLAS_PATH:$PATH"
+        fi
 # old hacks for the now obsolete CMake build
 #        # help cmake's findCuda-method to find the right cuda version
 #        export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
@@ -247,6 +266,11 @@ case $PLATFORM in
         return 0
         ;;
 esac
+
+if [[ "$EXTENSION" =~ python ]]; then
+    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH keras_applications==1.0.6 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH keras_preprocessing==1.0.5 --no-deps
+fi
 
 # prevent Bazel from exceeding maximum command line length on Windows
 unset PLATFORM_ARTIFACTS
@@ -290,8 +314,17 @@ sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInference
 
 if [[ "$EXTENSION" =~ python ]]; then
     # adjust the directory structure a bit to facilitate packaging in JAR files
-    ln -snf tensorflow-$TENSORFLOW_VERSION/bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/org_tensorflow ../python
-    ln -sf python/_pywrap_tensorflow_internal.so bazel-bin/tensorflow/libtensorflow_cc.so
+    if [[ "$PLATFORM" == windows* ]]; then
+        echo "Unzipping simple_console_for_windows.zip to create runfiles tree..."
+        unzip -o -q ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_windows.zip -d ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip
+        echo "Unzip finished."
+        rm -Rf ../python
+        mv ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip/runfiles/org_tensorflow ../python
+        mv ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip/runfiles ../python/external
+    else
+        ln -snf tensorflow-$TENSORFLOW_VERSION/bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/org_tensorflow ../python
+        ln -sf python/_pywrap_tensorflow_internal.so bazel-bin/tensorflow/libtensorflow_cc.so
+    fi
     ln -sf external/absl_py/absl/ ../python/
     ln -sf external/astor_archive/astor/ ../python/
     ln -sf external/gast_archive/gast/ ../python/

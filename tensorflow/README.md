@@ -116,6 +116,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
             <version>1.14.0-rc1-1.5.1-SNAPSHOT</version>
+            <classifier>windows-x86_64-python</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.14.0-rc1-1.5.1-SNAPSHOT</version>
             <classifier>linux-x86_64-python-gpu</classifier>
         </dependency>
         <dependency>
@@ -123,6 +129,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <artifactId>tensorflow</artifactId>
             <version>1.14.0-rc1-1.5.1-SNAPSHOT</version>
             <classifier>macosx-x86_64-python-gpu</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>tensorflow</artifactId>
+            <version>1.14.0-rc1-1.5.1-SNAPSHOT</version>
+            <classifier>windows-x86_64-python-gpu</classifier>
         </dependency>
 
     </dependencies>
