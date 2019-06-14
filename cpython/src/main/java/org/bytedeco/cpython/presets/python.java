@@ -123,7 +123,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "pyfpe.h",
             },
             link = "python3.7m@.1.0!",
-            resource = {"include", "lib", "bin", "share"}
+            resource = {"include", "lib", "libs", "bin", "share"}
         ),
         @Platform(
             value = "macosx",

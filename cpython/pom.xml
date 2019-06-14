@@ -44,6 +44,7 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/libs/</linkPath>
           </linkPaths>
         </configuration>
       </plugin>
