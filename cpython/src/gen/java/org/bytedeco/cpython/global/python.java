@@ -11295,6 +11295,62 @@ public static final int PyGILState_LOCKED = 0, PyGILState_UNLOCKED = 1;
 
 /* Due to a glitch in 3.2, the _SizeT versions weren't exported from the DLL. */
 // #if !defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8);
+public static native int PyArg_Parse(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8, Pointer vararg9);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8);
+public static native int PyArg_ParseTuple(PyObject arg0, String arg1, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8, Pointer vararg9);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8);
+public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") PointerPointer arg3, Pointer vararg0, Pointer vararg1, Pointer vararg2, Pointer vararg3, Pointer vararg4, Pointer vararg5, Pointer vararg6, Pointer vararg7, Pointer vararg8, Pointer vararg9);
+@NoException public static native int PyArg_VaParse(PyObject arg0, @Cast("const char*") BytePointer arg1, @ByVal @Cast("va_list*") Pointer arg2);
+@NoException public static native int PyArg_VaParse(PyObject arg0, String arg1, @ByVal @Cast("va_list*") Pointer arg2);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  @Cast("const char*") BytePointer arg2, @Cast("char**") PointerPointer arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  @Cast("const char*") BytePointer arg2, @Cast("char**") @ByPtrPtr BytePointer arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") @ByPtrPtr ByteBuffer arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  @Cast("const char*") BytePointer arg2, @Cast("char**") @ByPtrPtr byte[] arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") @ByPtrPtr BytePointer arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  @Cast("const char*") BytePointer arg2, @Cast("char**") @ByPtrPtr ByteBuffer arg3, @ByVal @Cast("va_list*") Pointer arg4);
+@NoException public static native int PyArg_VaParseTupleAndKeywords(PyObject arg0, PyObject arg1,
+                                                  String arg2, @Cast("char**") @ByPtrPtr byte[] arg3, @ByVal @Cast("va_list*") Pointer arg4);
 // #endif
 @NoException public static native int PyArg_ValidateKeywordArguments(PyObject arg0);
 @NoException public static native int PyArg_UnpackTuple(PyObject arg0, @Cast("const char*") BytePointer arg1, @Cast("Py_ssize_t") long arg2, @Cast("Py_ssize_t") long arg3);
