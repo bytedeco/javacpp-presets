@@ -34,6 +34,7 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     static { Loader.load(); }
     public AbstractTensor(Pointer p) { super(p); }
 
+    public static Tensor create(boolean[] data, long... shape) { return create(data, new TensorShape(shape)); }
     public static Tensor create(float[]  data, long... shape) { return create(data, new TensorShape(shape)); }
     public static Tensor create(double[] data, long... shape) { return create(data, new TensorShape(shape)); }
     public static Tensor create(int[]    data, long... shape) { return create(data, new TensorShape(shape)); }
@@ -42,6 +43,14 @@ public abstract class AbstractTensor extends Pointer implements Indexable {
     public static Tensor create(long[]   data, long... shape) { return create(data, new TensorShape(shape)); }
     public static Tensor create(String[] data, long... shape) { return create(data, new TensorShape(shape)); }
 
+    public static Tensor create(boolean[] data, TensorShape shape) {
+        Tensor t = new Tensor(DT_BOOL, shape);
+        ByteBuffer b = t.createBuffer();
+        for (boolean bool : data) {
+            b.put(bool ? (byte)1 : (byte)0);
+        }
+        return t;
+    }
     public static Tensor create(float[]  data, TensorShape shape) { Tensor t = new Tensor(DT_FLOAT,  shape); FloatBuffer  b = t.createBuffer(); b.put(data); return t; }
     public static Tensor create(double[] data, TensorShape shape) { Tensor t = new Tensor(DT_DOUBLE, shape); DoubleBuffer b = t.createBuffer(); b.put(data); return t; }
     public static Tensor create(int[]    data, TensorShape shape) { Tensor t = new Tensor(DT_INT32,  shape); IntBuffer    b = t.createBuffer(); b.put(data); return t; }
