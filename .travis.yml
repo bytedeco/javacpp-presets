@@ -512,6 +512,11 @@ matrix:
         env: PROJ=cpu_features,systems OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=helloworld OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
 
       - os: linux
         env: PROJ=opencv OS=linux-x86_64 EXT=-gpu
