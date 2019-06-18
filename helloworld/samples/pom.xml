@@ -13,7 +13,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>helloworld-platform</artifactId>
-            <version>master-1.5.1-SNAPSHOT</version>
+            <version>1.0-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

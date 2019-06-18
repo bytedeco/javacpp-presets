@@ -15,7 +15,7 @@
     <name>JavaCPP Presets for helloworld</name>
 
     <properties>
-        <revision>master-${project.parent.version}</revision>
+        <revision>1.0-${project.parent.version}</revision>
     </properties>
 
     <dependencies>
