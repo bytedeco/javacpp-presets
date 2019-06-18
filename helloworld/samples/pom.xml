@@ -12,17 +12,7 @@
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacpp</artifactId>
-            <version>1.5.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
             <artifactId>helloworld-platform</artifactId>
-            <version>master-1.5.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>helloworld</artifactId>
             <version>master-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
