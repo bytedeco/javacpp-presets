@@ -37,8 +37,8 @@ public class mkldnn_eltwise_desc_t extends Pointer {
     /** The kind of eltwise algorithm. Possible values: #mkldnn_eltwise_relu,
      * #mkldnn_eltwise_tanh, #mkldnn_eltwise_elu, #mkldnn_eltwise_square,
      * #mkldnn_eltwise_abs, #mkldnn_eltwise_sqrt, #mkldnn_eltwise_linear,
-     * #mkldnn_eltwise_bounded_relu, #mkldnn_eltwise_soft_relu, and
-     * #mkldnn_eltwise_logistic. */
+     * #mkldnn_eltwise_bounded_relu, #mkldnn_eltwise_soft_relu,
+     * #mkldnn_eltwise_logistic and #mkldnn_eltwise_exp. */
     public native @Cast("mkldnn_alg_kind_t") int alg_kind(); public native mkldnn_eltwise_desc_t alg_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t data_desc(); public native mkldnn_eltwise_desc_t data_desc(mkldnn_memory_desc_t setter);
@@ -56,6 +56,7 @@ public class mkldnn_eltwise_desc_t extends Pointer {
      *  - #mkldnn_eltwise_bounded_relu: \p alpha -- upper bound, \p beta ignored
      *  - #mkldnn_eltwise_soft_relu: \p alpha and \p beta ignored
      *  - #mkldnn_eltwise_logistic: \p alpha and \p beta ignored
+     *  - #mkldnn_eltwise_exp: \p alpha and \p beta ignored
      */
     public native float alpha(); public native mkldnn_eltwise_desc_t alpha(float setter);
     public native float beta(); public native mkldnn_eltwise_desc_t beta(float setter);

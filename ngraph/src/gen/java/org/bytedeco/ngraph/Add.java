@@ -11,23 +11,48 @@ import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief Elementwise addition operation.
          *  */
-        @Namespace("ngraph::op") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+        @Namespace("ngraph::op") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class Add extends BinaryElementwiseArithmetic {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Add(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public Add(long size) { super((Pointer)null); allocateArray(size); }
+            private native void allocateArray(long size);
+            @Override public Add position(long position) {
+                return (Add)super.position(position);
+            }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            public native @StdString BytePointer description();
+            /** \brief Constructs an unitialized addition operation */
+            
+            ///
+            ///
+            ///
+            public Add() { super((Pointer)null); allocate(); }
+            private native void allocate();
+
             /** \brief Constructs an addition operation.
              * 
-             *  @param arg0 Node that produces the first input tensor.<br>
+             *  @param arg0 Output that produces the first input tensor.<br>
              *  {@code [d0, ...]}
-             *  @param arg1 Node that produces the second input tensor.<br>
+             *  @param arg1 Output that produces the second input tensor.<br>
              *  {@code [d0, ...]}
+             *  @param autob Auto broadcast specification
              * 
              *  Output {@code [d0, ...]}
              *  */
-            public Add(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg0, @Const @SharedPtr @ByRef Node arg1);
+            public Add(@Const @ByRef NodeOutput arg0,
+                            @Const @ByRef NodeOutput arg1,
+                            @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob) { super((Pointer)null); allocate(arg0, arg1, autob); }
+            private native void allocate(@Const @ByRef NodeOutput arg0,
+                            @Const @ByRef NodeOutput arg1,
+                            @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob);
+            public Add(@Const @ByRef NodeOutput arg0,
+                            @Const @ByRef NodeOutput arg1) { super((Pointer)null); allocate(arg0, arg1); }
+            private native void allocate(@Const @ByRef NodeOutput arg0,
+                            @Const @ByRef NodeOutput arg1);
 
             public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
         }

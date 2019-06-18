@@ -6,7 +6,7 @@ while true; do uptime; sleep 60; done &
 
 # Abort before the maximum build time to be able to save the cache
 # (needs to be less than 2 hours for this to work on Mac as well)
-(sleep 6600; sudo killall -s SIGINT java; sudo killall bazel) &
+(sleep 6600; sudo killall -s SIGINT java; sudo killall bazel; sudo killall make) &
 
 # Allocate a swapfile on Linux as it's not enabled by default
 sudo fallocate -l 4GB /swapfile

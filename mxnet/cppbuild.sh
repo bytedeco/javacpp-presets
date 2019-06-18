@@ -26,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.4.1
+MXNET_VERSION=1.5.0.rc0
 download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"
@@ -55,13 +55,17 @@ tar --totals -xzf ../apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz || true
 cd apache-mxnet-src-$MXNET_VERSION-incubating
 
 # upgrade MKL-DNN
-#sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
 #sedinplace 's/0.18.1/0.19/g' 3rdparty/mkldnn/CMakeLists.txt
 #sedinplace 's/0.18/0.19/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
 #sedinplace 's/2019.0.3.20190220/2019.0.5.20190502/g' 3rdparty/mkldnn/scripts/prepare_mkl.bat 3rdparty/mkldnn/scripts/prepare_mkl.sh
 
+# actually use LAPACK from OpenBLAS
+sedinplace 's/USE_LAPACK = 0/USE_LAPACK = 1/g' Makefile
+sedinplace '/LDFLAGS += -llapack/d' Makefile
+
 # patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
+sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
 
@@ -98,7 +102,7 @@ case $PLATFORM in
     windows-x86_64)
         # copy include files
         mkdir -p ../include
-        cp -r include/mxnet 3rdparty/dmlc-core/include/dmlc 3rdparty/mshadow/mshadow ../include
+        cp -RLf include/mxnet 3rdparty/dmlc-core/include/dmlc 3rdparty/mshadow/mshadow ../include
 
         # configure the build
         mkdir -p ../build
@@ -113,11 +117,11 @@ case $PLATFORM in
 
         # copy binary files
         mkdir -p ../bin
-        cp Release/*.dll 3rdparty/mkldnn/src/Release/*.dll ../bin
+        cp -f Release/*.dll 3rdparty/mkldnn/src/Release/*.dll ../bin
 
         # copy library files
         mkdir -p ../lib
-        cp Release/libmxnet.lib ../lib/mxnet.lib
+        cp -f Release/libmxnet.lib ../lib/mxnet.lib
 
         # finish
         cd ../apache-mxnet-src-$MXNET_VERSION-incubating
@@ -135,30 +139,36 @@ if [[ ! "$PLATFORM" == windows* ]]; then
 
     sed -i="" 's/$(shell pkg-config --cflags opencv)//' Makefile
     sed -i="" 's/$(shell pkg-config --libs opencv)/-lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_core/' Makefile
+    sed -i="" 's/$(shell pkg-config --cflags $(OPENCV_LIB))//' Makefile
+    sed -i="" 's/$(shell pkg-config --libs-only-L $(OPENCV_LIB))//' Makefile
+    sed -i="" 's/$(filter -lopencv_imgcodecs -lopencv_highgui, $(shell pkg-config --libs-only-l $(OPENCV_LIB)))/-lopencv_highgui -lopencv_imgcodecs/' Makefile
     make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
-    cp -r include lib 3rdparty/dmlc-core/include ..
-    cp -r 3rdparty/mshadow/mshadow ../include
+    cp -RLf include lib 3rdparty/dmlc-core/include ..
+    cp -RLf 3rdparty/mshadow/mshadow ../include
     unset CC
     unset CXX
 fi
 
 # add Scala files we cannot get with CMake for Windows
+# cd scala-package
+# mvn clean install -Dmaven.test.skip
+# rm -Rf `find ./ -iname target`
 patch -Np1 < ../../../mxnet-scala.patch || true
 # use mxnet-scala-cuda.patch to get a couple of CUDA ops,
 # but an actual GPU becomes necessary for the build
 
 # copy official JNI functions and adjust include directives
-cp -r 3rdparty/dlpack/include/dlpack 3rdparty/tvm/nnvm/include/* ../include
-cp src/common/cuda_utils.h scala-package/init-native/src/main/native/* scala-package/native/src/main/native/* ../include
+cp -RLf 3rdparty/dlpack/include/dlpack 3rdparty/tvm/nnvm/include/* ../include
+cp -f src/common/cuda_utils.h scala-package/init-native/src/main/native/* scala-package/native/src/main/native/* ../include
 sedinplace 's:../src/common/::g' ../include/*.cc
 
 # copy/adjust Scala source files and work around loader issue in Base.scala
 mkdir -p ../scala/init ../scala/core
-cp -r scala-package/init/src/main/scala/* ../scala/init
-cp -r scala-package/macros/src/main/scala/* ../scala/init
-cp -r scala-package/core/src/main/scala/* ../scala/core
-cp -r scala-package/infer/src/main/scala/* ../scala/core
-cp -r scala-package/spark/src/main/scala/* ../scala/core
+cp -RLf scala-package/init/src/main/scala/* ../scala/init
+cp -RLf scala-package/macros/src/main/scala/* ../scala/init
+cp -RLf scala-package/core/src/main/scala/* ../scala/core
+cp -RLf scala-package/infer/src/main/scala/* ../scala/core
+cp -RLf scala-package/spark/src/main/scala/* ../scala/core
 sedinplace 's/  tryLoadInitLibrary()/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.mxnet.presets.mxnet])/g' ../scala/init/org/apache/mxnet/init/Base.scala
 sedinplace 's/  tryLoadLibraryOS("mxnet-scala")/  org.bytedeco.javacpp.Loader.load(classOf[org.bytedeco.mxnet.presets.mxnet])/g' ../scala/core/org/apache/mxnet/Base.scala
 

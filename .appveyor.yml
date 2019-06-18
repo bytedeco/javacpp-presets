@@ -87,6 +87,12 @@ environment:
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python-gpu
 
 for:
 -

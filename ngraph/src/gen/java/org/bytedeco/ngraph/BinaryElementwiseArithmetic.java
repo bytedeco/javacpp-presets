@@ -10,8 +10,8 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.ngraph.global.ngraph.*;
 
             /** \brief Abstract base class for elementwise binary arithmetic operations, i.e., operations where the same
-             *         scalar binary arithmetic operation is applied to each corresponding pair of elements in two same-shaped
-             *         input tensors.
+             *         scalar binary arithmetic operation is applied to each corresponding pair of elements in the two
+             *         input tensors. Implicit broadcast of input tensors is supported through one of the AutoBroadcast modes
              * 
              *  For example, if the underlying arithmetic operation (determined by the subclass) is {@code \mathit{op}(x,y)}, the input tensors
              *  {@code [[x_0,y_0],[z_0,w_0]]} and {@code [[x_1,y_1],[z_1,w_1]]} will be mapped to {@code [[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]}.
@@ -21,23 +21,22 @@ import static org.bytedeco.ngraph.global.ngraph.*;
              *  |        | Type                              | Description                                                              |
              *  | ------ | --------------------------------- | ------------------------------------------------------------------------ |
              *  | {@code arg0} | {@code N[d_1,\dots,d_n]~(n \geq 0)} | A tensor of any shape. The element type {@code N} may be any numeric type. |
-             *  | {@code arg1} | {@code N[d_1,\dots,d_n]~(n \geq 0)} | A tensor of the same shape and element type as {@code arg0}.                   |
+             *  | {@code arg1} | {@code N[d_1,\dots,d_n]~(n \geq 0)} | A tensor of the same element type as {@code arg0}.                             |
+             *  | {@code autob}| AutoBroadcastSpec                 | Auto broadcast specification.                                            |
              * 
              *  ## Output
              * 
              *  | Type                   | Description                                                                                                                                                                                            |
              *  | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-             *  | {@code N[d_1,\dots,d_n]} | The tensor {@code T}, where {@code T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])}. This will always have the same shape and element type as the input tensors. | */
-            @Namespace("ngraph::op::util") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+             *  | {@code N[d_1,\dots,d_n]} | The tensor {@code T}, where {@code T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])}. This will always have the same shape and element type as the input tensors (after auto broadcasting). | */
+            @Namespace("ngraph::op::util") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class BinaryElementwiseArithmetic extends Op {
                 static { Loader.load(); }
                 /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                 public BinaryElementwiseArithmetic(Pointer p) { super(p); }
             
-                /** \brief Constructs a binary elementwise arithmetic operation.
-                 * 
-                 *  @param arg0 Node that produces the first input tensor.
-                 *  @param arg1 Node that produces the second input tensor. */
-
                 public native void validate_and_infer_types();
+
+                public native @Const @ByRef AutoBroadcastSpec get_autob();
+                public native void set_autob(@Const @ByRef AutoBroadcastSpec autob);
             }

@@ -28,5 +28,5 @@ public class CustomOpInferShapeFunc extends FunctionPointer {
     protected CustomOpInferShapeFunc() { allocate(); }
     private native void allocate();
     public native int call(int arg0, IntPointer arg1,
-                                      @Cast("unsigned**") @ByPtrPtr IntPointer arg2, Pointer arg3);
+                                      @ByPtrPtr IntPointer arg2, Pointer arg3);
 }

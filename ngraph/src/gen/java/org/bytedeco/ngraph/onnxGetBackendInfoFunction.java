@@ -20,5 +20,5 @@ public class onnxGetBackendInfoFunction extends FunctionPointer {
     onnxBackendID backendID,
     @Cast("onnxBackendInfo") int infoType,
     Pointer infoValue,
-    @Cast("size_t*") LongPointer infoValueSize);
+    @Cast("size_t*") SizeTPointer infoValueSize);
 }

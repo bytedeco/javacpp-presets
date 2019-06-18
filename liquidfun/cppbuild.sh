@@ -36,7 +36,7 @@ case $PLATFORM in
     windows-x86)
         cd liquidfun/Box2D
         CXXFLAGS="/Wv:17" $CMAKE -G "Visual Studio 14 2015" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
-        MSBuild.exe Box2D.sln //p:Configuration=Release //maxcpucount:$MAKEJ
+        PLATFORM= MSBuild.exe Box2D.sln //p:Configuration=Release //maxcpucount:$MAKEJ
         cp -r Box2D $INSTALL_PATH/include
         cp Box2D/Release/*.lib $INSTALL_PATH/lib
         cp Box2D/Release/*.dll $INSTALL_PATH/bin
@@ -44,7 +44,7 @@ case $PLATFORM in
     windows-x86_64)
         cd liquidfun/Box2D
         CXXFLAGS="/Wv:17" $CMAKE -G "Visual Studio 14 2015 Win64" -DBOX2D_INSTALL=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DBOX2D_BUILD_SHARED=ON -DBOX2D_BUILD_EXAMPLES=OFF -DBOX2D_BUILD_UNITTESTS=OFF .
-        MSBuild.exe Box2D.sln //p:Configuration=Release //maxcpucount:$MAKEJ
+        PLATFORM= MSBuild.exe Box2D.sln //p:Configuration=Release //maxcpucount:$MAKEJ
         cp -r Box2D $INSTALL_PATH/include
         cp Box2D/Release/*.lib $INSTALL_PATH/lib
         cp Box2D/Release/*.dll $INSTALL_PATH/bin

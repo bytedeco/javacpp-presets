@@ -37,6 +37,8 @@ public class NodeInput extends Pointer {
         public native @ByVal NodeOutput get_source_output();
         /** @return A reference to the tensor descriptor for this input. */
         public native @ByRef DescriptorTensor get_tensor();
+        /** @return A shared pointer to the tensor descriptor for this input. */
+        public native @SharedPtr @ByVal DescriptorTensor get_tensor_ptr();
         /** @return true if this input is relevant to its node's output shapes; else false. */
         public native @Cast("bool") boolean get_is_relevant_to_shapes();
         /** @return true if this input is relevant to its node's output values; else false. */

@@ -15,10 +15,16 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../StringBoolMap.java
 
 
+// Targeting ../SizeTSet.java
+
+
 // Targeting ../NodeInputVector.java
 
 
 // Targeting ../NodeOutputVector.java
+
+
+// Targeting ../PtrDiffTVector.java
 
 
 // Targeting ../StringVector.java
@@ -215,6 +221,100 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
         @Namespace("ngraph::element") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Type obj);
     
+
+
+
+// Parsed from ngraph/axis_set.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <ostream>
+// #include <set>
+// #include <vector>
+// Targeting ../AxisSet.java
+
+
+
+    @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer s, @Const @ByRef AxisSet axis_set);
+
+
+
+// Parsed from ngraph/axis_vector.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <ostream>
+// #include <vector>
+// Targeting ../AxisVector.java
+
+
+
+    @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer s, @Const @ByRef AxisVector axis_vector);
+
+
+
+// Parsed from ngraph/coordinate_diff.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <ostream>
+// #include <vector>
+// Targeting ../CoordinateDiff.java
+
+
+
+    @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer s, @Const @ByRef CoordinateDiff coordinate_diff);
 
 
 
@@ -664,6 +764,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <stddef.h>
 
 // #include "ngraph/dimension.hpp"
+// #include "ngraph/op/util/attr_types.hpp"
 // #include "ngraph/rank.hpp"
 // #include "ngraph/shape.hpp"
 // Targeting ../PartialShape.java
@@ -886,6 +987,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include "ngraph/descriptor/input.hpp"
 // #include "ngraph/descriptor/output.hpp"
 // #include "ngraph/descriptor/tensor.hpp"
+// #include "ngraph/op/util/attr_types.hpp"
 // #include "ngraph/placement.hpp"
 // #include "ngraph/strides.hpp"
      // namespace op
@@ -938,11 +1040,10 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 
-    @Namespace("ngraph") public static native void check_new_args_count(@Const Node node, @Const @ByRef NodeVector new_args);
- // namespace ngraph
-
 // #define NODE_VALIDATION_CHECK(node, cond, ...)
 //     NGRAPH_CHECK_HELPER(::ngraph::NodeValidationFailure, (node), (cond), ##__VA_ARGS__)
+
+ // namespace ngraph
 
 
 // Parsed from ngraph/op/op.hpp
@@ -1058,6 +1159,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <cstring>
 // #include <sstream>
 
+// #include "ngraph/coordinate_diff.hpp"
 // #include "ngraph/node.hpp"
 // #include "ngraph/runtime/aligned_buffer.hpp"
 // #include "ngraph/type/bfloat16.hpp"
@@ -1070,6 +1172,88 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 
 // Targeting ../ScalarConstantLike.java
+
+
+    
+
+
+
+// Parsed from ngraph/op/util/attr_types.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+        /** \brief Modes for the {@code Pad} operator. */
+        /** enum class ngraph::op::PadMode */
+        public static final int
+            CONSTANT = 0,
+            EDGE = 1,
+            REFLECT = 2;
+
+        /** \brief Padding Type used for {@code Convolution} and {@code Pooling}
+         * 
+         *  Follows ONNX padding type definitions
+         *  EXPLICIT   - Pad dimensions are explicity specified
+         *  SAME_LOWER - Pad dimensions computed to match input shape
+         *               Ceil(num_dims/2) at the beginning and
+         *               Floor(num_dims/2) at the end
+         *  SAME_UPPER - Pad dimensions computed to match input shape
+         *               Floor(num_dims/2) at the beginning and
+         *               Ceil(num_dims/2) at the end
+         *  VALID      - No padding
+         *  */
+        /** enum class ngraph::op::PadType */
+        public static final int
+            EXPLICIT = 0,
+            SAME_LOWER = 1,
+            SAME_UPPER = 2,
+            VALID = 3,
+            AUTO = SAME_UPPER,
+            NOTSET = EXPLICIT;
+
+        /** \brief Specifies the algorithm to use for implicit broadcasting of a tensor
+         *         to align with another tensor
+         * 
+         *  NONE  - No implicit broadcasting of tensor
+         *  NUMPY - Numpy-style implicit broadcasting
+         *          (https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+         *          Right-align dimensions of the two tensors, with missing dimensions
+         *          treated as size 1 dimensions. After alignment, for each dimension,
+         *          their sizes should either match or one of them should be of size 1.
+         *          Size 1 dimension will be implicitly broadcast to match the other
+         *          size.
+         * 
+         *          E.g.,
+         *               A: Shape(2, 1, 6)
+         *               B: Shape(   3, 1)
+         *          Result: Shape(2, 3, 6)
+         * 
+         *               A: Shape(2, 1, 6)
+         *               B: Shape(   3, 1)
+         *          Result: Shape(2, 3, 6)
+         * 
+         *  TODO: Add more implicit broadcast modes used by frameworks */
+        /** enum class ngraph::op::AutoBroadcastType */
+        public static final int
+            NONE = 0,
+            NUMPY = 1;
+// Targeting ../AutoBroadcastSpec.java
 
 
     
@@ -1097,6 +1281,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #pragma once
 
 // #include "ngraph/op/op.hpp"
+// #include "ngraph/op/util/attr_types.hpp"
 // Targeting ../BinaryElementwiseArithmetic.java
 
 
@@ -2439,13 +2624,7 @@ public static final int ONNXIFI_TAG_MEMORY_FENCE_V1 = 0x23E08AAB;
  */
 public static native @Cast("onnxStatus") int onnxGetBackendIDs(
     @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") LongPointer numBackends);
-public static native @Cast("onnxStatus") int onnxGetBackendIDs(
-    @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") LongBuffer numBackends);
-public static native @Cast("onnxStatus") int onnxGetBackendIDs(
-    @ByPtrPtr onnxBackendID backendIDs,
-    @Cast("size_t*") long[] numBackends);
+    @Cast("size_t*") SizeTPointer numBackends);
 
 /**
  * Deinitialize ONNXIFI backend IDs and release associated resources.
@@ -2559,17 +2738,7 @@ public static native @Cast("onnxStatus") int onnxGetBackendInfo(
     onnxBackendID backendID,
     @Cast("onnxBackendInfo") int infoType,
     Pointer infoValue,
-    @Cast("size_t*") LongPointer infoValueSize);
-public static native @Cast("onnxStatus") int onnxGetBackendInfo(
-    onnxBackendID backendID,
-    @Cast("onnxBackendInfo") int infoType,
-    Pointer infoValue,
-    @Cast("size_t*") LongBuffer infoValueSize);
-public static native @Cast("onnxStatus") int onnxGetBackendInfo(
-    onnxBackendID backendID,
-    @Cast("onnxBackendInfo") int infoType,
-    Pointer infoValue,
-    @Cast("size_t*") long[] infoValueSize);
+    @Cast("size_t*") SizeTPointer infoValueSize);
 
 /**
  * Query if an ONNX model graph is compatible with the backend.

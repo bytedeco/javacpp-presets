@@ -123,7 +123,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "pyfpe.h",
             },
             link = "python3.7m@.1.0!",
-            resource = {"include", "lib", "bin", "share"}
+            resource = {"include", "lib", "libs", "bin", "share"}
         ),
         @Platform(
             value = "macosx",
@@ -220,7 +220,6 @@ public class python implements InfoMapper {
                              "Py_DEBUG",
                              "defined(MS_WIN32) && !defined(HAVE_SNPRINTF)",
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
-                             "!defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
                .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD").cppTypes().define(true))
@@ -277,5 +276,28 @@ public class python implements InfoMapper {
                .put(new Info("stat").pointerTypes("@Cast(\"struct stat*\") Pointer"))
                .put(new Info("_Py_wreadlink", "_Py_wrealpath", "_Py_get_blocking", "_Py_set_blocking").skip())
         ;
+
+        String PyArg_Parse = "public static native int PyArg_Parse(PyObject arg0, String arg1",
+               PyArg_ParseTuple = "public static native int PyArg_ParseTuple(PyObject arg0, String arg1",
+               PyArg_ParseTupleAndKeywords = "public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,\n"
+                                           + "                                                  String arg2, @Cast(\"char**\") PointerPointer arg3";
+
+        String PyArg_ParseText = "", PyArg_ParseTupleText = "", PyArg_ParseTupleAndKeywordsText = "";
+        for (int i = 0; i < 10; i++) {
+            PyArg_ParseText += PyArg_Parse;
+            PyArg_ParseTupleText += PyArg_ParseTuple;
+            PyArg_ParseTupleAndKeywordsText += PyArg_ParseTupleAndKeywords;
+            for (int j = 0; j <= i; j++) {
+                PyArg_ParseText += ", Pointer vararg" + j;
+                PyArg_ParseTupleText += ", Pointer vararg" + j;
+                PyArg_ParseTupleAndKeywordsText += ", Pointer vararg" + j;
+            }
+            PyArg_ParseText += ");\n";
+            PyArg_ParseTupleText += ");\n";
+            PyArg_ParseTupleAndKeywordsText += ");\n";
+        }
+        infoMap.put(new Info("PyArg_Parse").javaText(PyArg_ParseText))
+               .put(new Info("PyArg_ParseTuple").javaText(PyArg_ParseTupleText))
+               .put(new Info("PyArg_ParseTupleAndKeywords").javaText(PyArg_ParseTupleAndKeywordsText));
     }
 }

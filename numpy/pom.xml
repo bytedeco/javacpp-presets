@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for NumPy</name>
 
   <properties>
-    <revision>1.16.3-${project.parent.version}</revision>
+    <revision>1.16.4-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -92,6 +92,7 @@
           <linkPaths>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/libs/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/python/numpy/core/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
@@ -120,6 +121,7 @@
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/libs/</linkResource>
           </linkResources>
         </configuration>
         <executions>

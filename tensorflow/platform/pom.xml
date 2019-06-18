@@ -17,20 +17,20 @@
 
   <properties>
     <javacpp.moduleId>tensorflow</javacpp.moduleId>
-    <revision>1.14.0-rc0-${project.parent.version}</revision>
+    <revision>1.14.0-rc1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.16.3-${project.parent.version}</version>
+      <version>1.16.4-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.19-${project.parent.version}</version>
+      <version>0.20-rc-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
