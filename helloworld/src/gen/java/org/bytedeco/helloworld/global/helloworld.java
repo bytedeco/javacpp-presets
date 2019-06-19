@@ -38,6 +38,11 @@ public class helloworld extends org.bytedeco.helloworld.presets.helloworld {
 
 // #ifndef helloworld_h__
 // #define helloworld_h__
+
+
+// #ifdef __cplusplus
+// #endif
+
     public static native @Cast("bool") boolean getBool();
     public static native void printBool(@Cast("bool") boolean value);
 
@@ -65,6 +70,9 @@ public class helloworld extends org.bytedeco.helloworld.presets.helloworld {
     public static native @Cast("wchar_t*") CharPointer getUnicodeString();
     public static native void printUnicodeString(@Cast("wchar_t*") CharPointer value);
     public static native void printUnicodeString(@Cast("wchar_t*") IntPointer value);
+
+// #ifdef __cplusplus
+// #endif
 
 // #endif // helloworld_h__
 
