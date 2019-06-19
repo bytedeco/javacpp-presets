@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * helloworld 1.0  https://github.com/matteodg/helloworld
+ * helloworld 1.0  https://github.com/bytedeco/helloworld
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -15,7 +15,7 @@ Sample Usage
 ------------
 Here is a simple example of helloworld ported to Java from this C source file:
 
- * https://github.com/matteodg/helloworld/#example
+ * https://github.com/bytedeco/helloworld/#example
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `HelloWorldTest.java` source files below, simply execute on the command line:
 ```bash

@@ -8,13 +8,13 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 HELLOWORLD_VERSION=1.0
-download https://github.com/matteodg/helloworld/archive/$HELLOWORLD_VERSION.zip helloworld-$HELLOWORLD_VERSION.zip
+download https://github.com/bytedeco/helloworld/archive/$HELLOWORLD_VERSION.zip helloworld-$HELLOWORLD_VERSION.zip
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
 
-#git clone https://github.com/matteodg/helloworld.git helloworld-$HELLOWORLD_VERSION
+#git clone https://github.com/bytedeco/helloworld.git helloworld-$HELLOWORLD_VERSION
 echo "Decompressing archives..."
 unzip -o ../helloworld-$HELLOWORLD_VERSION.zip
 
