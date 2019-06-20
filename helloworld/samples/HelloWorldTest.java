@@ -1,10 +1,9 @@
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import static org.bytedeco.helloworld.global.helloworld.*;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.CharPointer;
+import static org.bytedeco.helloworld.global.helloworld.*;
 
 public class HelloWorldTest {
 

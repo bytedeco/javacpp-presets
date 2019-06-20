@@ -54,6 +54,7 @@
     <module>../skia/platform</module>
     <module>../cpu_features/platform</module>
     <module>../systems/platform</module>
+    <module>../helloworld/platform</module>
   </modules>
 
   <dependencies>
@@ -257,6 +258,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>systems-platform</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>helloworld-platform</artifactId>
+      <version>1.0-${project.version}</version>
     </dependency>
   </dependencies>
 

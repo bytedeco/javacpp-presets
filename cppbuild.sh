@@ -164,7 +164,7 @@ function sedinplace {
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
-    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl mkl-dnn openblas arpack-ng cminpack fftw gsl cpython numpy llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow tensorrt ale onnx ngraph liquidfun qt skia cpu_features systems)
+    PROJECTS=(opencv ffmpeg flycapture spinnaker libdc1394 libfreenect libfreenect2 librealsense videoinput artoolkitplus chilitags flandmark hdf5 mkl mkl-dnn openblas arpack-ng cminpack fftw gsl cpython numpy llvm libpostal leptonica tesseract caffe cuda mxnet tensorflow tensorrt ale onnx ngraph liquidfun qt skia cpu_features systems helloworld)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

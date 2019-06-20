@@ -10,6 +10,12 @@ This directory contains the JavaCPP Presets module for:
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
 
+Documentation
+-------------
+Java API documentation is available here:
+
+ * http://bytedeco.org/javacpp-presets/helloworld/apidocs/
+
 
 Sample Usage
 ------------
@@ -53,9 +59,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import static org.bytedeco.helloworld.global.helloworld.*;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.CharPointer;
+import static org.bytedeco.helloworld.global.helloworld.*;
 
 public class HelloWorldTest {
 
