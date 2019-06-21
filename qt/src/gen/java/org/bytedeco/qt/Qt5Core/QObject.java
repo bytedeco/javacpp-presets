@@ -55,6 +55,8 @@ public class QObject extends Pointer {
     public native void killTimer(int id);
 
 // #ifndef QT_NO_REGEXP
+// #if QT_DEPRECATED_SINCE(5, 13)
+// #endif
 // #endif
 
 // #if QT_CONFIG(regularexpression)

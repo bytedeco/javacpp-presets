@@ -496,7 +496,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
             return;
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cudnn", "nccl", "nvinfer"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvinfer"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-x86_64":

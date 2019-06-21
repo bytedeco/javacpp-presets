@@ -39,7 +39,7 @@ import org.bytedeco.leptonica.presets.lept;
  * @author Samuel Audet
  */
 @Properties(target = "org.bytedeco.tesseract", global = "org.bytedeco.tesseract.global.tesseract", inherit = lept.class, value = {
-    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
+    @Platform(define = "TESS_CAPI_INCLUDE_BASEAPI", include = {"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", // "tesseract/host.h",
         "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h", "locale.h"},
         compiler = "cpp11", link = "tesseract@.4"/*, resource = {"include", "lib"}*/),

@@ -33,10 +33,10 @@ public class QLayout extends QObject {
         SetMinAndMaxSize = 5;
     
 
-    public native int margin();
-    public native int spacing();
+// #if QT_DEPRECATED_SINCE(5, 13)
+// #endif
 
-    public native void setMargin(int arg0);
+    public native int spacing();
     public native void setSpacing(int arg0);
 
     public native void setContentsMargins(int left, int top, int right, int bottom);

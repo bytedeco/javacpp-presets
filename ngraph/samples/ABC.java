@@ -27,7 +27,7 @@ public class ABC {
         Parameter b = new Parameter(f32(), new PartialShape(s), false);
         Parameter c = new Parameter(f32(), new PartialShape(s), false);
 
-        Op t0 = new Add(a, b);
+        Op t0 = new Add(new NodeOutput(a), new NodeOutput(b));
         Op t1 = new Multiply(t0, c);
 
         // Make the function

@@ -33,6 +33,8 @@ public class NodeOutput extends Pointer {
 
         /** \brief Constructs a Output, referencing the zeroth output of the node.
          *  @param node A {@code shared_ptr} to the node for the output handle. */
+        public NodeOutput(Node node) { super((Pointer)null); allocate(node); }
+        private native void allocate(@Cast({"", "const std::shared_ptr<ngraph::Node>&"}) @SharedPtr Node node);
 
         /** @return A pointer to the node referred to by this output handle. */
         

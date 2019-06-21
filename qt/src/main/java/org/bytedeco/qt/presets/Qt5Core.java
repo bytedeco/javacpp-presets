@@ -113,6 +113,7 @@ public class Qt5Core extends QtInfoMapper {
         "QT_DEPRECATED_SINCE(5,0)",
         "QT_DEPRECATED_SINCE(5, 0)",
         "QT_DEPRECATED_SINCE(5, 9)",
+        "QT_DEPRECATED_SINCE(5, 13)",
 
         // qnamespace.h
         "defined(Q_COMPILER_CLASS_ENUM) && defined(Q_COMPILER_CONSTEXPR)",

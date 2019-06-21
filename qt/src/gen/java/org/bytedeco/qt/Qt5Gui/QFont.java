@@ -133,7 +133,8 @@ public class QFont extends Pointer {
         WordSpacingResolved         = 0x4000,
         HintingPreferenceResolved   = 0x8000,
         StyleNameResolved           = 0x10000,
-        AllPropertiesResolved       = 0x1ffff;
+        FamiliesResolved            = 0x20000,
+        AllPropertiesResolved       = 0x3ffff;
 
     public QFont() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -141,10 +142,12 @@ public class QFont extends Pointer {
     private native void allocate(@Const @ByRef QString family, int pointSize/*=-1*/, int weight/*=-1*/, @Cast("bool") boolean italic/*=false*/);
     public QFont(@Const @ByRef QString family) { super((Pointer)null); allocate(family); }
     private native void allocate(@Const @ByRef QString family);
-    public QFont(@Const @ByRef QFont arg0, QPaintDevice pd) { super((Pointer)null); allocate(arg0, pd); }
-    private native void allocate(@Const @ByRef QFont arg0, QPaintDevice pd);
-    public QFont(@Const @ByRef QFont arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Const @ByRef QFont arg0);
+// #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+// #endif
+    public QFont(@Const @ByRef QFont font, @Const QPaintDevice pd) { super((Pointer)null); allocate(font, pd); }
+    private native void allocate(@Const @ByRef QFont font, @Const QPaintDevice pd);
+    public QFont(@Const @ByRef QFont font) { super((Pointer)null); allocate(font); }
+    private native void allocate(@Const @ByRef QFont font);
 
     public native void swap(@ByRef QFont other);
 
@@ -249,8 +252,8 @@ public class QFont extends Pointer {
     public static native void cacheStatistics();
 
     public native @ByVal QString defaultFamily();
-    public native @ByVal QString lastResortFamily();
-    public native @ByVal QString lastResortFont();
+// #if QT_DEPRECATED_SINCE(5, 13)
+// #endif
 
     
     
