@@ -191,7 +191,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tesseract-platform</artifactId>
-      <version>4.1.0-rc2-${project.version}</version>
+      <version>4.1.0-rc4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -206,12 +206,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.5.0.rc0-${project.version}</version>
+      <version>1.5.0.rc1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.14.0-rc1-${project.version}</version>
+      <version>1.14.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -231,7 +231,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ngraph-platform</artifactId>
-      <version>0.21.0-${project.version}</version>
+      <version>0.22.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -241,7 +241,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>qt-platform</artifactId>
-      <version>5.12.3-${project.version}</version>
+      <version>5.13.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

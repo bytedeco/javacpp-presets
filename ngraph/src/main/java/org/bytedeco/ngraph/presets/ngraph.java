@@ -81,7 +81,7 @@ import org.bytedeco.javacpp.tools.*;
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
     preload = {"iomp5", "mklml", "mklml_intel"}, preloadresource = "/org/bytedeco/mkldnn/",
-    link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "cpu_backend", "codegen", "tbb@.2"}
+    link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
 public class ngraph implements InfoMapper {
@@ -141,8 +141,11 @@ public class ngraph implements InfoMapper {
 //               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
 //               .put(new Info("std::vector<std::shared_ptr<op::Parameter> >", "std::vector<std::shared_ptr<ngraph::op::Parameter> >").pointerTypes("Pointer"))
                .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())
-               .put(new Info("ngraph::Input<ngraph::Node>").pointerTypes("NodeInput").define())
-               .put(new Info("ngraph::Output<ngraph::Node>").pointerTypes("NodeOutput").define())
+               .put(new Info("ngraph::Input<ngraph::Node>").javaNames("NodeInput").pointerTypes("NodeInput").define())
+               .put(new Info("ngraph::Output<ngraph::Node>").javaNames("NodeOutput").pointerTypes("NodeOutput").define())
+               .put(new Info("ngraph::Output<ngraph::Node>(const std::shared_ptr<ngraph::Node>&)").javaText(
+                       "public NodeOutput(Node node) { super((Pointer)null); allocate(node); }\n"
+                     + "private native void allocate(@Cast({\"\", \"const std::shared_ptr<ngraph::Node>&\"}) @SharedPtr Node node);\n"))
                .put(new Info("const std::vector<ngraph::Input<ngraph::Node> >", "std::vector<ngraph::Input<ngraph::Node> >").pointerTypes("NodeInputVector").define())
                .put(new Info("const std::vector<ngraph::Output<ngraph::Node> >", "std::vector<ngraph::Output<ngraph::Node> >").pointerTypes("NodeOutputVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("ParameterVector").define())

@@ -40,11 +40,8 @@ public class QComboBox extends QWidget {
     public native int maxCount();
 
 // #if QT_CONFIG(completer)
-    public native @Cast("bool") boolean autoCompletion();
-    public native void setAutoCompletion(@Cast("bool") boolean enable);
-
-    public native CaseSensitivity autoCompletionCaseSensitivity();
-    public native void setAutoCompletionCaseSensitivity(CaseSensitivity sensitivity);
+// #if QT_DEPRECATED_SINCE(5, 13)
+// #endif
 // #endif
 
     public native @Cast("bool") boolean duplicatesEnabled();

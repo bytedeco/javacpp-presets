@@ -35,4 +35,6 @@ public class AxisSet extends SizeTSet {
         private native void allocate(@Const @ByRef AxisSet axes);
 
         public native @ByRef @Name("operator =") AxisSet put(@Const @ByRef AxisSet v);
+
+        public native @Cast("int64_t*") @StdVector SizeTPointer to_vector();
     }

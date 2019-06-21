@@ -131,19 +131,19 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * LLVM 8.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
- * Tesseract 4.1.0-rc2  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.1.0-rc4  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.1 Update 1  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6  https://developer.nvidia.com/cudnn
    * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.5.0.rc0  https://github.com/dmlc/mxnet
- * TensorFlow 1.14.0-rc1  https://github.com/tensorflow/tensorflow
+ * MXNet 1.5.0.rc1  https://github.com/dmlc/mxnet
+ * TensorFlow 1.14.0  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.21.0  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.22.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.12.3  https://download.qt.io/archive/qt/
+ * Qt 5.13.0  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
  * cpu_features 0.3.0  https://github.com/google/cpu_features
  * System APIs of the build environments:

@@ -62,7 +62,6 @@ public class QWidget extends QObject {
 
     public native @Cast("bool") boolean isEnabled();
     public native @Cast("bool") boolean isEnabledTo(@Const QWidget arg0);
-    public native @Cast("bool") boolean isEnabledToTLW();
     public native void setEnabled(@Cast("bool") boolean arg0);
     public native void setDisabled(@Cast("bool") boolean arg0);
     public native void setWindowModified(@Cast("bool") boolean arg0);

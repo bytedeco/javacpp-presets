@@ -32,7 +32,7 @@ private native void allocate(String fileName, int lineNumber, String functionNam
 
     public native int version(); public native QMessageLogContext version(int setter);
     public native int line(); public native QMessageLogContext line(int setter);
-    @MemberGetter public native @Cast("const char*") BytePointer file();
-    @MemberGetter public native @Cast("const char*") BytePointer function();
-    @MemberGetter public native @Cast("const char*") BytePointer category();
+    public native @Cast("const char*") BytePointer file(); public native QMessageLogContext file(BytePointer setter);
+    public native @Cast("const char*") BytePointer function(); public native QMessageLogContext function(BytePointer setter);
+    public native @Cast("const char*") BytePointer category(); public native QMessageLogContext category(BytePointer setter);
 }

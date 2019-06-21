@@ -505,7 +505,8 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         AA_NativeWindows(3),
         AA_DontCreateNativeWidgetSiblings(4),
         AA_PluginApplication(5),
-        AA_MacPluginApplication(AA_PluginApplication),  // ### Qt 6: remove me
+// #if QT_DEPRECATED_SINCE(5, 13) // ### Qt 6: remove me
+// #endif
         AA_DontUseNativeMenuBar(6),
         AA_MacDontSwapCtrlAndMeta(7),
         AA_Use96Dpi(8),
@@ -521,7 +522,7 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         AA_SetPalette(19),
         AA_EnableHighDpiScaling(20),
         AA_DisableHighDpiScaling(21),
-        AA_UseStyleSheetPropagationInWidgetStyles(22), // ### Qt 6: remove me
+        AA_UseStyleSheetPropagationInWidgetStyles(22),
         AA_DontUseNativeDialogs(23),
         AA_SynthesizeMouseForUnhandledTabletEvents(24),
         AA_CompressHighFrequencyEvents(25),
@@ -1532,10 +1533,10 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         // Metadata
         FontRole = 6,
         TextAlignmentRole = 7,
-        BackgroundColorRole = 8,
         BackgroundRole = 8,
-        TextColorRole = 9,
         ForegroundRole = 9,
+// #if QT_DEPRECATED_SINCE(5, 13) // ### Qt 6: remove me
+// #endif
         CheckStateRole = 10,
         // Accessibility
         AccessibleTextRole = 11,

@@ -350,8 +350,9 @@ public static native int MXDumpProcessProfile(int finished, int profile_process,
  */
 public static native int MXDumpProfile(int finished);
 
+
 /**
- * \brief Print aggregate stats to the a string
+ * \brief Deprecated, use MXAggregateProfileStatsPrintEx instead.
  * @param out_str Will receive a pointer to the output string
  * @param reset Clear the aggregate stats after printing
  * @return 0 when success, -1 when failure happens.
@@ -361,6 +362,26 @@ public static native int MXAggregateProfileStatsPrint(@Cast("const char**") Poin
 public static native int MXAggregateProfileStatsPrint(@Cast("const char**") @ByPtrPtr BytePointer out_str, int reset);
 public static native int MXAggregateProfileStatsPrint(@Cast("const char**") @ByPtrPtr ByteBuffer out_str, int reset);
 public static native int MXAggregateProfileStatsPrint(@Cast("const char**") @ByPtrPtr byte[] out_str, int reset);
+
+/**
+ * \brief Print sorted aggregate stats to the a string
+ *        How aggregate stats are stored will not change
+ * @param out_str will receive a pointer to the output string
+ * @param reset clear the aggregate stats after printing
+ * @param format whether to return in tabular or json format
+ * @param sort_by sort by avg, min, max, or count
+ * @param ascending whether to sort ascendingly
+ * @return 0 when success, -1 when failure happens.
+ * \note
+ */
+public static native int MXAggregateProfileStatsPrintEx(@Cast("const char**") PointerPointer out_str, int reset, int format,
+                                            int sort_by, int ascending);
+public static native int MXAggregateProfileStatsPrintEx(@Cast("const char**") @ByPtrPtr BytePointer out_str, int reset, int format,
+                                            int sort_by, int ascending);
+public static native int MXAggregateProfileStatsPrintEx(@Cast("const char**") @ByPtrPtr ByteBuffer out_str, int reset, int format,
+                                            int sort_by, int ascending);
+public static native int MXAggregateProfileStatsPrintEx(@Cast("const char**") @ByPtrPtr byte[] out_str, int reset, int format,
+                                            int sort_by, int ascending);
 
 /**
  * \brief Pause profiler tuning collection
@@ -1141,7 +1162,8 @@ public static native int MXNDArrayToDLPack(NDArrayHandle handle,
                                        @ByPtrPtr DLManagedTensorHandle out_dlpack);
 
 /**
-* \brief Create a NDArray backed by a dlpack tensor.
+* \brief DEPRECATED. Use MXNDArrayFromDLPackEx instead.
+<p>
 *
 * This allows us to create a NDArray using the memory
 * allocated by an external deep learning framework
@@ -1155,11 +1177,30 @@ public static native int MXNDArrayToDLPack(NDArrayHandle handle,
 * @return 0 when success, -1 when failure happens
 */
 public static native int MXNDArrayFromDLPack(DLManagedTensorHandle dlpack,
-                                  @Cast("const bool") boolean transient_handle,
                                   PointerPointer out_handle);
 public static native int MXNDArrayFromDLPack(DLManagedTensorHandle dlpack,
-                                  @Cast("const bool") boolean transient_handle,
                                   @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out_handle);
+
+/**
+* \brief Create a NDArray backed by a dlpack tensor.
+*
+* This allows us to create a NDArray using the memory
+* allocated by an external deep learning framework
+* that is DLPack compatible.
+*
+* The memory is retained until the NDArray went out of scope.
+*
+* @param dlpack the pointer of the input DLManagedTensor
+* @param transient_handle whether the handle will be destructed before calling the deleter
+* @param out_handle pointer holder to get pointer of NDArray
+* @return 0 when success, -1 when failure happens
+*/
+public static native int MXNDArrayFromDLPackEx(DLManagedTensorHandle dlpack,
+                                    @Cast("const bool") boolean transient_handle,
+                                    PointerPointer out_handle);
+public static native int MXNDArrayFromDLPackEx(DLManagedTensorHandle dlpack,
+                                    @Cast("const bool") boolean transient_handle,
+                                    @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle out_handle);
 
 /**
  * \brief Delete a dlpack tensor
@@ -5480,9 +5521,9 @@ public static native int MXNDArrayCreateFromSharedMemEx(int shared_pid, int shar
   * @param ctx_handle Execution context.
   * @param const_vars_handle The variables that current operation will use
   *                          but not mutate.
-  * @param num_const_vars The number of const_vars.
+  * @param num_const_vars The number of const_vars_handle.
   * @param mutable_vars_handle The variables that current operation will mutate.
-  * @param num_mutable_vars The number of mutable_vars.
+  * @param num_mutable_vars The number of mutable_vars_handle.
   * @param prop_handle Property of the function.
   * @param priority Priority of the action, as hint to the engine.
   * @param opr_name The operation name.
@@ -5515,9 +5556,9 @@ public static native int MXEnginePushAsync(EngineAsyncFunc async_func, Pointer f
   * @param ctx_handle Execution context.
   * @param const_vars_handle The variables that current operation will use
   *                          but not mutate.
-  * @param num_const_vars The number of const_vars.
+  * @param num_const_vars The number of const_vars_handle.
   * @param mutable_vars_handle The variables that current operation will mutate.
-  * @param num_mutable_vars The number of mutable_vars.
+  * @param num_mutable_vars The number of mutable_vars_handle.
   * @param prop_handle Property of the function.
   * @param priority Priority of the action, as hint to the engine.
   * @param opr_name The operation name.
@@ -5536,6 +5577,74 @@ public static native int MXEnginePushSync(EngineSyncFunc sync_func, Pointer func
                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
                                EngineVarHandle const_vars_handle, int num_const_vars,
                                EngineVarHandle mutable_vars_handle, int num_mutable_vars,
+                               EngineFnPropertyHandle prop_handle/*=NULL*/,
+                               int priority/*=0*/, String opr_name/*=NULL*/);
+
+/**
+  * \brief Push an asynchronous operation to the engine.
+  * @param async_func Execution function whici takes a parameter on_complete
+  *                   that must be called when the execution ompletes.
+  * @param func_param The parameter set on calling async_func, can be NULL.
+  * @param deleter The callback to free func_param, can be NULL.
+  * @param ctx_handle Execution context.
+  * @param const_nds_handle The NDArrays that current operation will use
+  *                          but not mutate.
+  * @param num_const_nds The number of const_nds_handle.
+  * @param mutable_nds_handle The NDArrays that current operation will mutate.
+  * @param num_mutable_nds The number of mutable_nds_handle.
+  * @param prop_handle Property of the function.
+  * @param priority Priority of the action, as hint to the engine.
+  * @param opr_name The operation name.
+  * @param wait Whether this is a WaitForVar operation.
+  */
+public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                NDArrayHandle const_nds_handle, int num_const_nds,
+                                NDArrayHandle mutable_nds_handle, int num_mutable_nds,
+                                EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/,
+                                @Cast("bool") boolean wait/*=false*/);
+public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                NDArrayHandle const_nds_handle, int num_const_nds,
+                                NDArrayHandle mutable_nds_handle, int num_mutable_nds);
+public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
+                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                NDArrayHandle const_nds_handle, int num_const_nds,
+                                NDArrayHandle mutable_nds_handle, int num_mutable_nds,
+                                EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                int priority/*=0*/, String opr_name/*=NULL*/,
+                                @Cast("bool") boolean wait/*=false*/);
+
+/**
+  * \brief Push a synchronous operation to the engine.
+  * @param sync_func Execution function that executes the operation.
+  * @param func_param The parameter set on calling sync_func, can be NULL.
+  * @param deleter The callback to free func_param, can be NULL.
+  * @param ctx_handle Execution context.
+  * @param const_nds_handle The NDArrays that current operation will use
+  *                          but not mutate.
+  * @param num_const_nds The number of const_nds_handle.
+  * @param mutable_nds_handle The NDArrays that current operation will mutate.
+  * @param num_mutable_nds The number of mutable_nds_handle.
+  * @param prop_handle Property of the function.
+  * @param priority Priority of the action, as hint to the engine.
+  * @param opr_name The operation name.
+  */
+public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               NDArrayHandle const_nds_handle, int num_const_nds,
+                               NDArrayHandle mutable_nds_handle, int num_mutable_nds,
+                               EngineFnPropertyHandle prop_handle/*=NULL*/,
+                               int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/);
+public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               NDArrayHandle const_nds_handle, int num_const_nds,
+                               NDArrayHandle mutable_nds_handle, int num_mutable_nds);
+public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
+                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                               NDArrayHandle const_nds_handle, int num_const_nds,
+                               NDArrayHandle mutable_nds_handle, int num_mutable_nds,
                                EngineFnPropertyHandle prop_handle/*=NULL*/,
                                int priority/*=0*/, String opr_name/*=NULL*/);
 

@@ -94,6 +94,8 @@ public class QTextEdit extends QAbstractScrollArea {
     public native @Cast("bool") boolean find(@Const @ByRef QString exp);
 // #ifndef QT_NO_REGEXP
 // #endif
+// #if QT_CONFIG(regularexpression)
+// #endif
 
     public native @ByVal QString toPlainText();
 // #ifndef QT_NO_TEXTHTMLPARSER
