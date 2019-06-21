@@ -15,6 +15,7 @@
         <exclude>downloads/**</exclude>
         <exclude>**/target/**</exclude>
         <exclude>**/cppbuild/**</exclude>
+        <exclude>**/samples/data/**</exclude>
       </excludes>
     </fileSet>
   </fileSets>
