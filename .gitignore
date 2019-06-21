@@ -2,6 +2,7 @@
 /target/
 **/cppbuild/**
 **/target/**
+**/samples/data
 
 # Mac
 .DS_Store

@@ -20,11 +20,14 @@
         <include>**/LGPL*</include>
         <include>**/LICENSE*</include>
         <include>**/*license*</include>
-        <include>NOTICE*</include>
+        <include>**/NOTICE*</include>
+        <include>**/samples/**</include>
       </includes>
       <excludes>
-        <exclude>**/cppbuild/**</exclude>
         <exclude>**/src/**</exclude>
+        <exclude>**/target/**</exclude>
+        <exclude>**/cppbuild/**</exclude>
+        <exclude>**/samples/data/**</exclude>
       </excludes>
     </fileSet>
     <fileSet>
