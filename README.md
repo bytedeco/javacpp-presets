@@ -150,6 +150,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/
    * Windows (Win32)  https://developer.microsoft.com/en-us/windows/
+ * helloworld 1.0  https://github.com/bytedeco/helloworld
 
 Once everything installed and configured, simply execute
 ```bash

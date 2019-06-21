@@ -347,6 +347,10 @@ matrix:
         env: PROJ=cpu_features,systems OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=helloworld OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
 
       - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-x86_64
@@ -442,6 +446,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=cpu_features,systems OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=helloworld OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
 
@@ -553,6 +561,11 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         env: PROJ=cpu_features,systems OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
+        env: PROJ=helloworld OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
 

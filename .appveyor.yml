@@ -34,6 +34,8 @@ environment:
       OS: windows-x86
     - PROJ: "cpu_features,systems"
       OS: windows-x86
+    - PROJ: "helloworld"
+      OS: windows-x86
 
     - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
       OS: windows-x86_64
@@ -70,6 +72,8 @@ environment:
     - PROJ: "liquidfun"
       OS: windows-x86_64
     - PROJ: "cpu_features,systems"
+      OS: windows-x86_64
+    - PROJ: "helloworld"
       OS: windows-x86_64
 
     - PROJ: "opencv"
