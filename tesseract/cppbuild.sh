@@ -29,6 +29,10 @@ export AUTOHEADER=:
 export AUTOMAKE=:
 export ACLOCAL=:
 
+# Disable external dependencies on libarchive and libtiff
+sedinplace 's/"libarchive"//g' configure
+sedinplace 's/-ltiff//g' src/api/Makefile.in
+
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
