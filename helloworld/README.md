@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * helloworld 1.0  https://github.com/bytedeco/helloworld
+ * helloworld 2.0  https://github.com/bytedeco/helloworld
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -45,7 +45,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>helloworld-platform</artifactId>
-            <version>1.0-1.5.1-SNAPSHOT</version>
+            <version>2.0-1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
