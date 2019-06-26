@@ -24,5 +24,18 @@ public class helloworld implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
+
+        //    struct Person {
+        //        char firstname[100];
+        //        char lastname[100];
+        //    };
+        infoMap.put(new Info("Person").pointerTypes("PersonTypePtr"));
+        //
+        //    typedef struct Person PersonType;
+        infoMap.put(new Info("PersonType").pointerTypes("PersonTypePtr"));
+        //
+        //
+        //    typedef struct Person * PersonTypePtr;
+        infoMap.put(new Info("PersonTypePtr").valueTypes("PersonTypePtr").pointerTypes("@Cast(\"PersonTypePtr*\") PointerPointer", "@ByPtrPtr PersonTypePtr"));
     }
 }
