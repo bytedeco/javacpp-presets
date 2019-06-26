@@ -58,7 +58,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     fi
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"

@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 sudo: required
 cache:
   directories:
@@ -6,12 +6,6 @@ cache:
       - $HOME/.ccache
       - $HOME/downloads
   timeout: 1000
-addons:
-  apt:
-    packages:
-    - yasm
-    - nasm
-
 language: java
 services:
       - docker
