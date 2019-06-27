@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/mkl-dnn/apidocs/
 
-&lowast; Although MKL-DNN comes bundled with a stripped-down version of MKL known as "MKLML", it is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system, unless the `-redist` artifacts listed below are in the class path.
+&lowast; It is sometimes desirable to link instead with the full version of [Intel MKL](https://software.intel.com/intel-mkl). For that, MKL first needs to be installed in its default location, or available in the system PATH or in the "java.library.path", then we can set the "org.bytedeco.mklml.load" system property to `mkl_rt`. We should also set the "org.bytedeco.javacpp.pathsfirst" system property to `true` to ensure that all libraries are actually loaded from the system, unless the `-redist` artifacts listed below are in the class path.
 
 
 Sample Usage

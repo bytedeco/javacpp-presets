@@ -23,7 +23,6 @@ sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake
 
 case $PLATFORM in
     linux-x86_64)
-        # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
         "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
         make -j $MAKEJ
         make install/strip
