@@ -28,12 +28,6 @@ public class Complexf extends FloatPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Complexf(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Complexf(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Complexf position(long position) {
-        return (Complexf)super.position(position);
-    }
 
 
     /** default constructor */

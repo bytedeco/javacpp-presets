@@ -27,7 +27,7 @@ public class gsl_root_fdfsolver extends Pointer {
         return (gsl_root_fdfsolver)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_root_fdfsolver_type type();
+    public native @Const gsl_root_fdfsolver_type type(); public native gsl_root_fdfsolver type(gsl_root_fdfsolver_type setter);
     public native gsl_function_fdf fdf(); public native gsl_root_fdfsolver fdf(gsl_function_fdf setter);
     public native double root(); public native gsl_root_fdfsolver root(double setter);
     public native Pointer state(); public native gsl_root_fdfsolver state(Pointer setter);

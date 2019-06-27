@@ -185,7 +185,7 @@ public class FileNode extends Pointer {
     public native @ByVal Mat mat();
 
     //protected:
-    @MemberGetter public native @Const FileStorage fs();
+    public native @Const FileStorage fs(); public native FileNode fs(FileStorage setter);
     public native @Cast("size_t") long blockIdx(); public native FileNode blockIdx(long setter);
     public native @Cast("size_t") long ofs(); public native FileNode ofs(long setter);
 }

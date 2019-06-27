@@ -18,12 +18,6 @@ public class UMat extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMat(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public UMat(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public UMat position(long position) {
-        return (UMat)super.position(position);
-    }
 
     /** default constructor */
     public UMat(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(usageFlags); }

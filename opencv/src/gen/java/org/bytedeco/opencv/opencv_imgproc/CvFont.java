@@ -31,13 +31,13 @@ public class CvFont extends AbstractCvFont {
         return (CvFont)super.position(position);
     }
 
-  @MemberGetter public native @Cast("const char*") BytePointer nameFont();   //Qt:nameFont
+  public native @Cast("const char*") BytePointer nameFont(); public native CvFont nameFont(BytePointer setter);   //Qt:nameFont
   public native @ByRef CvScalar color(); public native CvFont color(CvScalar setter);       //Qt:ColorFont -> cvScalar(blue_component, green_component, red_component[, alpha_component])
     public native int font_face(); public native CvFont font_face(int setter);    //Qt: bool italic         /** =CV_FONT_* */
     /** font data and metrics */
-    @MemberGetter public native @Const IntPointer ascii();
-    @MemberGetter public native @Const IntPointer greek();
-    @MemberGetter public native @Const IntPointer cyrillic();
+    public native @Const IntPointer ascii(); public native CvFont ascii(IntPointer setter);
+    public native @Const IntPointer greek(); public native CvFont greek(IntPointer setter);
+    public native @Const IntPointer cyrillic(); public native CvFont cyrillic(IntPointer setter);
     public native float hscale(); public native CvFont hscale(float setter);
     public native float vscale(); public native CvFont vscale(float setter);
     /** slope coefficient: 0 - normal, >0 - italic */

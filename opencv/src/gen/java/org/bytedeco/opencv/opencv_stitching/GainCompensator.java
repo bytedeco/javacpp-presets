@@ -45,12 +45,6 @@ public class GainCompensator extends ExposureCompensator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GainCompensator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public GainCompensator(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public GainCompensator position(long position) {
-        return (GainCompensator)super.position(position);
-    }
 
     // This Constructor only exists to make source level compatibility detector happy
     public GainCompensator() { super((Pointer)null); allocate(); }

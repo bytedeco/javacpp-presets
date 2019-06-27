@@ -27,7 +27,7 @@ public class gsl_splinalg_itersolve extends Pointer {
         return (gsl_splinalg_itersolve)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_splinalg_itersolve_type type();
+  public native @Const gsl_splinalg_itersolve_type type(); public native gsl_splinalg_itersolve type(gsl_splinalg_itersolve_type setter);
   public native double normr(); public native gsl_splinalg_itersolve normr(double setter); /* current residual norm || b - A x || */
   public native Pointer state(); public native gsl_splinalg_itersolve state(Pointer setter);
 }

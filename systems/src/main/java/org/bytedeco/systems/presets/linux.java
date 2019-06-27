@@ -158,7 +158,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("struct sysinfo").pointerTypes("sysinfo"))
                .put(new Info("struct timezone").pointerTypes("timezone"))
                .put(new Info("struct sigaction").pointerTypes("sigaction"))
-               .put(new Info("struct sigvec").pointerTypes("sigvec"))
+               .put(new Info("struct sigvec").pointerTypes("sigvec").skip())
                .put(new Info("__sigset_t").pointerTypes("sigset_t"))
                .put(new Info("sigval_t").pointerTypes("sigval"))
                .put(new Info("struct sigstack").pointerTypes("sigstack"))

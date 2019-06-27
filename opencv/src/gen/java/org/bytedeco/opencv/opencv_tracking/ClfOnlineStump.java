@@ -39,12 +39,6 @@ public class ClfOnlineStump extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ClfOnlineStump(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ClfOnlineStump(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ClfOnlineStump position(long position) {
-        return (ClfOnlineStump)super.position(position);
-    }
 
   public native float _mu0(); public native ClfOnlineStump _mu0(float setter);
   public native float _mu1(); public native ClfOnlineStump _mu1(float setter);

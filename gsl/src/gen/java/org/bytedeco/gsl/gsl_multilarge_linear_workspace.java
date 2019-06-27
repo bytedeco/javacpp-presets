@@ -27,7 +27,7 @@ public class gsl_multilarge_linear_workspace extends Pointer {
         return (gsl_multilarge_linear_workspace)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_multilarge_linear_type type();
+  public native @Const gsl_multilarge_linear_type type(); public native gsl_multilarge_linear_workspace type(gsl_multilarge_linear_type setter);
   public native Pointer state(); public native gsl_multilarge_linear_workspace state(Pointer setter);
   public native @Cast("size_t") long p(); public native gsl_multilarge_linear_workspace p(long setter);
 }

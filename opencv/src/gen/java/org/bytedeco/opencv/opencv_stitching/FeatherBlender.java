@@ -44,12 +44,6 @@ public class FeatherBlender extends Blender {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeatherBlender(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public FeatherBlender(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public FeatherBlender position(long position) {
-        return (FeatherBlender)super.position(position);
-    }
 
     public FeatherBlender(float sharpness/*=0.02f*/) { super((Pointer)null); allocate(sharpness); }
     private native void allocate(float sharpness/*=0.02f*/);

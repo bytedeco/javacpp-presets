@@ -28,7 +28,7 @@ public class gsl_splinalg_itersolve_type extends Pointer {
         return (gsl_splinalg_itersolve_type)super.position(position);
     }
 
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native gsl_splinalg_itersolve_type name(BytePointer setter);
   public static class Alloc_long_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

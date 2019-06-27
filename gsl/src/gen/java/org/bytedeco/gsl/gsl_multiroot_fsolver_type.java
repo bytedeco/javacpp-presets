@@ -28,7 +28,7 @@ public class gsl_multiroot_fsolver_type extends Pointer {
         return (gsl_multiroot_fsolver_type)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native gsl_multiroot_fsolver_type name(BytePointer setter);
     public native @Cast("size_t") long size(); public native gsl_multiroot_fsolver_type size(long setter);
     public static class Alloc_Pointer_long extends FunctionPointer {
         static { Loader.load(); }

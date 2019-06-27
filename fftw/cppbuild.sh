@@ -98,6 +98,14 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install-strip
         ;;
+    linux-arm64)
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=aarch64-linux-gnu
+        make -j $MAKEJ V=0
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --disable-fortran --enable-shared --enable-threads --with-combined-threads --host=aarch64-linux-gnu --enable-float
+        make -j $MAKEJ V=0
+        make install-strip
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

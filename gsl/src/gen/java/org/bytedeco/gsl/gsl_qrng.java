@@ -31,7 +31,7 @@ public class gsl_qrng extends Pointer {
         return (gsl_qrng)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_qrng_type type();
+  public native @Const gsl_qrng_type type(); public native gsl_qrng type(gsl_qrng_type setter);
   public native @Cast("unsigned int") int dimension(); public native gsl_qrng dimension(int setter);
   public native @Cast("size_t") long state_size(); public native gsl_qrng state_size(long setter);
   public native Pointer state(); public native gsl_qrng state(Pointer setter);

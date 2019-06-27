@@ -27,6 +27,6 @@ public class gsl_odeiv_control extends Pointer {
         return (gsl_odeiv_control)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_odeiv_control_type type();
+  public native @Const gsl_odeiv_control_type type(); public native gsl_odeiv_control type(gsl_odeiv_control_type setter);
   public native Pointer state(); public native gsl_odeiv_control state(Pointer setter);
 }

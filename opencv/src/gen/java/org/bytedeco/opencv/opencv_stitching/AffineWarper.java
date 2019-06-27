@@ -48,12 +48,6 @@ public class AffineWarper extends DetailPlaneWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AffineWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public AffineWarper(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public AffineWarper position(long position) {
-        return (AffineWarper)super.position(position);
-    }
 
     /** \brief Construct an instance of the affine warper class.
     <p>

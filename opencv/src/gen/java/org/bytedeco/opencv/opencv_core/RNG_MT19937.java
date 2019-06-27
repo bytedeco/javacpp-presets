@@ -22,12 +22,6 @@ public class RNG_MT19937 extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNG_MT19937(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public RNG_MT19937(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public RNG_MT19937 position(long position) {
-        return (RNG_MT19937)super.position(position);
-    }
 
     public RNG_MT19937() { super((Pointer)null); allocate(); }
     private native void allocate();

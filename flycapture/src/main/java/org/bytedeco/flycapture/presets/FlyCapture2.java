@@ -56,7 +56,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
                 "<Utilities.h>", "<TopologyNode.h>", "<ImageStatistics.h>",
                 "<FlyCapture2VideoDefs.h>", "<FlyCapture2Video.h>"},
-                link = {"flycapture@.2", "flycapturevideo-c@.2"}),
+                link = {"flycapture@.2", "flycapturevideo@.2"}),
         @Platform(value = "windows",
                 link = {"FlyCapture2_v140", "MultiSyncLibrary_v140", "FlyCapture2Video_v140"},
                 includepath = {"C:/Program Files/Point Grey Research/FlyCapture2/include/",

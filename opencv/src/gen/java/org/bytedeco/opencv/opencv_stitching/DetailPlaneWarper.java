@@ -44,12 +44,6 @@ public class DetailPlaneWarper extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DetailPlaneWarper(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DetailPlaneWarper position(long position) {
-        return (DetailPlaneWarper)super.position(position);
-    }
 
     /** \brief Construct an instance of the plane warper class.
     <p>

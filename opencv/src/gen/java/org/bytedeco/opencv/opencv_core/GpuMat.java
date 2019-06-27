@@ -352,7 +352,7 @@ public class GpuMat extends Pointer {
 
     /** helper fields used in locateROI and adjustROI */
     public native @Cast("uchar*") BytePointer datastart(); public native GpuMat datastart(BytePointer setter);
-    @MemberGetter public native @Cast("const uchar*") BytePointer dataend();
+    public native @Cast("const uchar*") BytePointer dataend(); public native GpuMat dataend(BytePointer setter);
 
     /** allocator */
     public native Allocator allocator(); public native GpuMat allocator(Allocator setter);

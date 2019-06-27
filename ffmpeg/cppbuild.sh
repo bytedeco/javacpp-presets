@@ -918,7 +918,7 @@ EOF
         echo "--------------------"
         echo ""
         cd $ZLIB
-        CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -927,7 +927,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -936,29 +936,29 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH  "$CFLAGS" no-shared no-afalgeng no-idea no-mdc2 no-rc5 no-zlib no-ssl3 no-ssl3-method enable-rfc3779 enable-cms
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=gcc CXX=g++
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++
         cd ../$X264
-        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl  --disable-cli --enable-asm --host=aarch64-linux --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations"
+        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl --disable-cli --enable-asm --host=aarch64-linux-gnu --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --cross-prefix="aarch64-linux-gnu-"
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265/build/linux
@@ -966,17 +966,17 @@ EOF
         mkdir -p 8bit 10bit 12bit
 
         cd 12bit
-        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
         make -j $MAKEJ
 
         cd ../10bit
-        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
         make -j $MAKEJ
 
         cd ../8bit
         ln -sf ../10bit/libx265.a libx265_main10.a
         ln -sf ../12bit/libx265.a libx265_main12.a
-        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
+        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         make -j $MAKEJ
 
         # rename the 8bit library, then combine all three into libx265.a
@@ -994,19 +994,19 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
+        CROSS=aarch64-linux-gnu- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv8-linux-gcc
         make -j $MAKEJ
         make install
         cd ../alsa-lib-$ALSA_VERSION/
-        ./configure --host=aarch64-linux --prefix=$INSTALL_PATH --disable-python
+        ./configure --host=aarch64-linux-gnu --prefix=$INSTALL_PATH --disable-python
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' LD_LIBRARY_PATH=../lib/ CC="gcc" CXX="g++" PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure  --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-"
         make -j $MAKEJ
         make install
         ;;

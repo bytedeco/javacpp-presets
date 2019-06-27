@@ -53,6 +53,11 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-arm64)
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        make -j4
+        make install
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

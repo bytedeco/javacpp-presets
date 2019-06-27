@@ -20,12 +20,6 @@ public class float16_t extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public float16_t(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public float16_t(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public float16_t position(long position) {
-        return (float16_t)super.position(position);
-    }
 
 // #if CV_FP16_TYPE
 

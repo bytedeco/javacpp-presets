@@ -28,7 +28,7 @@ public class gsl_multimin_fdfminimizer extends Pointer {
     }
 
   /* multi dimensional part */
-  @MemberGetter public native @Const gsl_multimin_fdfminimizer_type type();
+  public native @Const gsl_multimin_fdfminimizer_type type(); public native gsl_multimin_fdfminimizer type(gsl_multimin_fdfminimizer_type setter);
   public native gsl_multimin_function_fdf fdf(); public native gsl_multimin_fdfminimizer fdf(gsl_multimin_function_fdf setter);
 
   public native double f(); public native gsl_multimin_fdfminimizer f(double setter);

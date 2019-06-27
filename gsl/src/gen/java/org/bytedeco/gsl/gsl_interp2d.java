@@ -27,7 +27,7 @@ public class gsl_interp2d extends Pointer {
         return (gsl_interp2d)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_interp2d_type type(); /* interpolation type */
+    public native @Const gsl_interp2d_type type(); public native gsl_interp2d type(gsl_interp2d_type setter); /* interpolation type */
     public native double xmin(); public native gsl_interp2d xmin(double setter);                    /* minimum value of x for which data have been provided */
     public native double xmax(); public native gsl_interp2d xmax(double setter);                    /* maximum value of x for which data have been provided */
     public native double ymin(); public native gsl_interp2d ymin(double setter);                    /* minimum value of y for which data have been provided */

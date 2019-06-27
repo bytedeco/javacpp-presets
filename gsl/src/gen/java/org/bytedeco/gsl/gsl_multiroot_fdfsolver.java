@@ -27,7 +27,7 @@ public class gsl_multiroot_fdfsolver extends Pointer {
         return (gsl_multiroot_fdfsolver)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_multiroot_fdfsolver_type type();
+    public native @Const gsl_multiroot_fdfsolver_type type(); public native gsl_multiroot_fdfsolver type(gsl_multiroot_fdfsolver_type setter);
     public native gsl_multiroot_function_fdf fdf(); public native gsl_multiroot_fdfsolver fdf(gsl_multiroot_function_fdf setter);
     public native gsl_vector x(); public native gsl_multiroot_fdfsolver x(gsl_vector setter);
     public native gsl_vector f(); public native gsl_multiroot_fdfsolver f(gsl_vector setter);

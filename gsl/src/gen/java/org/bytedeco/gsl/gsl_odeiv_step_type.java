@@ -35,7 +35,7 @@ public class gsl_odeiv_step_type extends Pointer {
         return (gsl_odeiv_step_type)super.position(position);
     }
 
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native gsl_odeiv_step_type name(BytePointer setter);
   public native int can_use_dydt_in(); public native gsl_odeiv_step_type can_use_dydt_in(int setter);
   public native int gives_exact_dydt_out(); public native gsl_odeiv_step_type gives_exact_dydt_out(int setter);
   public static class Alloc_long extends FunctionPointer {

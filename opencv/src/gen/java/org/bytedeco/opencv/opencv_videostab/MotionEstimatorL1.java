@@ -46,12 +46,6 @@ public class MotionEstimatorL1 extends MotionEstimatorBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorL1(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public MotionEstimatorL1(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public MotionEstimatorL1 position(long position) {
-        return (MotionEstimatorL1)super.position(position);
-    }
 
     public MotionEstimatorL1(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/);

@@ -42,6 +42,11 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
+    linux-arm64)
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu --disable-sdltest
+        make -j4
+        make install-strip
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         sed -i s/elf64ppc/elf64lppc/ configure

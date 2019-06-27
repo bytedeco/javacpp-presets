@@ -1278,9 +1278,9 @@ public static native double gsl_min_fminimizer_minimum(@Const gsl_min_fminimizer
 
 public static native int gsl_min_test_interval(double x_lower, double x_upper, double epsabs, double epsrel);
 
-@MemberGetter public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_goldensection();
-@MemberGetter public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_brent();
-@MemberGetter public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_quad_golden();
+public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_goldensection(); public static native void gsl_min_fminimizer_goldensection(gsl_min_fminimizer_type setter);
+public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_brent(); public static native void gsl_min_fminimizer_brent(gsl_min_fminimizer_type setter);
+public static native @Const gsl_min_fminimizer_type gsl_min_fminimizer_quad_golden(); public static native void gsl_min_fminimizer_quad_golden(gsl_min_fminimizer_type setter);
 // Targeting ../gsl_min_bracketing_function.java
 
 
@@ -1530,7 +1530,7 @@ public static final String GSL_VERSION = "2.5";
 public static final int GSL_MAJOR_VERSION = 2;
 public static final int GSL_MINOR_VERSION = 5;
 
-@MemberGetter public static native @Cast("const char*") BytePointer gsl_version();
+public static native @Cast("const char*") BytePointer gsl_version(); public static native void gsl_version(BytePointer setter);
 
 // #endif /* __GSL_VERSION_H__ */
 
@@ -10094,15 +10094,15 @@ public static native int gsl_integration_romberg(@Const gsl_function f, double a
 
 
 /* IQPACK integral types */
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_legendre();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_chebyshev();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_gegenbauer();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_jacobi();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_laguerre();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_hermite();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_exponential();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_rational();
-@MemberGetter public static native @Const gsl_integration_fixed_type gsl_integration_fixed_chebyshev2();
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_legendre(); public static native void gsl_integration_fixed_legendre(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_chebyshev(); public static native void gsl_integration_fixed_chebyshev(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_gegenbauer(); public static native void gsl_integration_fixed_gegenbauer(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_jacobi(); public static native void gsl_integration_fixed_jacobi(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_laguerre(); public static native void gsl_integration_fixed_laguerre(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_hermite(); public static native void gsl_integration_fixed_hermite(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_exponential(); public static native void gsl_integration_fixed_exponential(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_rational(); public static native void gsl_integration_fixed_rational(gsl_integration_fixed_type setter);
+public static native @Const gsl_integration_fixed_type gsl_integration_fixed_chebyshev2(); public static native void gsl_integration_fixed_chebyshev2(gsl_integration_fixed_type setter);
 
 public static native gsl_integration_fixed_workspace gsl_integration_fixed_alloc(@Const gsl_integration_fixed_type type, @Cast("const size_t") long n,
                             double a, double b, double alpha, double beta);
@@ -10173,13 +10173,13 @@ public static native int gsl_integration_fixed(@Const gsl_function func, double[
 
 
 /* available types */
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_linear();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_polynomial();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_cspline();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_cspline_periodic();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_akima();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_akima_periodic();
-@MemberGetter public static native @Const gsl_interp_type gsl_interp_steffen();
+public static native @Const gsl_interp_type gsl_interp_linear(); public static native void gsl_interp_linear(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_polynomial(); public static native void gsl_interp_polynomial(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_cspline(); public static native void gsl_interp_cspline(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_cspline_periodic(); public static native void gsl_interp_cspline_periodic(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_akima(); public static native void gsl_interp_akima(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_akima_periodic(); public static native void gsl_interp_akima_periodic(gsl_interp_type setter);
+public static native @Const gsl_interp_type gsl_interp_steffen(); public static native void gsl_interp_steffen(gsl_interp_type setter);
 
 public static native gsl_interp_accel gsl_interp_accel_alloc();
 
@@ -11341,72 +11341,72 @@ public static native int gsl_poly_complex_solve(@Const double[] a, @Cast("size_t
 /* These structs also need to appear in default.c so you can select
    them via the environment variable GSL_RNG_TYPE */
 
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_borosh13();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_coveyou();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_cmrg();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_fishman18();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_fishman20();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_fishman2x();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_gfsr4();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_knuthran();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_knuthran2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_knuthran2002();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_lecuyer21();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_minstd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_mrg();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_mt19937();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_mt19937_1999();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_mt19937_1998();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_r250();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ran0();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ran1();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ran2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ran3();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_rand();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_rand48();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random128_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random128_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random128_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random256_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random256_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random256_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random32_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random32_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random32_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random64_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random64_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random64_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random8_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random8_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random8_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random_bsd();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random_glibc2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_random_libc5();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_randu();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranf();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlux();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlux389();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlxd1();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlxd2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlxs0();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlxs1();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranlxs2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_ranmar();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_slatec();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_taus();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_taus2();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_taus113();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_transputer();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_tt800();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_uni();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_uni32();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_vax();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_waterman14();
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_zuf();
+public static native @Const gsl_rng_type gsl_rng_borosh13(); public static native void gsl_rng_borosh13(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_coveyou(); public static native void gsl_rng_coveyou(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_cmrg(); public static native void gsl_rng_cmrg(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_fishman18(); public static native void gsl_rng_fishman18(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_fishman20(); public static native void gsl_rng_fishman20(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_fishman2x(); public static native void gsl_rng_fishman2x(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_gfsr4(); public static native void gsl_rng_gfsr4(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_knuthran(); public static native void gsl_rng_knuthran(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_knuthran2(); public static native void gsl_rng_knuthran2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_knuthran2002(); public static native void gsl_rng_knuthran2002(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_lecuyer21(); public static native void gsl_rng_lecuyer21(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_minstd(); public static native void gsl_rng_minstd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_mrg(); public static native void gsl_rng_mrg(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_mt19937(); public static native void gsl_rng_mt19937(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_mt19937_1999(); public static native void gsl_rng_mt19937_1999(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_mt19937_1998(); public static native void gsl_rng_mt19937_1998(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_r250(); public static native void gsl_rng_r250(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ran0(); public static native void gsl_rng_ran0(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ran1(); public static native void gsl_rng_ran1(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ran2(); public static native void gsl_rng_ran2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ran3(); public static native void gsl_rng_ran3(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_rand(); public static native void gsl_rng_rand(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_rand48(); public static native void gsl_rng_rand48(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random128_bsd(); public static native void gsl_rng_random128_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random128_glibc2(); public static native void gsl_rng_random128_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random128_libc5(); public static native void gsl_rng_random128_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random256_bsd(); public static native void gsl_rng_random256_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random256_glibc2(); public static native void gsl_rng_random256_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random256_libc5(); public static native void gsl_rng_random256_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random32_bsd(); public static native void gsl_rng_random32_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random32_glibc2(); public static native void gsl_rng_random32_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random32_libc5(); public static native void gsl_rng_random32_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random64_bsd(); public static native void gsl_rng_random64_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random64_glibc2(); public static native void gsl_rng_random64_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random64_libc5(); public static native void gsl_rng_random64_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random8_bsd(); public static native void gsl_rng_random8_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random8_glibc2(); public static native void gsl_rng_random8_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random8_libc5(); public static native void gsl_rng_random8_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random_bsd(); public static native void gsl_rng_random_bsd(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random_glibc2(); public static native void gsl_rng_random_glibc2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_random_libc5(); public static native void gsl_rng_random_libc5(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_randu(); public static native void gsl_rng_randu(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranf(); public static native void gsl_rng_ranf(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlux(); public static native void gsl_rng_ranlux(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlux389(); public static native void gsl_rng_ranlux389(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlxd1(); public static native void gsl_rng_ranlxd1(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlxd2(); public static native void gsl_rng_ranlxd2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlxs0(); public static native void gsl_rng_ranlxs0(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlxs1(); public static native void gsl_rng_ranlxs1(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranlxs2(); public static native void gsl_rng_ranlxs2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_ranmar(); public static native void gsl_rng_ranmar(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_slatec(); public static native void gsl_rng_slatec(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_taus(); public static native void gsl_rng_taus(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_taus2(); public static native void gsl_rng_taus2(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_taus113(); public static native void gsl_rng_taus113(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_transputer(); public static native void gsl_rng_transputer(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_tt800(); public static native void gsl_rng_tt800(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_uni(); public static native void gsl_rng_uni(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_uni32(); public static native void gsl_rng_uni32(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_vax(); public static native void gsl_rng_vax(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_waterman14(); public static native void gsl_rng_waterman14(gsl_rng_type setter);
+public static native @Const gsl_rng_type gsl_rng_zuf(); public static native void gsl_rng_zuf(gsl_rng_type setter);
 
 public static native @Cast("const gsl_rng_type**") PointerPointer gsl_rng_types_setup();
 
-@MemberGetter public static native @Const gsl_rng_type gsl_rng_default();
+public static native @Const gsl_rng_type gsl_rng_default(); public static native void gsl_rng_default(gsl_rng_type setter);
 public static native @Cast("unsigned long int") long gsl_rng_default_seed(); public static native void gsl_rng_default_seed(long setter);
 
 public static native gsl_rng gsl_rng_alloc(@Const gsl_rng_type T);
@@ -11476,10 +11476,10 @@ public static native @Const gsl_rng_type gsl_rng_env_setup();
 
 /* Supported generator types.
  */
-@MemberGetter public static native @Const gsl_qrng_type gsl_qrng_niederreiter_2();
-@MemberGetter public static native @Const gsl_qrng_type gsl_qrng_sobol();
-@MemberGetter public static native @Const gsl_qrng_type gsl_qrng_halton();
-@MemberGetter public static native @Const gsl_qrng_type gsl_qrng_reversehalton();
+public static native @Const gsl_qrng_type gsl_qrng_niederreiter_2(); public static native void gsl_qrng_niederreiter_2(gsl_qrng_type setter);
+public static native @Const gsl_qrng_type gsl_qrng_sobol(); public static native void gsl_qrng_sobol(gsl_qrng_type setter);
+public static native @Const gsl_qrng_type gsl_qrng_halton(); public static native void gsl_qrng_halton(gsl_qrng_type setter);
+public static native @Const gsl_qrng_type gsl_qrng_reversehalton(); public static native void gsl_qrng_reversehalton(gsl_qrng_type setter);
 
 
 /* Allocate and initialize a generator
@@ -11902,12 +11902,12 @@ public static native int gsl_root_test_residual(double f, double epsabs);
 
 public static native int gsl_root_test_delta(double x1, double x0, double epsabs, double epsrel);
 
-@MemberGetter public static native @Const gsl_root_fsolver_type gsl_root_fsolver_bisection();
-@MemberGetter public static native @Const gsl_root_fsolver_type gsl_root_fsolver_brent();
-@MemberGetter public static native @Const gsl_root_fsolver_type gsl_root_fsolver_falsepos();
-@MemberGetter public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_newton();
-@MemberGetter public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_secant();
-@MemberGetter public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_steffenson();
+public static native @Const gsl_root_fsolver_type gsl_root_fsolver_bisection(); public static native void gsl_root_fsolver_bisection(gsl_root_fsolver_type setter);
+public static native @Const gsl_root_fsolver_type gsl_root_fsolver_brent(); public static native void gsl_root_fsolver_brent(gsl_root_fsolver_type setter);
+public static native @Const gsl_root_fsolver_type gsl_root_fsolver_falsepos(); public static native void gsl_root_fsolver_falsepos(gsl_root_fsolver_type setter);
+public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_newton(); public static native void gsl_root_fdfsolver_newton(gsl_root_fdfsolver_type setter);
+public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_secant(); public static native void gsl_root_fdfsolver_secant(gsl_root_fdfsolver_type setter);
+public static native @Const gsl_root_fdfsolver_type gsl_root_fdfsolver_steffenson(); public static native void gsl_root_fdfsolver_steffenson(gsl_root_fdfsolver_type setter);
 
 // #endif /* __GSL_ROOTS_H__ */
 
@@ -12333,12 +12333,12 @@ public static final int
 
 
 
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_daubechies();
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_daubechies_centered();
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_haar();
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_haar_centered();
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_bspline();
-@MemberGetter public static native @Const gsl_wavelet_type gsl_wavelet_bspline_centered();
+public static native @Const gsl_wavelet_type gsl_wavelet_daubechies(); public static native void gsl_wavelet_daubechies(gsl_wavelet_type setter);
+public static native @Const gsl_wavelet_type gsl_wavelet_daubechies_centered(); public static native void gsl_wavelet_daubechies_centered(gsl_wavelet_type setter);
+public static native @Const gsl_wavelet_type gsl_wavelet_haar(); public static native void gsl_wavelet_haar(gsl_wavelet_type setter);
+public static native @Const gsl_wavelet_type gsl_wavelet_haar_centered(); public static native void gsl_wavelet_haar_centered(gsl_wavelet_type setter);
+public static native @Const gsl_wavelet_type gsl_wavelet_bspline(); public static native void gsl_wavelet_bspline(gsl_wavelet_type setter);
+public static native @Const gsl_wavelet_type gsl_wavelet_bspline_centered(); public static native void gsl_wavelet_bspline_centered(gsl_wavelet_type setter);
 
 public static native gsl_wavelet gsl_wavelet_alloc(@Const gsl_wavelet_type T, @Cast("size_t") long k);
 public static native void gsl_wavelet_free(gsl_wavelet w);
@@ -12578,8 +12578,8 @@ public static native int gsl_wavelet2d_nstransform_matrix_inverse(@Const gsl_wav
 
 
 /* available types */
-@MemberGetter public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_normal();
-@MemberGetter public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_tsqr();
+public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_normal(); public static native void gsl_multilarge_linear_normal(gsl_multilarge_linear_type setter);
+public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_tsqr(); public static native void gsl_multilarge_linear_tsqr(gsl_multilarge_linear_type setter);
 
 /*
  * Prototypes
@@ -12948,7 +12948,7 @@ public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix
 
 
 /* available types */
-@MemberGetter public static native @Const gsl_splinalg_itersolve_type gsl_splinalg_itersolve_gmres();
+public static native @Const gsl_splinalg_itersolve_type gsl_splinalg_itersolve_gmres(); public static native void gsl_splinalg_itersolve_gmres(gsl_splinalg_itersolve_type setter);
 
 /*
  * Prototypes
@@ -13005,8 +13005,8 @@ public static native double gsl_splinalg_itersolve_normr(@Const gsl_splinalg_ite
 
 
 /* available types */
-@MemberGetter public static native @Const gsl_interp2d_type gsl_interp2d_bilinear();
-@MemberGetter public static native @Const gsl_interp2d_type gsl_interp2d_bicubic();
+public static native @Const gsl_interp2d_type gsl_interp2d_bilinear(); public static native void gsl_interp2d_bilinear(gsl_interp2d_type setter);
+public static native @Const gsl_interp2d_type gsl_interp2d_bicubic(); public static native void gsl_interp2d_bicubic(gsl_interp2d_type setter);
 
 public static native gsl_interp2d gsl_interp2d_alloc(@Const gsl_interp2d_type T, @Cast("const size_t") long xsize,
                                   @Cast("const size_t") long ysize);
@@ -15655,13 +15655,13 @@ public static native int gsl_multifit_linear_gcv(@Const gsl_vector y,
 
 
 /* available types */
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_default();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_bisquare();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_cauchy();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_fair();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_huber();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_ols();
-@MemberGetter public static native @Const gsl_multifit_robust_type gsl_multifit_robust_welsch();
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_default(); public static native void gsl_multifit_robust_default(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_bisquare(); public static native void gsl_multifit_robust_bisquare(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_cauchy(); public static native void gsl_multifit_robust_cauchy(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_fair(); public static native void gsl_multifit_robust_fair(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_huber(); public static native void gsl_multifit_robust_huber(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_ols(); public static native void gsl_multifit_robust_ols(gsl_multifit_robust_type setter);
+public static native @Const gsl_multifit_robust_type gsl_multifit_robust_welsch(); public static native void gsl_multifit_robust_welsch(gsl_multifit_robust_type setter);
 
 public static native gsl_multifit_robust_workspace gsl_multifit_robust_alloc(@Const gsl_multifit_robust_type T,
                                                          @Cast("const size_t") long n, @Cast("const size_t") long p);
@@ -15906,9 +15906,9 @@ public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
 
 /* extern const gsl_multifit_fsolver_type * gsl_multifit_fsolver_gradient; */
 
-@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmsder();
-@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmder();
-@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmniel();
+public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmsder(); public static native void gsl_multifit_fdfsolver_lmsder(gsl_multifit_fdfsolver_type setter);
+public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmder(); public static native void gsl_multifit_fdfsolver_lmder(gsl_multifit_fdfsolver_type setter);
+public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmniel(); public static native void gsl_multifit_fdfsolver_lmniel(gsl_multifit_fdfsolver_type setter);
 
 // #endif /* __GSL_MULTIFIT_NLIN_H__ */
 
@@ -16032,14 +16032,14 @@ public static native gsl_vector gsl_multimin_fdfminimizer_gradient(@Const gsl_mu
 
 public static native double gsl_multimin_fdfminimizer_minimum(@Const gsl_multimin_fdfminimizer s);
 
-@MemberGetter public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_steepest_descent();
-@MemberGetter public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_conjugate_pr();
-@MemberGetter public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_conjugate_fr();
-@MemberGetter public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_vector_bfgs();
-@MemberGetter public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_vector_bfgs2();
-@MemberGetter public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex();
-@MemberGetter public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex2();
-@MemberGetter public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex2rand();
+public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_steepest_descent(); public static native void gsl_multimin_fdfminimizer_steepest_descent(gsl_multimin_fdfminimizer_type setter);
+public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_conjugate_pr(); public static native void gsl_multimin_fdfminimizer_conjugate_pr(gsl_multimin_fdfminimizer_type setter);
+public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_conjugate_fr(); public static native void gsl_multimin_fdfminimizer_conjugate_fr(gsl_multimin_fdfminimizer_type setter);
+public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_vector_bfgs(); public static native void gsl_multimin_fdfminimizer_vector_bfgs(gsl_multimin_fdfminimizer_type setter);
+public static native @Const gsl_multimin_fdfminimizer_type gsl_multimin_fdfminimizer_vector_bfgs2(); public static native void gsl_multimin_fdfminimizer_vector_bfgs2(gsl_multimin_fdfminimizer_type setter);
+public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex(); public static native void gsl_multimin_fminimizer_nmsimplex(gsl_multimin_fminimizer_type setter);
+public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex2(); public static native void gsl_multimin_fminimizer_nmsimplex2(gsl_multimin_fminimizer_type setter);
+public static native @Const gsl_multimin_fminimizer_type gsl_multimin_fminimizer_nmsimplex2rand(); public static native void gsl_multimin_fminimizer_nmsimplex2rand(gsl_multimin_fminimizer_type setter);
 
 // #endif /* __GSL_MULTIMIN_H__ */
 
@@ -16147,15 +16147,15 @@ public static native int gsl_multiroot_test_delta(@Const gsl_vector dx, @Const g
 
 public static native int gsl_multiroot_test_residual(@Const gsl_vector f, double epsabs);
 
-@MemberGetter public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_dnewton();
-@MemberGetter public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_broyden();
-@MemberGetter public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_hybrid();
-@MemberGetter public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_hybrids();
+public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_dnewton(); public static native void gsl_multiroot_fsolver_dnewton(gsl_multiroot_fsolver_type setter);
+public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_broyden(); public static native void gsl_multiroot_fsolver_broyden(gsl_multiroot_fsolver_type setter);
+public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_hybrid(); public static native void gsl_multiroot_fsolver_hybrid(gsl_multiroot_fsolver_type setter);
+public static native @Const gsl_multiroot_fsolver_type gsl_multiroot_fsolver_hybrids(); public static native void gsl_multiroot_fsolver_hybrids(gsl_multiroot_fsolver_type setter);
 
-@MemberGetter public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_newton();
-@MemberGetter public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_gnewton();
-@MemberGetter public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_hybridj();
-@MemberGetter public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_hybridsj();
+public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_newton(); public static native void gsl_multiroot_fdfsolver_newton(gsl_multiroot_fdfsolver_type setter);
+public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_gnewton(); public static native void gsl_multiroot_fdfsolver_gnewton(gsl_multiroot_fdfsolver_type setter);
+public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_hybridj(); public static native void gsl_multiroot_fdfsolver_hybridj(gsl_multiroot_fdfsolver_type setter);
+public static native @Const gsl_multiroot_fdfsolver_type gsl_multiroot_fdfsolver_hybridsj(); public static native void gsl_multiroot_fdfsolver_hybridsj(gsl_multiroot_fdfsolver_type setter);
 
 // #endif /* __GSL_MULTIROOTS_H__ */
 
@@ -16361,17 +16361,17 @@ public static native int gsl_ntuple_close(gsl_ntuple ntuple);
 
 /* Available stepper types */
 
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk2();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk4();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rkf45();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rkck();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk8pd();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk2imp();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk4imp();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_bsimp();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk1imp();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_msadams();
-@MemberGetter public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_msbdf();
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk2(); public static native void gsl_odeiv2_step_rk2(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk4(); public static native void gsl_odeiv2_step_rk4(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rkf45(); public static native void gsl_odeiv2_step_rkf45(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rkck(); public static native void gsl_odeiv2_step_rkck(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk8pd(); public static native void gsl_odeiv2_step_rk8pd(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk2imp(); public static native void gsl_odeiv2_step_rk2imp(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk4imp(); public static native void gsl_odeiv2_step_rk4imp(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_bsimp(); public static native void gsl_odeiv2_step_bsimp(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_rk1imp(); public static native void gsl_odeiv2_step_rk1imp(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_msadams(); public static native void gsl_odeiv2_step_msadams(gsl_odeiv2_step_type setter);
+public static native @Const gsl_odeiv2_step_type gsl_odeiv2_step_msbdf(); public static native void gsl_odeiv2_step_msbdf(gsl_odeiv2_step_type setter);
 
 /* Stepper object methods */
 
@@ -16664,17 +16664,17 @@ public static native void gsl_odeiv2_driver_free(gsl_odeiv2_driver state);
  * gear2  : M=2 implicit Gear method
  */
 
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk4();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rkf45();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rkck();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk8pd();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2imp();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2simp();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk4imp();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_bsimp();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_gear1();
-@MemberGetter public static native @Const gsl_odeiv_step_type gsl_odeiv_step_gear2();
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2(); public static native void gsl_odeiv_step_rk2(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk4(); public static native void gsl_odeiv_step_rk4(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rkf45(); public static native void gsl_odeiv_step_rkf45(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rkck(); public static native void gsl_odeiv_step_rkck(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk8pd(); public static native void gsl_odeiv_step_rk8pd(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2imp(); public static native void gsl_odeiv_step_rk2imp(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk2simp(); public static native void gsl_odeiv_step_rk2simp(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_rk4imp(); public static native void gsl_odeiv_step_rk4imp(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_bsimp(); public static native void gsl_odeiv_step_bsimp(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_gear1(); public static native void gsl_odeiv_step_gear1(gsl_odeiv_step_type setter);
+public static native @Const gsl_odeiv_step_type gsl_odeiv_step_gear2(); public static native void gsl_odeiv_step_gear2(gsl_odeiv_step_type setter);
 
 
 /* Constructor for specialized stepper objects.

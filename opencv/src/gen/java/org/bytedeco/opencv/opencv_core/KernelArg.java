@@ -54,7 +54,7 @@ public class KernelArg extends Pointer {
 
     public native int flags(); public native KernelArg flags(int setter);
     public native UMat m(); public native KernelArg m(UMat setter);
-    @MemberGetter public native @Const Pointer obj();
+    public native @Const Pointer obj(); public native KernelArg obj(Pointer setter);
     public native @Cast("size_t") long sz(); public native KernelArg sz(long setter);
     public native int wscale(); public native KernelArg wscale(int setter);
     public native int iwscale(); public native KernelArg iwscale(int setter);

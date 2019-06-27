@@ -33,7 +33,7 @@ public class SimpleExample {
         //cvNamedWindow(flandmark_window, 0);
 
         ms = System.currentTimeMillis();
-        FLANDMARK_Model model = flandmark_init("flandmark_model.dat");
+        FLANDMARK_Model model = flandmark_init("data/flandmark_model.dat");
         if (model == null) {
             System.out.println("Structure model wasn't created. Corrupted file flandmark_model.dat?");
             System.exit(1);

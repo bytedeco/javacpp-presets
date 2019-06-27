@@ -190,6 +190,35 @@ matrix:
         script: ./ci/install-travis.sh
 
       - os: linux
+        env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=flycapture,libdc1394,libfreenect OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=cpu_features,systems OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+
+      - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh

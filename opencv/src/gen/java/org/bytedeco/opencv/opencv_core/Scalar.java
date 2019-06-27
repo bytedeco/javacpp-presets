@@ -26,12 +26,6 @@ public class Scalar extends AbstractScalar {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Scalar(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Scalar(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Scalar position(long position) {
-        return (Scalar)super.position(position);
-    }
 
     /** default constructor */
     public Scalar() { super((Pointer)null); allocate(); }
