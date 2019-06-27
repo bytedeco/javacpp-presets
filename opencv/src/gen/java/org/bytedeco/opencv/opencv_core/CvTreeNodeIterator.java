@@ -29,7 +29,7 @@ public class CvTreeNodeIterator extends Pointer {
         return (CvTreeNodeIterator)super.position(position);
     }
 
-    @MemberGetter public native @Const Pointer node();
+    public native @Const Pointer node(); public native CvTreeNodeIterator node(Pointer setter);
     public native int level(); public native CvTreeNodeIterator level(int setter);
     public native int max_level(); public native CvTreeNodeIterator max_level(int setter);
 }

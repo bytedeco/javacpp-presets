@@ -1,4 +1,5 @@
 
+ * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))
  * Add convenient `Tensor.create(boolean[] data, shape)` factory methods for TensorFlow
  * Set correct default path to `javacpp.platform.compiler` for Android builds on Mac OS X ([issue #733](https://github.com/bytedeco/javacpp-presets/issues/733))
  * Call `Loader.checkVersion()` in all presets to log warnings with potentially incompatible versions of JavaCPP

@@ -45,12 +45,6 @@ public class DisjointSets extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DisjointSets(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DisjointSets(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DisjointSets position(long position) {
-        return (DisjointSets)super.position(position);
-    }
 
     public DisjointSets(int elem_count/*=0*/) { super((Pointer)null); allocate(elem_count); }
     private native void allocate(int elem_count/*=0*/);

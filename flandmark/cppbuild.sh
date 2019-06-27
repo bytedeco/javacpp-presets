@@ -74,6 +74,12 @@ case $PLATFORM in
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
+    linux-arm64)
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/ -DCMAKE_CXX_FLAGS="-std=c++11" .
+        make -j4 flandmark_static
+        cp libflandmark/*.h ../include
+        cp libflandmark/*.a ../lib
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

@@ -69,7 +69,7 @@ public class SparseMatConstIterator extends Pointer {
     /** moves iterator to the element after the last element */
     public native void seekEnd();
 
-    @MemberGetter public native @Const SparseMat m();
+    public native @Const SparseMat m(); public native SparseMatConstIterator m(SparseMat setter);
     public native @Cast("size_t") long hashidx(); public native SparseMatConstIterator hashidx(long setter);
     public native @Cast("uchar*") BytePointer ptr(); public native SparseMatConstIterator ptr(BytePointer setter);
 }

@@ -29,7 +29,7 @@ public class gsl_interp extends Pointer {
         return (gsl_interp)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_interp_type type();
+  public native @Const gsl_interp_type type(); public native gsl_interp type(gsl_interp_type setter);
   public native double xmin(); public native gsl_interp xmin(double setter);
   public native double xmax(); public native gsl_interp xmax(double setter);
   public native @Cast("size_t") long size(); public native gsl_interp size(long setter);

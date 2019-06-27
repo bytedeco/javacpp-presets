@@ -29,7 +29,7 @@ public class gsl_rng_type extends Pointer {
         return (gsl_rng_type)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native gsl_rng_type name(BytePointer setter);
     public native @Cast("unsigned long int") long max(); public native gsl_rng_type max(long setter);
     public native @Cast("unsigned long int") long min(); public native gsl_rng_type min(long setter);
     public native @Cast("size_t") long size(); public native gsl_rng_type size(long setter);

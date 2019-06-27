@@ -36,12 +36,6 @@ public class HostMem extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HostMem(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public HostMem(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public HostMem position(long position) {
-        return (HostMem)super.position(position);
-    }
 
     /** enum cv::cuda::HostMem::AllocType */
     public static final int PAGE_LOCKED = 1, SHARED = 2, WRITE_COMBINED = 4;
@@ -133,7 +127,7 @@ public class HostMem extends Pointer {
     public native IntPointer refcount(); public native HostMem refcount(IntPointer setter);
 
     public native @Cast("uchar*") BytePointer datastart(); public native HostMem datastart(BytePointer setter);
-    @MemberGetter public native @Cast("const uchar*") BytePointer dataend();
+    public native @Cast("const uchar*") BytePointer dataend(); public native HostMem dataend(BytePointer setter);
 
     public native @Cast("cv::cuda::HostMem::AllocType") int alloc_type(); public native HostMem alloc_type(int setter);
 }

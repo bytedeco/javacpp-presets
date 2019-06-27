@@ -22,12 +22,6 @@ public class CvScalar extends AbstractCvScalar {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvScalar(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public CvScalar(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public CvScalar position(long position) {
-        return (CvScalar)super.position(position);
-    }
 
     public native double val(int i); public native CvScalar val(int i, double setter);
     @MemberGetter public native DoublePointer val();

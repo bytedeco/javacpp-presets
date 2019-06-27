@@ -44,12 +44,6 @@ public class TrackerStateEstimatorMILBoosting extends TrackerStateEstimator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerStateEstimatorMILBoosting(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TrackerStateEstimatorMILBoosting(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public TrackerStateEstimatorMILBoosting position(long position) {
-        return (TrackerStateEstimatorMILBoosting)super.position(position);
-    }
 
 
   /**

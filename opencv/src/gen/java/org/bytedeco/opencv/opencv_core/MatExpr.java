@@ -105,7 +105,7 @@ public class MatExpr extends Pointer {
     public native @ByVal Mat cross(@Const @ByRef Mat m);
     public native double dot(@Const @ByRef Mat m);
 
-    @MemberGetter public native @Const MatOp op();
+    public native @Const MatOp op(); public native MatExpr op(MatOp setter);
     public native int flags(); public native MatExpr flags(int setter);
 
     public native @ByRef Mat a(); public native MatExpr a(Mat setter);

@@ -40,12 +40,6 @@ public class StandardCollector extends PredictCollector {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StandardCollector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public StandardCollector(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public StandardCollector position(long position) {
-        return (StandardCollector)super.position(position);
-    }
 
     @NoOffset public static class PredictResult extends Pointer {
         static { Loader.load(); }

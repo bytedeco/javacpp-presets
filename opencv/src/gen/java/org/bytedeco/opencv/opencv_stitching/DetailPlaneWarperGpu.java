@@ -43,12 +43,6 @@ public class DetailPlaneWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public DetailPlaneWarperGpu(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public DetailPlaneWarperGpu position(long position) {
-        return (DetailPlaneWarperGpu)super.position(position);
-    }
 
     public DetailPlaneWarperGpu(float scale/*=1.f*/) { super((Pointer)null); allocate(scale); }
     private native void allocate(float scale/*=1.f*/);

@@ -62,6 +62,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    linux-arm64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ CFLAGS="-march=armv8-a -mcpu=cortex-a57" CXXFLAGS="-march=armv8-a -mcpu=cortex-a57" CPPFLAGS="-march=armv8-a -mcpu=cortex-a57" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a .
+        make -j $MAKEJ
+        make install
+        ;;
     linux-ppc64le)
         cd ../libusb-$LIBUSB_VERSION
         MACHINE_TYPE=$( uname -m )

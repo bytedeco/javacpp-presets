@@ -29,12 +29,6 @@ public class LDA extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LDA(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LDA(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public LDA position(long position) {
-        return (LDA)super.position(position);
-    }
 
     /** \brief constructor
     Initializes a LDA with num_components (default 0).

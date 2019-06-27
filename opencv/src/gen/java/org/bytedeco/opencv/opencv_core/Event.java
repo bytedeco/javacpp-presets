@@ -17,12 +17,6 @@ public class Event extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Event(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Event(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Event position(long position) {
-        return (Event)super.position(position);
-    }
 
     /** enum cv::cuda::Event::CreateFlags */
     public static final int

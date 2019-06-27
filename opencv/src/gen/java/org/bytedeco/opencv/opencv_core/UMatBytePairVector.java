@@ -29,7 +29,7 @@ public class UMatBytePairVector extends Pointer {
     public native void resize(@Cast("size_t") long n);
 
     @Index(function = "at") public native @ByRef UMat first(@Cast("size_t") long i); public native UMatBytePairVector first(@Cast("size_t") long i, UMat first);
-    @Index(function = "at") public native byte second(@Cast("size_t") long i);  public native UMatBytePairVector second(@Cast("size_t") long i, byte second);
+    @Index(function = "at") public native @Cast("uchar") byte second(@Cast("size_t") long i);  public native UMatBytePairVector second(@Cast("size_t") long i, byte second);
 
     public UMatBytePairVector put(UMat[] firstValue, byte[] secondValue) {
         for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {

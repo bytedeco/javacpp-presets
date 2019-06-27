@@ -26,6 +26,11 @@ case $PLATFORM in
         ln -sf "$INCLUDE_PATH"
         ln -sf "$INCLUDE_PATH/arm-linux-gnueabihf"
         ;;
+    linux-arm64)
+        touch cpuid.h
+        ln -sf "$INCLUDE_PATH"
+        ln -sf "$INCLUDE_PATH/aarch64-linux-gnu"
+        ;;
     linux-ppc64le)
         touch cpuid.h
         ln -sf "$INCLUDE_PATH"
