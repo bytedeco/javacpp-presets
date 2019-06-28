@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.mkldnn.platform>${javacpp.platform}</javacpp.mkldnn.platform>
-    <revision>1.5.0.rc1-${project.parent.version}</revision>
+    <revision>1.5.0.rc2-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
