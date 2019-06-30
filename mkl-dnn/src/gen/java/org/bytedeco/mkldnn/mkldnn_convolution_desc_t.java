@@ -9,8 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
-/** \} */
-
 /** A descriptor of a convolution operation. */
 @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_convolution_desc_t extends Pointer {
@@ -28,14 +26,14 @@ public class mkldnn_convolution_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_convolution. */
+     *  descriptor. Must be #mkldnn_convolution. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_convolution_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training,
-     * #mkldnn_forward_inference, #mkldnn_backward_data,
-     * #mkldnn_backward_weights, and #mkldnn_backward_bias. */
+     *  #mkldnn_forward_inference, #mkldnn_backward_data,
+     *  #mkldnn_backward_weights, and #mkldnn_backward_bias. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_convolution_desc_t prop_kind(int setter);
     /** The kind of the convolution algorithm. Possible values:
-     * #mkldnn_convolution_direct. */
+     *  #mkldnn_convolution_direct. */
     public native @Cast("mkldnn_alg_kind_t") int alg_kind(); public native mkldnn_convolution_desc_t alg_kind(int setter);
     /** Source memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t src_desc(); public native mkldnn_convolution_desc_t src_desc(mkldnn_memory_desc_t setter);
@@ -54,16 +52,14 @@ public class mkldnn_convolution_desc_t extends Pointer {
     /** Destination gradient memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t diff_dst_desc(); public native mkldnn_convolution_desc_t diff_dst_desc(mkldnn_memory_desc_t setter);
     /** Convolution strides in each spatial dimension. */
-    @MemberGetter public native IntPointer strides();
+    @MemberGetter public native CLongPointer strides();
     /** Convolution dilates in each spatial dimension. */
-    @MemberGetter public native IntPointer dilates();
+    @MemberGetter public native CLongPointer dilates();
     /** Padding in each spatial dimension. padding[0] is a padding in the
-     * beginning (\p padding_l), padding[1] is a padding in the end (\p
-     * padding_r). */
-    @MemberGetter public native IntPointer padding(int i);
-    @MemberGetter public native @Cast("int const**") PointerPointer padding();
-    /** The kind of padding to use. */
-    public native @Cast("mkldnn_padding_kind_t") int padding_kind(); public native mkldnn_convolution_desc_t padding_kind(int setter);
+     *  beginning (\p padding_l), padding[1] is a padding in the end (\p
+     *  padding_r). */
+    @MemberGetter public native CLongPointer padding(int i);
+    @MemberGetter public native @Cast("long int const**") PointerPointer padding();
     /** The accumulator data type. Initialized automatically. */
     public native @Cast("mkldnn_data_type_t") int accum_data_type(); public native mkldnn_convolution_desc_t accum_data_type(int setter);
 }

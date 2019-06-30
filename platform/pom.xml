@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.20-rc-${project.version}</version>
+      <version>1.0-rc-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

@@ -11,10 +11,8 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 /** \}
  <p>
- *  \} Primitives
- <p>
  *  \addtogroup cpp_api_stream Stream
- *  Execution stream operations.
+ *  Execution stream operations
  * 
  *  @see \ref c_api_stream in \ref c_api
  *  \{ */
@@ -22,41 +20,52 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // #endif
 
+/** An execution stream. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class stream extends mkldnn_stream_handle {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public stream(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public stream(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public stream position(long position) {
+        return (stream)super.position(position);
+    }
 
 
-    /** enum mkldnn::stream::kind */
-    public static final int any = mkldnn_any_stream,
-        eager = mkldnn_eager,
-        lazy = mkldnn_lazy;
+    /** \brief Stream flags. */
+    /** enum class mkldnn::stream::flags */
+    public static final int
+        /** Default order execution. Either in-order or out-of-order depending
+         *  on the engine runtime */
+        default_order = mkldnn_stream_default_order,
+        /** In-order execution. */
+        in_order = mkldnn_stream_default_order,
+        /** Out-of-order execution. */
+        out_of_order = mkldnn_stream_out_of_order,
+        /** Default stream configuration. */
+        default_flags = mkldnn_stream_default_flags;
 
-    public static native @Cast("mkldnn_stream_kind_t") int convert_to_c(@Cast("mkldnn::stream::kind") int akind);
+    public stream() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
     /** Constructs a stream. */
-    
-    ///
-    public stream(@Cast("mkldnn::stream::kind") int akind) { super((Pointer)null); allocate(akind); }
-    private native void allocate(@Cast("mkldnn::stream::kind") int akind);
+    public stream(@Const @ByRef engine aengine,
+                @Cast("mkldnn::stream::flags") int aflags/*=mkldnn::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
+    private native void allocate(@Const @ByRef engine aengine,
+                @Cast("mkldnn::stream::flags") int aflags/*=mkldnn::stream::flags::default_flags*/);
+    public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
+    private native void allocate(@Const @ByRef engine aengine);
 
-    /** Submits a vector of primitives to a stream for computations.
-     * 
-     *  @param primitives The vector of primitives to submit.
-     *  @return The stream. */
-    
-    ///
-    public native @ByRef stream submit(@ByVal primitive_vector primitives);
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+    /** Constructs a stream associated with the engine \p eng and with the
+     *  OpenCL command queue \p queue. */
 
-    /** Waits for all computations submitted to the stream to complete.
-     * 
-     *  @param block Specifies whether the operation should wait indefinitely or
-     *               return immediately.
-     *  @return \c true if all computations completed.
-     *  @return \c false if not all computations completed. */
-    public native @Cast("bool") @Name("wait") boolean _wait(@Cast("bool") boolean block/*=true*/);
-    public native @Cast("bool") @Name("wait") boolean _wait();
+    /** Returns the OpenCL command queue associated with the stream. */
+// #endif
 
-    public native @ByRef stream rerun();
+
+    /** Waits for all primitives in the stream to finish. */
+    public native @ByRef @Name("wait") stream _wait();
 }

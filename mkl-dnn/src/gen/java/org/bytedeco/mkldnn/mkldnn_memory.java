@@ -9,17 +9,12 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
-/** \}
- <p>
- *  \addtogroup c_api_types_primitive Primitive
- *  \{
- <p>
- *  \struct mkldnn_primitive
- *  An opaque structure to describe a primitive. */
+/** \struct mkldnn_memory
+ *  An opaque structure to describe a memory. */
 @Opaque @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
-public class mkldnn_primitive extends Pointer {
+public class mkldnn_memory extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public mkldnn_primitive() { super((Pointer)null); }
+    public mkldnn_memory() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public mkldnn_primitive(Pointer p) { super(p); }
+    public mkldnn_memory(Pointer p) { super(p); }
 }

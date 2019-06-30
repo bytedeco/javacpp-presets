@@ -18,7 +18,7 @@
   <properties>
     <javacpp.moduleId>mkl-dnn</javacpp.moduleId>
     <javacpp.packageName>mkldnn</javacpp.packageName>
-    <revision>0.20-rc-${project.parent.version}</revision>
+    <revision>1.0-rc-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-MKLDNN_VERSION=0.20-rc
+MKLDNN_VERSION=1.0-rc
 download https://github.com/intel/mkl-dnn/archive/v$MKLDNN_VERSION.tar.gz mkl-dnn-$MKLDNN_VERSION.tar.bz2
 
 mkdir -p $PLATFORM
@@ -16,7 +16,7 @@ INSTALL_PATH=`pwd`
 echo "Decompressing archives..."
 tar --totals -xf ../mkl-dnn-$MKLDNN_VERSION.tar.bz2
 cd mkl-dnn-$MKLDNN_VERSION
-patch -Np1 < ../../../mkl-dnn.patch
+#patch -Np1 < ../../../mkl-dnn.patch
 
 sedinplace 's/-fvisibility=internal//g' cmake/platform.cmake
 sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake

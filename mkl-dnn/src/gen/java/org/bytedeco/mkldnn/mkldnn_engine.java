@@ -10,7 +10,7 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
 /** \struct mkldnn_engine
- * \brief An opaque structure to describe an engine. */
+ *  \brief An opaque structure to describe an engine. */
 @Opaque @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_engine extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
