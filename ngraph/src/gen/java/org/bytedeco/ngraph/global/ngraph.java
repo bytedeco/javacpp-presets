@@ -9,6 +9,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
     static { Loader.load(); }
 
