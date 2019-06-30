@@ -1580,9 +1580,9 @@ public class Mat extends AbstractMat {
     public native @Cast("uchar*") BytePointer data(); public native Mat data(BytePointer setter);
 
     /** helper fields used in locateROI and adjustROI */
-    @MemberGetter public native @Cast("const uchar*") BytePointer datastart();
-    @MemberGetter public native @Cast("const uchar*") BytePointer dataend();
-    @MemberGetter public native @Cast("const uchar*") BytePointer datalimit();
+    public native @Cast("const uchar*") BytePointer datastart(); public native Mat datastart(BytePointer setter);
+    public native @Cast("const uchar*") BytePointer dataend(); public native Mat dataend(BytePointer setter);
+    public native @Cast("const uchar*") BytePointer datalimit(); public native Mat datalimit(BytePointer setter);
 
     /** custom allocator */
     public native MatAllocator allocator(); public native Mat allocator(MatAllocator setter);

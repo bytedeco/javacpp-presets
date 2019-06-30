@@ -37,5 +37,5 @@ public class gsl_odeiv2_evolve extends Pointer {
   public native double last_step(); public native gsl_odeiv2_evolve last_step(double setter);
   public native @Cast("unsigned long int") long count(); public native gsl_odeiv2_evolve count(long setter);
   public native @Cast("unsigned long int") long failed_steps(); public native gsl_odeiv2_evolve failed_steps(long setter);
-  @MemberGetter public native @Const gsl_odeiv2_driver driver();
+  public native @Const gsl_odeiv2_driver driver(); public native gsl_odeiv2_evolve driver(gsl_odeiv2_driver setter);
 }

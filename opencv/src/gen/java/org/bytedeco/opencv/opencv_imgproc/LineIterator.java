@@ -81,7 +81,7 @@ public class LineIterator extends Pointer {
     public native @ByVal Point pos();
 
     public native @Cast("uchar*") BytePointer ptr(); public native LineIterator ptr(BytePointer setter);
-    @MemberGetter public native @Cast("const uchar*") BytePointer ptr0();
+    public native @Cast("const uchar*") BytePointer ptr0(); public native LineIterator ptr0(BytePointer setter);
     public native int step(); public native LineIterator step(int setter);
     public native int elemSize(); public native LineIterator elemSize(int setter);
     public native int err(); public native LineIterator err(int setter);

@@ -27,7 +27,7 @@ public class gsl_root_fsolver extends Pointer {
         return (gsl_root_fsolver)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_root_fsolver_type type();
+    public native @Const gsl_root_fsolver_type type(); public native gsl_root_fsolver type(gsl_root_fsolver_type setter);
     public native gsl_function function(); public native gsl_root_fsolver function(gsl_function setter);
     public native double root(); public native gsl_root_fsolver root(double setter);
     public native double x_lower(); public native gsl_root_fsolver x_lower(double setter);

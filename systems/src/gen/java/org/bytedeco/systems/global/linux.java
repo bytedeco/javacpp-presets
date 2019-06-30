@@ -6861,9 +6861,8 @@ public static native int sigwait(@Const sigset_t __set, @Cast("int*") int[] __si
 @MemberGetter public static native @Cast("const char*__const*") PointerPointer _sys_siglist();
 @MemberGetter public static native @Cast("const char*") BytePointer sys_siglist(int i);
 @MemberGetter public static native @Cast("const char*__const*") PointerPointer sys_siglist();
-// Targeting ../linux/sigvec.java
 
-
+/* Structure passed to `sigvec'.  */
 
 /* Bits in `sv_flags'.  */
 public static final int SV_ONSTACK =	(1 << 0);/* Take the signal on the signal stack.  */
@@ -6876,8 +6875,7 @@ public static final int SV_RESETHAND =	(1 << 2);/* Reset handler to SIG_DFL on r
    If the SV_RESETHAND bit is set in `sv_flags', the handler for SIG will be
    reset to SIG_DFL before `sv_handler' is entered.  If OVEC is non-NULL,
    it is filled in with the old information for SIG.  */
-public static native int sigvec(int __sig, @Const sigvec __vec,
-		   sigvec __ovec);
+
 
 
 /* Get machine-dependent `struct sigcontext' and signal subcodes.  */

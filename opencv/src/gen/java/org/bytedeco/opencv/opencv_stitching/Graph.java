@@ -43,12 +43,6 @@ public class Graph extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Graph(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Graph(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Graph position(long position) {
-        return (Graph)super.position(position);
-    }
 
     public Graph(int num_vertices/*=0*/) { super((Pointer)null); allocate(num_vertices); }
     private native void allocate(int num_vertices/*=0*/);

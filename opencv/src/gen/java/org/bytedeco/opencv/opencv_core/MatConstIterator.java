@@ -85,9 +85,9 @@ public class MatConstIterator extends Pointer {
     public native void seek(@Const int[] _idx, @Cast("bool") boolean relative/*=false*/);
     public native void seek(@Const int[] _idx);
 
-    @MemberGetter public native @Const Mat m();
+    public native @Const Mat m(); public native MatConstIterator m(Mat setter);
     public native @Cast("size_t") long elemSize(); public native MatConstIterator elemSize(long setter);
-    @MemberGetter public native @Cast("const uchar*") BytePointer ptr();
-    @MemberGetter public native @Cast("const uchar*") BytePointer sliceStart();
-    @MemberGetter public native @Cast("const uchar*") BytePointer sliceEnd();
+    public native @Cast("const uchar*") BytePointer ptr(); public native MatConstIterator ptr(BytePointer setter);
+    public native @Cast("const uchar*") BytePointer sliceStart(); public native MatConstIterator sliceStart(BytePointer setter);
+    public native @Cast("const uchar*") BytePointer sliceEnd(); public native MatConstIterator sliceEnd(BytePointer setter);
 }

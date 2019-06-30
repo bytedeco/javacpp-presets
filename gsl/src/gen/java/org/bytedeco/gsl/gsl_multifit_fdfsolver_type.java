@@ -27,7 +27,7 @@ public class gsl_multifit_fdfsolver_type extends Pointer {
         return (gsl_multifit_fdfsolver_type)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native gsl_multifit_fdfsolver_type name(BytePointer setter);
     public native @Cast("size_t") long size(); public native gsl_multifit_fdfsolver_type size(long setter);
     public static class Alloc_Pointer_long_long extends FunctionPointer {
         static { Loader.load(); }

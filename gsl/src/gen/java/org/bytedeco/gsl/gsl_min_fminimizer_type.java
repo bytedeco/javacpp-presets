@@ -29,7 +29,7 @@ public class gsl_min_fminimizer_type extends Pointer {
         return (gsl_min_fminimizer_type)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native gsl_min_fminimizer_type name(BytePointer setter);
     public native @Cast("size_t") long size(); public native gsl_min_fminimizer_type size(long setter);
     public static class Set_Pointer_gsl_function_double_double_double_double_double_double extends FunctionPointer {
         static { Loader.load(); }

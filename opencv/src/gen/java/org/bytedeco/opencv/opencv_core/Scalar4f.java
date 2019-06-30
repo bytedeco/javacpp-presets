@@ -16,12 +16,6 @@ public class Scalar4f extends FloatPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Scalar4f(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Scalar4f(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Scalar4f position(long position) {
-        return (Scalar4f)super.position(position);
-    }
 
     /** default constructor */
     public Scalar4f() { super((Pointer)null); allocate(); }

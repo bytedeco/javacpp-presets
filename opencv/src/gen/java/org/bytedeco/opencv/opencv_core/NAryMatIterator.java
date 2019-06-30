@@ -128,7 +128,7 @@ public class NAryMatIterator extends Pointer {
     public native @ByVal @Name("operator ++") NAryMatIterator increment(int arg0);
 
     /** the iterated arrays */
-    @MemberGetter public native @Const Mat arrays(int i);
+    public native @Const Mat arrays(int i); public native NAryMatIterator arrays(int i, Mat setter);
     @MemberGetter public native @Cast("const cv::Mat**") PointerPointer arrays();
     /** the current planes */
     public native Mat planes(); public native NAryMatIterator planes(Mat setter);

@@ -16,12 +16,6 @@ public class Scalar4i extends IntPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Scalar4i(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Scalar4i(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Scalar4i position(long position) {
-        return (Scalar4i)super.position(position);
-    }
 
     /** default constructor */
     public Scalar4i() { super((Pointer)null); allocate(); }

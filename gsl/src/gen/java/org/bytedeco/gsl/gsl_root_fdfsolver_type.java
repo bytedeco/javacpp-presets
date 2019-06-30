@@ -27,7 +27,7 @@ public class gsl_root_fdfsolver_type extends Pointer {
         return (gsl_root_fdfsolver_type)super.position(position);
     }
 
-    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("const char*") BytePointer name(); public native gsl_root_fdfsolver_type name(BytePointer setter);
     public native @Cast("size_t") long size(); public native gsl_root_fdfsolver_type size(long setter);
     public static class Set_Pointer_gsl_function_fdf_DoublePointer extends FunctionPointer {
         static { Loader.load(); }

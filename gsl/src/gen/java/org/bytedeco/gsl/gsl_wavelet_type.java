@@ -27,7 +27,7 @@ public class gsl_wavelet_type extends Pointer {
         return (gsl_wavelet_type)super.position(position);
     }
 
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native gsl_wavelet_type name(BytePointer setter);
   public static class Init_PointerPointer_PointerPointer_PointerPointer_PointerPointer_SizeTPointer_SizeTPointer_long extends FunctionPointer {
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */

@@ -29,7 +29,7 @@ public class MatBytePairVector extends Pointer {
     public native void resize(@Cast("size_t") long n);
 
     @Index(function = "at") public native @ByRef Mat first(@Cast("size_t") long i); public native MatBytePairVector first(@Cast("size_t") long i, Mat first);
-    @Index(function = "at") public native byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
+    @Index(function = "at") public native @Cast("uchar") byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
 
     public MatBytePairVector put(Mat[] firstValue, byte[] secondValue) {
         for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {

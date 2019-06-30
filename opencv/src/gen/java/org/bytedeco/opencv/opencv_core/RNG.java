@@ -29,12 +29,6 @@ public class RNG extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNG(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public RNG(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public RNG position(long position) {
-        return (RNG)super.position(position);
-    }
 
     /** enum cv::RNG:: */
     public static final int UNIFORM = 0,

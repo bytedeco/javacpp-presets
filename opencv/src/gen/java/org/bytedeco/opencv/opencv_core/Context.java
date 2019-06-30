@@ -18,12 +18,6 @@ public class Context extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Context(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Context(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Context position(long position) {
-        return (Context)super.position(position);
-    }
 
     public Context() { super((Pointer)null); allocate(); }
     private native void allocate();

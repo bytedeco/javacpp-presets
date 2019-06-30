@@ -45,12 +45,6 @@ public class ChannelsCompensator extends ExposureCompensator {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChannelsCompensator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public ChannelsCompensator(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public ChannelsCompensator position(long position) {
-        return (ChannelsCompensator)super.position(position);
-    }
 
     public ChannelsCompensator(int nr_feeds/*=1*/) { super((Pointer)null); allocate(nr_feeds); }
     private native void allocate(int nr_feeds/*=1*/);

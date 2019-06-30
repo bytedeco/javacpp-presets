@@ -27,6 +27,6 @@ public class gsl_rng extends Pointer {
         return (gsl_rng)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_rng_type type();
+    public native @Const gsl_rng_type type(); public native gsl_rng type(gsl_rng_type setter);
     public native Pointer state(); public native gsl_rng state(Pointer setter);
   }

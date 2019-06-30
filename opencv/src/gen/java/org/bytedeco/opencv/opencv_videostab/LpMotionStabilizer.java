@@ -42,12 +42,6 @@ public class LpMotionStabilizer extends IMotionStabilizer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LpMotionStabilizer(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public LpMotionStabilizer(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public LpMotionStabilizer position(long position) {
-        return (LpMotionStabilizer)super.position(position);
-    }
 
     public LpMotionStabilizer(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/);

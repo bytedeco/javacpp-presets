@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 sudo: required
 cache:
   directories:
@@ -6,12 +6,6 @@ cache:
       - $HOME/.ccache
       - $HOME/downloads
   timeout: 1000
-addons:
-  apt:
-    packages:
-    - yasm
-    - nasm
-
 language: java
 services:
       - docker
@@ -194,6 +188,35 @@ matrix:
         env: PROJ=cpu_features,systems OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
+
+      - os: linux
+        env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=ffmpeg OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=flycapture,libdc1394,libfreenect OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=openblas OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=leptonica,tesseract OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=cpu_features,systems OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
 
       - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-ppc64le

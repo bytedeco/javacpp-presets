@@ -64,6 +64,14 @@ case $PLATFORM in
         make DESTDIR="$INSTALL_PATH" LIBSUFFIX=l install
         make DESTDIR="$INSTALL_PATH" LIBSUFFIX=s install
         ;;
+    linux-arm64)
+        make -j $MAKEJ CC="aarch64-linux-gnu-gcc -fPIC" double
+        make -j $MAKEJ CC="aarch64-linux-gnu-gcc -fPIC" lapack
+        make -j $MAKEJ CC="aarch64-linux-gnu-gcc -fPIC" float
+        make DESTDIR="$INSTALL_PATH" LIBSUFFIX=  install
+        make DESTDIR="$INSTALL_PATH" LIBSUFFIX=l install
+        make DESTDIR="$INSTALL_PATH" LIBSUFFIX=s install
+        ;;
     linux-ppc64le)
         make -j $MAKEJ CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" double
         make -j $MAKEJ CC="powerpc64le-linux-gnu-gcc -m64 -fPIC" lapack

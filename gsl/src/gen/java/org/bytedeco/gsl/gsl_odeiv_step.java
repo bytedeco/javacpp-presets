@@ -27,7 +27,7 @@ public class gsl_odeiv_step extends Pointer {
         return (gsl_odeiv_step)super.position(position);
     }
 
-  @MemberGetter public native @Const gsl_odeiv_step_type type();
+  public native @Const gsl_odeiv_step_type type(); public native gsl_odeiv_step type(gsl_odeiv_step_type setter);
   public native @Cast("size_t") long dimension(); public native gsl_odeiv_step dimension(long setter);
   public native Pointer state(); public native gsl_odeiv_step state(Pointer setter);
 }

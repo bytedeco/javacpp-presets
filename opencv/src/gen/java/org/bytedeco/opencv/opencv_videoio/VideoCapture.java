@@ -40,12 +40,6 @@ public class VideoCapture extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoCapture(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public VideoCapture(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public VideoCapture position(long position) {
-        return (VideoCapture)super.position(position);
-    }
 
     /** \brief Default constructor
     \note In \ref videoio_c "C API", when you finished working with video, release CvCapture structure with

@@ -29,7 +29,7 @@ public class gsl_interp_type extends Pointer {
         return (gsl_interp_type)super.position(position);
     }
 
-  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public native @Cast("const char*") BytePointer name(); public native gsl_interp_type name(BytePointer setter);
   public native @Cast("unsigned int") int min_size(); public native gsl_interp_type min_size(int setter);
   public static class Alloc_long extends FunctionPointer {
       static { Loader.load(); }

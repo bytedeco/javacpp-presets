@@ -16,12 +16,6 @@ public class Complexd extends DoublePointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Complexd(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Complexd(long size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(long size);
-    @Override public Complexd position(long position) {
-        return (Complexd)super.position(position);
-    }
 
 
     /** default constructor */

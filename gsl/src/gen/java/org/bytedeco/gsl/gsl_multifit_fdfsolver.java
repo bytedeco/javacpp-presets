@@ -27,7 +27,7 @@ public class gsl_multifit_fdfsolver extends Pointer {
         return (gsl_multifit_fdfsolver)super.position(position);
     }
 
-    @MemberGetter public native @Const gsl_multifit_fdfsolver_type type();
+    public native @Const gsl_multifit_fdfsolver_type type(); public native gsl_multifit_fdfsolver type(gsl_multifit_fdfsolver_type setter);
     public native gsl_multifit_function_fdf fdf(); public native gsl_multifit_fdfsolver fdf(gsl_multifit_function_fdf setter);
     public native gsl_vector x(); public native gsl_multifit_fdfsolver x(gsl_vector setter);        /* parameter values x */
     public native gsl_vector f(); public native gsl_multifit_fdfsolver f(gsl_vector setter);        /* residual vector f(x) */
