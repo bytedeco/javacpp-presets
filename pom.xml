@@ -1085,15 +1085,18 @@
         <module>libfreenect</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
-        <module>flandmark</module>
+	<module>flandmark</module>
+	<module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
         <module>leptonica</module>
-        <module>tesseract</module>
-        <module>cpu_features</module>
+<!--
+	<module>tesseract</module>
+-->
+	<module>cpu_features</module>
         <module>systems</module>
       </modules>
       <properties>

@@ -51,6 +51,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    linux-arm64)
+        ./configure --prefix=$INSTALL_PATH CC="gcc" CXX="g++" --enable-cxx
+        make -j $MAKEJ
+        make install-strip
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

@@ -11,14 +11,14 @@ FLYCAPTURE_VERSION=2.13.3.31
 
 case $PLATFORM in
     linux-arm*)
-        if [[ ! -f "../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz" ]]; then
-            echo "Please place flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz in the downloads directory"
+        if [[ ! -f "../../downloads/flycapture.${FLYCAPTURE_VERSION}_arm64_xenial.tar.gz" ]]; then
+            echo "Please place flycapture.${FLYCAPTURE_VERSION}_arm64_xenial.tar.gz in the downloads directory"
             exit 1
         fi
         echo "Decompressing archives..."
-        tar -xzf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_armhf.tar.gz
+        tar -xzf ../../downloads/flycapture.${FLYCAPTURE_VERSION}_arm64_xenial.tar.gz
         rm -Rf $PLATFORM
-        mv flycapture.${FLYCAPTURE_VERSION}_armhf $PLATFORM
+        mv flycapture.${FLYCAPTURE_VERSION}_arm64 $PLATFORM
         mv $PLATFORM/lib/C/* $PLATFORM/lib
         mv $PLATFORM/include/C/* $PLATFORM/include
         ;;

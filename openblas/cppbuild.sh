@@ -147,6 +147,12 @@ case $PLATFORM in
         export BINARY=64
         export DYNAMIC_ARCH=1
         ;;
+    linux-arm64)
+        export CC="gcc"
+        export FC="gfortran"
+        export BINARY=64
+	export TARGET=CORTEXA57
+        ;;
     linux-ppc64le)
         # patch to use less buggy generic kernels
         patch -Np1 < ../../../OpenBLAS-linux-ppc64le.patch

@@ -43,6 +43,11 @@ case $PLATFORM in
         ln -sf "$CPUID_PATH"
         ln -sf "$INCLUDE_PATH"
         ;;
+    linux-arm64)
+        touch cpuid.h
+        ln -sf "$INCLUDE_PATH"
+        ln -sf "$INCLUDE_PATH/aarch64-linux-gnu"
+        ;;
     windows-*)
         if [[ ! -d "/C/Program Files (x86)/Windows Kits/" ]]; then
             echo "Please install the Windows SDK under the default installation directory"

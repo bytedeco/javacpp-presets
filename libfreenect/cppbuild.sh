@@ -52,6 +52,16 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         ;;
+    linux-arm64)
+        cd ../libusb-$LIBUSB_VERSION
+        CC="gcc" CXX="g++" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux --disable-udev
+        make -j $MAKEJ
+        make install
+        cd ../libfreenect-$LIBFREENECT_VERSION
+        CC="gcc" CXX="g++" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIBUSB_1_INCLUDE_DIR=$INSTALL_PATH/include/libusb-1.0/ -DLIBUSB_1_LIBRARY=$INSTALL_PATH/lib/libusb-1.0.a .
+        make -j $MAKEJ
+        make install
+        ;;
     linux-armhf)
         cd ../libusb-$LIBUSB_VERSION
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev

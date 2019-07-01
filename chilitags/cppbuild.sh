@@ -66,6 +66,11 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-arm64)
+        CXX="g++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/lib/cmake/opencv4/ .
+        make -j4
+        make install
+        ;;
     linux-ppc64le)
         MACHINE_TYPE=$( uname -m )
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then

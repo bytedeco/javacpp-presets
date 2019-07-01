@@ -48,6 +48,11 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-arm64)
+        CC="gcc" CXX="g++" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
+        make -j4
+        make install
+        ;;
     linux-armhf)
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. .
         make -j4

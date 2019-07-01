@@ -7,6 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64
+export JAVA_AWT_LIBRARY=/usr/lib/jvm/java-8-openjdk-arm64/lib/aarch64
+export JAVA_JVM_LIBRARY=/usr/lib/jvm/java-8-openjdk-arm64/jre/lib/aarch64/server
+export JAVA_INCLUDE_PATH=/usr/lib/jvm/java-8-openjdk-arm64/include
+export JAVA_INCLUDE_PATH2=/usr/lib/jvm/java-8-openjdk-arm64/include/linux
+export JAVA_AWT_INCLUDE_PATH=/usr/lib/jvm/java-8-openjdk-arm64/include
+
+export OpenBLAS_HOME=/usr/include/aarch64-linux-gnu
+
 OPENCV_VERSION=4.0.1
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz

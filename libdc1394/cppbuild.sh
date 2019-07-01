@@ -37,6 +37,11 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
+    linux-arm64)
+        CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-sdltest
+        make -j4
+        make install-strip
+        ;;
     linux-armhf)
         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --disable-sdltest
         make -j4

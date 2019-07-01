@@ -95,6 +95,11 @@ case $PLATFORM in
         make -j $MAKEJ V=0
         make install-strip
         ;;
+    linux-arm64)
+        ./configure --prefix=$INSTALL_PATH CC="gcc"
+        make -j $MAKEJ V=0
+        make install-strip
+        ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
         MACHINE_TYPE=$( uname -m )

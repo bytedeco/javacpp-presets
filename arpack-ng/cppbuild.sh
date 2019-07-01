@@ -71,6 +71,15 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    linux-arm64)
+        LIBS=
+        if echo "int main() { }" | gcc -x c - -lgfortran_nonshared; then
+            LIBS="-lgfortran_nonshared"
+        fi
+        CC="gcc" CXX="g++" FC="gfortran $LIBS" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas
+        make -j $MAKEJ
+        make install-strip
+        ;;
     linux-ppc64le)
         sed -i s/elf64ppc/elf64lppc/ configure
         CC="powerpc64le-linux-gnu-gcc -m64" CXX="powerpc64le-linux-gnu-g++ -m64" FC="powerpc64le-linux-gnu-gfortran -m64" F77="$FC" ./configure --prefix=$INSTALL_PATH --enable-icb --with-blas=openblas --with-lapack=openblas --host=powerpc64le-linux-gnu --build=ppc64le-linux
