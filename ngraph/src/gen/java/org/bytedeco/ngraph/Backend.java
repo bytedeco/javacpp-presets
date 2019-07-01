@@ -7,6 +7,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -117,4 +120,13 @@ public class Backend extends Pointer {
      *  @return a shared pointer to the op if found, else nullptr */
     public native @SharedPtr @ByVal Node get_backend_op(@StdString BytePointer op_name);
     public native @SharedPtr @ByVal Node get_backend_op(@StdString String op_name);
+
+    /** \brief Allows sending backend specific configuration. The map contains key, value pairs
+     *      specific to a particluar backend. The definition of these key, value pairs is
+     *      defined by each backend.
+     *  @param config The configuration map sent to the backend
+     *  @param error An error string describing any error encountered
+     *  @return true if the configuration is supported, false otherwise. On false the error
+     *      parameter value is valid. */
+    public native @Cast("bool") boolean set_config(@Const @ByRef StringStringMap config, @StdString @ByRef BytePointer error);
 }

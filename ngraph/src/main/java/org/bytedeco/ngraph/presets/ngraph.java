@@ -25,8 +25,9 @@ package org.bytedeco.ngraph.presets;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
+import org.bytedeco.openblas.presets.*;
 
-@Properties(target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
+@Properties(inherit = {openblas.class}, target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
     value = {"linux", "macosx"},
     define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
@@ -80,7 +81,7 @@ import org.bytedeco.javacpp.tools.*;
 //        "core/tensor.hpp",
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
-    preload = {"iomp5", "mklml", "mklml_intel"}, preloadresource = "/org/bytedeco/mkldnn/",
+    preload = {"iomp5"}, preloadresource = "/org/bytedeco/mkldnn/",
     link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
@@ -141,6 +142,7 @@ public class ngraph implements InfoMapper {
 //               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
 //               .put(new Info("std::vector<std::shared_ptr<op::Parameter> >", "std::vector<std::shared_ptr<ngraph::op::Parameter> >").pointerTypes("Pointer"))
                .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())
+	       .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("ngraph::Input<ngraph::Node>").javaNames("NodeInput").pointerTypes("NodeInput").define())
                .put(new Info("ngraph::Output<ngraph::Node>").javaNames("NodeOutput").pointerTypes("NodeOutput").define())
                .put(new Info("ngraph::Output<ngraph::Node>(const std::shared_ptr<ngraph::Node>&)").javaText(

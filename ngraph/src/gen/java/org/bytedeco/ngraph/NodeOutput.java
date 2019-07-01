@@ -7,6 +7,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -16,6 +19,12 @@ public class NodeOutput extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public NodeOutput(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public NodeOutput(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public NodeOutput position(long position) {
+            return (NodeOutput)super.position(position);
+        }
     
         /** \brief Constructs a Output.
          *  @param node A pointer to the node for the output handle.
@@ -35,6 +44,10 @@ public class NodeOutput extends Pointer {
          *  @param node A {@code shared_ptr} to the node for the output handle. */
         public NodeOutput(Node node) { super((Pointer)null); allocate(node); }
         private native void allocate(@Cast({"", "const std::shared_ptr<ngraph::Node>&"}) @SharedPtr Node node);
+
+        // A null output
+        public NodeOutput() { super((Pointer)null); allocate(); }
+        private native void allocate();
 
         /** @return A pointer to the node referred to by this output handle. */
         

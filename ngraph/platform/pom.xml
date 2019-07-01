@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>ngraph</javacpp.moduleId>
-    <revision>0.22.0-${project.parent.version}</revision>
+    <revision>0.23.0-rc.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -25,6 +25,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
       <version>0.20-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>openblas-platform</artifactId>
+      <version>0.3.6-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>

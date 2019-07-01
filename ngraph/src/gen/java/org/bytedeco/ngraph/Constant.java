@@ -7,6 +7,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief Class for constants. */
@@ -16,6 +19,10 @@ public class Constant extends Node {
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Constant(Pointer p) { super(p); }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            
+            ///
+            public native @StdString BytePointer description();
             /** \brief Constructs a tensor constant.
              * 
              *  @param type The element type of the tensor constant.

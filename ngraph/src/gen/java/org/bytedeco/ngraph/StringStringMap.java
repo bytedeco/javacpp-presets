@@ -12,20 +12,21 @@ import static org.bytedeco.openblas.global.openblas.*;
 
 import static org.bytedeco.ngraph.global.ngraph.*;
 
-@Name("std::unordered_map<std::string,void*>") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
-public class StringVoidMap extends Pointer {
+@Name("std::map<std::string,std::string>") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+public class StringStringMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StringVoidMap(Pointer p) { super(p); }
-    public StringVoidMap()       { allocate();  }
+    public StringStringMap(Pointer p) { super(p); }
+    public StringStringMap()       { allocate();  }
     private native void allocate();
-    public native @Name("operator=") @ByRef StringVoidMap put(@ByRef StringVoidMap x);
+    public native @Name("operator=") @ByRef StringStringMap put(@ByRef StringStringMap x);
 
     public boolean empty() { return size() == 0; }
     public native long size();
 
-    @Index public native Pointer get(@StdString BytePointer i);
-    public native StringVoidMap put(@StdString BytePointer i, Pointer value);
+    @Index public native @StdString BytePointer get(@StdString BytePointer i);
+    public native StringStringMap put(@StdString BytePointer i, BytePointer value);
+    @ValueSetter @Index public native StringStringMap put(@StdString BytePointer i, @StdString String value);
 
     public native @ByVal Iterator begin();
     public native @ByVal Iterator end();
@@ -36,7 +37,7 @@ public class StringVoidMap extends Pointer {
         public native @Name("operator++") @ByRef Iterator increment();
         public native @Name("operator==") boolean equals(@ByRef Iterator it);
         public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
-        public native @Name("operator*().second") @MemberGetter @Const Pointer second();
+        public native @Name("operator*().second") @MemberGetter @StdString BytePointer second();
     }
 }
 

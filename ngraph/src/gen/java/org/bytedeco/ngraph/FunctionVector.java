@@ -7,6 +7,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 @Name("std::vector<std::shared_ptr<ngraph::Function> >") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
