@@ -106,6 +106,7 @@ public class Node extends Pointer {
         public native @Cast("bool") boolean is_op();
         public native @Cast("bool") boolean is_commutative();
         public native @Cast("bool") boolean is_dynamic();
+        public native @Cast("bool") boolean has_state();
         public native @Cast("size_t") long get_instance_id();
         
         public native @Cast("std::ostream*") @ByRef Pointer write_short_description(@Cast("std::ostream*") @ByRef Pointer arg0);
@@ -186,8 +187,6 @@ public class Node extends Pointer {
         public native @SharedPtr @ByVal Node get_argument(@Cast("size_t") long index);
         // Will be replaced with an OutputVector version
         public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
-
-        public native @ByVal FunctionVector get_functions();
 
         /** True if this and node have one output with same element type and shape */
         

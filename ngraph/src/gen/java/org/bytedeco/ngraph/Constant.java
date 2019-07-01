@@ -19,6 +19,10 @@ public class Constant extends Node {
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Constant(Pointer p) { super(p); }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            
+            ///
+            public native @StdString BytePointer description();
             /** \brief Constructs a tensor constant.
              * 
              *  @param type The element type of the tensor constant.

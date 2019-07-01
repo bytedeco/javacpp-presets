@@ -14,7 +14,7 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 NCURSES=6.1
-NGRAPH=0.22.0
+NGRAPH=0.23.0-rc.1
 download https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$NCURSES.tar.gz ncurses-$NCURSES.tar.gz
 download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph-$NGRAPH.tar.gz
 

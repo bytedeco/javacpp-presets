@@ -17,14 +17,27 @@ public class Result extends Op {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Result(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public Result(long size) { super((Pointer)null); allocateArray(size); }
+            private native void allocateArray(long size);
+            @Override public Result position(long position) {
+                return (Result)super.position(position);
+            }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            public native @StdString BytePointer description();
+            /** \brief Allows a value to be used as a function result. */
+            
+            ///
+            public Result() { super((Pointer)null); allocate(); }
+            private native void allocate();
             /** \brief Allows a value to be used as a function result.
              * 
              *  @param arg Node that produces the input tensor. */
-            public Result(@Const @SharedPtr @ByRef Node arg, @Cast("bool") boolean needs_default_layout/*=false*/) { super((Pointer)null); allocate(arg, needs_default_layout); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg, @Cast("bool") boolean needs_default_layout/*=false*/);
-            public Result(@Const @SharedPtr @ByRef Node arg) { super((Pointer)null); allocate(arg); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg);
+            public Result(@Const @ByRef NodeOutput arg, @Cast("bool") boolean needs_default_layout/*=false*/) { super((Pointer)null); allocate(arg, needs_default_layout); }
+            private native void allocate(@Const @ByRef NodeOutput arg, @Cast("bool") boolean needs_default_layout/*=false*/);
+            public Result(@Const @ByRef NodeOutput arg) { super((Pointer)null); allocate(arg); }
+            private native void allocate(@Const @ByRef NodeOutput arg);
 
             public native void validate_and_infer_types();
 

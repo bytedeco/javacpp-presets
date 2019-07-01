@@ -18,6 +18,9 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../StringBoolMap.java
 
 
+// Targeting ../StringStringMap.java
+
+
 // Targeting ../SizeTSet.java
 
 
@@ -1002,6 +1005,8 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
                                                              @Cast("size_t") long i);
     @Namespace("ngraph") public static native @Const @ByRef NodeVector check_single_output_args(@Const @ByRef NodeVector args);
 
+    @Namespace("ngraph") public static native @ByVal @Cast("ngraph::OutputVector*") NodeOutputVector as_output_vector(@Const @ByRef NodeVector args);
+
     /** Alias useful for cloning */
 // Targeting ../Node.java
 
@@ -1207,7 +1212,8 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         public static final int
             CONSTANT = 0,
             EDGE = 1,
-            REFLECT = 2;
+            REFLECT = 2,
+            SYMMETRIC = 3;
 
         /** \brief Padding Type used for {@code Convolution} and {@code Pooling}
          * 
@@ -1593,6 +1599,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include <map>
 // #include <memory>
+// #include <mutex>
 
 // #include "cpu_backend_visibility.h"
 // #include "ngraph/pass/pass_config.hpp"
