@@ -40,6 +40,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install > /dev/null
         ;;
+    linux-arm64)
+        $CMAKE -DCMAKE_INSTALL_PREFIX=../.. -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=host -DLIBXML2_LIBRARIES= -DLLVM_INCLUDE_TESTS=OFF ..
+        make -j $MAKEJ
+        make install > /dev/null
+        ;;
 #    linux-armhf)
 #        export CC_FLAGS="clang -target arm -march=armv7 -mfloat-abi=hard"
 #        export CXX_FLAGS="-target arm -march=armv7 -mfloat-abi=hard"

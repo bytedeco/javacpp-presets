@@ -217,6 +217,10 @@ matrix:
         env: PROJ=cpu_features,systems OS=linux-arm64
         install: true
         script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=llvm OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
 
       - os: linux
         env: PROJ=opencv,artoolkitplus,chilitags,flandmark OS=linux-ppc64le
