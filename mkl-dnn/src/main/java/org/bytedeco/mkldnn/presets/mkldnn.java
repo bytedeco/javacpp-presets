@@ -50,7 +50,7 @@ public class mkldnn implements InfoMapper {
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
 
 	       .put(new Info("MKLDNN_MEMORY_ALLOCATE", "MKLDNN_MEMORY_NONE", "mkldnn::rnn_flags", "mkldnn::query", "mkldnn::memory::format_kind", "mkldnn::memory::format_tag", "cl_mem", "cl_device_id", "cl_command_queue", "cl_context", "cl_device_id", "undef").skip())
-               .put(new Info("mkldnn_dims_t").cppTypes("long int* const"))
+               .put(new Info("mkldnn_dims_t").cppTypes("long long int* const"))
 //               .put(new Info("mkldnn_dims_t").cppTypes("ptrdiff_t*"))
                .put(new Info("mkldnn_engine_t").valueTypes("mkldnn_engine").pointerTypes("@ByPtrPtr mkldnn_engine", "@Cast(\"mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_engine_t").valueTypes("@Const mkldnn_engine").pointerTypes("@Const @ByPtrPtr mkldnn_engine", "@Cast(\"const_mkldnn_engine_t*\") PointerPointer"))
