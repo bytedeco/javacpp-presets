@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for nGraph</name>
 
   <properties>
-    <revision>0.23.0-rc.1-${project.parent.version}</revision>
+    <revision>0.23.0-rc.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
