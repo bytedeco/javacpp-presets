@@ -140,7 +140,6 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >", "std::vector<std::shared_ptr<op::Result> >").pointerTypes("ResultVector").define())
                .put(new Info("std::ptrdiff_t", "ptrdiff_t", "std::size_t", "size_t", "std::int64_t", "int64_t").cast().valueTypes("long").pointerTypes("SizeTPointer"))
 //               .put(new Info("std::vector<std::shared_ptr<ngraph::op::Result> >").pointerTypes("Pointer"))
-
                .put(new Info("std::unordered_map<std::string,void*>").pointerTypes("StringVoidMap").define())
 	       .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("ngraph::Input<ngraph::Node>").javaNames("NodeInput").pointerTypes("NodeInput").define())
