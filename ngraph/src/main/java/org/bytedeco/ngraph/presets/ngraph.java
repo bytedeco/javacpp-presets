@@ -81,7 +81,7 @@ import org.bytedeco.openblas.presets.*;
 //        "core/tensor.hpp",
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
-    preload = {"iomp5"}, preloadresource = "/org/bytedeco/mkldnn/",
+    preloadresource = "/org/bytedeco/mkldnn/",
     link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
 //@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})

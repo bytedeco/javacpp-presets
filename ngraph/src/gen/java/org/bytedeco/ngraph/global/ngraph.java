@@ -1599,7 +1599,6 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include <map>
 // #include <memory>
-// #include <mutex>
 
 // #include "cpu_backend_visibility.h"
 // #include "ngraph/pass/pass_config.hpp"
