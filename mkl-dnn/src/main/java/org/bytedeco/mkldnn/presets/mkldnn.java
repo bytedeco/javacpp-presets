@@ -50,7 +50,10 @@ public class mkldnn implements InfoMapper {
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
 
 	       .put(new Info("MKLDNN_MEMORY_ALLOCATE", "MKLDNN_MEMORY_NONE", "mkldnn::rnn_flags", "mkldnn::query", "mkldnn::memory::format_kind", "mkldnn::memory::format_tag", "cl_mem", "cl_device_id", "cl_command_queue", "cl_context", "cl_device_id", "undef").skip())
-               .put(new Info("mkldnn_dims_t").cppTypes("long* const"))
+  
+	       .put(new Info("mkldnn_dims_t").cppTypes("int64_t * const"))
+	       .put(new Info("mkldnn_dim_t").cppTypes("int64_t"))
+	       .put(new Info("int64_t const**", "const mkldnn_dims_t").cast().pointerTypes("CLongPointer"))
                .put(new Info("mkldnn_engine_t").valueTypes("mkldnn_engine").pointerTypes("@ByPtrPtr mkldnn_engine", "@Cast(\"mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_engine_t").valueTypes("@Const mkldnn_engine").pointerTypes("@Const @ByPtrPtr mkldnn_engine", "@Cast(\"const_mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("mkldnn_primitive_desc_iterator_t").valueTypes("mkldnn_primitive_desc_iterator").pointerTypes("@ByPtrPtr mkldnn_primitive_desc_iterator", "@Cast(\"mkldnn_primitive_desc_iterator_t*\") PointerPointer"))
@@ -70,12 +73,11 @@ public class mkldnn implements InfoMapper {
                .put(new Info("mkldnn_stream_t").valueTypes("mkldnn_stream").pointerTypes("@ByPtrPtr mkldnn_stream", "@Cast(\"mkldnn_stream_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_stream_t").valueTypes("@Const mkldnn_stream").pointerTypes("@Const @ByPtrPtr mkldnn_stream", "@Cast(\"const_mkldnn_stream_t*\") PointerPointer"))
 
- 
-               .put(new Info("long long const**", "long const**", "const mkldnn_dims_t").cast().pointerTypes("@ByPtrPtr CLongPointer"))
+
+	      //.put(new Info("long long").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]")) 
+//               .put(new Info("long long * const", "long * const").pointerTypes("@Cast(\"long long * const\") CLongPointer"))
  
 	       .put(new Info("mkldnn::primitive_desc").pointerTypes("org.bytedeco.mkldnn.primitive_desc"))
-//	       .put(new Info("long long", "long", "mkldnn_dims_t").cast().pointerTypes("@Const CLongPointer"))
-//               .put(new Info("long long[]", "int64_t[]").valueTypes( "long[]"))
                .put(new Info("std::vector<const_mkldnn_primitive_desc_t>").annotations("@StdVector @Cast(\"const_mkldnn_primitive_desc_t*\")").pointerTypes("PointerPointer"))
 //               .put(new Info("mkldnn::primitive::at").pointerTypes("primitive.at").define())
 //               .put(new Info("mkldnn::memory::primitive_desc").pointerTypes("memoryPrimitive_desc").define())

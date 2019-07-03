@@ -1507,16 +1507,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_scra
 ///
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongPointer count, IntPointer mask,
         @Cast("const float**") PointerPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongPointer count, IntPointer mask,
         @Const @ByPtrPtr FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongBuffer count, IntBuffer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongBuffer count, IntBuffer mask,
         @Const @ByPtrPtr FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") long[] count, int[] mask,
+        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") long[] count, int[] mask,
         @Const @ByPtrPtr float[] scales);
 
 /** Sets output \p scales for primitive operations. The number of elements \p
@@ -1560,13 +1560,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_outp
 
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
         @Const FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
         @Const FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
         @Const float[] scales);
 
 /** Returns \p post_ops for given \p attr.
@@ -1781,8 +1781,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_elt
 
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
-        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dims,
-        @Cast("mkldnn_data_type_t") int data_type, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides);
+        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides);
 
 /** Initializes a \p memory_desc memory descriptor using \p ndims, \p dims, \p
  *  data_type, and format \p tag.
@@ -1791,7 +1791,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_str
  *  the appropriate memory format. In this case, the \p format_kind would be set
  *  to #mkldnn_format_kind_any */
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
-        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dims,
+        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims,
         @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
 
 /** Initializes a \p memory_desc for a given \p parent_memory_desc, with
@@ -1803,7 +1803,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
         mkldnn_memory_desc_t memory_desc,
         @Const mkldnn_memory_desc_t parent_memory_desc,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dims, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer offsets);
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer offsets);
 
 /** Compares two memory descriptors.
  *  @return 1 if the descriptors are the same.
@@ -2098,8 +2098,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_des
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for forward
  *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
@@ -2130,9 +2130,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_for
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
@@ -2155,8 +2155,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_da
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for backward
  *  propagation with respect to data using \p alg_kind, memory descriptors, \p
@@ -2179,9 +2179,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2206,8 +2206,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_we
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2234,9 +2234,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** \}
  <p>
@@ -2275,8 +2275,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_d
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p deconv_desc for forward
  *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
@@ -2307,9 +2307,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_f
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
  *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
@@ -2332,8 +2332,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
  *  propagation with respect to data using \p alg_kind, memory descriptors, \p
@@ -2356,9 +2356,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2383,8 +2383,8 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
  *  propagation with respect to weights using \p alg_kind, memory descriptors,
@@ -2410,9 +2410,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** \}
  <p>
@@ -2440,7 +2440,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, int axis,
-        @Cast("mkldnn_dim_t") long group_size);
+        @Cast("int64_t") long group_size);
 
 /** Initializes a \p shuffle_desc for backward propagation using memory
  *  descriptor \p diff_data_desc, \p axis, and \p group_size.
@@ -2463,7 +2463,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_in
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_backward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc,
         @Const mkldnn_memory_desc_t diff_data_desc, int axis,
-        @Cast("mkldnn_dim_t") long group_size);
+        @Cast("int64_t") long group_size);
 
 /** \}
  <p>
@@ -2606,9 +2606,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_i
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** Initializes a pooling descriptor \p pool_desc for backward propagation
  *  using \p alg_kind, memory descriptors, and pooling parameters in the spatial
@@ -2632,9 +2632,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_in
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") @ByPtrPtr CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
+        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
 
 /** \}
  <p>
@@ -2667,7 +2667,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_i
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
-        @Cast("mkldnn_dim_t") long local_size, float alpha, float beta, float k);
+        @Cast("int64_t") long local_size, float alpha, float beta, float k);
 
 /** Initializes an \p lrn_desc for backward propagation using \p alg_kind,
  *  memory descriptors \p data_desc and \p diff_data_desc, and regularization
@@ -2693,7 +2693,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
-        @Const mkldnn_memory_desc_t data_desc, @Cast("mkldnn_dim_t") long local_size,
+        @Const mkldnn_memory_desc_t data_desc, @Cast("int64_t") long local_size,
         float alpha, float beta, float k);
 
 /** \}
@@ -2974,13 +2974,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_
 ///
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
                 @Const FloatPointer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
                 @Const FloatBuffer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
                 @Const float[] weights_scales);
 
 /** Initializes an RNN descriptor \p rnn_desc for forward propagation
@@ -3551,22 +3551,22 @@ public static native @Const mkldnn_version_t mkldnn_version();
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
-        float alpha, @Const FloatPointer A, @Cast("mkldnn_dim_t") long lda,
-        @Const FloatPointer B, @Cast("mkldnn_dim_t") long ldb,
-        float beta, FloatPointer C, @Cast("mkldnn_dim_t") long ldc);
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        float alpha, @Const FloatPointer A, @Cast("int64_t") long lda,
+        @Const FloatPointer B, @Cast("int64_t") long ldb,
+        float beta, FloatPointer C, @Cast("int64_t") long ldc);
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
-        float alpha, @Const FloatBuffer A, @Cast("mkldnn_dim_t") long lda,
-        @Const FloatBuffer B, @Cast("mkldnn_dim_t") long ldb,
-        float beta, FloatBuffer C, @Cast("mkldnn_dim_t") long ldc);
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        float alpha, @Const FloatBuffer A, @Cast("int64_t") long lda,
+        @Const FloatBuffer B, @Cast("int64_t") long ldb,
+        float beta, FloatBuffer C, @Cast("int64_t") long ldc);
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
-        float alpha, @Const float[] A, @Cast("mkldnn_dim_t") long lda,
-        @Const float[] B, @Cast("mkldnn_dim_t") long ldb,
-        float beta, float[] C, @Cast("mkldnn_dim_t") long ldc);
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        float alpha, @Const float[] A, @Cast("int64_t") long lda,
+        @Const float[] B, @Cast("int64_t") long ldb,
+        float beta, float[] C, @Cast("int64_t") long ldc);
 
 /** gemm_s8u8s32 and gemm_s8s8s32 perform a matrix-matrix multiplication
  *  operation and add the result to a scalar-matrix product. For the final
@@ -3604,25 +3604,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Cast("const uint8_t*") BytePointer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
-        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
+        @Cast("const uint8_t*") BytePointer A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
+        @Const BytePointer B, @Cast("int64_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("int64_t") long ldc, @Const IntPointer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Cast("const uint8_t*") ByteBuffer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
-        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
+        @Cast("const uint8_t*") ByteBuffer A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
+        @Const ByteBuffer B, @Cast("int64_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("int64_t") long ldc, @Const IntBuffer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Cast("const uint8_t*") byte[] A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
-        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
+        @Cast("const uint8_t*") byte[] A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
+        @Const byte[] B, @Cast("int64_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("int64_t") long ldc, @Const int[] co);
 
 /** gemm_s8u8s32 and gemm_s8s8s32 perform a matrix-matrix multiplication
  *  operation and add the result to a scalar-matrix product. For the final
@@ -3633,25 +3633,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
  *  @see dev_guide_int8_computations */
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Const BytePointer A, @Cast("mkldnn_dim_t") long lda, byte ao,
-        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
+        @Const BytePointer A, @Cast("int64_t") long lda, byte ao,
+        @Const BytePointer B, @Cast("int64_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("int64_t") long ldc, @Const IntPointer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Const ByteBuffer A, @Cast("mkldnn_dim_t") long lda, byte ao,
-        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
+        @Const ByteBuffer A, @Cast("int64_t") long lda, byte ao,
+        @Const ByteBuffer B, @Cast("int64_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("int64_t") long ldc, @Const IntBuffer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
         float alpha,
-        @Const byte[] A, @Cast("mkldnn_dim_t") long lda, byte ao,
-        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
-        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
+        @Const byte[] A, @Cast("int64_t") long lda, byte ao,
+        @Const byte[] B, @Cast("int64_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("int64_t") long ldc, @Const int[] co);
 /** \}
  <p>
  *  \} */

@@ -52,14 +52,14 @@ public class mkldnn_convolution_desc_t extends Pointer {
     /** Destination gradient memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t diff_dst_desc(); public native mkldnn_convolution_desc_t diff_dst_desc(mkldnn_memory_desc_t setter);
     /** Convolution strides in each spatial dimension. */
-    @MemberGetter public native CLongPointer strides();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer strides();
     /** Convolution dilates in each spatial dimension. */
-    @MemberGetter public native CLongPointer dilates();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer dilates();
     /** Padding in each spatial dimension. padding[0] is a padding in the
      *  beginning (\p padding_l), padding[1] is a padding in the end (\p
      *  padding_r). */
-    @MemberGetter public native CLongPointer padding(int i);
-    @MemberGetter public native @Cast("long const**") PointerPointer padding();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer padding(int i);
+    @MemberGetter public native @Cast("int64_t  const**") PointerPointer padding();
     /** The accumulator data type. Initialized automatically. */
     public native @Cast("mkldnn_data_type_t") int accum_data_type(); public native mkldnn_convolution_desc_t accum_data_type(int setter);
 }

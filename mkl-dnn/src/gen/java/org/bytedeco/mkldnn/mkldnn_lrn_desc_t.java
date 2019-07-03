@@ -40,7 +40,7 @@ public class mkldnn_lrn_desc_t extends Pointer {
     public native @ByRef mkldnn_memory_desc_t diff_data_desc(); public native mkldnn_lrn_desc_t diff_data_desc(mkldnn_memory_desc_t setter);
     /** The number of channels to sum over (for cross-channel LRN) or the side
      *  length of the square region to sum over (for within-channel LRN). */
-    public native @Cast("mkldnn_dim_t") long local_size(); public native mkldnn_lrn_desc_t local_size(long setter);
+    public native @Cast("int64_t") long local_size(); public native mkldnn_lrn_desc_t local_size(long setter);
     /** LRN alpha parameter. */
     public native float lrn_alpha(); public native mkldnn_lrn_desc_t lrn_alpha(float setter);
     /** LRN beta parameter. */

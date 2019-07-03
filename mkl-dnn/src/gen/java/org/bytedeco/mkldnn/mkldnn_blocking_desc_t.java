@@ -29,14 +29,14 @@ public class mkldnn_blocking_desc_t extends Pointer {
 
     /** The strides between the outermost blocks.
      *  In case of plain (non-blocked) formats the strides between dimensions. */
-    @MemberGetter public native CLongPointer strides();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer strides();
     // Innermost section
     // ASSUMPTION: the innermost blocks are always dense
     /** The number of innermost blocks, e.g. 3 in case of {@code OIhw_4i16o4i_} */
     public native int inner_nblks(); public native mkldnn_blocking_desc_t inner_nblks(int setter);
     /** The size of the blocks, e.g. {@code {4, 16, 4}} in case of {@code OIhw_4i16o4i} */
-    @MemberGetter public native CLongPointer inner_blks();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer inner_blks();
     /** The logical indices of the blocks, e.g. {@code {1, 0, 1}} in case of
      *  {@code 4i16o4i}, because {@code i} is the 1st dim and {@code o} is the 0st dim */
-    @MemberGetter public native CLongPointer inner_idxs();
+    @MemberGetter public native @Cast("int64_t  const*") LongPointer inner_idxs();
 }
