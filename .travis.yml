@@ -21,3 +21,7 @@ matrix:
         env: PROJ=mkl-dnn OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=ngraph OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
