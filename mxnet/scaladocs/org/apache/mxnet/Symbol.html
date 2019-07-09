@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Symbol - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.Symbol</title>
-          <meta name="description" content="Symbol - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.Symbol" />
-          <meta name="keywords" content="Symbol JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.Symbol" />
+          <title>Symbol - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.Symbol</title>
+          <meta name="description" content="Symbol - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.Symbol" />
+          <meta name="keywords" content="Symbol JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.Symbol" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -1394,6 +1394,29 @@ An error will be raised if there is inconsistency found in the known shapes pass
 argShapes List of shapes of arguments. The order is in the same order as list_arguments()
 outShapes List of shapes of outputs. The order is in the same order as list_outputs()
 auxShapes List of shapes of outputs. The order is in the same order as list_auxiliary()</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.Symbol#inferShape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="inferShape(args:IndexedSeq[org.apache.mxnet.DataDesc]):(IndexedSeq[org.apache.mxnet.Shape],IndexedSeq[org.apache.mxnet.Shape],IndexedSeq[org.apache.mxnet.Shape])"></a>
+      <a id="inferShape(IndexedSeq[DataDesc]):(IndexedSeq[Shape],IndexedSeq[Shape],IndexedSeq[Shape])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">inferShape</span><span class="params">(<span name="args">args: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]</span>)</span><span class="result">: (<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>], <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>], <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>])</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.Symbol@inferShape(args:IndexedSeq[org.apache.mxnet.DataDesc]):(IndexedSeq[org.apache.mxnet.Shape],IndexedSeq[org.apache.mxnet.Shape],IndexedSeq[org.apache.mxnet.Shape])" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Infer the shape of outputs and arguments of given known shapes of arguments.</p><div class="fullcomment"><div class="comment cmt"><p>Infer the shape of outputs and arguments of given known shapes of arguments.
+User can either pass in the known shapes in positional way or keyword argument way.
+Tuple of Nones is returned if there is not enough information passed in.
+An error will be raised if there is inconsistency found in the known shapes passed in.</p></div><dl class="paramcmts block"><dt class="param">args</dt><dd class="cmt"><p>Provide a list of DataDesc containing the shapes to resolve</p></dd><dt>returns</dt><dd class="cmt"><p>
+argShapes List of shapes of arguments. The order is in the same order as list_arguments()
+outShapes List of shapes of outputs. The order is in the same order as list_outputs()
+auxShapes List of shapes of outputs. The order is in the same order as list_auxiliary()</p></dd></dl></div>
     </li><li name="org.apache.mxnet.Symbol#inferType" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferType(kwargs:Map[String,org.apache.mxnet.DType.DType]):(Seq[org.apache.mxnet.DType.DType],Seq[org.apache.mxnet.DType.DType],Seq[org.apache.mxnet.DType.DType])"></a>
       <a id="inferType(Map[String,DType.DType]):(Seq[DType.DType],Seq[DType.DType],Seq[DType.DType])"></a>
@@ -1746,6 +1769,29 @@ they like to bind to, and it will automatically allocate the ndarray
 for arguments and auxiliary states that user did not specify explicitly.
 </p></div><dl class="paramcmts block"><dt class="param">ctx</dt><dd class="cmt"><p>The device context the generated executor to run on.</p></dd><dt class="param">gradReq</dt><dd class="cmt"><p>{'write', 'add', 'null'}, or list of str or dict of str to str, optional
                Specifies how we should update the gradient to the args_grad.</p><ul><li>'write' means everytime gradient is write to specified args_grad NDArray.</li><li>'add' means everytime gradient is add to the specified NDArray.</li><li>'null' means no action is taken, the gradient may not be calculated.</li></ul></dd><dt class="param">shapeDict</dt><dd class="cmt"><p>Input shape dictionary, name-&gt;shape</p></dd><dt class="param">typeDict</dt><dd class="cmt"><p>Input type dictionary, name-&gt;dtype</p></dd><dt>returns</dt><dd class="cmt"><p>The generated Executor</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.Symbol#simpleBind" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="simpleBind(ctx:org.apache.mxnet.Context,gradReq:String,descs:IndexedSeq[org.apache.mxnet.DataDesc]):org.apache.mxnet.Executor"></a>
+      <a id="simpleBind(Context,String,IndexedSeq[DataDesc]):Executor"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">simpleBind</span><span class="params">(<span name="ctx">ctx: <a href="Context.html" class="extype" name="org.apache.mxnet.Context">Context</a></span>, <span name="gradReq">gradReq: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="descs">descs: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<a href="DataDesc.html" class="extype" name="org.apache.mxnet.DataDesc">DataDesc</a>]</span>)</span><span class="result">: <a href="Executor.html" class="extype" name="org.apache.mxnet.Executor">Executor</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.Symbol@simpleBind(ctx:org.apache.mxnet.Context,gradReq:String,descs:IndexedSeq[org.apache.mxnet.DataDesc]):org.apache.mxnet.Executor" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Bind current symbol to get an executor, allocate all the ndarrays needed.</p><div class="fullcomment"><div class="comment cmt"><p>Bind current symbol to get an executor, allocate all the ndarrays needed.
+Allows specifying data types.
+This function will ask user to pass in ndarray of position
+they like to bind to, and it will automatically allocate the ndarray
+for arguments and auxiliary states that user did not specify explicitly.
+</p></div><dl class="paramcmts block"><dt class="param">ctx</dt><dd class="cmt"><p>The device context the generated executor to run on.</p></dd><dt class="param">gradReq</dt><dd class="cmt"><p>{'write', 'add', 'null'}, or list of str or dict of str to str, optional
+               Specifies how we should update the gradient to the args_grad.</p><ul><li>'write' means everytime gradient is write to specified args_grad NDArray.</li><li>'add' means everytime gradient is add to the specified NDArray.</li><li>'null' means no action is taken, the gradient may not be calculated.</li></ul></dd><dt>returns</dt><dd class="cmt"><p>The generated Executor</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

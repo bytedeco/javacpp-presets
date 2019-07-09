@@ -1,3 +1,4 @@
 org.bytedeco.cpython
 org.bytedeco.cpython.global
+org.bytedeco.cpython.helper
 org.bytedeco.cpython.presets

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>mxnet - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet</title>
-          <meta name="description" content="mxnet - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet" />
-          <meta name="keywords" content="mxnet JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet" />
+          <title>mxnet - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet</title>
+          <meta name="description" content="mxnet - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet" />
+          <meta name="keywords" content="mxnet JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -134,7 +134,8 @@
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Constructing a context.</p>
+      <p class="shortcomment cmt">Constructing a context which is used to specify the device and device type that will
+be utilized by the engine.</p>
     </li><li name="org.apache.mxnet.CustomMetric" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="CustomMetricextendsEvalMetric"></a>
       <a id="CustomMetric:CustomMetric"></a>
@@ -371,23 +372,6 @@ be base_lr * factor^^(floor(n/step))
     </span>
       <p class="shortcomment cmt">Model class of MXNet for training and predicting feedforward nets.</p><div class="fullcomment"><div class="comment cmt"><p>Model class of MXNet for training and predicting feedforward nets.
 This class is designed for a single-data single output supervised network.</p></div></div>
-    </li><li name="org.apache.mxnet.GeneratorBase" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="GeneratorBaseextendsAnyRef"></a>
-      <a id="GeneratorBase:GeneratorBase"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a href="GeneratorBase.html"><span class="name">GeneratorBase</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.package@GeneratorBaseextendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="org.apache.mxnet.Initializer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="InitializerextendsAnyRef"></a>
       <a id="Initializer:Initializer"></a>
@@ -634,7 +618,10 @@ Support random access.
       <p class="shortcomment cmt">NDArray object in mxnet.</p><div class="fullcomment"><div class="comment cmt"><p>NDArray object in mxnet.
 NDArray is basic ndarray/Tensor like data structure in mxnet. <br />
 <b>
-WARNING: it is your responsibility to clear this object through dispose().
+NOTE: NDArray is stored in native memory. Use NDArray in a try-with-resources() construct
+or a [[org.apache.mxnet.ResourceScope]] in a try-with-resource to have them
+automatically disposed. You can explicitly control the lifetime of NDArray
+by calling dispose manually. Failure to do this will result in leaking native memory.
 </b>
 </p></div></div>
     </li><li name="org.apache.mxnet.NDArrayAPIBase" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
@@ -671,19 +658,36 @@ WARNING: it is your responsibility to clear this object through dispose().
       </a>
     </span>
       
-    </li><li name="org.apache.mxnet.NDArrayCollector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NDArrayCollectorextendsAnyRef"></a>
-      <a id="NDArrayCollector:NDArrayCollector"></a>
+    </li><li name="org.apache.mxnet.NDArrayOrScalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NDArrayOrScalar[T]extendsAnyRef"></a>
+      <a id="NDArrayOrScalar[T]:NDArrayOrScalar[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="NDArrayCollector.html"><span class="name">NDArrayCollector</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+        <a href="NDArrayOrScalar.html"><span class="name">NDArrayOrScalar</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.package@NDArrayCollectorextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayOrScalar[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.NDArrayRandomAPIBase" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NDArrayRandomAPIBaseextendsAnyRef"></a>
+      <a id="NDArrayRandomAPIBase:NDArrayRandomAPIBase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NDArrayRandomAPIBase.html"><span class="name">NDArrayRandomAPIBase</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayRandomAPIBaseextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -725,6 +729,23 @@ User can also inherit this object to change naming behavior.
     </span>
       <p class="shortcomment cmt">Initialize the weight with normal(0, sigma)
 </p>
+    </li><li name="org.apache.mxnet.NumpyScope" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NumpyScopeextendsAnyRef"></a>
+      <a id="NumpyScope:NumpyScope"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NumpyScope.html"><span class="name">NumpyScope</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NumpyScopeextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.Optimizer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="OptimizerextendsSerializable"></a>
       <a id="Optimizer:Optimizer"></a>
@@ -920,6 +941,40 @@ WARNING: it is your responsibility to clear this object through dispose().
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.SymbolOrScalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SymbolOrScalar[T]extendsAnyRef"></a>
+      <a id="SymbolOrScalar[T]:SymbolOrScalar[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolOrScalar.html"><span class="name">SymbolOrScalar</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@SymbolOrScalar[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.SymbolRandomAPIBase" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SymbolRandomAPIBaseextendsAnyRef"></a>
+      <a id="SymbolRandomAPIBase:SymbolRandomAPIBase"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolRandomAPIBase.html"><span class="name">SymbolRandomAPIBase</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@SymbolRandomAPIBaseextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.TopKAccuracy" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TopKAccuracyextendsEvalMetric"></a>
       <a id="TopKAccuracy:TopKAccuracy"></a>
@@ -990,6 +1045,26 @@ WARNING: it is your responsibility to clear this object through dispose().
       </a>
     </span>
       <p class="shortcomment cmt">Initialize the weight with Xavier or similar initialization scheme.</p>
+    </li><li name="org.apache.mxnet.NDArrayCollector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NDArrayCollectorextendsAnyRef"></a>
+      <a id="NDArrayCollector:NDArrayCollector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="NDArrayCollector.html"><span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">NDArrayCollector</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayCollectorextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -1228,6 +1303,23 @@ T sequence length
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.MX_PRIMITIVES" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MX_PRIMITIVES"></a>
+      <a id="MX_PRIMITIVES:MX_PRIMITIVES"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MX_PRIMITIVES$.html"><span class="name">MX_PRIMITIVES</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@MX_PRIMITIVES" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.Model" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Model"></a>
       <a id="Model:Model"></a>
@@ -1288,66 +1380,61 @@ Main code will be generated during compile time through Macros
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">typesafe NDArray API: NDArray.api._
+Main code will be generated during compile time through Macros
+</p><div class="fullcomment"><div class="comment cmt"><p>typesafe NDArray API: NDArray.api._
+Main code will be generated during compile time through Macros
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@AddNDArrayAPIs</span><span class="args">(<span>
       
       <span class="symbol">false</span>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.apache.mxnet.NDArrayCollector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="NDArrayCollector"></a>
-      <a id="NDArrayCollector:NDArrayCollector"></a>
+    </li><li name="org.apache.mxnet.NDArrayOrScalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NDArrayOrScalar"></a>
+      <a id="NDArrayOrScalar:NDArrayOrScalar"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a href="NDArrayCollector$.html"><span class="name">NDArrayCollector</span></a>
+        <a href="NDArrayOrScalar$.html"><span class="name">NDArrayOrScalar</span></a>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.package@NDArrayCollector" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayOrScalar" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt"> A collector to store NDArrays.</p><div class="fullcomment"><div class="comment cmt"><p> A collector to store NDArrays.
- It provides a scope, NDArrays allocated in the scope can either <br /></p><ul><li>be disposed automatically when the code block finishes, or <br /></li><li>simply be collected for future usage.
- <br />
- If the return type of scope is <em>NDArray</em> or <em>NDArrayFuncReturn</em>,
- the collector is smart enough NOT to collect or dispose the returned NDArray. <br />
- However in other cases, it is users' responsibility NOT to leak allocated NDArrays outside,
- (e.g., store to a global variable and use later, pass to another thread, etc.) <br />
- Usage Example:
-<pre>
- val a = NDArray.array(Array(-1f, 0f, 1f, 2f, 3f, 4f), shape = Shape(2, 3))
- val res = NDArrayCollector.auto().withScope {
-   (NDArray.relu(a) + a).toArray
- }
-</pre>
- In the case above, the intermediate NDArrays
- (created by <em>NDArray.relu</em> and <em>+</em>) will be disposed automatically. <br />
- User can also decide to dispose the collected NDArrays later: <br />
-<pre>
- val collector = NDArrayCollector.manual()
- val res = collector.withScope {
-   (NDArray.relu(a) + a).toArray
- }
- collector.foreach(_.dispose())
-</pre>
- For Java users: <br />
-<pre>
- NDArray a = NDArray.array(new float[]{-1f, 0f, 1f, 2f, 3f, 4f},
-                           Shape.create(2, 3), Context.cpu(0));
- float[] sliced = NDArrayCollector.auto().withScope(
-   new scala.runtime.AbstractFunction0<float[]>() {
-   @Override
-   public float[] apply() {
-     a.slice(0, 1).toArray();
-   }
- });
-</pre>
-</li></ul></div></div>
+      
+    </li><li name="org.apache.mxnet.NDArrayRandomAPI" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NDArrayRandomAPI"></a>
+      <a id="NDArrayRandomAPI:NDArrayRandomAPI"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NDArrayRandomAPI$.html"><span class="name">NDArrayRandomAPI</span></a><span class="result"> extends <a href="NDArrayRandomAPIBase.html" class="extype" name="org.apache.mxnet.NDArrayRandomAPIBase">NDArrayRandomAPIBase</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayRandomAPI" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">typesafe NDArray random module: NDArray.random._
+Main code will be generated during compile time through Macros
+</p><div class="fullcomment"><div class="comment cmt"><p>typesafe NDArray random module: NDArray.random._
+Main code will be generated during compile time through Macros
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@AddNDArrayRandomAPIs</span><span class="args">(<span>
+      
+      <span class="symbol">false</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="org.apache.mxnet.NameManager" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NameManager"></a>
       <a id="NameManager:NameManager"></a>
@@ -1365,6 +1452,27 @@ Main code will be generated during compile time through Macros
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.NumpyScope" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NumpyScope"></a>
+      <a id="NumpyScope:NumpyScope"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NumpyScope$.html"><span class="name">NumpyScope</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NumpyScope" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">NumpyScope object provides util functions for turning on/off NumPy compatibility
+and checking whether NumPy compatibility has been turned on/off.</p><div class="fullcomment"><div class="comment cmt"><p>NumpyScope object provides util functions for turning on/off NumPy compatibility
+and checking whether NumPy compatibility has been turned on/off. NumPy compatibility
+is introduced first to support zero-dim and zero-size tensors as in NumPy.
+</p></div></div>
     </li><li name="org.apache.mxnet.Operator" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Operator"></a>
       <a id="Operator:Operator"></a>
@@ -1510,7 +1618,11 @@ Main code will be generated during compile time through Macros
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">typesafe Symbol API: Symbol.api._
+Main code will be generated during compile time through Macros
+</p><div class="fullcomment"><div class="comment cmt"><p>typesafe Symbol API: Symbol.api._
+Main code will be generated during compile time through Macros
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@AddSymbolAPIs</span><span class="args">(<span>
       
       <span class="symbol">false</span>
@@ -1534,6 +1646,50 @@ Main code will be generated during compile time through Macros
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.SymbolOrScalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SymbolOrScalar"></a>
+      <a id="SymbolOrScalar:SymbolOrScalar"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolOrScalar$.html"><span class="name">SymbolOrScalar</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@SymbolOrScalar" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.SymbolRandomAPI" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="SymbolRandomAPI"></a>
+      <a id="SymbolRandomAPI:SymbolRandomAPI"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SymbolRandomAPI$.html"><span class="name">SymbolRandomAPI</span></a><span class="result"> extends <a href="SymbolRandomAPIBase.html" class="extype" name="org.apache.mxnet.SymbolRandomAPIBase">SymbolRandomAPIBase</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@SymbolRandomAPI" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">typesafe Symbol random module: Symbol.random._
+Main code will be generated during compile time through Macros
+</p><div class="fullcomment"><div class="comment cmt"><p>typesafe Symbol random module: Symbol.random._
+Main code will be generated during compile time through Macros
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@AddSymbolRandomAPIs</span><span class="args">(<span>
+      
+      <span class="symbol">false</span>
+    </span>)</span>
+              
+        </dd></dl></div>
     </li><li name="org.apache.mxnet.Visualization" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Visualization"></a>
       <a id="Visualization:Visualization"></a>
@@ -1704,12 +1860,88 @@ Main code will be generated during compile time through Macros
       </a>
     </span>
       
+    </li><li name="org.apache.mxnet.util" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="util"></a>
+      <a id="util:util"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="util/package.html"><span class="name">util</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@util" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li></ol>
             </div>
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="org.apache.mxnet.NDArrayCollector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="NDArrayCollector"></a>
+      <a id="NDArrayCollector:NDArrayCollector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NDArrayCollector$.html"><span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">NDArrayCollector</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.package@NDArrayCollector" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"> A collector to store NDArrays.</p><div class="fullcomment"><div class="comment cmt"><p> A collector to store NDArrays.
+ It provides a scope, NDArrays allocated in the scope can either <br /></p><ul><li>be disposed automatically when the code block finishes, or <br /></li><li>simply be collected for future usage.
+ <br />
+ If the return type of scope is <em>NDArray</em> or <em>NDArrayFuncReturn</em>,
+ the collector is smart enough NOT to collect or dispose the returned NDArray. <br />
+ However in other cases, it is users' responsibility NOT to leak allocated NDArrays outside,
+ (e.g., store to a global variable and use later, pass to another thread, etc.) <br />
+ Usage Example:
+<pre>
+ val a = NDArray.array(Array(-1f, 0f, 1f, 2f, 3f, 4f), shape = Shape(2, 3))
+ val res = NDArrayCollector.auto().withScope {
+   (NDArray.relu(a) + a).toArray
+ }
+</pre>
+ In the case above, the intermediate NDArrays
+ (created by <em>NDArray.relu</em> and <em>+</em>) will be disposed automatically. <br />
+ User can also decide to dispose the collected NDArrays later: <br />
+<pre>
+ val collector = NDArrayCollector.manual()
+ val res = collector.withScope {
+   (NDArray.relu(a) + a).toArray
+ }
+ collector.foreach(_.dispose())
+</pre>
+ For Java users: <br />
+<pre>
+ NDArray a = NDArray.array(new float[]{-1f, 0f, 1f, 2f, 3f, 4f},
+                           Shape.create(2, 3), Context.cpu(0));
+ float[] sliced = NDArrayCollector.auto().withScope(
+   new scala.runtime.AbstractFunction0<float[]>() {
+   @Override
+   public float[] apply() {
+     a.slice(0, 1).toArray();
+   }
+ });
+</pre>
+</li></ul></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

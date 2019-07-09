@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>NDArrayCollector - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.NDArrayCollector</title>
-          <meta name="description" content="NDArrayCollector - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.NDArrayCollector" />
-          <meta name="keywords" content="NDArrayCollector JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.NDArrayCollector" />
+          <title>NDArrayCollector - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.NDArrayCollector</title>
+          <meta name="description" content="NDArrayCollector - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.NDArrayCollector" />
+          <meta name="keywords" content="NDArrayCollector JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.NDArrayCollector" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -47,7 +47,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">NDArrayCollector</span>
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">NDArrayCollector</span>
       </span>
       </h4>
       
@@ -87,7 +87,10 @@
    }
  });
 </pre>
-</li></ul></div><div class="toggleContainer block">
+</li></ul></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -200,23 +203,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.apache.mxnet.NDArrayCollector#auto" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="auto():org.apache.mxnet.NDArrayCollector"></a>
-      <a id="auto():NDArrayCollector"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">auto</span><span class="params">()</span><span class="result">: <a href="NDArrayCollector.html" class="extype" name="org.apache.mxnet.NDArrayCollector">NDArrayCollector</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@auto():org.apache.mxnet.NDArrayCollector" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Create a collector which will dispose the collected NDArrays automatically.</p><div class="fullcomment"><div class="comment cmt"><p>Create a collector which will dispose the collected NDArrays automatically.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an auto-disposable collector.</p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -238,26 +224,6 @@
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="org.apache.mxnet.NDArrayCollector#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="collect(ndArray:org.apache.mxnet.NDArray*):Unit"></a>
-      <a id="collect(NDArray*):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">collect</span><span class="params">(<span name="ndArray">ndArray: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@collect(ndArray:org.apache.mxnet.NDArray*):Unit" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Collect the NDArrays into the collector of the current thread.</p><div class="fullcomment"><div class="comment cmt"><p>Collect the NDArrays into the collector of the current thread.</p></div><dl class="paramcmts block"><dt class="param">ndArray</dt><dd class="cmt"><p>NDArrays need to be collected.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@varargs</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -368,26 +334,6 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.apache.mxnet.NDArrayCollector#manual" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="manual():org.apache.mxnet.NDArrayCollector"></a>
-      <a id="manual():NDArrayCollector"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">manual</span><span class="params">()</span><span class="result">: <a href="NDArrayCollector.html" class="extype" name="org.apache.mxnet.NDArrayCollector">NDArrayCollector</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@manual():org.apache.mxnet.NDArrayCollector" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Create a collector allows users to later dispose the collected NDArray manually.</p><div class="fullcomment"><div class="comment cmt"><p>Create a collector allows users to later dispose the collected NDArray manually.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a manually-disposable collector.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@<a href="annotation/Experimental.html" class="extype" name="org.apache.mxnet.annotation.Experimental">Experimental</a></span><span class="args">()</span>
-              
-        </dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -547,7 +493,74 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="org.apache.mxnet.NDArrayCollector#auto" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="auto():org.apache.mxnet.NDArrayCollector"></a>
+      <a id="auto():NDArrayCollector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">auto</span><span class="params">()</span><span class="result">: <a href="NDArrayCollector.html" class="extype" name="org.apache.mxnet.NDArrayCollector">NDArrayCollector</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@auto():org.apache.mxnet.NDArrayCollector" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a collector which will dispose the collected NDArrays automatically.</p><div class="fullcomment"><div class="comment cmt"><p>Create a collector which will dispose the collected NDArrays automatically.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an auto-disposable collector.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArrayCollector#collect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="collect(ndArray:org.apache.mxnet.NDArray*):Unit"></a>
+      <a id="collect(NDArray*):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">collect</span><span class="params">(<span name="ndArray">ndArray: <a href="NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a>*</span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@collect(ndArray:org.apache.mxnet.NDArray*):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Collect the NDArrays into the collector of the current thread.</p><div class="fullcomment"><div class="comment cmt"><p>Collect the NDArrays into the collector of the current thread.</p></div><dl class="paramcmts block"><dt class="param">ndArray</dt><dd class="cmt"><p>NDArrays need to be collected.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+                <span class="name">@varargs</span><span class="args">()</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArrayCollector#manual" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="manual():org.apache.mxnet.NDArrayCollector"></a>
+      <a id="manual():NDArrayCollector"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">manual</span><span class="params">()</span><span class="result">: <a href="NDArrayCollector.html" class="extype" name="org.apache.mxnet.NDArrayCollector">NDArrayCollector</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArrayCollector$@manual():org.apache.mxnet.NDArrayCollector" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Create a collector allows users to later dispose the collected NDArray manually.</p><div class="fullcomment"><div class="comment cmt"><p>Create a collector allows users to later dispose the collected NDArray manually.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a manually-disposable collector.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+                <span class="name">@<a href="annotation/Experimental.html" class="extype" name="org.apache.mxnet.annotation.Experimental">Experimental</a></span><span class="args">()</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

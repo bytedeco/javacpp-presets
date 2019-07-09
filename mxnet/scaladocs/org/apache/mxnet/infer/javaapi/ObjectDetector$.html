@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ObjectDetector - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.javaapi.ObjectDetector</title>
-          <meta name="description" content="ObjectDetector - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.javaapi.ObjectDetector" />
-          <meta name="keywords" content="ObjectDetector JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.javaapi.ObjectDetector" />
+          <title>ObjectDetector - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.javaapi.ObjectDetector</title>
+          <meta name="description" content="ObjectDetector - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.javaapi.ObjectDetector" />
+          <meta name="keywords" content="ObjectDetector JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.javaapi.ObjectDetector" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -164,7 +164,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#bufferedImageToPixels" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#bufferedImageToPixels" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bufferedImageToPixels(resizedImage:java.awt.image.BufferedImage,inputImageShape:org.apache.mxnet.javaapi.Shape):org.apache.mxnet.javaapi.NDArray"></a>
       <a id="bufferedImageToPixels(BufferedImage,javaapi.Shape):javaapi.NDArray"></a>
       <h4 class="signature">
@@ -180,7 +180,13 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Convert input BufferedImage to NDArray of input shape
+Note: Caller is responsible to dispose the NDArray
+returned by this method after the use.</p><div class="fullcomment"><div class="comment cmt"><p>Convert input BufferedImage to NDArray of input shape
+Note: Caller is responsible to dispose the NDArray
+returned by this method after the use.
+</p></div><dl class="paramcmts block"><dt class="param">resizedImage</dt><dd class="cmt"><p>BufferedImage to get pixels from</p></dd><dt class="param">inputImageShape</dt><dd class="cmt"><p>Input shape; for example for resnet it is (3,224,224).
+                       Should be same as inputDescriptor shape.</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray pixels array with shape (3, 224, 224) in CHW format</p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -261,7 +267,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#fromObjectDetector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#fromObjectDetector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="fromObjectDetector(OD:org.apache.mxnet.infer.ObjectDetector):org.apache.mxnet.infer.javaapi.ObjectDetector"></a>
       <a id="fromObjectDetector(infer.ObjectDetector):ObjectDetector"></a>
       <h4 class="signature">
@@ -277,7 +283,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Implicitly convert a Scala ObjectDetector to a Java ObjectDetector</p><div class="fullcomment"><div class="comment cmt"><p>Implicitly convert a Scala ObjectDetector to a Java ObjectDetector</p></div><dl class="paramcmts block"><dt class="param">OD</dt><dd class="cmt"><p>The Scala ObjectDetector</p></dd><dt>returns</dt><dd class="cmt"><p>The Java ObjectDetector</p></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -329,7 +335,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#loadImageFromFile" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#loadImageFromFile" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadImageFromFile(inputImagePath:String):java.awt.image.BufferedImage"></a>
       <a id="loadImageFromFile(String):BufferedImage"></a>
       <h4 class="signature">
@@ -345,24 +351,24 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#loadInputBatch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="loadInputBatch(inputImagePaths:java.util.List[String]):java.util.List[java.awt.image.BufferedImage]"></a>
-      <a id="loadInputBatch(List[String]):List[BufferedImage]"></a>
+      <p class="shortcomment cmt">Loads an input images from file</p><div class="fullcomment"><div class="comment cmt"><p>Loads an input images from file</p></div><dl class="paramcmts block"><dt class="param">inputImagePath</dt><dd class="cmt"><p>Path of single input image</p></dd><dt>returns</dt><dd class="cmt"><p>BufferedImage Buffered image</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#loadInputBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loadInputBatch(inputImagePaths:Iterable[String]):java.util.List[java.awt.image.BufferedImage]"></a>
+      <a id="loadInputBatch(Iterable[String]):List[BufferedImage]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadInputBatch</span><span class="params">(<span name="inputImagePaths">inputImagePaths: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>
+        <span class="name">loadInputBatch</span><span class="params">(<span name="inputImagePaths">inputImagePaths: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector$@loadInputBatch(inputImagePaths:java.util.List[String]):java.util.List[java.awt.image.BufferedImage]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector$@loadInputBatch(inputImagePaths:Iterable[String]):java.util.List[java.awt.image.BufferedImage]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Loads a batch of images from a folder</p><div class="fullcomment"><div class="comment cmt"><p>Loads a batch of images from a folder</p></div><dl class="paramcmts block"><dt class="param">inputImagePaths</dt><dd class="cmt"><p>Path to a folder of images</p></dd><dt>returns</dt><dd class="cmt"><p>List of buffered images</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -414,7 +420,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#reshapeImage" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#reshapeImage" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reshapeImage(img:java.awt.image.BufferedImage,newWidth:Int,newHeight:Int):java.awt.image.BufferedImage"></a>
       <a id="reshapeImage(BufferedImage,Int,Int):BufferedImage"></a>
       <h4 class="signature">
@@ -430,7 +436,9 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Reshape the input image to a new shape
+</p><div class="fullcomment"><div class="comment cmt"><p>Reshape the input image to a new shape
+</p></div><dl class="paramcmts block"><dt class="param">img</dt><dd class="cmt"><p>Input image</p></dd><dt class="param">newWidth</dt><dd class="cmt"><p>New width for rescaling</p></dd><dt class="param">newHeight</dt><dd class="cmt"><p>New height for rescaling</p></dd><dt>returns</dt><dd class="cmt"><p>Rescaled BufferedImage</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -448,7 +456,7 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#toObjectDetector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#toObjectDetector" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toObjectDetector(jOD:org.apache.mxnet.infer.javaapi.ObjectDetector):org.apache.mxnet.infer.ObjectDetector"></a>
       <a id="toObjectDetector(ObjectDetector):infer.ObjectDetector"></a>
       <h4 class="signature">
@@ -464,7 +472,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Implicitly converts a Java ObjectDetector to a Scala ObjectDetector</p><div class="fullcomment"><div class="comment cmt"><p>Implicitly converts a Java ObjectDetector to a Scala ObjectDetector</p></div><dl class="paramcmts block"><dt class="param">jOD</dt><dd class="cmt"><p>The Java ObjectDetector</p></dd><dt>returns</dt><dd class="cmt"><p>The Scala ObjectDetector</p></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>

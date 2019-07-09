@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ObjectDetector - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.javaapi.ObjectDetector</title>
-          <meta name="description" content="ObjectDetector - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.javaapi.ObjectDetector" />
-          <meta name="keywords" content="ObjectDetector JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.javaapi.ObjectDetector" />
+          <title>ObjectDetector - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.javaapi.ObjectDetector</title>
+          <meta name="description" content="ObjectDetector - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.javaapi.ObjectDetector" />
+          <meta name="keywords" content="ObjectDetector JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.javaapi.ObjectDetector" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -92,8 +92,8 @@ is to find bounding boxes and corresponding labels for objects in a image.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(modelPathPrefix:String,inputDescriptors:java.util.List[org.apache.mxnet.javaapi.DataDesc],contexts:java.util.List[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.ObjectDetector"></a>
+              <ol><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(modelPathPrefix:String,inputDescriptors:Iterable[org.apache.mxnet.javaapi.DataDesc],contexts:Iterable[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.ObjectDetector"></a>
       <a id="&lt;init&gt;:ObjectDetector"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,14 +101,20 @@ is to find bounding boxes and corresponding labels for objects in a image.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ObjectDetector</span><span class="params">(<span name="modelPathPrefix">modelPathPrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="inputDescriptors">inputDescriptors: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/DataDesc.html" class="extype" name="org.apache.mxnet.javaapi.DataDesc">javaapi.DataDesc</a>]</span>, <span name="contexts">contexts: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/Context.html" class="extype" name="org.apache.mxnet.javaapi.Context">javaapi.Context</a>]</span>, <span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="name">ObjectDetector</span><span class="params">(<span name="modelPathPrefix">modelPathPrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="inputDescriptors">inputDescriptors: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/DataDesc.html" class="extype" name="org.apache.mxnet.javaapi.DataDesc">javaapi.DataDesc</a>]</span>, <span name="contexts">contexts: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/Context.html" class="extype" name="org.apache.mxnet.javaapi.Context">javaapi.Context</a>]</span>, <span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@&lt;init&gt;(modelPathPrefix:String,inputDescriptors:java.util.List[org.apache.mxnet.javaapi.DataDesc],contexts:java.util.List[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.ObjectDetector" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@&lt;init&gt;(modelPathPrefix:String,inputDescriptors:Iterable[org.apache.mxnet.javaapi.DataDesc],contexts:Iterable[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.ObjectDetector" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">modelPathPrefix</dt><dd class="cmt"><p>Path prefix from where to load the model artifacts.
+                          These include the symbol, parameters, and synset.txt.
+                          Example: file://model-dir/ssd_resnet50_512 (containing
+                          ssd_resnet50_512-symbol.json, ssd_resnet50_512-0000.params,
+                          and synset.txt)</p></dd><dt class="param">inputDescriptors</dt><dd class="cmt"><p>Descriptors defining the input node names, shape,
+                          layout and type parameters</p></dd><dt class="param">contexts</dt><dd class="cmt"><p>Device contexts on which you want to run inference.
+                          Defaults to CPU.</p></dd><dt class="param">epoch</dt><dd class="cmt"><p>Model epoch to load; defaults to 0</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -209,7 +215,7 @@ is to find bounding boxes and corresponding labels for objects in a image.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#convert" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#convert" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="convert[B,A](l:IndexedSeq[A])(implicitevidence$1:A=&gt;B):IndexedSeq[B]"></a>
       <a id="convert[B,A](IndexedSeq[A])((A)⇒B):IndexedSeq[B]"></a>
       <h4 class="signature">
@@ -225,7 +231,7 @@ is to find bounding boxes and corresponding labels for objects in a image.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Helper to map an implicit conversion</p><div class="fullcomment"><div class="comment cmt"><p>Helper to map an implicit conversion</p></div><dl class="paramcmts block"><dt class="tparam">B</dt><dd class="cmt"><p>The desired type</p></dd><dt class="tparam">A</dt><dd class="cmt"><p>The input type</p></dd><dt class="param">l</dt><dd class="cmt"><p>The value to convert</p></dd><dt>returns</dt><dd class="cmt"><p>The converted result</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -318,18 +324,18 @@ is to find bounding boxes and corresponding labels for objects in a image.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#imageBatchObjectDetect" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="imageBatchObjectDetect(inputBatch:java.util.List[java.awt.image.BufferedImage],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]"></a>
-      <a id="imageBatchObjectDetect(List[BufferedImage],Int):List[List[ObjectDetectorOutput]]"></a>
+      <a id="imageBatchObjectDetect(inputBatch:Iterable[java.awt.image.BufferedImage],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]"></a>
+      <a id="imageBatchObjectDetect(Iterable[BufferedImage],Int):List[List[ObjectDetectorOutput]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">imageBatchObjectDetect</span><span class="params">(<span name="inputBatch">inputBatch: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>, <span name="topK">topK: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<a href="ObjectDetectorOutput.html" class="extype" name="org.apache.mxnet.infer.javaapi.ObjectDetectorOutput">ObjectDetectorOutput</a>]]</span>
+        <span class="name">imageBatchObjectDetect</span><span class="params">(<span name="inputBatch">inputBatch: <span class="extype" name="java.lang.Iterable">Iterable</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>, <span name="topK">topK: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<a href="ObjectDetectorOutput.html" class="extype" name="org.apache.mxnet.infer.javaapi.ObjectDetectorOutput">ObjectDetectorOutput</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@imageBatchObjectDetect(inputBatch:java.util.List[java.awt.image.BufferedImage],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@imageBatchObjectDetect(inputBatch:Iterable[java.awt.image.BufferedImage],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -440,20 +446,20 @@ is to find bounding boxes and corresponding labels for objects in a image.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A source Scala Object detector</p>
     </li><li name="org.apache.mxnet.infer.javaapi.ObjectDetector#objectDetectWithNDArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="objectDetectWithNDArray(input:java.util.List[org.apache.mxnet.javaapi.NDArray],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]"></a>
-      <a id="objectDetectWithNDArray(List[javaapi.NDArray],Int):List[List[ObjectDetectorOutput]]"></a>
+      <a id="objectDetectWithNDArray(input:Iterable[org.apache.mxnet.javaapi.NDArray],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]"></a>
+      <a id="objectDetectWithNDArray(Iterable[javaapi.NDArray],Int):List[List[ObjectDetectorOutput]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">objectDetectWithNDArray</span><span class="params">(<span name="input">input: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>, <span name="topK">topK: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<a href="ObjectDetectorOutput.html" class="extype" name="org.apache.mxnet.infer.javaapi.ObjectDetectorOutput">ObjectDetectorOutput</a>]]</span>
+        <span class="name">objectDetectWithNDArray</span><span class="params">(<span name="input">input: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>, <span name="topK">topK: <span class="extype" name="scala.Int">Int</span></span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<a href="ObjectDetectorOutput.html" class="extype" name="org.apache.mxnet.infer.javaapi.ObjectDetectorOutput">ObjectDetectorOutput</a>]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@objectDetectWithNDArray(input:java.util.List[org.apache.mxnet.javaapi.NDArray],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.ObjectDetector@objectDetectWithNDArray(input:Iterable[org.apache.mxnet.javaapi.NDArray],topK:Int):java.util.List[java.util.List[org.apache.mxnet.infer.javaapi.ObjectDetectorOutput]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

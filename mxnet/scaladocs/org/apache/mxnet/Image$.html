@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Image - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.Image</title>
-          <meta name="description" content="Image - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.Image" />
-          <meta name="keywords" content="Image JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.Image" />
+          <title>Image - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.Image</title>
+          <meta name="description" content="Image - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.Image" />
+          <meta name="keywords" content="Image JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.Image" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -203,7 +203,25 @@ enable OpenCV feature
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Pad image border with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Pad image border with OpenCV.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>source image</p></dd><dt class="param">top</dt><dd class="cmt"><p>Top margin.</p></dd><dt class="param">bot</dt><dd class="cmt"><p>Bottom margin.</p></dd><dt class="param">left</dt><dd class="cmt"><p>Left margin.</p></dd><dt class="param">right</dt><dd class="cmt"><p>Right margin.</p></dd><dt class="param">typeOf</dt><dd class="cmt"><p>Filling type (default=cv2.BORDER_CONSTANT).</p></dd><dt class="param">value</dt><dd class="cmt"><p>(Deprecated! Use <code><code>values</code></code> instead.) Fill with single value.</p></dd><dt class="param">values</dt><dd class="cmt"><p>Fill with value(RGB[A] or gray), up to 4 channels.</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray</p></dd></dl></div>
+      <p class="shortcomment cmt">Pad image border with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Pad image border with OpenCV.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>source image</p></dd><dt class="param">top</dt><dd class="cmt"><p>Top margin.</p></dd><dt class="param">bot</dt><dd class="cmt"><p>Bottom margin.</p></dd><dt class="param">left</dt><dd class="cmt"><p>Left margin.</p></dd><dt class="param">right</dt><dd class="cmt"><p>Right margin.</p></dd><dt class="param">typeOf</dt><dd class="cmt"><p>Filling type (default=cv2.BORDER_CONSTANT).</p></dd><dt class="param">value</dt><dd class="cmt"><p>(Deprecated! Use <code><code>values</code></code> instead.) Fill with single value.</p></dd><dt class="param">values</dt><dd class="cmt"><p>Fill with value(RGB[A] or gray), up to 4 channels.</p></dd><dt class="param">out</dt><dd class="cmt"><p>NDArray to store the output</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.Image#drawBoundingBox" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="drawBoundingBox(src:java.awt.image.BufferedImage,coordinate:Array[Map[String,Int]],names:Option[Array[String]],stroke:Option[Int],fontSizeMult:Option[Float],transparency:Option[Float]):Unit"></a>
+      <a id="drawBoundingBox(BufferedImage,Array[Map[String,Int]],Option[Array[String]],Option[Int],Option[Float],Option[Float]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">drawBoundingBox</span><span class="params">(<span name="src">src: <span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span></span>, <span name="coordinate">coordinate: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Int">Int</span>]]</span>, <span name="names">names: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]] = <span class="symbol">None</span></span>, <span name="stroke">stroke: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">Some(3)</span></span>, <span name="fontSizeMult">fontSizeMult: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Float">Float</span>] = <span class="symbol">Some(1.0f)</span></span>, <span name="transparency">transparency: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Float">Float</span>] = <span class="symbol">Some(1.0f)</span></span>)</span><span class="result">: <span class="extype" name="scala.Unit">Unit</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.Image$@drawBoundingBox(src:java.awt.image.BufferedImage,coordinate:Array[Map[String,Int]],names:Option[Array[String]],stroke:Option[Int],fontSizeMult:Option[Float],transparency:Option[Float]):Unit" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Method to draw bounding boxes for an image</p><div class="fullcomment"><div class="comment cmt"><p>Method to draw bounding boxes for an image</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>Source of the buffered image</p></dd><dt class="param">coordinate</dt><dd class="cmt"><p>Contains Map of xmin, xmax, ymin, ymax
+                  corresponding to top-left and down-right points</p></dd><dt class="param">names</dt><dd class="cmt"><p>The name set of the bounding box</p></dd><dt class="param">stroke</dt><dd class="cmt"><p>Thickness of the bounding box</p></dd><dt class="param">fontSizeMult</dt><dd class="cmt"><p>Font size multiplier</p></dd><dt class="param">transparency</dt><dd class="cmt"><p>Transparency of the bounding box</p></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -328,7 +346,8 @@ enable OpenCV feature
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Same imageDecode with InputStream</p><div class="fullcomment"><div class="comment cmt"><p>Same imageDecode with InputStream</p></div><dl class="paramcmts block"><dt class="param">inputStream</dt><dd class="cmt"><p>the inputStream of the image</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray in HWC format</p></dd></dl></div>
+      <p class="shortcomment cmt">Same imageDecode with InputStream</p><div class="fullcomment"><div class="comment cmt"><p>Same imageDecode with InputStream</p></div><dl class="paramcmts block"><dt class="param">inputStream</dt><dd class="cmt"><p>the inputStream of the image</p></dd><dt class="param">flag</dt><dd class="cmt"><p>Convert decoded image to grayscale (0) or color (1).</p></dd><dt class="param">to_rgb</dt><dd class="cmt"><p>Whether to convert decoded image
+              to mxnet's default RGB format (instead of opencv's default BGR).</p></dd><dt class="param">out</dt><dd class="cmt"><p>NDArray to store the output</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray in HWC format with DType <a href="DType$.html#UInt8:org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType#UInt8">DType.UInt8</a></p></dd></dl></div>
     </li><li name="org.apache.mxnet.Image#imDecode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="imDecode(buf:Array[Byte],flag:Int,to_rgb:Boolean,out:Option[org.apache.mxnet.NDArray]):org.apache.mxnet.NDArray"></a>
       <a id="imDecode(Array[Byte],Int,Boolean,Option[NDArray]):NDArray"></a>
@@ -347,7 +366,7 @@ enable OpenCV feature
     </span>
       <p class="shortcomment cmt">Decode image with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Decode image with OpenCV.
 Note: return image in RGB by default, instead of OpenCV's default BGR.</p></div><dl class="paramcmts block"><dt class="param">buf</dt><dd class="cmt"><p>Buffer containing binary encoded image</p></dd><dt class="param">flag</dt><dd class="cmt"><p>Convert decoded image to grayscale (0) or color (1).</p></dd><dt class="param">to_rgb</dt><dd class="cmt"><p>Whether to convert decoded image
-              to mxnet's default RGB format (instead of opencv's default BGR).</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray in HWC format</p></dd></dl></div>
+              to mxnet's default RGB format (instead of opencv's default BGR).</p></dd><dt class="param">out</dt><dd class="cmt"><p>NDArray to store the output</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray in HWC format with DType <a href="DType$.html#UInt8:org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType#UInt8">DType.UInt8</a></p></dd></dl></div>
     </li><li name="org.apache.mxnet.Image#imRead" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="imRead(filename:String,flag:Option[Int],to_rgb:Option[Boolean],out:Option[org.apache.mxnet.NDArray]):org.apache.mxnet.NDArray"></a>
       <a id="imRead(String,Option[Int],Option[Boolean],Option[NDArray]):NDArray"></a>
@@ -366,7 +385,7 @@ Note: return image in RGB by default, instead of OpenCV's default BGR.</p></div>
     </span>
       <p class="shortcomment cmt">Read and decode image with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Read and decode image with OpenCV.
 Note: return image in RGB by default, instead of OpenCV's default BGR.</p></div><dl class="paramcmts block"><dt class="param">filename</dt><dd class="cmt"><p>Name of the image file to be loaded.</p></dd><dt class="param">flag</dt><dd class="cmt"><p>Convert decoded image to grayscale (0) or color (1).</p></dd><dt class="param">to_rgb</dt><dd class="cmt"><p>Whether to convert decoded image to mxnet's default RGB format
-                (instead of opencv's default BGR).</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray in HWC format</p></dd></dl></div>
+                (instead of opencv's default BGR).</p></dd><dt class="param">out</dt><dd class="cmt"><p>NDArray to store the output</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray in HWC format with DType <a href="DType$.html#UInt8:org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType#UInt8">DType.UInt8</a></p></dd></dl></div>
     </li><li name="org.apache.mxnet.Image#imResize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="imResize(src:org.apache.mxnet.NDArray,w:Int,h:Int,interp:Option[Int],out:Option[org.apache.mxnet.NDArray]):org.apache.mxnet.NDArray"></a>
       <a id="imResize(NDArray,Int,Int,Option[Int],Option[NDArray]):NDArray"></a>
@@ -383,7 +402,7 @@ Note: return image in RGB by default, instead of OpenCV's default BGR.</p></div>
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Resize image with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Resize image with OpenCV.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>source image in NDArray</p></dd><dt class="param">w</dt><dd class="cmt"><p>Width of resized image.</p></dd><dt class="param">h</dt><dd class="cmt"><p>Height of resized image.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>Interpolation method (default=cv2.INTER_LINEAR).</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray</p></dd></dl></div>
+      <p class="shortcomment cmt">Resize image with OpenCV.</p><div class="fullcomment"><div class="comment cmt"><p>Resize image with OpenCV.</p></div><dl class="paramcmts block"><dt class="param">src</dt><dd class="cmt"><p>source image in NDArray</p></dd><dt class="param">w</dt><dd class="cmt"><p>Width of resized image.</p></dd><dt class="param">h</dt><dd class="cmt"><p>Height of resized image.</p></dd><dt class="param">interp</dt><dd class="cmt"><p>Interpolation method (default=cv2.INTER_LINEAR).</p></dd><dt class="param">out</dt><dd class="cmt"><p>NDArray to store the output</p></dd><dt>returns</dt><dd class="cmt"><p>org.apache.mxnet.NDArray</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>

@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>NDArray - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.NDArray</title>
-          <meta name="description" content="NDArray - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.NDArray" />
-          <meta name="keywords" content="NDArray JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.NDArray" />
+          <title>NDArray - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.NDArray</title>
+          <meta name="description" content="NDArray - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.NDArray" />
+          <meta name="keywords" content="NDArray JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.NDArray" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -54,7 +54,10 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>NDArray object in mxnet.
 NDArray is basic ndarray/Tensor like data structure in mxnet. <br />
 <b>
-WARNING: it is your responsibility to clear this object through dispose().
+NOTE: NDArray is stored in native memory. Use NDArray in a try-with-resources() construct
+or a [[org.apache.mxnet.ResourceScope]] in a try-with-resource to have them
+automatically disposed. You can explicitly control the lifetime of NDArray
+by calling dispose manually. Failure to do this will result in leaking native memory.
 </b>
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -93,7 +96,30 @@ WARNING: it is your responsibility to clear this object through dispose().
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="org.apache.mxnet.NDArray#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(handle:org.apache.mxnet.Base.NDArrayHandle,writable:Boolean,addToCollector:Boolean):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;init&gt;:NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 1.5.0) Please use ResourceScope instead">NDArray</span><span class="params">(<span name="handle">handle: <span class="extype" name="org.apache.mxnet.Base.NDArrayHandle">NDArrayHandle</span></span>, <span name="writable">writable: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>, <span name="addToCollector">addToCollector: <span class="extype" name="scala.Boolean">Boolean</span> = <span class="symbol">true</span></span>)</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@&lt;init&gt;(handle:org.apache.mxnet.Base.NDArrayHandle,writable:Boolean,addToCollector:Boolean):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 1.5.0)</i> Please use ResourceScope instead</p></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -136,18 +162,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#%" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="%(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="%(Float):NDArray"></a>
+      <a id="%(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="%(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $percent" class="name">%</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $percent" class="name">%</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@%(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@%(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -170,18 +196,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#%=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="%=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="%=(Float):NDArray"></a>
+      <a id="%=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="%=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $percent$eq" class="name">%=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $percent$eq" class="name">%=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@%=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@%=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -204,18 +230,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#*" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="*(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="*(Float):NDArray"></a>
+      <a id="*(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="*(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $times" class="name">*</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@*(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@*(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -238,18 +264,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#**" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="**(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="**(Float):NDArray"></a>
+      <a id="**(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="**(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times$times" class="name">**</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $times$times" class="name">**</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@**(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@**(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -272,18 +298,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#**=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="**=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="**=(Float):NDArray"></a>
+      <a id="**=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="**=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times$times$eq" class="name">**=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $times$times$eq" class="name">**=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@**=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@**=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -306,18 +332,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#*=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="*=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="*=(Float):NDArray"></a>
+      <a id="*=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="*=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $times$eq" class="name">*=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $times$eq" class="name">*=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@*=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@*=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -340,18 +366,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#+" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="+(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="+(Float):NDArray"></a>
+      <a id="+(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="+(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $plus" class="name">+</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@+(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@+(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -374,18 +400,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#+=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="+=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="+=(Float):NDArray"></a>
+      <a id="+=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="+=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $plus$eq" class="name">+=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $plus$eq" class="name">+=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@+=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@+=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -408,18 +434,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#-" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="-(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="-(Float):NDArray"></a>
+      <a id="-(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="-(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $minus" class="name">-</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@-(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@-(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -442,18 +468,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#-=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="-=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="-=(Float):NDArray"></a>
+      <a id="-=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="-=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $minus$eq" class="name">-=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $minus$eq" class="name">-=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@-=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@-=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -476,18 +502,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#/" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="/(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="/(Float):NDArray"></a>
+      <a id="/(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="/(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $div" class="name">/</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@/(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@/(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -510,18 +536,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#/=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="/=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="/=(Float):NDArray"></a>
+      <a id="/=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="/=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $div$eq" class="name">/=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $div$eq" class="name">/=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@/=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@/=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -544,18 +570,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#&lt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="&lt;(Float):NDArray"></a>
+      <a id="&lt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $less" class="name">&lt;</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@&lt;(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@&lt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -578,18 +604,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#&lt;=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="&lt;=(Float):NDArray"></a>
+      <a id="&lt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&lt;=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $less$eq" class="name">&lt;=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@&lt;=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@&lt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -629,18 +655,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&gt;(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="&gt;(Float):NDArray"></a>
+      <a id="&gt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $greater" class="name">&gt;</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@&gt;(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@&gt;(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -663,18 +689,18 @@ WARNING: it is your responsibility to clear this object through dispose().
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#&gt;=" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&gt;=(other:Float):org.apache.mxnet.NDArray"></a>
-      <a id="&gt;=(Float):NDArray"></a>
+      <a id="&gt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="&gt;=(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span title="gt4s: $greater$eq" class="name">&gt;=</span><span class="params">(<span name="other">other: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@&gt;=(other:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@&gt;=(other:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -966,7 +992,7 @@ The object shall never be used after it is disposed.
       </a>
     </span>
       <p class="shortcomment cmt">Dispose all NDArrays who help to construct this array.</p><div class="fullcomment"><div class="comment cmt"><p>Dispose all NDArrays who help to construct this array. <br />
-e.g. (a * b + c).disposeDeps() will dispose a, b, c (including their deps) and a * b</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>this array</p></dd></dl></div>
+e.g. (a * b + c).disposeDeps() will dispose a, b, c (including their deps) and a * b</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>this NDArray</p></dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#disposeDepsExcept" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disposeDepsExcept(arrs:org.apache.mxnet.NDArray*):org.apache.mxnet.NDArray"></a>
       <a id="disposeDepsExcept(NDArray*):NDArray"></a>
@@ -986,7 +1012,7 @@ e.g. (a * b + c).disposeDeps() will dispose a, b, c (including their deps) and a
       <p class="shortcomment cmt">Dispose all NDArrays who help to construct this array, excepts those in the arguments.</p><div class="fullcomment"><div class="comment cmt"><p>Dispose all NDArrays who help to construct this array, excepts those in the arguments. <br />
 e.g. (a * b + c).disposeDepsExcept(a, b)
 will dispose c and a * b.
-Note that a, b's dependencies will not be disposed either.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>this array</p></dd></dl></div>
+Note that a, b's dependencies will not be disposed either.</p></div><dl class="paramcmts block"><dt class="param">arrs</dt><dd class="cmt"><p>array of NDArrays</p></dd><dt>returns</dt><dd class="cmt"><p>this array</p></dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#dtype" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="dtype:org.apache.mxnet.DType.DType"></a>
       <a id="dtype:DType.DType"></a>
@@ -1303,6 +1329,23 @@ ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"
     </span>
       <p class="shortcomment cmt">Return a reshaped NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a reshaped NDArray that shares memory with current one.</p></div><dl class="paramcmts block"><dt class="param">dims</dt><dd class="cmt"><p>New shape.</p></dd><dt>returns</dt><dd class="cmt"><p>a reshaped NDArray that shares memory with current one.</p></dd></dl></div>
     </li><li name="org.apache.mxnet.NDArray#reshape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="reshape(dims:Array[Long],reverse:Option[Boolean]):org.apache.mxnet.NDArray"></a>
+      <a id="reshape(Array[Long],Option[Boolean]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">reshape</span><span class="params">(<span name="dims">dims: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Long">Long</span>]</span>, <span name="reverse">reverse: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Boolean">Boolean</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@reshape(dims:Array[Long],reverse:Option[Boolean]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a reshaped NDArray that shares memory with current one.</p><div class="fullcomment"><div class="comment cmt"><p>Return a reshaped NDArray that shares memory with current one.</p></div><dl class="paramcmts block"><dt class="param">dims</dt><dd class="cmt"><p>New shape.</p></dd><dt class="param">reverse</dt><dd class="cmt"><p>whether to inplace reshape</p></dd><dt>returns</dt><dd class="cmt"><p>a reshaped NDArray that shares memory with current one.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#reshape" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reshape(dims:Array[Int]):org.apache.mxnet.NDArray"></a>
       <a id="reshape(Array[Int]):NDArray"></a>
       <h4 class="signature">
@@ -1332,6 +1375,23 @@ ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#org.apache.mxnet.NDArray@serialize():Array[Byte]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="set(other:Array[Double]):org.apache.mxnet.NDArray"></a>
+      <a id="set(Array[Double]):NDArray"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">set</span><span class="params">(<span name="other">other: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@set(other:Array[Double]):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1371,18 +1431,18 @@ ResourceScope if used inside ResourceScope.</p></div><dl class="paramcmts block"
     </span>
       
     </li><li name="org.apache.mxnet.NDArray#set" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="set(value:Float):org.apache.mxnet.NDArray"></a>
-      <a id="set(Float):NDArray"></a>
+      <a id="set(value:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray"></a>
+      <a id="set(MX_PRIMITIVE_TYPE):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">set</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span class="name">set</span><span class="params">(<span name="value">value: <a href="MX_PRIMITIVES$$MX_PRIMITIVE_TYPE.html" class="extype" name="org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE">MX_PRIMITIVE_TYPE</a></span>)</span><span class="result">: <a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../index.html#org.apache.mxnet.NDArray@set(value:Float):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@set(value:org.apache.mxnet.MX_PRIMITIVES.MX_PRIMITIVE_TYPE):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1508,6 +1568,40 @@ NDArray only support continuous slicing on axis 0
       </a>
     </span>
       <p class="shortcomment cmt">Return a copied flat java array of current array (row-major).</p><div class="fullcomment"><div class="comment cmt"><p>Return a copied flat java array of current array (row-major).</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A copy of array content.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toFloat64Array" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFloat64Array:Array[Double]"></a>
+      <a id="toFloat64Array:Array[Double]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFloat64Array</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@toFloat64Array:Array[Double]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Return a copied flat java array of current array (row-major) with datatype as Float64/Double.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copied flat java array of current array (row-major) with datatype as Float64/Double.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A copy of array content.</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.NDArray#toFloat64Scalar" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="toFloat64Scalar:Double"></a>
+      <a id="toFloat64Scalar:Double"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFloat64Scalar</span><span class="result">: <span class="extype" name="scala.Double">Double</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../index.html#org.apache.mxnet.NDArray@toFloat64Scalar:Double" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="org.apache.mxnet.NDArray#toScalar" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toScalar:Float"></a>
       <a id="toScalar:Float"></a>
@@ -1527,7 +1621,7 @@ NDArray only support continuous slicing on axis 0
       <p class="shortcomment cmt">Return a CPU scalar(float) of current ndarray.</p><div class="fullcomment"><div class="comment cmt"><p>Return a CPU scalar(float) of current ndarray.
 This ndarray must have shape (1,)
 </p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>The scalar representation of the ndarray.</p></dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="org.apache.mxnet.NDArray#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -1536,14 +1630,14 @@ This ndarray must have shape (1,)
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#org.apache.mxnet.NDArray@toString():String" title="Permalink" target="_top">
         <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <p class="shortcomment cmt">Visualize the internal structure of NDArray</p><div class="fullcomment"><div class="comment cmt"><p>Visualize the internal structure of NDArray</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>String that show the structure</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.NDArray">NDArray</a> → AnyRef → Any</dd></dl></div>
     </li><li name="org.apache.mxnet.WarnIfNotDisposed#tracingEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="tracingEnabled:Boolean"></a>
       <a id="tracingEnabled:Boolean"></a>

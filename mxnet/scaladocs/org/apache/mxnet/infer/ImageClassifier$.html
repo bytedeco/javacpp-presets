@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ImageClassifier - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.ImageClassifier</title>
-          <meta name="description" content="ImageClassifier - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.ImageClassifier" />
-          <meta name="keywords" content="ImageClassifier JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.ImageClassifier" />
+          <title>ImageClassifier - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.ImageClassifier</title>
+          <meta name="description" content="ImageClassifier - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.ImageClassifier" />
+          <meta name="keywords" content="ImageClassifier JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.ImageClassifier" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -165,25 +165,30 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="org.apache.mxnet.infer.ImageClassifier#bufferedImageToPixels" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="bufferedImageToPixels(resizedImage:java.awt.image.BufferedImage,inputImageShape:org.apache.mxnet.Shape):org.apache.mxnet.NDArray"></a>
-      <a id="bufferedImageToPixels(BufferedImage,Shape):NDArray"></a>
+      <a id="bufferedImageToPixels(resizedImage:java.awt.image.BufferedImage,inputImageShape:org.apache.mxnet.Shape,dType:org.apache.mxnet.DType.DType):org.apache.mxnet.NDArray"></a>
+      <a id="bufferedImageToPixels(BufferedImage,Shape,DType.DType):NDArray"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">bufferedImageToPixels</span><span class="params">(<span name="resizedImage">resizedImage: <span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span></span>, <span name="inputImageShape">inputImageShape: <a href="../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a></span>)</span><span class="result">: <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
+        <span class="name">bufferedImageToPixels</span><span class="params">(<span name="resizedImage">resizedImage: <span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span></span>, <span name="inputImageShape">inputImageShape: <a href="../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a></span>, <span name="dType">dType: <a href="../DType$.html#DType=org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType.DType">DType.DType</a> = <span class="symbol"><span class="name"><a href="../../../package.html">DType.Float32</a></span></span></span>)</span><span class="result">: <a href="../NDArray.html" class="extype" name="org.apache.mxnet.NDArray">NDArray</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier$@bufferedImageToPixels(resizedImage:java.awt.image.BufferedImage,inputImageShape:org.apache.mxnet.Shape):org.apache.mxnet.NDArray" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier$@bufferedImageToPixels(resizedImage:java.awt.image.BufferedImage,inputImageShape:org.apache.mxnet.Shape,dType:org.apache.mxnet.DType.DType):org.apache.mxnet.NDArray" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Convert input BufferedImage to NDArray of input shape</p><div class="fullcomment"><div class="comment cmt"><p>Convert input BufferedImage to NDArray of input shape</p><p>Note: Caller is responsible to dispose the NDArray
+      <p class="shortcomment cmt">Convert input BufferedImage to NDArray of input shape
+Note: Caller is responsible to dispose the NDArray
+returned by this method after the use.</p><div class="fullcomment"><div class="comment cmt"><p>Convert input BufferedImage to NDArray of input shape
+Note: Caller is responsible to dispose the NDArray
 returned by this method after the use.
 </p></div><dl class="paramcmts block"><dt class="param">resizedImage</dt><dd class="cmt"><p>BufferedImage to get pixels from</p></dd><dt class="param">inputImageShape</dt><dd class="cmt"><p>Input shape; for example for resnet it is (3,224,224).
-                              Should be same as inputDescriptor shape.</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray pixels array with shape (3, 224, 224) in CHW format</p></dd></dl></div>
+                       Should be same as inputDescriptor shape.</p></dd><dt class="param">dType</dt><dd class="cmt"><p>The DataType of the NDArray created from the image
+             that should be returned.
+             Currently it defaults to Dtype.Float32</p></dd><dt>returns</dt><dd class="cmt"><p>NDArray pixels array with shape (3, 224, 224) in CHW format</p></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>

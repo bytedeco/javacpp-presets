@@ -24,6 +24,7 @@ org.bytedeco.opencv.opencv_optflow
 org.bytedeco.opencv.opencv_phase_unwrapping
 org.bytedeco.opencv.opencv_photo
 org.bytedeco.opencv.opencv_plot
+org.bytedeco.opencv.opencv_quality
 org.bytedeco.opencv.opencv_saliency
 org.bytedeco.opencv.opencv_shape
 org.bytedeco.opencv.opencv_stitching

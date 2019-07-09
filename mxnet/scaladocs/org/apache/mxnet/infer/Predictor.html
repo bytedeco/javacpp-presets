@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Predictor - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.Predictor</title>
-          <meta name="description" content="Predictor - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.Predictor" />
-          <meta name="keywords" content="Predictor JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.Predictor" />
+          <title>Predictor - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.Predictor</title>
+          <meta name="description" content="Predictor - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.Predictor" />
+          <meta name="keywords" content="Predictor JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.Predictor" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -513,26 +513,43 @@ Note: If the input Descriptors is missing batchSize
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="org.apache.mxnet.infer.Predictor#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="predict(input:IndexedSeq[Array[Float]]):IndexedSeq[Array[Float]]"></a>
-      <a id="predict(IndexedSeq[Array[Float]]):IndexedSeq[Array[Float]]"></a>
+    </li><li name="org.apache.mxnet.infer.Predictor#outputShapes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="outputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]"></a>
+      <a id="outputShapes:IndexedSeq[(String,Shape)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">predict</span><span class="params">(<span name="input">input: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Float">Float</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Float">Float</span>]]</span>
+        <span class="name">outputShapes</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.infer.Predictor@predict(input:IndexedSeq[Array[Float]]):IndexedSeq[Array[Float]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.infer.Predictor@outputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get model output shapes.</p><div class="fullcomment"><div class="comment cmt"><p>Get model output shapes.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>model output shapes.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.infer.Predictor">Predictor</a> → PredictBase</dd></dl></div>
+    </li><li name="org.apache.mxnet.infer.Predictor#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict[T](input:IndexedSeq[Array[T]]):IndexedSeq[Array[T]]"></a>
+      <a id="predict[T](IndexedSeq[Array[T]]):IndexedSeq[Array[T]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="input">input: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.apache.mxnet.infer.Predictor.predict.T">T</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.apache.mxnet.infer.Predictor.predict.T">T</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.infer.Predictor@predict[T](input:IndexedSeq[Array[T]]):IndexedSeq[Array[T]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Takes input as IndexedSeq one dimensional arrays and creates the NDArray needed for inference
 The array will be reshaped based on the input descriptors.</p><div class="fullcomment"><div class="comment cmt"><p>Takes input as IndexedSeq one dimensional arrays and creates the NDArray needed for inference
 The array will be reshaped based on the input descriptors.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.infer.Predictor">Predictor</a> → PredictBase</dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The Scala equivalent of the DType used for the input array and return value</p></dd><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="org.apache.mxnet.infer.Predictor">Predictor</a> → PredictBase</dd></dl></div>
     </li><li name="org.apache.mxnet.infer.Predictor#predictWithNDArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predictWithNDArray(inputBatch:IndexedSeq[org.apache.mxnet.NDArray]):IndexedSeq[org.apache.mxnet.NDArray]"></a>
       <a id="predictWithNDArray(IndexedSeq[NDArray]):IndexedSeq[NDArray]"></a>

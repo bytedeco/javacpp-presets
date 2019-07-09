@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>Predictor - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.javaapi.Predictor</title>
-          <meta name="description" content="Predictor - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.javaapi.Predictor" />
-          <meta name="keywords" content="Predictor JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.javaapi.Predictor" />
+          <title>Predictor - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.javaapi.Predictor</title>
+          <meta name="description" content="Predictor - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.javaapi.Predictor" />
+          <meta name="keywords" content="Predictor JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.javaapi.Predictor" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -89,8 +89,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="org.apache.mxnet.infer.javaapi.Predictor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(modelPathPrefix:String,inputDescriptors:java.util.List[org.apache.mxnet.javaapi.DataDesc],contexts:java.util.List[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.Predictor"></a>
+              <ol><li name="org.apache.mxnet.infer.javaapi.Predictor#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(modelPathPrefix:String,inputDescriptors:Iterable[org.apache.mxnet.javaapi.DataDesc],contexts:Iterable[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.Predictor"></a>
       <a id="&lt;init&gt;:Predictor"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -98,14 +98,20 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Predictor</span><span class="params">(<span name="modelPathPrefix">modelPathPrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="inputDescriptors">inputDescriptors: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/DataDesc.html" class="extype" name="org.apache.mxnet.javaapi.DataDesc">javaapi.DataDesc</a>]</span>, <span name="contexts">contexts: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/Context.html" class="extype" name="org.apache.mxnet.javaapi.Context">javaapi.Context</a>]</span>, <span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span></span>)</span>
+        <span class="name">Predictor</span><span class="params">(<span name="modelPathPrefix">modelPathPrefix: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="inputDescriptors">inputDescriptors: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/DataDesc.html" class="extype" name="org.apache.mxnet.javaapi.DataDesc">javaapi.DataDesc</a>]</span>, <span name="contexts">contexts: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/Context.html" class="extype" name="org.apache.mxnet.javaapi.Context">javaapi.Context</a>]</span>, <span name="epoch">epoch: <span class="extype" name="scala.Int">Int</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@&lt;init&gt;(modelPathPrefix:String,inputDescriptors:java.util.List[org.apache.mxnet.javaapi.DataDesc],contexts:java.util.List[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.Predictor" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@&lt;init&gt;(modelPathPrefix:String,inputDescriptors:Iterable[org.apache.mxnet.javaapi.DataDesc],contexts:Iterable[org.apache.mxnet.javaapi.Context],epoch:Int):org.apache.mxnet.infer.javaapi.Predictor" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">modelPathPrefix</dt><dd class="cmt"><p>Path prefix from where to load the model artifacts.
+                           These include the symbol, parameters, and synset.txt
+                           Example: file://model-dir/resnet-152 (containing
+                           resnet-152-symbol.json, resnet-152-0000.params, and synset.txt).</p></dd><dt class="param">inputDescriptors</dt><dd class="cmt"><p>Descriptors defining the input node names, shape,
+                           layout and type parameters
+Note: If the input Descriptors is missing batchSize
+                           ('N' in layout), a batchSize of 1 is assumed for the model.</p></dd><dt class="param">contexts</dt><dd class="cmt"><p>Device contexts on which you want to run inference; defaults to CPU</p></dd><dt class="param">epoch</dt><dd class="cmt"><p>Model epoch to load; defaults to 0</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -374,17 +380,42 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">predict</span><span class="params">(<span name="input">input: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<span class="extype" name="scala.Float">Float</span>]]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<span class="extype" name="scala.Float">Float</span>]]</span>
+        <span class="name">predict</span><span class="params">(<span name="input">input: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.lang.Float">Float</span>]]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.util.List">List</span>[<span class="extype" name="java.lang.Float">Float</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@predict(input:java.util.List[java.util.List[Float]]):java.util.List[java.util.List[Float]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Takes input as List of one dimensional arrays and creates the NDArray needed for inference
-The array will be reshaped based on the input descriptors.</p><div class="fullcomment"><div class="comment cmt"><p>Takes input as List of one dimensional arrays and creates the NDArray needed for inference
+      <p class="shortcomment cmt">Takes input as List of one dimensional iterables and creates the NDArray needed for inference
+The array will be reshaped based on the input descriptors.</p><div class="fullcomment"><div class="comment cmt"><p>Takes input as List of one dimensional iterables and creates the NDArray needed for inference
 The array will be reshaped based on the input descriptors.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>A List of a one-dimensional iterables of DType Float.
+                        An extra List is needed for when the model has more than one input.</p></dd><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl></div>
+    </li><li name="org.apache.mxnet.infer.javaapi.Predictor#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="predict(input:Array[Array[Double]]):Array[Array[Double]]"></a>
+      <a id="predict(Array[Array[Double]]):Array[Array[Double]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predict</span><span class="params">(<span name="input">input: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]]</span>)</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Double">Double</span>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@predict(input:Array[Array[Double]]):Array[Array[Double]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Takes input as Array of one dimensional arrays and creates the NDArray needed for inference
+The array will be reshaped based on the input descriptors.</p><div class="fullcomment"><div class="comment cmt"><p>Takes input as Array of one dimensional arrays and creates the NDArray needed for inference
+The array will be reshaped based on the input descriptors. Example of calling in Java:</p><pre>double tmp[][] = <span class="kw">new</span> double[<span class="num">1</span>][<span class="num">224</span>];
+<span class="kw">for</span> (int x = <span class="num">0</span>; x &lt; <span class="num">1</span>; x++)
+  <span class="kw">for</span> (int y = <span class="num">0</span>; y &lt; <span class="num">224</span>; y++)
+    tmp[x][y] = (int)(Math.random()*<span class="num">10</span>);
+predictor.predict(tmp);</pre></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>An Array of a one-dimensional array.
+                        An extra Array is needed for when the model has more than one input.</p></dd><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.javaapi.Predictor#predict" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predict(input:Array[Array[Float]]):Array[Array[Float]]"></a>
       <a id="predict(Array[Array[Float]]):Array[Array[Float]]"></a>
@@ -403,29 +434,25 @@ The array will be reshaped based on the input descriptors.
     </span>
       <p class="shortcomment cmt">Takes input as Array of one dimensional arrays and creates the NDArray needed for inference
 The array will be reshaped based on the input descriptors.</p><div class="fullcomment"><div class="comment cmt"><p>Takes input as Array of one dimensional arrays and creates the NDArray needed for inference
-The array will be reshaped based on the input descriptors. Example of calling in Java:</p><p><pre>
-<code>
-float tmp[][] = new float[1][224];
-for (int x = 0; x < 1; x++)
-  for (int y = 0; y < 224; y++)
-    tmp[x][y] = (int)(Math.random()*10);
-predictor.predict(tmp);
-</code>
-</pre>
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl></div>
+The array will be reshaped based on the input descriptors. Example of calling in Java:</p><pre>float tmp[][] = <span class="kw">new</span> float[<span class="num">1</span>][<span class="num">224</span>];
+<span class="kw">for</span> (int x = <span class="num">0</span>; x &lt; <span class="num">1</span>; x++)
+  <span class="kw">for</span> (int y = <span class="num">0</span>; y &lt; <span class="num">224</span>; y++)
+    tmp[x][y] = (int)(Math.random()*<span class="num">10</span>);
+predictor.predict(tmp);</pre></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>An Array of a one-dimensional array.
+             An extra Array is needed for when the model has more than one input.</p></dd><dt>returns</dt><dd class="cmt"><p>Indexed sequence array of outputs</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.javaapi.Predictor#predictWithNDArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="predictWithNDArray(input:java.util.List[org.apache.mxnet.javaapi.NDArray]):java.util.List[org.apache.mxnet.javaapi.NDArray]"></a>
-      <a id="predictWithNDArray(List[javaapi.NDArray]):List[javaapi.NDArray]"></a>
+      <a id="predictWithNDArray(input:Iterable[org.apache.mxnet.javaapi.NDArray]):java.util.List[org.apache.mxnet.javaapi.NDArray]"></a>
+      <a id="predictWithNDArray(Iterable[javaapi.NDArray]):List[javaapi.NDArray]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">predictWithNDArray</span><span class="params">(<span name="input">input: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>
+        <span class="name">predictWithNDArray</span><span class="params">(<span name="input">input: <span class="extype" name="java.lang.Iterable">Iterable</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>)</span><span class="result">: <span class="extype" name="java.util.List">List</span>[<a href="../../javaapi/NDArray.html" class="extype" name="org.apache.mxnet.javaapi.NDArray">javaapi.NDArray</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@predictWithNDArray(input:java.util.List[org.apache.mxnet.javaapi.NDArray]):java.util.List[org.apache.mxnet.javaapi.NDArray]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#org.apache.mxnet.infer.javaapi.Predictor@predictWithNDArray(input:Iterable[org.apache.mxnet.javaapi.NDArray]):java.util.List[org.apache.mxnet.javaapi.NDArray]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -434,7 +461,7 @@ This method is useful when the input is a batch of data
 Note: User is responsible for managing allocation/deallocation of input/output NDArrays.</p><div class="fullcomment"><div class="comment cmt"><p>Predict using NDArray as input
 This method is useful when the input is a batch of data
 Note: User is responsible for managing allocation/deallocation of input/output NDArrays.
-</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>List of NDArrays</p></dd><dt>returns</dt><dd class="cmt"><p>Output of predictions as NDArrays</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>Iterable of NDArrays</p></dd><dt>returns</dt><dd class="cmt"><p>Output of predictions as NDArrays</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.javaapi.Predictor#predictor" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="predictor:org.apache.mxnet.infer.Predictor"></a>
       <a id="predictor:infer.Predictor"></a>
@@ -451,7 +478,7 @@ Note: User is responsible for managing allocation/deallocation of input/output N
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">The underlying Scala predictor</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>

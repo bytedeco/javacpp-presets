@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ImageClassifier - JavaCPP Presets for MXNet 1.4.0-1.5 API - org.apache.mxnet.infer.ImageClassifier</title>
-          <meta name="description" content="ImageClassifier - JavaCPP Presets for MXNet 1.4.0 - 1.5 API - org.apache.mxnet.infer.ImageClassifier" />
-          <meta name="keywords" content="ImageClassifier JavaCPP Presets for MXNet 1.4.0 1.5 API org.apache.mxnet.infer.ImageClassifier" />
+          <title>ImageClassifier - JavaCPP Presets for MXNet 1.5.0.rc2-1.5.1 API - org.apache.mxnet.infer.ImageClassifier</title>
+          <meta name="description" content="ImageClassifier - JavaCPP Presets for MXNet 1.5.0.rc2 - 1.5.1 API - org.apache.mxnet.infer.ImageClassifier" />
+          <meta name="keywords" content="ImageClassifier JavaCPP Presets for MXNet 1.5.0.rc2 1.5.1 API org.apache.mxnet.infer.ImageClassifier" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -225,61 +225,65 @@ Contains helper methods.
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="package.html" class="extype" name="org.apache.mxnet.infer">org.apache.mxnet.infer</a>] </dd></dl></div>
     </li><li name="org.apache.mxnet.infer.Classifier#classify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="classify(input:IndexedSeq[Array[Float]],topK:Option[Int]):IndexedSeq[(String,Float)]"></a>
-      <a id="classify(IndexedSeq[Array[Float]],Option[Int]):IndexedSeq[(String,Float)]"></a>
+      <a id="classify[T](input:IndexedSeq[Array[T]],topK:Option[Int]):IndexedSeq[(String,T)]"></a>
+      <a id="classify[T](IndexedSeq[Array[T]],Option[Int]):IndexedSeq[(String,T)]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">classify</span><span class="params">(<span name="input">input: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Float">Float</span>]]</span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Float">Float</span>)]</span>
+        <span class="name">classify</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="input">input: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.Array">Array</span>[<span class="extype" name="org.apache.mxnet.infer.Classifier.classify.T">T</span>]]</span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="org.apache.mxnet.infer.Classifier.classify.T">T</span>)]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classify(input:IndexedSeq[Array[Float]],topK:Option[Int]):IndexedSeq[(String,Float)]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classify[T](input:IndexedSeq[Array[T]],topK:Option[Int]):IndexedSeq[(String,T)]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Takes flat arrays as input and returns (Label, Score) tuples.</p><div class="fullcomment"><div class="comment cmt"><p>Takes flat arrays as input and returns (Label, Score) tuples.</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>Indexed sequence one-dimensional array of floats</p></dd><dt class="param">topK</dt><dd class="cmt"><p>(Optional) How many result (sorting based on the last axis)
+      <p class="shortcomment cmt">Takes flat arrays as input and returns (Label, Score) tuples.</p><div class="fullcomment"><div class="comment cmt"><p>Takes flat arrays as input and returns (Label, Score) tuples.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>The Scala equivalent of the DType used for the input array and return value</p></dd><dt class="param">input</dt><dd class="cmt"><p>Indexed sequence one-dimensional array of floats/doubles</p></dd><dt class="param">topK</dt><dd class="cmt"><p>(Optional) How many result (sorting based on the last axis)
                         elements to return. Default returns unsorted output.</p></dd><dt>returns</dt><dd class="cmt"><p>Indexed sequence of (Label, Score) tuples</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Classifier.html" class="extype" name="org.apache.mxnet.infer.Classifier">Classifier</a> → <a href="ClassifierBase.html" class="extype" name="org.apache.mxnet.infer.ClassifierBase">ClassifierBase</a></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.ImageClassifier#classifyImage" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="classifyImage(inputImage:java.awt.image.BufferedImage,topK:Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
-      <a id="classifyImage(BufferedImage,Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
+      <a id="classifyImage(inputImage:java.awt.image.BufferedImage,topK:Option[Int],dType:org.apache.mxnet.DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
+      <a id="classifyImage(BufferedImage,Option[Int],DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">classifyImage</span><span class="params">(<span name="inputImage">inputImage: <span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span></span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Float">Float</span>)]]</span>
+        <span class="name">classifyImage</span><span class="params">(<span name="inputImage">inputImage: <span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span></span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="dType">dType: <a href="../DType$.html#DType=org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType.DType">DType.DType</a> = <span class="symbol"><span class="name"><a href="../../../package.html">DType.Float32</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Float">Float</span>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classifyImage(inputImage:java.awt.image.BufferedImage,topK:Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classifyImage(inputImage:java.awt.image.BufferedImage,topK:Option[Int],dType:org.apache.mxnet.DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">To classify the image according to the provided model
 </p><div class="fullcomment"><div class="comment cmt"><p>To classify the image according to the provided model
-</p></div><dl class="paramcmts block"><dt class="param">inputImage</dt><dd class="cmt"><p>Path prefix of the input image</p></dd><dt class="param">topK</dt><dd class="cmt"><p>Number of result elements to return, sorted by probability</p></dd><dt>returns</dt><dd class="cmt"><p>List of list of tuples of (Label, Probability)</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">inputImage</dt><dd class="cmt"><p>Path prefix of the input image</p></dd><dt class="param">topK</dt><dd class="cmt"><p>Number of result elements to return, sorted by probability</p></dd><dt class="param">dType</dt><dd class="cmt"><p>The precision at which to run the inference.
+                        specify the DType as DType.Float64 for Double precision.
+                        Defaults to DType.Float32</p></dd><dt>returns</dt><dd class="cmt"><p>List of list of tuples of (Label, Probability)</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.ImageClassifier#classifyImageBatch" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="classifyImageBatch(inputBatch:Traversable[java.awt.image.BufferedImage],topK:Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
-      <a id="classifyImageBatch(Traversable[BufferedImage],Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
+      <a id="classifyImageBatch(inputBatch:Traversable[java.awt.image.BufferedImage],topK:Option[Int],dType:org.apache.mxnet.DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
+      <a id="classifyImageBatch(Traversable[BufferedImage],Option[Int],DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">classifyImageBatch</span><span class="params">(<span name="inputBatch">inputBatch: <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Float">Float</span>)]]</span>
+        <span class="name">classifyImageBatch</span><span class="params">(<span name="inputBatch">inputBatch: <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="java.awt.image.BufferedImage">BufferedImage</span>]</span>, <span name="topK">topK: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.Int">Int</span>] = <span class="symbol">None</span></span>, <span name="dType">dType: <a href="../DType$.html#DType=org.apache.mxnet.DType.Value" class="extmbr" name="org.apache.mxnet.DType.DType">DType.DType</a> = <span class="symbol"><span class="name"><a href="../../../package.html">DType.Float32</a></span></span></span>)</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[<span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Float">Float</span>)]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classifyImageBatch(inputBatch:Traversable[java.awt.image.BufferedImage],topK:Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]" title="Permalink" target="_top">
+      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@classifyImageBatch(inputBatch:Traversable[java.awt.image.BufferedImage],topK:Option[Int],dType:org.apache.mxnet.DType.DType):IndexedSeq[IndexedSeq[(String,Float)]]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">To classify batch of input images according to the provided model
 </p><div class="fullcomment"><div class="comment cmt"><p>To classify batch of input images according to the provided model
-</p></div><dl class="paramcmts block"><dt class="param">inputBatch</dt><dd class="cmt"><p>Input array of buffered images</p></dd><dt class="param">topK</dt><dd class="cmt"><p>Number of result elements to return, sorted by probability</p></dd><dt>returns</dt><dd class="cmt"><p>List of list of tuples of (Label, Probability)</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">inputBatch</dt><dd class="cmt"><p>Input array of buffered images</p></dd><dt class="param">topK</dt><dd class="cmt"><p>Number of result elements to return, sorted by probability</p></dd><dt class="param">dType</dt><dd class="cmt"><p>The precision at which to run the inference.
+                        specify the DType as DType.Float64 for Double precision.
+                        Defaults to DType.Float32</p></dd><dt>returns</dt><dd class="cmt"><p>List of list of tuples of (Label, Probability)</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.Classifier#classifyWithNDArray" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="classifyWithNDArray(input:IndexedSeq[org.apache.mxnet.NDArray],topK:Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
       <a id="classifyWithNDArray(IndexedSeq[NDArray],Option[Int]):IndexedSeq[IndexedSeq[(String,Float)]]"></a>
@@ -298,7 +302,7 @@ Contains helper methods.
     </span>
       <p class="shortcomment cmt">Perform multiple classification operations on NDArrays.</p><div class="fullcomment"><div class="comment cmt"><p>Perform multiple classification operations on NDArrays.
 Also works with batched input.</p></div><dl class="paramcmts block"><dt class="param">input</dt><dd class="cmt"><p>Indexed sequence of NDArrays</p></dd><dt class="param">topK</dt><dd class="cmt"><p>(Optional) How many result (sorting based on the last axis)
-                        elements to return. Default returns unsorted output.</p></dd><dt>returns</dt><dd class="cmt"><p>Traversable sequence of (Label, Score) tuples</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Classifier.html" class="extype" name="org.apache.mxnet.infer.Classifier">Classifier</a> → <a href="ClassifierBase.html" class="extype" name="org.apache.mxnet.infer.ClassifierBase">ClassifierBase</a></dd></dl></div>
+                        elements to return. Default returns unsorted output.</p></dd><dt>returns</dt><dd class="cmt"><p>Traversable sequence of (Label, Score) tuples.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Classifier.html" class="extype" name="org.apache.mxnet.infer.Classifier">Classifier</a> → <a href="ClassifierBase.html" class="extype" name="org.apache.mxnet.infer.ClassifierBase">ClassifierBase</a></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -602,6 +606,23 @@ Also works with batched input.</p></div><dl class="paramcmts block"><dt class="p
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="org.apache.mxnet.infer.ImageClassifier#outputShapes" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="outputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]"></a>
+      <a id="outputShapes:IndexedSeq[(String,Shape)]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">outputShapes</span><span class="result">: <span class="extype" name="scala.IndexedSeq">IndexedSeq</span>[(<span class="extype" name="scala.Predef.String">String</span>, <a href="../Shape.html" class="extype" name="org.apache.mxnet.Shape">Shape</a>)]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#org.apache.mxnet.infer.ImageClassifier@outputShapes:IndexedSeq[(String,org.apache.mxnet.Shape)]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Get the names and shapes that would be returns by a classify call</p><div class="fullcomment"><div class="comment cmt"><p>Get the names and shapes that would be returns by a classify call</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a list of (name, shape) tuples</p></dd></dl></div>
     </li><li name="org.apache.mxnet.infer.Classifier#predictor" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="predictor:org.apache.mxnet.infer.PredictBase"></a>
       <a id="predictor:PredictBase"></a>
