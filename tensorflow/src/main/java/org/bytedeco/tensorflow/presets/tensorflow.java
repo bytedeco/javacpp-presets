@@ -415,7 +415,7 @@ import java.util.List;
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
-                link = "tensorflow_cc@.1", preload = "tensorflow_framework"),
+                link = "tensorflow_cc", preload = "tensorflow_framework"),
         },
         target = "org.bytedeco.tensorflow",
         global = "org.bytedeco.tensorflow.global.tensorflow")

@@ -8,7 +8,7 @@ public class LoadModel {
         OpSchemaVector allSchemas = OpSchemaRegistry.get_all_schemas();
         System.out.println(allSchemas.size());
 
-        byte[] bytes = Files.readAllBytes(Paths.get("examples/resources/single_relu.onnx"));
+        byte[] bytes = Files.readAllBytes(Paths.get(args.length > 0 ? args[0] : "examples/resources/single_relu.onnx"));
 
         ModelProto model = new ModelProto();
         ParseProtoFromBytes(model, new BytePointer(bytes), bytes.length);
