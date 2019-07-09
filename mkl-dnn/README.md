@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mkl-dnn</groupId>
     <artifactId>mkl-dnn</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.1</version>
     <properties>
         <exec.mainClass>SimpleNetInt8</exec.mainClass>
     </properties>
@@ -44,26 +44,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.20-1.5.1-SNAPSHOT</version>
+            <version>0.20-1.5.1</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
+            <version>2019.4-1.5.1</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
+            <version>2019.4-1.5.1</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
+            <version>2019.4-1.5.1</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
 

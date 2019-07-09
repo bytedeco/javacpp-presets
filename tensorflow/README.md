@@ -37,7 +37,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.1</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -45,26 +45,26 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>linux-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>macosx-x86_64-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>windows-x86_64-gpu</classifier>
         </dependency>
 
@@ -72,25 +72,25 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1-SNAPSHOT</version>
+            <version>10.1-7.6-1.5.1</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1-SNAPSHOT</version>
+            <version>10.1-7.6-1.5.1</version>
             <classifier>macosx-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1-SNAPSHOT</version>
+            <version>10.1-7.6-1.5.1</version>
             <classifier>windows-x86_64-redist</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorrt</artifactId>
-            <version>5.1-1.5.1-SNAPSHOT</version>
+            <version>5.1-1.5.1</version>
             <classifier>linux-x86_64-redist</classifier>
         </dependency>
 
@@ -98,42 +98,42 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.16.4-1.5.1-SNAPSHOT</version>
+            <version>1.16.4-1.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>linux-x86_64-python</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>macosx-x86_64-python</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>windows-x86_64-python</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>linux-x86_64-python-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>macosx-x86_64-python-gpu</classifier>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>1.14.0-1.5.1-SNAPSHOT</version>
+            <version>1.14.0-1.5.1</version>
             <classifier>windows-x86_64-python-gpu</classifier>
         </dependency>
 
