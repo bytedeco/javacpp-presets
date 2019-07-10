@@ -15,7 +15,6 @@
   <name>JavaCPP Presets for MXNet</name>
 
   <properties>
-    <javacpp.mkldnn.platform>${javacpp.platform}</javacpp.mkldnn.platform>
     <revision>1.5.0.rc2-${project.parent.version}</revision>
   </properties>
 
@@ -30,11 +29,7 @@
       <artifactId>openblas</artifactId>
       <version>0.3.6-${project.parent.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.bytedeco</groupId>
-      <artifactId>mkl-dnn</artifactId>
-      <version>1.0-rc-${project.parent.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
@@ -93,11 +88,6 @@
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-dnn</artifactId>
-            <version>1.0-rc-${project.parent.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
             <version>4.1.0-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
@@ -107,12 +97,6 @@
             <artifactId>openblas</artifactId>
             <version>0.3.6-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
-          </dependency>
-          <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-dnn</artifactId>
-            <version>1.0-rc-${project.parent.version}</version>
-            <classifier>${javacpp.mkldnn.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->
           <dependency>
@@ -310,9 +294,6 @@
           <value>linux-x86</value>
         </property>
       </activation>
-      <properties>
-        <javacpp.mkldnn.platform>linux-x86_64</javacpp.mkldnn.platform>
-      </properties>
       <build>
         <plugins>
           <plugin>

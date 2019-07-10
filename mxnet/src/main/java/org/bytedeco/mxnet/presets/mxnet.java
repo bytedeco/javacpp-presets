@@ -65,13 +65,12 @@ public class mxnet implements LoadEnabled, InfoMapper {
 
         // Only apply this at load time since we don't want to copy the MKL or CUDA libraries here
         if (Loader.isLoadLibraries()) {
-            List<String> l = Arrays.asList("iomp5", "libiomp5md", "mklml", "mklml_intel");
+            List<String> l = Arrays.asList("iomp5", "libiomp5md");
             if (!preloads.containsAll(l)) {
                 preloads.addAll(0, l);
             }
             // make sure to look for MXNet's version of MKL-DNN first
             resources.add("/org/bytedeco/mxnet/");
-            resources.add("/org/bytedeco/mkldnn/");
         }
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
             return;

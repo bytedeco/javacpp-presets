@@ -63,8 +63,20 @@ cd apache-mxnet-src-$MXNET_VERSION-incubating
 sedinplace 's/USE_LAPACK = 0/USE_LAPACK = 1/g' Makefile
 sedinplace '/LDFLAGS += -llapack/d' Makefile
 
+
 # patch up compile errors
 sedinplace "s/cmake/$CMAKE/g" mkldnn.mk
+sedinplace "s/export USE_MKLML = 1//g" Makefile
+sedinplace "s/CFLAGS += -DUSE_MKL=1//g" Makefile
+sedinplace "s/include(cmake\/DownloadMKLML.cmake)//g" CMakeLists.txt
+sedinplace "s/add_definitions(-DUSE_MKL=1)//g" CMakeLists.txt
+sedinplace "s/add_definitions(-DCUB_MKL=1)//g" CMakeLists.txt
+
+sedinplace "s/&& .\/prepare_mkl.sh//g" mkldnn.mk
+sedinplace "s/&& cp -a external\/\*\/\* \$(MKLDNNROOT)\/.//g" mkldnn.mk
+sedinplace "s/cp \$(OMP_LIBFILE) \$(MXNET_LIBDIR)//g" mkldnn.mk
+sedinplace "s/cp \$(MKLML_LIBFILE) \$(MXNET_LIBDIR)//g" mkldnn.mk
+
 sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
 sedinplace 's:../../src/operator/tensor/:./:g' src/operator/tensor/cast_storage-inl.h
@@ -81,13 +93,13 @@ case $PLATFORM in
     linux-x86)
         export CC="$(which gcc) -m32"
         export CXX="$(which g++) -m32"
-        export BLAS="openblas"
+        export BLAS="Open"
         export USE_MKLDNN=0
         ;;
     linux-x86_64)
         export CC="$(which gcc) -m64"
         export CXX="$(which g++) -m64"
-        export BLAS="openblas"
+        export BLAS="Open"
         # libmklml_intel.so does not have a SONAME, so libmkldnn.so.0 needs an RPATH to be able to load
         sedinplace "s/$CMAKE/$CMAKE -DCMAKE_CXX_FLAGS='-Wl,-rpath,\$\$ORIGIN\/'/g" mkldnn.mk
         ;;
@@ -96,7 +108,7 @@ case $PLATFORM in
         sedinplace '/install_name_tool/d' Makefile
         export CC="$(which clang)"
         export CXX="$(which clang++)"
-        export BLAS="openblas"
+        export BLAS="Open"
         export USE_OPENMP=0
         ;;
     windows-x86_64)
@@ -142,7 +154,7 @@ if [[ ! "$PLATFORM" == windows* ]]; then
     sed -i="" 's/$(shell pkg-config --cflags $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(shell pkg-config --libs-only-L $(OPENCV_LIB))//' Makefile
     sed -i="" 's/$(filter -lopencv_imgcodecs -lopencv_highgui, $(shell pkg-config --libs-only-l $(OPENCV_LIB)))/-lopencv_highgui -lopencv_imgcodecs/' Makefile
-    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
+    make -j $MAKEJ CC="$CC" CXX="$CXX" USE_BLAS="$BLAS" USE_OPENMP="$USE_OPENMP" CUDA_ARCH="$CUDA_ARCH" USE_CUDA="$USE_CUDA" USE_CUDNN="$USE_CUDNN" USE_NCCL="$USE_NCCL" USE_CUDA_PATH="$USE_CUDA_PATH" MSHADOW_USE_MKL=0 MXNET_USE_MKL_DROPOUT=0 USE_MKLML=0 USE_MKL=0 USE_MKLDNN="$USE_MKLDNN" USE_F16C=0 ADD_CFLAGS="$ADD_CFLAGS" ADD_LDFLAGS="$ADD_LDFLAGS" lib/libmxnet.a lib/libmxnet.so
     cp -RLf include lib 3rdparty/dmlc-core/include ..
     cp -RLf 3rdparty/mshadow/mshadow ../include
     unset CC
