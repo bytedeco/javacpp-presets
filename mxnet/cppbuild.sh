@@ -71,11 +71,15 @@ sedinplace "s/CFLAGS += -DUSE_MKL=1//g" Makefile
 sedinplace "s/include(cmake\/DownloadMKLML.cmake)//g" CMakeLists.txt
 sedinplace "s/add_definitions(-DUSE_MKL=1)//g" CMakeLists.txt
 sedinplace "s/add_definitions(-DCUB_MKL=1)//g" CMakeLists.txt
+sedinplace "s/saveLibraryToTemp(\"libmklml_intel.so\", \"\/lib\/native\/libmklml_intel.so\", false)//g" scala-package/core/src/main/scala/org/apache/mxnet/util/NativeLibraryLoader.scala
+sedinplace "s/saveLibraryToTemp(\"libmklml.dylib\", \"\/lib\/native\/libmklml.dylib\", false)//g" scala-package/core/src/main/scala/org/apache/mxnet/util/NativeLibraryLoader.scala
+
 
 sedinplace "s/&& .\/prepare_mkl.sh//g" mkldnn.mk
 sedinplace "s/&& cp -a external\/\*\/\* \$(MKLDNNROOT)\/.//g" mkldnn.mk
 sedinplace "s/cp \$(OMP_LIBFILE) \$(MXNET_LIBDIR)//g" mkldnn.mk
 sedinplace "s/cp \$(MKLML_LIBFILE) \$(MXNET_LIBDIR)//g" mkldnn.mk
+sedinplace "s/mv /mkdir \$(MKLDNNROOT)\/lib\/; mv /g" mkldnn.mk
 
 sedinplace 's/-Werror//g' 3rdparty/mkldnn/cmake/platform.cmake
 sedinplace 's/kCPU/Context::kCPU/g' src/operator/tensor/elemwise_binary_scalar_op_basic.cc
