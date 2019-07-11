@@ -98,6 +98,7 @@ case $PLATFORM in
         export CC="$(which gcc) -m32"
         export CXX="$(which g++) -m32"
         export BLAS="Open"
+	export USE_MKLDNN=0
         ;;
     linux-x86_64)
         export CC="$(which gcc) -m64"
