@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -51,47 +51,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.5.0.rc2-1.5.1</version>
+            <version>1.5.0.rc2-1.5.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>mxnet</artifactId>
-            <version>1.5.0.rc2-1.5.1</version>
-            <classifier>linux-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mxnet</artifactId>
-            <version>1.5.0.rc2-1.5.1</version>
-            <classifier>macosx-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mxnet</artifactId>
-            <version>1.5.0.rc2-1.5.1</version>
-            <classifier>windows-x86_64-gpu</classifier>
+            <artifactId>mxnet-platform-gpu</artifactId>
+            <version>1.5.0.rc2-1.5.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1</version>
-            <classifier>linux-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1</version>
-            <classifier>macosx-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.6-1.5.1</version>
-            <classifier>windows-x86_64-redist</classifier>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>10.1-7.6-1.5.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
