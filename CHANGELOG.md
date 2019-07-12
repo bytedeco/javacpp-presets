@@ -1,4 +1,5 @@
 
+ * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
  * Upgrade presets for FFmpeg 4.1.4
 
 ### July 9, 2019 version 1.5.1
