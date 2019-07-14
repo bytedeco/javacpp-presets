@@ -674,6 +674,34 @@
     </profile>
 
     <profile>
+      <id>javacpp.platform.custom-true</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.custom</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform></javacpp.platform>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
       <id>javacpp-platform-none</id>
       <activation>
         <property>
@@ -1473,7 +1501,7 @@
     </profile>
 
     <!-- Profiles to modify the transitive dependencies when picked up from other pom.xml files, for example:
-         mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ... -->
+         mvn -Djavacpp.platform.custom -Djavacpp.platform.host -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ... -->
     <profile>
       <id>javacpp.platform.android-arm-true</id>
       <activation>
@@ -1666,6 +1694,201 @@
       </properties>
     </profile>
 
+    <profile>
+      <id>javacpp.platform.custom-linux-arm</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>arm</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-armhf</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>armhf</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-aarch64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-armv8</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>armv8</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>arm64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-ppc64le</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>ppc64le</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
     <!-- Profiles to set the default javacpp.platform property: If someone knows a better way to do this, please do let me know! -->
     <profile>
       <id>linux</id>
@@ -1695,6 +1918,33 @@
       <properties>
         <os.kernel>windows</os.kernel>
         <os.name>windows</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>arm</id>
+      <activation>
+        <os><arch>arm</arch></os>
+      </activation>
+      <properties>
+        <os.arch>armhf</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>aarch64</id>
+      <activation>
+        <os><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>arm64</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>armv8</id>
+      <activation>
+        <os><arch>armv8</arch></os>
+      </activation>
+      <properties>
+        <os.arch>arm64</os.arch>
       </properties>
     </profile>
     <profile>
