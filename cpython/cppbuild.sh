@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-CPYTHON_VERSION=3.7.3
+CPYTHON_VERSION=3.7.4
 download https://www.python.org/ftp/python/$CPYTHON_VERSION/Python-$CPYTHON_VERSION.tgz Python-$CPYTHON_VERSION.tgz
 
 mkdir -p $PLATFORM

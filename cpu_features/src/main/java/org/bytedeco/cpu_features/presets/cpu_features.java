@@ -39,6 +39,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             include = {
                 "cpu_features/cpu_features_macros.h",
+                "cpu_features/cpu_features_cache_info.h",
                 "cpu_features/internal/hwcaps.h",
                 "cpu_features/cpuinfo_aarch64.h",
                 "cpu_features/cpuinfo_arm.h",
