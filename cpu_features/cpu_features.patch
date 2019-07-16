@@ -1,7 +1,7 @@
-diff -ruN cpu_features-0.3.0/include/cpuinfo_aarch64.h cpu_features-0.3.0-patch/include/cpuinfo_aarch64.h
---- cpu_features-0.3.0/include/cpuinfo_aarch64.h	2019-03-20 18:04:24.000000000 +0900
-+++ cpu_features-0.3.0-patch/include/cpuinfo_aarch64.h	2019-05-06 19:20:24.468436297 +0900
-@@ -60,10 +60,13 @@
+diff -ruN cpu_features-0.4.0/include/cpuinfo_aarch64.h cpu_features-0.4.0-patch/include/cpuinfo_aarch64.h
+--- cpu_features-0.4.0/include/cpuinfo_aarch64.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/cpuinfo_aarch64.h	2019-07-16 18:03:58.907537797 +0900
+@@ -61,10 +61,13 @@
  
  const char* GetAarch64FeaturesEnumName(Aarch64FeaturesEnum);
  
@@ -18,10 +18,10 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_aarch64.h cpu_features-0.3.0-patch/
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_AARCH64_H_
-diff -ruN cpu_features-0.3.0/include/cpuinfo_arm.h cpu_features-0.3.0-patch/include/cpuinfo_arm.h
---- cpu_features-0.3.0/include/cpuinfo_arm.h	2019-03-20 18:04:24.000000000 +0900
-+++ cpu_features-0.3.0-patch/include/cpuinfo_arm.h	2019-05-06 19:30:37.910951204 +0900
-@@ -79,10 +79,13 @@
+diff -ruN cpu_features-0.4.0/include/cpuinfo_arm.h cpu_features-0.4.0-patch/include/cpuinfo_arm.h
+--- cpu_features-0.4.0/include/cpuinfo_arm.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/cpuinfo_arm.h	2019-07-16 18:03:58.908537798 +0900
+@@ -108,10 +108,13 @@
  
  const char* GetArmFeaturesEnumName(ArmFeaturesEnum);
  
@@ -38,10 +38,10 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_arm.h cpu_features-0.3.0-patch/incl
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_ARM_H_
-diff -ruN cpu_features-0.3.0/include/cpuinfo_mips.h cpu_features-0.3.0-patch/include/cpuinfo_mips.h
---- cpu_features-0.3.0/include/cpuinfo_mips.h	2019-03-20 18:04:24.000000000 +0900
-+++ cpu_features-0.3.0-patch/include/cpuinfo_mips.h	2019-05-06 19:22:30.544131088 +0900
-@@ -50,10 +50,13 @@
+diff -ruN cpu_features-0.4.0/include/cpuinfo_mips.h cpu_features-0.4.0-patch/include/cpuinfo_mips.h
+--- cpu_features-0.4.0/include/cpuinfo_mips.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/cpuinfo_mips.h	2019-07-16 18:03:58.908537798 +0900
+@@ -51,10 +51,13 @@
  
  const char* GetMipsFeaturesEnumName(MipsFeaturesEnum);
  
@@ -58,10 +58,10 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_mips.h cpu_features-0.3.0-patch/inc
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_MIPS_H_
-diff -ruN cpu_features-0.3.0/include/cpuinfo_ppc.h cpu_features-0.3.0-patch/include/cpuinfo_ppc.h
---- cpu_features-0.3.0/include/cpuinfo_ppc.h	2019-03-20 18:04:24.000000000 +0900
-+++ cpu_features-0.3.0-patch/include/cpuinfo_ppc.h	2019-05-06 19:24:49.545794572 +0900
-@@ -136,10 +136,13 @@
+diff -ruN cpu_features-0.4.0/include/cpuinfo_ppc.h cpu_features-0.4.0-patch/include/cpuinfo_ppc.h
+--- cpu_features-0.4.0/include/cpuinfo_ppc.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/cpuinfo_ppc.h	2019-07-16 18:03:58.909537798 +0900
+@@ -137,10 +137,13 @@
  
  const char* GetPPCFeaturesEnumName(PPCFeaturesEnum);
  
@@ -78,10 +78,10 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_ppc.h cpu_features-0.3.0-patch/incl
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_PPC_H_
-diff -ruN cpu_features-0.3.0/include/cpuinfo_x86.h cpu_features-0.3.0-patch/include/cpuinfo_x86.h
---- cpu_features-0.3.0/include/cpuinfo_x86.h	2019-03-20 18:04:24.000000000 +0900
-+++ cpu_features-0.3.0-patch/include/cpuinfo_x86.h	2019-05-06 19:36:14.757135724 +0900
-@@ -158,10 +158,15 @@
+diff -ruN cpu_features-0.4.0/include/cpuinfo_x86.h cpu_features-0.4.0-patch/include/cpuinfo_x86.h
+--- cpu_features-0.4.0/include/cpuinfo_x86.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/cpuinfo_x86.h	2019-07-16 18:05:03.611574572 +0900
+@@ -199,10 +199,16 @@
  
  const char* GetX86MicroarchitectureName(X86Microarchitecture);
  
@@ -90,6 +90,7 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_x86.h cpu_features-0.3.0-patch/incl
  #if !defined(CPU_FEATURES_ARCH_X86)
 -#error "Including cpuinfo_x86.h from a non-x86 target."
 +X86Info GetX86Info(void) { return X86Info(); }
++CacheInfo GetX86CacheInfo(void) { return CacheInfo(); }
 +X86Microarchitecture GetX86Microarchitecture(const X86Info* info) { return X86Microarchitecture(); }
 +void FillX86BrandString(char brand_string[49]) { }
 +int GetX86FeaturesEnumValue(const X86Features* features, X86FeaturesEnum value) { return 0; }
@@ -100,10 +101,10 @@ diff -ruN cpu_features-0.3.0/include/cpuinfo_x86.h cpu_features-0.3.0-patch/incl
 +CPU_FEATURES_END_CPP_NAMESPACE
 +
  #endif  // CPU_FEATURES_INCLUDE_CPUINFO_X86_H_
-diff -ruN cpu_features-0.3.0/include/internal/hwcaps.h cpu_features-0.3.0-patch/include/internal/hwcaps.h
---- cpu_features-0.3.0/include/internal/hwcaps.h	2019-05-06 19:37:20.455976673 +0900
-+++ cpu_features-0.3.0-patch/include/internal/hwcaps.h	2019-05-06 19:38:42.707777542 +0900
-@@ -119,6 +119,11 @@
+diff -ruN cpu_features-0.4.0/include/internal/hwcaps.h cpu_features-0.4.0-patch/include/internal/hwcaps.h
+--- cpu_features-0.4.0/include/internal/hwcaps.h	2019-07-05 15:47:41.000000000 +0900
++++ cpu_features-0.4.0-patch/include/internal/hwcaps.h	2019-07-16 18:03:58.910537799 +0900
+@@ -133,6 +133,11 @@
  
  PlatformType CpuFeatures_GetPlatformType(void);
  

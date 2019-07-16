@@ -166,7 +166,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.7.3-${project.version}</version>
+      <version>3.7.4-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -251,7 +251,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.3.0-${project.version}</version>
+      <version>0.4.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
