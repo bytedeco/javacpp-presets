@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for NumPy</name>
 
   <properties>
-    <revision>1.16.4-${project.parent.version}</revision>
+    <revision>1.17.0rc2-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
