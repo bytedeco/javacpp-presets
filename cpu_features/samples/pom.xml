@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpu_features-platform</artifactId>
-            <version>0.4.0-1.5.2-SNAPSHOT</version>
+            <version>0.4.1-1.5.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

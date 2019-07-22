@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * MXNet 1.5.0.rc2  http://mxnet.incubator.apache.org/
+ * MXNet 1.5.0  http://mxnet.incubator.apache.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -51,14 +51,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.5.0.rc2-1.5.2-SNAPSHOT</version>
+            <version>1.5.0-1.5.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform-gpu</artifactId>
-            <version>1.5.0.rc2-1.5.2-SNAPSHOT</version>
+            <version>1.5.0-1.5.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->

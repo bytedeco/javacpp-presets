@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>cpu_features</javacpp.moduleId>
-    <revision>0.4.0-${project.parent.version}</revision>
+    <revision>0.4.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

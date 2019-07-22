@@ -103,7 +103,7 @@ public class numpy implements InfoMapper {
                                                            "         PyUFunc_API\\[42\\]\\)").skip())
 
                .put(new Info("NPY_VISIBILITY_HIDDEN", "NPY_GCC_UNROLL_LOOPS", "NPY_GCC_OPT_3",
-                             "NPY_GCC_TARGET_AVX", "NPY_GCC_TARGET_AVX2", "NPY_RETURNS_BORROWED_REF",
+                             "NPY_GCC_TARGET_AVX", "NPY_GCC_TARGET_AVX2", "NPY_GCC_TARGET_AVX512F", "NPY_RETURNS_BORROWED_REF",
                              "NPY_INLINE", "NPY_TLS", "constchar",
                              "NPY_SIGINT_ON", "NPY_SIGINT_OFF", "NPY_INPLACE",
                              "npy_fseek", "npy_ftell", "npy_lseek", "npy_off_t",

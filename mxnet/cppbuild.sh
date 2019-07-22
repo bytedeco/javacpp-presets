@@ -26,7 +26,7 @@ if [[ "$EXTENSION" == *gpu ]]; then
     export USE_CUDA_PATH="/usr/local/cuda"
 fi
 
-MXNET_VERSION=1.5.0.rc2
+MXNET_VERSION=1.5.0
 download https://github.com/apache/incubator-mxnet/releases/download/$MXNET_VERSION/apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz apache-mxnet-src-$MXNET_VERSION-incubating.tar.gz
 
 mkdir -p "$PLATFORM$EXTENSION"

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-NUMPY_VERSION=1.16.4
+NUMPY_VERSION=1.17.0rc2
 download https://github.com/numpy/numpy/releases/download/v$NUMPY_VERSION/numpy-$NUMPY_VERSION.tar.gz numpy-$NUMPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -67,6 +67,8 @@ case $PLATFORM in
         export PATH="$PATH:$OPENBLAS_PATH/:$CPYTHON_PATH/"
         export PYTHONPATH="$INSTALL_PATH/lib/site-packages/"
         mkdir -p "$PYTHONPATH"
+        # the build sometimes fails with multiple jobs
+        MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
         "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
         ;;

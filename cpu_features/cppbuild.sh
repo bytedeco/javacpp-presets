@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-CPU_FEATURES_VERSION=0.4.0
+CPU_FEATURES_VERSION=0.4.1
 download https://github.com/google/cpu_features/archive/v$CPU_FEATURES_VERSION.tar.gz cpu_features-$CPU_FEATURES_VERSION.tar.gz
 
 mkdir -p $PLATFORM

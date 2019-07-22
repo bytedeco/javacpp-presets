@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>mxnet</javacpp.moduleId>
-    <revision>1.5.0.rc2-${project.parent.version}</revision>
+    <revision>1.5.0-${project.parent.version}</revision>
     <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.20-${project.parent.version}</version>
+      <version>0.20.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
