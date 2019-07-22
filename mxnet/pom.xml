@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.mkldnn.platform>${javacpp.platform}</javacpp.mkldnn.platform>
-    <revision>1.5.0.rc2-${project.parent.version}</revision>
+    <revision>1.5.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.20-${project.parent.version}</version>
+      <version>0.20.1-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -94,7 +94,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.20-${project.parent.version}</version>
+            <version>0.20.1-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -111,7 +111,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn</artifactId>
-            <version>0.20-${project.parent.version}</version>
+            <version>0.20.1-${project.parent.version}</version>
             <classifier>${javacpp.mkldnn.platform}</classifier>
           </dependency>
           <!-- Use JavaCPP to get correct class path for scala-maven-plugin as ${javacpp.platform.artifacts} below -->

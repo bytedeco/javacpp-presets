@@ -1,7 +1,7 @@
 
  * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
- * Upgrade presets for FFmpeg 4.1.4, CPython 3.7.4, cpu_features 0.4.0, and their dependencies
+ * Upgrade presets for FFmpeg 4.1.4, MKL-DNN 0.20.1, CPython 3.7.4, NumPy 1.17.0rc2, MXNet 1.5.0, cpu_features 0.4.1, and their dependencies
 
 ### July 9, 2019 version 1.5.1
  * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))

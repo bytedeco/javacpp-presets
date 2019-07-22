@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.20-${project.version}</version>
+      <version>0.20.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -171,7 +171,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.16.4-${project.version}</version>
+      <version>1.17.0rc2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -206,7 +206,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.5.0.rc2-${project.version}</version>
+      <version>1.5.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -251,7 +251,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpu_features-platform</artifactId>
-      <version>0.4.0-${project.version}</version>
+      <version>0.4.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
