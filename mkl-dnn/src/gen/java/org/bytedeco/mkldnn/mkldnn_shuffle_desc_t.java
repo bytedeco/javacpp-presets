@@ -37,5 +37,5 @@ public class mkldnn_shuffle_desc_t extends Pointer {
     /** axis for shuffling. */
     public native int axis(); public native mkldnn_shuffle_desc_t axis(int setter);
     /** number of groups in group convolution */
-    public native @Cast("int64_t") long group_size(); public native mkldnn_shuffle_desc_t group_size(long setter);
+    public native @Cast("mkldnn_dim_t") long group_size(); public native mkldnn_shuffle_desc_t group_size(long setter);
 }

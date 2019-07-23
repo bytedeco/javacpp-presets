@@ -47,6 +47,18 @@ public class lrn_forward extends primitive {
          *  #mkldnn::forward_inference), \p aalgorithm, memory descriptor \p
          *  data_desc, and regularization parameters \p local_size, \p alpha, \p
          *  beta, and \p k. */
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta, k); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
                         float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta, k); }

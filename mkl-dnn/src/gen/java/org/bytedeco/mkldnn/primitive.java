@@ -18,36 +18,42 @@ public class primitive extends mkldnn_primitive_handle {
 
     /** Kinds of primitives. Used to implement a way to extend the library with
      *  new primitives without changing the ABI. */
-    /** enum class mkldnn::primitive::kind */
-    public static final int
+    public enum kind {
         /** Undefined primitive */
-        undef = mkldnn_undefined_primitive,
+        undef(mkldnn_undefined_primitive),
         /** A reorder primitive. */
-        reorder = mkldnn_reorder,
+        reorder(mkldnn_reorder),
         /** A shuffle primitive. */
-        shuffle = mkldnn_shuffle,
+        shuffle(mkldnn_shuffle),
         /** A (out-of-place) concat primitive. */
-        concat = mkldnn_concat,
+        concat(mkldnn_concat),
         /** A sum primitive. */
-        sum = mkldnn_sum,
+        sum(mkldnn_sum),
         /** A convolution primitive. */
-        convolution = mkldnn_convolution,
+        convolution(mkldnn_convolution),
         /** A deconvolution primitive. */
-        deconvolution = mkldnn_deconvolution,
+        deconvolution(mkldnn_deconvolution),
         /** An element-wise primitive. */
-        eltwise = mkldnn_eltwise,
+        eltwise(mkldnn_eltwise),
         /** A softmax primitive. */
-        softmax = mkldnn_softmax,
+        softmax(mkldnn_softmax),
         /** A pooling primitive. */
-        pooling = mkldnn_pooling,
+        pooling(mkldnn_pooling),
         /** An LRN primitive. */
-        lrn = mkldnn_lrn,
+        lrn(mkldnn_lrn),
         /** An batch normalization primitive. */
-        batch_normalization = mkldnn_batch_normalization,
+        batch_normalization(mkldnn_batch_normalization),
         /** An inner product primitive. */
-        inner_product = mkldnn_inner_product,
+        inner_product(mkldnn_inner_product),
         /** A rnn primitive. */
-        rnn = mkldnn_rnn;
+        rnn(mkldnn_rnn);
+
+        public final int value;
+        private kind(int v) { this.value = v; }
+        private kind(kind e) { this.value = e.value; }
+        public kind intern() { for (kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
     public primitive(@Const mkldnn_primitive_desc c_pd) { super((Pointer)null); allocate(c_pd); }
     private native void allocate(@Const mkldnn_primitive_desc c_pd);

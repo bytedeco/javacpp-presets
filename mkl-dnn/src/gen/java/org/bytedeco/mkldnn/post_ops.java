@@ -48,7 +48,7 @@ public class post_ops extends mkldnn_post_ops_handle {
     ///
     ///
     ///
-    public native @Cast("mkldnn::primitive::kind") int kind(int index);
+    public native @ByVal primitive.kind kind(int index);
 
     /** Appends accumulation (sum) post operation. Prior to accumulating the
      *  result, the previous value would be multiplied by \p scale.
@@ -90,14 +90,16 @@ public class post_ops extends mkldnn_post_ops_handle {
      *  computations would be:
      *  dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
      *  where eltwise_op is configured with the given parameters. */
+    public native void append_eltwise(float scale, algorithm alg, float alpha,
+                float beta);
     public native void append_eltwise(float scale, @Cast("mkldnn::algorithm") int alg, float alpha,
                 float beta);
 
     /** Gets the eltwise parameters of the post operation with index \p index. */
-    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @Cast("mkldnn::algorithm*") @ByRef IntPointer alg,
+    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("mkldnn::algorithm*") IntPointer alg,
                 @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
-    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @Cast("mkldnn::algorithm*") @ByRef IntBuffer alg,
+    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("mkldnn::algorithm*") IntBuffer alg,
                 @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
-    public native void get_params_eltwise(int index, @ByRef float[] scale, @Cast("mkldnn::algorithm*") @ByRef int[] alg,
+    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("mkldnn::algorithm*") int[] alg,
                 @ByRef float[] alpha, @ByRef float[] beta);
 }

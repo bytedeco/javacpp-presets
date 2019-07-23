@@ -51,6 +51,10 @@ public class primitive_desc extends mkldnn_primitive_desc_handle {
     public native @Cast("const char*") BytePointer impl_info_str();
 
     /** Queries the memory::dim value (same as int64_t) */
+    
+    ///
+    public native @Cast("mkldnn::memory::dim") long query_s64(query q);
+    public native @Cast("mkldnn::memory::dim") long query_s64(@Cast("mkldnn::query") int q);
 
     /** Advances the next implementation for the given op descriptor.
      * 
@@ -61,6 +65,12 @@ public class primitive_desc extends mkldnn_primitive_desc_handle {
     public native @Cast("bool") boolean next_impl();
 
     /** Queries and returns requested memory descriptor. */
+    
+    ///
+    public native @ByVal memory.desc query_md(query what, int idx/*=0*/);
+    public native @ByVal memory.desc query_md(query what);
+    public native @ByVal memory.desc query_md(@Cast("mkldnn::query") int what, int idx/*=0*/);
+    public native @ByVal memory.desc query_md(@Cast("mkldnn::query") int what);
 
     /** Queries scratchpad memory descriptor.
      * 

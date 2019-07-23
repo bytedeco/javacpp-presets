@@ -20,6 +20,63 @@ public class mkldnn extends org.bytedeco.mkldnn.presets.mkldnn {
 // Targeting ../IntMemoryMap.java
 
 
+// Parsed from mkldnn_config.h
+
+/*******************************************************************************
+* Copyright 2019 Intel Corporation
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*******************************************************************************/
+
+// #ifndef MKLDNN_CONFIG_H
+// #define MKLDNN_CONFIG_H
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif // DOXYGEN_SHOULD_SKIP_THIS
+
+// No runtime (disabled)
+public static final long MKLDNN_RUNTIME_NONE = 0L;
+// Sequential runtime (CPU only)
+public static final long MKLDNN_RUNTIME_SEQ = 1L;
+// OpenMP runtime (CPU only)
+public static final long MKLDNN_RUNTIME_OMP = 2L;
+// TBB runtime (CPU only)
+public static final long MKLDNN_RUNTIME_TBB = 4L;
+// OpenCL runtime
+public static final long MKLDNN_RUNTIME_OCL = 256L;
+
+// MKL-DNN CPU engine runtime
+public static final long MKLDNN_CPU_RUNTIME = MKLDNN_RUNTIME_OMP;
+
+// MKL-DNN GPU engine runtime
+public static final long MKLDNN_GPU_RUNTIME = MKLDNN_RUNTIME_NONE;
+
+// #if defined(MKLDNN_CPU_RUNTIME) && defined(MKLDNN_GPU_RUNTIME)
+// #    if (MKLDNN_CPU_RUNTIME == MKLDNN_RUNTIME_NONE)
+//             || (MKLDNN_CPU_RUNTIME == MKLDNN_RUNTIME_OCL)
+// #        error "Unexpected MKLDNN_CPU_RUNTIME"
+// #    endif
+// #    if (MKLDNN_GPU_RUNTIME != MKLDNN_RUNTIME_NONE)
+//             && (MKLDNN_GPU_RUNTIME != MKLDNN_RUNTIME_OCL)
+// #        error "Unexpected MKLDNN_GPU_RUNTIME"
+// #    endif
+// #else
+// #    error "BOTH MKLDNN_CPU_RUNTIME and MKLDNN_GPU_RUNTIME must be defined"
+// #endif
+
+// #endif
+
+
 // Parsed from mkldnn_types.h
 
 /*******************************************************************************
@@ -1213,6 +1270,43 @@ public static final int
 // #endif
 
 
+// Parsed from mkldnn_version.h
+
+/*******************************************************************************
+* Copyright 2019 Intel Corporation
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*******************************************************************************/
+
+// #ifndef MKLDNN_VERSION_H
+// #define MKLDNN_VERSION_H
+
+/** Major version */
+public static final int MKLDNN_VERSION_MAJOR = 1;
+
+/** Minor version */
+public static final int MKLDNN_VERSION_MINOR = 0;
+
+/** Patch version */
+public static final int MKLDNN_VERSION_PATCH = 0;
+
+/** Git commit hash */
+public static native @MemberGetter String MKLDNN_VERSION_HASH();
+public static final String MKLDNN_VERSION_HASH = MKLDNN_VERSION_HASH();
+
+// #endif
+
+
 // Parsed from mkldnn.h
 
 /*******************************************************************************
@@ -1507,16 +1601,16 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_scra
 ///
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
         @Cast("const float**") PointerPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
         @Const @ByPtrPtr FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") LongBuffer count, IntBuffer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongBuffer count, IntBuffer mask,
         @Const @ByPtrPtr FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, @Cast("int64_t*") long[] count, int[] mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") long[] count, int[] mask,
         @Const @ByPtrPtr float[] scales);
 
 /** Sets output \p scales for primitive operations. The number of elements \p
@@ -1560,13 +1654,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_outp
 
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const float[] scales);
 
 /** Returns \p post_ops for given \p attr.
@@ -1781,8 +1875,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_elt
 
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
-        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims,
-        @Cast("mkldnn_data_type_t") int data_type, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides);
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongPointer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") LongPointer strides);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongBuffer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") LongBuffer strides);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") long[] dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") long[] strides);
 
 /** Initializes a \p memory_desc memory descriptor using \p ndims, \p dims, \p
  *  data_type, and format \p tag.
@@ -1791,7 +1891,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_str
  *  the appropriate memory format. In this case, the \p format_kind would be set
  *  to #mkldnn_format_kind_any */
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
-        mkldnn_memory_desc_t memory_desc, int ndims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims,
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongPointer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongBuffer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") long[] dims,
         @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
 
 /** Initializes a \p memory_desc for a given \p parent_memory_desc, with
@@ -1803,7 +1909,15 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
         mkldnn_memory_desc_t memory_desc,
         @Const mkldnn_memory_desc_t parent_memory_desc,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dims, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer offsets);
+        @Cast("const int64_t*") LongPointer dims, @Cast("const int64_t*") LongPointer offsets);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
+        mkldnn_memory_desc_t memory_desc,
+        @Const mkldnn_memory_desc_t parent_memory_desc,
+        @Cast("const int64_t*") LongBuffer dims, @Cast("const int64_t*") LongBuffer offsets);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
+        mkldnn_memory_desc_t memory_desc,
+        @Const mkldnn_memory_desc_t parent_memory_desc,
+        @Cast("const int64_t*") long[] dims, @Cast("const int64_t*") long[] offsets);
 
 /** Compares two memory descriptors.
  *  @return 1 if the descriptors are the same.
@@ -1900,9 +2014,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_memory_set_data_handle(
         mkldnn_memory memory, Pointer handle);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-/** For a \p memory returns the OpenCL memory object associated with it. */
-
-/** For a \p memory sets the OpenCL memory object associated with it. */
 // #endif
 
 /** Deletes a \p memory. */
@@ -2098,8 +2209,22 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_des
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for forward
  *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
@@ -2130,9 +2255,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_for
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
@@ -2155,8 +2296,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_da
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for backward
  *  propagation with respect to data using \p alg_kind, memory descriptors, \p
@@ -2179,9 +2332,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2206,8 +2373,22 @@ public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_we
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2234,9 +2415,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_bac
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
+        mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** \}
  <p>
@@ -2275,8 +2472,22 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_d
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p deconv_desc for forward
  *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
@@ -2307,9 +2518,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_f
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
  *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
@@ -2332,8 +2559,20 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
  *  propagation with respect to data using \p alg_kind, memory descriptors, \p
@@ -2356,9 +2595,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t weights_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
  *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
@@ -2383,8 +2636,22 @@ public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
  *  propagation with respect to weights using \p alg_kind, memory descriptors,
@@ -2410,9 +2677,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer dilates, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
+        @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t diff_weights_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** \}
  <p>
@@ -2440,7 +2723,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_b
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, int axis,
-        @Cast("int64_t") long group_size);
+        @Cast("mkldnn_dim_t") long group_size);
 
 /** Initializes a \p shuffle_desc for backward propagation using memory
  *  descriptor \p diff_data_desc, \p axis, and \p group_size.
@@ -2463,7 +2746,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_in
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_backward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc,
         @Const mkldnn_memory_desc_t diff_data_desc, int axis,
-        @Cast("int64_t") long group_size);
+        @Cast("mkldnn_dim_t") long group_size);
 
 /** \}
  <p>
@@ -2606,9 +2889,21 @@ public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_i
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
+        mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
+        mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a pooling descriptor \p pool_desc for backward propagation
  *  using \p alg_kind, memory descriptors, and pooling parameters in the spatial
@@ -2632,9 +2927,21 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_in
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer strides,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer kernel, @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_l,
-        @ByVal @Cast("const mkldnn_dims_t*") CLongPointer padding_r);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
+        mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
+public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
+        mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
+        @Const mkldnn_memory_desc_t diff_src_desc,
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** \}
  <p>
@@ -2667,7 +2974,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_i
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
-        @Cast("int64_t") long local_size, float alpha, float beta, float k);
+        @Cast("mkldnn_dim_t") long local_size, float alpha, float beta, float k);
 
 /** Initializes an \p lrn_desc for backward propagation using \p alg_kind,
  *  memory descriptors \p data_desc and \p diff_data_desc, and regularization
@@ -2693,7 +3000,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
-        @Const mkldnn_memory_desc_t data_desc, @Cast("int64_t") long local_size,
+        @Const mkldnn_memory_desc_t data_desc, @Cast("mkldnn_dim_t") long local_size,
         float alpha, float beta, float k);
 
 /** \}
@@ -2974,13 +3281,13 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_
 ///
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const FloatPointer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const FloatBuffer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, @Cast("int64_t") long count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const float[] weights_scales);
 
 /** Initializes an RNN descriptor \p rnn_desc for forward propagation
@@ -3428,8 +3735,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_engine_create(@Cast("mk
         @Cast("mkldnn_engine_kind_t") int kind, @Cast("size_t") long index);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-/** Creates an \p engine of particular \p kind associated with a given OpenCL
- *  \p device and \p context objects. */
 // #endif
 
 /** Returns the kind of an \p engine. */
@@ -3441,9 +3746,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_engine_get_kind(mkldnn_
         @Cast("mkldnn_engine_kind_t*") int[] kind);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-/** Returns an OpenCL \p context associated with an \p engine. */
-
-/** Returns an OpenCL \p device associated with an \p engine. */
 // #endif
 
 /** Returns the kind of an \p engine. */
@@ -3463,11 +3765,6 @@ public static native @Cast("mkldnn_status_t") int mkldnn_stream_create(@Cast("mk
         mkldnn_engine engine, @Cast("unsigned") int flags);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-/** Creates an execution \p stream for a given \p engine associated with
- *  an OpenCL command \p queue. */
-
-/** Returns the OpenCL command \p queue associated with an execution
- *  \p stream. */
 // #endif
 
 /** Waits for all primitives in the execution \p stream to finish. */
@@ -3552,22 +3849,22 @@ public static native @Const mkldnn_version_t mkldnn_version();
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
-        float alpha, @Const FloatPointer A, @Cast("int64_t") long lda,
-        @Const FloatPointer B, @Cast("int64_t") long ldb,
-        float beta, FloatPointer C, @Cast("int64_t") long ldc);
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const FloatPointer A, @Cast("mkldnn_dim_t") long lda,
+        @Const FloatPointer B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, FloatPointer C, @Cast("mkldnn_dim_t") long ldc);
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
-        float alpha, @Const FloatBuffer A, @Cast("int64_t") long lda,
-        @Const FloatBuffer B, @Cast("int64_t") long ldb,
-        float beta, FloatBuffer C, @Cast("int64_t") long ldc);
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const FloatBuffer A, @Cast("mkldnn_dim_t") long lda,
+        @Const FloatBuffer B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, FloatBuffer C, @Cast("mkldnn_dim_t") long ldc);
 public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
         @Cast("char") byte transa, @Cast("char") byte transb,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
-        float alpha, @Const float[] A, @Cast("int64_t") long lda,
-        @Const float[] B, @Cast("int64_t") long ldb,
-        float beta, float[] C, @Cast("int64_t") long ldc);
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const float[] A, @Cast("mkldnn_dim_t") long lda,
+        @Const float[] B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, float[] C, @Cast("mkldnn_dim_t") long ldc);
 
 /** mkldnn_gemm_u8s8s32() and mkldnn_gemm_s8s8s32() perform a matrix-matrix
  *  multiplication operation and add the result to a scalar-matrix product.
@@ -3611,25 +3908,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
 ///
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Cast("const uint8_t*") BytePointer A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
-        @Const BytePointer B, @Cast("int64_t") long ldb, byte bo,
-        float beta, IntPointer C, @Cast("int64_t") long ldc, @Const IntPointer co);
+        @Cast("const uint8_t*") BytePointer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Cast("const uint8_t*") ByteBuffer A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
-        @Const ByteBuffer B, @Cast("int64_t") long ldb, byte bo,
-        float beta, IntBuffer C, @Cast("int64_t") long ldc, @Const IntBuffer co);
+        @Cast("const uint8_t*") ByteBuffer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Cast("const uint8_t*") byte[] A, @Cast("int64_t") long lda, @Cast("uint8_t") byte ao,
-        @Const byte[] B, @Cast("int64_t") long ldb, byte bo,
-        float beta, int[] C, @Cast("int64_t") long ldc, @Const int[] co);
+        @Cast("const uint8_t*") byte[] A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
 
 /** mkldnn_gemm_u8s8s32() and mkldnn_gemm_s8s8s32() perform a matrix-matrix
  *  multiplication operation and add the result to a scalar-matrix product.
@@ -3644,25 +3941,25 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
  *       \ref dev_guide_int8_computations. */
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Const BytePointer A, @Cast("int64_t") long lda, byte ao,
-        @Const BytePointer B, @Cast("int64_t") long ldb, byte bo,
-        float beta, IntPointer C, @Cast("int64_t") long ldc, @Const IntPointer co);
+        @Const BytePointer A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Const ByteBuffer A, @Cast("int64_t") long lda, byte ao,
-        @Const ByteBuffer B, @Cast("int64_t") long ldb, byte bo,
-        float beta, IntBuffer C, @Cast("int64_t") long ldc, @Const IntBuffer co);
+        @Const ByteBuffer A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
 public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
         @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
-        @Cast("int64_t") long M, @Cast("int64_t") long N, @Cast("int64_t") long K,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
         float alpha,
-        @Const byte[] A, @Cast("int64_t") long lda, byte ao,
-        @Const byte[] B, @Cast("int64_t") long ldb, byte bo,
-        float beta, int[] C, @Cast("int64_t") long ldc, @Const int[] co);
+        @Const byte[] A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
 /** \}
  <p>
  *  \} */
@@ -3735,7 +4032,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
 
 
 
-@Namespace("mkldnn") public static native @Cast("mkldnn_primitive_kind_t") int convert_to_c(@Cast("mkldnn::primitive::kind") int akind);
+@Namespace("mkldnn") public static native @Cast("mkldnn_primitive_kind_t") int convert_to_c(@ByVal primitive.kind akind);
 
 
 /** \}
@@ -3746,97 +4043,113 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
  *  \{
  <p>
  *  Scratchpad mode */
-/** enum class mkldnn::scratchpad_mode */
-public static final int
+@Namespace("mkldnn") public enum scratchpad_mode {
     /** The library manages scratchpad (default) */
-    library = mkldnn_scratchpad_mode_library,
+    library(mkldnn_scratchpad_mode_library),
     /** A user shall query and provide the scratchpad memory to primitives */
-    user = mkldnn_scratchpad_mode_user;
+    user(mkldnn_scratchpad_mode_user);
+
+    public final int value;
+    private scratchpad_mode(int v) { this.value = v; }
+    private scratchpad_mode(scratchpad_mode e) { this.value = e.value; }
+    public scratchpad_mode intern() { for (scratchpad_mode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("mkldnn") public static native @Cast("mkldnn_scratchpad_mode_t") int convert_to_c(scratchpad_mode mode);
+@Namespace("mkldnn") public static native @Cast("mkldnn_scratchpad_mode_t") int convert_to_c(@Cast("mkldnn::scratchpad_mode") int mode);
 
 /** Propagation kind */
-/** enum class mkldnn::prop_kind */
-public static final int
+@Namespace("mkldnn") public enum prop_kind {
     /** Forward data propagation (training mode). In this mode primitives
      *  perform computations necessary for subsequent backward propagation. */
-    forward_training = mkldnn_forward_training,
+    forward_training(mkldnn_forward_training),
     /** Forward data propagation (inference mode). In this mode primitives
      *  perform only computations that are necessary for inference and omit
      *  computations that are necessary only for backward propagation. */
-    forward_inference = mkldnn_forward_inference,
+    forward_inference(mkldnn_forward_inference),
     /** Forward data propagation,
      *  alias for #mkldnn::prop_kind::forward_inference */
-    forward_scoring = mkldnn_forward_scoring,
+    forward_scoring(mkldnn_forward_scoring),
     /** Forward data propagation,
      *  alias for #mkldnn::prop_kind::forward_training */
-    forward = mkldnn_forward,
+    forward(mkldnn_forward),
     /** Backward propagation (with respect to all parameters). */
-    backward = mkldnn_backward,
+    backward(mkldnn_backward),
     /** Backward data propagation. */
-    backward_data = mkldnn_backward_data,
+    backward_data(mkldnn_backward_data),
     /** Backward weights propagation. */
-    backward_weights = mkldnn_backward_weights,
+    backward_weights(mkldnn_backward_weights),
     /** Backward bias propagation. */
-    backward_bias = mkldnn_backward_bias;
+    backward_bias(mkldnn_backward_bias);
+
+    public final int value;
+    private prop_kind(int v) { this.value = v; }
+    private prop_kind(prop_kind e) { this.value = e.value; }
+    public prop_kind intern() { for (prop_kind e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("mkldnn") public static native @Cast("mkldnn_prop_kind_t") int convert_to_c(prop_kind kind);
 
 /** Kinds of algorithms. */
-/** enum class mkldnn::algorithm */
-public static final int
-    undef = mkldnn_alg_kind_undef,
+@Namespace("mkldnn") public enum algorithm {
+    undef(mkldnn_alg_kind_undef),
     /** Convolution algorithm(either direct or Winograd) is chosen just in time */
-    convolution_auto = mkldnn_convolution_auto,
+    convolution_auto(mkldnn_convolution_auto),
     /** Direct convolution */
-    convolution_direct = mkldnn_convolution_direct,
+    convolution_direct(mkldnn_convolution_direct),
     /** Winograd convolution */
-    convolution_winograd = mkldnn_convolution_winograd,
+    convolution_winograd(mkldnn_convolution_winograd),
     /** Direct deconvolution */
-    deconvolution_direct = mkldnn_deconvolution_direct,
+    deconvolution_direct(mkldnn_deconvolution_direct),
     /** Winograd deconvolution */
-    deconvolution_winograd = mkldnn_deconvolution_winograd,
+    deconvolution_winograd(mkldnn_deconvolution_winograd),
     /** Eltwise: ReLU */
-    eltwise_relu = mkldnn_eltwise_relu,
+    eltwise_relu(mkldnn_eltwise_relu),
     /** Eltwise: hyperbolic tangent non-linearity (tanh) */
-    eltwise_tanh = mkldnn_eltwise_tanh,
+    eltwise_tanh(mkldnn_eltwise_tanh),
     /** Eltwise: parametric exponential linear unit (elu) */
-    eltwise_elu = mkldnn_eltwise_elu,
+    eltwise_elu(mkldnn_eltwise_elu),
     /** Eltwise: square */
-    eltwise_square = mkldnn_eltwise_square,
+    eltwise_square(mkldnn_eltwise_square),
     /** Eltwise: abs */
-    eltwise_abs = mkldnn_eltwise_abs,
+    eltwise_abs(mkldnn_eltwise_abs),
     /** Eltwise: square root */
-    eltwise_sqrt = mkldnn_eltwise_sqrt,
+    eltwise_sqrt(mkldnn_eltwise_sqrt),
     /** Eltwise: linear */
-    eltwise_linear = mkldnn_eltwise_linear,
+    eltwise_linear(mkldnn_eltwise_linear),
     /** Eltwise: bounded_relu */
-    eltwise_bounded_relu = mkldnn_eltwise_bounded_relu,
+    eltwise_bounded_relu(mkldnn_eltwise_bounded_relu),
     /** Eltwise: soft_relu */
-    eltwise_soft_relu = mkldnn_eltwise_soft_relu,
+    eltwise_soft_relu(mkldnn_eltwise_soft_relu),
     /** Eltwise: logistic */
-    eltwise_logistic = mkldnn_eltwise_logistic,
+    eltwise_logistic(mkldnn_eltwise_logistic),
     /** Eltwise: exponent */
-    eltwise_exp = mkldnn_eltwise_exp,
+    eltwise_exp(mkldnn_eltwise_exp),
     /** Eltwise: gelu */
-    eltwise_gelu = mkldnn_eltwise_gelu,
+    eltwise_gelu(mkldnn_eltwise_gelu),
     /** Local response normalization (LRN) across multiple channels */
-    lrn_across_channels = mkldnn_lrn_across_channels,
+    lrn_across_channels(mkldnn_lrn_across_channels),
     /** LRN within a single channel */
-    lrn_within_channel  = mkldnn_lrn_within_channel,
+    lrn_within_channel (mkldnn_lrn_within_channel),
     /** Max pooling */
-    pooling_max = mkldnn_pooling_max,
+    pooling_max(mkldnn_pooling_max),
     /** Average pooling exclude padding,
      *  alias for #mkldnn::algorithm::pooling_avg_include_padding */
-    pooling_avg = mkldnn_pooling_avg,
+    pooling_avg(mkldnn_pooling_avg),
     /** Average pooling include padding */
-    pooling_avg_include_padding = mkldnn_pooling_avg_include_padding,
+    pooling_avg_include_padding(mkldnn_pooling_avg_include_padding),
     /** Average pooling exclude padding */
-    pooling_avg_exclude_padding = mkldnn_pooling_avg_exclude_padding,
+    pooling_avg_exclude_padding(mkldnn_pooling_avg_exclude_padding),
     /** RNN cell */
-    vanilla_rnn = mkldnn_vanilla_rnn,
+    vanilla_rnn(mkldnn_vanilla_rnn),
     /** LSTM cell */
-    vanilla_lstm = mkldnn_vanilla_lstm,
+    vanilla_lstm(mkldnn_vanilla_lstm),
     /** GRU cell */
     
 ///
-    vanilla_gru = mkldnn_vanilla_gru,
+    vanilla_gru(mkldnn_vanilla_gru),
     /** GRU cell with linear before reset
      * 
      *  Modification of original GRU cell. Differs from #mkldnn_vanilla_gru
@@ -3844,11 +4157,19 @@ public static final int
      *  <pre>{@code \[ c_t = tanh(W_c*x_t + b_{c_x} + r_t*(U_c*h_{t-1}+b_{c_h})) \]}</pre>
      *  Primitive expects 4 biases on input:
      *  {@code [b_{u}, b_{r}, b_{c_x}, b_{c_h}]} */
-    lbr_gru = mkldnn_lbr_gru;
+    lbr_gru(mkldnn_lbr_gru);
+
+    public final int value;
+    private algorithm(int v) { this.value = v; }
+    private algorithm(algorithm e) { this.value = e.value; }
+    public algorithm intern() { for (algorithm e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("mkldnn") public static native @Cast("mkldnn_alg_kind_t") int convert_to_c(algorithm aalgorithm);
 
 /** Flags for batch normalization primitive. */
-/** enum class mkldnn::normalization_flags */
-public static final int
+@Namespace("mkldnn") public enum normalization_flags {
     /** Use global statistics
      * 
      *  If specified
@@ -3863,7 +4184,7 @@ public static final int
     
 ///
 ///
-    use_global_stats = mkldnn_use_global_stats,
+    use_global_stats(mkldnn_use_global_stats),
 
     /** Use scale and shift parameters
      * 
@@ -3880,7 +4201,7 @@ public static final int
      *     same behavior as prop_kind == #mkldnn::prop_kind::backward */
     
 ///
-    use_scale_shift = mkldnn_use_scaleshift,
+    use_scale_shift(mkldnn_use_scaleshift),
 
     /** Fuse with ReLU
      * 
@@ -3889,9 +4210,30 @@ public static final int
      *     fused with ReLU via post ops API
      *   - on training primitive requires workspace (required to be able to
      *     perform backward pass) */
-    fuse_norm_relu = mkldnn_fuse_norm_relu;
+    fuse_norm_relu(mkldnn_fuse_norm_relu);
 
+    public final int value;
+    private normalization_flags(int v) { this.value = v; }
+    private normalization_flags(normalization_flags e) { this.value = e.value; }
+    public normalization_flags intern() { for (normalization_flags e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
+@Namespace("mkldnn") public static native @Cast("mkldnn_normalization_flags_t") int convert_to_c(
+        normalization_flags aflag);
+
+@Namespace("mkldnn") public enum rnn_flags {
+    undef(mkldnn_rnn_flags_undef);
+
+    public final int value;
+    private rnn_flags(int v) { this.value = v; }
+    private rnn_flags(rnn_flags e) { this.value = e.value; }
+    public rnn_flags intern() { for (rnn_flags e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("mkldnn") public static native @Cast("mkldnn_rnn_flags_t") int convert_to_c(
+        rnn_flags aflag);
 
 // #define MKLDNN_DEFINE_BITMASK_OPS(enum_name)
 // inline enum_name operator|(enum_name lhs, enum_name rhs) {
@@ -3931,37 +4273,80 @@ public static final int
 //     return static_cast<enum_name>(~static_cast<unsigned>(rhs));
 // }                                                                       
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags") @Name("operator |") int or(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @Name("operator |") normalization_flags or(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator |") @Cast("mkldnn::normalization_flags") int or(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags") @Name("operator &") int and(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @Name("operator &") normalization_flags and(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator &") @Cast("mkldnn::normalization_flags") int and(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags") @Name("operator ^") int xor(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @Name("operator ^") normalization_flags xor(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator ^") @Cast("mkldnn::normalization_flags") int xor(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator |=") IntPointer orPut(@Cast("mkldnn::normalization_flags*") @ByRef IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator |=") IntBuffer orPut(@Cast("mkldnn::normalization_flags*") @ByRef IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator |=") int[] orPut(@Cast("mkldnn::normalization_flags*") @ByRef int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") int[] orPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") int[] orPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator &=") IntPointer andPut(@Cast("mkldnn::normalization_flags*") @ByRef IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator &=") IntBuffer andPut(@Cast("mkldnn::normalization_flags*") @ByRef IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator &=") int[] andPut(@Cast("mkldnn::normalization_flags*") @ByRef int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") int[] andPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") int[] andPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator ^=") IntPointer xorPut(@Cast("mkldnn::normalization_flags*") @ByRef IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator ^=") IntBuffer xorPut(@Cast("mkldnn::normalization_flags*") @ByRef IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags*") @ByRef @Name("operator ^=") int[] xorPut(@Cast("mkldnn::normalization_flags*") @ByRef int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") int[] xorPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") int[] xorPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
 
-@Namespace("mkldnn") public static native @Cast("mkldnn::normalization_flags") @Name("operator ~") int not(@Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @Name("operator ~") normalization_flags not(normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator ~") @Cast("mkldnn::normalization_flags") int not(@Cast("mkldnn::normalization_flags") int rhs);
 
+@Namespace("mkldnn") public static native @Name("operator |") rnn_flags or(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator &") rnn_flags and(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ^") rnn_flags xor(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") int[] orPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") int[] andPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") int[] xorPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ~") rnn_flags not(rnn_flags rhs);
 
 
 // #undef MKLDNN_DEFINE_BITMASK_OPS
 
-/** enum class mkldnn::rnn_direction */
-public static final int
-    unidirectional_left2right = mkldnn_unidirectional_left2right,
-    unidirectional_right2left = mkldnn_unidirectional_right2left,
-    unidirectional = mkldnn_unidirectional,
-    bidirectional_concat = mkldnn_bidirectional_concat,
-    bidirectional_sum = mkldnn_bidirectional_sum;
+@Namespace("mkldnn") public enum rnn_direction {
+    unidirectional_left2right(mkldnn_unidirectional_left2right),
+    unidirectional_right2left(mkldnn_unidirectional_right2left),
+    unidirectional(mkldnn_unidirectional),
+    bidirectional_concat(mkldnn_bidirectional_concat),
+    bidirectional_sum(mkldnn_bidirectional_sum);
+
+    public final int value;
+    private rnn_direction(int v) { this.value = v; }
+    private rnn_direction(rnn_direction e) { this.value = e.value; }
+    public rnn_direction intern() { for (rnn_direction e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+///
+///
+@Namespace("mkldnn") public static native @Cast("mkldnn_rnn_direction_t") int convert_to_c(rnn_direction adir);
 
 /** Primitive descriptor query specification
  * 
@@ -3970,7 +4355,92 @@ public static final int
  *  descriptor).
  * 
  *  For more information see \ref mkldnn_query_t. */
+@Namespace("mkldnn") public enum query {
+    /** no query */
+    undef(mkldnn_query_undef),
 
+    /** execution engine */
+    engine(mkldnn_query_engine),
+    /** primitive kind */
+    primitive_kind(mkldnn_query_primitive_kind),
+
+    /** number of inputs expected */
+    num_of_inputs_s32(mkldnn_query_num_of_inputs_s32),
+    /** number of outputs expected */
+    num_of_outputs_s32(mkldnn_query_num_of_outputs_s32),
+
+    /** runtime estimation (seconds), unimplemented */
+    
+///
+///
+    time_estimate_f64(mkldnn_query_time_estimate_f64),
+    /** memory consumption (bytes)
+     * 
+     *  extra (scratch) memory, additional to all inputs and outputs memory
+     * 
+     *  @see \ref dev_guide_attributes_scratchpad */
+    
+///
+    memory_consumption_s64(mkldnn_query_memory_consumption_s64),
+
+    /** scratchpad engine
+     * 
+     *  engine to be used for creating scratchpad memory */
+    scratchpad_engine(mkldnn_query_scratchpad_engine),
+
+    /** implementation name */
+    impl_info_str(mkldnn_query_impl_info_str),
+
+    /** op descriptor */
+    op_d(mkldnn_query_op_d),
+    /** convolution descriptor */
+    convolution_d(mkldnn_query_convolution_d),
+    /** deconvolution descriptor */
+    deconvolution_d(mkldnn_query_deconvolution_d),
+    /** shuffle descriptor */
+    shuffle_d(mkldnn_query_shuffle_d),
+    /** eltwise descriptor */
+    eltwise_d(mkldnn_query_eltwise_d),
+    /** softmax descriptor */
+    softmax_d(mkldnn_query_softmax_d),
+    /** pooling descriptor */
+    pooling_d(mkldnn_query_pooling_d),
+    /** lrn descriptor */
+    lrn_d(mkldnn_query_lrn_d),
+    /** batch normalization descriptor */
+    batch_normalization_d(mkldnn_query_batch_normalization_d),
+    /** inner product descriptor */
+    inner_product_d(mkldnn_query_inner_product_d),
+    /** rnn descriptor */
+    rnn_d(mkldnn_query_rnn_d),
+
+    /** source memory desc */
+    src_md(mkldnn_query_src_md),
+    /** source gradient memory desc */
+    diff_src_md(mkldnn_query_diff_src_md),
+    /** weights memory descriptor desc */
+    weights_md(mkldnn_query_weights_md),
+    /** weights grad. memory desc */
+    diff_weights_md(mkldnn_query_diff_weights_md),
+    /** destination memory desc */
+    dst_md(mkldnn_query_dst_md),
+    /** destination grad. memory desc */
+    diff_dst_md(mkldnn_query_diff_dst_md),
+    /** workspace memory desc */
+    workspace_md(mkldnn_query_workspace_md),
+    /** scratchpad memory desc */
+    scratchpad_md(mkldnn_query_scratchpad_md);
+
+    public final int value;
+    private query(int v) { this.value = v; }
+    private query(query e) { this.value = e.value; }
+    public query intern() { for (query e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+///
+@Namespace("mkldnn") public static native @Cast("mkldnn_query_t") int convert_to_c(query aquery);
 // Targeting ../post_ops.java
 
 
@@ -3983,12 +4453,31 @@ public static final int
 // Targeting ../stream.java
 
 
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator |") stream.flags or(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator &") stream.flags and(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator ^") stream.flags xor(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+
+///
+@Namespace("mkldnn") public static native @ByVal @Name("operator ~") stream.flags not(@ByVal stream.flags rhs);
 // Targeting ../memory.java
 
 
 
-@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_data_type_t") int a, @Cast("mkldnn::memory::data_type") int b);
-@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_data_type_t") int a, @Cast("mkldnn::memory::data_type") int b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_data_type_t") int a, @ByVal memory.data_type b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_data_type_t") int a, @ByVal memory.data_type b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.data_type a, @Cast("mkldnn_data_type_t") int b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.data_type a, @Cast("mkldnn_data_type_t") int b);
+
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_format_tag_t") int a, @ByVal memory.format_tag b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_format_tag_t") int a, @ByVal memory.format_tag b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.format_tag a, @Cast("mkldnn_format_tag_t") int b);
+
+///
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.format_tag a, @Cast("mkldnn_format_tag_t") int b);
 // Targeting ../reorder.java
 
 

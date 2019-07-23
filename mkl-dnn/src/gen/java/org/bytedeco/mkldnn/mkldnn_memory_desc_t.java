@@ -46,21 +46,21 @@ public class mkldnn_memory_desc_t extends Pointer {
      *     The order of dimensions does not depend on the memory format, so
      *     whether the data is laid out in #mkldnn_nchw or #mkldnn_nhwc
      *     the dims for 4D CN data tensor would be <code>{N, C, H, W}</code>. */
-    @MemberGetter public native @Cast("int64_t  const*") LongPointer dims();
+    @MemberGetter public native @Cast("int64_t*") LongPointer dims();
 
     /** Data type of the tensor elements. */
     public native @Cast("mkldnn_data_type_t") int data_type(); public native mkldnn_memory_desc_t data_type(int setter);
 
     /** Size of the data including padding in each dimension. */
-    @MemberGetter public native @Cast("int64_t  const*") LongPointer padded_dims();
+    @MemberGetter public native @Cast("int64_t*") LongPointer padded_dims();
 
     /** Per-dimension offset from the padding to actual data, the top-level
      *  tensor with offsets applied must lie within the padding area. */
-    @MemberGetter public native @Cast("int64_t  const*") LongPointer padded_offsets();
+    @MemberGetter public native @Cast("int64_t*") LongPointer padded_offsets();
 
     /** Offset from memory origin to the current block, non-zero only in
      *  a description of a memory sub-block. */
-    public native @Cast("int64_t") long offset0(); public native mkldnn_memory_desc_t offset0(long setter);
+    public native @Cast("mkldnn_dim_t") long offset0(); public native mkldnn_memory_desc_t offset0(long setter);
 
     /** Memory format kind. */
     public native @Cast("mkldnn_format_kind_t") int format_kind(); public native mkldnn_memory_desc_t format_kind(int setter);

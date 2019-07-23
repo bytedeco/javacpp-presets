@@ -44,6 +44,10 @@ public class shuffle_forward extends primitive {
         /** Initializes a shuffle descriptor for forward propagation using \p
          *  prop_kind, memory descriptor \p data_desc, \p axis, and \p
          *  group_size. */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
+                        int axis, int group_size) { super((Pointer)null); allocate(aprop_kind, data_desc, axis, group_size); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
+                        int axis, int group_size);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
                         int axis, int group_size) { super((Pointer)null); allocate(aprop_kind, data_desc, axis, group_size); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,

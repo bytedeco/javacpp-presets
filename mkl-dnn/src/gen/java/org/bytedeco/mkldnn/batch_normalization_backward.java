@@ -42,6 +42,12 @@ public class batch_normalization_backward extends primitive {
          * 
          *  \note In-place operation is supported; that is, diff_src points to
          *        the same memory as diff_dst. */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        normalization_flags flags);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float epsilon,
                         @Cast("mkldnn::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }

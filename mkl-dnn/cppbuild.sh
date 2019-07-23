@@ -23,7 +23,7 @@ sedinplace 's/-fvisibility-inlines-hidden//g' cmake/platform.cmake
 
 case $PLATFORM in
     linux-x86_64)
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_CXX_FLAGS='-Wl,-rpath,$ORIGIN/' -DARCH_OPT_FLAGS='-Wno-error' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;
@@ -31,14 +31,14 @@ case $PLATFORM in
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export CXX="$(ls -1 /usr/local/bin/g++-? | head -n 1)"
         sedinplace 's/__thread/thread_local/g' src/common/utils.hpp
-        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
+        "$CMAKE" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         unset CC
         unset CXX
         ;;
     windows-x86_64)
-        "$CMAKE" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DWITH_EXAMPLE=OFF -DWITH_TEST=OFF .
+        "$CMAKE" -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR="lib" -DARCH_OPT_FLAGS='' -DMKLDNN_BUILD_EXAMPLES=OFF -DMKLDNN_BUILD_TESTS=OFF .
         make -j $MAKEJ
         make install/strip
         ;;

@@ -54,6 +54,10 @@ public class eltwise_forward extends primitive {
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_eltwise_desc_t data(); public native desc data(mkldnn_eltwise_desc_t setter);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, alpha, beta); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, alpha, beta); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,

@@ -35,14 +35,20 @@ public class engine extends mkldnn_engine_handle {
 
 
     /** Kinds of engines. */
-    /** enum class mkldnn::engine::kind */
-    public static final int
+    public enum kind {
         /** An unspecified engine */
-        any = mkldnn_any_engine,
+        any(mkldnn_any_engine),
         /** CPU engine */
-        cpu = mkldnn_cpu,
+        cpu(mkldnn_cpu),
         /** GPU engine */
-        gpu = mkldnn_gpu;
+        gpu(mkldnn_gpu);
+
+        public final int value;
+        private kind(int v) { this.value = v; }
+        private kind(kind e) { this.value = e.value; }
+        public kind intern() { for (kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
     
     ///
@@ -54,6 +60,7 @@ public class engine extends mkldnn_engine_handle {
      *  @param akind The kind of engines to count. */
     
     ///
+    public static native @Cast("size_t") long get_count(kind akind);
     public static native @Cast("size_t") long get_count(@Cast("mkldnn::engine::kind") int akind);
 
     /** Constructs an engine.
@@ -62,12 +69,12 @@ public class engine extends mkldnn_engine_handle {
      *  @param index The index of the engine. Must be less than the value
      *               returned by #get_count() for this particular kind
      *               of engine. */
+    public engine(kind akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
+    private native void allocate(kind akind, @Cast("size_t") long index);
     public engine(@Cast("mkldnn::engine::kind") int akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
     private native void allocate(@Cast("mkldnn::engine::kind") int akind, @Cast("size_t") long index);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-    /** Constructs an engine of particular \p akind associated with the given
-     *  OpenCL \p device and \p context objects. */
 // #endif
 
     /** Constructs an engine from other engine \p aengine. */
@@ -80,14 +87,8 @@ public class engine extends mkldnn_engine_handle {
     private native void allocate(@Const @ByRef mkldnn_primitive_desc_handle pd);
 
     /** Returns the kind of the engine. */
-    public native @Cast("mkldnn::engine::kind") int get_kind();
+    public native kind get_kind();
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-    /** Returns the OpenCL context associated with the engine. */
-
-    /** Returns the OpenCL device associated with the engine. */
 // #endif
-
-
-    
 }

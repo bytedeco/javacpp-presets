@@ -36,6 +36,18 @@ public class lrn_backward extends primitive {
          *  memory descriptors \p data_desc and \p diff_data_desc, and
          *  regularization parameters \p local_size, \p alpha, \p beta, and
          *  \p k. */
+        public desc(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
+                        @Const @ByRef memory.desc diff_data_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta, k); }
+        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
+                        @Const @ByRef memory.desc diff_data_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/);
+        public desc(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
+                        @Const @ByRef memory.desc diff_data_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta); }
+        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc data_desc,
+                        @Const @ByRef memory.desc diff_data_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta);
         public desc(@Cast("mkldnn::algorithm") int aalgorithm, @Const @ByRef memory.desc data_desc,
                         @Const @ByRef memory.desc diff_data_desc, @Cast("mkldnn::memory::dim") long local_size,
                         float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aalgorithm, data_desc, diff_data_desc, local_size, alpha, beta, k); }

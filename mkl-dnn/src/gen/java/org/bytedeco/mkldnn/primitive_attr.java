@@ -32,9 +32,10 @@ public class primitive_attr extends mkldnn_primitive_attr_handle {
     private native void allocate();
 
     /** Returns the scratchpad mode. */
-    public native @Cast("mkldnn::scratchpad_mode") int get_scratchpad_mode();
+    public native scratchpad_mode get_scratchpad_mode();
 
     /** Sets scratchpad mode. */
+    public native void set_scratchpad_mode(scratchpad_mode mode);
     public native void set_scratchpad_mode(@Cast("mkldnn::scratchpad_mode") int mode);
 
     /** Gets correspondence scale \p mask and a constant floating point vector

@@ -35,34 +35,36 @@ public class stream extends mkldnn_stream_handle {
 
 
     /** \brief Stream flags. */
-    /** enum class mkldnn::stream::flags */
-    public static final int
+    public enum flags {
         /** Default order execution. Either in-order or out-of-order depending
          *  on the engine runtime */
-        default_order = mkldnn_stream_default_order,
+        default_order(mkldnn_stream_default_order),
         /** In-order execution. */
-        in_order = mkldnn_stream_default_order,
+        in_order(mkldnn_stream_default_order),
         /** Out-of-order execution. */
-        out_of_order = mkldnn_stream_out_of_order,
+        out_of_order(mkldnn_stream_out_of_order),
         /** Default stream configuration. */
-        default_flags = mkldnn_stream_default_flags;
+        default_flags(mkldnn_stream_default_flags);
+
+        public final int value;
+        private flags(int v) { this.value = v; }
+        private flags(flags e) { this.value = e.value; }
+        public flags intern() { for (flags e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
     public stream() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** Constructs a stream. */
     public stream(@Const @ByRef engine aengine,
-                @Cast("mkldnn::stream::flags") int aflags/*=mkldnn::stream::flags::default_flags*/) { super((Pointer)null); allocate(aengine, aflags); }
+                @ByVal(nullValue = "mkldnn::stream::flags::default_flags") flags aflags) { super((Pointer)null); allocate(aengine, aflags); }
     private native void allocate(@Const @ByRef engine aengine,
-                @Cast("mkldnn::stream::flags") int aflags/*=mkldnn::stream::flags::default_flags*/);
+                @ByVal(nullValue = "mkldnn::stream::flags::default_flags") flags aflags);
     public stream(@Const @ByRef engine aengine) { super((Pointer)null); allocate(aengine); }
     private native void allocate(@Const @ByRef engine aengine);
 
 // #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
-    /** Constructs a stream associated with the engine \p eng and with the
-     *  OpenCL command queue \p queue. */
-
-    /** Returns the OpenCL command queue associated with the stream. */
 // #endif
 
 

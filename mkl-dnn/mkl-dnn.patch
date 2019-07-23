@@ -1,6 +1,33 @@
-diff -ruN mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-0.20-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
---- mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-06-08 08:44:00.000000000 +0900
-+++ mkl-dnn-0.20-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-06-10 13:58:10.834617161 +0900
+diff -ruN mkl-dnn-1.0/src/cpu/cpu_engine.cpp mkl-dnn-1.0-patch/src/cpu/cpu_engine.cpp
+--- mkl-dnn-1.0/src/cpu/cpu_engine.cpp	2019-07-11 02:03:46.000000000 +0900
++++ mkl-dnn-1.0-patch/src/cpu/cpu_engine.cpp	2019-07-23 21:11:44.409275262 +0900
+@@ -75,6 +75,23 @@
+ namespace impl {
+ namespace cpu {
+ 
++template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<sse41, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<sse41, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
++        data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
++        data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<sse41, data_type::f32>;
++
+ status_t cpu_engine_t::create_memory_storage(
+         memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
+     return safe_ptr_assign<memory_storage_t>(
+diff -ruN mkl-dnn-1.0/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.0-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- mkl-dnn-1.0/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-07-11 02:03:46.000000000 +0900
++++ mkl-dnn-1.0-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-07-23 21:11:39.279269441 +0900
 @@ -202,11 +202,6 @@
          scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
  }
@@ -25,10 +52,11 @@ diff -ruN mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-0.20-
  template <cpu_isa_t isa, data_type_t kernel_dt>
  struct jit_uni_dw_conv_bwd_weights_kernel {
  
-@@ -519,12 +509,6 @@
+@@ -518,13 +508,6 @@
+ 
      jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
  }
- 
+-
 -template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
 -        data_type::bf16>;
 -template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
@@ -38,60 +66,3 @@ diff -ruN mkl-dnn-0.20-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-0.20-
  }
  }
  }
-
-
-diff -ruN mkl-dnn-0.20-rc/src/cpu/cpu_engine.cpp mkl-dnn-0.20-rc-patch/src/cpu/cpu_engine.cpp
---- mkl-dnn-0.20-rc/src/cpu/cpu_engine.cpp	2019-06-08 08:44:00.000000000 +0900
-+++ mkl-dnn-0.20-rc-patch/src/cpu/cpu_engine.cpp	2019-06-10 13:58:13.665616263 +0900
-@@ -75,6 +75,51 @@
- namespace impl {
- namespace cpu {
- 
-+template struct jit_uni_gru_cell_postgemm_part1_fwd<sse41, data_type::f32>;
-+template struct jit_uni_gru_cell_postgemm_part1_fwd<avx2, data_type::f32>;
-+template struct jit_uni_gru_cell_postgemm_part1_fwd<avx512_core, data_type::f32>;
-+
-+template struct jit_uni_gru_cell_postgemm_part2_fwd<sse41, data_type::f32>;
-+template struct jit_uni_gru_cell_postgemm_part2_fwd<avx2, data_type::f32>;
-+template struct jit_uni_gru_cell_postgemm_part2_fwd<avx512_core, data_type::f32>;
-+
-+template struct jit_uni_gru_lbr_cell_postgemm_fwd<sse41, data_type::f32>;
-+template struct jit_uni_gru_lbr_cell_postgemm_fwd<avx2, data_type::f32>;
-+template struct jit_uni_gru_lbr_cell_postgemm_fwd<avx512_core, data_type::f32>;
-+
-+template struct jit_uni_lstm_cell_postgemm_fwd<sse41, data_type::f32>;
-+template struct jit_uni_lstm_cell_postgemm_fwd<avx2, data_type::f32>;
-+template struct jit_uni_lstm_cell_postgemm_fwd<avx512_core, data_type::f32>;
-+
-+template struct jit_uni_lstm_cell_postgemm_fwd<sse41, data_type::u8>;
-+template struct jit_uni_lstm_cell_postgemm_fwd<avx2, data_type::u8>;
-+template struct jit_uni_lstm_cell_postgemm_fwd<avx512_core, data_type::u8>;
-+
-+template struct jit_uni_rnn_cell_postgemm_fwd<sse41, data_type::f32>;
-+template struct jit_uni_rnn_cell_postgemm_fwd<avx2, data_type::f32>;
-+template struct jit_uni_rnn_cell_postgemm_fwd<avx512_core, data_type::f32>;
-+
-+template struct jit_uni_rnn_cell_postgemm_fwd<sse41, data_type::u8>;
-+template struct jit_uni_rnn_cell_postgemm_fwd<avx2, data_type::u8>;
-+template struct jit_uni_rnn_cell_postgemm_fwd<avx512_core, data_type::u8>;
-+
-+template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
-+template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
-+template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
-+template struct jit_uni_dw_conv_fwd_kernel<sse41, data_type::f32>;
-+
-+template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
-+template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
-+template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
-+template struct jit_uni_dw_conv_bwd_data_kernel<sse41, data_type::f32>;
-+
-+template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
-+        data_type::bf16>;
-+template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
-+        data_type::f32>;
-+template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
-+template struct jit_uni_dw_conv_bwd_weights_kernel<sse41, data_type::f32>;
-+
- status_t cpu_engine_t::create_memory_storage(
-         memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
-     return safe_ptr_assign<memory_storage_t>(

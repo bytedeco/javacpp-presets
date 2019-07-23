@@ -48,6 +48,14 @@ public class inner_product_forward extends primitive {
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_inner_product_desc_t data(); public native desc data(mkldnn_inner_product_desc_t setter);
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, bias_desc, dst_desc); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
@@ -57,6 +65,12 @@ public class inner_product_forward extends primitive {
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc);
 
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc) { super((Pointer)null); allocate(aprop_kind, src_desc, weights_desc, dst_desc); }

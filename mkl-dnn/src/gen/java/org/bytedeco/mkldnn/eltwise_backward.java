@@ -34,6 +34,10 @@ public class eltwise_backward extends primitive {
     
         public native @ByRef mkldnn_eltwise_desc_t data(); public native desc data(mkldnn_eltwise_desc_t setter);
 
+        public desc(algorithm aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aalgorithm, diff_data_desc, data_desc, alpha, beta); }
+        private native void allocate(algorithm aalgorithm, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float alpha/*=0*/, float beta/*=0*/);
         public desc(@Cast("mkldnn::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,
                         @Const @ByRef memory.desc data_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aalgorithm, diff_data_desc, data_desc, alpha, beta); }
         private native void allocate(@Cast("mkldnn::algorithm") int aalgorithm, @Const @ByRef memory.desc diff_data_desc,

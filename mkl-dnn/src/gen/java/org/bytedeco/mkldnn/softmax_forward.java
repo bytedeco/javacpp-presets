@@ -44,6 +44,10 @@ public class softmax_forward extends primitive {
         /** Initializes a softmax descriptor for forward propagation using \p
          *  prop_kind (possible values are #mkldnn::forward_training and
          *  #mkldnn::forward_inference) and memory descriptor \p data_desc. */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
+                     int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc data_desc,
+                     int softmax_axis);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,
                      int softmax_axis) { super((Pointer)null); allocate(aprop_kind, data_desc, softmax_axis); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc data_desc,

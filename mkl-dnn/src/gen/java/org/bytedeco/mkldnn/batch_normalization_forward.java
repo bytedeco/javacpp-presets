@@ -62,6 +62,10 @@ public class batch_normalization_forward extends primitive {
          * 
          *  \note In-place operation is supported; that is, dst points to the
          *        same memory as src. */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc, float epsilon,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, src_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc src_desc, float epsilon,
+                        normalization_flags flags);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc, float epsilon,
                         @Cast("mkldnn::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, src_desc, epsilon, flags); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc src_desc, float epsilon,
