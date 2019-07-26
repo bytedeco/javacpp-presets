@@ -150,6 +150,9 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/env.h",
+                        "tensorflow/c/kernels.h",
+                        "tensorflow/c/ops.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -382,6 +385,9 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/env.h",
+                        "tensorflow/c/kernels.h",
+                        "tensorflow/c/ops.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -992,6 +998,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TFE_MonitoringIntGaugeCell::cell").javaText("public native @MemberGetter @ByRef IntGaugeCell cell();"))
                .put(new Info("TFE_MonitoringStringGaugeCell::cell").javaText("public native @MemberGetter @ByRef StringGaugeCell cell();"))
                .put(new Info("TFE_MonitoringBoolGaugeCell::cell").javaText("public native @MemberGetter @ByRef BoolGaugeCell cell();"))
+               .put(new Info("TF_ShapeInferenceContextDimValueKnown").skip())
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));
 

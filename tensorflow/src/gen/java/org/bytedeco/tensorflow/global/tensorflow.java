@@ -13808,6 +13808,872 @@ limitations under the License.
 // #endif  // TENSORFLOW_C_C_API_INTERNAL_H_
 
 
+// Parsed from tensorflow/c/env.h
+
+/* Copyright 2018 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include <stdbool.h>
+// #include <stddef.h>
+// #include <stdint.h>
+
+// #ifndef TENSORFLOW_C_ENV_H_
+// #define TENSORFLOW_C_ENV_H_
+
+// #include "tensorflow/c/c_api.h"
+
+// --------------------------------------------------------------------------
+// C API for tensorflow::Env.
+
+// #ifdef __cplusplus
+// Targeting ../TF_WritableFileHandle.java
+
+
+// Targeting ../TF_StringStream.java
+
+
+// Targeting ../TF_Thread.java
+
+
+// Targeting ../TF_FileStatistics.java
+
+
+// Targeting ../TF_ThreadOptions.java
+
+
+
+// Creates the specified directory. Typical status code are:
+//  * TF_OK - successfully created the directory
+//  * TF_ALREADY_EXISTS - directory already exists
+//  * TF_PERMISSION_DENIED - dirname is not writable
+public static native void TF_CreateDir(@Cast("const char*") BytePointer dirname, TF_Status status);
+public static native void TF_CreateDir(String dirname, TF_Status status);
+
+// Deletes the specified directory. Typical status codes are:
+//  * TF_OK - successfully deleted the directory
+//  * TF_FAILED_PRECONDITION - the directory is not empty
+public static native void TF_DeleteDir(@Cast("const char*") BytePointer dirname, TF_Status status);
+public static native void TF_DeleteDir(String dirname, TF_Status status);
+
+// Deletes the specified directory and all subdirectories and files underneath
+// it. This is accomplished by traversing the directory tree rooted at dirname
+// and deleting entries as they are encountered.
+//
+// If dirname itself is not readable or does not exist, *undeleted_dir_count is
+// set to 1, *undeleted_file_count is set to 0 and an appropriate status (e.g.
+// TF_NOT_FOUND) is returned.
+//
+// If dirname and all its descendants were successfully deleted, TF_OK is
+// returned and both error counters are set to zero.
+//
+// Otherwise, while traversing the tree, undeleted_file_count and
+// undeleted_dir_count are updated if an entry of the corresponding type could
+// not be deleted. The returned error status represents the reason that any one
+// of these entries could not be deleted.
+//
+// Typical status codes:
+//  * TF_OK - dirname exists and we were able to delete everything underneath
+//  * TF_NOT_FOUND - dirname doesn't exist
+//  * TF_PERMISSION_DENIED - dirname or some descendant is not writable
+//  * TF_UNIMPLEMENTED - some underlying functions (like Delete) are not
+//    implemented
+public static native void TF_DeleteRecursively(@Cast("const char*") BytePointer dirname,
+                                                @Cast("int64_t*") LongPointer undeleted_file_count,
+                                                @Cast("int64_t*") LongPointer undeleted_dir_count,
+                                                TF_Status status);
+public static native void TF_DeleteRecursively(String dirname,
+                                                @Cast("int64_t*") LongBuffer undeleted_file_count,
+                                                @Cast("int64_t*") LongBuffer undeleted_dir_count,
+                                                TF_Status status);
+public static native void TF_DeleteRecursively(@Cast("const char*") BytePointer dirname,
+                                                @Cast("int64_t*") long[] undeleted_file_count,
+                                                @Cast("int64_t*") long[] undeleted_dir_count,
+                                                TF_Status status);
+public static native void TF_DeleteRecursively(String dirname,
+                                                @Cast("int64_t*") LongPointer undeleted_file_count,
+                                                @Cast("int64_t*") LongPointer undeleted_dir_count,
+                                                TF_Status status);
+public static native void TF_DeleteRecursively(@Cast("const char*") BytePointer dirname,
+                                                @Cast("int64_t*") LongBuffer undeleted_file_count,
+                                                @Cast("int64_t*") LongBuffer undeleted_dir_count,
+                                                TF_Status status);
+public static native void TF_DeleteRecursively(String dirname,
+                                                @Cast("int64_t*") long[] undeleted_file_count,
+                                                @Cast("int64_t*") long[] undeleted_dir_count,
+                                                TF_Status status);
+
+// Obtains statistics for the given path. If status is TF_OK, *stats is
+// updated, otherwise it is not touched.
+public static native void TF_FileStat(@Cast("const char*") BytePointer filename,
+                                       TF_FileStatistics stats,
+                                       TF_Status status);
+public static native void TF_FileStat(String filename,
+                                       TF_FileStatistics stats,
+                                       TF_Status status);
+
+// Creates or truncates the given filename and returns a handle to be used for
+// appending data to the file. If status is TF_OK, *handle is updated and the
+// caller is responsible for freeing it (see TF_CloseWritableFile).
+public static native void TF_NewWritableFile(@Cast("const char*") BytePointer filename,
+                                              @Cast("TF_WritableFileHandle**") PointerPointer handle,
+                                              TF_Status status);
+public static native void TF_NewWritableFile(@Cast("const char*") BytePointer filename,
+                                              @ByPtrPtr TF_WritableFileHandle handle,
+                                              TF_Status status);
+public static native void TF_NewWritableFile(String filename,
+                                              @ByPtrPtr TF_WritableFileHandle handle,
+                                              TF_Status status);
+
+// Closes the given handle and frees its memory. If there was a problem closing
+// the file, it is indicated by status. Memory is freed in any case.
+public static native void TF_CloseWritableFile(TF_WritableFileHandle handle,
+                                                TF_Status status);
+
+// Syncs content of the handle to the filesystem. Blocks waiting for the
+// filesystem to indicate that the content has been persisted.
+public static native void TF_SyncWritableFile(TF_WritableFileHandle handle,
+                                               TF_Status status);
+
+// Flush local buffers to the filesystem. If the process terminates after a
+// successful flush, the contents may still be persisted, since the underlying
+// filesystem may eventually flush the contents.  If the OS or machine crashes
+// after a successful flush, the contents may or may not be persisted, depending
+// on the implementation.
+public static native void TF_FlushWritableFile(TF_WritableFileHandle handle,
+                                                TF_Status status);
+
+// Appends the given bytes to the file. Any failure to do so is indicated in
+// status.
+public static native void TF_AppendWritableFile(TF_WritableFileHandle handle,
+                                                 @Cast("const char*") BytePointer data,
+                                                 @Cast("size_t") long length,
+                                                 TF_Status status);
+public static native void TF_AppendWritableFile(TF_WritableFileHandle handle,
+                                                 String data,
+                                                 @Cast("size_t") long length,
+                                                 TF_Status status);
+
+// Deletes the named file and indicates whether successful in *status.
+public static native void TF_DeleteFile(@Cast("const char*") BytePointer filename,
+                                         TF_Status status);
+public static native void TF_DeleteFile(String filename,
+                                         TF_Status status);
+
+// Retrieves the next item from the given TF_StringStream and places a pointer
+// to it in *result. If no more items are in the list, *result is set to NULL
+// and false is returned.
+//
+// Ownership of the items retrieved with this function remains with the library.
+// Item points are invalidated after a call to TF_StringStreamDone.
+public static native @Cast("bool") boolean TF_StringStreamNext(TF_StringStream list,
+                                               @Cast("const char**") PointerPointer result);
+public static native @Cast("bool") boolean TF_StringStreamNext(TF_StringStream list,
+                                               @Cast("const char**") @ByPtrPtr BytePointer result);
+public static native @Cast("bool") boolean TF_StringStreamNext(TF_StringStream list,
+                                               @Cast("const char**") @ByPtrPtr ByteBuffer result);
+public static native @Cast("bool") boolean TF_StringStreamNext(TF_StringStream list,
+                                               @Cast("const char**") @ByPtrPtr byte[] result);
+
+// Frees the resources associated with given string list. All pointers returned
+// by TF_StringStreamNext are invalid after this call.
+public static native void TF_StringStreamDone(TF_StringStream list);
+
+// Retrieves the list of children of the given directory. You can iterate
+// through the list with TF_StringStreamNext. The caller is responsible for
+// freeing the list (see TF_StringStreamDone).
+public static native TF_StringStream TF_GetChildren(@Cast("const char*") BytePointer filename,
+                                                      TF_Status status);
+public static native TF_StringStream TF_GetChildren(String filename,
+                                                      TF_Status status);
+
+// Retrieves a list of directory names on the local machine that may be used for
+// temporary storage. You can iterate through the list with TF_StringStreamNext.
+// The caller is responsible for freeing the list (see TF_StringStreamDone).
+public static native TF_StringStream TF_GetLocalTempDirectories();
+
+// Returns the number of nanoseconds since the Unix epoch.
+public static native @Cast("uint64_t") long TF_NowNanos();
+
+// Returns the number of microseconds since the Unix epoch.
+public static native @Cast("uint64_t") long TF_NowMicros();
+
+// Returns the number of seconds since the Unix epoch.
+public static native @Cast("uint64_t") long TF_NowSeconds();
+
+// Populates a TF_ThreadOptions struct with system-default values.
+public static native void TF_DefaultThreadOptions(TF_ThreadOptions options);
+// Targeting ../Work_func_Pointer.java
+
+
+public static native TF_Thread TF_StartThread(@Const TF_ThreadOptions options,
+                                                @Cast("const char*") BytePointer thread_name,
+                                                Work_func_Pointer work_func,
+                                                Pointer param);
+public static native TF_Thread TF_StartThread(@Const TF_ThreadOptions options,
+                                                String thread_name,
+                                                Work_func_Pointer work_func,
+                                                Pointer param);
+
+// Waits for the given thread to finish execution, then deletes it.
+public static native void TF_JoinThread(TF_Thread thread);
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif  // TENSORFLOW_C_ENV_H_
+
+
+// Parsed from tensorflow/c/kernels.h
+
+/* Copyright 2018 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_C_KERNELS_H_
+// #define TENSORFLOW_C_KERNELS_H_
+
+// #include "tensorflow/c/c_api.h"
+
+// #ifdef __cplusplus
+// Targeting ../TF_KernelBuilder.java
+
+
+// Targeting ../TF_OpKernelConstruction.java
+
+
+// Targeting ../TF_OpKernelContext.java
+
+
+// Targeting ../Create_func_TF_OpKernelConstruction.java
+
+
+// Targeting ../Compute_func_Pointer_TF_OpKernelContext.java
+
+
+// Targeting ../Delete_func_Pointer.java
+
+
+public static native TF_KernelBuilder TF_NewKernelBuilder(
+    @Cast("const char*") BytePointer op_name, @Cast("const char*") BytePointer device_name,
+    Create_func_TF_OpKernelConstruction create_func,
+    Compute_func_Pointer_TF_OpKernelContext compute_func,
+    Delete_func_Pointer delete_func);
+public static native TF_KernelBuilder TF_NewKernelBuilder(
+    String op_name, String device_name,
+    Create_func_TF_OpKernelConstruction create_func,
+    Compute_func_Pointer_TF_OpKernelContext compute_func,
+    Delete_func_Pointer delete_func);
+
+// Register the given kernel builder with the TensorFlow runtime. If
+// registration fails, the given status will be populated.
+//
+// This call takes ownership of the `builder` pointer.
+public static native void TF_RegisterKernelBuilder(@Cast("const char*") BytePointer kernel_name,
+                                                    TF_KernelBuilder builder,
+                                                    TF_Status status);
+public static native void TF_RegisterKernelBuilder(String kernel_name,
+                                                    TF_KernelBuilder builder,
+                                                    TF_Status status);
+
+// Deletes the given TF_KernelBuilder. This should be called only if the kernel
+// builder is not registered with TensorFlow via TF_RegisterKernelBuilder.
+public static native void TF_DeleteKernelBuilder(TF_KernelBuilder builder);
+
+// --------------------------------------------------------------------------
+// OpKernelContext routines
+
+// TF_NumInputs returns the number of inputs available in ctx.
+public static native int TF_NumInputs(TF_OpKernelContext ctx);
+
+// TF_NumOutputs returns the number of outputs to be placed in *ctx by the
+// kernel.
+public static native int TF_NumOutputs(TF_OpKernelContext ctx);
+
+// Retrieves the ith input from ctx. If TF_GetCode(status) is TF_OK, *tensor is
+// populated and its ownership is passed to the caller. In any other case,
+// *tensor is not modified.
+//
+// If i < 0 or i >= TF_NumInputs(ctx), *status is set to TF_OUT_OF_RANGE.
+public static native void TF_GetInput(TF_OpKernelContext ctx, int i,
+                                       @Cast("TF_Tensor**") PointerPointer tensor, TF_Status status);
+public static native void TF_GetInput(TF_OpKernelContext ctx, int i,
+                                       @ByPtrPtr TF_Tensor tensor, TF_Status status);
+
+// Sets the ith output of ctx to tensor. If TF_GetCode(status) is anything but
+// TF_OK, ctx is left unmodified.
+//
+// If i < 0 or i >= TF_NumOutputs(ctx), *status is set to TF_OUT_OF_RANGE.
+public static native void TF_SetOutput(TF_OpKernelContext ctx, int i,
+                                        @Const TF_Tensor tensor,
+                                        TF_Status status);
+
+// Notifies the given OpKernelConstruction that kernel construction has failed.
+public static native void TF_OpKernelConstruction_Failure(
+    TF_OpKernelConstruction ctx, TF_Status status);
+
+// Notifies the given OpKernelContext that the kernel's compute function has
+// failed.
+public static native void TF_OpKernelContext_Failure(TF_OpKernelContext ctx,
+                                                      TF_Status status);
+
+// Returns the expected output data type of the ith output. If i < 0 or
+// i >= TF_NumOutputs(ctx), the program aborts.
+public static native @Cast("TF_DataType") int TF_ExpectedOutputDataType(
+    TF_OpKernelContext ctx, int i);
+
+// Returns the step ID of the given context.
+public static native @Cast("int64_t") long TF_StepId(TF_OpKernelContext ctx);
+
+// Interprets the named kernel construction attribute as a TF_DataType and
+// places it into *val. *status is set to TF_OK.
+//
+// If the attribute could not be found or could not be interpreted as
+// TF_DataType, *status is populated with an error.
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") IntPointer val,
+    TF_Status status);
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, String attr_name, @Cast("TF_DataType*") IntBuffer val,
+    TF_Status status);
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") int[] val,
+    TF_Status status);
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, String attr_name, @Cast("TF_DataType*") IntPointer val,
+    TF_Status status);
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") IntBuffer val,
+    TF_Status status);
+public static native void TF_OpKernelConstruction_GetAttrType(
+    TF_OpKernelConstruction ctx, String attr_name, @Cast("TF_DataType*") int[] val,
+    TF_Status status);
+
+// #ifdef __cplusplus /* end extern "C" */
+// #endif
+
+// #endif  // TENSORFLOW_C_KERNELS_H_
+
+
+// Parsed from tensorflow/c/ops.h
+
+/* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// Routines for registering new ops and for implementing op shape inference
+// functions.
+//
+// This API is alpha software and is subject to change.
+//
+// REGISTRATION
+// ------------
+//
+// In order to register a new op, create a new TF_OpDefinitionBuilder:
+//
+// TF_OpDefinitionBuilder* builder = TF_NewOpDefinitionBuilder("OpName");
+//
+// Inputs, outputs and attributes can be added to the builder with the
+// corresponding functions, e.g.
+//
+// TF_OpDefinitionBuilderAddInput(builder, "input1: int32");
+// TF_OpDefinitionBuilderAddOutput(builder, "output1: int64");
+// TF_OpDefinitionBuilderAddAttr(builder, "attr: int32");
+//
+// The builder may then be registered with TensorFlow using the
+// TF_RegisterOpDefinition function. E.g.
+//
+// TF_Status* status = TF_NewStatus();
+// TF_RegisterOpDefinition(builder, &status);
+// if (TF_GetCode(status) != TF_OK) {
+//   // handle error
+// }
+//
+// SHAPE INFERENCE
+// ---------------
+//
+// You can provide a shape inference function that TensorFlow will call when it
+// wants to understand the shape of outputs that the op will produce. Use the
+// TF_OpDefinitionBuilderSetShapeInferenceFunction function to register a shape
+// inference function pointer with TensorFlow. The following is an example of a
+// very simple shape inference function:
+//
+// void identity_shape_fn(TF_ShapeInferenceContext* ctx, TF_Status* status) {
+//   TF_ShapeHandle* input = TF_NewShapeHandle();
+//   TF_ShapeInferenceContextGetInput(ctx, 0, input, status);
+//   if (TF_GetCode(status) == TF_OK) {
+//     TF_ShapeInferenceContextSetOutput(ctx, 0, input, status);
+//   }
+//   TF_DeleteShapeHandle(input);
+// }
+//
+// The following code registers the inference function with TensorFlow:
+//
+// TF_OpDefinitionBuilderSetShapeInferenceFunction(builder, &identity_shape_fn);
+//
+// For more details about shape inference, see the documentation for
+// TF_OpDefinitionBuilderSetShapeInferenceFunction.
+
+// #ifndef TENSORFLOW_C_OPS_H_
+// #define TENSORFLOW_C_OPS_H_
+
+// #include <stdbool.h>
+// #include <stdint.h>
+// #include <stdlib.h>
+
+// #include "tensorflow/c/c_api.h"
+
+// #ifdef SWIG
+// #define TF_CAPI_EXPORT
+// #else
+// #endif  // SWIG
+
+// #ifdef __cplusplus
+// Targeting ../TF_DimensionHandle.java
+
+
+// Targeting ../TF_OpDefinitionBuilder.java
+
+
+// Targeting ../TF_ShapeHandle.java
+
+
+// Targeting ../TF_ShapeInferenceContext.java
+
+
+
+// Returns a newly allocated op definition builder for the given op name. The
+// returned builder may be customized with the `TF_OpDefinitionBuilder...`
+// functions and then registered with TensorFlow with TF_RegisterOpDefinition.
+//
+// The returned pointer is either freed by a call to TF_RegisterOpDefinition, or
+// can be manually deleted by TF_DeleteOpDefinitionBuilder if it is never
+// registered.
+public static native TF_OpDefinitionBuilder TF_NewOpDefinitionBuilder(
+    @Cast("const char*") BytePointer op_name);
+public static native TF_OpDefinitionBuilder TF_NewOpDefinitionBuilder(
+    String op_name);
+
+// Registers the given op builder with TensorFlow. Indicates success or
+// otherwise in the given status.
+//
+// `builder` is freed whether the op was successfully registered or not. You
+// must call either this function or TF_DeleteOpDefinitionBuilder to free the
+// builder, but never both.
+public static native void TF_RegisterOpDefinition(
+    TF_OpDefinitionBuilder builder, TF_Status status);
+
+// Frees the given op definition builder. You must call either this function or
+// TF_RegisterOpDefinition to free the builder, but never both.
+public static native void TF_DeleteOpDefinitionBuilder(
+    TF_OpDefinitionBuilder builder);
+
+//----------------------------------------------------
+// Attribute functions.
+
+// Adds a string attribute with the given name to the builder.
+public static native void TF_OpDefinitionBuilderAddStringAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddStringAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a string attribute with the given name and default value to the builder.
+public static native void TF_OpDefinitionBuilderAddStringAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer value);
+public static native void TF_OpDefinitionBuilderAddStringAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, String name, String value);
+
+// Adds a string list attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddStringListAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddStringListAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a string list attribute with the given default values to the builder.
+// `values` must contain at least `n` elements.
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("const char**") PointerPointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("const char**") @ByPtrPtr BytePointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("const char**") @ByPtrPtr ByteBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("const char**") @ByPtrPtr byte[] values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("const char**") @ByPtrPtr BytePointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("const char**") @ByPtrPtr ByteBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddStringListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("const char**") @ByPtrPtr byte[] values,
+    @Cast("size_t") long n);
+
+// Adds an integer attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddIntAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddIntAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds an integer attribute with the given name and default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddIntAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("int64_t") long value);
+public static native void TF_OpDefinitionBuilderAddIntAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, String name, @Cast("int64_t") long value);
+
+// Adds an integer list attribute with the given name and no default value to
+// the builder.
+public static native void TF_OpDefinitionBuilderAddIntListAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddIntListAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds an integer list attribute with the given name and default values to the
+// builder. `values` must contain at least `n` elements.
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("int64_t*") LongPointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("int64_t*") LongBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("int64_t*") long[] values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("int64_t*") LongPointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("int64_t*") LongBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddIntListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("int64_t*") long[] values,
+    @Cast("size_t") long n);
+
+// Adds a float attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddFloatAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddFloatAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a float attribute with the given name and default value to the builder.
+public static native void TF_OpDefinitionBuilderAddFloatAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, float value);
+public static native void TF_OpDefinitionBuilderAddFloatAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, String name, float value);
+
+// Adds a float list attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddFloatListAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddFloatListAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a float list attribute with the given name and default values to the
+// builder. `values` must contain at least `n` elements.
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, FloatPointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, FloatBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, float[] values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, FloatPointer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, FloatBuffer values,
+    @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddFloatListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, float[] values,
+    @Cast("size_t") long n);
+
+// Adds a boolean attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddBoolAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddBoolAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a boolean attribute with the given name and default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddBoolAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("bool") boolean value);
+public static native void TF_OpDefinitionBuilderAddBoolAttrWithDefaultValue(
+    TF_OpDefinitionBuilder builder, String name, @Cast("bool") boolean value);
+
+// Adds a boolean list attribute with the given name and no default value to the
+// builder.
+public static native void TF_OpDefinitionBuilderAddBoolListAttr(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name);
+public static native void TF_OpDefinitionBuilderAddBoolListAttr(
+    TF_OpDefinitionBuilder builder, String name);
+
+// Adds a boolean list attribute with the given name and default values to the
+// builder. `values` must contain at least `n` elements.
+public static native void TF_OpDefinitionBuilderAddBoolListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("bool*") BoolPointer values, @Cast("size_t") long n);
+public static native void TF_OpDefinitionBuilderAddBoolListAttrWithDefaultValues(
+    TF_OpDefinitionBuilder builder, String name, @Cast("bool*") boolean[] values, @Cast("size_t") long n);
+
+// Adds the input with the given name and type to the op.
+public static native void TF_OpDefinitionBuilderAddInput(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer name, @Cast("TF_DataType") int type);
+public static native void TF_OpDefinitionBuilderAddInput(
+    TF_OpDefinitionBuilder builder, String name, @Cast("TF_DataType") int type);
+
+// Adds the output with the given name and type to the op.
+public static native void TF_OpDefinitionBuilderAddOutput(
+    TF_OpDefinitionBuilder builder, @Cast("const char*") BytePointer output, @Cast("TF_DataType") int type);
+public static native void TF_OpDefinitionBuilderAddOutput(
+    TF_OpDefinitionBuilder builder, String output, @Cast("TF_DataType") int type);
+
+// Sets the commutative property for the op built by the given builder.
+public static native void TF_OpDefinitionBuilderSetIsCommutative(
+    TF_OpDefinitionBuilder builder, @Cast("bool") boolean is_commutative);
+
+// Sets the is_aggregate property of the builder to the given value.
+//
+// If is_aggregate is true, then the operation produced by this builder accepts
+// N >= 2 inputs and produces 1 output all of the same type. Should be
+// associative and commutative, and produce output with the same shape as the
+// input. The optimizer may replace an aggregate op taking input from multiple
+// devices with a tree of aggregate ops that aggregate locally within each
+// device (and possibly within groups of nearby devices) before communicating.
+public static native void TF_OpDefinitionBuilderSetIsAggregate(
+    TF_OpDefinitionBuilder builder, @Cast("bool") boolean is_aggregate);
+
+// Sets the is_stateful property of the builder to the given value.
+//
+// The op built by this builder is stateful if its behavior depends on some
+// state beyond its input tensors (e.g. variable reading op) or if it has a
+// side-effect (e.g. printing or asserting ops). Equivalently, stateless ops
+// must always produce the same output for the same input and have no
+// side-effects.
+//
+// By default Ops may be moved between devices. Stateful ops should either not
+// be moved, or should only be moved if that state can also be moved (e.g. via
+// some sort of save / restore). Stateful ops are guaranteed to never be
+// optimized away by Common Subexpression Elimination (CSE).
+public static native void TF_OpDefinitionBuilderSetIsStateful(
+    TF_OpDefinitionBuilder builder, @Cast("bool") boolean is_stateful);
+
+// Sets the allows_uninitialized_input property of the operation built by this
+// builder.
+//
+// By default, all inputs to an Op must be initialized Tensors. Ops that may
+// initialize tensors for the first time should set this field to true, to allow
+// the Op to take an uninitialized Tensor as input.
+public static native void TF_OpDefinitionBuilderSetAllowsUninitializedInput(
+    TF_OpDefinitionBuilder builder, @Cast("bool") boolean allows_uninitialized_input);
+
+// Adds a deprecation warning for the given op. This indicates to the user that
+// `version` is the first TensorFlow GraphDef version for which the operation is
+// deprecated. `explanation` should contain the reason for the deprecation and
+// what to use instead.
+//
+// This function is only an indicator that the operation may disappear in a
+// version of TensorFlow after `version`. It does not affect op registration.
+public static native void TF_OpDefinitionBuilderDeprecated(
+    TF_OpDefinitionBuilder builder, int version, @Cast("const char*") BytePointer explanation);
+public static native void TF_OpDefinitionBuilderDeprecated(
+    TF_OpDefinitionBuilder builder, int version, String explanation);
+// Targeting ../Shape_inference_func_TF_ShapeInferenceContext_TF_Status.java
+
+
+public static native void TF_OpDefinitionBuilderSetShapeInferenceFunction(
+    TF_OpDefinitionBuilder builder,
+    Shape_inference_func_TF_ShapeInferenceContext_TF_Status shape_inference_func);
+
+//----------------------------------------------------
+// Functions for TF_ShapeInferenceContext.
+//
+// Functions for implementing shape inference functions. TensorFlow uses these
+// functions to determine the shape of tensors produced by an operation without
+// having to actually run the operation. If an operation chooses to provide a
+// shape inference function, it will be invoked by TensorFlow as needed.
+//
+// When invoked by TensorFlow, the shape inference function is provided with a
+// TF_ShapeInferenceContext pointer. The function's implementation will use the
+// accessor and mutator functions with names beginning with
+// TF_ShapeInferenceContext to examine the input state and determine the output
+// shape.
+
+// Returns the number of inputs in the given shape inference context.
+public static native @Cast("int64_t") long TF_ShapeInferenceContextNumInputs(
+    TF_ShapeInferenceContext ctx);
+
+// Returns a newly allocated shape handle. The shapes represented by these
+// handles may be queried or mutated with the corresponding
+// TF_ShapeInferenceContext...  functions.
+public static native TF_ShapeHandle TF_NewShapeHandle();
+
+// Places the ith input of the given shape inference context into the given
+// shape handle, or returns a status other than TF_OK indicating why the input
+// could not be retrieved
+// (for example, if i < 0 || i >= TF_ShapeInferenceContextNumInputs(ctx)).
+public static native void TF_ShapeInferenceContextGetInput(
+    TF_ShapeInferenceContext ctx, int i, TF_ShapeHandle handle,
+    TF_Status status);
+
+// Places the given shape handle into the `i`th output position of the given
+// context. Internally, the shape handle is copied; the caller may subsequently
+// delete `handle`.
+public static native void TF_ShapeInferenceContextSetOutput(TF_ShapeInferenceContext ctx,
+                                              int i, TF_ShapeHandle handle,
+                                              TF_Status status);
+
+// Returns a newly-allocate shape handle representing a vector of the given
+// size. The returned handle should be freed with TF_DeleteShapeHandle.
+public static native TF_ShapeHandle TF_ShapeInferenceContextVectorFromSize(
+    TF_ShapeInferenceContext ctx, @Cast("size_t") long size);
+
+// Returns a newly allocated dimension handle. It must be freed with
+// TF_DeleteDimensionHandle.
+public static native TF_DimensionHandle TF_NewDimensionHandle();
+
+// Interprets the named shape inference context attribute as a TF_DataType and
+// places it into *val. *status is set to TF_OK.
+//
+// If the attribute could not be found or could not be interpreted as
+// TF_DataType, *status is populated with an error.
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") IntPointer val,
+    TF_Status status);
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, String attr_name, @Cast("TF_DataType*") IntBuffer val,
+    TF_Status status);
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") int[] val,
+    TF_Status status);
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, String attr_name, @Cast("TF_DataType*") IntPointer val,
+    TF_Status status);
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, @Cast("const char*") BytePointer attr_name, @Cast("TF_DataType*") IntBuffer val,
+    TF_Status status);
+public static native void TF_ShapeInferenceContext_GetAttrType(
+    TF_ShapeInferenceContext ctx, String attr_name, @Cast("TF_DataType*") int[] val,
+    TF_Status status);
+
+// Returns the rank of the shape represented by the given handle.
+public static native @Cast("int64_t") long TF_ShapeInferenceContextRank(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle handle);
+
+// Returns 1 if `handle` has a known rank, 0 otherwise.
+public static native int TF_ShapeInferenceContextRankKnown(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle handle);
+
+// If <handle> has rank <rank>, or its rank is unknown, return OK and return the
+// shape with asserted rank in <*result>. Otherwise an error is placed into
+// `status`.
+public static native void TF_ShapeInferenceContextWithRank(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle handle, @Cast("int64_t") long rank,
+    TF_ShapeHandle result, TF_Status status);
+
+// If <handle> has rank at least <rank>, or its rank is unknown, return OK and
+// return the shape with asserted rank in <*result>. Otherwise an error is
+// placed into `status`.
+public static native void TF_ShapeInferenceContextWithRankAtLeast(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle handle, @Cast("int64_t") long rank,
+    TF_ShapeHandle result, TF_Status status);
+
+// If <handle> has rank at most <rank>, or its rank is unknown, return OK and
+// return the shape with asserted rank in <*result>. Otherwise an error is
+// placed into `status`.
+public static native void TF_ShapeInferenceContextWithRankAtMost(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle handle, @Cast("int64_t") long rank,
+    TF_ShapeHandle result, TF_Status status);
+
+// Places a handle to the ith dimension of the given shape into *result.
+public static native void TF_ShapeInferenceContextDim(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle shape_handle, @Cast("int64_t") long i,
+    TF_DimensionHandle result);
+
+// Returns 1 if the given handle represents a known dimension.
+
+
+// Returns in <*result> a sub-shape of <shape_handle>, with dimensions
+// [start:end]. <start> and <end> can be negative, to index from the end of the
+// shape. <start> and <end> are set to the rank of <shape_handle> if > rank of
+// <shape_handle>.
+public static native void TF_ShapeInferenceContextSubshape(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle shape_handle, @Cast("int64_t") long start,
+    @Cast("int64_t") long end, TF_ShapeHandle result, TF_Status status);
+
+// Places an unknown shape in all outputs for the given inference context. Used
+// for shape inference functions with ops whose output shapes are unknown.
+public static native void TF_ShapeInferenceContextSetUnknownShape(
+    TF_ShapeInferenceContext ctx, TF_Status status);
+
+// Returns whether the given handle represents a known dimension.
+public static native int TF_DimensionHandleValueKnown(
+    TF_DimensionHandle dim_handle);
+
+// Returns the value of the given dimension.
+public static native @Cast("int64_t") long TF_DimensionHandleValue(
+    TF_DimensionHandle dim_handle);
+
+// Returns in <*result> the result of appending the dimensions of <second> to
+// those of <first>.
+public static native void TF_ShapeInferenceContextConcatenateShapes(
+    TF_ShapeInferenceContext ctx, TF_ShapeHandle first,
+    TF_ShapeHandle second, TF_ShapeHandle result, TF_Status status);
+
+// Frees the given shape handle.
+public static native void TF_DeleteShapeHandle(TF_ShapeHandle handle);
+
+// Frees the given dimension handle.
+public static native void TF_DeleteDimensionHandle(TF_DimensionHandle handle);
+
+// #ifdef __cplusplus /* end extern "C" */
+// #endif
+
+// #endif  // TENSORFLOW_C_OPS_H_
+
+
 // Parsed from tensorflow/core/framework/op_def_builder.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
