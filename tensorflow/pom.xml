@@ -269,9 +269,12 @@
             <configuration>
               <properties>${javacpp.platform}</properties>
               <compilerOptions>
+                <compilerOption>/DNOMINMAX</compilerOption>
                 <compilerOption>/DCOMPILER_MSVC</compilerOption>
                 <compilerOption>/DTF_COMPILE_LIBRARY</compilerOption>
                 <compilerOption>@${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/bazel-out/x64_windows-opt/objs.dos</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/c/env.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/c/ops.cc</compilerOption>
 <!-- old hacks for the now obsolete CMake build
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/exception_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/graph_jni.cc</compilerOption>
