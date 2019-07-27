@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            define = "GENERIC_EXCEPTION_CLASS mkldnn::error",
+            define = {"GENERIC_EXCEPTION_CLASS mkldnn::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"mkldnn_config.h", "mkldnn_types.h", /*"mkldnn_debug.h",*/ "mkldnn_version.h", "mkldnn.h", "mkldnn.hpp"},
             link = "mkldnn@.0", preload = "libmkldnn")},
     target = "org.bytedeco.mkldnn", global = "org.bytedeco.mkldnn.global.mkldnn")

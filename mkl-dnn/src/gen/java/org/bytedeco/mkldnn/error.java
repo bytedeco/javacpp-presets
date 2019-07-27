@@ -51,4 +51,6 @@ public class error extends Pointer {
      *  @param message The error message. */
     public static native void wrap_c_api(@Cast("mkldnn_status_t") int status, @Cast("const char*") BytePointer message);
     public static native void wrap_c_api(@Cast("mkldnn_status_t") int status, String message);
+
+    public native @StdString BytePointer toStdString();
 }

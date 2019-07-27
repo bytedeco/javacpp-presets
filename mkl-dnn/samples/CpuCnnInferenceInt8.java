@@ -1,58 +1,3 @@
-JavaCPP Presets for MKL-DNN
-===========================
-
-Introduction
-------------
-This directory contains the JavaCPP Presets module for:
-
- * MKL-DNN 1.0  https://01.org/mkl-dnn
-
-Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
-
-
-Documentation
--------------
-Java API documentation is available here:
-
- * http://bytedeco.org/javacpp-presets/mkl-dnn/apidocs/
-
-
-Sample Usage
-------------
-Here is a simple example of MKL-DNN ported to Java from this C++ source file:
-
-* https://github.com/intel/mkl-dnn/blob/master/examples/cpu_cnn_inference_int8.cpp
-
-We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `CpuCnnInferenceInt8.java` source files below, simply execute on the command line:
-```bash
- $ mvn compile exec:java
-```
-
-### The `pom.xml` build file
-```xml
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.bytedeco.mkl-dnn</groupId>
-    <artifactId>mkl-dnn</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
-    <properties>
-        <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-dnn-platform</artifactId>
-            <version>1.0-1.5.2-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-    <build>
-        <sourceDirectory>.</sourceDirectory>
-    </build>
-</project>
-```
-
-### The `CpuCnnInferenceInt8.java` source file
-```java
 /*******************************************************************************
 * Copyright 2018-2019 Intel Corporation
 *
@@ -332,4 +277,3 @@ public class CpuCnnInferenceInt8 {
         System.exit(0);
     }
 }
-```

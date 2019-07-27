@@ -4,7 +4,7 @@
     <artifactId>mkl-dnn</artifactId>
     <version>1.5.2-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SimpleNetInt8</exec.mainClass>
+        <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>

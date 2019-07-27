@@ -1,3 +1,15 @@
+diff -ruN mkl-dnn-1.0/include/mkldnn.hpp mkl-dnn-1.0-patch/include/mkldnn.hpp
+--- mkl-dnn-1.0/include/mkldnn.hpp	2019-07-11 02:03:46.000000000 +0900
++++ mkl-dnn-1.0-patch/include/mkldnn.hpp	2019-07-27 22:47:33.629745898 +0900
+@@ -73,6 +73,8 @@
+         if (status != mkldnn_success)
+             throw error(status, message);
+     }
++
++    const std::string& toStdString() { return std::string(message).append(": status = ").append(std::to_string(status)); }
+ };
+ 
+ /// A class that provides the destructor for an Intel(R) MKL-DNN C handle
 diff -ruN mkl-dnn-1.0/src/cpu/cpu_engine.cpp mkl-dnn-1.0-patch/src/cpu/cpu_engine.cpp
 --- mkl-dnn-1.0/src/cpu/cpu_engine.cpp	2019-07-11 02:03:46.000000000 +0900
 +++ mkl-dnn-1.0-patch/src/cpu/cpu_engine.cpp	2019-07-23 21:11:44.409275262 +0900
