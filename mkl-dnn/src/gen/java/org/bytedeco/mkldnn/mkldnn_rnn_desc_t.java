@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,19 +26,22 @@ public class mkldnn_rnn_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_rnn. */
+     *  descriptor. Must be #mkldnn_rnn. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_rnn_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training,
-     * #mkldnn_forward_inference, and #mkldnn_backward. */
+     *  #mkldnn_forward_inference, and #mkldnn_backward. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_rnn_desc_t prop_kind(int setter);
-    /** The RNN cell desc. */
-    public native @ByRef mkldnn_rnn_cell_desc_t cell_desc(); public native mkldnn_rnn_desc_t cell_desc(mkldnn_rnn_cell_desc_t setter);
+    /** RNN cell kind. Must be one of #mkldnn_vanilla_rnn,
+     *  #mkldnn_vanilla_lstm, #mkldnn_vanilla_gru, or #mkldnn_lbr_gru. */
+    public native @Cast("mkldnn_alg_kind_t") int cell_kind(); public native mkldnn_rnn_desc_t cell_kind(int setter);
     /** The direction of RNN primitive execution. */
     public native @Cast("mkldnn_rnn_direction_t") int direction(); public native mkldnn_rnn_desc_t direction(int setter);
     /** Source layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t src_layer_desc(); public native mkldnn_rnn_desc_t src_layer_desc(mkldnn_memory_desc_t setter);
-    /** Source iteration memory descriptor. */
+    /** Source iteration memory descriptor for hidden state. */
     public native @ByRef mkldnn_memory_desc_t src_iter_desc(); public native mkldnn_rnn_desc_t src_iter_desc(mkldnn_memory_desc_t setter);
+    /** Source iteration memory descriptor for cell state. */
+    public native @ByRef mkldnn_memory_desc_t src_iter_c_desc(); public native mkldnn_rnn_desc_t src_iter_c_desc(mkldnn_memory_desc_t setter);
     /** Weights layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t weights_layer_desc(); public native mkldnn_rnn_desc_t weights_layer_desc(mkldnn_memory_desc_t setter);
     /** Weights iteration memory descriptor. */
@@ -49,12 +50,20 @@ public class mkldnn_rnn_desc_t extends Pointer {
     public native @ByRef mkldnn_memory_desc_t bias_desc(); public native mkldnn_rnn_desc_t bias_desc(mkldnn_memory_desc_t setter);
     /** Destination layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t dst_layer_desc(); public native mkldnn_rnn_desc_t dst_layer_desc(mkldnn_memory_desc_t setter);
-    /** Destination iter memory descriptor. */
+    /** Destination iter memory descriptor for hidden state. */
     public native @ByRef mkldnn_memory_desc_t dst_iter_desc(); public native mkldnn_rnn_desc_t dst_iter_desc(mkldnn_memory_desc_t setter);
+    /** Destination iter memory descriptor for cell state. */
+    public native @ByRef mkldnn_memory_desc_t dst_iter_c_desc(); public native mkldnn_rnn_desc_t dst_iter_c_desc(mkldnn_memory_desc_t setter);
+    /** Placeholders */
+    public native @ByRef mkldnn_memory_desc_t placeholder_desc(); public native mkldnn_rnn_desc_t placeholder_desc(mkldnn_memory_desc_t setter);
+    public native @ByRef mkldnn_memory_desc_t placeholder2_desc(); public native mkldnn_rnn_desc_t placeholder2_desc(mkldnn_memory_desc_t setter);
+
     /** Source gradient layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t diff_src_layer_desc(); public native mkldnn_rnn_desc_t diff_src_layer_desc(mkldnn_memory_desc_t setter);
-    /** Source gradient iter memory descriptor. */
+    /** Source gradient iter memory descriptor for hidden state. */
     public native @ByRef mkldnn_memory_desc_t diff_src_iter_desc(); public native mkldnn_rnn_desc_t diff_src_iter_desc(mkldnn_memory_desc_t setter);
+    /** Source gradient iter memory descriptor for cell state. */
+    public native @ByRef mkldnn_memory_desc_t diff_src_iter_c_desc(); public native mkldnn_rnn_desc_t diff_src_iter_c_desc(mkldnn_memory_desc_t setter);
     /** Weights gradient layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t diff_weights_layer_desc(); public native mkldnn_rnn_desc_t diff_weights_layer_desc(mkldnn_memory_desc_t setter);
     /** Weights gradient iter memory descriptor. */
@@ -63,6 +72,20 @@ public class mkldnn_rnn_desc_t extends Pointer {
     public native @ByRef mkldnn_memory_desc_t diff_bias_desc(); public native mkldnn_rnn_desc_t diff_bias_desc(mkldnn_memory_desc_t setter);
     /** Destination gradient layer memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t diff_dst_layer_desc(); public native mkldnn_rnn_desc_t diff_dst_layer_desc(mkldnn_memory_desc_t setter);
-    /** Destination gradient iteration memory descriptor. */
+    /** Destination gradient iteration memory descriptor for hidden state. */
     public native @ByRef mkldnn_memory_desc_t diff_dst_iter_desc(); public native mkldnn_rnn_desc_t diff_dst_iter_desc(mkldnn_memory_desc_t setter);
+    /** Destination gradient iteration memory descriptor for cell state. */
+    public native @ByRef mkldnn_memory_desc_t diff_dst_iter_c_desc(); public native mkldnn_rnn_desc_t diff_dst_iter_c_desc(mkldnn_memory_desc_t setter);
+    /** Placeholders */
+    public native @ByRef mkldnn_memory_desc_t diff_placeholder_desc(); public native mkldnn_rnn_desc_t diff_placeholder_desc(mkldnn_memory_desc_t setter);
+    public native @ByRef mkldnn_memory_desc_t diff_placeholder2_desc(); public native mkldnn_rnn_desc_t diff_placeholder2_desc(mkldnn_memory_desc_t setter);
+
+    /** RNN cell flags */
+    public native @Cast("unsigned int") int flags(); public native mkldnn_rnn_desc_t flags(int setter);
+    /** Activation function used for vanilla_rnn cell kind.
+     *  Must be either #mkldnn_eltwise_relu or #mkldnn_eltwise_tanh. */
+    public native @Cast("mkldnn_alg_kind_t") int activation_kind(); public native mkldnn_rnn_desc_t activation_kind(int setter);
+    public native float alpha(); public native mkldnn_rnn_desc_t alpha(float setter);
+    public native float beta(); public native mkldnn_rnn_desc_t beta(float setter);
+
 }

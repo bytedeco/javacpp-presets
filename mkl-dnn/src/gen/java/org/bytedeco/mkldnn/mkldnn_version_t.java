@@ -6,21 +6,23 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
+// #endif
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif
 
 /** \addtogroup c_api C API
  *  \{
- *
+ * 
  *  \addtogroup c_api_types Types
  *  \{
- *
+ * 
  *  \addtogroup c_api_types_generic Generic
- *  \{ */
-
-/** Intel(R) MKL-DNN Version type */
+ *  \{
+ <p>
+ *  Version type */
 @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_version_t extends Pointer {
     static { Loader.load(); }

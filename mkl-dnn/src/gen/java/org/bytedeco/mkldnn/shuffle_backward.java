@@ -6,43 +6,74 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
+/** Shuffle for backward propagation.  Implements descriptor, primitive
+ *  descriptor, and primitive. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class shuffle_backward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public shuffle_backward(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public shuffle_backward(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public shuffle_backward position(long position) {
+        return (shuffle_backward)super.position(position);
+    }
 
+
+    // Descriptor for shuffle backward propagation.
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_shuffle_desc_t data(); public native desc data(mkldnn_shuffle_desc_t setter);
+
+        /** Initializes a shuffle descriptor for backward propagation using
+         *  memory descriptor \p diff_data_desc, \p axis, and \p group_size. */
         public desc(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size) { super((Pointer)null); allocate(diff_data_desc, axis, group_size); }
         private native void allocate(@Const @ByRef memory.desc diff_data_desc, int axis, int group_size);
     }
 
+    // Primitive descriptor for shuffle backward propagation.
     public static class primitive_desc extends org.bytedeco.mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(desc, e, hint_fwd_pd, aattr); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
+                        @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
                         @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
                         @Const @ByRef shuffle_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
+        /** Queries diff source gradient memory descriptor. */
+        public native @ByVal memory.desc diff_src_desc();
+
+        /** Queries diff destination memory descriptor. */
+        public native @ByVal memory.desc diff_dst_desc();
     }
 
-    public shuffle_backward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at diff_dst, @Const @ByRef memory diff_src) { super((Pointer)null); allocate(aprimitive_desc, diff_dst, diff_src); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at diff_dst, @Const @ByRef memory diff_src);
+    public shuffle_backward() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public shuffle_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,11 +26,11 @@ public class mkldnn_inner_product_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_inner_product. */
+     *  descriptor. Must be #mkldnn_inner_product. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_inner_product_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training,
-     * #mkldnn_forward_inference, #mkldnn_backward_data,
-     * #mkldnn_backward_weights, and #mkldnn_backward_bias. */
+     *  #mkldnn_forward_inference, #mkldnn_backward_data,
+     *  #mkldnn_backward_weights, and #mkldnn_backward_bias. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_inner_product_desc_t prop_kind(int setter);
     /** Source memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t src_desc(); public native mkldnn_inner_product_desc_t src_desc(mkldnn_memory_desc_t setter);

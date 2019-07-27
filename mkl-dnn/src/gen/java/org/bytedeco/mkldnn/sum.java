@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -16,62 +14,135 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
  *  \addtogroup cpp_api_sum Sum
  *  A primitive to sum data.
  * 
+ *  @see \ref dev_guide_sum in developer guide
  *  @see \ref c_api_sum in \ref c_api
- *  \{ */
-
+ *  \{
+ <p>
+ *  Creates an out-of-place sum primitive descriptor for sum of \p n inputs
+ *  multiplied by the scale with resulting \p output_desc memory descriptor.
+ *  \p output_desc can be NULL or specified with the
+ *  #mkldnn::memory::format_tag::any format kind--in this case, the
+ *  appropriate memory format would be chosen automatically. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class sum extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public sum(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public sum(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public sum position(long position) {
+        return (sum)super.position(position);
+    }
 
     public static class primitive_desc extends mkldnn_primitive_desc_handle {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
-        public native @ByVal @Cast("std::vector<const_mkldnn_primitive_desc_t>*") mkldnn_primitive_desc_vector cpp_to_c(
-                        @ByVal memory_primitive_desc_vector inputs);
+        public native @StdVector mkldnn_memory_desc_t cpp_to_c(
+                        @StdVector memory.desc srcs);
 
-        public primitive_desc(@Const @ByRef memory.desc output,
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(output, scales, inputs); }
-        private native void allocate(@Const @ByRef memory.desc output,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, aattr); }
+        private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatPointer scales,
-                        @ByVal memory_primitive_desc_vector inputs);
-        public primitive_desc(@Const @ByRef memory.desc output,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@Const @ByRef memory.desc dst,
+                        @StdVector FloatPointer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
+        private native void allocate(@Const @ByRef memory.desc dst,
+                        @StdVector FloatPointer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(output, scales, inputs); }
-        private native void allocate(@Const @ByRef memory.desc output,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, aattr); }
+        private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector FloatBuffer scales,
-                        @ByVal memory_primitive_desc_vector inputs);
-        public primitive_desc(@Const @ByRef memory.desc output,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@Const @ByRef memory.desc dst,
+                        @StdVector FloatBuffer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
+        private native void allocate(@Const @ByRef memory.desc dst,
+                        @StdVector FloatBuffer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
+        public primitive_desc(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(output, scales, inputs); }
-        private native void allocate(@Const @ByRef memory.desc output,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(dst, scales, srcs, aengine, aattr); }
+        private native void allocate(@Const @ByRef memory.desc dst,
                         @StdVector float[] scales,
-                        @ByVal memory_primitive_desc_vector inputs);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@Const @ByRef memory.desc dst,
+                        @StdVector float[] scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(dst, scales, srcs, aengine); }
+        private native void allocate(@Const @ByRef memory.desc dst,
+                        @StdVector float[] scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
         public primitive_desc(@StdVector FloatPointer scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(scales, inputs); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(scales, srcs, aengine, aattr); }
         private native void allocate(@StdVector FloatPointer scales,
-                        @ByVal memory_primitive_desc_vector inputs);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@StdVector FloatPointer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
+        private native void allocate(@StdVector FloatPointer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@StdVector FloatBuffer scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(scales, inputs); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(scales, srcs, aengine, aattr); }
         private native void allocate(@StdVector FloatBuffer scales,
-                        @ByVal memory_primitive_desc_vector inputs);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@StdVector FloatBuffer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
+        private native void allocate(@StdVector FloatBuffer scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
         public primitive_desc(@StdVector float[] scales,
-                        @ByVal memory_primitive_desc_vector inputs) { super((Pointer)null); allocate(scales, inputs); }
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(scales, srcs, aengine, aattr); }
         private native void allocate(@StdVector float[] scales,
-                        @ByVal memory_primitive_desc_vector inputs);
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@StdVector float[] scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine) { super((Pointer)null); allocate(scales, srcs, aengine); }
+        private native void allocate(@StdVector float[] scales,
+                        @StdVector memory.desc srcs, @Const @ByRef engine aengine);
 
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        /** Queries destination memory descriptor. */
+        
+        ///
+        public native @ByVal memory.desc dst_desc();
+
+        /** Queries scratchpad memory descriptor.
+         * 
+         *  @see \ref dev_guide_attributes_scratchpad
+         *  Returns a zero_md if no scratchpad is required. */
+        public native @ByVal memory.desc scratchpad_desc();
 
         public native @ByVal engine get_engine();
     }
 
-    public sum(@Const @ByRef primitive_desc sum_pd,
-                @StdVector primitive.at inputs, @Const @ByRef memory output) { super((Pointer)null); allocate(sum_pd, inputs, output); }
-    private native void allocate(@Const @ByRef primitive_desc sum_pd,
-                @StdVector primitive.at inputs, @Const @ByRef memory output);
+    public sum() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public sum(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -30,10 +28,15 @@ public class mkldnn_rnn_packed_desc_t extends Pointer {
     public native @Cast("mkldnn_rnn_packed_memory_format_t") int format(); public native mkldnn_rnn_packed_desc_t format(int setter);
     public native int n_parts(); public native mkldnn_rnn_packed_desc_t n_parts(int setter);
     public native int n(); public native mkldnn_rnn_packed_desc_t n(int setter);
+    public native int ldb(); public native mkldnn_rnn_packed_desc_t ldb(int setter);
     public native int parts(int i); public native mkldnn_rnn_packed_desc_t parts(int i, int setter);
     @MemberGetter public native IntPointer parts();
     public native @Cast("size_t") long part_pack_size(int i); public native mkldnn_rnn_packed_desc_t part_pack_size(int i, long setter);
     @MemberGetter public native @Cast("size_t*") SizeTPointer part_pack_size();
+    public native @Cast("unsigned") int pack_part(int i); public native mkldnn_rnn_packed_desc_t pack_part(int i, int setter);
+    @MemberGetter public native @Cast("unsigned*") IntPointer pack_part();
     public native @Cast("size_t") long offset_compensation(); public native mkldnn_rnn_packed_desc_t offset_compensation(long setter);
     public native @Cast("size_t") long size(); public native mkldnn_rnn_packed_desc_t size(long setter);
+    public native @Cast("char") byte reserved(int i); public native mkldnn_rnn_packed_desc_t reserved(int i, byte setter);
+    @MemberGetter public native @Cast("char*") BytePointer reserved();
 }

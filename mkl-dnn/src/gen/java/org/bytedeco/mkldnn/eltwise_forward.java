@@ -6,55 +6,97 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
 /** \}
  <p>
  *  \addtogroup cpp_api_eltwise Eltwise
- *  A primitive to compute element-wise operations like parametric rectifier
- *  linear unit (ReLU).
+ *  A primitive to compute element-wise operations such as rectified linear
+ *  unit (ReLU).
  * 
+ *  Both forward and backward passes support in-place operation; that is, src
+ *  and dst point to the same memory for forward pass, and diff_dst and
+ *  diff_src point to the same memory for backward pass.
+ * 
+ *  \warning Because the original src is required for backward pass, in-place
+ *  forward pass in general cannot be applied during training. However, for
+ *  some kinds of element-wise operations (namely ReLU with alpha parameter
+ *  equals 0), dst and src can be interchangeable for the backward pass, which
+ *  enables performance of in-place forward even for training.
+ * 
+ *  @see \ref dev_guide_eltwise in developer guide
  *  @see \ref c_api_eltwise in \ref c_api
- *  \{ */
-
+ *  \{
+ <p>
+ *  Element-wise operations for forward propagation.  Implements descriptor,
+ *  primitive descriptor, and primitive. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class eltwise_forward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public eltwise_forward(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public eltwise_forward(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public eltwise_forward position(long position) {
+        return (eltwise_forward)super.position(position);
+    }
 
+
+    /** Initializes an eltwise descriptor for forward propagation using \p
+     *  prop_kind (possible values are #mkldnn::forward_training and
+     *  #mkldnn::forward_inference), \p aalgorithm algorithm, memory
+     *  descriptor \p data_desc, \p alpha, and \p beta parameters. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_eltwise_desc_t data(); public native desc data(mkldnn_eltwise_desc_t setter);
-        public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int alg_kind,
-                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, alg_kind, src_desc, alpha, beta); }
-        private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int alg_kind,
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, alpha, beta); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/);
+        public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
+                        @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, alpha, beta); }
+        private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc, float alpha/*=0*/, float beta/*=0*/);
     }
 
+    /** Primitive descriptor for eltwise forward propagation. */
     public static class primitive_desc extends org.bytedeco.mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
-        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
-        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
+        public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
+        private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr,
+                        @Const @ByRef engine e);
 
-        public native @ByVal memory.primitive_desc src_primitive_desc();
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        /** Queries source memory descriptor. */
+        public native @ByVal memory.desc src_desc();
+
+        /** Queries destination memory descriptor. */
+        public native @ByVal memory.desc dst_desc();
     }
 
-    public eltwise_forward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory dst);
+    public eltwise_forward() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    public eltwise_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

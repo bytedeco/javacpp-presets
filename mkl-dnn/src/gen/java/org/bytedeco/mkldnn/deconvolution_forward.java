@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -17,266 +15,510 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 /** A primitive to compute deconvolution using different algorithms.
 /**
 /** @see \ref c_api_deconvolution in \ref c_api
-/** \{ */
-
+/** \{
+<p>
+/** Deconvolution forward propagation.
+/**
+/** Implements descriptor, primitive descriptor, and primitive
+/** for the deconvolution forward propagation. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class deconvolution_forward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public deconvolution_forward(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public deconvolution_forward(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public deconvolution_forward position(long position) {
+        return (deconvolution_forward)super.position(position);
+    }
 
+
+    /** Descriptor for convolution forward propagation. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
+        
+        ///
         public native @ByRef @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t data(); public native desc data(mkldnn_convolution_desc_t setter);
+
+        /** Initializes a descriptor for deconvolution forward propagation
+         *  with bias using \p prop_kind (possible values are
+         *  #mkldnn::forward_training and #mkldnn::forward_inference), \p
+         *  aalgorithm, memory descriptors, \p strides, \p padding_l, and \p
+         *  padding_r.
+         * 
+         *  \note Memory descriptors are allowed to be initialized with
+         *        #mkldnn::memory::format_tag::any value of \p format_kind. */
+        
+        ///
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
+
+        /** Initializes a descriptor for deconvolution forward propagation
+         *  without bias using \p prop_kind (possible values are
+         *  #mkldnn::forward_training and #mkldnn::forward_inference), \p
+         *  aalgorithm, memory descriptors, \p strides, \p padding_l, and \p
+         *  padding_r.
+         * 
+         *  \note Memory descriptors are allowed to be initialized with
+         *        #mkldnn::memory::format_tag::any value of \p format_kind. */
+        
+        ///
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
+
+        /** Initializes a descriptor for dilated deconvolution forward
+         *  propagation with bias using \p aprop_kind (possible values are
+         *  #mkldnn::forward_training and #mkldnn::forward_inference), \p
+         *  aalgorithm memory descriptors, \p strides, \p dilates, \p
+         *  padding_l, and \p padding_r.
+         * 
+         *  \note Memory descriptors are allowed to be initialized with
+         *        #mkldnn::memory::format_tag::any value of \p format_kind. */
+        
+        ///
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc bias_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, bias_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc bias_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
+
+        /** Initializes a descriptor for dilated deconvolution forward
+         *  propagation without bias using \p aprop_kind (possible values are
+         *  #mkldnn::forward_training and #mkldnn::forward_inference), \p
+         *  aalgorithm, memory descriptors, \p strides, \p dilates, \p
+         *  padding_l, and \p padding_r.
+         * 
+         *  \note Memory descriptors are allowed to be initialized with
+         *        #mkldnn::memory::format_tag::any value of \p format_kind. */
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer padding_r);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc,
+                        @Const @ByRef memory.desc weights_desc,
+                        @Const @ByRef memory.desc dst_desc,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer padding_r);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r, apadding_kind); }
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, weights_desc, dst_desc, strides, dilates, padding_l, padding_r); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
                         @Const @ByRef memory.desc src_desc,
                         @Const @ByRef memory.desc weights_desc,
                         @Const @ByRef memory.desc dst_desc,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] strides,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] dilates,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_l,
-                        @Const @StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] padding_r,
-                        @Cast("const mkldnn::padding_kind") int apadding_kind);
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] strides,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] dilates,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_l,
+                        @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] padding_r);
     }
 
+     /** Primitive descriptor for deconvolution forward propagation. */
     public static class primitive_desc extends org.bytedeco.mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        /** Initializes a primitive descriptor for deconvolution forward
+         *  propagation. */
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
+        /** Initializes primitive descriptor for deconvolution forward
+         *  propagation with attributes defined by \p attr. */
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
-        public native @ByVal memory.primitive_desc src_primitive_desc();
-        public native @ByVal memory.primitive_desc weights_primitive_desc();
-        public native @ByVal memory.primitive_desc bias_primitive_desc();
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
+        /** Queries source memory descriptor. */
+        public native @ByVal memory.desc src_desc();
+
+        /** Queries weights memory descriptor. */
+        
+        ///
+        public native @ByVal memory.desc weights_desc();
+
+        /** Queries bias memory descriptor.
+         * 
+         *  Returns a zero_md if no bias was specified at op_desc
+         *  creation time. */
+        public native @ByVal memory.desc bias_desc();
+
+        /** Queries destination memory descriptor. */
+        public native @ByVal memory.desc dst_desc();
     }
 
-    public deconvolution_forward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
-                @Const @ByRef primitive.at bias, @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, weights, bias, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
-                @Const @ByRef primitive.at bias, @Const @ByRef memory dst);
+    public deconvolution_forward() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
-    public deconvolution_forward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
-                @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, weights, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at weights,
-                @Const @ByRef memory dst);
+    /** Creates a deconvolution forward propagation primitive from the
+     *  corresponding primitive descriptor. */
+    public deconvolution_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

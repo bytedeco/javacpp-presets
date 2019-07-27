@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,37 +26,69 @@ public class engine extends mkldnn_engine_handle {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public engine(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public engine(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public engine position(long position) {
+        return (engine)super.position(position);
+    }
 
-    // gcc bug??? using handle::handle;
 
     /** Kinds of engines. */
-    /** enum mkldnn::engine::kind */
-    public static final int
+    public enum kind {
         /** An unspecified engine */
-        any = mkldnn_any_engine,
+        any(mkldnn_any_engine),
         /** CPU engine */
-        cpu = mkldnn_cpu;
+        cpu(mkldnn_cpu),
+        /** GPU engine */
+        gpu(mkldnn_gpu);
+
+        public final int value;
+        private kind(int v) { this.value = v; }
+        private kind(kind e) { this.value = e.value; }
+        public kind intern() { for (kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+    
+    ///
+    public engine() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
     /** Returns the number of engines of a certain kind.
      * 
      *  @param akind The kind of engines to count. */
-
     
     ///
+    public static native @Cast("size_t") long get_count(kind akind);
     public static native @Cast("size_t") long get_count(@Cast("mkldnn::engine::kind") int akind);
 
     /** Constructs an engine.
      * 
      *  @param akind The kind of engine to construct.
      *  @param index The index of the engine. Must be less than the value
-     *               returned by #get_count() for this particular kind of engine. */
-
+     *               returned by #get_count() for this particular kind
+     *               of engine. */
+    public engine(kind akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
+    private native void allocate(kind akind, @Cast("size_t") long index);
     public engine(@Cast("mkldnn::engine::kind") int akind, @Cast("size_t") long index) { super((Pointer)null); allocate(akind, index); }
     private native void allocate(@Cast("mkldnn::engine::kind") int akind, @Cast("size_t") long index);
 
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
+
+    /** Constructs an engine from other engine \p aengine. */
     public engine(mkldnn_engine aengine) { super((Pointer)null); allocate(aengine); }
     private native void allocate(mkldnn_engine aengine);
 
+    /** Constructs an engine from the primitive descriptor \p pd
+     *  by querying its engine. */
     public engine(@Const @ByRef mkldnn_primitive_desc_handle pd) { super((Pointer)null); allocate(pd); }
     private native void allocate(@Const @ByRef mkldnn_primitive_desc_handle pd);
+
+    /** Returns the kind of the engine. */
+    public native kind get_kind();
+
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
 }

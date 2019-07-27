@@ -6,100 +6,120 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
+/** Batch normalization backward propagation.  Implements descriptor, primitive
+ *  descriptor, and primitive. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class batch_normalization_backward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public batch_normalization_backward(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public batch_normalization_backward(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public batch_normalization_backward position(long position) {
+        return (batch_normalization_backward)super.position(position);
+    }
 
+
+    /** Descriptor for batch normalization backward propagation. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
+        
+        ///
         public native @ByRef mkldnn_batch_normalization_desc_t data(); public native desc data(mkldnn_batch_normalization_desc_t setter);
+
+        /** Initializes a batch normalization descriptor for backward
+         *  propagation with respect to data and scale-shift parameters using
+         *  memory descriptors \p data_desc and \p diff_data_desc, normalization
+         *  parameter \p epsilon, and \p flags set using bit flags of type
+         *  mkldnn_batch_normalization_desc_t.
+         * 
+         *  \note In-place operation is supported; that is, diff_src points to
+         *        the same memory as diff_dst. */
+        public desc(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        normalization_flags flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
+        private native void allocate(prop_kind aprop_kind, @Const @ByRef memory.desc diff_data_desc,
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        normalization_flags flags);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon, @Cast("unsigned") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        @Cast("mkldnn::normalization_flags") int flags) { super((Pointer)null); allocate(aprop_kind, diff_data_desc, data_desc, epsilon, flags); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Const @ByRef memory.desc diff_data_desc,
-                        @Const @ByRef memory.desc data_desc, float epsilon, @Cast("unsigned") int flags);
+                        @Const @ByRef memory.desc data_desc, float epsilon,
+                        @Cast("mkldnn::normalization_flags") int flags);
     }
 
+    /** Primitive descriptor for batch normalization backward propagation. */
     public static class primitive_desc extends org.bytedeco.mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
+        /** Initializes a primitive descriptor for batch normalization backward
+         *  propagation. */
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e,
                         @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, e, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e,
                         @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd);
 
+        /** Initializes a primitive descriptor for batch normalization backward
+         *  propagation with attributes defined by \p attr. */
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
                         @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e,
                         @Const @ByRef batch_normalization_forward.primitive_desc hint_fwd_pd);
 
-        public native @ByVal memory.primitive_desc src_primitive_desc();
-        public native @ByVal memory.primitive_desc mean_primitive_desc();
-        public native @ByVal memory.primitive_desc variance_primitive_desc();
-        public native @ByVal memory.primitive_desc weights_primitive_desc();
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
-        public native @ByVal memory.primitive_desc diff_dst_primitive_desc();
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
+        /** Queries source memory descriptor. */
+        public native @ByVal memory.desc src_desc();
 
-        public native @ByVal memory.primitive_desc diff_src_primitive_desc();
-        public native @ByVal memory.primitive_desc diff_weights_primitive_desc();
+        /** Queries mean memory descriptor. */
+        public native @ByVal memory.desc mean_desc();
+
+        /** Queries variance memory descriptor. */
+        public native @ByVal memory.desc variance_desc();
+
+        /** Queries weights (scale and shift) memory descriptor. */
+        public native @ByVal memory.desc weights_desc();
+
+        /** Queries destination memory descriptor. */
+        public native @ByVal memory.desc dst_desc();
+
+        /** Queries diff destination memory descriptor. */
+        
+        ///
+        public native @ByVal memory.desc diff_dst_desc();
+
+        /** Queries workspace memory descriptor.
+         * 
+         *  Returns a zero_md if no worspace is required. */
+        public native @ByVal memory.desc workspace_desc();
+
+        /** Queries diff source memory descriptor. */
+        public native @ByVal memory.desc diff_src_desc();
+
+        /** Queries diff weights (scale and shift) memory descriptor. */
+        public native @ByVal memory.desc diff_weights_desc();
     }
 
-    // Prop_kind == backward
-    public batch_normalization_backward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights, @Const @ByRef memory diff_src,
-                @Const @ByRef memory diff_weights) { super((Pointer)null); allocate(aprimitive_desc, src, mean, variance, diff_dst, weights, diff_src, diff_weights); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights, @Const @ByRef memory diff_src,
-                @Const @ByRef memory diff_weights);
+    public batch_normalization_backward() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
-    // Prop_kind == backward (+ws)
-    public batch_normalization_backward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights, @Const @ByRef primitive.at workspace,
-                @Const @ByRef memory diff_src, @Const @ByRef memory diff_weights) { super((Pointer)null); allocate(aprimitive_desc, src, mean, variance, diff_dst, weights, workspace, diff_src, diff_weights); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights, @Const @ByRef primitive.at workspace,
-                @Const @ByRef memory diff_src, @Const @ByRef memory diff_weights);
-
-    // Prop_kind == backward_data (+ws or +weights)
-    /** \warning This constructor works for backward_data propagation
-     *           - w/ weights but w/o workspace, or
-     *           - w/ workspace but w/o weights */
-    public batch_normalization_backward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance,@Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights_or_workspace, @Const @ByRef memory diff_src) { super((Pointer)null); allocate(aprimitive_desc, src, mean, variance, diff_dst, weights_or_workspace, diff_src); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance,@Const @ByRef primitive.at diff_dst,
-                @Const @ByRef primitive.at weights_or_workspace, @Const @ByRef memory diff_src);
-
-    // Prop_kind == backward_data
-    public batch_normalization_backward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef memory diff_src) { super((Pointer)null); allocate(aprimitive_desc, src, mean, variance, diff_dst, diff_src); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef primitive.at mean,
-                @Const @ByRef primitive.at variance, @Const @ByRef primitive.at diff_dst,
-                @Const @ByRef memory diff_src);
+    public batch_normalization_backward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

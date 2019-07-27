@@ -6,15 +6,13 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
 /** Memory descriptor. The description is based on a number of dimensions,
- * dimensions themselves, plus information about elements type and memory
- * format. Additionally, contains format-specific descriptions of the data
- * layout. */
+ *  dimensions themselves, plus information about elements type and memory
+ *  format. Additionally, contains format-specific descriptions of the data
+ *  layout. */
 @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_memory_desc_t extends Pointer {
     static { Loader.load(); }
@@ -30,37 +28,50 @@ public class mkldnn_memory_desc_t extends Pointer {
         return (mkldnn_memory_desc_t)super.position(position);
     }
 
-    /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_memory. */
-    public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_memory_desc_t primitive_kind(int setter);
     /** Number of dimensions */
+    
+    ///
     public native int ndims(); public native mkldnn_memory_desc_t ndims(int setter);
     /** Dimensions in the following order:
-     * - CNN data tensors: mini-batch, channel, spatial
-     *   (<code>{N, C, [[D,] H,] W}</code>)
-     * - CNN weight tensors: group (optional), output channel, input channel,
-     *   spatial (<code>{[G,] O, I, [[D,] H,] W}</code>)
-     * - RNN data tensors: time, mini-batch, channels (<code>{T, N, C}</code>)
-     *   or layers, directions, states, mini-batch, channels (<code>{L, D, S, N, C}</code>)
-     * - RNN weight tensor: layers, directions, input channel, gates, output channels
-     *   (<code>{L, D, I, G, O}</code>).
-     *
-     * \note
-     *    The order of dimensions does not depend on the memory format, so
-     *    whether the data is laid out in #mkldnn_nchw or #mkldnn_nhwc
-     *    the dims for 4D CN data tensor would be <code>{N, C, H, W}</code>.
-     */
-    @MemberGetter public native IntPointer dims();
+     *  - CNN data tensors: mini-batch, channel, spatial
+     *    (<code>{N, C, [[D,] H,] W}</code>)
+     *  - CNN weight tensors: group (optional), output channel, input channel,
+     *    spatial (<code>{[G,] O, I, [[D,] H,] W}</code>)
+     *  - RNN data tensors: time, mini-batch, channels (<code>{T, N, C}</code>)
+     *    or layers, directions, states, mini-batch, channels (<code>{L, D, S, N, C}</code>)
+     *  - RNN weight tensor: layers, directions, input channel, gates, output channels
+     *    (<code>{L, D, I, G, O}</code>).
+     * 
+     *  \note
+     *     The order of dimensions does not depend on the memory format, so
+     *     whether the data is laid out in #mkldnn_nchw or #mkldnn_nhwc
+     *     the dims for 4D CN data tensor would be <code>{N, C, H, W}</code>. */
+    @MemberGetter public native @Cast("int64_t*") LongPointer dims();
+
     /** Data type of the tensor elements. */
     public native @Cast("mkldnn_data_type_t") int data_type(); public native mkldnn_memory_desc_t data_type(int setter);
-    /** Memory format. */
-    public native @Cast("mkldnn_memory_format_t") int format(); public native mkldnn_memory_desc_t format(int setter);
+
+    /** Size of the data including padding in each dimension. */
+    @MemberGetter public native @Cast("int64_t*") LongPointer padded_dims();
+
+    /** Per-dimension offset from the padding to actual data, the top-level
+     *  tensor with offsets applied must lie within the padding area. */
+    @MemberGetter public native @Cast("int64_t*") LongPointer padded_offsets();
+
+    /** Offset from memory origin to the current block, non-zero only in
+     *  a description of a memory sub-block. */
+    public native @Cast("mkldnn_dim_t") long offset0(); public native mkldnn_memory_desc_t offset0(long setter);
+
+    /** Memory format kind. */
+    public native @Cast("mkldnn_format_kind_t") int format_kind(); public native mkldnn_memory_desc_t format_kind(int setter);
         /** Description of the data layout for memory formats that use
-         * blocking. */
-        @Name("layout_desc.blocking") public native @ByRef mkldnn_blocking_desc_t layout_desc_blocking(); public native mkldnn_memory_desc_t layout_desc_blocking(mkldnn_blocking_desc_t setter);
+         *  blocking. */
+        @Name("format_desc.blocking") public native @ByRef mkldnn_blocking_desc_t format_desc_blocking(); public native mkldnn_memory_desc_t format_desc_blocking(mkldnn_blocking_desc_t setter);
         /** Tensor of weights for integer 8bit winograd convolution. */
-        @Name("layout_desc.wino_desc") public native @ByRef mkldnn_wino_desc_t layout_desc_wino_desc(); public native mkldnn_memory_desc_t layout_desc_wino_desc(mkldnn_wino_desc_t setter);
+        @Name("format_desc.wino_desc") public native @ByRef mkldnn_wino_desc_t format_desc_wino_desc(); public native mkldnn_memory_desc_t format_desc_wino_desc(mkldnn_wino_desc_t setter);
         /** Tensor of packed weights for RNN. */
-        @Name("layout_desc.rnn_packed_desc") public native @ByRef mkldnn_rnn_packed_desc_t layout_desc_rnn_packed_desc(); public native mkldnn_memory_desc_t layout_desc_rnn_packed_desc(mkldnn_rnn_packed_desc_t setter);
-        /* ... other descriptions possible */
+        @Name("format_desc.rnn_packed_desc") public native @ByRef mkldnn_rnn_packed_desc_t format_desc_rnn_packed_desc(); public native mkldnn_memory_desc_t format_desc_rnn_packed_desc(mkldnn_rnn_packed_desc_t setter);
+        // ... other descriptions possible
+
+    public native @ByRef mkldnn_memory_extra_desc_t extra(); public native mkldnn_memory_desc_t extra(mkldnn_memory_extra_desc_t setter);
 }

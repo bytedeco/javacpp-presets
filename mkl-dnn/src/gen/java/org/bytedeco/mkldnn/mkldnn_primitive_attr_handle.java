@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 @Name("mkldnn::handle<mkldnn_primitive_attr_t>") @NoOffset @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
@@ -25,8 +23,23 @@ public class mkldnn_primitive_attr_handle extends Pointer {
     /** Constructs a C handle wrapper.
      *  @param t The C handle to wrap.
      *  @param weak A flag to specify whether to construct a weak wrapper. */
-    public mkldnn_primitive_attr_handle(mkldnn_primitive_attr t/*=0*/, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
-    private native void allocate(mkldnn_primitive_attr t/*=0*/, @Cast("bool") boolean weak/*=false*/);
+    
+    ///
+    ///
+    public mkldnn_primitive_attr_handle(mkldnn_primitive_attr t, @Cast("bool") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }
+    private native void allocate(mkldnn_primitive_attr t, @Cast("bool") boolean weak/*=false*/);
+    public mkldnn_primitive_attr_handle(mkldnn_primitive_attr t) { super((Pointer)null); allocate(t); }
+    private native void allocate(mkldnn_primitive_attr t);
+
+    /** Empty constructor.
+     * 
+     *  Allows declaring an object before actual initialization
+     *  (mostly for convenience).
+     * 
+     *  \warning
+     *      Uninitialized object cannot be used in any library calls.
+     *      Any attempt to use its methods or passing it to the other library
+     *      function will lead to a thrown exception. */
     public mkldnn_primitive_attr_handle() { super((Pointer)null); allocate(); }
     private native void allocate();
 
@@ -40,6 +53,7 @@ public class mkldnn_primitive_attr_handle extends Pointer {
     public native void reset(mkldnn_primitive_attr t);
 
     /** Returns the value of the underlying C handle. */
+    public native mkldnn_primitive_attr get(@Cast("bool") boolean allow_emtpy/*=false*/);
     public native mkldnn_primitive_attr get();
 
     public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef mkldnn_primitive_attr_handle other);

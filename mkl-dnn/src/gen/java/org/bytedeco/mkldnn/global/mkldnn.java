@@ -8,8 +8,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 public class mkldnn extends org.bytedeco.mkldnn.presets.mkldnn {
     static { Loader.load(); }
 
@@ -19,13 +17,13 @@ public class mkldnn extends org.bytedeco.mkldnn.presets.mkldnn {
 // Targeting ../primitive_vector.java
 
 
-// Targeting ../memory_primitive_desc_vector.java
+// Targeting ../IntMemoryMap.java
 
 
-// Parsed from mkldnn_types.h
+// Parsed from mkldnn_config.h
 
 /*******************************************************************************
-* Copyright 2016-2018 Intel Corporation
+* Copyright 2019 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -40,491 +38,695 @@ public class mkldnn extends org.bytedeco.mkldnn.presets.mkldnn {
 * limitations under the License.
 *******************************************************************************/
 
+// #ifndef MKLDNN_CONFIG_H
+// #define MKLDNN_CONFIG_H
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif // DOXYGEN_SHOULD_SKIP_THIS
+
+// No runtime (disabled)
+public static final long MKLDNN_RUNTIME_NONE = 0L;
+// Sequential runtime (CPU only)
+public static final long MKLDNN_RUNTIME_SEQ = 1L;
+// OpenMP runtime (CPU only)
+public static final long MKLDNN_RUNTIME_OMP = 2L;
+// TBB runtime (CPU only)
+public static final long MKLDNN_RUNTIME_TBB = 4L;
+// OpenCL runtime
+public static final long MKLDNN_RUNTIME_OCL = 256L;
+
+// MKL-DNN CPU engine runtime
+public static final long MKLDNN_CPU_RUNTIME = MKLDNN_RUNTIME_OMP;
+
+// MKL-DNN GPU engine runtime
+public static final long MKLDNN_GPU_RUNTIME = MKLDNN_RUNTIME_NONE;
+
+// #if defined(MKLDNN_CPU_RUNTIME) && defined(MKLDNN_GPU_RUNTIME)
+// #    if (MKLDNN_CPU_RUNTIME == MKLDNN_RUNTIME_NONE)
+//             || (MKLDNN_CPU_RUNTIME == MKLDNN_RUNTIME_OCL)
+// #        error "Unexpected MKLDNN_CPU_RUNTIME"
+// #    endif
+// #    if (MKLDNN_GPU_RUNTIME != MKLDNN_RUNTIME_NONE)
+//             && (MKLDNN_GPU_RUNTIME != MKLDNN_RUNTIME_OCL)
+// #        error "Unexpected MKLDNN_GPU_RUNTIME"
+// #    endif
+// #else
+// #    error "BOTH MKLDNN_CPU_RUNTIME and MKLDNN_GPU_RUNTIME must be defined"
+// #endif
+
+// #endif
+
+
+// Parsed from mkldnn_types.h
+
+/*******************************************************************************
+* Copyright 2016-2019 Intel Corporation
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*******************************************************************************/
+
+/** \file
+/** C API types definitions */
+
 // #ifndef MKLDNN_TYPES_H
 // #define MKLDNN_TYPES_H
 
 // #ifdef __cplusplus
-// #endif
-
-// #ifndef DOXYGEN_SHOULD_SKIP_THIS
-// #endif
 // Targeting ../mkldnn_version_t.java
 
 
 
-/** Status values returned by Intel(R) MKL-DNN functions. */
+/** Status values returned by the library functions. */
 /** enum mkldnn_status_t */
 public static final int
     /** The operation was successful */
     mkldnn_success = 0,
     /** The operation failed due to an out-of-memory condition */
     mkldnn_out_of_memory = 1,
-    /** The operation failed and should be retried */
-    mkldnn_try_again = 2,
-    /** The operation failed because of incorrect function arguments  */
-    mkldnn_invalid_arguments = 3,
-    /** The operation failed because a primitive was not ready for execution */
-    mkldnn_not_ready = 4,
-    /** The operation failed because requested functionality is not implemented
-     */
-    mkldnn_unimplemented = 5,
+    /** The operation failed because of incorrect function arguments */
+    mkldnn_invalid_arguments = 2,
+    /** The operation failed because requested functionality is not implemented */
+    mkldnn_unimplemented = 3,
     /** Primitive iterator passed over last primitive descriptor */
-    mkldnn_iterator_ends = 6,
+    mkldnn_iterator_ends = 4,
     /** Primitive or engine failed on execution */
-    mkldnn_runtime_error = 7,
+    mkldnn_runtime_error = 5,
     /** Queried element is not required for given primitive */
-    mkldnn_not_required = 8;
+    mkldnn_not_required = 6;
 
 /** Data type specification */
 /** enum mkldnn_data_type_t */
 public static final int
     /** Undefined data type, used for empty memory descriptors. */
     mkldnn_data_type_undef = 0,
+    /** 16-bit/half-precision floating point. */
+    mkldnn_f16 = 1,
+    /** non-standard 16-bit (bfloat16 w/ 7 bit mantissa) floating point. */
+    mkldnn_bf16 = 2,
     /** 32-bit/single-precision floating point. */
-    mkldnn_f32 = 1,
+    mkldnn_f32 = 3,
     /** 32-bit signed integer. */
-    mkldnn_s32 = 2,
-    /** 16-bit signed integer. */
-    mkldnn_s16 = 4,
+    mkldnn_s32 = 4,
     /** 8-bit signed integer. */
     mkldnn_s8 = 5,
     /** 8-bit unsigned integer. */
-    mkldnn_u8 = 6,
-    /** bfloat 16-bit. */
-    mkldnn_bf16 = 7;
+    mkldnn_u8 = 6;
 
-/** Rounding mode */
-/** enum mkldnn_round_mode_t */
+/** Memory format kind */
+/** enum mkldnn_format_kind_t */
 public static final int
-    /** Round nearest */
-    mkldnn_round_nearest = 1,
-    /** Round down */
-    mkldnn_round_down = 2;
-
-/** Memory format specification.
- *
- * Intel MKL-DNN formats describe physical data layout. The physical layout
- * is described as a sequence of the dimensions as they are laid out in the
- * memory (from the outer-most to the inner-most). Note that this order
- * doesn't affect the logical order of the dimensions that is kept in the
- * {@code dims} field of the mkldnn_memory_desc_t structure. The logical order of the
- * dimensions is specified by the type of tensor.
- *
- * For example, CNN 5D tensor always has its logical dimensions in the order
- * {@code (batch, channels, depth, height, width)}, while the physical layout might be
- * #mkldnn_ncdhw or #mkldnn_ndhwc:
- *
- * ~~~cpp
- * int batch = 2, channels = 16, depth = 13, height = 13, width = 13;
- *
- * int ndims = 5; // 5D tensor
- * mkldnn_dims_t dims = {batch, channels, depth, height, width};
- *
- * mkldnn_memory_desc_t data_in_ncdhw;
- * mkldnn_memory_desc_init(&data_in_ncdhw, 5, dims, mlkdnn_ncdhw);
- *
- * // note that in both cases dims passed are the same
- * mkldnn_memory_desc_t data_in_ndhwc;
- * mkldnn_memory_desc_init(&data_in_ndhwc, 5, dims, mlkdnn_ndhwc);
- * ~~~
- *
- * The following notation applies to memory format names:
- *  - \c 'n' denotes the mini-batch dimension
- *  - \c 'c' denotes a channels dimension
- *  - When there are multiple channel dimensions (for example, in convolution
- *    weights tensor), \c 'i' and \c 'o' denote dimensions of input and output
- *    channels
- *  - \c 'd', \c 'h', and \c 'w' denote spatial depth, height, and width
- *    respectively
- *  - Upper-case letters indicate that the data is laid out in blocks
- *    for a particular dimension. In such cases, the format name contains both
- *    upper- and lower-case letters for that dimension with a lower-case letter
- *    preceded by the block size. For example: \c 'mkldnn_nChw8c' describes a
- *    format where the outermost dimension is mini-batch, followed by the
- *    channel block number, followed by the spatial height and width, and
- *    finally followed by 8-element channel blocks.
- *
- * \note
- *    Channel designations can be different. For example, both the \c
- *    'mkldnn_nc' and \c 'mkldnn_io' formats can be used to describe a 2D
- *    tensor.
- *
- * @see \ref understanding_memory_formats
- */
-/** enum mkldnn_memory_format_t */
-public static final int
-    /** Undefined memory format, used for empty memory descriptors. */
-    mkldnn_format_undef = 0,
-    /** Unspecified format. The primitive selects a format
-     * automatically. */
-    mkldnn_any = 1,
+    /** Undefined memory format kind, used for empty memory descriptors. */
+    mkldnn_format_kind_undef = 0,
+    /** Unspecified format kind.
+     *  The primitive selects a format automatically. */
+    mkldnn_format_kind_any = 1,
     /** A tensor in a generic format described by the stride and blocking
-     * values in each dimension. See #mkldnn_blocking_desc_t for more
-     * information. */
+     *  values in each dimension. See \ref mkldnn_blocking_desc_t for more
+     *  information. */
     mkldnn_blocked = 2,
-    /** 1D data tensor. */
-    mkldnn_x = 3,
-    /** 2D data tensor. */
-    mkldnn_nc = 4,
-    /** 3D data tensor with the physical layout \c ncw.
-     * Logical dimensions come in the order: (n, c, w) */
-    mkldnn_ncw = 5,
-    /** 3D data tensor with the physical layout \c nwc.
-     * Logical dimensions come in the order: (n, c, w) */
-    mkldnn_nwc = 6,
-    /** 4D data tensor with the physical layout \c nchw, used in Caffe.
-     * Logical dimensions come in the order: (n, c, h, w) */
-    mkldnn_nchw = 7,
-    /** 4D data tensor with the physical layout \c nhwc, used in TensorFlow.
-     * Logical dimensions come in the order: (n, c, h, w) */
-    mkldnn_nhwc = 8,
-    /** 4D data tensor with the physical layout \c chwn, used in Neon.
-     * Logical dimensions come in the order: (n, c, h, w) */
-    mkldnn_chwn = 9,
-    /** 5D data tensor with the physical layout \c ncdhw.
-     * Logical dimensions come in the order: (n, c, d, h, w) */
-    mkldnn_ncdhw = 10,
-    /** 5D data tensor with the physical layout \c ndhwc, used in TensorFlow.
-     * Logical dimensions come in the order: (n, c, d, h, w) */
-    mkldnn_ndhwc = 11,
-    /** 2D weights tensor with physical layout \c oi.
-     * Logical dimensions come in the order: (o, i) */
-    mkldnn_oi = 12,
-    /** 2D weights tensor with physical layout \c io.
-     * Logical dimensions come in the order: (o, i) */
-    mkldnn_io = 13,
-    /** 3D weights tensor with physical layout \c oiw.
-     * Logical dimensions come in the order: (o, i, w) */
-    mkldnn_oiw = 14,
-    /** 3D weights tensor with physical layout \c owi.
-     * Logical dimensions come in the order: (o, i, w) */
-    mkldnn_owi = 15,
-    /** 3D weights tensor with physical layout \c wio.
-     * Logical dimensions come in the order: (o, i, w) */
-    mkldnn_wio = 16,
-    /** 4D weights tensor with physical layout \c oihw, used in Caffe.
-     * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_oihw = 17,
-    /** 4D weights tensor with physical layout \c hwio, used in TensorFlow.
-     * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_hwio = 18,
-    /** 4D weights tensor with physical layout \c ohwi.
-     * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_ohwi = 19,
-    /** 4D weights tensor with physical layout \c ihwo.
-     * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_ihwo = 20,
-    /** 4D weights tensor with physical layout \c iohw.
-     * Logical dimensions come in the order: (o, i, h, w) */
-    mkldnn_iohw = 21,
-    /** 5D weights tensor with physical layout \c iodhw, used in Caffe.
-     * Logical dimensions come in the order: (o, i, d, h, w) */
-    mkldnn_oidhw = 22,
-    /** 5D weights tensor with physical layout \c dhwio, used in TensorFlow.
-     * Logical dimensions come in the order: (o, i, d, h, w) */
-    mkldnn_dhwio = 23,
-    /** 5D weights tensor with physical layout \c odhwi.
-     * Logical dimensions come in the order: (o, i, d, h, w) */
-    mkldnn_odhwi = 24,
-    /** 4D grouped weights tensor with the physical layout \c goiw.
-     * Logical dimensions come in the order: (g, o, i, w) */
-    mkldnn_goiw = 25,
-    /** 5D grouped weights tensor with the physical layout \c goihw,
-     * used in Caffe.
-     * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_goihw = 26,
-    /** 5D grouped weights tensor with the physical layout \c hwigo,
-     * used in TensorFlow.
-     * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_hwigo = 27,
-    /** 5D grouped weights tensor with the physical layout \c giohw.
-     * Logical dimensions come in the order: (g, o, i, h, w) */
-    mkldnn_giohw = 28,
-    /** 6D grouped weights tensor with the physical layout \c goidhw,
-     * used in Caffe.
-     * Logical dimensions come in the order: (g, o, i, d, h, w) */
-    mkldnn_goidhw = 29,
-    /** 3D RNN data tensor in the format (batch, seq_length, input channels). */
-    mkldnn_ntc = 30,
-    /** 3D RNN data tensor in the format (seq_length, batch, input channels). */
-    mkldnn_tnc = 31,
-    /** 5D RNN states tensor in the format (num_layers, num_directions,
-     * num_states, batch, state channels). */
-    mkldnn_ldsnc = 32,
-    /** 5D RNN weights tensor in the format (num_layers, num_directions,
-     *  input_channels, num_gates, output_channels).
-     *
-     *  - For LSTM cells, the gates order is input, forget, candidate
-     *    and output gate.
-     *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldigo = 33,
-    /** 5D RNN weights tensor in the format (num_layers, num_directions,
-     * num_gates, output_channels, input_channels).
-     *
-     *  - For LSTM cells, the gates order is input, forget, candidate
-     *    and output gate.
-     *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldgoi = 34,
-    /** 4D RNN bias tensor in the format (num_layers, num_directions,
-     * num_gates, output_channels).
-     *
-     *  - For LSTM cells, the gates order is input, forget, candidate
-     *    and output gate.
-     *  - For GRU cells, the gates order is update, reset and output gate. */
-    mkldnn_ldgo = 35,
+    /** Weights format used in 8bit Winograd convolution */
+    mkldnn_format_kind_wino = 3,
+    /** Packed weights format used in RNN */
+    mkldnn_format_kind_rnn_packed = 4;
 
-    /* Opaque data types, are not to be used explicitly */
-
-    /* data */
-    mkldnn_nCw4c = 36,
-    mkldnn_nCw8c = 37,
-    mkldnn_nCw16c = 38,
-    mkldnn_nChw4c = 39,
-    mkldnn_nChw8c = 40,
-    mkldnn_nChw16c = 41,
-    mkldnn_nCdhw4c = 42,
-    mkldnn_nCdhw8c = 43,
-    mkldnn_nCdhw16c = 44,
-
-    /* weights, 3D */
-    mkldnn_Owi4o = 45,
-    mkldnn_OIw4i4o = 46,
-    mkldnn_Owi8o = 47,
-    mkldnn_OIw8i8o = 48,
-    mkldnn_OIw8o8i = 49,
-    mkldnn_OIw16i16o = 50,
-    mkldnn_OIw16o16i = 51,
-    mkldnn_Oiw4o = 52,
-    mkldnn_Oiw16o = 53,
-    mkldnn_Owi16o = 54,
-    mkldnn_OIw8i16o2i = 55,
-    mkldnn_OIw8o16i2o = 56,
-    mkldnn_IOw8o16i2o = 57,
-    mkldnn_IOw16o16i = 58,
-    mkldnn_OIw4i16o4i = 59,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * and containing the values:
-     * O[i:0,OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
-    mkldnn_OIw4i16o4i_s8s8 = 60,
-
-    /* weights, 4D */
-    /** weights format with additional buffer
-     * size equal to the number of output channels
-     * and containing the values:
-     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwio_s8s8 = 61,
-    mkldnn_oIhw8i = 62,
-    mkldnn_oIhw16i = 63,
-    mkldnn_OIhw4i4o = 64,
-    mkldnn_OIhw8i8o = 65,
-    mkldnn_OIhw16i16o = 66,
-    mkldnn_OIhw4i16o4i = 67,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * and containing the values:
-     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_OIhw4i16o4i_s8s8 = 68,
-    mkldnn_OIhw8i16o2i = 69,
-    mkldnn_IOhw8i16o2i = 70,
-    mkldnn_OIhw8o16i2o = 71,
-    mkldnn_IOhw8o16i2o = 72,
-    mkldnn_OIhw8o8i = 73,
-    mkldnn_OIhw16o16i = 74,
-    mkldnn_IOhw16o16i = 75,
-    mkldnn_Oihw8o = 76,
-    mkldnn_Oihw4o = 77,
-    mkldnn_Oihw16o = 78,
-    mkldnn_Ohwi8o = 79,
-    mkldnn_Ohwi4o = 80,
-    mkldnn_Ohwi16o = 81,
-    mkldnn_OhIw16o4i = 82,
-
-    /* weights, 5D */
-    mkldnn_oIdhw8i = 83,
-    mkldnn_oIdhw16i = 84,
-    mkldnn_OIdhw4i4o = 85,
-    mkldnn_Odhwi4o = 86,
-    mkldnn_OIdhw8i8o = 87,
-    mkldnn_OIdhw8o8i = 88,
-    mkldnn_Odhwi8o = 89,
-    mkldnn_OIdhw16i16o = 90,
-    mkldnn_OIdhw16o16i = 91,
-    mkldnn_Oidhw4o = 92,
-    mkldnn_Oidhw16o = 93,
-    mkldnn_Odhwi16o = 94,
-    mkldnn_OIdhw8i16o2i = 95,
-    mkldnn_OIdhw8o16i2o = 96,
-    mkldnn_IOdhw8o16i2o = 97,
-
-    /* weights w/ groups, 4D */
-    mkldnn_gOwi4o = 98,
-    mkldnn_gOIw4i4o = 99,
-    mkldnn_gOwi8o = 100,
-    mkldnn_gOIw8o8i = 101,
-    mkldnn_gOIw8i8o = 102,
-    mkldnn_gOIw16i16o = 103,
-    mkldnn_gOIw16o16i = 104,
-    mkldnn_gOiw4o = 105,
-    mkldnn_gOiw16o = 106,
-    mkldnn_gOwi16o = 107,
-    mkldnn_gOIw8i16o2i = 108,
-    mkldnn_gOIw8o16i2o = 109,
-    mkldnn_gIOw8o16i2o = 110,
-    mkldnn_gIOw16o16i = 111,
-    mkldnn_gOIw4i16o4i = 112,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * multiplied by number of groups and containing the values:
-     * O[i:0,G*OC] = -128 * SUM(j:0,IC;w:0,W)(weights(i,j,w))*/
-    mkldnn_gOIw4i16o4i_s8s8 = 113,
-    mkldnn_Goiw16g = 114,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of groups and containing the values:
-     * O[i:0,G] = -128 * SUM(w:0,W)(weights(i,i,w))*/
-    mkldnn_Goiw16g_s8s8 = 115,
-
-    /* weights w/ groups, 5D */
-    /** weights format with additional buffer
-     * size equal to the number of output channels
-     * multiplied by number of groups and containing the values:
-     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_hwigo_s8s8 = 116,
-    mkldnn_gOIhw4i4o = 117,
-    mkldnn_gOIhw8i8o = 118,
-    mkldnn_gOIhw16i16o = 119,
-    mkldnn_gOIhw4i16o4i = 120,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * multiplied by number of groups and containing the values:
-     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw4i16o4i_s8s8 = 121,
-    mkldnn_gOIhw2i8o4i = 122,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * multiplied by number of groups and containing the values:
-     * O[i:0,G*OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw2i8o4i_s8s8 = 123,
-    mkldnn_gOIhw8i16o2i = 124,
-    mkldnn_gIOhw8i16o2i = 125,
-    mkldnn_gOIhw8o16i2o = 126,
-    mkldnn_gIOhw8o16i2o = 127,
-    mkldnn_gOIhw4o4i = 128,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of output channels
-     * and containing the values:
-     * O[i:0,OC] = -128 * SUM(j:0,IC;h:0,H;w:0,W)(weights(i,j,h,w))*/
-    mkldnn_gOIhw4o4i_s8s8 = 129,
-    mkldnn_gOIhw8o8i = 130,
-    mkldnn_gOIhw16o16i = 131,
-    mkldnn_gIOhw16o16i = 132,
-    mkldnn_gOihw8o = 133,
-    mkldnn_gOihw4o = 134,
-    mkldnn_gOihw16o = 135,
-    mkldnn_gOhwi8o = 136,
-    mkldnn_gOhwi4o = 137,
-    mkldnn_gOhwi16o = 138,
-    mkldnn_Goihw8g = 139,
-    mkldnn_Goihw16g = 140,
-    /** blocked weights format with additional buffer
-     * with size equal to the number of groups and containing the values:
-     * O[i:0,G] = -128 * SUM(h:0,H;w:0,W)(weights(i,i,h,w))*/
-    mkldnn_Goihw16g_s8s8 = 141,
-    mkldnn_gOhIw16o4i = 142,
-
-    /* weights w/ groups, 6D */
-    mkldnn_gOIdhw4i4o = 143,
-    mkldnn_gOdhwi4o = 144,
-    mkldnn_gOIdhw8i8o = 145,
-    mkldnn_gOIdhw8o8i = 146,
-    mkldnn_gOdhwi8o = 147,
-    mkldnn_gOIdhw8i16o2i = 148,
-    mkldnn_gOIdhw8o16i2o = 149,
-    mkldnn_gIOdhw8o16i2o = 150,
-    mkldnn_gOIdhw16i16o = 151,
-    mkldnn_gOIdhw16o16i = 152,
-    mkldnn_gOidhw4o = 153,
-    mkldnn_gOidhw16o = 154,
-    mkldnn_gOdhwi16o = 155,
-
-    mkldnn_wino_fmt = 156,
-
-    mkldnn_rnn_packed = 157,
-
-    /** Just a sentinel, not real memory format. Must be changed after new
-     * format is added. */
-    mkldnn_format_last = 158;
-
-/** Kinds of padding. Define how to interpret the data in padding regions. */
-/** enum mkldnn_padding_kind_t */
+/** Memory format tag specification.
+ * 
+ *  Intel MKL-DNN formats describe physical data layout. The physical layout
+ *  is described as a sequence of the dimensions as they are laid out in the
+ *  memory (from the outer-most to the inner-most). Note that this order
+ *  doesn't affect the logical order of the dimensions that is kept in the
+ *  {@code dims} field of the mkldnn_memory_desc_t structure. The logical order of the
+ *  dimensions is specified by the primitive that uses the tensor.
+ * 
+ *  For example, CNN 5D tensor always has its logical dimensions in the order
+ *  {@code (batch, channels, depth, height, width)}, while the physical layout might be
+ *  {@code NCDHW} (corresponds to #mkldnn_ncdhw format tag) or
+ *  {@code NDHWC} (corresponds to #mkldnn_ndhwc format tag).
+ * 
+ *  ~~~cpp
+ *  int batch = 2, channels = 16, depth = 13, height = 13, width = 13;
+ * 
+ *  int ndims = 5; // 5D tensor
+ *  mkldnn_dims_t dims = {batch, channels, depth, height, width};
+ *  mkldnn_memory_desc_t data_in_ncdhw;
+ *  mkldnn_memory_desc_init_by_tag(
+ *       &data_in_ncdhw, 5, dims, mkldnn_f32, mkldnn_ncdhw);
+ * 
+ *  // note that in both cases dims passed are the same
+ *  mkldnn_memory_desc_t data_in_ndhwc;
+ *  mkldnn_memory_desc_init_by_tag(
+ *       &data_in_ndhwc, 5, dims, mkldnn_f32, mkldnn_ndhwc);
+ *  ~~~
+ * 
+ *  Memory format tags can be further divided into two categories:
+ *   - Domain-agnostic names, i.e. names the do not depend on the tensor usage
+ *     in the specific primitive. These names use letters from {@code a} to {@code l} to
+ *     denote logical dimension from 1 to 12, and form the order in which the
+ *     dimensions are laid in memory. For instance, #mkldnn_ab is used to denote
+ *     2D tensor where the second logical dimension (aka {@code b}) is the innermost,
+ *     i.e. has stride = 1, and the first logical dimension ({@code a}) laid out in
+ *     memory with stride equal to the size of second dimension. On the other
+ *     hand, #mkldnn_ba is just transposed version of the same tensor: the
+ *     first dimension ({@code a}) becomes the innermost one.
+ *   - Domain-specific names, i.e. names that make sense only in the context of
+ *     a certain domain, such as CNN. This names are just aliases to the
+ *     corresponding domain-agnostic tags and used mostly for the convenience.
+ *     For example, #mkldnn_nc is used to denote 2D CNN activations tensor
+ *     memory format, where channels are the innermost dimension and batch is an
+ *     outermost one. Moreover, #mkldnn_nc is just an alias to #mkldnn_ab,
+ *     since for Intel MKL-DNN CNN primitives the logical dimensions of
+ *     activations tensors come in order: batch, channels, spatial.
+ *     In other words, batch corresponds to the first logical dimension ({@code a}),
+ *     channels correspond to the second one ({@code b}).
+ * 
+ *  The following domain-specific notation applies to memory format tags:
+ *   - \c 'n' denotes the mini-batch dimension
+ *   - \c 'c' denotes a channels dimension
+ *   - When there are multiple channel dimensions (for example, in convolution
+ *     weights tensor), \c 'i' and \c 'o' denote dimensions of input and output
+ *     channels
+ *   - \c 'd', \c 'h', and \c 'w' denote spatial depth, height, and width
+ *     respectively
+ * 
+ *  Upper-case letters indicate that the data is laid out in blocks for a
+ *  particular dimension. In such cases, the format name contains both upper-
+ *  and lower-case letters for that dimension with a lower-case letter preceded
+ *  by the block size. For example: #mkldnn_nChw8c describes a format where the
+ *  outermost dimension is mini-batch, followed by the channel block number,
+ *  followed by the spatial height and width, and finally followed by 8-element
+ *  channel blocks.
+ * 
+ *  @see \ref dev_guide_understanding_memory_formats */
+/** enum mkldnn_format_tag_t */
 public static final int
-    /** The data in padding regions is zero. */
-    mkldnn_padding_zero = 0;
+    /** Undefined memory format tag */
+    mkldnn_format_tag_undef = 0,
+    /** Undefined memory format tag.
+     *  The primitive selects a format automatically. */
+    mkldnn_format_tag_any = 1,
+
+    // Semantic agnostic section
+    // The physical order of dimensions is defined by the permutation of the
+    // characters, assuming that ab..z defines the natural order.
+
+    // Plain formats
+
+    /** plain 1D tensor */
+    mkldnn_a = 2,
+    /** plain 2D tensor */
+    mkldnn_ab = 3,
+    /** plain 3D tensor */
+    mkldnn_abc = 4,
+    /** plain 4D tensor */
+    mkldnn_abcd = 5,
+    /** plain 5D tensor */
+    mkldnn_abcde = 6,
+    /** plain 6D tensor */
+    mkldnn_abcdef = 7,
+
+    // Permuted plain formats
+
+    /** permuted 5D tensor */
+    mkldnn_abdec = 8,
+    /** permuted 3D tensor */
+    mkldnn_acb = 9,
+    /** permuted 5D tensor */
+    mkldnn_acbde = 10,
+    /** permuted 4D tensor */
+    mkldnn_acdb = 11,
+    /** permuted 5D tensor */
+    mkldnn_acdeb = 12,
+    /** permuted 2D tensor */
+    mkldnn_ba = 13,
+    /** permuted 3D tensor */
+    mkldnn_bac = 14,
+    /** permuted 4D tensor */
+    mkldnn_bacd = 15,
+    /** permuted 3D tensor */
+    mkldnn_bca = 16,
+    /** permuted 4D tensor */
+    mkldnn_bcda = 17,
+    /** permuted 5D tensor */
+    mkldnn_bcdea = 18,
+    /** permuted 3D tensor */
+    mkldnn_cba = 19,
+    /** permuted 4D tensor */
+    mkldnn_cdba = 20,
+    /** permuted 5D tensor */
+    mkldnn_cdeba = 21,
+    /** permuted 5D tensor */
+    mkldnn_decab = 22,
+
+    // Opaque blocked formats
+
+    mkldnn_Abc16a = 23,
+    mkldnn_ABc16a16b = 24,
+    /** 3D tensor blocked by 2nd dimension with block size 16 */
+    mkldnn_aBc16b = 25,
+    mkldnn_ABc16b16a = 26,
+    mkldnn_Abc4a = 27,
+    /** 3D tensor blocked by 2nd dimension with block size 4 */
+    mkldnn_aBc4b = 28,
+    mkldnn_ABc4b16a4b = 29,
+    mkldnn_ABc4b4a = 30,
+    mkldnn_ABc8a16b2a = 31,
+    mkldnn_ABc8a8b = 32,
+    /** 3D tensor blocked by 2nd dimension with block size 8 */
+    mkldnn_aBc8b = 33,
+    mkldnn_ABc8b16a2b = 34,
+    mkldnn_BAc8a16b2a = 35,
+    mkldnn_ABc8b8a = 36,
+    mkldnn_Abcd16a = 37,
+    mkldnn_ABcd16a16b = 38,
+    mkldnn_ABcd32a32b = 39,
+    /** 4D tensor blocked by 2nd dimension with block size 16 */
+    mkldnn_aBcd16b = 40,
+    mkldnn_ABcd16b16a = 41,
+    mkldnn_aBCd16b16c = 42,
+    mkldnn_aBCd16c16b = 43,
+    mkldnn_Abcd4a = 44,
+    /** 4D tensor blocked by 2nd dimension with block size 4 */
+    mkldnn_aBcd4b = 45,
+    mkldnn_ABcd4b16a4b = 46,
+    mkldnn_ABcd4b4a = 47,
+    mkldnn_aBCd4c16b4c = 48,
+    mkldnn_aBCd4c4b = 49,
+    mkldnn_ABcd8a16b2a = 50,
+    mkldnn_ABcd8a8b = 51,
+    /** 4D tensor blocked by 2nd dimension with block size 8 */
+    mkldnn_aBcd8b = 52,
+    mkldnn_ABcd8b16a2b = 53,
+    mkldnn_aBCd8b16c2b = 54,
+    mkldnn_BAcd8a16b2a = 55,
+    /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
+    mkldnn_ABcd8b8a = 56,
+    mkldnn_aBCd8b8c = 57,
+    mkldnn_aBCd8c16b2c = 58,
+    mkldnn_ABcde8a16b2a = 59,
+    mkldnn_aCBd8b16c2b = 60,
+    mkldnn_aBCd8c8b = 61,
+    mkldnn_Abcde16a = 62,
+    mkldnn_ABcde16a16b = 63,
+    mkldnn_BAcde8a16b2a = 64,
+    /** 5D tensor blocked by 2nd dimension with block size 16 */
+    mkldnn_aBcde16b = 65,
+    mkldnn_ABcde16b16a = 66,
+    mkldnn_aBCde16b16c = 67,
+    mkldnn_aBCde16c16b = 68,
+    mkldnn_aBCde2c8b4c = 69,
+    mkldnn_Abcde4a = 70,
+    /** 5D tensor blocked by 2nd dimension with block size 4 */
+    mkldnn_aBcde4b = 71,
+    mkldnn_ABcde4b4a = 72,
+    mkldnn_aBCde4b4c = 73,
+    mkldnn_aBCde4c16b4c = 74,
+    mkldnn_aBCde4c4b = 75,
+    mkldnn_Abcde8a = 76,
+    mkldnn_ABcde8a8b = 77,
+    mkldnn_BAcde16b16a = 78,
+    /** 5D tensor blocked by 2nd dimension with block size 8 */
+    mkldnn_aBcde8b = 79,
+    mkldnn_ABcde8b16a2b = 80,
+    mkldnn_aBCde8b16c2b = 81,
+    mkldnn_aCBde8b16c2b = 82,
+    mkldnn_ABcde8b8a = 83,
+    mkldnn_aBCde8b8c = 84,
+    mkldnn_ABcd4a8b8a4b = 85,
+    mkldnn_ABcd2a8b8a2b = 86,
+    mkldnn_aBCde4b8c8b4c = 87,
+    mkldnn_aBCde2b8c8b2c = 88,
+    mkldnn_aBCde8c16b2c = 89,
+    mkldnn_aBCde8c8b = 90,
+    /** 6D tensor blocked by 2nd dimension with block size 16 */
+    mkldnn_aBcdef16b = 91,
+    mkldnn_aBCdef16b16c = 92,
+    mkldnn_aBCdef16c16b = 93,
+    /** 6D tensor blocked by 2nd dimension with block size 4 */
+    mkldnn_aBcdef4b = 94,
+    mkldnn_aBCdef4c4b = 95,
+    mkldnn_aBCdef8b8c = 96,
+    mkldnn_aBCdef8c16b2c = 97,
+    mkldnn_aBCdef8b16c2b = 98,
+    mkldnn_aCBdef8b16c2b = 99,
+    mkldnn_aBCdef8c8b = 100,
+    mkldnn_aBdc16b = 101,
+    mkldnn_aBdc4b = 102,
+    mkldnn_aBdc8b = 103,
+    mkldnn_aBdec16b = 104,
+    mkldnn_aBdec32b = 105,
+    mkldnn_aBdec4b = 106,
+    mkldnn_aBdec8b = 107,
+    mkldnn_aBdefc16b = 108,
+    mkldnn_aCBdef16c16b = 109,
+    mkldnn_aBdefc4b = 110,
+    mkldnn_aBdefc8b = 111,
+    mkldnn_Abcdef16a = 112,
+    mkldnn_Acb16a = 113,
+    mkldnn_Acb4a = 114,
+    mkldnn_Acb8a = 115,
+    mkldnn_aCBd16b16c = 116,
+    mkldnn_aCBd16c16b = 117,
+    mkldnn_aCBde16b16c = 118,
+    mkldnn_aCBde16c16b = 119,
+    mkldnn_Acdb16a = 120,
+    mkldnn_Acdb32a = 121,
+    mkldnn_Acdb4a = 122,
+    mkldnn_Acdb8a = 123,
+    mkldnn_Acdeb16a = 124,
+    mkldnn_Acdeb4a = 125,
+    mkldnn_Acdeb8a = 126,
+    mkldnn_BAc16a16b = 127,
+    mkldnn_BAc16b16a = 128,
+    mkldnn_BAcd16a16b = 129,
+    mkldnn_BAcd16b16a = 130,
+
+    /** Just a sentinel, not real memory format tag. Must be changed after new
+     *  format tag is added. */
+    mkldnn_format_tag_last = 131,
+
+    // Aliases
+
+    /** 1D tensor, an alias to #mkldnn_a */
+    mkldnn_x = mkldnn_a,
+    /** 2D CNN activations tensor, an alias to #mkldnn_ab */
+    mkldnn_nc = mkldnn_ab,
+    /** 2D CNN activations tensor, an alias to #mkldnn_ba */
+    mkldnn_cn = mkldnn_ba,
+    /** 3D CNN activations tensor, an alias to #mkldnn_abc */
+    mkldnn_ncw = mkldnn_abc,
+    /** 3D CNN activations tensor, an alias to #mkldnn_acb */
+    mkldnn_nwc = mkldnn_acb,
+    /** 4D CNN activations tensor, an alias to #mkldnn_abcd */
+    mkldnn_nchw = mkldnn_abcd,
+    /** 4D CNN activations tensor, an alias to #mkldnn_acdb */
+    mkldnn_nhwc = mkldnn_acdb,
+    /** 4D CNN activations tensor, an alias to #mkldnn_bcda */
+    mkldnn_chwn = mkldnn_bcda,
+    /** 5D CNN activations tensor, an alias to #mkldnn_abcde */
+    mkldnn_ncdhw = mkldnn_abcde,
+    /** 5D CNN activations tensor, an alias to #mkldnn_acdeb */
+    mkldnn_ndhwc = mkldnn_acdeb,
+
+    /** 2D CNN weights tensor, an alias to #mkldnn_ab */
+    mkldnn_oi = mkldnn_ab,
+    /** 2D CNN weights tensor, an alias to #mkldnn_ba */
+    mkldnn_io = mkldnn_ba,
+    /** 3D CNN weights tensor, an alias to #mkldnn_abc */
+    mkldnn_oiw = mkldnn_abc,
+    /** 3D CNN weights tensor, an alias to #mkldnn_acb */
+    mkldnn_owi = mkldnn_acb,
+    /** 3D CNN weights tensor, an alias to #mkldnn_cba */
+    mkldnn_wio = mkldnn_cba,
+    /** 3D CNN weights tensor, an alias to #mkldnn_bca */
+    mkldnn_iwo = mkldnn_bca,
+    /** 4D CNN weights tensor, an alias to #mkldnn_abcd */
+    mkldnn_oihw = mkldnn_abcd,
+    /** 4D CNN weights tensor, an alias to #mkldnn_cdba */
+    mkldnn_hwio = mkldnn_cdba,
+    /** 4D CNN weights tensor, an alias to #mkldnn_acdb */
+    mkldnn_ohwi = mkldnn_acdb,
+    /** 4D CNN weights tensor, an alias to #mkldnn_bcda */
+    mkldnn_ihwo = mkldnn_bcda,
+    /** 4D CNN weights tensor, an alias to #mkldnn_bacd */
+    mkldnn_iohw = mkldnn_bacd,
+    /** 5D CNN weights tensor, an alias to #mkldnn_abcde */
+    mkldnn_oidhw = mkldnn_abcde,
+    /** 5D CNN weights tensor, an alias to #mkldnn_cdeba */
+    mkldnn_dhwio = mkldnn_cdeba,
+    /** 5D CNN weights tensor, an alias to #mkldnn_acdeb */
+    mkldnn_odhwi = mkldnn_acdeb,
+    /** 5D CNN weights tensor, an alias to #mkldnn_bcdea */
+    mkldnn_idhwo = mkldnn_bcdea,
+
+    /** 4D CNN weights tensor (incl. groups), an alias to #mkldnn_abcd */
+    mkldnn_goiw = mkldnn_abcd,
+    /** 5D CNN weights tensor (incl. groups), an alias to #mkldnn_abcde */
+    mkldnn_goihw = mkldnn_abcde,
+    /** 5D CNN weights tensor (incl. groups), an alias to #mkldnn_decab */
+    mkldnn_hwigo = mkldnn_decab,
+    /** 5D CNN weights tensor (incl. groups), an alias to #mkldnn_acbde */
+    mkldnn_giohw = mkldnn_acbde,
+    /** 6D CNN weights tensor (incl. groups), an alias to #mkldnn_abcdef */
+    mkldnn_goidhw = mkldnn_abcdef,
+
+    /** 3D RNN data tensor in the format (seq_length, batch, input channels). */
+    mkldnn_tnc = mkldnn_abc,
+    /** 3D RNN data tensor in the format (batch, seq_length, input channels). */
+    mkldnn_ntc = mkldnn_bac,
+    /** 4D RNN states tensor in the format (num_layers, num_directions,
+     *  batch, state channels). */
+    
+///
+    mkldnn_ldnc = mkldnn_abcd,
+    /** 5D RNN weights tensor in the format (num_layers, num_directions,
+     *   input_channels, num_gates, output_channels).
+     * 
+     *   - For LSTM cells, the gates order is input, forget, candidate
+     *     and output gate.
+     *   - For GRU cells, the gates order is update, reset and output gate. */
+    
+///
+    mkldnn_ldigo = mkldnn_abcde,
+    /** 5D RNN weights tensor in the format (num_layers, num_directions,
+     *  num_gates, output_channels, input_channels).
+     * 
+     *   - For LSTM cells, the gates order is input, forget, candidate
+     *     and output gate.
+     *   - For GRU cells, the gates order is update, reset and output gate. */
+    
+///
+    mkldnn_ldgoi = mkldnn_abdec,
+    /** 4D RNN bias tensor in the format (num_layers, num_directions,
+     *  num_gates, output_channels).
+     * 
+     *   - For LSTM cells, the gates order is input, forget, candidate
+     *     and output gate.
+     *   - For GRU cells, the gates order is update, reset and output gate. */
+    mkldnn_ldgo = mkldnn_abcd,
+
+    // Opaque data types, are not to be used explicitly
+
+    // data
+
+    /** 5D CNN activations tensor blocked by channels with block size 16,
+     *  an alias to #mkldnn_aBcde16b */
+    mkldnn_nCdhw16c = mkldnn_aBcde16b,
+    /** 5D CNN activations tensor blocked by channels with block size 4,
+     *  an alias to #mkldnn_aBcde4b */
+    mkldnn_nCdhw4c = mkldnn_aBcde4b,
+    /** 5D CNN activations tensor blocked by channels with block size 8,
+     *  an alias to #mkldnn_aBcde8b */
+    mkldnn_nCdhw8c = mkldnn_aBcde8b,
+    /** 4D CNN activations tensor blocked by channels with block size 16,
+     *  an alias to #mkldnn_aBcd16b */
+    mkldnn_nChw16c = mkldnn_aBcd16b,
+    /** 4D CNN activations tensor blocked by channels with block size 4,
+     *  an alias to #mkldnn_aBcd4b */
+    mkldnn_nChw4c = mkldnn_aBcd4b,
+    /** 4D CNN activations tensor blocked by channels with block size 8,
+     *  an alias to #mkldnn_aBcd8b */
+    mkldnn_nChw8c = mkldnn_aBcd8b,
+    /** 3D CNN activations tensor blocked by channels with block size 16,
+     *  an alias to #mkldnn_aBc16b */
+    mkldnn_nCw16c = mkldnn_aBc16b,
+    /** 3D CNN activations tensor blocked by channels with block size 4,
+     *  an alias to #mkldnn_aBc4b */
+    mkldnn_nCw4c = mkldnn_aBc4b,
+    /** 3D CNN activations tensor blocked by channels with block size 8,
+     *  an alias to #mkldnn_aBc8b */
+    mkldnn_nCw8c = mkldnn_aBc8b,
+    mkldnn_NCw16n16c = mkldnn_ABc16a16b,
+    mkldnn_NCdhw16n16c = mkldnn_ABcde16a16b,
+    mkldnn_NChw16n16c = mkldnn_ABcd16a16b,
+    mkldnn_NChw32n32c = mkldnn_ABcd32a32b,
+
+    // weights, 3D
+    mkldnn_IOw16o16i = mkldnn_BAc16a16b,
+    mkldnn_IOw16i16o = mkldnn_BAc16b16a,
+    mkldnn_OIw16i16o = mkldnn_ABc16b16a,
+    mkldnn_OIw16o16i = mkldnn_ABc16a16b,
+    mkldnn_Oiw16o = mkldnn_Abc16a,
+    mkldnn_OIw4i16o4i = mkldnn_ABc4b16a4b,
+    mkldnn_OIw4i4o = mkldnn_ABc4b4a,
+    mkldnn_Oiw4o = mkldnn_Abc4a,
+    mkldnn_OIw8i16o2i = mkldnn_ABc8b16a2b,
+    mkldnn_OIw8i8o = mkldnn_ABc8b8a,
+    mkldnn_OIw8o16i2o = mkldnn_ABc8a16b2a,
+    mkldnn_IOw8o16i2o = mkldnn_BAc8a16b2a,
+    mkldnn_OIw8o8i = mkldnn_ABc8a8b,
+    mkldnn_Owi16o = mkldnn_Acb16a,
+    mkldnn_Owi4o = mkldnn_Acb4a,
+    mkldnn_Owi8o = mkldnn_Acb8a,
+
+    // weights, 4D
+    mkldnn_IOhw16i16o = mkldnn_BAcd16b16a,
+    mkldnn_IOhw16o16i = mkldnn_BAcd16a16b,
+    mkldnn_Ohwi16o = mkldnn_Acdb16a,
+    mkldnn_Ohwi32o = mkldnn_Acdb32a,
+    mkldnn_Ohwi4o = mkldnn_Acdb4a,
+    mkldnn_Ohwi8o = mkldnn_Acdb8a,
+    mkldnn_OIhw16i16o = mkldnn_ABcd16b16a,
+    mkldnn_OIhw16o16i = mkldnn_ABcd16a16b,
+    mkldnn_Oihw16o = mkldnn_Abcd16a,
+    mkldnn_OIhw4i16o4i = mkldnn_ABcd4b16a4b,
+    mkldnn_OIhw4i4o = mkldnn_ABcd4b4a,
+    mkldnn_Oihw4o = mkldnn_Abcd4a,
+    mkldnn_OIhw8i16o2i = mkldnn_ABcd8b16a2b,
+    mkldnn_OIhw8i8o = mkldnn_ABcd8b8a,
+    mkldnn_OIhw8o16i2o = mkldnn_ABcd8a16b2a,
+    mkldnn_IOhw8o16i2o = mkldnn_BAcd8a16b2a,
+    mkldnn_OIhw8o8i = mkldnn_ABcd8a8b,
+
+    // weights, 5D
+    mkldnn_Odhwi16o = mkldnn_Acdeb16a,
+    mkldnn_Odhwi4o = mkldnn_Acdeb4a,
+    mkldnn_Odhwi8o = mkldnn_Acdeb8a,
+    mkldnn_OIdhw16i16o = mkldnn_ABcde16b16a,
+    mkldnn_OIdhw16o16i = mkldnn_ABcde16a16b,
+    mkldnn_Oidhw16o = mkldnn_Abcde16a,
+    mkldnn_OIdhw4i4o = mkldnn_ABcde4b4a,
+    mkldnn_Oidhw4o = mkldnn_Abcde4a,
+    mkldnn_OIdhw8i16o2i = mkldnn_ABcde8b16a2b,
+    mkldnn_OIdhw8i8o = mkldnn_ABcde8b8a,
+    mkldnn_OIdhw8o16i2o = mkldnn_ABcde8a16b2a,
+    mkldnn_IOdhw8o16i2o = mkldnn_BAcde8a16b2a,
+    mkldnn_OIdhw8o8i = mkldnn_ABcde8a8b,
+    mkldnn_IOdhw16i16o = mkldnn_BAcde16b16a,
+
+    // weights w/ groups, 3D
+    mkldnn_Goiw16g = mkldnn_Abcd16a,
+    mkldnn_gIOw16o16i = mkldnn_aCBd16b16c,
+    mkldnn_gIOw16i16o = mkldnn_aCBd16c16b,
+    mkldnn_gOIw16i16o = mkldnn_aBCd16c16b,
+    mkldnn_gOIw16o16i = mkldnn_aBCd16b16c,
+    mkldnn_gOiw16o = mkldnn_aBcd16b,
+    mkldnn_gOIw4i16o4i = mkldnn_aBCd4c16b4c,
+    mkldnn_gOIw4i4o = mkldnn_aBCd4c4b,
+    mkldnn_gOiw4o = mkldnn_aBcd4b,
+    mkldnn_gOIw8i16o2i = mkldnn_aBCd8c16b2c,
+    mkldnn_gOIw8i8o = mkldnn_aBCd8c8b,
+    mkldnn_gOIw8o16i2o = mkldnn_aBCd8b16c2b,
+    mkldnn_gIOw8o16i2o = mkldnn_aCBd8b16c2b,
+    mkldnn_gOIw8o8i = mkldnn_aBCd8b8c,
+    mkldnn_gOwi16o = mkldnn_aBdc16b,
+    mkldnn_gOwi4o = mkldnn_aBdc4b,
+    mkldnn_gOwi8o = mkldnn_aBdc8b,
+
+    // weights w/ groups, 4D
+    mkldnn_gIOhw16i16o = mkldnn_aCBde16c16b,
+    mkldnn_gIOhw16o16i = mkldnn_aCBde16b16c,
+    mkldnn_gOhwi16o = mkldnn_aBdec16b,
+    mkldnn_gOhwi32o = mkldnn_aBdec32b,
+    mkldnn_gOhwi4o = mkldnn_aBdec4b,
+    mkldnn_gOhwi8o = mkldnn_aBdec8b,
+    mkldnn_Goihw16g = mkldnn_Abcde16a,
+    mkldnn_gOIhw16i16o = mkldnn_aBCde16c16b,
+    mkldnn_gOIhw16o16i = mkldnn_aBCde16b16c,
+    mkldnn_gOihw16o = mkldnn_aBcde16b,
+    mkldnn_gOIhw2i8o4i = mkldnn_aBCde2c8b4c,
+    mkldnn_gOIhw4i16o4i = mkldnn_aBCde4c16b4c,
+    mkldnn_gOIhw4i4o = mkldnn_aBCde4c4b,
+    mkldnn_gOIhw4o4i = mkldnn_aBCde4b4c,
+    mkldnn_gOihw4o = mkldnn_aBcde4b,
+    mkldnn_Goihw8g = mkldnn_Abcde8a,
+    mkldnn_gOIhw8i16o2i = mkldnn_aBCde8c16b2c,
+    mkldnn_gOIhw8i8o = mkldnn_aBCde8c8b,
+    mkldnn_gOIhw8o16i2o = mkldnn_aBCde8b16c2b,
+    mkldnn_gIOhw8o16i2o = mkldnn_aCBde8b16c2b,
+    mkldnn_gOIhw8o8i = mkldnn_aBCde8b8c,
+
+    mkldnn_OIhw4o8i8o4i = mkldnn_ABcd4a8b8a4b,
+    mkldnn_OIhw2o8i8o2i = mkldnn_ABcd2a8b8a2b,
+    mkldnn_gOIhw4o8i8o4i = mkldnn_aBCde4b8c8b4c,
+    mkldnn_gOIhw2o8i8o2i = mkldnn_aBCde2b8c8b2c,
+
+    // weights w/ groups, 6D
+    mkldnn_gIOdhw16i16o = mkldnn_aCBdef16c16b,
+    mkldnn_gOdhwi16o = mkldnn_aBdefc16b,
+    mkldnn_gOdhwi4o = mkldnn_aBdefc4b,
+    mkldnn_gOdhwi8o = mkldnn_aBdefc8b,
+    mkldnn_gOIdhw16i16o = mkldnn_aBCdef16c16b,
+    mkldnn_gOIdhw16o16i = mkldnn_aBCdef16b16c,
+    mkldnn_gOidhw16o = mkldnn_aBcdef16b,
+    mkldnn_gOIdhw4i4o = mkldnn_aBCdef4c4b,
+    mkldnn_gOidhw4o = mkldnn_aBcdef4b,
+    mkldnn_gOIdhw8i16o2i = mkldnn_aBCdef8c16b2c,
+    mkldnn_gOIdhw8i8o = mkldnn_aBCdef8c8b,
+    mkldnn_gOIdhw8o16i2o = mkldnn_aBCdef8b16c2b,
+    mkldnn_gIOdhw8o16i2o = mkldnn_aCBdef8b16c2b,
+    mkldnn_gOIdhw8o8i = mkldnn_aBCdef8b8c,
+    mkldnn_Goidhw16g = mkldnn_Abcdef16a;
 
 /** Kinds of propagation. */
 /** enum mkldnn_prop_kind_t */
 public static final int
-    /* TODO: suggest renames */
+    // TODO: suggest renames
     /** Undefined propagation type. */
     mkldnn_prop_kind_undef = 0,
     /** Forward data propagation (training mode). In this mode primitives
-     * perform computations necessary for subsequent backward propagation. */
+     *  perform computations necessary for subsequent backward propagation. */
     mkldnn_forward_training = 64,
     /** Forward data propagation (inference mode). In this mode primitives
-     * perform only computations that are necessary for inference and omit
-     * computations that are necessary only for backward propagation. */
+     *  perform only computations that are necessary for inference and omit
+     *  computations that are necessary only for backward propagation. */
     mkldnn_forward_inference = 96,
-    /** Forward data propagation (alias for \c mkldnn_forward_inference) */
+    /** Forward data propagation (alias for \c mkldnn_forward_inference). */
     mkldnn_forward_scoring = mkldnn_forward_inference,
-   /** Forward data propagation (alias for \c mkldnn_forward_training) */
+    /** Forward data propagation (alias for \c mkldnn_forward_training). */
     mkldnn_forward = mkldnn_forward_training,
-    /** Backward propagation (with respect to all parameters */
+    /** Backward propagation (with respect to all parameters). */
     mkldnn_backward = 128,
-    /** Backward data propagation */
+    /** Backward data propagation. */
     mkldnn_backward_data = 160,
-    /** Backward weights propagation */
+    /** Backward weights propagation. */
     mkldnn_backward_weights = 192,
-    /** Backward bias propagation */
+    /** Backward bias propagation. */
     mkldnn_backward_bias = 193;
 
 /** Kinds of primitives. Used to implement a way to extend the library with new
- * primitives without changing the ABI. */
+ *  primitives without changing the ABI. */
 /** enum mkldnn_primitive_kind_t */
 public static final int
-    /** Undefined primitive (XXX: why do we have it?). */
+    /** Undefined primitive */
     mkldnn_undefined_primitive = 0,
-    /** A memory primitive. */
-    mkldnn_memory = 1,
-    /** A view primitive. */
-    mkldnn_view = 2,
-    /** A reorder primitive.*/
-    mkldnn_reorder = 3,
-    /** A shuffle primitive.*/
-    mkldnn_shuffle = 4,
+    /** A reorder primitive. */
+    mkldnn_reorder = 1,
+    /** A shuffle primitive. */
+    mkldnn_shuffle = 2,
     /** A (out-of-place) concat primitive. */
-    mkldnn_concat = 5,
-    /** A (in-place) concat primitive. */
-    mkldnn_concat_inplace = 6,
+    mkldnn_concat = 3,
     /** A sum primitive. */
-    mkldnn_sum = 7,
+    mkldnn_sum = 4,
     /** A convolution primitive. */
-    mkldnn_convolution = 8,
+    mkldnn_convolution = 5,
     /** A deconvolution primitive. */
-    mkldnn_deconvolution = 9,
+    mkldnn_deconvolution = 6,
     /** An element-wise primitive. */
-    mkldnn_eltwise = 10,
-    /** A Softmax primitive. */
-    mkldnn_softmax = 11,
+    mkldnn_eltwise = 7,
+    /** A softmax primitive. */
+    mkldnn_softmax = 8,
     /** A pooling primitive. */
-    mkldnn_pooling = 12,
+    mkldnn_pooling = 9,
     /** An LRN primitive. */
-    mkldnn_lrn = 13,
+    mkldnn_lrn = 10,
     /** An batch normalization primitive. */
-    mkldnn_batch_normalization = 14,
+    mkldnn_batch_normalization = 11,
     /** An inner product primitive. */
-    mkldnn_inner_product = 15,
+    mkldnn_inner_product = 12,
     /** A rnn primitive. */
-    mkldnn_rnn = 16;
+    mkldnn_rnn = 13,
+    /** A matrix multiplication primitive. */
+    mkldnn_gemm = 14;
 
 /** Kinds of algorithms. */
 /** enum mkldnn_alg_kind_t */
@@ -534,7 +736,7 @@ public static final int
     mkldnn_convolution_direct = 0x1,
     /** Winograd convolution */
     mkldnn_convolution_winograd = 0x2,
-    /** Convolution algorithm(either direct or Winograd) is chosen just in time **/
+    /** Convolution algorithm(either direct or Winograd) is chosen just in time */
     mkldnn_convolution_auto = 0x3,
     /** Direct deconvolution */
     mkldnn_deconvolution_direct = 0xa,
@@ -561,7 +763,14 @@ public static final int
     /** Eltwise: logistic */
     mkldnn_eltwise_logistic = 0xaf,
     /** Eltwise: exponent */
+    
+///
     mkldnn_eltwise_exp = 0xbf,
+    /** Eltwise: gelu
+     * 
+     *  \note Tanh approximation formula is used to approximate
+     *  cumulative distribution function of a Gaussian */
+    mkldnn_eltwise_gelu = 0xcf,
     /** Max pooling */
     mkldnn_pooling_max = 0x1ff,
     /** Average pooling include padding */
@@ -578,81 +787,94 @@ public static final int
     /** LSTM cell */
     mkldnn_vanilla_lstm = 0x2fff,
     /** GRU cell */
+    
+///
     mkldnn_vanilla_gru = 0x3fff,
     /** GRU cell with linear before reset
-     *
-     * Modification of original GRU cell. Differs from #mkldnn_vanilla_gru
-     * in how the new memory gate is calculated:
-     * <pre>{@code \[ c_t = tanh(W_c*x_t + b_{c_x} + r_t*(U_c*h_{t-1}+b_{c_h})) \]}</pre>
-     * Primitive expects 4 biases on input:
-     * {@code [b_{u}, b_{r}, b_{c_x}, b_{c_h}]}
-     * */
-    mkldnn_gru_linear_before_reset = 0x4fff;
+     * 
+     *  Modification of original GRU cell. Differs from #mkldnn_vanilla_gru
+     *  in how the new memory gate is calculated:
+     *  <pre>{@code \[ c_t = tanh(W_c*x_t + b_{c_x} + r_t*(U_c*h_{t-1}+b_{c_h})) \]}</pre>
+     *  Primitive expects 4 biases on input:
+     *  {@code [b_{u}, b_{r}, b_{c_x}, b_{c_h}]} */
+    mkldnn_lbr_gru = 0x4fff;
 
-/** Flags for batch-normalization primititve. */
-/** enum mkldnn_batch_normalization_flag_t */
+/** Flags for batch normalization primitive. */
+/** enum mkldnn_normalization_flags_t */
 public static final int
     /** Use global statistics
-     *
-     * If specified
-     *  - on forward propagation use mean and variance provided by user (input)
-     *  - on backward propagation reduces the amount of computations, since
-     *    mean and variance are considered as constants
-     *
-     *  If not specified:
-     *   - on forward propagation mean and variance are computed and stored in
-     *     output
-     *   - on backward propagation compute full derivative wrt to data
-     */
+     * 
+     *  If specified
+     *   - on forward propagation use mean and variance provided by user (input)
+     *   - on backward propagation reduces the amount of computations, since
+     *     mean and variance are considered as constants
+     * 
+     *   If not specified:
+     *    - on forward propagation mean and variance are computed and stored in
+     *      output
+     *    - on backward propagation compute full derivative wrt to data */
+    
+///
+///
     mkldnn_use_global_stats = 0x1,
+
     /** Use scale and shift parameters
-     *
-     * If specified:
-     *  - on forward propagation use scale and shift (aka scale and bias) for
-     *    the batch normalization results
-     *  - on backward propagation (for prop_kind == #mkldnn_backward) compute
-     *    diff wrt to scale and shift (hence one extra output used)
-     *
-     * If no specified:
-     *  - on backward propagation prop_kind == #mkldnn_backward_data has the
-     *    same behavior as prop_kind == #mkldnn_backward
-     */
+     * 
+     *  If specified:
+     *   - on forward propagation use scale and shift (aka scale and bias) for
+     *     the batch normalization results
+     *   - on backward propagation (for prop_kind == #mkldnn_backward) compute
+     *     diff wrt to scale and shift (hence one extra output used)
+     * 
+     *  If no specified:
+     *   - on backward propagation prop_kind == #mkldnn_backward_data has the
+     *     same behavior as prop_kind == #mkldnn_backward */
+    
+///
     mkldnn_use_scaleshift = 0x2,
+
     /** Fuse with ReLU
-     *
-     * If specified:
-     *  - on inference this option behaves the same as if the primitive were
-     *    fused with ReLU via post ops API
-     *  - on training primitive requires workspace (required to be able to
-     *    perform backward pass)
-     */
-    mkldnn_fuse_bn_relu = 0x4;
+     * 
+     *  If specified:
+     *   - on inference this option behaves the same as if the primitive were
+     *     fused with ReLU via post ops API
+     *   - on training primitive requires workspace (required to be able to
+     *     perform backward pass) */
+    mkldnn_fuse_norm_relu = 0x4;
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_types_memory Memory
+ *  \{
+ <p>
+ *  Maximum number of dimensions a tensor can have. Only restricts the amount
+ *  of space used for the tensor description. Individual computational
+ *  primitives may support only tensors of certain dimensions. */
+public static final int MKLDNN_MAX_NDIMS = 12;
 
-/** \addtogroup c_api_types_memory Auxiliary types for memory description
- *  \{ */
-
-/** Maximum number of dimensions a tensor can have. Only restricts the amount
- * of space used for the tensor description. Individual computational
- * primitives may support only tensors of certain dimensions. */
-public static final int TENSOR_MAX_DIMS = 12;
+/** A type to describe tensor dimension. */
 
 /** A type to describe tensor dimensions. */
-/** A type to describe strides within a tensor. */
+
+///
 // Targeting ../mkldnn_blocking_desc_t.java
 
 
 
+/** Winograd-specific formats */
 /** enum mkldnn_wino_memory_format_t */
 public static final int
     /** Undefined memory format, used for empty memory descriptors. */
     mkldnn_wino_undef = 0,
-    /** Tensors of weights for 2x3 winograd convolutions. */
+    // Tensors of weights for 2x3 winograd convolutions.
+    /** Internal weights format for 2x3 Winograd */
     mkldnn_wino_wei_aaOIoi = 1,
+    /** Internal weights format for 2x3 Winograd */
     mkldnn_wino_wei_aaOio = 2,
+    /** Internal weights format for 2x3 Winograd */
     mkldnn_wino_wei_aaOBiOo = 3,
-    /** Tensor of weights for 4x3 convolution. */
+    // Tensor of weights for 4x3 convolution.
+    /** Internal weights format for 4x3 Winograd */
     mkldnn_wino_wei_OBaaIBOIio = 4;
 // Targeting ../mkldnn_wino_desc_t.java
 
@@ -664,19 +886,48 @@ public static final int
     mkldnn_ldigo_p = 1,
     mkldnn_ldgoi_p = 2;
 
-/* Maximum number of parts of RNN weights tensor that require separate
- * computation. */
+/** Maximum number of parts of RNN weights tensor that require separate
+ *  computation. */
 public static final int MKLDNN_RNN_MAX_N_PARTS = 4;
 // Targeting ../mkldnn_rnn_packed_desc_t.java
 
 
+
+/** Flags for memory special features */
+/** enum mkldnn_memory_extra_flags_t */
+public static final int
+    
+///
+    mkldnn_memory_extra_flag_none = 0x0,
+    /** Indicates the weights have an additional buffer, that depends on the
+     *  \p compensation_mask.
+     * 
+     *  For instance, in 4D case with the compensation mask equals (1 << 0)
+     *  the additional buffer would consist of OC values:
+     *  O[oc : 0,OC] =
+     *   -128 * SUM(ic : 0,IC; kh : 0,KH; kw : 0,KW){ weights(oc, ic, kh, kw) } */
+    mkldnn_memory_extra_flag_compensation_conv_s8s8 = 0x1,
+    mkldnn_memory_extra_flag_scale_adjust = 0x2;
+// Targeting ../mkldnn_memory_extra_desc_t.java
+
+
+// Targeting ../mkldnn_memory_desc_t.java
+
+
+// Targeting ../mkldnn_memory.java
+
+
+
+/** A memory handle. */
+
+/** A constant memory handle. */
+
+// #define MKLDNN_MEMORY_NONE (NULL)
+// #define MKLDNN_MEMORY_ALLOCATE ((void *)(size_t)-1)
 // Targeting ../mkldnn_op_desc_t.java
 
 
 // Targeting ../const_mkldnn_op_desc_t.java
-
-
-// Targeting ../mkldnn_memory_desc_t.java
 
 
 // Targeting ../mkldnn_convolution_desc_t.java
@@ -707,44 +958,42 @@ public static final int MKLDNN_RNN_MAX_N_PARTS = 4;
 
 
 /** Flags for RNN cell. */
-/** enum mkldnn_rnn_cell_flags_t */
+/** enum mkldnn_rnn_flags_t */
 public static final int
-    mkldnn_rnn_cell_with_relu = 0x1,
-    mkldnn_rnn_cell_with_clipping = 0x2;
-// Targeting ../mkldnn_rnn_cell_desc_t.java
-
-
+    mkldnn_rnn_flags_undef = 0x0;
 
 /** A direction of RNN primitive execution. */
 /** enum mkldnn_rnn_direction_t */
 public static final int
-    /* Unidirectional execution of RNN primitive from left to right. */
+    /** Unidirectional execution of RNN primitive from left to right. */
     mkldnn_unidirectional_left2right = 0,
-    /* Unidirectional execution of RNN primitive from right to left. */
+    /** Unidirectional execution of RNN primitive from right to left. */
     mkldnn_unidirectional_right2left = 1,
-    /* Bidirectional execution of RNN primitive with concatenation of the
-     * results. */
+    /** Bidirectional execution of RNN primitive with concatenation of the
+     *  results. */
     mkldnn_bidirectional_concat = 2,
-    /* Bidirectional execution of RNN primitive with summation of the
-     * results. */
+    /** Bidirectional execution of RNN primitive with summation of the
+     *  results. */
     mkldnn_bidirectional_sum = 3,
     mkldnn_unidirectional = mkldnn_unidirectional_left2right;
 // Targeting ../mkldnn_rnn_desc_t.java
 
 
 
-/** \} */
-
-/** \addtogroup c_api_engine_types Engine
- * \{ */
-
-/** \brief Kinds of engines. */
+/** \}
+ <p>
+ *  \addtogroup c_api_engine_types Engine
+ *  \{
+ <p>
+ *  \brief Kinds of engines. */
 /** enum mkldnn_engine_kind_t */
 public static final int
     /** An unspecified engine. */
     mkldnn_any_engine = 0,
     /** CPU engine. */
-    mkldnn_cpu = 1;
+    mkldnn_cpu = 1,
+    /** GPU engine. */
+    mkldnn_gpu = 2;
 // Targeting ../mkldnn_engine.java
 
 
@@ -763,12 +1012,25 @@ public static final int
 /** \brief A primitive descriptor handle. */
 
 /** \brief A constant primitive descriptor handle. */
+
+/** \}
+ <p>
+ *  \addtogroup c_api_primitive_attr Primitive descriptor attributes
+ *  \{
+ <p>
+ *  Scratchpad mode */
+/** enum mkldnn_scratchpad_mode_t */
+public static final int
+    /** The library manages scratchpad (default) */
+    mkldnn_scratchpad_mode_library = 0,
+    /** A user shall query and provide the scratchpad memory to primitives */
+    mkldnn_scratchpad_mode_user = 1;
 // Targeting ../mkldnn_primitive_attr.java
 
 
 
 /** \brief A primitive descriptor attributes handle that controls primitive
- * behavior. */
+ *  behavior. */
 
 /** \brief A constant primitive descriptor attributes handle. */
 // Targeting ../mkldnn_post_ops.java
@@ -783,42 +1045,119 @@ public static final int
 
 /** A primitive handle. */
 /** A constant primitive handle. */
-// Targeting ../mkldnn_primitive_at_t.java
+
+/** \addtogroup c_api_types_arguments Argument indices
+ *  \{ */
+
+public static final int MKLDNN_ARG_SRC_0 =                1;
+public static final int MKLDNN_ARG_SRC =                  MKLDNN_ARG_SRC_0;
+public static final int MKLDNN_ARG_SRC_LAYER =            MKLDNN_ARG_SRC_0;
+public static final int MKLDNN_ARG_FROM =                 MKLDNN_ARG_SRC_0;
+
+public static final int MKLDNN_ARG_SRC_1 =                2;
+public static final int MKLDNN_ARG_SRC_ITER =             MKLDNN_ARG_SRC_1;
+
+public static final int MKLDNN_ARG_SRC_2 =                3;
+public static final int MKLDNN_ARG_SRC_ITER_C =           MKLDNN_ARG_SRC_2;
+
+public static final int MKLDNN_ARG_DST_0 =                17;
+public static final int MKLDNN_ARG_DST =                  MKLDNN_ARG_DST_0;
+public static final int MKLDNN_ARG_TO =                   MKLDNN_ARG_DST_0;
+public static final int MKLDNN_ARG_DST_LAYER =            MKLDNN_ARG_DST_0;
+
+public static final int MKLDNN_ARG_DST_1 =                18;
+public static final int MKLDNN_ARG_DST_ITER =             MKLDNN_ARG_DST_1;
+
+public static final int MKLDNN_ARG_DST_2 =                19;
+public static final int MKLDNN_ARG_DST_ITER_C =           MKLDNN_ARG_DST_2;
+
+public static final int MKLDNN_ARG_WEIGHTS_0 =            33;
+public static final int MKLDNN_ARG_WEIGHTS =              MKLDNN_ARG_WEIGHTS_0;
+public static final int MKLDNN_ARG_SCALE_SHIFT =          MKLDNN_ARG_WEIGHTS_0;
+public static final int MKLDNN_ARG_WEIGHTS_LAYER =        MKLDNN_ARG_WEIGHTS_0;
+
+public static final int MKLDNN_ARG_WEIGHTS_1 =            34;
+public static final int MKLDNN_ARG_WEIGHTS_ITER =         MKLDNN_ARG_WEIGHTS_1;
+
+public static final int MKLDNN_ARG_BIAS =                 41;
+
+public static final int MKLDNN_ARG_MEAN =                 49;
+public static final int MKLDNN_ARG_VARIANCE =             50;
+
+public static final int MKLDNN_ARG_WORKSPACE =            64;
+public static final int MKLDNN_ARG_SCRATCHPAD =           80;
+
+public static final int MKLDNN_ARG_DIFF_SRC_0 =           129;
+public static final int MKLDNN_ARG_DIFF_SRC =             MKLDNN_ARG_DIFF_SRC_0;
+public static final int MKLDNN_ARG_DIFF_SRC_LAYER =       MKLDNN_ARG_DIFF_SRC_0;
+
+public static final int MKLDNN_ARG_DIFF_SRC_1 =           130;
+public static final int MKLDNN_ARG_DIFF_SRC_ITER =        MKLDNN_ARG_DIFF_SRC_1;
+
+public static final int MKLDNN_ARG_DIFF_SRC_2 =           131;
+public static final int MKLDNN_ARG_DIFF_SRC_ITER_C =      MKLDNN_ARG_DIFF_SRC_2;
+
+public static final int MKLDNN_ARG_DIFF_DST_0 =           145;
+public static final int MKLDNN_ARG_DIFF_DST =             MKLDNN_ARG_DIFF_DST_0;
+public static final int MKLDNN_ARG_DIFF_DST_LAYER =       MKLDNN_ARG_DIFF_DST_0;
+
+public static final int MKLDNN_ARG_DIFF_DST_1 =           146;
+public static final int MKLDNN_ARG_DIFF_DST_ITER =        MKLDNN_ARG_DIFF_DST_1;
+
+public static final int MKLDNN_ARG_DIFF_DST_2 =           147;
+public static final int MKLDNN_ARG_DIFF_DST_ITER_C =      MKLDNN_ARG_DIFF_DST_2;
+
+public static final int MKLDNN_ARG_DIFF_WEIGHTS_0 =       161;
+public static final int MKLDNN_ARG_DIFF_WEIGHTS =         MKLDNN_ARG_DIFF_WEIGHTS_0;
+public static final int MKLDNN_ARG_DIFF_SCALE_SHIFT =     MKLDNN_ARG_DIFF_WEIGHTS_0;
+public static final int MKLDNN_ARG_DIFF_WEIGHTS_LAYER =   MKLDNN_ARG_DIFF_WEIGHTS_0;
+
+public static final int MKLDNN_ARG_DIFF_WEIGHTS_1 =       162;
+public static final int MKLDNN_ARG_DIFF_WEIGHTS_ITER =    MKLDNN_ARG_DIFF_WEIGHTS_1;
+
+public static final int MKLDNN_ARG_DIFF_BIAS =            169;
+
+public static final int MKLDNN_ARG_MULTIPLE_SRC =         1024;
+
+///
+public static final int MKLDNN_ARG_MULTIPLE_DST =         2048;
+// Targeting ../mkldnn_exec_arg_t.java
 
 
 
-/** \} */
-
-/** \addtogroup c_api_types_query Queries
- * \{ */
-
-/** Primitive descriptor query specification
- *
- * For generic function mkldnn_primitive_desc_query(), the type of result must
- * agree with the queried argument. The correspondence table:
- *      Query                        | type of result
- *      --------------------------------------------------------------
- *      #mkldnn_query_engine         | mkldnn_engine_t *
- *      #mkldnn_query_primitive_kind | mkldnn_primitive_kind_t *
- *      *_s32                        | int *
- *      *_s64                        | ptrdiff_t *
- *      *_f64                        | double *
- *      *_str                        | const char **
- *      #mkldnn_query_op_d           | const_mkldnn_op_desc_t *
- *      *_md                         | const mkldnn_memory_desc_t **
- *      *_${op}_d                    | const mkldnn_${op}_desc_t **
- *      *_pd                         | const_mkldnn_primitive_desc_t *
- *
- * \note
- *     Rule of thumb: all opaque types and structures are returned by
- *     reference. All numbers are returned by value.
- *
- * \warning
- *     All returned references point to constant objects and are valid only
- *     during the lifetime of the queried primitive descriptor. Returned objects
- *     must not be destroyed by the user. If you need to keep the object longer
- *     than the lifetime of the queried primitive descriptor, use
- *     mkldnn_primitive_desc_clone() to make a copy. */
+/** \}
+ <p>
+ *  \addtogroup c_api_types_query Queries
+ *  \{
+ <p>
+ *  Primitive descriptor query specification
+ * 
+ *  For generic function mkldnn_primitive_desc_query(), the type of result must
+ *  agree with the queried argument. The correspondence table:
+ *       Query                           | type of result
+ *       --------------------------------------------------------------
+ *       #mkldnn_query_engine            | mkldnn_engine_t *
+ *       #mkldnn_query_scratchpad_engine | mkldnn_engine_t *
+ *       #mkldnn_query_primitive_kind    | mkldnn_primitive_kind_t *
+ *       *_s32                           | int *
+ *       *_s64                           | mkldnn_dim_t * (same as int64_t *)
+ *       *_f64                           | double *
+ *       *_str                           | const char **
+ *       #mkldnn_query_op_d              | const_mkldnn_op_desc_t *
+ *       *_md                            | const mkldnn_memory_desc_t **
+ *       *_${op}_d                       | const mkldnn_${op}_desc_t **
+ *       *_pd                            | const_mkldnn_primitive_desc_t *
+ * 
+ *  \note
+ *      Rule of thumb: all opaque types and structures are returned by
+ *      reference. All numbers are returned by value.
+ * 
+ *  \warning
+ *      All returned references point to constant objects and are valid only
+ *      during the lifetime of the queried primitive descriptor. Returned objects
+ *      must not be destroyed by the user. If you need to keep the object longer
+ *      than the lifetime of the queried primitive descriptor, use
+ *      mkldnn_primitive_desc_clone() to make a copy. */
 /** enum mkldnn_query_t */
 public static final int
     /** no query */
@@ -836,87 +1175,93 @@ public static final int
 
     /** runtime estimation (seconds) */
     mkldnn_query_time_estimate_f64 = 5,
-    /** memory consumption -- extra
-                                           (scratch) memory, additional to all
-                                           inputs and outputs memory (bytes) */
+    /** memory consumption -- extra */
     mkldnn_query_memory_consumption_s64 = 6,
+                                         /**  (scratch) memory, additional to
+                                          *   all inputs and outputs memory
+                                          *   (bytes) */
+
+    /** scratchpad engine -- engine to be used */
+    mkldnn_query_scratchpad_engine = 7,
+                                    /**  for creating scratchpad memory */
 
     /** implementation name */
-    mkldnn_query_impl_info_str = 7,
+    mkldnn_query_impl_info_str = 8,
 
-    /* memory and op descriptor section */
+    // memory and op descriptor section
     /** stub */
     mkldnn_query_some_d = 64,
     /** op descriptor */
     mkldnn_query_op_d = 65,
-    /** memory descriptor for memory and view */
-    mkldnn_query_memory_d = 66,
     /** convolution descriptor */
-    mkldnn_query_convolution_d = 67,
+    mkldnn_query_convolution_d = 66,
     /** deconvolution descriptor */
-    mkldnn_query_deconvolution_d = 68,
+    mkldnn_query_deconvolution_d = 67,
     /** shuffle descriptor */
-    mkldnn_query_shuffle_d = 69,
+    mkldnn_query_shuffle_d = 68,
     /** eltwise descriptor */
-    mkldnn_query_eltwise_d = 70,
+    mkldnn_query_eltwise_d = 69,
     /** softmax descriptor */
-    mkldnn_query_softmax_d = 71,
+    mkldnn_query_softmax_d = 70,
     /** pooling descriptor */
-    mkldnn_query_pooling_d = 72,
+    mkldnn_query_pooling_d = 71,
     /** lrn descriptor */
-    mkldnn_query_lrn_d = 73,
+    mkldnn_query_lrn_d = 72,
     /** batch normalization descriptor */
-    mkldnn_query_batch_normalization_d = 74,
+    mkldnn_query_batch_normalization_d = 73,
     /** inner product descriptor */
-    mkldnn_query_inner_product_d = 75,
+    mkldnn_query_inner_product_d = 74,
     /** rnn descriptor */
-    mkldnn_query_rnn_d = 76,
+    mkldnn_query_rnn_d = 75,
+    /** GEMM descriptor */
+    mkldnn_query_gemm_d = 76,
 
-    /* (memory) primitive descriptor section */
+    // memory descriptor section
     /** stub */
-    mkldnn_query_some_pd = 128,
-    /** input memory primitive desc */
-    mkldnn_query_input_pd = 129,
-    /** output memory primitive desc */
-    mkldnn_query_output_pd = 130,
-    /** source memory primitive desc */
-    mkldnn_query_src_pd = 131,
-    /** source gradient memory primitive desc */
-    mkldnn_query_diff_src_pd = 132,
-    /** weights memory primitive descriptor desc */
-    mkldnn_query_weights_pd = 133,
-    /** weights grad. memory primitive desc */
-    mkldnn_query_diff_weights_pd = 134,
-    /** destination memory primitive desc */
-    mkldnn_query_dst_pd = 135,
-    /** destination grad. memory primitive desc */
-    mkldnn_query_diff_dst_pd = 136,
-    /** workspace memory primitive desc */
-    mkldnn_query_workspace_pd = 137;
+    mkldnn_query_some_md = 128,
+    /** source memory desc */
+    mkldnn_query_src_md = 129,
+    /** source gradient memory desc */
+    mkldnn_query_diff_src_md = 130,
+    /** weights memory descriptor desc */
+    mkldnn_query_weights_md = 131,
+    /** weights grad. memory desc */
+    mkldnn_query_diff_weights_md = 132,
+    /** destination memory desc */
+    mkldnn_query_dst_md = 133,
+    /** destination grad. memory desc */
+    mkldnn_query_diff_dst_md = 134,
+    /** workspace memory desc */
+    mkldnn_query_workspace_md = 135,
+    /** scratchpad memory desc */
+    mkldnn_query_scratchpad_md = 136;
 
-/** \} */
-
-/** \addtogroup c_api_types_stream Execution stream
- * \{ */
-
-/** \brief Kinds of streams. */
-/** enum mkldnn_stream_kind_t */
+/** \}
+ <p>
+ *  \addtogroup c_api_types_stream Execution stream
+ *  \{
+ <p>
+ *  \brief Stream flags. */
+/** enum mkldnn_stream_flags_t */
 public static final int
-    /** An unspecified engine. */
-    mkldnn_any_stream = 0,
-    /** Eager stream. */
-    mkldnn_eager = 1,
-    /** Lazy stream. */
-    mkldnn_lazy = 2;
+    /** Default order execution. Either in-order or out-of-order depending on
+     *  the runtime. */
+    mkldnn_stream_default_order = 0x1,
+    /** In-order execution. */
+    mkldnn_stream_in_order = 0x2,
+    /** Out-of-order execution. */
+    mkldnn_stream_out_of_order = 0x4,
+    /** Default stream configuration. */
+    mkldnn_stream_default_flags = mkldnn_stream_default_order;
 // Targeting ../mkldnn_stream.java
 
 
 /** An execution stream handle. */
 /** A constant execution stream handle. */
 
-/** \} */
-/** \} */
-/** \} */
+/** \}
+ *  \}
+ *  \} */
 
 // #ifdef __cplusplus
 // #endif
@@ -925,10 +1270,10 @@ public static final int
 // #endif
 
 
-// Parsed from mkldnn.h
+// Parsed from mkldnn_version.h
 
 /*******************************************************************************
-* Copyright 2016-2018 Intel Corporation
+* Copyright 2019 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -943,8 +1288,52 @@ public static final int
 * limitations under the License.
 *******************************************************************************/
 
+// #ifndef MKLDNN_VERSION_H
+// #define MKLDNN_VERSION_H
+
+/** Major version */
+public static final int MKLDNN_VERSION_MAJOR = 1;
+
+/** Minor version */
+public static final int MKLDNN_VERSION_MINOR = 0;
+
+/** Patch version */
+public static final int MKLDNN_VERSION_PATCH = 0;
+
+/** Git commit hash */
+public static native @MemberGetter String MKLDNN_VERSION_HASH();
+public static final String MKLDNN_VERSION_HASH = MKLDNN_VERSION_HASH();
+
+// #endif
+
+
+// Parsed from mkldnn.h
+
+/*******************************************************************************
+* Copyright 2016-2019 Intel Corporation
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*******************************************************************************/
+
+/** \file
+/** C API */
+
 // #ifndef MKLDNN_H
 // #define MKLDNN_H
+
+// #include "mkldnn_config.h"
+// #include "mkldnn_types.h"
+// #include "mkldnn_version.h"
 
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // #endif /* DOXYGEN_SHOULD_SKIP_THIS */
@@ -953,53 +1342,41 @@ public static final int
 // #endif
 
 /** \addtogroup c_api C API
- * \{ */
-
-/** \addtogroup c_api_primitive Primitive operations
- * \{ */
-
-/** \addtogroup c_api_primitive_common Common primitive operations
- * \{ */
-
-/** Creates a primitive descriptor \p iterator for given \p op_desc, \p engine,
- * and optionally a hint primitive descriptor from forward propagation
- * (required for backward propagation). Pass \c NULL for forward propagation.
- */
+ *  \{
+ <p>
+ *  \addtogroup c_api_primitive Primitive operations
+ *  \{
+ <p>
+ *  \addtogroup c_api_primitive_common Common primitive operations
+ *  \{
+ <p>
+ *  Creates a primitive descriptor \p iterator for given \p op_desc, \p attr,
+ *  \p engine, and optionally a hint primitive descriptor from forward
+ *  propagation (required for backward propagation). Pass \c NULL for forward
+ *  propagation. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_create(
-        @ByPtrPtr mkldnn_primitive_desc_iterator iterator,
-        const_mkldnn_op_desc_t op_desc, mkldnn_engine engine,
-        @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_create(
-        @Cast("mkldnn_primitive_desc_iterator_t*") PointerPointer iterator,
-        const_mkldnn_op_desc_t op_desc, mkldnn_engine engine,
-        @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-
-/** Creates a primitive descriptor \p iterator for given \p op_desc, \p attr,
- * \p engine, and optionally a hint primitive descriptor from forward
- * propagation (required for backward propagation). Pass \c NULL for forward
- * propagation.
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_create_v2(
         @ByPtrPtr mkldnn_primitive_desc_iterator iterator,
         const_mkldnn_op_desc_t op_desc, @Const mkldnn_primitive_attr attr,
         mkldnn_engine engine,
         @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_create_v2(
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_create(
         @Cast("mkldnn_primitive_desc_iterator_t*") PointerPointer iterator,
         const_mkldnn_op_desc_t op_desc, @Const mkldnn_primitive_attr attr,
         mkldnn_engine engine,
         @Const mkldnn_primitive_desc hint_forward_primitive_desc);
 
 /** Iterates over primitive descriptors. Returns #mkldnn_iterator_ends if no
- * more primitive descriptors are available. */
+ *  more primitive descriptors are available. */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_next(
         mkldnn_primitive_desc_iterator iterator);
 
 /** Fetches the current primitive descriptor.
- *
- * \note
- *     The user should delete the fetched primitive descriptor using
- *     mkldnn_primitive_desc_destroy() once it is no longer needed. */
+ * 
+ *  \note
+ *      The user should delete the fetched primitive descriptor using
+ *      mkldnn_primitive_desc_destroy() once it is no longer needed. */
 public static native mkldnn_primitive_desc mkldnn_primitive_desc_iterator_fetch(
         @Const mkldnn_primitive_desc_iterator iterator);
 
@@ -1007,35 +1384,25 @@ public static native mkldnn_primitive_desc mkldnn_primitive_desc_iterator_fetch(
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_iterator_destroy(
         mkldnn_primitive_desc_iterator iterator);
 
-/** Creates a \p primitive_desc using \p op_desc, \p engine, and optionally a
- * hint primitive descriptor from forward propagation. The call is equivalent
- * to creating a primitive descriptor iterator, immediately fetching a
- * primitive descriptor, and then destroying the iterator. */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc primitive_desc,
-        const_mkldnn_op_desc_t op_desc, mkldnn_engine engine,
-        @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer primitive_desc,
-        const_mkldnn_op_desc_t op_desc, mkldnn_engine engine,
-        @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-
 /** Creates a \p primitive_desc using \p op_desc, \p attr, \p engine, and
- * optionally a hint primitive descriptor from forward propagation. The call is
- * equivalent to creating a primitive descriptor iterator, immediately fetching
- * a primitive descriptor, and then destroying the iterator. */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create_v2(
+ *  optionally a hint primitive descriptor from forward propagation. The call is
+ *  equivalent to creating a primitive descriptor iterator, immediately fetching
+ *  a primitive descriptor, and then destroying the iterator. */
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc primitive_desc,
         const_mkldnn_op_desc_t op_desc, @Const mkldnn_primitive_attr attr,
         mkldnn_engine engine,
         @Const mkldnn_primitive_desc hint_forward_primitive_desc);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create_v2(
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_create(
         @Cast("mkldnn_primitive_desc_t*") PointerPointer primitive_desc,
         const_mkldnn_op_desc_t op_desc, @Const mkldnn_primitive_attr attr,
         mkldnn_engine engine,
         @Const mkldnn_primitive_desc hint_forward_primitive_desc);
 
 /** Makes a copy of a \p primitive_desc. */
+
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_clone(
         @ByPtrPtr mkldnn_primitive_desc primitive_desc,
         @Const mkldnn_primitive_desc existing_primitive_desc);
@@ -1044,14 +1411,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_clone(
         @Const mkldnn_primitive_desc existing_primitive_desc);
 
 /** Returns a constant reference to the attribute of a \p primitive_desc.
- *
- * \warning
- *      The user should not destroy the obtained \p attr.
- *
- * \warning
- *      The lifetime of an \p attr is the same as that of a \p primitive_desc,
- *      so it is illegal to use the \p attr once \p primitive_desc has been
- *      destroyed. */
+ * 
+ *  \warning
+ *       The user should not destroy the obtained \p attr.
+ * 
+ *  \warning
+ *       The lifetime of an \p attr is the same as that of a \p primitive_desc,
+ *       so it is illegal to use the \p attr once \p primitive_desc has been
+ *       destroyed. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_get_attr(
         @Const mkldnn_primitive_desc primitive_desc,
         @Const @ByPtrPtr mkldnn_primitive_attr attr);
@@ -1060,102 +1427,98 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_get_attr
         @Cast("const_mkldnn_primitive_attr_t*") PointerPointer attr);
 
 /** Deletes a \p primitive_desc. */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_destroy(
         mkldnn_primitive_desc primitive_desc);
 
 /** Queries primitive descriptor
- *
- * One of the most typical use cases is to query a convolution primitive
- * descriptor created with source, weights, and destination formats equal
- * to #mkldnn_any about the corresponding memory primitive descriptors
- * (\p what equals #mkldnn_query_src_pd, #mkldnn_query_weights_pd, and
- * #mkldnn_query_dst_pd respectively) to be able to prepare memory and
- * create reorders if required.
- *
- * Another quite typical use case is to query an operation primitive
- * descriptor for a workspace (\p what equals #mkldnn_query_workspace_pd).
- * The returned status #mkldnn_not_required indicates that a workspace is
- * not required.
- *
- * A few other possibilities:
- *  - query a memory primitive descriptor for the underlying memory
- *    descriptor (#mkldnn_query_memory_d)
- *  - query an operation primitive descriptor for the underlying operation
- *    descriptor (#mkldnn_query_convolution_d, #mkldnn_query_eltwise_d,
- *    #mkldnn_query_rnn_d, etc.)
- *  - query an operation primitive descriptor for the implementation
- *    information string (#mkldnn_query_impl_info_str)
- *  - query an operation primitive descriptor for the number of inputs and
- *    outputs (#mkldnn_query_num_of_inputs_s32 and
- *    #mkldnn_query_num_of_outputs_s32 respectively)
- *
- * @see mkldnn_query_t for more options
- */
+ * 
+ *  One of the most typical use cases is to query a primitive descriptor
+ *  created with source, weights, and destination formats equal
+ *  to #mkldnn_format_tag_any about the corresponding memory descriptors
+ *  (\p what equals #mkldnn_query_src_md, #mkldnn_query_weights_md, and
+ *  #mkldnn_query_dst_md respectively) to be able to prepare memory and
+ *  create reorders if required.
+ * 
+ *  Another quite typical use case is to query an operation primitive
+ *  descriptor for a workspace (\p what equals #mkldnn_query_workspace_md).
+ *  The returned status #mkldnn_not_required indicates that a workspace is
+ *  not required.
+ * 
+ *  \note When querying a memory descriptor for a scratchpad, a
+ *  workspace, or an optional parameter, the query will return a
+ *  zero_md if the parameter is not needed.
+ * 
+ *  A few other possibilities:
+ *   - query an operation primitive descriptor for the underlying operation
+ *     descriptor (#mkldnn_query_convolution_d, #mkldnn_query_eltwise_d,
+ *     #mkldnn_query_rnn_d, etc.)
+ *   - query an operation primitive descriptor for the implementation
+ *     information string (#mkldnn_query_impl_info_str)
+ *   - query an operation primitive descriptor for the number of inputs and
+ *     outputs (#mkldnn_query_num_of_inputs_s32 and
+ *     #mkldnn_query_num_of_outputs_s32 respectively)
+ * 
+ *  @see mkldnn_query_t for more options */
+
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_desc_query(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index, Pointer result);
 
 /** Queries primitive descriptor for memory descriptor
- *
- * @return NULL in case of any error (in particular if the queried entity is
- * not of type mkldnn_memory_desc_t).
- *
- * This is just a specialized version of mkldnn_primitive_desc_query
- * used for convenience.
- */
-public static native @Const mkldnn_memory_desc_t mkldnn_primitive_desc_query_memory_d(
-        @Const mkldnn_primitive_desc primitive_desc);
+ * 
+ *  @return NULL in case of any error.
+ * 
+ *  This is just a specialized version of mkldnn_primitive_desc_query
+ *  used for convenience. */
 
-/** Queries primitive descriptor for primitive descriptor
- *
- * @return NULL in case of any error (in particular if the queried entity is
- * not of type const_mkldnn_primitive_desc_t).
- *
- * This is just a specialized version of mkldnn_primitive_desc_query
- * used for convenience.
- *
- * Example: Query an operation primitive descriptor for a workspace
- *         (\p what equals #mkldnn_query_workspace_pd). Returned
- *         NULL indicates that the primitive does not require a workspace.
- *         Otherwise, a user should prepare the workspace and pass it
- *         to the corresponding primitive.
- */
-public static native @Const mkldnn_primitive_desc mkldnn_primitive_desc_query_pd(
+///
+///
+public static native @Const mkldnn_memory_desc_t mkldnn_primitive_desc_query_md(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index);
 
 /** Queries primitive descriptor for signed 32bit int
- *
- * @return 0 in case of any error (in particular if the queried entity is
- * not of type int32_t). Note that 0 might also be the actual returned
- * value.
- *
- * This is just a specialized version of mkldnn_primitive_desc_query
- * used for convenience.
- */
+ * 
+ *  @return 0 in case of any error (in particular if the queried entity is
+ *  not of type int32_t). Note that 0 might also be the actual returned
+ *  value.
+ * 
+ *  This is just a specialized version of mkldnn_primitive_desc_query
+ *  used for convenience. */
 public static native int mkldnn_primitive_desc_query_s32(
         @Const mkldnn_primitive_desc primitive_desc, @Cast("mkldnn_query_t") int what,
         int index);
 
-/** Creates a \p primitive using a \p primitive_desc descriptor and arrays of
- * \p inputs and \p outputs. */
+/** Creates a \p primitive using a \p primitive_desc descriptor. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_create(
         @ByPtrPtr mkldnn_primitive primitive,
-        @Const mkldnn_primitive_desc primitive_desc,
-        @Const mkldnn_primitive_at_t inputs,
-        @Const @ByPtrPtr mkldnn_primitive outputs);
+        @Const mkldnn_primitive_desc primitive_desc);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_create(
         @Cast("mkldnn_primitive_t*") PointerPointer primitive,
-        @Const mkldnn_primitive_desc primitive_desc,
-        @Const mkldnn_primitive_at_t inputs,
-        @Cast("const_mkldnn_primitive_t*") PointerPointer outputs);
+        @Const mkldnn_primitive_desc primitive_desc);
+
+/** Executes a \p primitive using a \p stream, and \p nargs arguments
+ *  \p args. */
+
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_execute(
+        @Const mkldnn_primitive primitive, mkldnn_stream stream,
+        int nargs, @Const mkldnn_exec_arg_t args);
 
 /** Retrieves a reference to the \p primitive_desc descriptor of given \p
- * primitive.
- *
- * \warning
- *     The returned object must not be destroyed by the user. The \c const
- *     qualifier of the returned object prevents such attempts. */
+ *  primitive.
+ * 
+ *  \warning
+ *      The returned object must not be destroyed by the user. The \c const
+ *      qualifier of the returned object prevents such attempts. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_get_primitive_desc(
         @Const mkldnn_primitive primitive,
         @Const @ByPtrPtr mkldnn_primitive_desc primitive_desc);
@@ -1163,43 +1526,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_get_primitive
         @Const mkldnn_primitive primitive,
         @Cast("const_mkldnn_primitive_desc_t*") PointerPointer primitive_desc);
 
-/** For a \p primitive, returns \p input at the \p index position. */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_get_input_at(
-        @Const mkldnn_primitive primitive, @Cast("size_t") long index,
-        mkldnn_primitive_at_t input);
-
-/** For a \p primitive, returns \p output at the \p index position. */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_get_output(
-        @Const mkldnn_primitive primitive, @Cast("size_t") long index,
-        @Const @ByPtrPtr mkldnn_primitive output);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_get_output(
-        @Const mkldnn_primitive primitive, @Cast("size_t") long index,
-        @Cast("const_mkldnn_primitive_t*") PointerPointer output);
-
 /** Deletes a \p primitive. */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_destroy(
         mkldnn_primitive primitive);
 
-/** Creates an #mkldnn_primitive_at_t structure from a \p primitive and \p
- * output_index. This function only fills in the data structure
- * and does not check whether arguments are correct. The actual error checking
- * is done when the resulting #mkldnn_primitive_at structure is passed to a
- * primitive creation function. */
-public static native @ByVal mkldnn_primitive_at_t mkldnn_primitive_at(
-        @Const mkldnn_primitive primitive, @Cast("size_t") long output_index);
-
-/** \} */
-
-/** \addtogroup c_api_attributes Attributes
- * An extension for controlling primitive behavior.
- * \{ */
-
-/** Creates an empty (default) \p attr attribute. All the parameters are set to
- * default values.
- *
- * An empty attribute is used in primitive descriptor creation whenever it
- * is not passed explicitly, e.g. in mkldnn_primitive_desc_create.
- */
+/** \}
+ <p>
+ *  \addtogroup c_api_attributes Attributes
+ *  An extension for controlling primitive behavior.
+ *  \{
+ <p>
+ *  Creates an empty (default) \p attr attribute. All the parameters are set to
+ *  default values.
+ * 
+ *  An empty attribute is used in primitive descriptor creation whenever it
+ *  is not passed explicitly, e.g. in mkldnn_primitive_desc_create. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_create(
         @ByPtrPtr mkldnn_primitive_attr attr);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_create(
@@ -1217,127 +1560,139 @@ public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_clone(
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_destroy(
         mkldnn_primitive_attr attr);
 
-/** Returns integer output rounding mode \p round_mode for a given \p attr,
- * previously set by mkldnn_primitive_attr_set_int_output_round_mode. */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_int_output_round_mode(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_round_mode_t*") IntPointer round_mode);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_int_output_round_mode(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_round_mode_t*") IntBuffer round_mode);
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_int_output_round_mode(
-        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_round_mode_t*") int[] round_mode);
+/** Returns the scratchpad \p mode set in the attribute \p attr */
 
-/** Sets output rounding mode \p round_mode for integer operations for a given
- * \p attr.
- *
- * The default value is #mkldnn_round_nearest.
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_int_output_round_mode(
-        mkldnn_primitive_attr attr, @Cast("mkldnn_round_mode_t") int round_mode);
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_scratchpad_mode(
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_scratchpad_mode_t*") IntPointer mode);
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_scratchpad_mode(
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_scratchpad_mode_t*") IntBuffer mode);
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_scratchpad_mode(
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_scratchpad_mode_t*") int[] mode);
+
+/** Sets scratchpad \p mode.
+ * 
+ *  The possible values are: #mkldnn_scratchpad_mode_library (default) and
+ *  #mkldnn_scratchpad_mode_user. */
+
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_scratchpad_mode(
+        mkldnn_primitive_attr attr, @Cast("mkldnn_scratchpad_mode_t") int mode);
 
 /** Returns \p count, correspondence scale \p mask, and a pointer to a constant
- * floating point array of output \p scales for given \p attr, previously set
- * by mkldnn_primitive_attr_set_output_scales.
- *
- * \warning
- *      The \p scales array points to the internal \p attr field, so the user
- *      should not modify or destroy \p scales.
- *
- * \warning
- *      The lifetime of \p scales is the same as that of the \p attr to which it
- *      belongs, so it is illegal to use \p scales after \p attr is destroyed.
- */
+ *  floating point array of output \p scales for given \p attr, previously set
+ *  by mkldnn_primitive_attr_set_output_scales.
+ * 
+ *  \warning
+ *       The \p scales array points to the internal \p attr field, so the user
+ *       should not modify or destroy \p scales.
+ * 
+ *  \warning
+ *       The lifetime of \p scales is the same as that of the \p attr to which it
+ *       belongs, so it is illegal to use \p scales after \p attr is destroyed. */
+
+///
+///
+///
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, IntPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
         @Cast("const float**") PointerPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, IntPointer count, IntPointer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongPointer count, IntPointer mask,
         @Const @ByPtrPtr FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, IntBuffer count, IntBuffer mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") LongBuffer count, IntBuffer mask,
         @Const @ByPtrPtr FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_output_scales(
-        @Const mkldnn_primitive_attr attr, int[] count, int[] mask,
+        @Const mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t*") long[] count, int[] mask,
         @Const @ByPtrPtr float[] scales);
 
 /** Sets output \p scales for primitive operations. The number of elements \p
- * count and correspondence scale \p mask are stored for future use.
- *
- * The \p mask argument defines the correspondence between the output tensor
- * dimensions and the \p scales array. Set the i-th bit of \p mask to 1 to use a
- * dedicated scaling factor for each slice of the output tensor over the i-th
- * dimension. Set \p mask to 0 to use a common scaling factor for the whole
- * output tensor.
- *
- * \note
- *      The dimension order is always native and does not depend on the actual
- *      layout used. Examples:
- *       - 2D dimensional data the order of dimensions is always: (n, c)
- *       - 4D dimensional data the order is always: (n, c, h, w)
- *       - 5D dimensional weights the order is always: (g, oc, ic, kh, kw)
- *
- * Example usage:
- * <pre>{@code
- *      int mb = 32, oc = 32, oh = 14, ow = 14; // convolution output params
- *      float scales[oc] = { ... }; // unique output scales per output channel
- *      int oc_dim = 1; // mb_dim = 0, channel_dim = 1, height_dim = 2, ...
- *
- *      mkldnn_convolution_desc_t cd; // create & configure convolution op_desc
- *
- *      mkldnn_primitive_attr_t attr;
- *      mkldnn_primitive_attr_create(&attr);  // create default attributes
- *      mkldnn_primitive_attr_set_output_scales(attr, oc, 1 << oc_dim, scales);
- *
- *      mkldnn_primitive_desc_t cpd;
- *      mkldnn_primitive_desc_create_v2(&cpd, &cd, attr, NULL);
- * }</pre>
- *
- * \note
- *      There is no way to check that \p count corresponds to \p mask until an
- *      actual primitive descriptor is created, so it is the user's
- *      responsibility to set proper values. The following formula must hold:
- *
- *      <pre>{@code \[count = \prod\limits_{d \in mask} output.dims[d]\]}</pre>
- */
+ *  count and correspondence scale \p mask are stored for future use.
+ * 
+ *  The \p mask argument defines the correspondence between the output tensor
+ *  dimensions and the \p scales array. Set the i-th bit of \p mask to 1 to use a
+ *  dedicated scaling factor for each slice of the output tensor over the i-th
+ *  dimension. Set \p mask to 0 to use a common scaling factor for the whole
+ *  output tensor.
+ * 
+ *  \note
+ *       The dimension order is always native and does not depend on the actual
+ *       layout used. Examples:
+ *        - 2D dimensional data the order of dimensions is always: (n, c)
+ *        - 4D dimensional data the order is always: (n, c, h, w)
+ *        - 5D dimensional weights the order is always: (g, oc, ic, kh, kw)
+ * 
+ *  Example usage:
+ *  <pre>{@code
+ *       int mb = 32, oc = 32, oh = 14, ow = 14; // convolution output params
+ *       float scales[oc] = { ... }; // unique output scales per output channel
+ *       int oc_dim = 1; // mb_dim = 0, channel_dim = 1, height_dim = 2, ...
+ * 
+ *       mkldnn_convolution_desc_t cd; // create & configure convolution op_desc
+ * 
+ *       mkldnn_primitive_attr_t attr;
+ *       mkldnn_primitive_attr_create(&attr);  // create default attributes
+ *       mkldnn_primitive_attr_set_output_scales(attr, oc, 1 << oc_dim, scales);
+ * 
+ *       mkldnn_primitive_desc_t cpd;
+ *       mkldnn_primitive_desc_create(&cpd, &cd, attr, NULL);
+ *  }</pre>
+ * 
+ *  \note
+ *       There is no way to check that \p count corresponds to \p mask until an
+ *       actual primitive descriptor is created, so it is the user's
+ *       responsibility to set proper values. The following formula must hold:
+ * 
+ *       <pre>{@code \[count = \prod\limits_{d \in mask} output.dims[d]\]}</pre> */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const FloatPointer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const FloatBuffer scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_output_scales(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
         @Const float[] scales);
 
 /** Returns \p post_ops for given \p attr.
- *
- * \warning
- *      \p post_ops points to the internal \p attr field, so the user should not
- *      modify or destroy \p post_ops. Also, the lifetime of \p post_ops is the
- *      same as that of the \p attr it belongs to, so it is illegal to use \p
- *      post_ops after \p attr has been destroyed.
- */
+ * 
+ *  \warning
+ *       \p post_ops points to the internal \p attr field, so the user should not
+ *       modify or destroy \p post_ops. Also, the lifetime of \p post_ops is the
+ *       same as that of the \p attr it belongs to, so it is illegal to use \p
+ *       post_ops after \p attr has been destroyed. */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_post_ops(
         @Const mkldnn_primitive_attr attr, @Const @ByPtrPtr mkldnn_post_ops post_ops);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_get_post_ops(
         @Const mkldnn_primitive_attr attr, @Cast("const_mkldnn_post_ops_t*") PointerPointer post_ops);
 
 /** Sets configured \p post_ops to an attribute \p attr for future use (when
- * primitive descriptor is being created).
- *
- * \note
- *      At this point in time, there is no way to check whether the primitive
- *      descriptor does or does not support a given sequence of post operations.
- *      Therefore the user should handle an error that might occur at the
- *      mkldnn_primitive_desc_create call.
- */
+ *  primitive descriptor is being created).
+ * 
+ *  \note
+ *       At this point in time, there is no way to check whether the primitive
+ *       descriptor does or does not support a given sequence of post operations.
+ *       Therefore the user should handle an error that might occur at the
+ *       mkldnn_primitive_desc_create call. */
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_post_ops(
         mkldnn_primitive_attr attr, @Const mkldnn_post_ops post_ops);
 
 /** \addtogroup c_api_attributes_post_ops Sequence of post operations
- * An extension for performing extra operations after a base operation.
- * \{ */
-
-/** Creates an empty sequence of post operations \p post_ops. */
+ *  An extension for performing extra operations after a base operation.
+ *  \{
+ <p>
+ *  Creates an empty sequence of post operations \p post_ops. */
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_create(@ByPtrPtr mkldnn_post_ops post_ops);
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_create(@Cast("mkldnn_post_ops_t*") PointerPointer post_ops);
 
@@ -1347,42 +1702,50 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_destroy(mkldnn
 /** Returns the \p length of post operations for given \p post_ops. */
 public static native int mkldnn_post_ops_len(@Const mkldnn_post_ops post_ops);
 
-/** Returns the type of post operation with index \p index in given
- * \p post_ops. In case of error, returns #mkldnn_undefined_primitive. */
+/** Returns the kind of post operation with index \p index in given
+ *  \p post_ops. In case of error, returns #mkldnn_undefined_primitive. */
+
+///
+///
+///
+///
 public static native @Cast("mkldnn_primitive_kind_t") int mkldnn_post_ops_get_kind(
         @Const mkldnn_post_ops post_ops, int index);
 
 /** Appends accumulation (sum) post operation to the \p post_ops. Prior to
- * accumulating the result, the previous value would be multiplied by \p scale.
- *
- * The kind of this post operation is #mkldnn_sum.
- *
- * This feature might improve performance for cases like residual learning
- * blocks, where the result of convolution is accumulated to the previously
- * computed activations. The parameter \p scale might be extreme for the
- * integer-based computations when the result and previous activations have
- * different logical scaling factors.
- *
- * In the simplest case when the accumulation is the only post operation, the
- * computations would be:
- * dst[] <- scale * dst[] + op(...) // instead of dst[] <- op(...)
- *
- * \note
- *      This post operation (as well as all the others) disregards the original
- *      layout of the destination; that is, the layout of the original
- *      destination is expected to be the same as the layout of the stored
- *      destination.
- */
+ *  accumulating the result, the previous value would be multiplied by \p scale.
+ * 
+ *  The kind of this post operation is #mkldnn_sum.
+ * 
+ *  This feature might improve performance for cases like residual learning
+ *  blocks, where the result of convolution is accumulated to the previously
+ *  computed activations. The parameter \p scale might be extreme for the
+ *  integer-based computations when the result and previous activations have
+ *  different logical scaling factors.
+ * 
+ *  In the simplest case when the accumulation is the only post operation, the
+ *  computations would be:
+ *  dst[] <- scale * dst[] + op(...) // instead of dst[] <- op(...)
+ * 
+ *  \note
+ *       This post operation (as well as all the others) disregards the original
+ *       layout of the destination; that is, the layout of the original
+ *       destination is expected to be the same as the layout of the stored
+ *       destination. */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_append_sum(
         mkldnn_post_ops post_ops, float scale);
 
 /** Gets the parameters of the accumulation (sum) post operation with index
- * \p index in the sequence of \p post_ops.
- *
- * \note
- *      If index \p index would not correspond to the accumulation post
- *      operation, the function returns #mkldnn_invalid_arguments.
- */
+ *  \p index in the sequence of \p post_ops.
+ * 
+ *  \note
+ *       If index \p index would not correspond to the accumulation post
+ *       operation, the function returns #mkldnn_invalid_arguments. */
+
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_sum(
         @Const mkldnn_post_ops post_ops, int index, FloatPointer scale);
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_sum(
@@ -1391,23 +1754,28 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_sum
         @Const mkldnn_post_ops post_ops, int index, float[] scale);
 
 /** Appends eltwise post operation to the \p post_ops with given parameters
- * \p kind, \p alpha, and \p beta (@see mkldnn_eltwise_forward_desc_init and
- * mkldnn_eltwise_desc_t).
- *
- * The kind of this post operation is #mkldnn_eltwise.
- *
- * In the simplest case when the eltwise is the only post operation, the
- * computations would be:
- * dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
- * where eltwise_op is configured with the given parameters.
- */
+ *  \p kind, \p alpha, and \p beta (@see mkldnn_eltwise_forward_desc_init and
+ *  mkldnn_eltwise_desc_t).
+ * 
+ *  The kind of this post operation is #mkldnn_eltwise.
+ * 
+ *  In the simplest case when the eltwise is the only post operation, the
+ *  computations would be:
+ *  dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
+ *  where eltwise_op is configured with the given parameters. */
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_append_eltwise(
         mkldnn_post_ops post_ops, float scale, @Cast("mkldnn_alg_kind_t") int alg,
         float alpha, float beta);
 
 /** Gets the eltwise parameters of the post operation with index \p index in
- * the sequence of \p post_ops.
- */
+ *  the sequence of \p post_ops. */
+
+///
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_eltwise(
         @Const mkldnn_post_ops post_ops, int index, FloatPointer scale,
         @Cast("mkldnn_alg_kind_t*") IntPointer alg, FloatPointer alpha, FloatPointer beta);
@@ -1418,1204 +1786,1317 @@ public static native @Cast("mkldnn_status_t") int mkldnn_post_ops_get_params_elt
         @Const mkldnn_post_ops post_ops, int index, float[] scale,
         @Cast("mkldnn_alg_kind_t*") int[] alg, float[] alpha, float[] beta);
 
-/** \} */
+/** \}
+ <p>
+ *  \}
+ <p>
+ *  \addtogroup c_api_memory Memory
+ *  A primitive to describe and store data.
+ * 
+ *  The library supports various data types and formats. Memory hierarchy
+ *  consists of three levels of abstraction:
+ *  1. **Memory descriptor** -- engine agnostic logical description of data
+ *       (number of dimensions, dimensions themselves, and data type), and
+ *       optionally the format/layout that describes the physical representation
+ *       of data in memory. If the format is not known yet, one can pass
+ *       #mkldnn_format_tag_any. This approach is used to allow compute-intensive
+ *       primitives to specify the most appropriate format on their own with
+ *       users required to reorder the data if the incoming format doesn't match
+ *       the primitive's selection. Memory descriptor can be initialized with
+ *       mkldnn_memory_desc_init_by_tag() or mkldnn_memory_desc_init_by_strides()
+ *       functions, or by directly filling the mkldnn_memory_desc_t structure.
+ *       The latter requires deep knowledge of how the physical data
+ *       representation is mapped to the structure.
+ *       The \ref dev_guide_understanding_memory_formats topic should shed some
+ *       light on that.
+ *       For the fully defined memory descriptors (i.e. where the format kind is
+ *       not equal to #mkldnn_format_kind_any) a user can the size, using the
+ *       mkldnn_memory_desc_get_size() function. As described in
+ *       \ref dev_guide_understanding_memory_formats, the size of data sometimes
+ *       cannot be computed as the product of dimensions times the size
+ *       of the data type. So users are encouraged to use this function
+ *       for better code portability.
+ *       Two memory descriptors can be compared with mkldnn_memory_desc_equal().
+ *       The comparison is especially useful when checking whether a primitive
+ *       requires reorder from the user's data format to the primitive's format.
+ *  2. **Memory** -- an engine-specific object that handles the data and its
+ *       description (a memory descriptor). For CPU enigne, the data handle is
+ *       simply a pointer to \c void. The data handle can be queried using
+ *       mkldnn_memory_get_data_handle() and set using
+ *       mkldnn_memory_set_data_handle(). The latter function always sets the
+ *       memory in the padding region to zero, which is the invariant maintained
+ *       by all the primitives in Intel MKL-DNN.
+ *       See \ref dev_guide_understanding_memory_formats for more details.
+ *       A memory can be created using mkldnn_memory_create() function.
+ *       A memory can also be queried for the underlying memory descriptor and
+ *       engine using mkldnn_memory_get_memory_desc() and
+ *       mkldnn_memory_get_engine() functions.
+ * 
+ *  Along with ordinary memory with all dimensions being positive, Intel
+ *  MKL-DNN supports *zero-volume* memory with one or more dimensions set to
+ *  zero. This is to support the NumPy\* convention.
+ *  If a *zero-volume* memory is passed to a primitive, the primitive does
+ *  not perform any computations on this memory. For example:
+ *   - Convolution with {@code (0 batch, 3 input channels, 13 height, 13 width)}
+ *     source and {@code (16 output channels, 3 inputs, channel, 3 height, 3 width)}
+ *     weights would produce {@code (0 batch, 16 output channels, 11 height, 11 width)}
+ *     destination (assuming strides are {@code 1} and paddings are zero) and perform
+ *     zero multiply-add operations.
+ *   - Concatenation of three memories of shapes {@code (3, 4, 13, 13)},
+ *     {@code (3, 0, 13, 13)}, and {@code (3, 1, 13, 13)} along the second axis would produce
+ *     the output of the shape {@code (3, 5, 13, 13)}, effectively ignoring the second
+ *     input (however, if the user created a concatenation primitive descriptor
+ *     with three inputs they should also provide all three memories to the
+ *     concatenation primitive, including the one with zero second dimension).
+ *   - However, Intel MKL-DNN would return an error when attempting to create a
+ *     convolution with *zero-volume* memory passed for weights because such a
+ *     convolution is not well-defined:
+ *     ~~~
+ *     dst(1, 16, 11, 11) <-- src(1, 0, 13, 13) (*) wei(16, 0, 3, 3)
+ *     ~~~
+ *     Should the values in the destination be zeroes or just not accessed at
+ *     all? Moreover, backward pass w.r.t. weights in such cases is also not
+ *     well-defined.
+ * 
+ *   Data handle of *zero-volume* memory is never accessed and hence can be
+ *   unset (NULL in case of CPU engine).
+ * 
+ *  @see \ref dev_guide_understanding_memory_formats
+ *  \{
+ <p>
+ *  Initializes a \p memory_desc memory descriptor using \p ndims, \p dims, \p
+ *  data_type, and \p strides.
+ * 
+ *  The \p strides might be NULL, which means the order of physical dimensions
+ *  is the same as the order of logical ones.
+ * 
+ *  \note The logical order of dimensions is defined by a primitive that
+ *        consumes the memory. */
 
-/** \} */
-
-/** \addtogroup c_api_memory Memory
- * A primitive to describe and store data.
- *
- * The library supports various data types and formats. Memory hierarchy
- * consists of three levels of abstraction:
- * 1. **Memory descriptor** -- engine agnostic logical description of data
- *      (number of dimensions, dimensions themselves, and data type), and
- *      optionally the format/layout that describes the physical representation
- *      of data in memory. If the format is not known yet, one can pass
- *      #mkldnn_any. This approach is used to allow compute-intensive
- *      primitives to specify the most appropriate format on their own with
- *      users required to reorder the data if the incoming format doesn't match
- *      the primitive's selection. Memory descriptor can be created with the
- *      mkldnn_memory_desc_init() function or by directly filling the
- *      mkldnn_memory_desc_t structure. The latter requires deep knowledge of
- *      how the physical data representation is mapped to the structure. The
- *      \ref understanding_memory_formats topic should shed some light on that.
- * 2. **Memory primitive descriptor** -- logical description of data that is
- *      fully defined; that is, it cannot contain #mkldnn_any as a format. It
- *      also has the engine specified. A memory primitive descriptor is created
- *      by calling mkldnn_memory_primitive_desc_create() with two arguments: an
- *      mkldnn_memory_desc_t and an mkldnn_engine_t. It has the same type as
- *      other primitive descriptors and can be:
- *      - queried to return the underlying memory descriptor using
- *        mkldnn_primitive_desc_query() and
- *        mkldnn_primitive_desc_query_memory_d().
- *      - compared with another memory primitive descriptor using
- *        mkldnn_memory_primitive_desc_equal(). This is especially useful when
- *        checking whether a primitive requires reorder from the user's data
- *        format to the primitive's format.
- *      - queried to return the size of the data using
- *        mkldnn_memory_primitive_desc_get_size(). As described in
- *        \ref understanding_memory_formats, the size of data sometimes cannot
- *        be computed as the product of dimensions times the size of the data
- *        type. So users are encouraged to use this function for better code
- *        portability.
- * 3. **Memory primitive** or simply **memory** -- a pseudo-primitive that is
- *      defined by a memory primitive descriptor and a handle to the data
- *      itself. (In the case of CPU engine, the handle is simply a pointer to
- *      \c void.) The data handle can be queried using
- *      mkldnn_memory_get_data_handle() and set using
- *      mkldnn_memory_set_data_handle(). The latter function always sets the
- *      memory in the padding region to zero, which is the invariant maintained
- *      by all the primitives in Intel MKL-DNN. See
- *      \ref understanding_memory_formats for more details.
- *      A memory primitive can be created using mkldnn_primitive_create() with
- *      empty inputs and outputs. In this case, the memory primitive's data
- *      handle must be set manually using mkldnn_memory_set_data_handle().
- *
- * Along with ordinary memory with all dimensions being positive, Intel
- * MKL-DNN supports *zero-volume* memory with one or more dimensions set to
- * zero. This is to support the NumPy\* convention.
- * If a *zero-volume* memory is passed to a primitive, the primitive does
- * not perform any computations on this memory. For example:
- *  - Convolution with {@code (0 batch, 3 input channels, 13 height, 13 width)}
- *    source and {@code (16 output channels, 3 inputs, channel, 3 height, 3 width)}
- *    weights would produce {@code (0 batch, 16 ouput channels, 11 height, 11 width)}
- *    destination (assuming strides are {@code 1} and paddings are zero) and perform
- *    zero multiply-add operations.
- *  - Concatenation of three memories of shapes {@code (3, 4, 13, 13)},
- *    {@code (3, 0, 13, 13)}, and {@code (3, 1, 13, 13)} along the second axis would produce
- *    the output of the shape {@code (3, 5, 13, 13)}, effectively ignoring the second
- *    input (however, if the user created a concatenation primitive descriptor
- *    with three inputs they should also provide all three memories to the
- *    concatenation primitive, including the one with zero second dimension).
- *  - However, Intel MKL-DNN would return an error when attempting to create a
- *    convolution with *zero-volume* memory passed for weights because such a
- *    convolution is not well-defined:
- *    ~~~
- *    dst(1, 16, 11, 11) <-- src(1, 0, 13, 13) (*) wei(16, 0, 3, 3)
- *    ~~~
- *    Should the values in the destination be zeroes or just not accessed at
- *    all? Moreover, backward pass w.r.t. weights in such cases is also not
- *    well-defined.
- *
- *  Data handle of *zero-volume* memory is never accessed and hence can be
- *  unset (NULL in case of CPU engine).
- *
- * @see \ref understanding_memory_formats
- * \{ */
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongPointer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") LongPointer strides);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongBuffer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") LongBuffer strides);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_strides(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") long[] dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("const int64_t*") long[] strides);
 
 /** Initializes a \p memory_desc memory descriptor using \p ndims, \p dims, \p
- * data_type, and data \p format. \p format can be #mkldnn_any, which means
- * that specific data layouts are not permitted. */
-public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init(
-        mkldnn_memory_desc_t memory_desc, int ndims, @Const IntPointer dims,
-        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_memory_format_t") int format);
-public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init(
-        mkldnn_memory_desc_t memory_desc, int ndims, @Const IntBuffer dims,
-        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_memory_format_t") int format);
-public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init(
-        mkldnn_memory_desc_t memory_desc, int ndims, @Const int[] dims,
-        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_memory_format_t") int format);
+ *  data_type, and format \p tag.
+ * 
+ *  \p tag can be #mkldnn_format_tag_any, which allows a primitive to define
+ *  the appropriate memory format. In this case, the \p format_kind would be set
+ *  to #mkldnn_format_kind_any */
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongPointer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") LongBuffer dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_by_tag(
+        mkldnn_memory_desc_t memory_desc, int ndims, @Cast("const int64_t*") long[] dims,
+        @Cast("mkldnn_data_type_t") int data_type, @Cast("mkldnn_format_tag_t") int tag);
 
-/** Creates a \p memory_primitive_desc memory primitive descriptor using \p
- * memory_desc and \p engine. \p memory_desc cannot be uncertain; that is, it
- * cannot be initialized with #mkldnn_any. */
-public static native @Cast("mkldnn_status_t") int mkldnn_memory_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc memory_primitive_desc,
-        @Const mkldnn_memory_desc_t memory_desc, mkldnn_engine engine);
-public static native @Cast("mkldnn_status_t") int mkldnn_memory_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer memory_primitive_desc,
-        @Const mkldnn_memory_desc_t memory_desc, mkldnn_engine engine);
+/** Initializes a \p memory_desc for a given \p parent_memory_desc, with
+ *  \p dims sizes and \p offsets. May fail if layout used does not allow
+ *  obtain desired submemory. In this case consider using {@code extract} or {@code insert}
+ *  primitive */
 
-/** Creates a \p view_primitive_desc for a given \p memory_primitive_desc, with
- * \p dims sizes and \p offsets offsets. May fail if the format used does not
- * allow obtaining the desired view. In this case, consider using the extract
- * primitive. */
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const IntPointer dims, @Const IntPointer offsets);
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const IntBuffer dims, @Const IntBuffer offsets);
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const int[] dims, @Const int[] offsets);
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const IntPointer dims, @Const IntPointer offsets);
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const IntBuffer dims, @Const IntBuffer offsets);
-public static native @Cast("mkldnn_status_t") int mkldnn_view_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer view_primitive_desc,
-        @Const mkldnn_primitive_desc memory_primitive_desc,
-        @Const int[] dims, @Const int[] offsets);
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
+        mkldnn_memory_desc_t memory_desc,
+        @Const mkldnn_memory_desc_t parent_memory_desc,
+        @Cast("const int64_t*") LongPointer dims, @Cast("const int64_t*") LongPointer offsets);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
+        mkldnn_memory_desc_t memory_desc,
+        @Const mkldnn_memory_desc_t parent_memory_desc,
+        @Cast("const int64_t*") LongBuffer dims, @Cast("const int64_t*") LongBuffer offsets);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_desc_init_submemory(
+        mkldnn_memory_desc_t memory_desc,
+        @Const mkldnn_memory_desc_t parent_memory_desc,
+        @Cast("const int64_t*") long[] dims, @Cast("const int64_t*") long[] offsets);
 
-/** Compares two descriptors of memory primitives.
- * @return 1 if the descriptors are the same.
- * @return 0 if the descriptors are different.
- *
- * Use this function to identify whether a reorder is required for the memory
- * primitives. \p lhs and \p rhs must be either memory or view primitive
- * descriptors. */
-public static native int mkldnn_memory_primitive_desc_equal(
-        @Const mkldnn_primitive_desc lhs,
-        @Const mkldnn_primitive_desc rhs);
+/** Compares two memory descriptors.
+ *  @return 1 if the descriptors are the same.
+ *  @return 0 if the descriptors are different.
+ * 
+ *  Use this function to identify whether a reorder is required between the
+ *  two memories */
+public static native int mkldnn_memory_desc_equal(
+        @Const mkldnn_memory_desc_t lhs,
+        @Const mkldnn_memory_desc_t rhs);
 
-/** Returns the size (in bytes) that is required for given \p
- * memory_primitive_desc */
-/* XXX: view? */
-public static native @Cast("size_t") long mkldnn_memory_primitive_desc_get_size(
-        @Const mkldnn_primitive_desc memory_primitive_desc);
+/** Returns the size (in bytes) that is required for given \p memory_desc */
+public static native @Cast("size_t") long mkldnn_memory_desc_get_size(
+        @Const mkldnn_memory_desc_t memory_desc);
 
-/** For a \p memory primitive, returns the data \p handle. For the CPU engine,
- * the data handle is a pointer to the actual data. */
-/* XXX: view? */
+/** Creates a memory for given \p memory_desc and \p engine. Also sets \p
+ *  handle to one of the following:
+ *  - pointer to the user allocated memory, i.e. valid handle. In this case the
+ *    library doesn't own allocated memory.
+ *  - MKLDNN_MEMORY_ALLOCATE to ask the library to allocate and
+ *    attach memory. In this case the library owns allocated memory.
+ *  - MKLDNN_MEMORY_NONE to create mkldnn_memory w/o attached memory. */
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_create(@ByPtrPtr mkldnn_memory memory,
+        @Const mkldnn_memory_desc_t memory_desc, mkldnn_engine engine,
+        Pointer handle);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_create(@Cast("mkldnn_memory_t*") PointerPointer memory,
+        @Const mkldnn_memory_desc_t memory_desc, mkldnn_engine engine,
+        Pointer handle);
+
+/** Returns a \p memory_desc associated with \p memory. */
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_memory_desc(
+        @Const mkldnn_memory memory,
+        @Cast("const mkldnn_memory_desc_t**") PointerPointer memory_desc);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_memory_desc(
+        @Const mkldnn_memory memory,
+        @Const @ByPtrPtr mkldnn_memory_desc_t memory_desc);
+
+/** Returns an \p engine associated with \p memory. */
+
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_engine(
+        @Const mkldnn_memory memory, @ByPtrPtr mkldnn_engine engine);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_engine(
+        @Const mkldnn_memory memory, @Cast("mkldnn_engine_t*") PointerPointer engine);
+
+/** For a \p memory, maps the data of the memory to \p mapped_ptr.
+ * 
+ *  Mapping allows to read/write directly from/to the memory contents for
+ *  engines that do not support direct memory access.
+ * 
+ *  Mapping is an exclusive operation - a memory object cannot be used in other
+ *  operations until this memory object is unmapped.
+ * 
+ *  \note Any primitives working with \p memory should be completed before
+ *        mapping the memory. Use mkldnn_stream_wait to synchronize the
+ *        corresponding execution stream.
+ * 
+ *  \note Map/unmap API is provided mainly for debug/testing purposes and its
+ *        performance may be suboptimal. */
+
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_map_data(
+        @Const mkldnn_memory memory, @Cast("void**") PointerPointer mapped_ptr);
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_map_data(
+        @Const mkldnn_memory memory, @Cast("void**") @ByPtrPtr Pointer mapped_ptr);
+
+/** For a \p memory, unmaps a mapped pointer to the data of the memory.
+ * 
+ *  Any changes of the mapped data are synchronized back to the memory after the
+ *  call is complete. The mapped pointer must be obtained through a
+ *  mkldnn_memory_map_data call.
+ * 
+ *  \note Map/unmap API is provided mainly for debug/testing purposes and its
+ *        performance may be suboptimal. */
+
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_unmap_data(
+        @Const mkldnn_memory memory, Pointer mapped_ptr);
+
+/** For a \p memory, returns the data \p handle.
+ * 
+ *  For the CPU engine, the data handle is a pointer to the actual data. */
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_data_handle(
-        @Const mkldnn_primitive memory, @Cast("void**") PointerPointer handle);
+        @Const mkldnn_memory memory, @Cast("void**") PointerPointer handle);
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_get_data_handle(
-        @Const mkldnn_primitive memory, @Cast("void**") @ByPtrPtr Pointer handle);
+        @Const mkldnn_memory memory, @Cast("void**") @ByPtrPtr Pointer handle);
 
-/** For a \p memory primitive, sets the data \p handle. */
+/** For a \p memory, sets the data \p handle. */
 public static native @Cast("mkldnn_status_t") int mkldnn_memory_set_data_handle(
-        mkldnn_primitive memory, Pointer handle);
+        mkldnn_memory memory, Pointer handle);
 
-/** \} */
-
-/** \addtogroup c_api_reorder Reorder
- * A primitive to copy data between memory formats.
- * \{ */
-
-/** Initializes a \p reorder_primitive_desc using descriptors of \p input and
- * \p output memory primitives.
- *
- * Order of inputs:
- *  - input (#mkldnn_query_input_pd, 0)
- *
- * Order of outputs:
- *  - output (#mkldnn_query_output_pd, 0)
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc reorder_primitive_desc,
-        @Const mkldnn_primitive_desc input,
-        @Const mkldnn_primitive_desc output);
-public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer reorder_primitive_desc,
-        @Const mkldnn_primitive_desc input,
-        @Const mkldnn_primitive_desc output);
-
-/** Initializes a \p reorder_primitive_desc using an \p attr attribute and
- * descriptors of \p input and \p output memory primitives.
- *
- * Order of inputs:
- *  - input (#mkldnn_query_input_pd, 0)
- *
- * Order of outputs:
- *  - output (#mkldnn_query_output_pd, 0)
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create_v2(
-        @ByPtrPtr mkldnn_primitive_desc reorder_primitive_desc,
-        @Const mkldnn_primitive_desc input,
-        @Const mkldnn_primitive_desc output,
-        @Const mkldnn_primitive_attr attr);
-public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create_v2(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer reorder_primitive_desc,
-        @Const mkldnn_primitive_desc input,
-        @Const mkldnn_primitive_desc output,
-        @Const mkldnn_primitive_attr attr);
-
-/** \} */
-
-/** \addtogroup c_api_concat Concat
- * A primitive to concatenate data by arbitrary dimension.
- * \{ */
-
-/** Creates out-of-place \p concat_primitive_desc for concatenation of \p n
- * inputs by \p concat_dimension with resulting \p output_desc memory
- * descriptor. \p output_desc can be NULL or specified with the #mkldnn_any
- * format -- in this case, the appropriate memory format would be chosen
- * automatically.
- *
- * Order of inputs:
- *  - input 0 (#mkldnn_query_input_pd, 0)
- *  - input 1 (#mkldnn_query_input_pd, 1)
- *  - ...
- *  - input \p n - 1 (#mkldnn_query_input_pd, \p n - 1)
- *
- * Order of outputs:
- *  - output (#mkldnn_query_output_pd, 0)
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_create(
-        @ByPtrPtr mkldnn_primitive_desc concat_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, int concat_dimension,
-        @Const @ByPtrPtr mkldnn_primitive_desc input_pds);
-public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_create(
-        @Cast("mkldnn_primitive_desc_t*") PointerPointer concat_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, int concat_dimension,
-        @Cast("const_mkldnn_primitive_desc_t*") PointerPointer input_pds);
-
-// #if 0
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
 // #endif
 
-/** \} */
+/** Deletes a \p memory. */
 
-/** \addtogroup c_api_sum Sum
- * A primitive to sum data.
- * \{ */
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_memory_destroy(mkldnn_memory memory);
 
-/** Creates out-of-place \p sum_primitive_desc for sum of \p n
- * inputs multiplied by scale with resulting \p output_desc memory
- * descriptor. \p output_desc can be NULL or specified with the #mkldnn_any
- * format -- in this case, the appropriate memory format would be chosen
- * automatically.
- *
- * Order of inputs:
- *  - input 0 (#mkldnn_query_input_pd, 0)
- *  - input 1 (#mkldnn_query_input_pd, 1)
- *  - ...
- *  - input \p n - 1 (#mkldnn_query_input_pd, \p n - 1)
- *
- * Order of outputs:
- *  - output (#mkldnn_query_output_pd, 0)
- */
+/** \}
+ <p>
+ *  \addtogroup c_api_reorder Reorder
+ *  A primitive to copy data between memory formats.
+ * 
+ *  @see \ref dev_guide_reorder in developer guide
+ *  @see \ref cpp_api_reorder in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes a \p reorder_primitive_desc using the description of the source
+ *  (\p src_engine and \p src_md) and destination (\p dst_engine and \p dst_md)
+ *  memory, and an \p attr attribute.
+ * 
+ *  Inputs:
+ *   - input (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - output (#mkldnn_query_dst_md, 0) */
+
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create(
+        @ByPtrPtr mkldnn_primitive_desc reorder_primitive_desc,
+        @Const mkldnn_memory_desc_t src_md, mkldnn_engine src_engine,
+        @Const mkldnn_memory_desc_t dst_md, mkldnn_engine dst_engine,
+        @Const mkldnn_primitive_attr attr);
+public static native @Cast("mkldnn_status_t") int mkldnn_reorder_primitive_desc_create(
+        @Cast("mkldnn_primitive_desc_t*") PointerPointer reorder_primitive_desc,
+        @Const mkldnn_memory_desc_t src_md, mkldnn_engine src_engine,
+        @Const mkldnn_memory_desc_t dst_md, mkldnn_engine dst_engine,
+        @Const mkldnn_primitive_attr attr);
+
+/** \}
+ <p>
+ *  \addtogroup c_api_concat Concat
+ *  A primitive to concatenate data by arbitrary dimension.
+ * 
+ *  @see \ref dev_guide_concat in developer guide
+ *  @see \ref cpp_api_concat in \ref cpp_api
+ *  \{
+ <p>
+ *  Creates out-of-place \p concat_primitive_desc for concatenation of \p n
+ *  inputs by \p concat_dimension with resulting \p output_desc memory
+ *  descriptor. \p output_desc can be NULL or specified with the
+ *  #mkldnn_format_kind_any format kind -- in this case, the appropriate memory
+ *  format would be chosen automatically.
+ * 
+ *  Inputs:
+ *   - input 0 (#mkldnn_query_src_md, 0)
+ *   - input 1 (#mkldnn_query_src_md, 1)
+ *   - ...
+ *   - input \p n - 1 (#mkldnn_query_src_md, \p n - 1)
+ * 
+ *  Outputs:
+ *   - output (#mkldnn_query_dst_md, 0) */
+
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_create(
+        @ByPtrPtr mkldnn_primitive_desc concat_primitive_desc,
+        @Const mkldnn_memory_desc_t dst_md,
+        int n, int concat_dimension,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
+public static native @Cast("mkldnn_status_t") int mkldnn_concat_primitive_desc_create(
+        @Cast("mkldnn_primitive_desc_t*") PointerPointer concat_primitive_desc,
+        @Const mkldnn_memory_desc_t dst_md,
+        int n, int concat_dimension,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
+
+/** \}
+ <p>
+ *  \addtogroup c_api_sum Sum
+ *  A primitive to sum data.
+ * 
+ *  @see \ref dev_guide_sum in developer guide
+ *  @see \ref cpp_api_sum in \ref cpp_api
+ *  \{
+ <p>
+ *  Creates out-of-place \p sum_primitive_desc for sum of \p n
+ *  inputs multiplied by scale with resulting \p output_desc memory
+ *  descriptor. \p output_desc can be NULL or specified with the
+ *  #mkldnn_format_kind_any format kind -- in this case, the appropriate memory
+ *  format would be chosen automatically.
+ * 
+ *  Inputs:
+ *   - src 0 (#mkldnn_query_src_md, 0)
+ *   - src 1 (#mkldnn_query_src_md, 1)
+ *   - ...
+ *   - src \p n - 1 (#mkldnn_query_src_md, \p n - 1)
+ * 
+ *  Outputs:
+ *   - output (#mkldnn_query_dst_md, 0) */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const FloatPointer scales,
-        @Const @ByPtrPtr mkldnn_primitive_desc input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const FloatPointer scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @Cast("mkldnn_primitive_desc_t*") PointerPointer sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const FloatBuffer scales,
-        @Cast("const_mkldnn_primitive_desc_t*") PointerPointer input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const FloatBuffer scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const float[] scales,
-        @Const @ByPtrPtr mkldnn_primitive_desc input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const float[] scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @Cast("mkldnn_primitive_desc_t*") PointerPointer sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const FloatPointer scales,
-        @Cast("const_mkldnn_primitive_desc_t*") PointerPointer input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const FloatPointer scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @ByPtrPtr mkldnn_primitive_desc sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const FloatBuffer scales,
-        @Const @ByPtrPtr mkldnn_primitive_desc input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const FloatBuffer scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 public static native @Cast("mkldnn_status_t") int mkldnn_sum_primitive_desc_create(
         @Cast("mkldnn_primitive_desc_t*") PointerPointer sum_primitive_desc,
-        @Const mkldnn_memory_desc_t output_desc, int n, @Const float[] scales,
-        @Cast("const_mkldnn_primitive_desc_t*") PointerPointer input_pds);
+        @Const mkldnn_memory_desc_t dst_mds,
+        int n, @Const float[] scales,
+        @Const mkldnn_memory_desc_t src_mds,
+        @Const mkldnn_primitive_attr attr,
+        mkldnn_engine engine);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_convolution Convolution
+ *  The convolution primitive computes a forward, backward, or weight update for
+ *  a batched convolution operation on 1D, 2D, or 3D spatial data with bias.
+ * 
+ *   @see \ref dev_guide_convolution in developer guide
+ *   @see \ref cpp_api_convolution in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes a convolution descriptor \p conv_desc for forward propagation
+ *  using \p prop_kind (possible values are #mkldnn_forward_training and
+ *  #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides, \p
+ *  padding_l, and \p padding_r. In order to create a
+ *  convolution without bias, \p bias_desc should either be \c NULL or point to
+ *  a descriptor with memory format kind equal to #mkldnn_format_kind_undef.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ *   - bias (#mkldnn_query_weights_md, 1), if created with bias
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
 
-/** \addtogroup c_api_convolution Convolution
- * A primitive to compute convolution using different algorithms.
- *
- * <pre>{@code \[dst[n][oc][oh][ow]  =
- *     \sum_{kw=0}^{KW}\sum_{kh=0}^{KH}\sum_{ic=0}^{IC}
- *     src[n][ic][oh \cdot s_h - p_l[0] + kh][ow \cdot s_w - p_r[1] + kw]
- *     \cdot weights[g][oc][ic][kh][kw]
- *     + bias[g][oc],\]}</pre>
- *
- * where size of output spatial domain is given by
- * {@code  OH = \left\lfloor{\frac{IH - KH + p_l[0] + p_r[0]}{s_h}}
- *          \right\rfloor + 1},
- * {@code  OW = \left\lfloor{\frac{IW - KW + p_l[1] + p_r[1]}{s_w}}
- *          \right\rfloor + 1},
- *
- * and summation is carried over input channels {@code ic} in
- * group {@code g}, and {@code s_h, s_w} are \p strides and
- * {@code p_l, p_r} are \p padding_l and \p padding_r.
- * \{ */
-
-/** Initializes a convolution descriptor \p conv_desc for forward propagation
- * using \p prop_kind (possible values are #mkldnn_forward_training and
- * #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides, \p
- * padding_l, \p padding_r, and \p padding_kind. In order to create a
- * convolution without bias, \p bias_desc should either be \c NULL or point to
- * a descriptor with memory format equal to #mkldnn_format_undef.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for forward
- * propagation using \p prop_kind (possible values are #mkldnn_forward_training
- * and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
- * \p dilates, \p padding_l, \p padding_r, and \p padding_kind.
- * In order to create a dilated convolution without bias, \p bias_desc
- * should either be \c NULL or point to a descriptor with memory format equal
- * to #mkldnn_format_undef.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+ *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
+ *  and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
+ *  \p dilates, \p padding_l, and \p padding_r.
+ *  In order to create a dilated convolution without bias, \p bias_desc
+ *  should either be \c NULL or point to a descriptor with memory format kind
+ *  equals #mkldnn_format_kind_undef.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ *   - bias (#mkldnn_query_weights_md, 1), if created with bias
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_forward_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
- * with respect to data using \p alg_kind, memory descriptors, \p strides, \p
- * padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
+ *  padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated convolution descriptor \p conv_desc for backward
- * propagation with respect to data using \p alg_kind, memory descriptors, \p
- * strides, \p dilates \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  propagation with respect to data using \p alg_kind, memory descriptors, \p
+ *  strides, \p dilates \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_data_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
- * with respect to weights using \p alg_kind, memory descriptors, \p strides,
- * \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
- */
+ *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
+ *  \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_weights (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a convolution descriptor \p conv_desc for backward propagation
- * with respect to weights using \p alg_kind, memory descriptors, \p strides,
- * \p dilates \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
- */
+ *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
+ *  \p dilates \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_weights (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_convolution_backward_weights_desc_init(
         mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_deconvolution Deconvolution
+ *  A primitive to compute deconvolution using different algorithms.
+ * 
+ *  \{
+ <p>
+ <p>
+ *  Initializes a deconvolution descriptor \p deconv_desc for forward
+ *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
+ *  and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
+ *  \p padding_l, and \p padding_r. In order to create a
+ *  deconvolution without bias, \p bias_desc should either be \c NULL or point to
+ *  a descriptor with memory format kind equals #mkldnn_format_kind_undef.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ *   - bias (#mkldnn_query_weights_md, 1), if created with bias
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
 
-/** \addtogroup c_api_deconvolution Deconvolution
- * A primitive to compute deconvolution using different algorithms.
- *
- * \{ */
-
-
-/** Initializes a deconvolution descriptor \p deconv_desc for forward
- * propagation using \p prop_kind (possible values are #mkldnn_forward_training
- * and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
- * \p padding_l, \p padding_r, and \p padding_kind. In order to create a
- * deconvolution without bias, \p bias_desc should either be \c NULL or point to
- * a descriptor with memory format equal to #mkldnn_format_undef.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p deconv_desc for forward
- * propagation using \p prop_kind (possible values are #mkldnn_forward_training
- * and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
- * \p dilates, \p padding_l, \p padding_r, and \p padding_kind. In order to
- * create a dilated deconvolution without bias, \p bias_desc should either be
- * \c NULL or point to a descriptor with memory format equal to
- * #mkldnn_format_undef.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+ *  propagation using \p prop_kind (possible values are #mkldnn_forward_training
+ *  and #mkldnn_forward_inference), \p alg_kind, memory descriptors, \p strides,
+ *  \p dilates, \p padding_l, and \p padding_r. In order to
+ *  create a dilated deconvolution without bias, \p bias_desc should either be
+ *  \c NULL or point to a descriptor with memory format kind equal
+ *  #mkldnn_format_kind_undef.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ *   - bias (#mkldnn_query_weights_md, 1), if created with bias
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_forward_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
         @Const mkldnn_memory_desc_t bias_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
- * with respect to data using \p alg_kind, memory descriptors, \p strides, \p
- * padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  with respect to data using \p alg_kind, memory descriptors, \p strides, \p
+ *  padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
- * propagation with respect to data using \p alg_kind, memory descriptors, \p
- * strides, \p dilates, \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  propagation with respect to data using \p alg_kind, memory descriptors, \p
+ *  strides, \p dilates, \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_data_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
         @Const mkldnn_memory_desc_t weights_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a deconvolution descriptor \p conv_desc for backward propagation
- * with respect to weights using \p alg_kind, memory descriptors, \p strides,
- * \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
- */
+ *  with respect to weights using \p alg_kind, memory descriptors, \p strides,
+ *  \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_weights (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer padding_l, @Const IntPointer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer padding_l, @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer padding_l, @Const IntBuffer padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer padding_l, @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] padding_l, @Const int[] padding_r,
-        @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] padding_l, @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a dilated deconvolution descriptor \p conv_desc for backward
- * propagation with respect to weights using \p alg_kind, memory descriptors,
- * \p strides, \p dilates, \p padding_l, \p padding_r, and \p padding_kind.
- *
- * \note Memory descriptors are allowed to be initialized with #mkldnn_any
- * value of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
- */
+ *  propagation with respect to weights using \p alg_kind, memory descriptors,
+ *  \p strides, \p dilates, \p padding_l, and \p padding_r.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_weights (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias */
+
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer dilates, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer dilates, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer dilates, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer dilates, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_dilated_deconvolution_backward_weights_desc_init(
         @Cast("mkldnn_deconvolution_desc_t*") mkldnn_convolution_desc_t conv_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t src_desc,
         @Const mkldnn_memory_desc_t diff_weights_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] dilates, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] dilates, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_shuffle Shuffle
+ *  A primitive to shuffle data along the axis.
+ * 
+ *  @see \ref dev_guide_shuffle in developer guide
+ *  @see \ref cpp_api_shuffle in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes a \p shuffle_desc for forward propagation using \p prop_kind,
+ *  memory descriptor \p data_desc, \p axis, and \p group_size.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0)
+ *  */
 
-/** \addtogroup c_api_shuffle Shuffle
- * A primitive to shuffle data along the axis.
- * \{ */
-
-/** Initializes a \p shuffle_desc for forward propagation using \p prop_kind,
- * memory descriptor \p data_desc, \p axis, and \p group_size.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- *
- */
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_forward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
-        @Const mkldnn_memory_desc_t data_desc, int axis, int group_size);
+        @Const mkldnn_memory_desc_t data_desc, int axis,
+        @Cast("mkldnn_dim_t") long group_size);
 
 /** Initializes a \p shuffle_desc for backward propagation using memory
- * descriptor \p diff_data_desc, \p axis, and \p group_size.
- *
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- *
- */
+ *  descriptor \p diff_data_desc, \p axis, and \p group_size.
+ * 
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0)
+ *  */
+
+///
+///
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_shuffle_backward_desc_init(
         mkldnn_shuffle_desc_t shuffle_desc,
-        @Const mkldnn_memory_desc_t diff_data_desc, int axis, int group_size);
+        @Const mkldnn_memory_desc_t diff_data_desc, int axis,
+        @Cast("mkldnn_dim_t") long group_size);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_eltwise Eltwise
+ *  A primitive to compute element-wise operations such as parametric rectifier
+ *  linear unit (ReLU).
+ * 
+ *  Both forward and backward passes support in-place operation; that is, src
+ *  and dst point to the same memory for forward pass, and diff_dst and diff_src
+ *  point to the same memory for backward pass.
+ * 
+ *  \warning Because the original src is required for backward pass, in-place
+ *  forward pass in general cannot be applied during training. However, for some
+ *  kinds of element-wise operations (namely ReLU with alpha parameter equals 0),
+ *  dst and src can be interchangeable for the backward pass, which enables
+ *  performance of in-place forward even for training.
+ * 
+ *  @see \ref dev_guide_eltwise in developer guide
+ *  @see \ref cpp_api_eltwise in \ref cpp_api
+ * 
+ *  \{
+ <p>
+ *  Initializes an \p eltwise_desc for forward propagation using \p prop_kind
+ *  (possible values are #mkldnn_forward_training and #mkldnn_forward_inference),
+ *  \p alg_kind algorithm, memory descriptor \p data_desc, \p alpha, and
+ *  \p beta parameters.
+ * 
+ *  @see mkldnn_eltwise_desc_t for details.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
 
-/** \addtogroup c_api_eltwise Eltwise
- * A primitive to compute element-wise operations like parametric rectifier
- * linear unit (ReLU).
- *
- * Both forward and backward passes support in-place operation; that is, src
- * and dst point to the same memory for forward pass, and diff_dst and diff_src
- * point to the same memory for backward pass.
- *
- * \warning Because the original src is required for backward pass, in-place
- * forward pass in general cannot be applied during training. However, for some
- * kinds of element-wise operations (namely ReLU with alpha parameter equals 0),
- * dst and src can be interchangeable for the backward pass, which enables
- * performing in-place forward even for training.
- *
- * \{ */
-
-/** Initializes an \p eltwise_desc for forward propagation using \p prop_kind
- * (possible values are #mkldnn_forward_training and #mkldnn_forward_inference),
- * \p alg_kind algorithm, memory descriptor \p data_desc, \p alpha, and
- * \p beta parameters.
- *
- * @see mkldnn_eltwise_desc_t for details.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_forward_desc_init(
         mkldnn_eltwise_desc_t eltwise_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
         float alpha, float beta);
 
 /** Initializes an \p eltwise_desc for backward propagation using \p alg_kind
- * algorithm memory descriptors \p diff_data_desc and \p data_desc, and the
- * \p alpha and \p beta parameters.
- *
- * @see mkldnn_eltwise_desc_t for details.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  algorithm memory descriptors \p diff_data_desc and \p data_desc, and the
+ *  \p alpha and \p beta parameters.
+ * 
+ *  @see mkldnn_eltwise_desc_t for details.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_eltwise_backward_desc_init(
         mkldnn_eltwise_desc_t eltwise_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
         @Const mkldnn_memory_desc_t data_desc, float alpha, float beta);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_softmax Softmax
+ *  A primitive to perform softmax.
+ * 
+ *  @see \ref dev_guide_softmax in developer guide
+ *  @see \ref cpp_api_softmax in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes a \p softmax_desc for forward propagation using \p prop_kind
+ *  (possible values are #mkldnn_forward_training and #mkldnn_forward_inference)
+ *  and memory descriptor \p data_desc.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
 
-/** \addtogroup c_api_softmax Softmax
- * A primitive to perform softmax.
- *
- * <pre>{@code \[dst[u][c][in] =
- *    \frac{\exp(src[ou][c][in]) - \max\limits_{c}(src[ou][c][in])}
- *    {\sum\limits_{c}\{\exp(src[ou][c][in])
- *    - \max\limits_{c}(src[ou][c][in])\}},\]}</pre>
- *
- * where {@code ou, iu} are outer and inner sizes repectively, defined
- * by \p data_desc.dims and \p softmax_axis.
- * \{ */
-
-/** Initializes a \p softmax_desc for forward propagation using \p prop_kind
- * (possible values are #mkldnn_forward_training and #mkldnn_forward_inference)
- * and memory descriptor \p data_desc.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_softmax_forward_desc_init(
         mkldnn_softmax_desc_t softmax_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t data_desc, int softmax_axis);
 
 /** Initializes a \p softmax_desc for backward propagation using memory
- * descriptors \p diff_desc and \p data_desc.
- *
- * Order of inputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  descriptors \p diff_desc and \p data_desc.
+ * 
+ *  Inputs:
+ *   - dst (#mkldnn_query_dst_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_softmax_backward_desc_init(
         mkldnn_softmax_desc_t softmax_desc,
         @Const mkldnn_memory_desc_t diff_desc,
         @Const mkldnn_memory_desc_t data_desc, int softmax_axis);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_pooling Pooling
+ *  A primitive to perform max or average pooling.
+ * 
+ *  @see \ref dev_guide_pooling in developer guide
+ *  @see \ref cpp_api_pooling in \ref cpp_api
+ * 
+ *  \{
+ <p>
+ *  Initializes a pooling descriptor \p pool_desc for forward propagation using
+ *  \p prop_kind (possible values are #mkldnn_forward_training and
+ *  #mkldnn_forward_inference), \p alg_kind, memory descriptors, and pooling
+ *  parameters in the spatial domain: \p strides, \p kernel sizes, \p padding_l,
+ *  and \p padding_r.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0)
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p alg_kind = #mkldnn_pooling_max and
+ *       \p prop_kind = #mkldnn_forward_training */
 
-/** \addtogroup c_api_pooling Pooling
- * A primitive to perform max or average pooling.
- *
- * Max pooling:
- * <pre>{@code \[dst[n][oc][oh][ow] =
- *     \max\limits_{kw,kh}
- *     (src[n][ic][oh \cdot s_h - p_l[0] + kh][ow \cdot s_w - p_r[1] + kw]),\]}</pre>
- *
- * Average pooling:
- * <pre>{@code \[dst[n][oc][oh][ow] =
- *     \frac{1}{KW \cdot KH}\sum\limits_{kw,kh}
- *     src[n][ic][oh \cdot s_h - p_l[0] + kh][ow \cdot s_w - p_r[1] + kw],\]}</pre>
- *
- * where {@code p_l, p_r} are \p padding_l and \p padding_r respectively, and
- * output spatial dimensions are calculated similarly to how they are done in
- * convolution.
- *
- * During training, max pooling requires a workspace on forward
- * (#mkldnn_forward_training) and backward (#mkldnn_backward) passes to
- * save indices where maximum was found. The workspace layout is opaque, and
- * the indices cannot be restored from it. However, one can use backward
- * pooling to perform up-sampling (used in some detection topologies).
- *
- * \{ */
-
-/** Initializes a pooling descriptor \p pool_desc for forward propagation using
- * \p prop_kind (possible values are #mkldnn_forward_training and
- * #mkldnn_forward_inference), \p alg_kind, memory descriptors, and pooling
- * parameters in the spatial domain: \p strides, \p kernel sizes, \p padding_l,
- * \p padding_r, and \p padding_kind.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if \p alg_kind = #mkldnn_pooling_max and
- *      \p prop_kind = #mkldnn_forward_training
- */
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntPointer strides,
-        @Const IntPointer kernel, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer kernel, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_forward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t src_desc,
-        @Const mkldnn_memory_desc_t dst_desc, @Const int[] strides,
-        @Const int[] kernel, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
 /** Initializes a pooling descriptor \p pool_desc for backward propagation
- * using \p alg_kind, memory descriptors, and pooling parameters in the spatial
- * domain: \p strides, \p kernel sizes, \p padding_l, \p padding_r, and \p
- * padding_kind.
- *
- * \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if \p alg_kind = #mkldnn_pooling_max
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  using \p alg_kind, memory descriptors, and pooling parameters in the spatial
+ *  domain: \p strides, \p kernel sizes, \p padding_l, and \p padding_r.
+ * 
+ *  \note If \p padding_r is \c NULL, the padding is supposed to be symmetric.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p alg_kind = #mkldnn_pooling_max
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntPointer strides,
-        @Const IntPointer kernel, @Const IntPointer padding_l,
-        @Const IntPointer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongPointer strides,
+        @Cast("const int64_t*") LongPointer kernel, @Cast("const int64_t*") LongPointer padding_l,
+        @Cast("const int64_t*") LongPointer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const IntBuffer strides,
-        @Const IntBuffer kernel, @Const IntBuffer padding_l,
-        @Const IntBuffer padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") LongBuffer strides,
+        @Cast("const int64_t*") LongBuffer kernel, @Cast("const int64_t*") LongBuffer padding_l,
+        @Cast("const int64_t*") LongBuffer padding_r);
 public static native @Cast("mkldnn_status_t") int mkldnn_pooling_backward_desc_init(
         mkldnn_pooling_desc_t pool_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_src_desc,
-        @Const mkldnn_memory_desc_t diff_dst_desc, @Const int[] strides,
-        @Const int[] kernel, @Const int[] padding_l,
-        @Const int[] padding_r, @Cast("mkldnn_padding_kind_t") int padding_kind);
+        @Const mkldnn_memory_desc_t diff_dst_desc, @Cast("const int64_t*") long[] strides,
+        @Cast("const int64_t*") long[] kernel, @Cast("const int64_t*") long[] padding_l,
+        @Cast("const int64_t*") long[] padding_r);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_lrn LRN
+ *  A primitive to perform local response normalization (LRN) across or within
+ *  channels.
+ * 
+ *  @see mkldnn_primitive_desc_query and mkldnn_primitive_desc_query_pd
+ * 
+ *  @see \ref dev_guide_lrn in developer guide
+ *  @see \ref cpp_api_lrn in \ref cpp_api
+ * 
+ *  \{
+ <p>
+ *  Initializes an \p lrn_desc for forward propagation using \p prop_kind
+ *  (possible values are #mkldnn_forward_training and #mkldnn_forward_inference),
+ *  \p alg_kind, memory descriptor \p data_desc, and regularization
+ *  parameters \p local_size, \p alpha, \p beta, and \p k.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0)
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if the underlying implementation requires */
 
-/** \addtogroup c_api_lrn LRN
- * A primitive to perform local response normalization (LRN) across or within
- * channels.
- *
- * LRN accross channels:
- * <pre>{@code \[dst[n][c][h][w] = \left\{k + \frac{\alpha}{n_{l}}
- *                      \sum\limits_{i=-(n_{l}-1)/2}^{(n_{l}+1)/2}
- *                      (src[n][c+i][h][w])^2\right\}^{-\beta}
- *                      src[n][c][h][w],\]}</pre>
- *
- * LRN within channels:
- * <pre>{@code \[dst[n][c][h][w] = \left\{k + \frac{\alpha}{n_{l}}
- *                      \sum\limits_{i=-(n_{l}-1)/2}^{(n_{l}+1)/2}
- *                      (src[n][c][h+i][w+i])^2\right\}^{-\beta}
- *                      src[n][c][h][w],\]}</pre>
- *
- * where {@code n_{l}} is the \p local_size.
- *
- * During training, LRN might or might not require a workspace on forward
- * (#mkldnn_forward_training) and backward (#mkldnn_backward) passes. The
- * behavior is implementation specific. Optimized implementations typically
- * require a workspace and use it to save some intermediate results from the
- * forward pass that accelerate computations on the backward pass.
- *
- * To check whether a workspace is required, query the LRN primitive descriptor
- * for the workspace (#mkldnn_query_workspace_pd). Success indicates that the
- * workspace is required and its description will be returned.
- * @see mkldnn_primitive_desc_query and mkldnn_primitive_desc_query_pd
- *
- * \{ */
-
-/** Initializes an \p lrn_desc for forward propagation using \p prop_kind
- * (possible values are #mkldnn_forward_training and #mkldnn_forward_inference),
- * \p alg_kind, memory descriptor \p data_desc, and regularization
- * parameters \p local_size, \p alpha, \p beta, and \p k.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if the underlying implementation requires
- */
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_forward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Cast("mkldnn_alg_kind_t") int alg_kind, @Const mkldnn_memory_desc_t data_desc,
-        int local_size, float alpha, float beta, float k);
+        @Cast("mkldnn_dim_t") long local_size, float alpha, float beta, float k);
 
 /** Initializes an \p lrn_desc for backward propagation using \p alg_kind,
- * memory descriptors \p data_desc and \p diff_data_desc, and regularization
- * parameters \p local_size, \p alpha, \p beta, and \p k.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if the underlying implementation requires
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  memory descriptors \p data_desc and \p diff_data_desc, and regularization
+ *  parameters \p local_size, \p alpha, \p beta, and \p k.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if the underlying implementation requires
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_lrn_backward_desc_init(
         mkldnn_lrn_desc_t lrn_desc, @Cast("mkldnn_alg_kind_t") int alg_kind,
         @Const mkldnn_memory_desc_t diff_data_desc,
-        @Const mkldnn_memory_desc_t data_desc, int local_size, float alpha,
-        float beta, float k);
+        @Const mkldnn_memory_desc_t data_desc, @Cast("mkldnn_dim_t") long local_size,
+        float alpha, float beta, float k);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_batch_normalization Batch Normalization
+ *  A primitive to perform batch normalization.
+ * 
+ *  Both forward and backward passes support in-place operation; that is, src
+ *  and dst point to the same memory for forward pass, and diff_dst and diff_src
+ *  point to the same memory for backward pass.
+ * 
+ *  Batch normalization supports different flavors controlled by
+ *  mkldnn_batch_normalization_desc_t. For example, batch normalization can
+ *  compute the mean and variance on its own or take them as inputs. It can
+ *  either perform scaling and shifting using gamma and beta parameters or not.
+ *  Optionally, it can also perform a fused ReLU, which in case of training would
+ *  also require a workspace.
+ * 
+ *  @see mkldnn_batch_normalization_desc_t
+ * 
+ *  @see \ref dev_guide_batch_normalization in developer guide
+ *  @see \ref cpp_api_batch_normalization in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes a batch normalization descriptor \p bnrm_desc for forward
+ *  propagation using \p prop_kind (possible values are
+ *  #mkldnn_forward_training and #mkldnn_forward_inference), memory descriptor
+ *  \p data_desc, normalization parameter \p epsilon, and \p flags set using bit
+ *  flags of type mkldnn_batch_normalization_desc_t.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - mean (#mkldnn_query_src_md, 1),
+ *       if #mkldnn_use_global_stats bit-flags is set in \p flags
+ *   - variance (#mkldnn_query_src_md, 2),
+ *       if #mkldnn_use_global_stats bit-flags is set in \p flags
+ *   - scale_and_shift (#mkldnn_query_weights_md, 0),
+ *       if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0)
+ *   - mean (#mkldnn_query_dst_md, 1),
+ *       if #mkldnn_use_global_stats bit-flags is not set in \p flags
+ *       \p prop_kind = #mkldnn_forward_training
+ *   - variance (#mkldnn_query_dst_md, 2),
+ *       if #mkldnn_use_global_stats bit-flags is not set in \p flags
+ *       and \p prop_kind = #mkldnn_forward_training
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if #mkldnn_fuse_norm_relu bit-flags is set in \p flags
+ *       and \p prop_kind = #mkldnn_forward_training
+ * 
+ *  \note In-place operation is supported; that is, dst points to the same memory
+ *        as src.
+ * 
+ *  @see mkldnn_batch_normalization_desc_t */
 
-/** \addtogroup c_api_batch_normalization Batch Normalization
- * A primitive to perform batch normalization.
- *
- * <pre>{@code \[dst[n][c][h][w] = \gamma[c] \frac{src[n][c][h][w] - \mu[c]}
- *                      {\sqrt{\sigma[c] + eps}} + \beta[c],\]}</pre>
- *
- * where {@code \gamma[c], \beta[c]} are weights and bias for a channel and,
- *
- * {@code \mu[c] = \frac{1}{NHW} \sum\limits_{whn} src[n][c][h][w]},
- * {@code \sigma[c] = \frac{1}{NHW} \sum\limits_{whn}
- *                              (src[n][c][h][w] - \mu[c])^2},
- *
- * and \c eps is a constant to improve numerical stability.
- *
- * Both forward and backward passes support in-place operation; that is, src
- * and dst point to the same memory for forward pass, and diff_dst and diff_src
- * point to the same memory for backward pass.
- *
- * Batch normalization supports different flavors controlled by
- * mkldnn_batch_normalization_desc_t. For example, batch normalization can
- * compute the mean and variance on its own or take them as inputs. It can
- * either perform scaling and shifting using gamma and beta parameters or not.
- * Optionally it can also perform a fused ReLU, which in case of training would
- * also require a workspace.
- *
- * @see mkldnn_batch_normalization_desc_t
- * \{ */
-
-/** Initializes a batch normalization descriptor \p bnrm_desc for forward
- * propagation using \p prop_kind (possible values are
- * #mkldnn_forward_training and #mkldnn_forward_inference), memory descriptor
- * \p data_desc, normalization parameter \p epsilon, and \p flags set using bit
- * flags of type mkldnn_batch_normalization_desc_t.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - mean (#mkldnn_query_src_pd, 1),
- *      if #mkldnn_use_global_stats bit-flags is set in \p flags
- *  - variance (#mkldnn_query_src_pd, 2),
- *      if #mkldnn_use_global_stats bit-flags is set in \p flags
- *  - scale_and_shift (#mkldnn_query_weights_pd, 0),
- *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- *  - mean (#mkldnn_query_dst_pd, 1),
- *      if #mkldnn_use_global_stats bit-flags is not set in \p flags
- *      \p prop_kind = #mkldnn_forward_training
- *  - variance (#mkldnn_query_dst_pd, 2),
- *      if #mkldnn_use_global_stats bit-flags is not set in \p flags
- *      and \p prop_kind = #mkldnn_forward_training
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if #mkldnn_fuse_bn_relu bit-flags is set in \p flags
- *      and \p prop_kind = #mkldnn_forward_training
- *
- * \note In-place operation is supported; that is, dst points to the same memory
- *       as src.
- *
- * @see mkldnn_batch_normalization_desc_t
- */
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_forward_desc_init(
         mkldnn_batch_normalization_desc_t bnrm_desc,
         @Cast("mkldnn_prop_kind_t") int prop_kind, @Const mkldnn_memory_desc_t data_desc,
         float epsilon, @Cast("unsigned") int flags);
 
 /** Initializes a batch normalization descriptor \p bnrm_desc for backward
- * propagation with respect to data and scale-shift parameters using memory
- * descriptors \p data_desc and \p diff_data_desc, normalization parameter
- * \p epsilon, and \p flags set using bit flags of type
- * mkldnn_batch_normalization_desc_t.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - mean (#mkldnn_query_src_pd, 1)
- *  - variance (#mkldnn_query_src_pd, 2)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - scale_and_shift (#mkldnn_query_weights_pd, 0),
- *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if #mkldnn_fuse_bn_relu bit-flags is set in \p flags
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- *  - diff_scale_and_shift (#mkldnn_query_diff_weights_pd, 0),
- *      if #mkldnn_use_scaleshift bit-flags is set in \p flags
- *      and \p prop_kind = #mkldnn_backward
- *
- * \note in-place operation is supported,
- *       i.e. diff_src points to the same memory as diff_dst.
- *
- * @see mkldnn_batch_normalization_desc_t
- */
+ *  propagation with respect to data and scale-shift parameters using memory
+ *  descriptors \p data_desc and \p diff_data_desc, normalization parameter
+ *  \p epsilon, and \p flags set using bit flags of type
+ *  mkldnn_batch_normalization_desc_t.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - mean (#mkldnn_query_src_md, 1)
+ *   - variance (#mkldnn_query_src_md, 2)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - scale_and_shift (#mkldnn_query_weights_md, 0),
+ *       if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if #mkldnn_fuse_norm_relu bit-flags is set in \p flags
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0)
+ *   - diff_scale_and_shift (#mkldnn_query_diff_weights_md, 0),
+ *       if #mkldnn_use_scaleshift bit-flags is set in \p flags
+ *       and \p prop_kind = #mkldnn_backward
+ * 
+ *  \note in-place operation is supported,
+ *        i.e. diff_src points to the same memory as diff_dst.
+ * 
+ *  @see mkldnn_batch_normalization_desc_t */
+
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_backward_desc_init(
         mkldnn_batch_normalization_desc_t bnrm_desc,
         @Cast("mkldnn_prop_kind_t") int prop_kind,
@@ -2623,37 +3104,36 @@ public static native @Cast("mkldnn_status_t") int mkldnn_batch_normalization_bac
         @Const mkldnn_memory_desc_t data_desc,
         float epsilon, @Cast("unsigned") int flags);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_inner_product Inner product
+ *  A primitive to compute an inner product.
+ * 
+ *  @see \ref dev_guide_inner_product in developer guide
+ *  @see \ref cpp_api_inner_product in \ref cpp_api
+ *  \{
+ <p>
+ *  Initializes an inner product descriptor \p ip_desc for forward propagation
+ *  using \p prop_kind (possible values are #mkldnn_forward_training and
+ *  #mkldnn_forward_inference) and memory descriptors. In order to create an
+ *  inner product without bias, \p bias_desc should be either \c NULL or a
+ *  pointer to a descriptor with memory format kind equals
+ *  #mkldnn_format_kind_undef.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ *   - bias (#mkldnn_query_weights_md, 1), if created with bias
+ * 
+ *  Outputs:
+ *   - dst (#mkldnn_query_dst_md, 0) */
 
-/** \addtogroup c_api_inner_product Inner product
- * A primitive to compute an inner product.
- *
- * Inner product layer is also known as fully connected layer.
- * With spatial dimension:
- *
- * <pre>{@code \[dst[n][oc] = \sum\limits_{ic, kh, kw}
- *                 src[n][ic][kh][kw] \cdot weights[oc][ic][kh][kw]
- *                 + bias[oc]\]}</pre>
- * \{ */
-
-/** Initializes an inner product descriptor \p ip_desc for forward propagation
- * using \p prop_kind (possible values are #mkldnn_forward_training and
- * #mkldnn_forward_inference) and memory descriptors. In order to create an
- * inner product without bias, \p bias_desc should be either \c NULL or a
- * pointer to a descriptor with memory format equal to #mkldnn_format_undef.
- *
- * \note
- *     Memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *  - bias (#mkldnn_query_weights_pd, 1), if created with bias
- *
- * Order of outputs:
- *  - dst (#mkldnn_query_dst_pd, 0)
- */
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_forward_desc_init(
         mkldnn_inner_product_desc_t ip_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2662,19 +3142,21 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_forward_d
         @Const mkldnn_memory_desc_t dst_desc);
 
 /** Initializes an inner product descriptor \p ip_desc for backward propagation
- * with respect to data using memory descriptors.
- *
- * \note
- *     Memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind.
- *
- * Order of inputs:
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *  - weights (#mkldnn_query_weights_pd, 0)
- *
- * Order of outputs:
- *  - diff_src (#mkldnn_query_diff_src_pd, 0)
- */
+ *  with respect to data using memory descriptors.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ *   - weights (#mkldnn_query_weights_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src (#mkldnn_query_diff_src_md, 0) */
+
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_data_desc_init(
         mkldnn_inner_product_desc_t ip_desc,
         @Const mkldnn_memory_desc_t diff_src_desc,
@@ -2682,20 +3164,23 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_
         @Const mkldnn_memory_desc_t diff_dst_desc);
 
 /** Initializes an inner product descriptor \p ip_desc for backward propagation
- * with respect to weights using memory descriptors.
- *
- * \note
- *     Memory descriptors are allowed to be initialized with #mkldnn_any value
- *     of \p format_kind.
- *
- * Order of inputs:
- *  - src (#mkldnn_query_src_pd, 0)
- *  - diff_dst (#mkldnn_query_diff_dst_pd, 0)
- *
- * Order of outputs:
- *  - diff_weights (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 1), if created with bias
- */
+ *  with respect to weights using memory descriptors.
+ * 
+ *  \note Memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Inputs:
+ *   - src (#mkldnn_query_src_md, 0)
+ *   - diff_dst (#mkldnn_query_diff_dst_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_weights (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 1), if created with bias */
+
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_weights_desc_init(
         mkldnn_inner_product_desc_t ip_desc,
         @Const mkldnn_memory_desc_t src_desc,
@@ -2703,146 +3188,147 @@ public static native @Cast("mkldnn_status_t") int mkldnn_inner_product_backward_
         @Const mkldnn_memory_desc_t diff_bias_desc,
         @Const mkldnn_memory_desc_t diff_dst_desc);
 
-/** \} */
-
-/** \addtogroup c_api_rnn RNN
- * A primitive to compute the common recurrent layer.
- * \todo add additional description for the group
- * \{ */
-
-/**
- * Initializes a recurrent cell descriptor \p rnn_cell_desc
- * using \p rnn_cell_desc, \p kind (possible values are
- *  #mkldnn_vanilla_rnn, #mkldnn_vanilla_lstm, #mkldnn_vanilla_gru, and
- *  #mkldnn_gru_linear_before_reset),
- *  \p f (possible values are #mkldnn_eltwise_relu and
- *   #mkldnn_eltwise_tanh), \p flags, \p alpha, and \p clipping.
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_rnn_cell_desc_init(
-        mkldnn_rnn_cell_desc_t rnn_cell_desc,
-        @Cast("mkldnn_alg_kind_t") int kind, @Cast("mkldnn_alg_kind_t") int f,
-        @Cast("unsigned int") int flags, float alpha, float clipping);
-
-/** Returns the number of gates of a particular \p rnn_cell_desc. */
-public static native int mkldnn_rnn_cell_get_gates_count(
-        @Const mkldnn_rnn_cell_desc_t rnn_cell_desc);
-
-/** Returns the number of states of a particular \p rnn_cell_desc. */
-public static native int mkldnn_rnn_cell_get_states_count(
-        @Const mkldnn_rnn_cell_desc_t rnn_cell_desc);
-
-/** Sets quantization \p scale and \p shift for RNN data tensors.
+/** \}
+ <p>
+ *  \addtogroup c_api_rnn RNN
+ *  A primitive to compute the common recurrent layer.
+ * 
+ *  @see \ref dev_guide_rnn in developer guide
+ *  @see \ref cpp_api_rnn in \ref cpp_api
+ *  \{
+ <p>
+ *  Sets quantization \p scale and \p shift for RNN data tensors.
  *  For performance reasons, low precision configuration of RNN primitive
  *  expects input activations to have unsigned int8 data type. Scale and shift
  *  used to quantize floating point data to unsigned integer must be passed to
  *  RNN primitive using attributes.
  *  Example usage:
- * <pre>{@code
+ *  <pre>{@code
  *      // rnn parameters
  *      int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
  *      // activations quantization parameters
  *      float scale = ..., shift = ..;
- *
+ * 
  *      mkldnn_primitive_attr_t rnn_attr;
  *      // create default attributes
  *      mkldnn_primitive_attr_create(&rnn_attr);
- *
+ * 
  *      // set scale and shift for int8 quantization of activation
  *      mkldnn_primitive_attr_set_rnn_data_qparams(rnn_attr, scale, shift);
- *
+ * 
  *      // create & configure rnn op_desc
  *      mkldnn_rnn_desc_t rnn_d;
  *      mkldnn_primitive_desc_t rnn_pd;
- *      mkldnn_primitive_desc_create_v2(&rnn_pd, &rnn_d, attr, NULL);
- * }</pre>
- * \note
+ *      mkldnn_primitive_desc_create(&rnn_pd, &rnn_d, attr, engine, NULL);
+ *  }</pre>
+ *  \note
  *      Quantization scale and shift are common for src_layer, src_iter,
- *      dst_iter and dst_layer.
- */
+ *      dst_iter and dst_layer. */
+
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_data_qparams(
         mkldnn_primitive_attr attr, float scale, float shift);
 
 /** Sets quantization scales \p weights_scales for RNN weights tensors.
- * Low precision configuration of RNN primitive expects input weights to have
- * signed int8 data type. Scales used to quantize floating point data
- * to signed integer must be passed to RNN primitive using attributes.
- * The \p mask argument defines correspondence between output tensor dimensions
- * and the \p weights_scales array. Set i-th bit of \p mask to 1 to use
- * dedicated scaling factor for each slice of the output tensor over i-th
- * dimension. Set \p mask to 0 to use common scaling factor for the whole output
- * tensor. Example usage:
- * <pre>{@code
- *      // rnn parameters
- *      int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
- *      // unique output scales per output channel
- *      float weights_scales[dic * n_gates] = { ... };
- *      // mask that specifies last two dimensions of ldigo format
- *      int mask = 0x3;
- *
- *      mkldnn_primitive_attr_t attr;
- *      // create default attributes
- *      mkldnn_primitive_attr_create(&attr);
- *
- *      // set output channel-wise weights scales
- *      mkldnn_primitive_attr_set_rnn_weights_qparams(attr, dic * n_gates, mask,
- *              weights_scales);
- *
- *      // create & configure rnn op_desc
- *      mkldnn_rnn_desc_t rnn_d;
- *      mkldnn_primitive_desc_t rnn_pd;
- *      mkldnn_primitive_desc_create_v2(&rnn_pd, &rnn_d, attr, NULL);
- * }</pre>
- * \note
- *      The dimension order is always native and does not depend on the actual
- *      layout used. For example, 5 dimensional weights always have
- *      (l, d, i, g, o) logical dimension ordering.
- * \note
- *      Quantization sales are common for weights_layer and weights_iteration
- * \note
- *      There is no way to check that \p count corresponds to \p mask until an
- *      actual primitive descriptor is created, so it is user's responsibility
- *      to set proper values. The following formula must be held:
- *
- *      <pre>{@code \[count = \prod\limits_{d \in mask} output.dims[d]\]}</pre>
- */
+ *  Low precision configuration of RNN primitive expects input weights to have
+ *  signed int8 data type. Scales used to quantize floating point data
+ *  to signed integer must be passed to RNN primitive using attributes.
+ *  The \p mask argument defines correspondence between output tensor dimensions
+ *  and the \p weights_scales array. Set i-th bit of \p mask to 1 to use
+ *  dedicated scaling factor for each slice of the output tensor over i-th
+ *  dimension. Set \p mask to 0 to use common scaling factor for the whole output
+ *  tensor. Example usage:
+ *  <pre>{@code
+ *       // rnn parameters
+ *       int l = 2, t = 2, mb = 32, sic = 32, slc = 32, dic = 32, dlc = 32;
+ *       // unique output scales per output channel
+ *       float weights_scales[dic * n_gates] = { ... };
+ *       // mask that specifies last two dimensions of ldigo format
+ *       int mask = 0x3;
+ * 
+ *       mkldnn_primitive_attr_t attr;
+ *       // create default attributes
+ *       mkldnn_primitive_attr_create(&attr);
+ * 
+ *       // set output channel-wise weights scales
+ *       mkldnn_primitive_attr_set_rnn_weights_qparams(attr, dic * n_gates, mask,
+ *               weights_scales);
+ * 
+ *       // create & configure rnn op_desc
+ *       mkldnn_rnn_desc_t rnn_d;
+ *       mkldnn_primitive_desc_t rnn_pd;
+ *       mkldnn_primitive_desc_create(&rnn_pd, &rnn_d, attr, engine, NULL);
+ *  }</pre>
+ *  \note
+ *       The dimension order is always native and does not depend on the actual
+ *       layout used. For example, 5 dimensional weights always have
+ *       (l, d, i, g, o) logical dimension ordering.
+ *  \note
+ *       Quantization sales are common for weights_layer and weights_iteration
+ *  \note
+ *       There is no way to check that \p count corresponds to \p mask until an
+ *       actual primitive descriptor is created, so it is user's responsibility
+ *       to set proper values. The following formula must be held:
+ * 
+ *       <pre>{@code \[count = \prod\limits_{d \in mask} output.dims[d]\]}</pre> */
+
+///
+///
+///
+///
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const FloatPointer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const FloatBuffer weights_scales);
 public static native @Cast("mkldnn_status_t") int mkldnn_primitive_attr_set_rnn_weights_qparams(
-        mkldnn_primitive_attr attr, int count, int mask,
+        mkldnn_primitive_attr attr, @Cast("mkldnn_dim_t") long count, int mask,
                 @Const float[] weights_scales);
 
-/** Initializes a rnn descriptor \p rnn_desc for forward propagation
- * using \p prop_kind, \p rnn_cell_desc, \p direction, and memory descriptors.
- * \note If \p prop_kind equals #mkldnn_forward_training, you must query a
- * workspace memory descriptor before creating the primitive.
- *
- * \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to either be
- * \c NULL or point to a zero memory descriptor, which would indicate that the
- * RNN primitive should not use them.
- *
- * \note All memory descriptors except \p src_iter_desc are allowed to be
- * initialized with #mkldnn_any value of \p format_kind.
- *
- * Order of inputs:
- *  - src_layer (#mkldnn_query_src_pd, 0)
- *  - src_iter (#mkldnn_query_src_pd, 1), if used
- *  - weights_layer (#mkldnn_query_weights_pd, 0)
- *  - weights_iter (#mkldnn_query_weights_pd, 1)
- *  - bias (#mkldnn_query_weights_pd, 2), if used
- *
- * Order of outputs:
- *  - dst_layer (#mkldnn_query_dst_pd, 0)
- *  - dst_iter (#mkldnn_query_dst_pd, 1), if used
- *  - workspace (#mkldnn_query_workspace_pd, 0),
- *      if \p prop_kind equals #mkldnn_forward_training
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_rnn_forward_desc_init(
+/** Initializes an RNN descriptor \p rnn_desc for forward propagation
+ *  using \p prop_kind, \p activation, \p direction, and memory descriptors.
+ *  \note If \p prop_kind equals #mkldnn_forward_training, you must query a
+ *  workspace memory descriptor before creating the primitive.
+ * 
+ *  \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to either be
+ *  \c NULL or point to a zero memory descriptor, which would indicate that the
+ *  RNN primitive should not use them and will default to zero values.
+ * 
+ *  \note All memory descriptorsare allowed to be initialized with
+ *  #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Parameters:
+ *   - activation (#mkldnn_eltwise_relu, #mkldnn_eltwise_tanh or #mkldnn_eltwise_logistic)
+ *   - alpha (negative slope if activation is #mkldnn_eltwise_relu)
+ *   - beta (unused for now)
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ * 
+ *  Outputs:
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p prop_kind equals #mkldnn_forward_training */
+
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_vanilla_rnn_forward_desc_init(
         mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
-        @Const mkldnn_rnn_cell_desc_t rnn_cell_desc,
+        @Cast("const mkldnn_alg_kind_t") int activation,
         @Cast("const mkldnn_rnn_direction_t") int direction,
         @Const mkldnn_memory_desc_t src_layer_desc,
         @Const mkldnn_memory_desc_t src_iter_desc,
@@ -2850,41 +3336,55 @@ public static native @Cast("mkldnn_status_t") int mkldnn_rnn_forward_desc_init(
         @Const mkldnn_memory_desc_t weights_iter_desc,
         @Const mkldnn_memory_desc_t bias_desc,
         @Const mkldnn_memory_desc_t dst_layer_desc,
-        @Const mkldnn_memory_desc_t dst_iter_desc);
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Cast("unsigned") int flags,
+        float alpha, float beta);
 
-/** Initializes a rnn descriptor \p rnn_desc for backward propagation
- * using \p prop_kind, \p rnn_cell_desc, \p direction, and memory descriptors.
- * \note All memory descriptors are allowed to be initialized with
- * #mkldnn_any value of \p format_kind.
- *
- * \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
- * \p bias_desc (simultaneously with \p diff_bias_desc), and
- * \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed to
- * either be \c NULL or point to a zero memory descriptor, which would indicate
- * that the RNN primitive should not use them.
- *
- * Order of inputs:
- *  - src_layer (#mkldnn_query_src_pd, 0)
- *  - src_iter (#mkldnn_query_src_pd, 1), if used
- *  - weights_layer (#mkldnn_query_weights_pd, 0)
- *  - weights_iter (#mkldnn_query_weights_pd, 1)
- *  - bias (#mkldnn_query_weights_pd, 2), if used
- *  - dst_layer (#mkldnn_query_dst_pd, 0)
- *  - dst_iter (#mkldnn_query_dst_pd, 1), if used
- *  - diff_dst_layer (#mkldnn_query_diff_dst_pd, 0)
- *  - diff_dst_iter (#mkldnn_query_diff_dst_pd, 1), if used
- *  - workspace (#mkldnn_query_workspace_pd, 0)
- *
- * Order of outputs:
- *  - diff_src_layer (#mkldnn_query_diff_src_pd, 0)
- *  - diff_src_iter (#mkldnn_query_diff_src_pd, 1), if used
- *  - diff_weights_layer (#mkldnn_query_diff_weights_pd, 0)
- *  - diff_weights_iter (#mkldnn_query_diff_weights_pd, 1)
- *  - diff_bias (#mkldnn_query_diff_weights_pd, 2), if used
- */
-public static native @Cast("mkldnn_status_t") int mkldnn_rnn_backward_desc_init(
+/** Initializes an RNN descriptor \p rnn_desc for backward propagation
+ *  using \p prop_kind, \p activation, \p direction, and memory descriptors.
+ * 
+ *  \note All memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
+ *  \p bias_desc (simultaneously with \p diff_bias_desc), and
+ *  \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed to
+ *  either be \c NULL or point to a zero memory descriptor, which would indicate
+ *  that the RNN primitive should not use them and will default to zero values.
+ * 
+ *  Parameters:
+ *   - activation (#mkldnn_eltwise_relu, #mkldnn_eltwise_tanh or #mkldnn_eltwise_logistic)
+ *   - alpha (negative slope if activation is #mkldnn_eltwise_relu)
+ *   - beta (unused for now)
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - diff_dst_layer (#mkldnn_query_diff_dst_md, 0)
+ *   - diff_dst_iter (#mkldnn_query_diff_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src_layer (#mkldnn_query_diff_src_md, 0)
+ *   - diff_src_iter (#mkldnn_query_diff_src_md, 1), if used
+ *   - diff_weights_layer (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_weights_iter (#mkldnn_query_diff_weights_md, 1)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 2), if used */
+
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_vanilla_rnn_backward_desc_init(
         mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
-        @Const mkldnn_rnn_cell_desc_t rnn_cell_desc,
+        @Cast("const mkldnn_alg_kind_t") int activation,
         @Cast("const mkldnn_rnn_direction_t") int direction,
         @Const mkldnn_memory_desc_t src_layer_desc,
         @Const mkldnn_memory_desc_t src_iter_desc,
@@ -2898,17 +3398,334 @@ public static native @Cast("mkldnn_status_t") int mkldnn_rnn_backward_desc_init(
         @Const mkldnn_memory_desc_t diff_weights_layer_desc,
         @Const mkldnn_memory_desc_t diff_weights_iter_desc,
         @Const mkldnn_memory_desc_t diff_bias_desc,
-        @Const mkldnn_memory_desc_t diff_dst_layer,
-        @Const mkldnn_memory_desc_t diff_dst_iter_desc);
+        @Const mkldnn_memory_desc_t diff_dst_layer_desc,
+        @Const mkldnn_memory_desc_t diff_dst_iter_desc,
+        @Cast("unsigned") int flags,
+        float alpha, float beta);
 
-/** \} */
+/** Initializes an LSTM descriptor \p rnn_desc for forward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ *  \note If \p prop_kind equals #mkldnn_forward_training, you must query a
+ *  workspace memory descriptor before creating the primitive.
+ * 
+ *  \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to either be
+ *  \c NULL or point to a zero memory descriptor, which would indicate that the
+ *  RNN primitive should not use them and will default to zero values.
+ * 
+ *  \note All memory descriptors except \p src_iter_desc are allowed to be
+ *        initialized with #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - src_iter_c (#mkldnn_query_src_md, 2), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ * 
+ *  Outputs:
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - dst_iter_c (#mkldnn_query_dst_md, 2), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p prop_kind equals #mkldnn_forward_training */
 
-/** \} */
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_lstm_forward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t src_iter_c_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Const mkldnn_memory_desc_t dst_iter_c_desc,
+        @Cast("unsigned") int flags);
 
-/** \addtogroup c_api_engine Engine operations
- * \{ */
+/** Initializes an LSTM descriptor \p rnn_desc for backward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ * 
+ *  \note All memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
+ *  \p bias_desc (simultaneously with \p diff_bias_desc), and
+ *  \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed to
+ *  either be \c NULL or point to a zero memory descriptor, which would indicate
+ *  that the RNN primitive should not use them and will default to zero values.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - src_iter_c (#mkldnn_query_src_md, 2), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - dst_iter_c (#mkldnn_query_dst_md, 2), if used
+ *   - diff_dst_layer (#mkldnn_query_diff_dst_md, 0)
+ *   - diff_dst_iter (#mkldnn_query_diff_dst_md, 1), if used
+ *   - diff_dst_iter_c (#mkldnn_query_diff_dst_md, 2), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src_layer (#mkldnn_query_diff_src_md, 0)
+ *   - diff_src_iter (#mkldnn_query_diff_src_md, 1), if used
+ *   - diff_src_iter_c (#mkldnn_query_diff_src_md, 2), if used
+ *   - diff_weights_layer (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_weights_iter (#mkldnn_query_diff_weights_md, 1)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 2), if used */
 
-/** Returns the number of engines of a particular \p kind. */
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_lstm_backward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t src_iter_c_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Const mkldnn_memory_desc_t dst_iter_c_desc,
+        @Const mkldnn_memory_desc_t diff_src_layer_desc,
+        @Const mkldnn_memory_desc_t diff_src_iter_desc,
+        @Const mkldnn_memory_desc_t diff_src_iter_c_desc,
+        @Const mkldnn_memory_desc_t diff_weights_layer_desc,
+        @Const mkldnn_memory_desc_t diff_weights_iter_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_layer_desc,
+        @Const mkldnn_memory_desc_t diff_dst_iter_desc,
+        @Const mkldnn_memory_desc_t diff_dst_iter_c_desc,
+        @Cast("unsigned") int flags);
+
+/** Initializes a GRU descriptor \p rnn_desc for forward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ *  \note If \p prop_kind equals #mkldnn_forward_training, you must query a
+ *  workspace memory descriptor before creating the primitive.
+ * 
+ *  \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to either be
+ *  \c NULL or point to a zero memory descriptor, which would indicate that the
+ *  RNN primitive should not use them and will default to zero values.
+ * 
+ *  \note All memory descriptors except \p src_iter_desc are allowed to be
+ *        initialized with #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ * 
+ *  Outputs:
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p prop_kind equals #mkldnn_forward_training */
+
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_gru_forward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Cast("unsigned") int flags);
+
+/** Initializes a GRU descriptor \p rnn_desc for backward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ * 
+ *  \note All memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
+ *  \p bias_desc (simultaneously with \p diff_bias_desc), and
+ *  \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed to
+ *  either be \c NULL or point to a zero memory descriptor, which would indicate
+ *  that the RNN primitive should not use them and will default to zero values.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - diff_dst_layer (#mkldnn_query_diff_dst_md, 0)
+ *   - diff_dst_iter (#mkldnn_query_diff_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src_layer (#mkldnn_query_diff_src_md, 0)
+ *   - diff_src_iter (#mkldnn_query_diff_src_md, 1), if used
+ *   - diff_weights_layer (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_weights_iter (#mkldnn_query_diff_weights_md, 1)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 2), if used */
+
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_gru_backward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Const mkldnn_memory_desc_t diff_src_layer_desc,
+        @Const mkldnn_memory_desc_t diff_src_iter_desc,
+        @Const mkldnn_memory_desc_t diff_weights_layer_desc,
+        @Const mkldnn_memory_desc_t diff_weights_iter_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_layer_desc,
+        @Const mkldnn_memory_desc_t diff_dst_iter_desc,
+        @Cast("unsigned") int flags);
+
+/** Initializes an LBR GRU descriptor \p rnn_desc for forward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ *  \note If \p prop_kind equals #mkldnn_forward_training, you must query a
+ *  workspace memory descriptor before creating the primitive.
+ * 
+ *  \p src_iter_desc, \p bias_desc, and \p dst_iter_desc are allowed to either be
+ *  \c NULL or point to a zero memory descriptor, which would indicate that the
+ *  RNN primitive should not use them and will default to zero values.
+ * 
+ *  \note All memory descriptors except \p src_iter_desc are allowed to be
+ *        initialized with #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ * 
+ *  Outputs:
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0),
+ *       if \p prop_kind equals #mkldnn_forward_training */
+
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_lbr_gru_forward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Cast("unsigned") int flags);
+
+/** Initializes an LBR GRU descriptor \p rnn_desc for backward propagation
+ *  using \p prop_kind, \p direction, and memory descriptors.
+ * 
+ *  \note All memory descriptors are allowed to be initialized with
+ *        #mkldnn_format_kind_any value of \p format_kind.
+ * 
+ *  \p src_iter_desc (simultaneously with \p diff_src_iter_desc),
+ *  \p bias_desc (simultaneously with \p diff_bias_desc), and
+ *  \p dst_iter_desc (simultaneously with \p diff_src_iter_desc) are allowed to
+ *  either be \c NULL or point to a zero memory descriptor, which would indicate
+ *  that the RNN primitive should not use them and will default to zero values.
+ * 
+ *  Parameters:
+ *   - flags (unused for now)
+ * 
+ *  Inputs:
+ *   - src_layer (#mkldnn_query_src_md, 0)
+ *   - src_iter (#mkldnn_query_src_md, 1), if used
+ *   - weights_layer (#mkldnn_query_weights_md, 0)
+ *   - weights_iter (#mkldnn_query_weights_md, 1)
+ *   - bias (#mkldnn_query_weights_md, 2), if used
+ *   - dst_layer (#mkldnn_query_dst_md, 0)
+ *   - dst_iter (#mkldnn_query_dst_md, 1), if used
+ *   - diff_dst_layer (#mkldnn_query_diff_dst_md, 0)
+ *   - diff_dst_iter (#mkldnn_query_diff_dst_md, 1), if used
+ *   - workspace (#mkldnn_query_workspace_md, 0)
+ * 
+ *  Outputs:
+ *   - diff_src_layer (#mkldnn_query_diff_src_md, 0)
+ *   - diff_src_iter (#mkldnn_query_diff_src_md, 1), if used
+ *   - diff_weights_layer (#mkldnn_query_diff_weights_md, 0)
+ *   - diff_weights_iter (#mkldnn_query_diff_weights_md, 1)
+ *   - diff_bias (#mkldnn_query_diff_weights_md, 2), if used */
+public static native @Cast("mkldnn_status_t") int mkldnn_lbr_gru_backward_desc_init(
+        mkldnn_rnn_desc_t rnn_desc, @Cast("mkldnn_prop_kind_t") int prop_kind,
+        @Cast("mkldnn_rnn_direction_t") int direction,
+        @Const mkldnn_memory_desc_t src_layer_desc,
+        @Const mkldnn_memory_desc_t src_iter_desc,
+        @Const mkldnn_memory_desc_t weights_layer_desc,
+        @Const mkldnn_memory_desc_t weights_iter_desc,
+        @Const mkldnn_memory_desc_t bias_desc,
+        @Const mkldnn_memory_desc_t dst_layer_desc,
+        @Const mkldnn_memory_desc_t dst_iter_desc,
+        @Const mkldnn_memory_desc_t diff_src_layer_desc,
+        @Const mkldnn_memory_desc_t diff_src_iter_desc,
+        @Const mkldnn_memory_desc_t diff_weights_layer_desc,
+        @Const mkldnn_memory_desc_t diff_weights_iter_desc,
+        @Const mkldnn_memory_desc_t diff_bias_desc,
+        @Const mkldnn_memory_desc_t diff_dst_layer_desc,
+        @Const mkldnn_memory_desc_t diff_dst_iter_desc,
+        @Cast("unsigned") int flags);
+
+/** \}
+ <p>
+ *  \}
+ <p>
+ *  \addtogroup c_api_engine Engine operations
+ *  \{
+ <p>
+ *  Returns the number of engines of a particular \p kind. */
 public static native @Cast("size_t") long mkldnn_engine_get_count(@Cast("mkldnn_engine_kind_t") int kind);
 
 /** Creates an \p engine of particular \p kind and \p index. */
@@ -2916,6 +3733,9 @@ public static native @Cast("mkldnn_status_t") int mkldnn_engine_create(@ByPtrPtr
         @Cast("mkldnn_engine_kind_t") int kind, @Cast("size_t") long index);
 public static native @Cast("mkldnn_status_t") int mkldnn_engine_create(@Cast("mkldnn_engine_t*") PointerPointer engine,
         @Cast("mkldnn_engine_kind_t") int kind, @Cast("size_t") long index);
+
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
 
 /** Returns the kind of an \p engine. */
 public static native @Cast("mkldnn_status_t") int mkldnn_engine_get_kind(mkldnn_engine engine,
@@ -2925,278 +3745,224 @@ public static native @Cast("mkldnn_status_t") int mkldnn_engine_get_kind(mkldnn_
 public static native @Cast("mkldnn_status_t") int mkldnn_engine_get_kind(mkldnn_engine engine,
         @Cast("mkldnn_engine_kind_t*") int[] kind);
 
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
+
+/** Returns the kind of an \p engine. */
+
 /** Destroys an \p engine. */
 public static native @Cast("mkldnn_status_t") int mkldnn_engine_destroy(mkldnn_engine engine);
 
-/** \} */
-
-/** \addtogroup c_api_stream Execution stream operations
- * \{ */
-
-/** Creates an execution \p stream of \p stream_kind. */
+/** \}
+ <p>
+ *  \addtogroup c_api_stream Execution stream operations
+ *  \{
+ <p>
+ *  Creates an execution \p stream for \p engine and with \p flags. */
 public static native @Cast("mkldnn_status_t") int mkldnn_stream_create(@ByPtrPtr mkldnn_stream stream,
-        @Cast("mkldnn_stream_kind_t") int stream_kind);
+        mkldnn_engine engine, @Cast("unsigned") int flags);
 public static native @Cast("mkldnn_status_t") int mkldnn_stream_create(@Cast("mkldnn_stream_t*") PointerPointer stream,
-        @Cast("mkldnn_stream_kind_t") int stream_kind);
+        mkldnn_engine engine, @Cast("unsigned") int flags);
 
-/** Submits \p primitives to an execution \p stream. The number of primitives
- * is \p n.  All or none of the primitives can be lazy. In case of an error,
- * returns the offending \p error_primitive if it is not \c NULL. */
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_submit(mkldnn_stream stream,
-        @Cast("size_t") long n, @ByPtrPtr mkldnn_primitive primitives,
-        @ByPtrPtr mkldnn_primitive error_primitive);
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_submit(mkldnn_stream stream,
-        @Cast("size_t") long n, @Cast("mkldnn_primitive_t*") PointerPointer primitives,
-        @Cast("mkldnn_primitive_t*") PointerPointer error_primitive);
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
 
-/** Waits for all primitives in the execution \p stream to finish. Returns
- * immediately if \p block is zero. In case of an error, returns
- * the offending \p error_primitive if it is not \c NULL. */
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_wait(mkldnn_stream stream,
-        int block, @ByPtrPtr mkldnn_primitive error_primitive);
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_wait(mkldnn_stream stream,
-        int block, @Cast("mkldnn_primitive_t*") PointerPointer error_primitive);
-
-/** Reruns all the primitives within the \p stream. In case of an error,
- * returns the offending \p error_primitive if it is not \c NULL. */
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_rerun(mkldnn_stream stream,
-        @ByPtrPtr mkldnn_primitive error_primitive);
-public static native @Cast("mkldnn_status_t") int mkldnn_stream_rerun(mkldnn_stream stream,
-        @Cast("mkldnn_primitive_t*") PointerPointer error_primitive);
+/** Waits for all primitives in the execution \p stream to finish. */
+public static native @Cast("mkldnn_status_t") int mkldnn_stream_wait(mkldnn_stream stream);
 
 /** Destroys an execution \p stream. */
+
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_stream_destroy(mkldnn_stream stream);
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_service Service functions
+ *  \{
+ <p>
+ *  Sets verbosity level (print information to stdout).
+ *  Possible levels are:
+ *   - 0 -- no verbose output (default)
+ *   - 1 -- primitive information at execution
+ *   - 2 -- primitive information at creation and execution
+ * 
+ *  \note
+ *      Dumping information might affect performance.
+ *      This setting overrides the MKLDNN_VERBOSE environment variable. */
 
-/** \addtogroup c_api_service Service functions
- * \{ */
-
-/** Sets verbosity level (print information to stdout).
- * Possible levels are:
- *  - 0 -- no verbose output (default)
- *  - 1 -- primitive information at execution
- *  - 2 -- primitive information at creation and execution
- *
- * \note
- *     Dumping information might affect performance.
- *     This setting overrides the MKLDNN_VERBOSE environment variable. */
+///
 public static native @Cast("mkldnn_status_t") int mkldnn_set_verbose(int level);
 
-/** Sets jit dump control.
- * dump equals:
- *  - zero -- turn jit dump off (default)
- *  - non-zero -- turn jit dump on
- *
- * \note
- *     This setting overrides the MKLDNN_JIT_DUMP environment variable. */
-public static native @Cast("mkldnn_status_t") int mkldnn_set_jit_dump(int dump);
+/** Enables or disables dumping of JIT-generated code.
+ *  The enable parameter can be:
+ *   - 0 -- disable
+ *   - any other value -- enable
+ * 
+ *  \note
+ *      This setting overrides the MKLDNN_JIT_DUMP environment variable. */
+public static native @Cast("mkldnn_status_t") int mkldnn_set_jit_dump(int enable);
 
 /** Gets library version information.
- * Version information includes:
- *  - major -- major version number
- *  - minor -- minor version number
- *  - patch -- patch release number
- *  - hash -- git commit hash */
+ *  Version information includes:
+ *   - major -- major version number
+ *   - minor -- minor version number
+ *   - patch -- patch release number
+ *   - hash -- git commit hash */
+
+///
+///
+///
+///
 public static native @Const mkldnn_version_t mkldnn_version();
 
-/** \} */
+/** \}
+ <p>
+ *  \addtogroup c_api_blas BLAS functions
+ *  A subset of Basic Linear ALgebra (BLAS) functions to perform
+ *  matrix-matrix multiplication.
+ *  \{
+ <p>
+ *  SGEMM performs a matrix-matrix multiplication operation defined as
+ * 
+ *  C := alpha*op( A )*op( B ) + beta*C
+ * 
+ *  where
+ *   - op( X ) is one of op( X ) = X or op( X ) = X**T,
+ *   - alpha and beta are scalars,
+ *   - A, B and C are matrices, with op( A ) an m by k matrix, op( B ) a k by n matrix
+ *     and C an m by n matrix.
+ * 
+ *  The matrices are assumed to be stored in row-major order (the elements
+ *  in a matrix rows are contiguous in memory).
+ * 
+ *  \note
+ *       The API is different from the standard BLAS routine
+ *       because it returns mkldnn_status_t for error handling.
+ *       XERBLA is not supported: no error message will be printed
+ *       in case of incorrect parameters. */
 
-/** \addtogroup c_api_blas BLAS functions
- * A subset of Basic Linear ALgebra (BLAS) functions to perform
- * matrix-matrix multiplication.
- * \{ */
+///
+///
+///
+///
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
+        @Cast("char") byte transa, @Cast("char") byte transb,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const FloatPointer A, @Cast("mkldnn_dim_t") long lda,
+        @Const FloatPointer B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, FloatPointer C, @Cast("mkldnn_dim_t") long ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
+        @Cast("char") byte transa, @Cast("char") byte transb,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const FloatBuffer A, @Cast("mkldnn_dim_t") long lda,
+        @Const FloatBuffer B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, FloatBuffer C, @Cast("mkldnn_dim_t") long ldc);
+public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(
+        @Cast("char") byte transa, @Cast("char") byte transb,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha, @Const float[] A, @Cast("mkldnn_dim_t") long lda,
+        @Const float[] B, @Cast("mkldnn_dim_t") long ldb,
+        float beta, float[] C, @Cast("mkldnn_dim_t") long ldc);
 
-/** SGEMM performs a matrix-matrix multiplication operation defined as
- *
- * C := alpha*op( A )*op( B ) + beta*C
- *
- * where
- *  - op( X ) is one of op( X ) = X or op( X ) = X**T,
- *  - alpha and beta are scalars,
- *  - A, B and C are matrices, with op( A ) an m by k matrix, op( B ) a k by n matrix
- *    and C an m by n matrix.
- *
- * The matrices are assumed to be stored in column-major order (the elements
- * in a matrix columns are contiguous in memory).
- *
- * \note
- *      The API is different from the standard BLAS routine
- *      because it returns mkldnn_status_t for error handling.
- *      XERBLA is not supported: no error message will be printed
- *      in case of incorrect parameters. */
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
-        @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
-        @Const FloatPointer alpha, @Const FloatPointer A, @Const IntPointer lda,
-        @Const FloatPointer B, @Const IntPointer ldb,
-        @Const FloatPointer beta, FloatPointer C, @Const IntPointer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
-        @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
-        @Const FloatBuffer alpha, @Const FloatBuffer A, @Const IntBuffer lda,
-        @Const FloatBuffer B, @Const IntBuffer ldb,
-        @Const FloatBuffer beta, FloatBuffer C, @Const IntBuffer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
-        @Const int[] M, @Const int[] N, @Const int[] K,
-        @Const float[] alpha, @Const float[] A, @Const int[] lda,
-        @Const float[] B, @Const int[] ldb,
-        @Const float[] beta, float[] C, @Const int[] ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
-        @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
-        @Const FloatPointer alpha, @Const FloatPointer A, @Const IntPointer lda,
-        @Const FloatPointer B, @Const IntPointer ldb,
-        @Const FloatPointer beta, FloatPointer C, @Const IntPointer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(@Cast("const char*") BytePointer transa, @Cast("const char*") BytePointer transb,
-        @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
-        @Const FloatBuffer alpha, @Const FloatBuffer A, @Const IntBuffer lda,
-        @Const FloatBuffer B, @Const IntBuffer ldb,
-        @Const FloatBuffer beta, FloatBuffer C, @Const IntBuffer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_sgemm(String transa, String transb,
-        @Const int[] M, @Const int[] N, @Const int[] K,
-        @Const float[] alpha, @Const float[] A, @Const int[] lda,
-        @Const float[] B, @Const int[] ldb,
-        @Const float[] beta, float[] C, @Const int[] ldc);
+/** mkldnn_gemm_u8s8s32() and mkldnn_gemm_s8s8s32() perform a matrix-matrix
+ *  multiplication operation and add the result to a scalar-matrix product.
+ *  For the final result, a vector is added to each row or column of the output
+ *  matrix.
+ * 
+ *  The operation is defined as:
+ * 
+ *  - {@code C := alpha*(op(A) - A_offset) * (op(B) - B_offset) + beta*C + C_offset}
+ * 
+ *  where
+ *   - {@code op( X ) = X} or {@code op( X ) = X**T},
+ *   - {@code A_offset} is an m-by-k matrix with every element
+ *                equal to the value {@code ao},
+ *   - {@code B_offset} is an k-by-n matrix with every element
+ *                equal to the value {@code bo},
+ *   - {@code C_offset} is an m-by-n matrix defined by the {@code co} array of size {@code len}:
+ *     - if {@code offsetc = F}: {@code len} must be at least {@code 1},
+ *     - if {@code offsetc = C}: {@code len} must be at least {@code max(1, m)},
+ *     - if {@code offsetc = R}: {@code len} must be at least {@code max(1, n)},
+ *   - {@code alpha} and {@code beta} are scalars, and
+ *   - {@code A}, {@code B} and {@code C} are matrices, with {@code op( A )} an m-by-k matrix,
+ *     {@code op( B )} a k-by-n matrix and {@code C} an m-by-n matrix.
+ * 
+ *  The matrices are assumed to be stored in row-major order (the elements
+ *  in a matrix rows are contiguous in memory).
+ * 
+ *  \note
+ *       The API is different compared with the standard BLAS routine.
+ *       In particular, the function returns \ref mkldnn_status_t for
+ *       error handling.
+ *       XERBLA is not supported: no error message will be printed
+ *       in case of incorrect parameters.
+ * 
+ *  \warning
+ *       On some architectures the intermediate saturation might happen,
+ *       which would lead to unexpected results. For more details, refer to
+ *       \ref dev_guide_int8_computations. */
 
-/** gemm_s8u8s32 and gemm_s8s8s32 perform a matrix-matrix multiplication
- * operation and add the result to a scalar-matrix product. For the final
- * result, a vector is added to each row or column of the output matrix.
- * The operation is defined as:
- *
- * C := alpha*(op(A) + A_offset) * (op(B) + B_offset) + beta*C + C_offset
- *
- * where
- *  - op( X ) = X or op( X ) = X**T,
- *  - A_offset is an m-by-k matrix with every element equal to the value oa,
- *  - B_offset is an k-by-n matrix with every element equal to the value ob,
- *  - C_offset is an m-by-n matrix defined by the oc array, size len:
- *    - if offsetc = F: len must be at least 1
- *    - if offsetc = C: len must be at least max(1, m)
- *    - if offsetc = R: len must be at least max(1, n)
- *  - alpha and beta are scalars, and A, B and C are matrices, with op( A )
- *    an m-by-k matrix, op( B ) a k-by-n matrix and C an m-by-n matrix.
- *
- * The matrices are assumed to be stored in column-major order (the elements
- * in a matrix columns are contiguous in memory).
- *
- * \note
- *      The API is different compared with the standard BLAS routine
- *      because it returns mkldnn_status_t for error handling.
- *      XERBLA is not supported: no error message will be printed
- *      in case of incorrect parameters. */
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntPointer M, @Const IntPointer N,
-        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
-        @Const BytePointer ao, @Cast("const uint8_t*") BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
-        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
-        String transb, String offsetc, @Const IntBuffer M, @Const IntBuffer N,
-        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
-        @Const ByteBuffer ao, @Cast("const uint8_t*") ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
-        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const int[] M, @Const int[] N,
-        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
-        @Const byte[] ao, @Cast("const uint8_t*") byte[] B, @Const int[] ldb, @Const byte[] bo,
-        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
-        String transb, String offsetc, @Const IntPointer M, @Const IntPointer N,
-        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
-        @Const BytePointer ao, @Cast("const uint8_t*") BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
-        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntBuffer M, @Const IntBuffer N,
-        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
-        @Const ByteBuffer ao, @Cast("const uint8_t*") ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
-        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8u8s32(String transa,
-        String transb, String offsetc, @Const int[] M, @Const int[] N,
-        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
-        @Const byte[] ao, @Cast("const uint8_t*") byte[] B, @Const int[] ldb, @Const byte[] bo,
-        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
+///
+///
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Cast("const uint8_t*") BytePointer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Cast("const uint8_t*") ByteBuffer A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_u8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Cast("const uint8_t*") byte[] A, @Cast("mkldnn_dim_t") long lda, @Cast("uint8_t") byte ao,
+        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
 
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntPointer M, @Const IntPointer N,
-        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
-        @Const BytePointer ao, @Const BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
-        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
-        String transb, String offsetc, @Const IntBuffer M, @Const IntBuffer N,
-        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
-        @Const ByteBuffer ao, @Const ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
-        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const int[] M, @Const int[] N,
-        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
-        @Const byte[] ao, @Const byte[] B, @Const int[] ldb, @Const byte[] bo,
-        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
-        String transb, String offsetc, @Const IntPointer M, @Const IntPointer N,
-        @Const IntPointer K, @Const FloatPointer alpha, @Const BytePointer A, @Const IntPointer lda,
-        @Const BytePointer ao, @Const BytePointer B, @Const IntPointer ldb, @Const BytePointer bo,
-        @Const FloatPointer beta, IntPointer c, @Const IntPointer ldc, @Const IntPointer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Cast("const char*") BytePointer offsetc, @Const IntBuffer M, @Const IntBuffer N,
-        @Const IntBuffer K, @Const FloatBuffer alpha, @Const ByteBuffer A, @Const IntBuffer lda,
-        @Const ByteBuffer ao, @Const ByteBuffer B, @Const IntBuffer ldb, @Const ByteBuffer bo,
-        @Const FloatBuffer beta, IntBuffer c, @Const IntBuffer ldc, @Const IntBuffer co);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(String transa,
-        String transb, String offsetc, @Const int[] M, @Const int[] N,
-        @Const int[] K, @Const float[] alpha, @Const byte[] A, @Const int[] lda,
-        @Const byte[] ao, @Const byte[] B, @Const int[] ldb, @Const byte[] bo,
-        @Const float[] beta, int[] c, @Const int[] ldc, @Const int[] co);
-
-/** gemm_bf16bf16f32 performs a matrix-matrix multiplication operation defined
- * as
- *
- * C := alpha*op( A )*op( B ) + beta*C
- *
- * where
- *  - op( X ) is one of op( X ) = X or op( X ) = X**T,
- *  - alpha and beta are scalars,
- *  - A, B and C are matrices, with op( A ) an m by k matrix, op( B ) a k by n
- *    matrix and C an m by n matrix.
- *
- * The matrices are assumed to be stored in column-major order (the elements
- * in a matrix columns are contiguous in memory).
- *
- * \note
- *      The API is different from the standard BLAS routine
- *      because it returns mkldnn_status_t for error handling.
- *      XERBLA is not supported: no error message will be printed
- *      in case of incorrect parameters. */
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
-        @Const FloatPointer alpha, @Cast("const mkldnn_bfloat16_t*") ShortPointer A, @Const IntPointer lda,
-        @Cast("const mkldnn_bfloat16_t*") ShortPointer B, @Const IntPointer ldb, @Const FloatPointer beta,
-        FloatPointer c, @Const IntPointer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
-        String transb, @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
-        @Const FloatBuffer alpha, @Cast("const mkldnn_bfloat16_t*") ShortBuffer A, @Const IntBuffer lda,
-        @Cast("const mkldnn_bfloat16_t*") ShortBuffer B, @Const IntBuffer ldb, @Const FloatBuffer beta,
-        FloatBuffer c, @Const IntBuffer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Const int[] M, @Const int[] N, @Const int[] K,
-        @Const float[] alpha, @Cast("const mkldnn_bfloat16_t*") short[] A, @Const int[] lda,
-        @Cast("const mkldnn_bfloat16_t*") short[] B, @Const int[] ldb, @Const float[] beta,
-        float[] c, @Const int[] ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
-        String transb, @Const IntPointer M, @Const IntPointer N, @Const IntPointer K,
-        @Const FloatPointer alpha, @Cast("const mkldnn_bfloat16_t*") ShortPointer A, @Const IntPointer lda,
-        @Cast("const mkldnn_bfloat16_t*") ShortPointer B, @Const IntPointer ldb, @Const FloatPointer beta,
-        FloatPointer c, @Const IntPointer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(@Cast("const char*") BytePointer transa,
-        @Cast("const char*") BytePointer transb, @Const IntBuffer M, @Const IntBuffer N, @Const IntBuffer K,
-        @Const FloatBuffer alpha, @Cast("const mkldnn_bfloat16_t*") ShortBuffer A, @Const IntBuffer lda,
-        @Cast("const mkldnn_bfloat16_t*") ShortBuffer B, @Const IntBuffer ldb, @Const FloatBuffer beta,
-        FloatBuffer c, @Const IntBuffer ldc);
-public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String transa,
-        String transb, @Const int[] M, @Const int[] N, @Const int[] K,
-        @Const float[] alpha, @Cast("const mkldnn_bfloat16_t*") short[] A, @Const int[] lda,
-        @Cast("const mkldnn_bfloat16_t*") short[] B, @Const int[] ldb, @Const float[] beta,
-        float[] c, @Const int[] ldc);
-
-/** \} */
-
-/** \} */
+/** mkldnn_gemm_u8s8s32() and mkldnn_gemm_s8s8s32() perform a matrix-matrix
+ *  multiplication operation and add the result to a scalar-matrix product.
+ *  For the final result, a vector is added to each row or column of the output
+ *  matrix.
+ * 
+ *  For full description, see mkldnn_gemm_u8s8s32().
+ * 
+ *  \warning
+ *       On some architectures the intermediate saturation might happen,
+ *       which would lead to unexpected results. For more details, refer to
+ *       \ref dev_guide_int8_computations. */
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Const BytePointer A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const BytePointer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntPointer C, @Cast("mkldnn_dim_t") long ldc, @Const IntPointer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Const ByteBuffer A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const ByteBuffer B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, IntBuffer C, @Cast("mkldnn_dim_t") long ldc, @Const IntBuffer co);
+public static native @Cast("mkldnn_status_t") int mkldnn_gemm_s8s8s32(
+        @Cast("char") byte transa, @Cast("char") byte transb, @Cast("char") byte offsetc,
+        @Cast("mkldnn_dim_t") long M, @Cast("mkldnn_dim_t") long N, @Cast("mkldnn_dim_t") long K,
+        float alpha,
+        @Const byte[] A, @Cast("mkldnn_dim_t") long lda, byte ao,
+        @Const byte[] B, @Cast("mkldnn_dim_t") long ldb, byte bo,
+        float beta, int[] C, @Cast("mkldnn_dim_t") long ldc, @Const int[] co);
+/** \}
+ <p>
+ *  \} */
 
 // #ifdef __cplusplus
 // #endif
@@ -3207,7 +3973,7 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String
 // Parsed from mkldnn.hpp
 
 /*******************************************************************************
-* Copyright 2016-2018 Intel Corporation
+* Copyright 2016-2019 Intel Corporation
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -3222,20 +3988,26 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String
 * limitations under the License.
 *******************************************************************************/
 
+/** \file
+/** C++ API */
+
 // #ifndef MKLDNN_HPP
 // #define MKLDNN_HPP
 
-// #ifndef DOXYGEN_SHOULD_SKIP_THIS
-// #endif
+// #include "mkldnn_config.h"
 
-/** \addtogroup cpp_api C++ API
- *  \{
- <p>
- *  \addtogroup cpp_api_utils Utils
- *  \{
- <p>
- *  A class that provides the destructor for an Intel(R) MKL-DNN C handle */
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
+// #endif
+// Targeting ../error.java
+
+
+
+/** A class that provides the destructor for an Intel(R) MKL-DNN C handle */
 // Targeting ../mkldnn_engine_handle.java
+
+
+// Targeting ../mkldnn_memory_handle.java
 
 
 // Targeting ../mkldnn_primitive_desc_handle.java
@@ -3253,18 +4025,14 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String
 // Targeting ../mkldnn_stream_handle.java
 
 
+
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif
 // Targeting ../primitive.java
 
 
 
-
-///
-@Namespace("mkldnn") public static native @Cast("mkldnn_primitive_kind_t") int convert_to_c(@Cast("mkldnn::primitive::kind") int akind);
-// Targeting ../error.java
-
-
-
-
+@Namespace("mkldnn") public static native @Cast("mkldnn_primitive_kind_t") int convert_to_c(@ByVal primitive.kind akind);
 
 
 /** \}
@@ -3272,109 +4040,407 @@ public static native @Cast("mkldnn_status_t") int mkldnn_gemm_bf16bf16f32(String
  *  \addtogroup cpp_api_enums Common data types and enumerations
  *  A proxy to \ref c_api_types in \ref c_api.
  * 
- *  \{ */
+ *  \{
+ <p>
+ *  Scratchpad mode */
+@Namespace("mkldnn") public enum scratchpad_mode {
+    /** The library manages scratchpad (default) */
+    library(mkldnn_scratchpad_mode_library),
+    /** A user shall query and provide the scratchpad memory to primitives */
+    user(mkldnn_scratchpad_mode_user);
 
-/** enum mkldnn::round_mode */
-public static final int
-    round_nearest = mkldnn_round_nearest,
-    round_down = mkldnn_round_down;
+    public final int value;
+    private scratchpad_mode(int v) { this.value = v; }
+    private scratchpad_mode(scratchpad_mode e) { this.value = e.value; }
+    public scratchpad_mode intern() { for (scratchpad_mode e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
-/** enum mkldnn::padding_kind */
-public static final int
-    zero = mkldnn_padding_zero;
+@Namespace("mkldnn") public static native @Cast("mkldnn_scratchpad_mode_t") int convert_to_c(scratchpad_mode mode);
+@Namespace("mkldnn") public static native @Cast("mkldnn_scratchpad_mode_t") int convert_to_c(@Cast("mkldnn::scratchpad_mode") int mode);
 
-/** enum mkldnn::prop_kind */
-public static final int
-    forward_training = mkldnn_forward_training,
-    forward_scoring = mkldnn_forward_scoring,
-    forward_inference = mkldnn_forward_inference,
-    forward = mkldnn_forward,
-    backward = mkldnn_backward,
-    backward_data = mkldnn_backward_data,
-    backward_weights = mkldnn_backward_weights,
-    backward_bias = mkldnn_backward_bias;
+/** Propagation kind */
+@Namespace("mkldnn") public enum prop_kind {
+    /** Forward data propagation (training mode). In this mode primitives
+     *  perform computations necessary for subsequent backward propagation. */
+    forward_training(mkldnn_forward_training),
+    /** Forward data propagation (inference mode). In this mode primitives
+     *  perform only computations that are necessary for inference and omit
+     *  computations that are necessary only for backward propagation. */
+    forward_inference(mkldnn_forward_inference),
+    /** Forward data propagation,
+     *  alias for #mkldnn::prop_kind::forward_inference */
+    forward_scoring(mkldnn_forward_scoring),
+    /** Forward data propagation,
+     *  alias for #mkldnn::prop_kind::forward_training */
+    forward(mkldnn_forward),
+    /** Backward propagation (with respect to all parameters). */
+    backward(mkldnn_backward),
+    /** Backward data propagation. */
+    backward_data(mkldnn_backward_data),
+    /** Backward weights propagation. */
+    backward_weights(mkldnn_backward_weights),
+    /** Backward bias propagation. */
+    backward_bias(mkldnn_backward_bias);
 
-/** enum mkldnn::algorithm */
-public static final int
-    algorithm_undef = mkldnn_alg_kind_undef,
-    convolution_auto = mkldnn_convolution_auto,
-    convolution_direct = mkldnn_convolution_direct,
-    convolution_winograd = mkldnn_convolution_winograd,
-    deconvolution_direct = mkldnn_deconvolution_direct,
-    deconvolution_winograd = mkldnn_deconvolution_winograd,
-    eltwise_relu = mkldnn_eltwise_relu,
-    eltwise_tanh = mkldnn_eltwise_tanh,
-    eltwise_elu = mkldnn_eltwise_elu,
-    eltwise_square = mkldnn_eltwise_square,
-    eltwise_abs = mkldnn_eltwise_abs,
-    eltwise_sqrt = mkldnn_eltwise_sqrt,
-    eltwise_linear = mkldnn_eltwise_linear,
-    eltwise_bounded_relu = mkldnn_eltwise_bounded_relu,
-    eltwise_soft_relu = mkldnn_eltwise_soft_relu,
-    eltwise_logistic = mkldnn_eltwise_logistic,
-    eltwise_exp = mkldnn_eltwise_exp,
-    lrn_across_channels = mkldnn_lrn_across_channels,
-    lrn_within_channel  = mkldnn_lrn_within_channel,
-    pooling_max = mkldnn_pooling_max,
-    pooling_avg = mkldnn_pooling_avg,
-    pooling_avg_include_padding = mkldnn_pooling_avg_include_padding,
-    pooling_avg_exclude_padding = mkldnn_pooling_avg_exclude_padding,
-    vanilla_rnn = mkldnn_vanilla_rnn,
-    vanilla_lstm = mkldnn_vanilla_lstm,
-    vanilla_gru = mkldnn_vanilla_gru,
-    gru_linear_before_reset = mkldnn_gru_linear_before_reset;
+    public final int value;
+    private prop_kind(int v) { this.value = v; }
+    private prop_kind(prop_kind e) { this.value = e.value; }
+    public prop_kind intern() { for (prop_kind e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
-/** enum mkldnn::batch_normalization_flag */
-public static final int
-    use_global_stats = mkldnn_use_global_stats,
-    use_scale_shift = mkldnn_use_scaleshift,
-    fuse_bn_relu = mkldnn_fuse_bn_relu;
+@Namespace("mkldnn") public static native @Cast("mkldnn_prop_kind_t") int convert_to_c(prop_kind kind);
 
-/** enum mkldnn::rnn_direction */
-public static final int
-    unidirectional_left2right = mkldnn_unidirectional_left2right,
-    unidirectional_right2left = mkldnn_unidirectional_right2left,
-    unidirectional = mkldnn_unidirectional,
-    bidirectional_concat = mkldnn_bidirectional_concat,
-    bidirectional_sum = mkldnn_bidirectional_sum;
+/** Kinds of algorithms. */
+@Namespace("mkldnn") public enum algorithm {
+    undef(mkldnn_alg_kind_undef),
+    /** Convolution algorithm(either direct or Winograd) is chosen just in time */
+    convolution_auto(mkldnn_convolution_auto),
+    /** Direct convolution */
+    convolution_direct(mkldnn_convolution_direct),
+    /** Winograd convolution */
+    convolution_winograd(mkldnn_convolution_winograd),
+    /** Direct deconvolution */
+    deconvolution_direct(mkldnn_deconvolution_direct),
+    /** Winograd deconvolution */
+    deconvolution_winograd(mkldnn_deconvolution_winograd),
+    /** Eltwise: ReLU */
+    eltwise_relu(mkldnn_eltwise_relu),
+    /** Eltwise: hyperbolic tangent non-linearity (tanh) */
+    eltwise_tanh(mkldnn_eltwise_tanh),
+    /** Eltwise: parametric exponential linear unit (elu) */
+    eltwise_elu(mkldnn_eltwise_elu),
+    /** Eltwise: square */
+    eltwise_square(mkldnn_eltwise_square),
+    /** Eltwise: abs */
+    eltwise_abs(mkldnn_eltwise_abs),
+    /** Eltwise: square root */
+    eltwise_sqrt(mkldnn_eltwise_sqrt),
+    /** Eltwise: linear */
+    eltwise_linear(mkldnn_eltwise_linear),
+    /** Eltwise: bounded_relu */
+    eltwise_bounded_relu(mkldnn_eltwise_bounded_relu),
+    /** Eltwise: soft_relu */
+    eltwise_soft_relu(mkldnn_eltwise_soft_relu),
+    /** Eltwise: logistic */
+    eltwise_logistic(mkldnn_eltwise_logistic),
+    /** Eltwise: exponent */
+    eltwise_exp(mkldnn_eltwise_exp),
+    /** Eltwise: gelu */
+    eltwise_gelu(mkldnn_eltwise_gelu),
+    /** Local response normalization (LRN) across multiple channels */
+    lrn_across_channels(mkldnn_lrn_across_channels),
+    /** LRN within a single channel */
+    lrn_within_channel (mkldnn_lrn_within_channel),
+    /** Max pooling */
+    pooling_max(mkldnn_pooling_max),
+    /** Average pooling exclude padding,
+     *  alias for #mkldnn::algorithm::pooling_avg_include_padding */
+    pooling_avg(mkldnn_pooling_avg),
+    /** Average pooling include padding */
+    pooling_avg_include_padding(mkldnn_pooling_avg_include_padding),
+    /** Average pooling exclude padding */
+    pooling_avg_exclude_padding(mkldnn_pooling_avg_exclude_padding),
+    /** RNN cell */
+    vanilla_rnn(mkldnn_vanilla_rnn),
+    /** LSTM cell */
+    vanilla_lstm(mkldnn_vanilla_lstm),
+    /** GRU cell */
+    
+///
+    vanilla_gru(mkldnn_vanilla_gru),
+    /** GRU cell with linear before reset
+     * 
+     *  Modification of original GRU cell. Differs from #mkldnn_vanilla_gru
+     *  in how the new memory gate is calculated:
+     *  <pre>{@code \[ c_t = tanh(W_c*x_t + b_{c_x} + r_t*(U_c*h_{t-1}+b_{c_h})) \]}</pre>
+     *  Primitive expects 4 biases on input:
+     *  {@code [b_{u}, b_{r}, b_{c_x}, b_{c_h}]} */
+    lbr_gru(mkldnn_lbr_gru);
 
-/** enum mkldnn::query */
-public static final int
-    undef = mkldnn_query_undef,
+    public final int value;
+    private algorithm(int v) { this.value = v; }
+    private algorithm(algorithm e) { this.value = e.value; }
+    public algorithm intern() { for (algorithm e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
-    eengine = mkldnn_query_engine,
-    primitive_kind = mkldnn_query_primitive_kind,
+@Namespace("mkldnn") public static native @Cast("mkldnn_alg_kind_t") int convert_to_c(algorithm aalgorithm);
 
-    num_of_inputs_s32 = mkldnn_query_num_of_inputs_s32,
-    num_of_outputs_s32 = mkldnn_query_num_of_outputs_s32,
+/** Flags for batch normalization primitive. */
+@Namespace("mkldnn") public enum normalization_flags {
+    /** Use global statistics
+     * 
+     *  If specified
+     *   - on forward propagation use mean and variance provided by user (input)
+     *   - on backward propagation reduces the amount of computations, since
+     *     mean and variance are considered as constants
+     * 
+     *   If not specified:
+     *    - on forward propagation mean and variance are computed and stored in
+     *      output
+     *    - on backward propagation compute full derivative wrt to data */
+    
+///
+///
+    use_global_stats(mkldnn_use_global_stats),
 
-    time_estimate_f64 = mkldnn_query_time_estimate_f64,
-    memory_consumption_s64 = mkldnn_query_memory_consumption_s64,
+    /** Use scale and shift parameters
+     * 
+     *  If specified:
+     *   - on forward propagation use scale and shift (aka scale and bias) for
+     *     the batch normalization results
+     *   - on backward propagation
+     *     (for prop_kind == #mkldnn::prop_kind::backward) compute
+     *     diff wrt to scale and shift (hence one extra output used)
+     * 
+     *  If not specified:
+     *   - on backward propagation
+     *     prop_kind == #mkldnn::prop_kind::backward_data has the
+     *     same behavior as prop_kind == #mkldnn::prop_kind::backward */
+    
+///
+    use_scale_shift(mkldnn_use_scaleshift),
 
-    impl_info_str = mkldnn_query_impl_info_str,
+    /** Fuse with ReLU
+     * 
+     *  If specified:
+     *   - on inference this option behaves the same as if the primitive were
+     *     fused with ReLU via post ops API
+     *   - on training primitive requires workspace (required to be able to
+     *     perform backward pass) */
+    fuse_norm_relu(mkldnn_fuse_norm_relu);
 
-    op_d = mkldnn_query_op_d,
-    memory_d = mkldnn_query_memory_d,
-    convolution_d = mkldnn_query_convolution_d,
-    deconvolution_d = mkldnn_query_deconvolution_d,
-    shuffle_d = mkldnn_query_shuffle_d,
-    eltwise_d = mkldnn_query_eltwise_d,
-    softmax_d = mkldnn_query_softmax_d,
-    pooling_d = mkldnn_query_pooling_d,
-    lrn_d = mkldnn_query_lrn_d,
-    batch_normalization_d = mkldnn_query_batch_normalization_d,
-    inner_product_d = mkldnn_query_inner_product_d,
-    rnn_d = mkldnn_query_rnn_d,
+    public final int value;
+    private normalization_flags(int v) { this.value = v; }
+    private normalization_flags(normalization_flags e) { this.value = e.value; }
+    public normalization_flags intern() { for (normalization_flags e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
 
-    input_pd = mkldnn_query_input_pd,
-    output_pd = mkldnn_query_output_pd,
-    src_pd = mkldnn_query_src_pd,
-    diff_src_pd = mkldnn_query_diff_src_pd,
-    weights_pd = mkldnn_query_weights_pd,
-    diff_weights_pd = mkldnn_query_diff_weights_pd,
-    dst_pd = mkldnn_query_dst_pd,
-    diff_dst_pd = mkldnn_query_diff_dst_pd,
-    workspace_pd = mkldnn_query_workspace_pd;
+@Namespace("mkldnn") public static native @Cast("mkldnn_normalization_flags_t") int convert_to_c(
+        normalization_flags aflag);
+
+@Namespace("mkldnn") public enum rnn_flags {
+    undef(mkldnn_rnn_flags_undef);
+
+    public final int value;
+    private rnn_flags(int v) { this.value = v; }
+    private rnn_flags(rnn_flags e) { this.value = e.value; }
+    public rnn_flags intern() { for (rnn_flags e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+@Namespace("mkldnn") public static native @Cast("mkldnn_rnn_flags_t") int convert_to_c(
+        rnn_flags aflag);
+
+// #define MKLDNN_DEFINE_BITMASK_OPS(enum_name)
+// inline enum_name operator|(enum_name lhs, enum_name rhs) {
+//     return static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
+// }
+// 
+// inline enum_name operator&(enum_name lhs, enum_name rhs) {
+//     return static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
+// }
+// 
+// inline enum_name operator^(enum_name lhs, enum_name rhs) {
+//     return static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) ^ static_cast<unsigned>(rhs));
+// }
+// 
+// inline enum_name& operator|=(enum_name &lhs, enum_name rhs) {
+//     lhs = static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) | static_cast<unsigned>(rhs));
+//     return lhs;
+// }
+// 
+// inline enum_name& operator&=(enum_name &lhs, enum_name rhs) {
+//     lhs = static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
+//     return lhs;
+// }
+// 
+// inline enum_name& operator^=(enum_name &lhs, enum_name rhs) {
+//     lhs = static_cast<enum_name>(
+//         static_cast<unsigned>(lhs) ^ static_cast<unsigned>(rhs));
+//     return lhs;
+// }
+// 
+// inline enum_name operator~(enum_name rhs) {
+//     return static_cast<enum_name>(~static_cast<unsigned>(rhs));
+// }                                                                       
+
+@Namespace("mkldnn") public static native @Name("operator |") normalization_flags or(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator |") @Cast("mkldnn::normalization_flags") int or(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @Name("operator &") normalization_flags and(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator &") @Cast("mkldnn::normalization_flags") int and(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ^") normalization_flags xor(normalization_flags lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator ^") @Cast("mkldnn::normalization_flags") int xor(@Cast("mkldnn::normalization_flags") int lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") int[] orPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::normalization_flags*") int[] orPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") int[] andPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::normalization_flags*") int[] andPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") int[] xorPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntPointer lhs, @Cast("mkldnn::normalization_flags") int rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::normalization_flags*") IntBuffer lhs, normalization_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::normalization_flags*") int[] xorPut(@ByRef @Cast("mkldnn::normalization_flags*") int[] lhs, @Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ~") normalization_flags not(normalization_flags rhs);
+@Namespace("mkldnn") public static native @Name("operator ~") @Cast("mkldnn::normalization_flags") int not(@Cast("mkldnn::normalization_flags") int rhs);
+
+@Namespace("mkldnn") public static native @Name("operator |") rnn_flags or(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator &") rnn_flags and(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ^") rnn_flags xor(rnn_flags lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") IntPointer orPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") int[] orPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator |=") @Cast("mkldnn::rnn_flags*") IntBuffer orPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") IntPointer andPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") int[] andPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator &=") @Cast("mkldnn::rnn_flags*") IntBuffer andPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") IntPointer xorPut(@ByRef @Cast("mkldnn::rnn_flags*") IntPointer lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") int[] xorPut(@ByRef @Cast("mkldnn::rnn_flags*") int[] lhs, rnn_flags rhs);
+@Namespace("mkldnn") public static native @ByRef @Name("operator ^=") @Cast("mkldnn::rnn_flags*") IntBuffer xorPut(@ByRef @Cast("mkldnn::rnn_flags*") IntBuffer lhs, rnn_flags rhs);
+
+@Namespace("mkldnn") public static native @Name("operator ~") rnn_flags not(rnn_flags rhs);
+
+
+// #undef MKLDNN_DEFINE_BITMASK_OPS
+
+@Namespace("mkldnn") public enum rnn_direction {
+    unidirectional_left2right(mkldnn_unidirectional_left2right),
+    unidirectional_right2left(mkldnn_unidirectional_right2left),
+    unidirectional(mkldnn_unidirectional),
+    bidirectional_concat(mkldnn_bidirectional_concat),
+    bidirectional_sum(mkldnn_bidirectional_sum);
+
+    public final int value;
+    private rnn_direction(int v) { this.value = v; }
+    private rnn_direction(rnn_direction e) { this.value = e.value; }
+    public rnn_direction intern() { for (rnn_direction e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+///
+///
+@Namespace("mkldnn") public static native @Cast("mkldnn_rnn_direction_t") int convert_to_c(rnn_direction adir);
+
+/** Primitive descriptor query specification
+ * 
+ *  In general should be used from C++ API since required queries are directly
+ *  implemented as class members (for instance, a query for source memory
+ *  descriptor).
+ * 
+ *  For more information see \ref mkldnn_query_t. */
+@Namespace("mkldnn") public enum query {
+    /** no query */
+    undef(mkldnn_query_undef),
+
+    /** execution engine */
+    engine(mkldnn_query_engine),
+    /** primitive kind */
+    primitive_kind(mkldnn_query_primitive_kind),
+
+    /** number of inputs expected */
+    num_of_inputs_s32(mkldnn_query_num_of_inputs_s32),
+    /** number of outputs expected */
+    num_of_outputs_s32(mkldnn_query_num_of_outputs_s32),
+
+    /** runtime estimation (seconds), unimplemented */
+    
+///
+///
+    time_estimate_f64(mkldnn_query_time_estimate_f64),
+    /** memory consumption (bytes)
+     * 
+     *  extra (scratch) memory, additional to all inputs and outputs memory
+     * 
+     *  @see \ref dev_guide_attributes_scratchpad */
+    
+///
+    memory_consumption_s64(mkldnn_query_memory_consumption_s64),
+
+    /** scratchpad engine
+     * 
+     *  engine to be used for creating scratchpad memory */
+    scratchpad_engine(mkldnn_query_scratchpad_engine),
+
+    /** implementation name */
+    impl_info_str(mkldnn_query_impl_info_str),
+
+    /** op descriptor */
+    op_d(mkldnn_query_op_d),
+    /** convolution descriptor */
+    convolution_d(mkldnn_query_convolution_d),
+    /** deconvolution descriptor */
+    deconvolution_d(mkldnn_query_deconvolution_d),
+    /** shuffle descriptor */
+    shuffle_d(mkldnn_query_shuffle_d),
+    /** eltwise descriptor */
+    eltwise_d(mkldnn_query_eltwise_d),
+    /** softmax descriptor */
+    softmax_d(mkldnn_query_softmax_d),
+    /** pooling descriptor */
+    pooling_d(mkldnn_query_pooling_d),
+    /** lrn descriptor */
+    lrn_d(mkldnn_query_lrn_d),
+    /** batch normalization descriptor */
+    batch_normalization_d(mkldnn_query_batch_normalization_d),
+    /** inner product descriptor */
+    inner_product_d(mkldnn_query_inner_product_d),
+    /** rnn descriptor */
+    rnn_d(mkldnn_query_rnn_d),
+
+    /** source memory desc */
+    src_md(mkldnn_query_src_md),
+    /** source gradient memory desc */
+    diff_src_md(mkldnn_query_diff_src_md),
+    /** weights memory descriptor desc */
+    weights_md(mkldnn_query_weights_md),
+    /** weights grad. memory desc */
+    diff_weights_md(mkldnn_query_diff_weights_md),
+    /** destination memory desc */
+    dst_md(mkldnn_query_dst_md),
+    /** destination grad. memory desc */
+    diff_dst_md(mkldnn_query_diff_dst_md),
+    /** workspace memory desc */
+    workspace_md(mkldnn_query_workspace_md),
+    /** scratchpad memory desc */
+    scratchpad_md(mkldnn_query_scratchpad_md);
+
+    public final int value;
+    private query(int v) { this.value = v; }
+    private query(query e) { this.value = e.value; }
+    public query intern() { for (query e : values()) if (e.value == value) return e; return this; }
+    @Override public String toString() { return intern().name(); }
+}
+
+
+///
+@Namespace("mkldnn") public static native @Cast("mkldnn_query_t") int convert_to_c(query aquery);
 // Targeting ../post_ops.java
 
 
@@ -3384,28 +4450,35 @@ public static final int
 // Targeting ../engine.java
 
 
+// Targeting ../stream.java
+
+
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator |") stream.flags or(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator &") stream.flags and(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+@Namespace("mkldnn") public static native @ByVal @Name("operator ^") stream.flags xor(@ByVal stream.flags lhs, @ByVal stream.flags rhs);
+
+
+///
+@Namespace("mkldnn") public static native @ByVal @Name("operator ~") stream.flags not(@ByVal stream.flags rhs);
 // Targeting ../memory.java
 
 
 
-@Namespace("mkldnn") public static native @ByVal memory.desc zero_md();
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_data_type_t") int a, @ByVal memory.data_type b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_data_type_t") int a, @ByVal memory.data_type b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.data_type a, @Cast("mkldnn_data_type_t") int b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.data_type a, @Cast("mkldnn_data_type_t") int b);
 
-@Namespace("mkldnn") public static native @ByVal memory null_memory(@ByVal engine eng);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_format_tag_t") int a, @ByVal memory.format_tag b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_format_tag_t") int a, @ByVal memory.format_tag b);
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal memory.format_tag a, @Cast("mkldnn_format_tag_t") int b);
 
-@Namespace("mkldnn") public static native void check_num_parameters(@Const mkldnn_primitive_desc aprimitive_desc, int n_inputs, int n_outputs,
-    @StdString BytePointer prim_name);
-@Namespace("mkldnn") public static native void check_num_parameters(@Const mkldnn_primitive_desc aprimitive_desc, int n_inputs, int n_outputs,
-    @StdString String prim_name);
-
-
-@Namespace("mkldnn") public static native @Cast("bool") boolean is_null_memory(@Const mkldnn_primitive aprimitive);
-
-@Namespace("mkldnn") public static native @Cast("bool") @Name("operator ==") boolean equals(@Cast("mkldnn_data_type_t") int a, @Cast("mkldnn::memory::data_type") int b);
-@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Cast("mkldnn_data_type_t") int a, @Cast("mkldnn::memory::data_type") int b);
+///
+@Namespace("mkldnn") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal memory.format_tag a, @Cast("mkldnn_format_tag_t") int b);
 // Targeting ../reorder.java
-
-
-// Targeting ../view.java
 
 
 // Targeting ../concat.java
@@ -3474,13 +4547,28 @@ public static final int
 // Targeting ../inner_product_backward_weights.java
 
 
-// Targeting ../rnn_cell.java
+// Targeting ../vanilla_rnn_forward.java
 
 
-// Targeting ../rnn_forward.java
+// Targeting ../vanilla_rnn_backward.java
 
 
-// Targeting ../rnn_backward.java
+// Targeting ../lstm_forward.java
+
+
+// Targeting ../lstm_backward.java
+
+
+// Targeting ../gru_forward.java
+
+
+// Targeting ../gru_backward.java
+
+
+// Targeting ../lbr_gru_forward.java
+
+
+// Targeting ../lbr_gru_backward.java
 
 
 // Targeting ../shuffle_forward.java
@@ -3489,15 +4577,16 @@ public static final int
 // Targeting ../shuffle_backward.java
 
 
-// Targeting ../stream.java
-
-
-
-// #undef REG_QUERY_MPD
 
 /** \}
  <p>
+ *  \} Primitives
+ <p>
  *  \} C++ API */
+
+// implementation section
+// #ifndef DOXYGEN_SHOULD_SKIP_THIS
+// #endif // DOXYGEN_SHOULD_SKIP_THIS
 
  // namespace mkldnn
 

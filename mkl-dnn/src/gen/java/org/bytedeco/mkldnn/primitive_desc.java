@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -27,7 +25,19 @@ public class primitive_desc extends mkldnn_primitive_desc_handle {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public primitive_desc(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public primitive_desc position(long position) {
+        return (primitive_desc)super.position(position);
+    }
 
+    public primitive_desc() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** Creates a primitive descriptor from given \p op_desc, \p attr, \p
+     *  engine, and optionally a hint primitive descriptor from forward
+     *  propagation. */
     public primitive_desc(const_mkldnn_op_desc_t desc, @Const primitive_attr attr,
                 @Const @ByRef engine e, @Const mkldnn_primitive_desc hint_fwd_pd) { super((Pointer)null); allocate(desc, attr, e, hint_fwd_pd); }
     private native void allocate(const_mkldnn_op_desc_t desc, @Const primitive_attr attr,
@@ -38,9 +48,13 @@ public class primitive_desc extends mkldnn_primitive_desc_handle {
     public native @ByVal primitive_attr get_primitive_attr();
 
     /** Returns implementation name */
+    public native @Cast("const char*") BytePointer impl_info_str();
+
+    /** Queries the memory::dim value (same as int64_t) */
     
     ///
-    public native @Cast("const char*") BytePointer impl_info_str();
+    public native @Cast("mkldnn::memory::dim") long query_s64(query q);
+    public native @Cast("mkldnn::memory::dim") long query_s64(@Cast("mkldnn::query") int q);
 
     /** Advances the next implementation for the given op descriptor.
      * 
@@ -50,12 +64,17 @@ public class primitive_desc extends mkldnn_primitive_desc_handle {
      *    the primitive descriptor itself is kept unchanged */
     public native @Cast("bool") boolean next_impl();
 
-    /** Queries and returns requested memory primitive descriptor. */
-    public native @ByVal memory.primitive_desc query_mpd(@Cast("mkldnn::query") int what, int idx/*=0*/);
-    public native @ByVal memory.primitive_desc query_mpd(@Cast("mkldnn::query") int what);
+    /** Queries and returns requested memory descriptor. */
+    
+    ///
+    public native @ByVal memory.desc query_md(query what, int idx/*=0*/);
+    public native @ByVal memory.desc query_md(query what);
+    public native @ByVal memory.desc query_md(@Cast("mkldnn::query") int what, int idx/*=0*/);
+    public native @ByVal memory.desc query_md(@Cast("mkldnn::query") int what);
 
-    // register specialized queries, e.g. src_primitive_desc()
-// #   define REG_QUERY_MPD(name, what, idx)
-//     memory::primitive_desc name ## _primitive_desc() const
-//     { return query_mpd(what ## _pd, idx); }
+    /** Queries scratchpad memory descriptor.
+     * 
+     *  @see \ref dev_guide_attributes_scratchpad
+     *  Returns a zero_md if no scratchpad is required. */
+    public native @ByVal memory.desc scratchpad_desc();
 }

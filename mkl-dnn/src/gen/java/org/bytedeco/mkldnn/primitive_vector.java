@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 @Name("std::vector<mkldnn::primitive>") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)

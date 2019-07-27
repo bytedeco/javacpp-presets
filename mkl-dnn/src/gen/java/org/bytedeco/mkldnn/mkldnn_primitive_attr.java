@@ -6,23 +6,14 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
-/** \} */
-
-/** \addtogroup c_api_primitive_attr Primitive descriptor attributes
- * \{ */
-
 /** \struct mkldnn_primitive_attr
- * \brief An opaque structure for primitive descriptor attributes.
- *
- * Attributes may contain:
- *  - rounding mode for integer based primitives (like convolution, reorders)
- *  - output scales (to scale the result prior to storing it to the memory)
- */
+ *  \brief An opaque structure for primitive descriptor attributes.
+ * 
+ *  Attributes may contain:
+ *   - output scales (to scale the result prior to storing it to the memory) */
 @Opaque @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_primitive_attr extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

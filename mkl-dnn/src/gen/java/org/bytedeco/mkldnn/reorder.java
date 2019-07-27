@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -16,40 +14,78 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
  *  \addtogroup cpp_api_reorder Reorder
  *  A primitive to copy data between memory formats.
  * 
+ *  @see \ref dev_guide_reorder in developer guide
  *  @see \ref c_api_reorder in \ref c_api
- *  \{ */
-
+ *  \{
+ <p>
+ *  Initializes a reorder primitive using the description of the source
+ *  (\p src_engine and \p src_md) and destination (\p dst_engine and \p dst_md)
+ *  memory, and an \p attr attribute. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class reorder extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public reorder(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public reorder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public reorder position(long position) {
+        return (reorder)super.position(position);
+    }
 
     public static class primitive_desc extends mkldnn_primitive_desc_handle {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
-        public primitive_desc(@Const @ByRef memory.primitive_desc input,
-                               @Const @ByRef memory.primitive_desc output) { super((Pointer)null); allocate(input, output); }
-        private native void allocate(@Const @ByRef memory.primitive_desc input,
-                               @Const @ByRef memory.primitive_desc output);
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
 
-        public primitive_desc(@Const @ByRef memory.primitive_desc input,
-                        @Const @ByRef memory.primitive_desc output,
-                        @Const @ByRef primitive_attr aattr) { super((Pointer)null); allocate(input, output, aattr); }
-        private native void allocate(@Const @ByRef memory.primitive_desc input,
-                        @Const @ByRef memory.primitive_desc output,
-                        @Const @ByRef primitive_attr aattr);
+        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md, aattr); }
+        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md) { super((Pointer)null); allocate(src_engine, src_md, dst_engine, dst_md); }
+        private native void allocate(@Const @ByRef engine src_engine, @Const @ByRef memory.desc src_md,
+                        @Const @ByRef engine dst_engine, @Const @ByRef memory.desc dst_md);
+
+        
+        ///
+        public primitive_desc(@Const @ByRef memory src, @Const @ByRef memory dst,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr) { super((Pointer)null); allocate(src, dst, aattr); }
+        private native void allocate(@Const @ByRef memory src, @Const @ByRef memory dst,
+                        @Const @ByRef(nullValue = "mkldnn::primitive_attr()") primitive_attr aattr);
+        public primitive_desc(@Const @ByRef memory src, @Const @ByRef memory dst) { super((Pointer)null); allocate(src, dst); }
+        private native void allocate(@Const @ByRef memory src, @Const @ByRef memory dst);
+
+        /** Queries scratchpad memory descriptor.
+         * 
+         *  @see \ref dev_guide_attributes_scratchpad
+         *  Returns a zero_md if no scratchpad is required. */
+        public native @ByVal memory.desc scratchpad_desc();
+
+        public native @ByVal engine scratchpad_engine();
 
         public native @ByVal engine get_engine();
     }
 
-    public reorder(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at input, @Const @ByRef memory output) { super((Pointer)null); allocate(aprimitive_desc, input, output); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at input, @Const @ByRef memory output);
+    public reorder() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
-    public reorder(@Const @ByRef primitive.at input, @Const @ByRef memory output) { super((Pointer)null); allocate(input, output); }
-    private native void allocate(@Const @ByRef primitive.at input, @Const @ByRef memory output);
+    public reorder(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
+
+    public reorder(@Const @ByRef memory src, @Const @ByRef memory dst) { super((Pointer)null); allocate(src, dst); }
+    private native void allocate(@Const @ByRef memory src, @Const @ByRef memory dst);
+
+    public native void execute(@ByVal stream astream, @ByRef memory src, @ByRef memory dst);
 }

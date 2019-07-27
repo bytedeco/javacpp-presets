@@ -6,15 +6,15 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
-/** \addtogroup c_api_types_op_descs Operation descriptors
- *  \{*/
-
-/** A pointer to any of the operation descriptors. */
+/** \}
+ <p>
+ *  \addtogroup c_api_types_op_descs Operation descriptors
+ *  \{
+ <p>
+ *  A pointer to any of the operation descriptors. */
 @Namespace @Name("void") @Opaque @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_op_desc_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

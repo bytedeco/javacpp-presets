@@ -4,22 +4,14 @@
     <artifactId>mkl-dnn</artifactId>
     <version>1.5.2-SNAPSHOT</version>
     <properties>
-        <exec.mainClass>SimpleNetInt8</exec.mainClass>
+        <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.20.2-1.5.2-SNAPSHOT</version>
+            <version>1.0-1.5.2-SNAPSHOT</version>
         </dependency>
-
-        <!-- Additional dependencies to use bundled full version of MKL -->
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl-platform-redist</artifactId>
-            <version>2019.4-1.5.2-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>

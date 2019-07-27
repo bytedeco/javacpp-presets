@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet, Alexander Merritt
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,26 +33,28 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
-    inherit = mklml.class,
     value = {
         @Platform(
             value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"},
             compiler = "cpp11",
-            define = {"GENERIC_EXCEPTION_CLASS mkldnn::error",
-                      "GENERIC_EXCEPTION_TOSTRING message.append(\": status = \").append(std::to_string(e.status)).c_str()"},
-            include = {"mkldnn_types.h", /*"mkldnn_debug.h",*/ "mkldnn.h", "mkldnn.hpp"},
+            define = {"GENERIC_EXCEPTION_CLASS mkldnn::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
+            include = {"mkldnn_config.h", "mkldnn_types.h", /*"mkldnn_debug.h",*/ "mkldnn_version.h", "mkldnn.h", "mkldnn.hpp"},
             link = "mkldnn@.0", preload = "libmkldnn")},
     target = "org.bytedeco.mkldnn", global = "org.bytedeco.mkldnn.global.mkldnn")
 public class mkldnn implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap//.put(new Info().enumerate())
-               .put(new Info("MKLDNN_HELPER_DLL_IMPORT", "MKLDNN_HELPER_DLL_EXPORT", "MKLDNN_API").cppTypes().annotations())
+        infoMap.put(new Info().enumerate())
+               .put(new Info("MKLDNN_HELPER_DLL_IMPORT", "MKLDNN_HELPER_DLL_EXPORT", "MKLDNN_API",
+                             "MKLDNN_MEMORY_NONE", "MKLDNN_MEMORY_ALLOCATE").cppTypes().annotations())
+               .put(new Info("MKLDNN_VERSION_HASH").translate(false))
                .put(new Info("MKLDNN_DEPRECATED").cppText("#define MKLDNN_DEPRECATED deprecated").cppTypes())
                .put(new Info("deprecated").annotations("@Deprecated"))
                .put(new Info("DOXYGEN_SHOULD_SKIP_THIS").define())
+               .put(new Info("MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL").define(false))
 
-               .put(new Info("mkldnn_dims_t").cppTypes("int* const"))
-               .put(new Info("mkldnn_strides_t").cppTypes("ptrdiff_t* const"))
+               .put(new Info("mkldnn_dims_t").cppTypes("int64_t* const"))
+               .put(new Info("mkldnn_memory_t").valueTypes("mkldnn_memory").pointerTypes("@ByPtrPtr mkldnn_memory", "@Cast(\"mkldnn_memory_t*\") PointerPointer"))
+               .put(new Info("const_mkldnn_memory_t").valueTypes("@Const mkldnn_memory").pointerTypes("@Const @ByPtrPtr mkldnn_memory", "@Cast(\"const_mkldnn_memory_t*\") PointerPointer"))
                .put(new Info("mkldnn_engine_t").valueTypes("mkldnn_engine").pointerTypes("@ByPtrPtr mkldnn_engine", "@Cast(\"mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("const_mkldnn_engine_t").valueTypes("@Const mkldnn_engine").pointerTypes("@Const @ByPtrPtr mkldnn_engine", "@Cast(\"const_mkldnn_engine_t*\") PointerPointer"))
                .put(new Info("mkldnn_primitive_desc_iterator_t").valueTypes("mkldnn_primitive_desc_iterator").pointerTypes("@ByPtrPtr mkldnn_primitive_desc_iterator", "@Cast(\"mkldnn_primitive_desc_iterator_t*\") PointerPointer"))
@@ -69,24 +71,31 @@ public class mkldnn implements InfoMapper {
                .put(new Info("const_mkldnn_stream_t").valueTypes("@Const mkldnn_stream").pointerTypes("@Const @ByPtrPtr mkldnn_stream", "@Cast(\"const_mkldnn_stream_t*\") PointerPointer"))
 
                .put(new Info("mkldnn::primitive_desc").pointerTypes("org.bytedeco.mkldnn.primitive_desc"))
-               .put(new Info("mkldnn::memory::dims").annotations("@StdVector(\"std::remove_extent<mkldnn_dims_t>::type\")").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("mkldnn::memory::dims").annotations("@Cast({\"mkldnn_dim_t*\", \"std::vector<mkldnn_dim_t>&\"}) @StdVector(\"mkldnn_dim_t\")").pointerTypes("LongPointer", "LongBuffer", "long[]"))
 //               .put(new Info("std::vector<const_mkldnn_primitive_desc_t>").annotations("@StdVector @Cast(\"const_mkldnn_primitive_desc_t*\")").pointerTypes("PointerPointer"))
-               .put(new Info("mkldnn::primitive::at").pointerTypes("primitive.at").define())
-               .put(new Info("mkldnn::memory::primitive_desc").pointerTypes("memory.primitive_desc").define())
-//               .put(new Info("std::vector<int>", "mkldnn::memory::dims").pointerTypes("memory_dims").define())
+//               .put(new Info("mkldnn::primitive::at").pointerTypes("primitive.at").define())
+//               .put(new Info("mkldnn::memory::primitive_desc").pointerTypes("memory.primitive_desc").define())
+//               .put(new Info("std::vector<int64_t>", "std::vector<mkldnn_dim_t>", "mkldnn::memory::dims").pointerTypes("memory_dims").define())
                .put(new Info("std::vector<mkldnn_primitive_desc_t>",
                              "std::vector<const_mkldnn_primitive_desc_t>").cast().pointerTypes("mkldnn_primitive_desc_vector").define())
                .put(new Info("std::vector<mkldnn::primitive>").pointerTypes("primitive_vector").define())
 //               .put(new Info("std::vector<mkldnn::primitive::at>").pointerTypes("primitive_at_vector").define())
-               .put(new Info("std::vector<mkldnn::memory::primitive_desc>").pointerTypes("memory_primitive_desc_vector").define())
+//               .put(new Info("std::vector<mkldnn::memory::primitive_desc>").pointerTypes("memory_primitive_desc_vector").define())
+
+               .put(new Info("mkldnn::memory::data_type").pointerTypes("memory.data_type"))
+               .put(new Info("mkldnn::memory::format_tag").pointerTypes("memory.format_tag"))
+               .put(new Info("mkldnn::stream::flags").pointerTypes("stream.flags"))
+               .put(new Info("mkldnn::primitive::kind").pointerTypes("primitive.kind"))
 
                .put(new Info("mkldnn::handle<mkldnn_engine_t>").pointerTypes("mkldnn_engine_handle"))
+               .put(new Info("mkldnn::handle<mkldnn_memory_t>").pointerTypes("mkldnn_memory_handle"))
                .put(new Info("mkldnn::handle<mkldnn_primitive_desc_t>").pointerTypes("mkldnn_primitive_desc_handle"))
                .put(new Info("mkldnn::handle<mkldnn_primitive_attr_t>").pointerTypes("mkldnn_primitive_attr_handle"))
                .put(new Info("mkldnn::handle<mkldnn_post_ops_t>").pointerTypes("mkldnn_post_ops_handle"))
                .put(new Info("mkldnn::handle<mkldnn_primitive_t>").pointerTypes("mkldnn_primitive_handle"))
                .put(new Info("mkldnn::handle<mkldnn_stream_t>").pointerTypes("mkldnn_stream_handle"))
 
+               .put(new Info("std::unordered_map<int,mkldnn::memory>").pointerTypes("IntMemoryMap").define())
                .put(new Info("mkldnn::primitive::get_primitive_desc").javaNames("get_mkldnn_primitive_desc"))
                .put(new Info("mkldnn::eltwise_forward::desc<float>",
                              "mkldnn::eltwise_backward::desc<float>",

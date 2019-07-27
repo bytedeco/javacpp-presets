@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,10 +26,10 @@ public class mkldnn_softmax_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-    * descriptor. Must be #mkldnn_softmax. */
+     *  descriptor. Must be #mkldnn_softmax. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_softmax_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training and
-     * #mkldnn_forward_inference. */
+     *  #mkldnn_forward_inference. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_softmax_desc_t prop_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t data_desc(); public native mkldnn_softmax_desc_t data_desc(mkldnn_memory_desc_t setter);

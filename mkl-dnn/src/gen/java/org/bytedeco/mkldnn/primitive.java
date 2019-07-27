@@ -6,76 +6,64 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
-
-// #ifndef DOXYGEN_SHOULD_SKIP_THIS
-// #endif
 
 /** Base class for all computational primitives. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class primitive extends mkldnn_primitive_handle {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public primitive() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public primitive(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public primitive(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public primitive position(long position) {
-        return (primitive)super.position(position);
+
+    /** Kinds of primitives. Used to implement a way to extend the library with
+     *  new primitives without changing the ABI. */
+    public enum kind {
+        /** Undefined primitive */
+        undef(mkldnn_undefined_primitive),
+        /** A reorder primitive. */
+        reorder(mkldnn_reorder),
+        /** A shuffle primitive. */
+        shuffle(mkldnn_shuffle),
+        /** A (out-of-place) concat primitive. */
+        concat(mkldnn_concat),
+        /** A sum primitive. */
+        sum(mkldnn_sum),
+        /** A convolution primitive. */
+        convolution(mkldnn_convolution),
+        /** A deconvolution primitive. */
+        deconvolution(mkldnn_deconvolution),
+        /** An element-wise primitive. */
+        eltwise(mkldnn_eltwise),
+        /** A softmax primitive. */
+        softmax(mkldnn_softmax),
+        /** A pooling primitive. */
+        pooling(mkldnn_pooling),
+        /** An LRN primitive. */
+        lrn(mkldnn_lrn),
+        /** An batch normalization primitive. */
+        batch_normalization(mkldnn_batch_normalization),
+        /** An inner product primitive. */
+        inner_product(mkldnn_inner_product),
+        /** A rnn primitive. */
+        rnn(mkldnn_rnn);
+
+        public final int value;
+        private kind(int v) { this.value = v; }
+        private kind(kind e) { this.value = e.value; }
+        public kind intern() { for (kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
     }
 
-    /** A proxy to C primitive kind enum */
-    /** enum class mkldnn::primitive::kind */
-    public static final int
-        undefined_primitive = mkldnn_undefined_primitive,
-        memory = mkldnn_memory,
-        view = mkldnn_view,
-        reorder = mkldnn_reorder,
-        concat = mkldnn_concat,
-        concat_inplace = mkldnn_concat_inplace,
-        sum = mkldnn_sum,
-        convolution = mkldnn_convolution,
-        deconvolution = mkldnn_deconvolution,
-        shuffle = mkldnn_shuffle,
-        eltwise = mkldnn_eltwise,
-        softmax = mkldnn_softmax,
-        pooling = mkldnn_pooling,
-        lrn = mkldnn_lrn,
-        batch_normalization = mkldnn_batch_normalization,
-        inner_product = mkldnn_inner_product,
-        rnn = mkldnn_rnn;
-
-    /** A wrapper structure to specify a particular output of a primitive. */
-    @NoOffset public static class at extends Pointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public at(Pointer p) { super(p); }
-    
-        /** The underlying C API structure. */
-        
-        ///
-        public native @ByRef mkldnn_primitive_at_t data(); public native at data(mkldnn_primitive_at_t setter);
-        /** Constructs a wrapper specifying \p aprimitive output with index \p
-         *  at.
-         * 
-         *  @param aprimitive The target primitive.
-         *  @param at The output index. */
-
-        public at(@Const @ByRef primitive aprimitive, @Cast("size_t") long at/*=0*/) { super((Pointer)null); allocate(aprimitive, at); }
-        private native void allocate(@Const @ByRef primitive aprimitive, @Cast("size_t") long at/*=0*/);
-        public at(@Const @ByRef primitive aprimitive) { super((Pointer)null); allocate(aprimitive); }
-        private native void allocate(@Const @ByRef primitive aprimitive);
-        /** Returns the specified output. */
-        public native @ByVal @Name("operator mkldnn::primitive") primitive asPrimitive();
-    }
+    public primitive(@Const mkldnn_primitive_desc c_pd) { super((Pointer)null); allocate(c_pd); }
+    private native void allocate(@Const mkldnn_primitive_desc c_pd);
+    public primitive(@Const @ByRef org.bytedeco.mkldnn.primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef org.bytedeco.mkldnn.primitive_desc pd);
 
     /** Returns the descriptor of the underlying C API primitive. */
     public native @Name("get_primitive_desc") @Const mkldnn_primitive_desc get_mkldnn_primitive_desc();
     // TODO: use the C++ API wrapper structure.
+
+    public native void execute(@ByRef stream astream,
+                @Const @ByRef IntMemoryMap args);
 }

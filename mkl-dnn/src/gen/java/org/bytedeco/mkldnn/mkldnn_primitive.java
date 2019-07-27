@@ -6,18 +6,16 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
-/** \} */
-
-/** \addtogroup c_api_types_primitive Primitive
- * \{ */
-
-/** \struct mkldnn_primitive
- * An opaque structure to describe a primitive. */
+/** \}
+ <p>
+ *  \addtogroup c_api_types_primitive Primitive
+ *  \{
+ <p>
+ *  \struct mkldnn_primitive
+ *  An opaque structure to describe a primitive. */
 @Opaque @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class mkldnn_primitive extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

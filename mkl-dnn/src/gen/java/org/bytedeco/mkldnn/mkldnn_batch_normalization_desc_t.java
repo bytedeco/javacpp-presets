@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,29 +26,30 @@ public class mkldnn_batch_normalization_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_batch_normalization. */
+     *  descriptor. Must be #mkldnn_batch_normalization. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_batch_normalization_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training,
-     * #mkldnn_forward_inference, #mkldnn_backward, and #mkldnn_backward_data.
-     */
+     *  #mkldnn_forward_inference, #mkldnn_backward, and #mkldnn_backward_data. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_batch_normalization_desc_t prop_kind(int setter);
     /** Source and destination memory descriptor. */
     public native @ByRef mkldnn_memory_desc_t data_desc(); public native mkldnn_batch_normalization_desc_t data_desc(mkldnn_memory_desc_t setter);
     /** Source and destination gradient memory descriptor. */
+    
+    ///
     public native @ByRef mkldnn_memory_desc_t diff_data_desc(); public native mkldnn_batch_normalization_desc_t diff_data_desc(mkldnn_memory_desc_t setter);
     /** Scale and shift data and gradient memory descriptors.
-     *
-     * Scaleshift memory descriptor uses 2D #mkldnn_nc format[2,Channels]. 1-st
-     * dimension contains gamma parameter, 2-nd dimension contains beta
-     * parameter. */
+     * 
+     *  Scaleshift memory descriptor uses 2D #mkldnn_nc format[2,Channels]. 1-st
+     *  dimension contains gamma parameter, 2-nd dimension contains beta
+     *  parameter. */
     public native @ByRef mkldnn_memory_desc_t data_scaleshift_desc(); public native mkldnn_batch_normalization_desc_t data_scaleshift_desc(mkldnn_memory_desc_t setter);
+    
+    ///
     public native @ByRef mkldnn_memory_desc_t diff_data_scaleshift_desc(); public native mkldnn_batch_normalization_desc_t diff_data_scaleshift_desc(mkldnn_memory_desc_t setter);
-    /** Mean and variance data memory descriptors.
-     *
-     * Mean and variance memory descriptors use 1D #mkldnn_x format[Channels].
-     */
-    public native @ByRef mkldnn_memory_desc_t mean_desc(); public native mkldnn_batch_normalization_desc_t mean_desc(mkldnn_memory_desc_t setter);
-    public native @ByRef mkldnn_memory_desc_t variance_desc(); public native mkldnn_batch_normalization_desc_t variance_desc(mkldnn_memory_desc_t setter);
+    /** Statistics memory descriptor.
+     * 
+     *  Statistics (mean or variance) descriptor use 1D #mkldnn_x format[Channels]. */
+    public native @ByRef mkldnn_memory_desc_t stat_desc(); public native mkldnn_batch_normalization_desc_t stat_desc(mkldnn_memory_desc_t setter);
     /** Batch normalization epsilon parameter. */
     public native float batch_norm_epsilon(); public native mkldnn_batch_normalization_desc_t batch_norm_epsilon(float setter);
     public native @Cast("unsigned") int flags(); public native mkldnn_batch_normalization_desc_t flags(int setter);

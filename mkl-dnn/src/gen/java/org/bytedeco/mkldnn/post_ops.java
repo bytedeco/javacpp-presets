@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -22,6 +20,9 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
 // #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // #endif
 
+/** Post operations
+/**
+/** @see \ref dev_guide_attributes_post_ops */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class post_ops extends mkldnn_post_ops_handle {
     static { Loader.load(); }
@@ -34,27 +35,71 @@ public class post_ops extends mkldnn_post_ops_handle {
         return (post_ops)super.position(position);
     }
 
+    /** Creates an empty sequence of post operations. */
     public post_ops() { super((Pointer)null); allocate(); }
     private native void allocate();
 
+    /** Returns the length of post operations */
     public native int len();
 
-    public native @Cast("mkldnn::primitive::kind") int kind(int index);
+    /** Returns the kind of post operation with index \p index. */
+    
+    ///
+    ///
+    ///
+    ///
+    public native @ByVal primitive.kind kind(int index);
 
+    /** Appends accumulation (sum) post operation. Prior to accumulating the
+     *  result, the previous value would be multiplied by \p scale.
+     * 
+     *  The kind of this post operation is #mkldnn_sum.
+     * 
+     *  This feature might improve performance for cases like residual learning
+     *  blocks, where the result of convolution is accumulated to the previously
+     *  computed activations. The parameter \p scale might be extreme for the
+     *  integer-based computations when the result and previous activations have
+     *  different logical scaling factors.
+     * 
+     *  In the simplest case when the accumulation is the only post operation,
+     *  the computations would be:
+     *  dst[] <- scale * dst[] + op(...) // instead of dst[] <- op(...)
+     * 
+     *  \note
+     *      This post operation (as well as all the others) disregards the
+     *      original layout of the destination; that is, the layout of the
+     *      original destination is expected to be the same as the layout of the
+     *      stored destination. */
     public native void append_sum(float scale/*=1.*/);
     public native void append_sum();
 
+    /** Gets the parameters of the accumulation (sum) post operation with index
+     *  \p index. */
+    
+    ///
+    ///
     public native void get_params_sum(int index, @ByRef FloatPointer scale);
     public native void get_params_sum(int index, @ByRef FloatBuffer scale);
     public native void get_params_sum(int index, @ByRef float[] scale);
 
+    /** Appends eltwise post operation.
+     * 
+     *  The kind of this post operation is #mkldnn_eltwise.
+     * 
+     *  In the simplest case when the eltwise is the only post operation, the
+     *  computations would be:
+     *  dst[] <- scale * eltwise_op ( op(...) ) // instead of dst[] <- op(...)
+     *  where eltwise_op is configured with the given parameters. */
+    public native void append_eltwise(float scale, algorithm alg, float alpha,
+                float beta);
     public native void append_eltwise(float scale, @Cast("mkldnn::algorithm") int alg, float alpha,
                 float beta);
 
-    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @Cast("mkldnn::algorithm*") @ByRef IntPointer alg,
+    /** Gets the eltwise parameters of the post operation with index \p index. */
+    public native void get_params_eltwise(int index, @ByRef FloatPointer scale, @ByRef @Cast("mkldnn::algorithm*") IntPointer alg,
                 @ByRef FloatPointer alpha, @ByRef FloatPointer beta);
-    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @Cast("mkldnn::algorithm*") @ByRef IntBuffer alg,
+    public native void get_params_eltwise(int index, @ByRef FloatBuffer scale, @ByRef @Cast("mkldnn::algorithm*") IntBuffer alg,
                 @ByRef FloatBuffer alpha, @ByRef FloatBuffer beta);
-    public native void get_params_eltwise(int index, @ByRef float[] scale, @Cast("mkldnn::algorithm*") @ByRef int[] alg,
+    public native void get_params_eltwise(int index, @ByRef float[] scale, @ByRef @Cast("mkldnn::algorithm*") int[] alg,
                 @ByRef float[] alpha, @ByRef float[] beta);
 }

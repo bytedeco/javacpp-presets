@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -22,285 +20,532 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
  *  For more information, refer to \ref c_api_memory in \ref c_api.
  *  \{
  <p>
- *  Memory primitive that describes the data. */
-@Namespace("mkldnn") @NoOffset @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
-public class memory extends primitive {
+ *  Memory that describes the data. */
+@Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
+public class memory extends mkldnn_memory_handle {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public memory(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public memory(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public memory position(long position) {
+        return (memory)super.position(position);
+    }
 
 
-    /** Data type specification. See #mkldnn_data_type_t for a detailed
-     *  description. */
-    /** enum mkldnn::memory::data_type */
-    public static final int
-        data_undef = mkldnn_data_type_undef,
-        f32 = mkldnn_f32,
-        s32 = mkldnn_s32,
-        bf16 = mkldnn_bf16,
-        s16 = mkldnn_s16,
-        s8 = mkldnn_s8,
-        u8 = mkldnn_u8;
+    /** Data type specification */
+    public enum data_type {
+        /** Undefined data type, used for empty memory descriptors. */
+        undef(mkldnn_data_type_undef),
+        /** 16-bit/half-precision floating point. */
+        f16(mkldnn_f16),
+        /** non-standard 16-bit (bfloat16 w/ 7 bit mantissa) floating point. */
+        bf16(mkldnn_bf16),
+        /** 32-bit/single-precision floating point. */
+        f32(mkldnn_f32),
+        /** 32-bit signed integer. */
+        s32(mkldnn_s32),
+        /** 8-bit signed integer. */
+        s8(mkldnn_s8),
+        /** 8-bit unsigned integer. */
+        u8(mkldnn_u8);
 
-    /** Memory format specification. See #mkldnn_memory_format_t
-     *  for a detailed description. */
-    /** enum mkldnn::memory::format */
-    public static final int
-        format_undef = mkldnn_format_undef,
-        any = mkldnn_any,
-        blocked = mkldnn_blocked,
-        x = mkldnn_x,
-        nc = mkldnn_nc,
-        ncw = mkldnn_ncw,
-        nwc = mkldnn_nwc,
-        nCw16c = mkldnn_nCw16c,
-        nchw = mkldnn_nchw,
-        nhwc = mkldnn_nhwc,
-        chwn = mkldnn_chwn,
-        nCw4c = mkldnn_nCw4c,
-        nCw8c = mkldnn_nCw8c,
-        nChw4c = mkldnn_nChw4c,
-        nChw8c = mkldnn_nChw8c,
-        nChw16c = mkldnn_nChw16c,
-        ncdhw = mkldnn_ncdhw,
-        ndhwc = mkldnn_ndhwc,
-        nCdhw4c = mkldnn_nCdhw4c,
-        nCdhw8c = mkldnn_nCdhw8c,
-        nCdhw16c = mkldnn_nCdhw16c,
-        oi = mkldnn_oi,
-        io = mkldnn_io,
-        oiw = mkldnn_oiw,
-        wio = mkldnn_wio,
-        Owi4o = mkldnn_Owi4o,
-        OIw4i4o = mkldnn_OIw4i4o,
-        Owi8o = mkldnn_Owi8o,
-        OIw8o8i = mkldnn_OIw8o8i,
-        OIw8i8o = mkldnn_OIw8i8o,
-        OIw16i16o = mkldnn_OIw16i16o,
-        OIw16o16i = mkldnn_OIw16o16i,
-        Oiw4o = mkldnn_Oiw4o,
-        Oiw16o = mkldnn_Oiw16o,
-        Owi16o = mkldnn_Owi16o,
-        OIw8i16o2i = mkldnn_OIw8i16o2i,
-        OIw8o16i2o = mkldnn_OIw8o16i2o,
-        IOw8o16i2o = mkldnn_IOw8o16i2o,
-        IOw16o16i = mkldnn_IOw16o16i,
-        OIw4i16o4i = mkldnn_OIw4i16o4i,
-        OIw4i16o4i_s8s8 = mkldnn_OIw4i16o4i_s8s8,
-        oihw = mkldnn_oihw,
-        ihwo = mkldnn_ihwo,
-        hwio = mkldnn_hwio,
-        iohw = mkldnn_iohw,
-        hwio_s8s8 = mkldnn_hwio_s8s8,
-        dhwio = mkldnn_dhwio,
-        oidhw = mkldnn_oidhw,
-        OIdhw4i4o = mkldnn_OIdhw4i4o,
-        Odhwi4o = mkldnn_Odhwi4o,
-        OIdhw8i8o = mkldnn_OIdhw8i8o,
-        OIdhw8o8i = mkldnn_OIdhw8o8i,
-        Odhwi8o = mkldnn_Odhwi8o,
-        OIdhw16i16o = mkldnn_OIdhw16i16o,
-        OIdhw16o16i = mkldnn_OIdhw16o16i,
-        Oidhw4o = mkldnn_Oidhw4o,
-        Oidhw16o = mkldnn_Oidhw16o,
-        Odhwi16o = mkldnn_Odhwi16o,
-        oIhw8i = mkldnn_oIhw8i,
-        oIhw16i = mkldnn_oIhw16i,
-        oIdhw8i = mkldnn_oIdhw8i,
-        oIdhw16i = mkldnn_oIdhw16i,
-        OIhw4i4o = mkldnn_OIhw4i4o,
-        OIhw8i8o = mkldnn_OIhw8i8o,
-        OIhw16i16o = mkldnn_OIhw16i16o,
-        OIhw8o8i = mkldnn_OIhw8o8i,
-        OIhw16o16i = mkldnn_OIhw16o16i,
-        IOhw16o16i = mkldnn_IOhw16o16i,
-        OIhw8i16o2i = mkldnn_OIhw8i16o2i,
-        IOhw8i16o2i = mkldnn_IOhw8i16o2i,
-        OIhw8o16i2o = mkldnn_OIhw8o16i2o,
-        IOhw8o16i2o = mkldnn_IOhw8o16i2o,
-        OIdhw8i16o2i = mkldnn_OIdhw8i16o2i,
-        OIdhw8o16i2o = mkldnn_OIdhw8o16i2o,
-        IOdhw8o16i2o = mkldnn_IOdhw8o16i2o,
-        OIhw4i16o4i = mkldnn_OIhw4i16o4i,
-        OIhw4i16o4i_s8s8 = mkldnn_OIhw4i16o4i_s8s8,
-        Oihw8o = mkldnn_Oihw8o,
-        Oihw4o = mkldnn_Oihw4o,
-        Oihw16o = mkldnn_Oihw16o,
-        Ohwi8o = mkldnn_Ohwi8o,
-        Ohwi4o = mkldnn_Ohwi4o,
-        Ohwi16o = mkldnn_Ohwi16o,
-        OhIw16o4i = mkldnn_OhIw16o4i,
-        goiw = mkldnn_goiw,
-        gOwi4o = mkldnn_gOwi4o,
-        gOIw4i4o = mkldnn_gOIw4i4o,
-        gOwi8o = mkldnn_gOwi8o,
-        gOIw8o8i = mkldnn_gOIw8o8i,
-        gOIw8i8o = mkldnn_gOIw8i8o,
-        gOIw16i16o = mkldnn_gOIw16i16o,
-        gOIw16o16i = mkldnn_gOIw16o16i,
-        gOiw4o = mkldnn_gOiw4o,
-        gOiw16o = mkldnn_gOiw16o,
-        gOwi16o = mkldnn_gOwi16o,
-        gIOw16o16i = mkldnn_gIOw16o16i,
-        gOIw8i16o2i = mkldnn_gOIw8i16o2i,
-        gOIw8o16i2o = mkldnn_gOIw8o16i2o,
-        gIOw8o16i2o = mkldnn_gIOw8o16i2o,
-        gOIw4i16o4i = mkldnn_gOIw4i16o4i,
-        gOIw4i16o4i_s8s8 = mkldnn_gOIw4i16o4i_s8s8,
-        goihw = mkldnn_goihw,
-        hwigo = mkldnn_hwigo,
-        giohw = mkldnn_giohw,
-        hwigo_s8s8 = mkldnn_hwigo_s8s8,
-        gOIdhw4i4o = mkldnn_gOIdhw4i4o,
-        gOdhwi4o = mkldnn_gOdhwi4o,
-        gOIdhw8i8o = mkldnn_gOIdhw8i8o,
-        gOIdhw8o8i = mkldnn_gOIdhw8o8i,
-        gOdhwi8o = mkldnn_gOdhwi8o,
-        gOIhw4i4o = mkldnn_gOIhw4i4o,
-        gOIhw8i8o = mkldnn_gOIhw8i8o,
-        gOIhw16i16o = mkldnn_gOIhw16i16o,
-        gOIhw8i16o2i = mkldnn_gOIhw8i16o2i,
-        gIOhw8i16o2i = mkldnn_gIOhw8i16o2i,
-        gOIhw8o16i2o = mkldnn_gOIhw8o16i2o,
-        gIOhw8o16i2o = mkldnn_gIOhw8o16i2o,
-        gOIdhw8i16o2i = mkldnn_gOIdhw8i16o2i,
-        gOIdhw8o16i2o = mkldnn_gOIdhw8o16i2o,
-        gIOdhw8o16i2o = mkldnn_gIOdhw8o16i2o,
-        gOIhw4i16o4i = mkldnn_gOIhw4i16o4i,
-        gOIhw4i16o4i_s8s8 = mkldnn_gOIhw4i16o4i_s8s8,
-        gOIhw2i8o4i = mkldnn_gOIhw2i8o4i,
-        gOIhw2i8o4i_s8s8 = mkldnn_gOIhw2i8o4i_s8s8,
-        gOihw8o = mkldnn_gOihw8o,
-        gOihw4o = mkldnn_gOihw4o,
-        gOihw16o = mkldnn_gOihw16o,
-        gOhwi4o = mkldnn_gOhwi4o,
-        gOhwi8o = mkldnn_gOhwi8o,
-        gOhwi16o = mkldnn_gOhwi16o,
-        Goihw8g = mkldnn_Goihw8g,
-        Goiw16g = mkldnn_Goiw16g,
-        Goiw16g_s8s8 = mkldnn_Goiw16g_s8s8,
-        Goihw16g = mkldnn_Goihw16g,
-        Goihw16g_s8s8 = mkldnn_Goihw16g_s8s8,
-        gOIhw4o4i = mkldnn_gOIhw4o4i,
-        gOIhw4o4i_s8s8 = mkldnn_gOIhw4o4i_s8s8,
-        gOIhw8o8i = mkldnn_gOIhw8o8i,
-        gOIhw16o16i = mkldnn_gOIhw16o16i,
-        gIOhw16o16i = mkldnn_gIOhw16o16i,
-        gOhIw16o4i = mkldnn_gOhIw16o4i,
-        goidhw = mkldnn_goidhw,
-        gOIdhw16i16o = mkldnn_gOIdhw16i16o,
-        gOIdhw16o16i = mkldnn_gOIdhw16o16i,
-        gOidhw4o = mkldnn_gOidhw4o,
-        gOidhw16o = mkldnn_gOidhw16o,
-        gOdhwi16o = mkldnn_gOdhwi16o,
-        ntc = mkldnn_ntc,
-        tnc = mkldnn_tnc,
-        ldsnc = mkldnn_ldsnc,
-        ldigo = mkldnn_ldigo,
-        ldgoi = mkldnn_ldgoi,
-        ldgo = mkldnn_ldgo,
-        rnn_packed = mkldnn_rnn_packed,
-        wino_fmt = mkldnn_wino_fmt,
-        format_last = mkldnn_format_last;
+        public final int value;
+        private data_type(int v) { this.value = v; }
+        private data_type(data_type e) { this.value = e.value; }
+        public data_type intern() { for (data_type e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+    /** Memory format kind */
+    public enum format_kind {
+        /** Undefined memory format kind, used for empty memory descriptors. */
+        undef(mkldnn_format_kind_undef),
+        /** Unspecified format kind.
+         *  The primitive selects a format automatically. */
+        any(mkldnn_format_kind_any),
+        /** A tensor in a generic format described by the stride and blocking
+         *  values in each dimension. See \ref mkldnn_blocking_desc_t for more
+         *  information. */
+        blocked(mkldnn_blocked),
+        /** Weights format used in 8bit Winograd convolution */
+        wino(mkldnn_format_kind_wino),
+        /** Packed weights format used in RNN */
+        packed(mkldnn_format_kind_rnn_packed);
+
+        public final int value;
+        private format_kind(int v) { this.value = v; }
+        private format_kind(format_kind e) { this.value = e.value; }
+        public format_kind intern() { for (format_kind e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
+
+    /** Memory format tag specification. See \ref mkldnn_format_tag_t for a
+     *  detailed description. */
+    public enum format_tag {
+        /** Undefined memory format tag */
+        undef(mkldnn_format_tag_undef),
+        /** Placeholder memory format tag. The primitive selects a format
+         *  automatically. */
+        any(mkldnn_format_tag_any),
+
+        // Semantic agnostic section
+        // The physical order of dimensions is defined by the permutation of the
+        // characters, assuming that ab..z defines the natural order.
+
+        // Plain formats
+
+        /** plain 1D tensor */
+        a(mkldnn_a),
+        /** plain 2D tensor */
+        ab(mkldnn_ab),
+        /** plain 3D tensor */
+        abc(mkldnn_abc),
+        /** plain 4D tensor */
+        abcd(mkldnn_abcd),
+        /** plain 5D tensor */
+        abcde(mkldnn_abcde),
+        /** plain 6D tensor */
+        abcdef(mkldnn_abcdef),
+
+        // Permuted plain formats
+
+        /** permuted 5D tensor */
+        abdec(mkldnn_abdec),
+        /** permuted 3D tensor */
+        acb(mkldnn_acb),
+        /** permuted 5D tensor */
+        acbde(mkldnn_acbde),
+        /** permuted 4D tensor */
+        acdb(mkldnn_acdb),
+        /** permuted 5D tensor */
+        acdeb(mkldnn_acdeb),
+        /** permuted 2D tensor */
+        ba(mkldnn_ba),
+        /** permuted 3D tensor */
+        bac(mkldnn_bac),
+        /** permuted 4D tensor */
+        bacd(mkldnn_bacd),
+        /** permuted 4D tensor */
+        bcda(mkldnn_bcda),
+        /** permuted 3D tensor */
+        cba(mkldnn_cba),
+        /** permuted 4D tensor */
+        cdba(mkldnn_cdba),
+        /** permuted 5D tensor */
+        cdeba(mkldnn_cdeba),
+        /** permuted 5D tensor */
+        decab(mkldnn_decab),
+
+        // Opaque blocked formats
+
+        Abc16a(mkldnn_Abc16a),
+        ABc16a16b(mkldnn_ABc16a16b),
+        aBc16b(mkldnn_aBc16b),
+        ABc16b16a(mkldnn_ABc16b16a),
+        Abc4a(mkldnn_Abc4a),
+        aBc4b(mkldnn_aBc4b),
+        ABc4b16a4b(mkldnn_ABc4b16a4b),
+        ABc4b4a(mkldnn_ABc4b4a),
+        ABc8a16b2a(mkldnn_ABc8a16b2a),
+        ABc8a8b(mkldnn_ABc8a8b),
+        aBc8b(mkldnn_aBc8b),
+        ABc8b16a2b(mkldnn_ABc8b16a2b),
+        ABc8b8a(mkldnn_ABc8b8a),
+        Abcd16a(mkldnn_Abcd16a),
+        ABcd16a16b(mkldnn_ABcd16a16b),
+        aBcd16b(mkldnn_aBcd16b),
+        ABcd16b16a(mkldnn_ABcd16b16a),
+        aBCd16b16c(mkldnn_aBCd16b16c),
+        aBCd16c16b(mkldnn_aBCd16c16b),
+        Abcd4a(mkldnn_Abcd4a),
+        aBcd4b(mkldnn_aBcd4b),
+        ABcd4b16a4b(mkldnn_ABcd4b16a4b),
+        ABcd4b4a(mkldnn_ABcd4b4a),
+        aBCd4c16b4c(mkldnn_aBCd4c16b4c),
+        aBCd4c4b(mkldnn_aBCd4c4b),
+        ABcd8a16b2a(mkldnn_ABcd8a16b2a),
+        ABcd8a8b(mkldnn_ABcd8a8b),
+        /** 4D tensor blocked by 2nd dimension with block size 8 */
+        aBcd8b(mkldnn_aBcd8b),
+        ABcd8b16a2b(mkldnn_ABcd8b16a2b),
+        aBCd8b16c2b(mkldnn_aBCd8b16c2b),
+        /** 4D tensor blocked by 1st and 2nd dimension with block size 8 */
+        ABcd8b8a(mkldnn_ABcd8b8a),
+        aBCd8b8c(mkldnn_aBCd8b8c),
+        aBCd8c16b2c(mkldnn_aBCd8c16b2c),
+        aBCd8c8b(mkldnn_aBCd8c8b),
+        Abcde16a(mkldnn_Abcde16a),
+        ABcde16a16b(mkldnn_ABcde16a16b),
+        aBcde16b(mkldnn_aBcde16b),
+        ABcde16b16a(mkldnn_ABcde16b16a),
+        aBCde16b16c(mkldnn_aBCde16b16c),
+        aBCde16c16b(mkldnn_aBCde16c16b),
+        aBCde2c8b4c(mkldnn_aBCde2c8b4c),
+        Abcde4a(mkldnn_Abcde4a),
+        aBcde4b(mkldnn_aBcde4b),
+        ABcde4b4a(mkldnn_ABcde4b4a),
+        aBCde4b4c(mkldnn_aBCde4b4c),
+        aBCde4c16b4c(mkldnn_aBCde4c16b4c),
+        aBCde4c4b(mkldnn_aBCde4c4b),
+        Abcde8a(mkldnn_Abcde8a),
+        ABcde8a8b(mkldnn_ABcde8a8b),
+        aBcde8b(mkldnn_aBcde8b),
+        ABcde8b16a2b(mkldnn_ABcde8b16a2b),
+        aBCde8b16c2b(mkldnn_aBCde8b16c2b),
+        ABcde8b8a(mkldnn_ABcde8b8a),
+        aBCde8b8c(mkldnn_aBCde8b8c),
+        ABcd4a8b8a4b(mkldnn_ABcd4a8b8a4b),
+        ABcd2a8b8a2b(mkldnn_ABcd2a8b8a2b),
+        aBCde4b8c8b4c(mkldnn_aBCde4b8c8b4c),
+        aBCde2b8c8b2c(mkldnn_aBCde2b8c8b2c),
+        aBCde8c16b2c(mkldnn_aBCde8c16b2c),
+        aBCde8c8b(mkldnn_aBCde8c8b),
+        aBcdef16b(mkldnn_aBcdef16b),
+        aBCdef16b16c(mkldnn_aBCdef16b16c),
+        aBCdef16c16b(mkldnn_aBCdef16c16b),
+        aBcdef4b(mkldnn_aBcdef4b),
+        aBCdef4c4b(mkldnn_aBCdef4c4b),
+        aBCdef8b8c(mkldnn_aBCdef8b8c),
+        aBCdef8c16b2c(mkldnn_aBCdef8c16b2c),
+        aBCdef8c8b(mkldnn_aBCdef8c8b),
+        aBdc16b(mkldnn_aBdc16b),
+        aBdc4b(mkldnn_aBdc4b),
+        aBdc8b(mkldnn_aBdc8b),
+        aBdec16b(mkldnn_aBdec16b),
+        aBdec4b(mkldnn_aBdec4b),
+        aBdec8b(mkldnn_aBdec8b),
+        aBdefc16b(mkldnn_aBdefc16b),
+        aCBdef16c16b(mkldnn_aCBdef16c16b),
+        aBdefc4b(mkldnn_aBdefc4b),
+        aBdefc8b(mkldnn_aBdefc8b),
+        Acb16a(mkldnn_Acb16a),
+        Acb4a(mkldnn_Acb4a),
+        Acb8a(mkldnn_Acb8a),
+        aCBd16b16c(mkldnn_aCBd16b16c),
+        aCBd16c16b(mkldnn_aCBd16c16b),
+        aCBde16b16c(mkldnn_aCBde16b16c),
+        aCBde16c16b(mkldnn_aCBde16c16b),
+        Acdb16a(mkldnn_Acdb16a),
+        Acdb4a(mkldnn_Acdb4a),
+        Acdb8a(mkldnn_Acdb8a),
+        Acdeb16a(mkldnn_Acdeb16a),
+        Acdeb4a(mkldnn_Acdeb4a),
+        Acdeb8a(mkldnn_Acdeb8a),
+        BAc16a16b(mkldnn_BAc16a16b),
+        BAc16b16a(mkldnn_BAc16b16a),
+        BAcd16a16b(mkldnn_BAcd16a16b),
+        BAcd16b16a(mkldnn_BAcd16b16a),
+        ABcd32a32b(mkldnn_ABcd32a32b),
+        BAcde16b16(mkldnn_BAcde16b16a),
+        aBdec32b  (mkldnn_aBdec32b),
+        Abcdef16a (mkldnn_Abcdef16a),
+        Acdb32a   (mkldnn_Acdb32a),
+        format_tag_last(mkldnn_format_tag_last),
+
+        x(mkldnn_x),
+        /** 2D CNN activations tensor,
+         *  an alias to #mkldnn::memory::format_tag::ab */
+        nc(mkldnn_nc),
+        cn(mkldnn_cn),
+        ncw(mkldnn_ncw),
+        nwc(mkldnn_nwc),
+        /** 4D CNN activations tensor,
+         *  an alias to #mkldnn::memory::format_tag::abcd */
+        nchw(mkldnn_nchw),
+        /** 4D CNN activations tensor,
+         *  an alias to #mkldnn::memory::format_tag::acdb */
+        nhwc(mkldnn_nhwc),
+        /** 4D CNN activations tensor,
+         *  an alias to #mkldnn::memory::format_tag::bcda */
+        chwn(mkldnn_chwn),
+        ncdhw(mkldnn_ncdhw),
+        ndhwc(mkldnn_ndhwc),
+        oi(mkldnn_oi),
+        io(mkldnn_io),
+        oiw(mkldnn_oiw),
+        wio(mkldnn_wio),
+        oihw(mkldnn_oihw),
+        hwio(mkldnn_hwio),
+        ihwo(mkldnn_ihwo),
+        iohw(mkldnn_iohw),
+        oidhw(mkldnn_oidhw),
+        dhwio(mkldnn_dhwio),
+        goiw(mkldnn_goiw),
+        goihw(mkldnn_goihw),
+        hwigo(mkldnn_hwigo),
+        giohw(mkldnn_giohw),
+        goidhw(mkldnn_goidhw),
+        tnc(mkldnn_tnc),
+        ntc(mkldnn_ntc),
+        ldnc(mkldnn_ldnc),
+        ldigo(mkldnn_ldigo),
+        ldgoi(mkldnn_ldgoi),
+        ldgo(mkldnn_ldgo),
+        nCdhw16c(mkldnn_nCdhw16c),
+        nCdhw4c(mkldnn_nCdhw4c),
+        nCdhw8c(mkldnn_nCdhw8c),
+        nChw16c(mkldnn_nChw16c),
+        nChw4c(mkldnn_nChw4c),
+        nChw8c(mkldnn_nChw8c),
+        nCw16c(mkldnn_nCw16c),
+        nCw4c(mkldnn_nCw4c),
+        nCw8c(mkldnn_nCw8c),
+        NCw16n16c(mkldnn_NCw16n16c),
+        NChw16n16c(mkldnn_NChw16n16c),
+        NCdhw16n16c(mkldnn_NCdhw16n16c),
+        NChw32n32c (mkldnn_NChw32n32c),
+        IOhw16i16o (mkldnn_IOhw16i16o),
+        Ohwi32o    (mkldnn_Ohwi32o),
+        IOdhw16i16o(mkldnn_IOdhw16i16o),
+        gIOhw16i16o(mkldnn_gIOhw16i16o),
+        gOhwi32o   (mkldnn_gOhwi32o),
+        Goidhw16g  (mkldnn_Goidhw16g),
+        IOw16o16i(mkldnn_IOw16o16i),
+        OIw16i16o(mkldnn_OIw16i16o),
+        IOw16i16o(mkldnn_IOw16i16o),
+        gIOw16i16o(mkldnn_gIOw16i16o),
+        OIw16o16i(mkldnn_OIw16o16i),
+        Oiw16o(mkldnn_Oiw16o),
+        OIw4i16o4i(mkldnn_OIw4i16o4i),
+        OIw4i4o(mkldnn_OIw4i4o),
+        Oiw4o(mkldnn_Oiw4o),
+        OIw8i16o2i(mkldnn_OIw8i16o2i),
+        OIw8i8o(mkldnn_OIw8i8o),
+        OIw8o16i2o(mkldnn_OIw8o16i2o),
+        OIw8o8i(mkldnn_OIw8o8i),
+        Owi16o(mkldnn_Owi16o),
+        Owi4o(mkldnn_Owi4o),
+        Owi8o(mkldnn_Owi8o),
+        IOhw16o16i(mkldnn_IOhw16o16i),
+        Ohwi16o(mkldnn_Ohwi16o),
+        Ohwi4o(mkldnn_Ohwi4o),
+        Ohwi8o(mkldnn_Ohwi8o),
+        OIhw16i16o(mkldnn_OIhw16i16o),
+        OIhw16o16i(mkldnn_OIhw16o16i),
+        Oihw16o(mkldnn_Oihw16o),
+        OIhw4i16o4i(mkldnn_OIhw4i16o4i),
+        OIhw4i4o(mkldnn_OIhw4i4o),
+        Oihw4o(mkldnn_Oihw4o),
+        OIhw8i16o2i(mkldnn_OIhw8i16o2i),
+        OIhw8i8o(mkldnn_OIhw8i8o),
+        OIhw8o16i2o(mkldnn_OIhw8o16i2o),
+        OIhw8o8i(mkldnn_OIhw8o8i),
+        Odhwi16o(mkldnn_Odhwi16o),
+        Odhwi4o(mkldnn_Odhwi4o),
+        Odhwi8o(mkldnn_Odhwi8o),
+        OIdhw16i16o(mkldnn_OIdhw16i16o),
+        OIdhw16o16i(mkldnn_OIdhw16o16i),
+        Oidhw16o(mkldnn_Oidhw16o),
+        OIdhw4i4o(mkldnn_OIdhw4i4o),
+        Oidhw4o(mkldnn_Oidhw4o),
+        OIdhw8i16o2i(mkldnn_OIdhw8i16o2i),
+        OIdhw8i8o(mkldnn_OIdhw8i8o),
+        OIdhw8o8i(mkldnn_OIdhw8o8i),
+        gIOw16o16i(mkldnn_gIOw16o16i),
+        gOIw16i16o(mkldnn_gOIw16i16o),
+        gOIw16o16i(mkldnn_gOIw16o16i),
+        gOiw16o(mkldnn_gOiw16o),
+        gOIw4i16o4i(mkldnn_gOIw4i16o4i),
+        gOIw4i4o(mkldnn_gOIw4i4o),
+        gOiw4o(mkldnn_gOiw4o),
+        gOIw8i16o2i(mkldnn_gOIw8i16o2i),
+        gOIw8i8o(mkldnn_gOIw8i8o),
+        gOIw8o16i2o(mkldnn_gOIw8o16i2o),
+        gOIw8o8i(mkldnn_gOIw8o8i),
+        gOwi16o(mkldnn_gOwi16o),
+        gOwi4o(mkldnn_gOwi4o),
+        gOwi8o(mkldnn_gOwi8o),
+        gIOhw16o16i(mkldnn_gIOhw16o16i),
+        gOhwi16o(mkldnn_gOhwi16o),
+        gOhwi4o(mkldnn_gOhwi4o),
+        gOhwi8o(mkldnn_gOhwi8o),
+        Goihw16g(mkldnn_Goihw16g),
+        gOIhw16i16o(mkldnn_gOIhw16i16o),
+        gOIhw16o16i(mkldnn_gOIhw16o16i),
+        gOihw16o(mkldnn_gOihw16o),
+        gOIhw2i8o4i(mkldnn_gOIhw2i8o4i),
+        gOIhw4i16o4i(mkldnn_gOIhw4i16o4i),
+        gOIhw4i4o(mkldnn_gOIhw4i4o),
+        gOIhw4o4i(mkldnn_gOIhw4o4i),
+        gOihw4o(mkldnn_gOihw4o),
+        Goihw8g(mkldnn_Goihw8g),
+        gOIhw8i16o2i(mkldnn_gOIhw8i16o2i),
+        gOIhw8i8o(mkldnn_gOIhw8i8o),
+        gOIhw8o16i2o(mkldnn_gOIhw8o16i2o),
+        OIhw4o8i8o4i(mkldnn_OIhw4o8i8o4i),
+        OIhw2o8i8o2i(mkldnn_OIhw2o8i8o2i),
+        gOIhw4o8i8o4i(mkldnn_gOIhw4o8i8o4i),
+        gOIhw2o8i8o2i(mkldnn_gOIhw2o8i8o2i),
+        gOIhw8o8i(mkldnn_gOIhw8o8i),
+        gIOdhw16i16o(mkldnn_gIOdhw16i16o),
+        gOdhwi16o(mkldnn_gOdhwi16o),
+        gOdhwi4o(mkldnn_gOdhwi4o),
+        gOdhwi8o(mkldnn_gOdhwi8o),
+        gOIdhw16i16o(mkldnn_gOIdhw16i16o),
+        gOIdhw16o16i(mkldnn_gOIdhw16o16i),
+        gOidhw16o(mkldnn_gOidhw16o),
+        gOIdhw4i4o(mkldnn_gOIdhw4i4o),
+        gOidhw4o(mkldnn_gOidhw4o),
+        gOIdhw8i16o2i(mkldnn_gOIdhw8i16o2i),
+        gOIdhw8i8o(mkldnn_gOIdhw8i8o),
+        gOIdhw8o8i(mkldnn_gOIdhw8o8i);
+
+        public final int value;
+        private format_tag(int v) { this.value = v; }
+        private format_tag(format_tag e) { this.value = e.value; }
+        public format_tag intern() { for (format_tag e : values()) if (e.value == value) return e; return this; }
+        @Override public String toString() { return intern().name(); }
+    }
 
     /** A memory descriptor. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public desc position(long position) {
+            return (desc)super.position(position);
+        }
     
         /** The underlying C API data structure. */
+        public native @ByRef mkldnn_memory_desc_t data(); public native desc data(mkldnn_memory_desc_t setter);
+
+        /** Constructs a zero memory descriptor */
         
         ///
-        public native @ByRef mkldnn_memory_desc_t data(); public native desc data(mkldnn_memory_desc_t setter);
+        public desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
 
         /** Constructs a memory descriptor.
          * 
          *  @param adims Data dimensions
          *  @param adata_type Data precision/type.
-         *  @param aformat Data layout format. */
+         *  @param aformat_tag Data layout format tag. */
         
         ///
-        public desc(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat) { super((Pointer)null); allocate(adims, adata_type, aformat); }
-        private native void allocate(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntPointer adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat);
-        public desc(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat) { super((Pointer)null); allocate(adims, adata_type, aformat); }
-        private native void allocate(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal IntBuffer adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat);
-        public desc(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat) { super((Pointer)null); allocate(adims, adata_type, aformat); }
-        private native void allocate(@StdVector("std::remove_extent<mkldnn_dims_t>::type") @ByVal int[] adims, @Cast("mkldnn::memory::data_type") int adata_type,
-                        @Cast("mkldnn::memory::format") int aformat);
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag) { super((Pointer)null); allocate(adims, adata_type, aformat_tag); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @ByVal format_tag aformat_tag);
+
+        /** Constructs a memory descriptor by strides.
+         * 
+         *  @param adims Data dimensions
+         *  @param adata_type Data precision/type.
+         *  @param astrides The strides for dimensions. */
+        
+        ///
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer astrides);
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer astrides);
+        public desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] astrides) { super((Pointer)null); allocate(adims, adata_type, astrides); }
+        private native void allocate(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] adims, @ByVal data_type adata_type, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] astrides);
 
         /** Constructs a memory descriptor from a C API data structure.
          * 
          *  @param adata A C API #mkldnn_memory_desc_t structure. */
         public desc(@Const @ByRef mkldnn_memory_desc_t adata) { super((Pointer)null); allocate(adata); }
         private native void allocate(@Const @ByRef mkldnn_memory_desc_t adata);
-    }
 
-    /** A memory primitive descriptor. */
-    public static class primitive_desc extends mkldnn_primitive_desc_handle {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public primitive_desc(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(long)}. */
-        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(long size);
-        @Override public primitive_desc position(long position) {
-            return (primitive_desc)super.position(position);
-        }
-    
+        /** Constructs a sub-memory descriptor. */
+        //
+        /** @param adims Sizes of a sub-memory
+        /** @param offsets Offsets of a sub-memory */
+        public native @ByVal desc submemory_desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer adims, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongPointer offsets);
+        public native @ByVal desc submemory_desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer adims, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef LongBuffer offsets);
+        public native @ByVal desc submemory_desc(@Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] adims, @Const @Cast({"mkldnn_dim_t*", "std::vector<mkldnn_dim_t>&"}) @StdVector("mkldnn_dim_t") @ByRef long[] offsets);
 
-        // TODO: make private
-        public primitive_desc() { super((Pointer)null); allocate(); }
-        private native void allocate();
-
-        /** Constructs a memory primitive descriptor. */
-        public primitive_desc(@Const @ByRef desc adesc, @Const @ByRef engine aengine) { super((Pointer)null); allocate(adesc, aengine); }
-        private native void allocate(@Const @ByRef desc adesc, @Const @ByRef engine aengine);
-
-        /** Returns the memory primitive descriptor. */
-        public native @ByVal desc desc();
-
-        /** Returns the number of bytes required to allocate the memory described
-         *  including the padding area. */
+        /** Returns the number of bytes required to allocate the memory
+         *  described including the padding area. */
         public native @Cast("size_t") long get_size();
 
-        public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef primitive_desc other);
+        /** Returns true if the memory descriptor describes an empty memory */
+        public native @Cast("bool") boolean is_zero();
 
-        public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef primitive_desc other);
+        public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef desc other);
 
-        public native @ByVal engine get_engine();
+        public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef desc other);
     }
 
-    /** Constructs a memory primitive from a generic primitive.
-     * 
-     *  @param aprimitive The primitive to treat as memory. */
     
     ///
-    public memory(@Const @ByRef primitive aprimitive) { super((Pointer)null); allocate(aprimitive); }
-    private native void allocate(@Const @ByRef primitive aprimitive);
-    /** Constructs a memory primitive.
+    public memory() { super((Pointer)null); allocate(); }
+    private native void allocate();
+
+    /** Constructs a memory.
      * 
-     *  @param adesc Memory primitive descriptor. */
-    public memory(@Const @ByRef primitive_desc adesc) { super((Pointer)null); allocate(adesc); }
-    private native void allocate(@Const @ByRef primitive_desc adesc);
+     *  @param md Memory descriptor.
+     *  @param aengine Engine.
+     *  @param ahandle handle. */
+    
+    ///
+    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer ahandle) { super((Pointer)null); allocate(md, aengine, ahandle); }
+    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine, Pointer ahandle);
 
-    public memory(@Const @ByRef primitive_desc adesc, Pointer ahandle) { super((Pointer)null); allocate(adesc, ahandle); }
-    private native void allocate(@Const @ByRef primitive_desc adesc, Pointer ahandle);
+    /** Constructs a memory.
+     * 
+     *  @param md Memory descriptor.
+     *  @param aengine Engine. */
+    public memory(@Const @ByRef desc md, @Const @ByRef engine aengine) { super((Pointer)null); allocate(md, aengine); }
+    private native void allocate(@Const @ByRef desc md, @Const @ByRef engine aengine);
 
-    /** Returns the descriptor of the memory primitive. */
-    public native @ByVal primitive_desc get_primitive_desc();
+    /** Returns the descriptor of the memory. */
+    public native @ByVal desc get_desc();
 
-    /** Returns a handle of the data contained in the memory primitive. On
-     *  the CPU engine, this is a pointer to the allocated memory. */
+    /** Returns the engine of the memory. */
+    
+    ///
+    public native @ByVal engine get_engine();
+
+    /** Returns a handle of the data contained in the memory.
+     * 
+     *  On the CPU engine, this is a pointer to the allocated memory. */
     public native Pointer get_data_handle();
 
+    
+    ///
+    ///
+    ///
+    ///
     public native void set_data_handle(Pointer handle);
 
+    /** Maps the data of the memory.
+     * 
+     *  Mapping allows to read/write directly from/to the memory contents for
+     *  engines that do not support direct memory access.
+     * 
+     *  Mapping is an exclusive operation - a memory object cannot be used in
+     *  other operations until this memory object is unmapped.
+     *  \tparam T Type of the pointer to be mapped.
+     * 
+     *  \note Any primitives working with the memory should be completed before
+     *        mapping. Use stream::wait() to synchronize the corresponding
+     *        execution stream.
+     * 
+     *  \note Map/unmap API is provided mainly for debug/testing purposes and
+     *        its performance may be suboptimal. */
+
+    /** Unmaps the previously mapped data for the memory.
+     * 
+     *  Any changes of the mapped data are synchronized back to the memory
+     *  after the call is complete. The mapped pointer must be
+     *  obtained through a map_data() call.
+     * 
+     *  \note Map/unmap API is provided mainly for debug/testing purposes and
+     *        its performance may be suboptimal. */
+    public native void unmap_data(Pointer mapped_ptr);
+
+// #if MKLDNN_GPU_RUNTIME == MKLDNN_RUNTIME_OCL
+// #endif
+
     // Must go away or be private:
-    public static native @Cast("mkldnn_data_type_t") int convert_to_c(@Cast("mkldnn::memory::data_type") int adata_type);
+    public static native @Cast("mkldnn_data_type_t") int convert_to_c(@ByVal data_type adata_type);
+    public static native @Cast("mkldnn_format_tag_t") int convert_to_c(@ByVal format_tag aformat);
 }

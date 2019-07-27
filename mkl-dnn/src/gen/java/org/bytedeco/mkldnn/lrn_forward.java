@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -17,60 +15,103 @@ import static org.bytedeco.mkldnn.global.mkldnn.*;
  *  A primitive to perform local response normalization (LRN) across or within
  *  channels.
  * 
+ *  @see \ref dev_guide_lrn in developer guide
  *  @see \ref c_api_lrn in \ref c_api
- *  \{ */
-
+ *  \{
+ <p>
+ *  Local response normalization for forward propagation. Implements
+ *  descriptor, primitive descriptor, and primitive. */
 @Namespace("mkldnn") @Properties(inherit = org.bytedeco.mkldnn.presets.mkldnn.class)
 public class lrn_forward extends primitive {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public lrn_forward(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public lrn_forward(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public lrn_forward position(long position) {
+        return (lrn_forward)super.position(position);
+    }
 
+
+    /** Descriptor for local response normalization forward propagation. */
     @NoOffset public static class desc extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public desc(Pointer p) { super(p); }
     
         public native @ByRef mkldnn_lrn_desc_t data(); public native desc data(mkldnn_lrn_desc_t setter);
+
+        /** Initializes a descriptor for forward propagation using \p prop_kind
+         *  (possible values are #mkldnn::forward_training and
+         *  #mkldnn::forward_inference), \p aalgorithm, memory descriptor \p
+         *  data_desc, and regularization parameters \p local_size, \p alpha, \p
+         *  beta, and \p k. */
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta, k); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/);
+        public desc(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta); }
+        private native void allocate(prop_kind aprop_kind, algorithm aalgorithm,
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
-                    @Const @ByRef memory.desc src_desc,
-                    int local_size, float alpha, float beta, float k) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta, k); }
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta, k); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
-                    @Const @ByRef memory.desc src_desc,
-                    int local_size, float alpha, float beta, float k);
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta, float k/*=1.f*/);
         public desc(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
-                    @Const @ByRef memory.desc src_desc,
-                    int local_size, float alpha, float beta) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta); }
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta) { super((Pointer)null); allocate(aprop_kind, aalgorithm, src_desc, local_size, alpha, beta); }
         private native void allocate(@Cast("mkldnn::prop_kind") int aprop_kind, @Cast("mkldnn::algorithm") int aalgorithm,
-                    @Const @ByRef memory.desc src_desc,
-                    int local_size, float alpha, float beta);
+                        @Const @ByRef memory.desc src_desc, @Cast("mkldnn::memory::dim") long local_size,
+                        float alpha, float beta);
     }
 
+    /** Primitive descriptor for local response normalization forward
+     *  propagation. */
     public static class primitive_desc extends org.bytedeco.mkldnn.primitive_desc {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public primitive_desc(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public primitive_desc(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public primitive_desc position(long position) {
+            return (primitive_desc)super.position(position);
+        }
     
+        public primitive_desc() { super((Pointer)null); allocate(); }
+        private native void allocate();
+
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, e); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef engine e);
 
         public primitive_desc(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e) { super((Pointer)null); allocate(desc, attr, e); }
         private native void allocate(@Const @ByRef desc desc, @Const @ByRef primitive_attr attr, @Const @ByRef engine e);
 
-        public native @ByVal memory.primitive_desc src_primitive_desc();
-        public native @ByVal memory.primitive_desc dst_primitive_desc();
-        public native @ByVal memory.primitive_desc workspace_primitive_desc();
+        /** Queries source memory descriptor. */
+        public native @ByVal memory.desc src_desc();
+
+        /** Queries destination memory descriptor. */
+        
+        ///
+        public native @ByVal memory.desc dst_desc();
+
+        /** Queries workspace memory descriptor.
+         * 
+         *  Returns a zero_md if no worspace is required. */
+        public native @ByVal memory.desc workspace_desc();
     }
 
-    public lrn_forward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory workspace,
-                @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, workspace, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory workspace,
-                @Const @ByRef memory dst);
+    public lrn_forward() { super((Pointer)null); allocate(); }
+    private native void allocate();
 
-    public lrn_forward(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory dst) { super((Pointer)null); allocate(aprimitive_desc, src, dst); }
-    private native void allocate(@Const @ByRef primitive_desc aprimitive_desc,
-                @Const @ByRef primitive.at src, @Const @ByRef memory dst);
+    public lrn_forward(@Const @ByRef primitive_desc pd) { super((Pointer)null); allocate(pd); }
+    private native void allocate(@Const @ByRef primitive_desc pd);
 }

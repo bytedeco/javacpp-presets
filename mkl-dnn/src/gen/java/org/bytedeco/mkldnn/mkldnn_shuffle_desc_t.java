@@ -6,8 +6,6 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-import static org.bytedeco.mkldnn.global.mklml.*;
-
 import static org.bytedeco.mkldnn.global.mkldnn.*;
 
 
@@ -28,10 +26,10 @@ public class mkldnn_shuffle_desc_t extends Pointer {
     }
 
     /** The kind of primitive. Used for self-identifying the primitive
-     * descriptor. Must be #mkldnn_convolution. */
+     *  descriptor. Must be #mkldnn_convolution. */
     public native @Cast("mkldnn_primitive_kind_t") int primitive_kind(); public native mkldnn_shuffle_desc_t primitive_kind(int setter);
     /** The kind of propagation. Possible values: #mkldnn_forward_training,
-     * #mkldnn_forward_inference, and #mkldnn_backward_data. */
+     *  #mkldnn_forward_inference, and #mkldnn_backward_data. */
     public native @Cast("mkldnn_prop_kind_t") int prop_kind(); public native mkldnn_shuffle_desc_t prop_kind(int setter);
     /** Source and destination memory descriptor,
      *  and source and destination gradient memory descriptor. */
@@ -39,5 +37,5 @@ public class mkldnn_shuffle_desc_t extends Pointer {
     /** axis for shuffling. */
     public native int axis(); public native mkldnn_shuffle_desc_t axis(int setter);
     /** number of groups in group convolution */
-    public native int group_size(); public native mkldnn_shuffle_desc_t group_size(int setter);
+    public native @Cast("mkldnn_dim_t") long group_size(); public native mkldnn_shuffle_desc_t group_size(long setter);
 }
