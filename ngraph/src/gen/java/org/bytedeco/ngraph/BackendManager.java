@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -22,7 +23,7 @@ public class BackendManager extends Pointer {
             
             
 
-            public static native void get_backend_ids(onnxBackendID backend_ids, @Cast("std::size_t*") SizeTPointer count);
+            public static native void get_backend_ids(@ByPtrPtr onnxBackendID backend_ids, @Cast("std::size_t*") SizeTPointer count);
 
             
 

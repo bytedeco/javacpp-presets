@@ -53,7 +53,7 @@ public class mkldnn_pooling_desc_t extends Pointer {
      * beginning (\p padding_l), padding[1] is a padding in the end (\p
      * padding_r). */
     @MemberGetter public native IntPointer padding(int i);
-    @MemberGetter public native @Cast("int const**") PointerPointer padding();
+    @MemberGetter public native @Cast("int**") PointerPointer padding();
     /** The kind of padding to use. */
     public native @Cast("mkldnn_padding_kind_t") int padding_kind(); public native mkldnn_pooling_desc_t padding_kind(int setter);
     /** The accumulator data type. Initialized automatically. */

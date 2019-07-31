@@ -236,7 +236,7 @@
           </execution>
           <execution>
             <id>javacpp-cppbuild-install</id>
-            <phase>generate-sources</phase>
+            <phase>initialize</phase>
             <goals>
               <goal>build</goal>
             </goals>

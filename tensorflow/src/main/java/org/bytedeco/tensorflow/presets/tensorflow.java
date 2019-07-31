@@ -58,7 +58,7 @@ import java.util.List;
  */
 @Properties(value = {
         @Platform(
-                value = {"linux-x86", "macosx", "windows"},
+                value = {"linux", "macosx", "windows"},
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
@@ -242,7 +242,7 @@ import java.util.List;
                         "tensorflow/cc/ops/user_ops.h"},
                 link = "tensorflow_cc@.1", preload = {"iomp5", "mklml", "mklml_intel", "tensorflow_framework"}, preloadresource = "/org/bytedeco/mkldnn/"),
         @Platform(
-                value = {"linux-x86_64", "macosx-x86_64"},
+                value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"},
                 extension = {"-gpu", "-python", "-python-gpu"},
                 link = "tensorflow_cc#",
                 preload = {"iomp5", "mklml", "mklml_intel", "python3.7m@.1.0!", "python3.7!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
@@ -505,6 +505,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvinfer"};
         for (String lib : libs) {
             switch (platform) {
+                case "linux-arm64":
+                case "linux-ppx64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
                     lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvinfer") ? "@.5" : lib.equals("cudart") ? "@.10.1" : "@.10";

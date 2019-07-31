@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -117,4 +118,25 @@ public class Backend extends Pointer {
      *  @return a shared pointer to the op if found, else nullptr */
     public native @SharedPtr @ByVal Node get_backend_op(@StdString BytePointer op_name);
     public native @SharedPtr @ByVal Node get_backend_op(@StdString String op_name);
+
+    /** \brief Returns memory allocator used by backend for host allocations */
+    public native Allocator get_host_memory_allocator();
+    /** \brief Set the host memory allocator to be used by the backend
+     *  @param allocator is pointer to host memory allocator object */
+    public native void set_host_memory_allocator(@MoveUniquePtr Allocator allocator);
+    /** \brief Returns memory allocator used by backend for device allocations */
+    public native Allocator get_device_memory_allocator();
+
+    /** \brief method for each supported backend to determine if the passed pointer is in device pinned memory or not
+     *  @param ptr pointer to the memory to determine if its in device memory or not */
+    public native @Cast("bool") boolean is_device_memory(Pointer ptr);
+
+    /** \brief Allows sending backend specific configuration. The map contains key, value pairs
+     *      specific to a particluar backend. The definition of these key, value pairs is
+     *      defined by each backend.
+     *  @param config The configuration map sent to the backend
+     *  @param error An error string describing any error encountered
+     *  @return true if the configuration is supported, false otherwise. On false the error
+     *      parameter value is valid. */
+    public native @Cast("bool") boolean set_config(@Const @ByRef StringStringMap config, @StdString @ByRef BytePointer error);
 }

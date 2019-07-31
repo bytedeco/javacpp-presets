@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -105,6 +106,8 @@ public class Function extends Pointer {
          *         set_friendly_name then the function's unique name is returned.
          *  @return A const reference to the function's friendly name. */
         public native @StdString BytePointer get_friendly_name();
+        public native void map_unordered_ops(@ByVal NodeFunction f);
+
         
         public native @Cast("size_t") long get_instance_id();
         public native @Cast("size_t") long get_temporary_pool_size();
