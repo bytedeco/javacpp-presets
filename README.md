@@ -106,7 +106,7 @@ The JavaCPP Presets depend on Maven, a powerful build system for Java, so before
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.1.0  https://opencv.org/releases.html
+ * OpenCV 4.1.1  https://opencv.org/releases.html
  * FFmpeg 4.1.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
  * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
@@ -127,7 +127,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.4  https://www.python.org/downloads/
- * NumPy 1.17.0rc2  https://github.com/numpy/numpy
+ * NumPy 1.17.0  https://github.com/numpy/numpy
  * LLVM 8.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
@@ -141,7 +141,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.22.0  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.24.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.13.0  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia

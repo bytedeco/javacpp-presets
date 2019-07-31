@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -103,16 +104,35 @@ public class Node extends Pointer {
         public native @Cast("bool") boolean is_op();
         public native @Cast("bool") boolean is_commutative();
         public native @Cast("bool") boolean is_dynamic();
+        public native @Cast("bool") boolean has_state();
         public native @Cast("size_t") long get_instance_id();
         
         public native @Cast("std::ostream*") @ByRef Pointer write_short_description(@Cast("std::ostream*") @ByRef Pointer arg0);
         public native @Cast("std::ostream*") @ByRef Pointer write_long_description(@Cast("std::ostream*") @ByRef Pointer arg0);
 
         /** Get control dependencies registered on the node */
+        public native @Const @ByRef NodeVector get_control_dependencies();
 
+        /** Get nodes dependent on this node */
+        public native @Cast("ngraph::Node**") @StdVector PointerPointer get_control_dependents();
+
+        /** This node cannot execute until node executes */
         public native void add_control_dependency(@SharedPtr @ByVal Node node);
 
+        /** Remove the dependency of this node on node */
         public native void remove_control_dependency(@SharedPtr @ByVal Node node);
+
+        /** Remove all dependencies from this node */
+        public native void clear_control_dependencies();
+
+        /** Remove this node as a dependency from all dependent nodes */
+        public native void clear_control_dependents();
+
+        /** This node absorbs the control dependencies of source_node */
+        public native void add_node_control_dependencies(@SharedPtr @ByVal Node source_node);
+
+        /** This node becomes a dependent of every node dependent on source_node */
+        public native void add_node_control_dependents(@SharedPtr @ByVal Node source_node);
 
         /** Returns the number of outputs from the node. */
         public native @Cast("size_t") long get_output_size();
@@ -158,6 +178,7 @@ public class Node extends Pointer {
         public native @SharedPtr @ByVal DescriptorTensor get_output_tensor_ptr();
 
         /** Returns the set of inputs using output i */
+        public native @Const @ByRef DescriptorInputVector get_output_inputs(@Cast("size_t") long i);
 
         /** Returns the number of inputs for the op */
         public native @Cast("size_t") long get_input_size();
@@ -181,10 +202,11 @@ public class Node extends Pointer {
         public native @ByVal NodeVector get_arguments();
         // Will be deprecated
         public native @SharedPtr @ByVal Node get_argument(@Cast("size_t") long index);
-        // Will be replaced with an OutputVector version
-        public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+        public native @SharedPtr @ByVal Node copy_with_new_inputs(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector new_args);
 
-        public native @ByVal FunctionVector get_functions();
+        public native @SharedPtr @ByVal Node copy_with_new_inputs(
+                    @Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector inputs,
+                    @Const @ByRef NodeVector control_dependencies);
 
         /** True if this and node have one output with same element type and shape */
         

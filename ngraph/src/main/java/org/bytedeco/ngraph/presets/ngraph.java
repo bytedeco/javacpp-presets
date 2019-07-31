@@ -22,9 +22,18 @@
 
 package org.bytedeco.ngraph.presets;
 
+import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 @Properties(target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
     value = {"linux", "macosx"},
@@ -64,6 +73,7 @@ import org.bytedeco.javacpp.tools.*;
         "ngraph/op/util/op_annotations.hpp",
         "ngraph/function.hpp",
         "ngraph/autodiff/adjoints.hpp",
+        "ngraph/runtime/allocator.hpp",
         "ngraph/runtime/executable.hpp",
         "ngraph/runtime/tensor.hpp",
         "ngraph/runtime/backend.hpp",
@@ -88,8 +98,10 @@ public class ngraph implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "ngraph"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().javaText("import org.bytedeco.ngraph.Function;"))
+        infoMap.put(new Info().javaText("import org.bytedeco.ngraph.Allocator;\n"
+                                      + "import org.bytedeco.ngraph.Function;"))
 //               .put(new Info("string", "std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("onnxBackendID").valueTypes("onnxBackendID").pointerTypes("@ByPtrPtr onnxBackendID", "@Cast(\"onnxBackendID*\") onnxBackendID"))
                .put(new Info("ngraph::runtime::cpu::CPU_Backend::Property").cast().valueTypes("int"))
                .put(new Info("ngraph::element::Type_t::boolean").javaNames("boolean_type"))
                .put(new Info("ngraph::descriptor::Tensor").purify(true).pointerTypes("DescriptorTensor"))
@@ -116,6 +128,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("deprecated").annotations("@Deprecated"))
 
                .put(new Info("ngraph::op::util::BinaryElementwiseArithmetic", "ngraph::op::ScalarConstantLike").purify(true))
+               .put(new Info("std::unique_ptr<ngraph::runtime::Allocator>").valueTypes("@MoveUniquePtr Allocator").pointerTypes("@UniquePtr Allocator"))
                .put(new Info("std::shared_ptr<ngraph::op::Result>").annotations("@SharedPtr").pointerTypes("Result"))
                .put(new Info("std::shared_ptr<ngraph::runtime::Tensor>").annotations("@SharedPtr").pointerTypes("Tensor"))
 //               .put(new Info("ngraph::Node").purify(false).virtualize())
@@ -132,6 +145,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>",
                              "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
                .put(new Info("std::map<std::string,bool>").pointerTypes("StringBoolMap").define())
+               .put(new Info("std::map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("std::set<size_t>").pointerTypes("SizeTSet").define())
                .put(new Info("std::vector<ptrdiff_t>", "std::vector<std::ptrdiff_t>").pointerTypes("PtrDiffTVector").define())
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
@@ -146,14 +160,34 @@ public class ngraph implements InfoMapper {
                .put(new Info("ngraph::Output<ngraph::Node>(const std::shared_ptr<ngraph::Node>&)").javaText(
                        "public NodeOutput(Node node) { super((Pointer)null); allocate(node); }\n"
                      + "private native void allocate(@Cast({\"\", \"const std::shared_ptr<ngraph::Node>&\"}) @SharedPtr Node node);\n"))
+               .put(new Info("const std::vector<ngraph::descriptor::Input*>", "std::vector<ngraph::descriptor::Input*>",
+                             "const std::vector<ngraph::Node::descriptor::Input*>", "std::vector<ngraph::Node::descriptor::Input*>").pointerTypes("DescriptorInputVector").define())
                .put(new Info("const std::vector<ngraph::Input<ngraph::Node> >", "std::vector<ngraph::Input<ngraph::Node> >").pointerTypes("NodeInputVector").define())
                .put(new Info("const std::vector<ngraph::Output<ngraph::Node> >", "std::vector<ngraph::Output<ngraph::Node> >").pointerTypes("NodeOutputVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Parameter> >", "std::vector<std::shared_ptr<op::Parameter> >").pointerTypes("ParameterVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::Node> >").pointerTypes("NodeVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::op::Constant> >").pointerTypes("OpConstantVector").define())
                .put(new Info("std::vector<std::shared_ptr<ngraph::runtime::Tensor> >", "std::vector<std::shared_ptr<runtime::Tensor> >").pointerTypes("TensorVector").define())
+
+               .put(new Info("std::function<void(Node*)>").pointerTypes("NodeFunction"))
                .put(new Info("std::vector<std::shared_ptr<ngraph::Function> >").pointerTypes("FunctionVector").define());
 
        //TODO: std::list<std::shared_ptr<Node> >   ?
+    }
+
+    public static class NodeFunction extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    NodeFunction(Pointer p) { super(p); }
+        protected NodeFunction() { allocate(); }
+        private native void allocate();
+        public native void call(@Cast("ngraph::Node*") Pointer node);
+    }
+
+    @Documented @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @Cast({"std::unique_ptr", "&&"}) @Adapter("UniquePtrAdapter")
+    public @interface MoveUniquePtr {
+        String value() default "";
     }
 }

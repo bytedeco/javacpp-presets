@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -25,6 +26,7 @@ public class CPU_Backend extends Backend {
                     return (CPU_Backend)super.position(position);
                 }
             
+
                 
 
                 public native @SharedPtr @ByVal Tensor create_tensor(@Const @ByRef Type element_type,
@@ -45,6 +47,9 @@ public class CPU_Backend extends Backend {
                                             @ByRef PassConfig pass_config);
 
                 public native void remove_compiled_function(@SharedPtr Executable exec);
+
+                public native Allocator get_host_memory_allocator();
+                public native void set_host_memory_allocator(@MoveUniquePtr Allocator allocator);
 
                 public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
                 public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::cpu::CPU_Backend::Property") int prop);

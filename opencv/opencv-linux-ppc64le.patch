@@ -1,7 +1,7 @@
-diff -ruN opencv-4.1.0/modules/core/include/opencv2/core/hal/intrin_vsx.hpp opencv-4.1.0-linux-ppc64le/modules/core/include/opencv2/core/hal/intrin_vsx.hpp
---- opencv-4.1.0/modules/core/include/opencv2/core/hal/intrin_vsx.hpp	2019-04-08 02:09:10.000000000 +0900
-+++ opencv-4.1.0-linux-ppc64le/modules/core/include/opencv2/core/hal/intrin_vsx.hpp	2019-04-15 11:41:51.410872293 +0900
-@@ -1072,63 +1072,46 @@
+diff -ruN opencv-4.1.1/modules/core/include/opencv2/core/hal/intrin_vsx.hpp opencv-4.1.1-linux-ppc64le/modules/core/include/opencv2/core/hal/intrin_vsx.hpp
+--- opencv-4.1.1/modules/core/include/opencv2/core/hal/intrin_vsx.hpp	2019-07-26 12:24:45.000000000 +0900
++++ opencv-4.1.1-linux-ppc64le/modules/core/include/opencv2/core/hal/intrin_vsx.hpp	2019-07-31 11:50:38.594957264 +0900
+@@ -1129,63 +1129,46 @@
  
  inline v_int32x4 v_lut(const int* tab, const v_int32x4& idxvec)
  {

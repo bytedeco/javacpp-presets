@@ -39,8 +39,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.4.1",
             preload = {"opencv_cuda@.4.1", "opencv_cudaarithm@.4.1"}),
         @Platform(value = "ios", preload = "libopencv_xfeatures2d"),
-        @Platform(value = "windows", link = "opencv_xfeatures2d410",
-            preload = {"opencv_cuda410", "opencv_cudaarithm410"})},
+        @Platform(value = "windows", link = "opencv_xfeatures2d411",
+            preload = {"opencv_cuda411", "opencv_cudaarithm411"})},
     target = "org.bytedeco.opencv.opencv_xfeatures2d",
     global = "org.bytedeco.opencv.global.opencv_xfeatures2d"
 )

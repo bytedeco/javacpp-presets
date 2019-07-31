@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.1.0
+OPENCV_VERSION=4.1.1
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -318,6 +318,7 @@ cp -r modules/java_bindings_generator/gen/java ..
 cp -r modules/java_bindings_generator/gen/android/java ..
 # remove files that require the Android SDK to compile
 rm ../java/org/opencv/android/AsyncServiceHelper.java
+rm ../java/org/opencv/android/CameraActivity.java
 rm ../java/org/opencv/android/CameraBridgeViewBase.java
 rm ../java/org/opencv/android/JavaCameraView.java
 rm ../java/org/opencv/android/OpenCVLoader.java

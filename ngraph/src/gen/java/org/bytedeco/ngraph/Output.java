@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -28,6 +29,7 @@ public class Output extends Pointer {
             public native void set_tensor_ptr(@Const @SharedPtr @ByRef DescriptorTensor tensor);
             public native void add_input(Input input);
             public native void remove_input(Input input);
+            public native @Const @ByRef DescriptorInputVector get_inputs();
             public native @ByRef DescriptorTensor get_tensor();
 
             /** @return the shape of the output */

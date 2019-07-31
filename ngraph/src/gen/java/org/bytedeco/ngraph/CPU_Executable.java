@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -18,9 +19,11 @@ public class CPU_Executable extends Executable {
             
                 public CPU_Executable(@SharedPtr @ByVal Function func,
                                                @ByRef PassConfig pass_config,
-                                               @Cast("bool") boolean performance_counters_enabled) { super((Pointer)null); allocate(func, pass_config, performance_counters_enabled); }
+                                               Allocator allocator,
+                                               @Cast("bool") boolean performance_counters_enabled) { super((Pointer)null); allocate(func, pass_config, allocator, performance_counters_enabled); }
                 private native void allocate(@SharedPtr @ByVal Function func,
                                                @ByRef PassConfig pass_config,
+                                               Allocator allocator,
                                                @Cast("bool") boolean performance_counters_enabled);
                 public native @Cast("bool") boolean call(@Const @ByRef TensorVector outputs,
                                           @Const @ByRef TensorVector inputs);
