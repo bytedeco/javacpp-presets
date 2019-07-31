@@ -1,6 +1,6 @@
 
  * Add packages missing from TensorFlow ([issue #773](https://github.com/bytedeco/javacpp-presets/issues/773))
- * Fix JPMS module name for Tesseract ([issue #772](https://github.com/bytedeco/javacpp-presets/issues/772))
+ * Fix JPMS module names for OpenBLAS and Tesseract ([issue #772](https://github.com/bytedeco/javacpp-presets/issues/772))
  * Include `env.h`, `kernels.h`, and `ops.h` to allow creating custom operations using the C API of TensorFlow
  * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
