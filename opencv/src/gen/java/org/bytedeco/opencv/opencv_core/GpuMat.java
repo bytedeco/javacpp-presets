@@ -70,7 +70,7 @@ public class GpuMat extends Pointer {
 
         // allocator must fill data, step and refcount fields
         public native @Cast("bool") @Name("allocate") boolean _allocate(GpuMat mat, int rows, int cols, @Cast("size_t") long elemSize);
-        public native void free(GpuMat mat);
+        public native @Name("free") void _free(GpuMat mat);
     }
 
     /** default allocator */
