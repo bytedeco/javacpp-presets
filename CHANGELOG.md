@@ -1,4 +1,5 @@
 
+ * Include `audio_ops.h`, `list_ops.h`, `lookup_ops.h`, and `manip_ops.h` for TensorFlow
  * Add necessary platform properties to build `-gpu` extensions on `linux-arm64` and `linux-ppc64le` ([issue #769](https://github.com/bytedeco/javacpp-presets/issues/769))
  * Add packages missing from TensorFlow ([issue #773](https://github.com/bytedeco/javacpp-presets/issues/773))
  * Fix JPMS module names for OpenBLAS and Tesseract ([issue #772](https://github.com/bytedeco/javacpp-presets/issues/772))

@@ -24290,6 +24290,42 @@ limitations under the License.
 // #endif  // TENSORFLOW_CC_OPS_ARRAY_OPS_H_
 
 
+// Parsed from tensorflow/cc/ops/audio_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_AUDIO_OPS_H_
+// #define TENSORFLOW_CC_OPS_AUDIO_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// Targeting ../AudioSpectrogram.java
+
+
+// Targeting ../DecodeWav.java
+
+
+// Targeting ../EncodeWav.java
+
+
+// Targeting ../Mfcc.java
+
+
+
+/** \} */
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_AUDIO_OPS_H_
+
+
 // Parsed from tensorflow/cc/ops/candidate_sampling_ops.h
 
 // This file is MACHINE GENERATED! Do not edit.
@@ -24890,6 +24926,90 @@ limitations under the License.
 // #endif  // TENSORFLOW_CC_OPS_LINALG_OPS_H_
 
 
+// Parsed from tensorflow/cc/ops/list_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_LIST_OPS_H_
+// #define TENSORFLOW_CC_OPS_LIST_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// Targeting ../EmptyTensorList.java
+
+
+// Targeting ../TensorListConcat.java
+
+
+// Targeting ../TensorListConcatLists.java
+
+
+// Targeting ../TensorListConcatV2.java
+
+
+// Targeting ../TensorListElementShape.java
+
+
+// Targeting ../TensorListFromTensor.java
+
+
+// Targeting ../TensorListGather.java
+
+
+// Targeting ../TensorListGetItem.java
+
+
+// Targeting ../TensorListLength.java
+
+
+// Targeting ../TensorListPopBack.java
+
+
+// Targeting ../TensorListPushBack.java
+
+
+// Targeting ../TensorListPushBackBatch.java
+
+
+// Targeting ../TensorListReserve.java
+
+
+// Targeting ../TensorListResize.java
+
+
+// Targeting ../TensorListScatter.java
+
+
+// Targeting ../TensorListScatterIntoExistingList.java
+
+
+// Targeting ../TensorListScatterV2.java
+
+
+// Targeting ../TensorListSetItem.java
+
+
+// Targeting ../TensorListSplit.java
+
+
+// Targeting ../TensorListStack.java
+
+
+
+/** \} */
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_LIST_OPS_H_
+
+
 // Parsed from tensorflow/cc/ops/logging_ops.h
 
 // This file is MACHINE GENERATED! Do not edit.
@@ -24945,6 +25065,90 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_CC_OPS_LOGGING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/lookup_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_LOOKUP_OPS_H_
+// #define TENSORFLOW_CC_OPS_LOOKUP_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// Targeting ../HashTable.java
+
+
+// Targeting ../InitializeTableFromTextFile.java
+
+
+// Targeting ../InitializeTable.java
+
+
+// Targeting ../LookupTableExport.java
+
+
+// Targeting ../LookupTableFind.java
+
+
+// Targeting ../LookupTableImport.java
+
+
+// Targeting ../LookupTableInsert.java
+
+
+// Targeting ../LookupTableSize.java
+
+
+// Targeting ../MutableDenseHashTable.java
+
+
+// Targeting ../MutableHashTableOfTensors.java
+
+
+// Targeting ../MutableHashTable.java
+
+
+
+/** \} */
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_LOOKUP_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/manip_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_MANIP_OPS_H_
+// #define TENSORFLOW_CC_OPS_MANIP_OPS_H_
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #include "tensorflow/cc/framework/ops.h"
+// #include "tensorflow/cc/framework/scope.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// Targeting ../Roll.java
+
+
+
+/** \} */
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_MANIP_OPS_H_
 
 
 // Parsed from tensorflow/cc/ops/math_ops.h
