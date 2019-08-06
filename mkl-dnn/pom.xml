@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.packageName>mkldnn</javacpp.packageName>
-    <revision>1.0-${project.parent.version}</revision>
+    <revision>1.0.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

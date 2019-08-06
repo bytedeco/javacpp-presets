@@ -1298,7 +1298,7 @@ public static final int MKLDNN_VERSION_MAJOR = 1;
 public static final int MKLDNN_VERSION_MINOR = 0;
 
 /** Patch version */
-public static final int MKLDNN_VERSION_PATCH = 0;
+public static final int MKLDNN_VERSION_PATCH = 1;
 
 /** Git commit hash */
 public static native @MemberGetter String MKLDNN_VERSION_HASH();

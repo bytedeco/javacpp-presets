@@ -27,22 +27,6 @@ public class mkldnn_blocking_desc_t extends Pointer {
         return (mkldnn_blocking_desc_t)super.position(position);
     }
 
-<<<<<<< HEAD
-    /** Block size for each of the dimensions. */
-    @MemberGetter public native IntPointer block_dims();
-    /** strides[0]: stride between the first elements of adjacent blocks.
-     * \n strides[1]: strides between elements in the same block. */
-    @MemberGetter public native @Cast("ptrdiff_t*") SizeTPointer strides(int i);
-    @MemberGetter public native @Cast("ptrdiff_t**") PointerPointer strides();
-    /** Size of the data including padding in each dimension. */
-    @MemberGetter public native IntPointer padding_dims();
-    /** Per-dimension offset from the padding to actual data, the top-level
-     * tensor with offsets applied must lie within the padding area. */
-    @MemberGetter public native IntPointer offset_padding_to_data();
-    /** Offset from memory origin to the current block, non-zero only in
-     * a description of a memory sub-block. */
-    public native @Cast("ptrdiff_t") long offset_padding(); public native mkldnn_blocking_desc_t offset_padding(long setter);
-=======
     /** The strides between the outermost blocks.
      *  In case of plain (non-blocked) formats the strides between dimensions. */
     @MemberGetter public native @Cast("int64_t*") LongPointer strides();
@@ -55,5 +39,4 @@ public class mkldnn_blocking_desc_t extends Pointer {
     /** The logical indices of the blocks, e.g. {@code {1, 0, 1}} in case of
      *  {@code 4i16o4i}, because {@code i} is the 1st dim and {@code o} is the 0st dim */
     @MemberGetter public native @Cast("int64_t*") LongPointer inner_idxs();
->>>>>>>  * Upgrade presets for MKL-DNN 1.0 (pull #765)
 }

@@ -56,19 +56,10 @@ public class mkldnn_convolution_desc_t extends Pointer {
     /** Convolution dilates in each spatial dimension. */
     @MemberGetter public native @Cast("int64_t*") LongPointer dilates();
     /** Padding in each spatial dimension. padding[0] is a padding in the
-<<<<<<< HEAD
-     * beginning (\p padding_l), padding[1] is a padding in the end (\p
-     * padding_r). */
-    @MemberGetter public native IntPointer padding(int i);
-    @MemberGetter public native @Cast("int**") PointerPointer padding();
-    /** The kind of padding to use. */
-    public native @Cast("mkldnn_padding_kind_t") int padding_kind(); public native mkldnn_convolution_desc_t padding_kind(int setter);
-=======
      *  beginning (\p padding_l), padding[1] is a padding in the end (\p
      *  padding_r). */
     @MemberGetter public native @Cast("int64_t*") LongPointer padding(int i);
     @MemberGetter public native @Cast("int64_t**") PointerPointer padding();
->>>>>>>  * Upgrade presets for MKL-DNN 1.0 (pull #765)
     /** The accumulator data type. Initialized automatically. */
     public native @Cast("mkldnn_data_type_t") int accum_data_type(); public native mkldnn_convolution_desc_t accum_data_type(int setter);
 }

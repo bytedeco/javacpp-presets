@@ -39,7 +39,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             compiler = "cpp11",
             define = {"GENERIC_EXCEPTION_CLASS mkldnn::error", "GENERIC_EXCEPTION_TOSTRING toStdString().c_str()"},
             include = {"mkldnn_config.h", "mkldnn_types.h", /*"mkldnn_debug.h",*/ "mkldnn_version.h", "mkldnn.h", "mkldnn.hpp"},
-            link = "mkldnn@.0", preload = "libmkldnn")},
+            link = "mkldnn@.1", preload = {"gomp@.1", "iomp5"},
+            preloadpath = {"/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
+        @Platform(
+            value = "macosx-x86_64",
+            preload = {"gcc_s@.1", "gomp@.1", "stdc++@.6", "iomp5"},
+            preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/",
+                           "/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
+        @Platform(
+            value = "windows-x86_64",
+            preload = {"libwinpthread-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libiomp5md", "libmkldnn"},
+            preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/compiler/",
+                           "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"})},
     target = "org.bytedeco.mkldnn", global = "org.bytedeco.mkldnn.global.mkldnn")
 public class mkldnn implements InfoMapper {
     public void map(InfoMap infoMap) {

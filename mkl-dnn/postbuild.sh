@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fix GCC library incorrectly linking for rpath on Mac
 for VER in 5 6 7 8; do
-    for LIB in libmkldnn.0.dylib libjnimkldnn.dylib; do
+    for LIB in libmkldnn.1.dylib libjnimkldnn.dylib; do
         LIBFILE=target/native/org/bytedeco/mkldnn/macosx-x86_64/$LIB
         if [[ -f $LIBFILE ]]; then
             echo Fixing $LIBFILE
