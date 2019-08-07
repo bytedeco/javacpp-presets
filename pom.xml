@@ -1072,6 +1072,7 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cpu_features</module>
@@ -1119,6 +1120,7 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cpu_features</module>
@@ -1166,6 +1168,7 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
