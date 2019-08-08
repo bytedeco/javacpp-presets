@@ -1,4 +1,5 @@
 
+ * Add `linux-armhf`, `linux-arm64`, and `linux-ppc64le` builds for LLVM ([pull #768](https://github.com/bytedeco/javacpp-presets/pull/768))
  * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
  * Upgrade presets for FFmpeg 4.1.4, MKL-DNN 0.20.1, CPython 3.7.4, NumPy 1.17.0rc2, LLVM 8.0.1, MXNet 1.5.0, cpu_features 0.4.1, and their dependencies
