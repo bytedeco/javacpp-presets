@@ -4,6 +4,7 @@ package org.bytedeco.ngraph.global;
 
 import org.bytedeco.ngraph.*;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -15,7 +16,13 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../StringBoolMap.java
 
 
+// Targeting ../StringStringMap.java
+
+
 // Targeting ../SizeTSet.java
+
+
+// Targeting ../DescriptorInputVector.java
 
 
 // Targeting ../NodeInputVector.java
@@ -660,7 +667,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #pragma once
 
 // #include <memory>
-// #include <set>
+// #include <vector>
 
 // #include "ngraph/descriptor/input.hpp"
 // #include "ngraph/descriptor/tensor.hpp"
@@ -708,7 +715,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
      *  @param dimension The dimension to be inserted into {@code str}.
      *  @return A reference to {@code str} after insertion.
      * 
-     *  Inserts the string {@code ?} if {@code dimension} is dynamic; else inserts {@code size_t(dimension)}. */
+     *  Inserts the string {@code ?} if {@code dimension} is dynamic; else inserts {@code int64_t(dimension)}. */
     @Namespace("ngraph") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer str, @Const @ByRef Dimension dimension);
 
 
@@ -947,6 +954,12 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #define NGRAPH_CHECK(cond, ...)
 //     NGRAPH_CHECK_HELPER(::ngraph::CheckFailure, "", (cond), ##__VA_ARGS__)
 
+/** \brief Macro to signal a code path that is unreachable in a successful execution. It's
+ *  implemented with NGRAPH_CHECK macro.
+ *  @param ... Additional error message that should describe why that execution path is unreachable.
+ *  @throws ::ngrap::CheckFailure if the macro is executed. */
+// #define NGRAPH_UNREACHABLE(...) NGRAPH_CHECK(false, "Unreachable: ", ##__VA_ARGS__)
+
 
 // Parsed from ngraph/node.hpp
 
@@ -998,6 +1011,8 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
     @Namespace("ngraph") public static native @Const @SharedPtr @ByRef Node check_single_output_arg(@Const @SharedPtr @ByRef Node node,
                                                              @Cast("size_t") long i);
     @Namespace("ngraph") public static native @Const @ByRef NodeVector check_single_output_args(@Const @ByRef NodeVector args);
+
+    @Namespace("ngraph") public static native @ByVal @Cast("ngraph::OutputVector*") NodeOutputVector as_output_vector(@Const @ByRef NodeVector args);
 
     /** Alias useful for cloning */
 // Targeting ../Node.java
@@ -1204,7 +1219,8 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         public static final int
             CONSTANT = 0,
             EDGE = 1,
-            REFLECT = 2;
+            REFLECT = 2,
+            SYMMETRIC = 3;
 
         /** \brief Padding Type used for {@code Convolution} and {@code Pooling}
          * 
@@ -1318,8 +1334,8 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
     
 
-    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByVal Node arg0,
-                                                @Const @SharedPtr @ByVal Node arg1);
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByRef Node arg0,
+                                                @Const @SharedPtr @ByRef Node arg1);
 
 
 
@@ -1450,13 +1466,50 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include "ngraph/coordinate.hpp"
 // #include "ngraph/strides.hpp"
-
     // Need duplicate definition here to avoid g++ issues
     // Keep consistent with version in node.hpp
 // Targeting ../Adjoints.java
 
 
     
+
+
+
+// Parsed from ngraph/runtime/allocator.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <cstddef>
+// #include <cstdint>
+// #include <cstdlib>
+// #include "ngraph/except.hpp"
+// #include "ngraph/util.hpp"
+// Targeting ../DefaultAllocator.java
+
+
+        /** \brief Create a default allocator that calls into system
+         *         allocation libraries */
+        @Namespace("ngraph::runtime") public static native Allocator get_default_allocator();
+    
+
+// Targeting ../Allocator.java
+
 
 
 
@@ -1557,10 +1610,12 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include "ngraph/function.hpp"
 // #include "ngraph/pass/pass_config.hpp"
+// #include "ngraph/runtime/allocator.hpp"
 // #include "ngraph/runtime/executable.hpp"
 // #include "ngraph/runtime/performance_counter.hpp"
 // #include "ngraph/shape.hpp"
 // #include "ngraph/type/element_type.hpp"
+// #include "ngraph/util.hpp"
     
 
 // Targeting ../Backend.java
@@ -1590,9 +1645,11 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include <map>
 // #include <memory>
+// #include <mutex>
 
 // #include "cpu_backend_visibility.h"
 // #include "ngraph/pass/pass_config.hpp"
+// #include "ngraph/runtime/allocator.hpp"
 // #include "ngraph/runtime/backend.hpp"
 // Targeting ../CPU_ExternalFunction.java
 

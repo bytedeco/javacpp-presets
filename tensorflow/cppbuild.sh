@@ -310,6 +310,7 @@ cp -r tensorflow/java/src/main/java/* ../java
 cp -r tensorflow/contrib/android/java/* ../java
 cp -r tensorflow/lite/java/src/main/java/* ../java
 cp -r bazel-genfiles/tensorflow/java/ops/src/main/java/* ../java
+cp -r bazel-genfiles/tensorflow/java/_javac/tensorflow/libtensorflow_sourcegenfiles/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 # remove lines that require the Android SDK to compile
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java

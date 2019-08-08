@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     value = {
         @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.4.1"),
         @Platform(value = "ios", preload = "libopencv_features2d"),
-        @Platform(value = "windows", link = "opencv_features2d410")},
+        @Platform(value = "windows", link = "opencv_features2d411")},
     target = "org.bytedeco.opencv.opencv_features2d",
     global = "org.bytedeco.opencv.global.opencv_features2d"
 )

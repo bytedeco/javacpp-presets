@@ -2,6 +2,7 @@
 
 package org.bytedeco.ngraph;
 
+import org.bytedeco.ngraph.Allocator;
 import org.bytedeco.ngraph.Function;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
@@ -165,6 +166,10 @@ public class PartialShape extends Pointer {
          *  @return A new Shape {@code s} where {@code s[i] = size_t((*this)[i])}.
          *  @throws std::invalid_argument If this PartialShape is dynamic. */
         public native @ByVal Shape to_shape();
+
+        /** \brief Returns {@code true} if all static dimensions of the tensor are non-negative, else
+         *         {@code false}. */
+        public native @Cast("bool") boolean all_non_negative();
 
         /** \brief Index operator for PartialShape.
          *  @param i The index of the dimension being selected.

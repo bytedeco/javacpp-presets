@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENCV_VERSION=4.1.0
+OPENCV_VERSION=4.1.1
 download https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 download https://github.com/opencv/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
@@ -258,9 +258,9 @@ case $PLATFORM in
         # also use pthreads on Mac for increased usability and more consistent behavior with Linux
         sedinplace '/HAVE_GCD/d' CMakeLists.txt
         # remove spurious "lib" lib
-        sedinplace '/if(HAVE_CUDA)/a\
+        sedinplace '/if.*(HAVE_CUDA)/a\
             list(REMOVE_ITEM CUDA_LIBRARIES lib)\
-            ' CMakeLists.txt
+            ' CMakeLists.txt cmake/OpenCVModule.cmake cmake/OpenCVDetectCUDA.cmake
         $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $GPU_FLAGS -DCUDA_HOST_COMPILER=/usr/bin/clang++ $BUILD_CONTRIB_X -DCMAKE_CXX_FLAGS="-w" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
@@ -318,6 +318,7 @@ cp -r modules/java_bindings_generator/gen/java ..
 cp -r modules/java_bindings_generator/gen/android/java ..
 # remove files that require the Android SDK to compile
 rm ../java/org/opencv/android/AsyncServiceHelper.java
+rm ../java/org/opencv/android/CameraActivity.java
 rm ../java/org/opencv/android/CameraBridgeViewBase.java
 rm ../java/org/opencv/android/JavaCameraView.java
 rm ../java/org/opencv/android/OpenCVLoader.java

@@ -61,6 +61,13 @@
               <classOrPackageName>org.bytedeco.openblas.presets.*</classOrPackageName>
             </configuration>
           </execution>
+          <execution>
+            <id>javacpp-validate-package</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
       <plugin>
