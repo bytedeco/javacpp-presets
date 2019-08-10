@@ -222,7 +222,6 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * that time,
      * the decoder reorders values as needed and sets AVFrame.reordered_opaque
      * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
-     * @deprecated in favor of pkt_pts
      */
     public native @Cast("int64_t") long reordered_opaque(); public native AVFrame reordered_opaque(long setter);
 
@@ -358,6 +357,8 @@ public static final int AV_FRAME_FLAG_DISCARD =   (1 << 2);
     public native int decode_error_flags(); public native AVFrame decode_error_flags(int setter);
 public static final int FF_DECODE_ERROR_INVALID_BITSTREAM =   1;
 public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
+public static final int FF_DECODE_ERROR_CONCEALMENT_ACTIVE =  4;
+public static final int FF_DECODE_ERROR_DECODE_SLICES =       8;
 
     /**
      * number of audio channels, only used for audio.

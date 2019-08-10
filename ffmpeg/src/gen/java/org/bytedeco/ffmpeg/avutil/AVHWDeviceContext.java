@@ -91,7 +91,7 @@ public class AVHWDeviceContext extends Pointer {
         private native void allocate();
         public native void call(AVHWDeviceContext ctx);
     }
-    public native Free_AVHWDeviceContext free(); public native AVHWDeviceContext free(Free_AVHWDeviceContext setter);
+    public native @Name("free") Free_AVHWDeviceContext _free(); public native AVHWDeviceContext _free(Free_AVHWDeviceContext setter);
 
     /**
      * Arbitrary user data, to be used e.g. by the free() callback.

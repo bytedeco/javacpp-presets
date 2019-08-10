@@ -87,7 +87,7 @@ public class AVHWFramesContext extends Pointer {
         private native void allocate();
         public native void call(AVHWFramesContext ctx);
     }
-    public native Free_AVHWFramesContext free(); public native AVHWFramesContext free(Free_AVHWFramesContext setter);
+    public native @Name("free") Free_AVHWFramesContext _free(); public native AVHWFramesContext _free(Free_AVHWFramesContext setter);
 
     /**
      * Arbitrary user data, to be used e.g. by the free() callback.

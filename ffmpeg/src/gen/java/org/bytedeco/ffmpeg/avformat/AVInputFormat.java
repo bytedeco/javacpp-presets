@@ -53,7 +53,7 @@ public class AVInputFormat extends Pointer {
 
     /**
      * Can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_SHOW_IDS,
-     * AVFMT_GENERIC_INDEX, AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH,
+     * AVFMT_NOTIMESTAMPS, AVFMT_GENERIC_INDEX, AVFMT_TS_DISCONT, AVFMT_NOBINSEARCH,
      * AVFMT_NOGENSEARCH, AVFMT_NO_BYTE_SEEK, AVFMT_SEEK_TO_PTS.
      */
     public native int flags(); public native AVInputFormat flags(int setter);
@@ -108,7 +108,7 @@ public class AVInputFormat extends Pointer {
         public    Read_probe_AVProbeData(Pointer p) { super(p); }
         protected Read_probe_AVProbeData() { allocate(); }
         private native void allocate();
-        public native int call(AVProbeData arg0);
+        public native int call(@Const AVProbeData arg0);
     }
     public native Read_probe_AVProbeData read_probe(); public native AVInputFormat read_probe(Read_probe_AVProbeData setter);
 

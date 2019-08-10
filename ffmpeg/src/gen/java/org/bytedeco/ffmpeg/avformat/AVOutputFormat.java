@@ -78,6 +78,15 @@ public class AVOutputFormat extends Pointer {
      * New public fields should be added right above.
      *****************************************************************
      */
+    /**
+     * The ff_const59 define is not part of the public API and will
+     * be removed without further warning.
+     */
+// #if FF_API_AVIOFORMAT
+// #define ff_const59
+// #else
+// #define ff_const59 const
+// #endif
     public native AVOutputFormat next(); public native AVOutputFormat next(AVOutputFormat setter);
     /**
      * size of private data so that it can be allocated in the wrapper

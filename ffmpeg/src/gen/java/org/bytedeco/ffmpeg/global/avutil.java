@@ -935,10 +935,10 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * }</pre>
  *
  * @param ptr [in,out]      Already allocated buffer, or {@code NULL}
- * @param size [in,out]     Pointer to current size of buffer {@code ptr}. {@code *size} is
- *                         changed to {@code min_size} in case of success or 0 in
- *                         case of failure
- * @param min_size [in] New size of buffer {@code ptr}
+ * @param size [in,out]     Pointer to the size of buffer {@code ptr}. {@code *size} is
+ *                         updated to the new allocated size, in particular 0
+ *                         in case of failure.
+ * @param min_size [in] Desired minimal size of buffer {@code ptr}
  * @return {@code ptr} if the buffer is large enough, a pointer to newly reallocated
  *         buffer if the buffer was not large enough, or {@code NULL} in case of
  *         error
@@ -971,10 +971,10 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * @param ptr [in,out]      Pointer to pointer to an already allocated buffer.
  *                         {@code *ptr} will be overwritten with pointer to new
  *                         buffer on success or {@code NULL} on failure
- * @param size [in,out]     Pointer to current size of buffer {@code *ptr}. {@code *size} is
- *                         changed to {@code min_size} in case of success or 0 in
- *                         case of failure
- * @param min_size [in] New size of buffer {@code *ptr}
+ * @param size [in,out]     Pointer to the size of buffer {@code *ptr}. {@code *size} is
+ *                         updated to the new allocated size, in particular 0
+ *                         in case of failure.
+ * @param min_size [in] Desired minimal size of buffer {@code *ptr}
  * @see av_realloc()
  * @see av_fast_mallocz()
  */
@@ -994,10 +994,10 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * @param ptr [in,out]      Pointer to pointer to an already allocated buffer.
  *                         {@code *ptr} will be overwritten with pointer to new
  *                         buffer on success or {@code NULL} on failure
- * @param size [in,out]     Pointer to current size of buffer {@code *ptr}. {@code *size} is
- *                         changed to {@code min_size} in case of success or 0 in
- *                         case of failure
- * @param min_size [in] New size of buffer {@code *ptr}
+ * @param size [in,out]     Pointer to the size of buffer {@code *ptr}. {@code *size} is
+ *                         updated to the new allocated size, in particular 0
+ *                         in case of failure.
+ * @param min_size [in] Desired minimal size of buffer {@code *ptr}
  * @see av_fast_malloc()
  */
 @NoException public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
@@ -2791,8 +2791,22 @@ public static final int
     /** IEEE-754 single precision Y, 32bpp, little-endian */
     AV_PIX_FMT_GRAYF32LE = AV_PIX_FMT_GBRP + 113,
 
+    /** planar YUV 4:2:2,24bpp, (1 Cr & Cb sample per 2x1 Y samples), 12b alpha, big-endian */
+    AV_PIX_FMT_YUVA422P12BE = AV_PIX_FMT_GBRP + 114,
+    /** planar YUV 4:2:2,24bpp, (1 Cr & Cb sample per 2x1 Y samples), 12b alpha, little-endian */
+    AV_PIX_FMT_YUVA422P12LE = AV_PIX_FMT_GBRP + 115,
+    /** planar YUV 4:4:4,36bpp, (1 Cr & Cb sample per 1x1 Y samples), 12b alpha, big-endian */
+    AV_PIX_FMT_YUVA444P12BE = AV_PIX_FMT_GBRP + 116,
+    /** planar YUV 4:4:4,36bpp, (1 Cr & Cb sample per 1x1 Y samples), 12b alpha, little-endian */
+    AV_PIX_FMT_YUVA444P12LE = AV_PIX_FMT_GBRP + 117,
+
+    /** planar YUV 4:4:4, 24bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V) */
+    AV_PIX_FMT_NV24 = AV_PIX_FMT_GBRP + 118,
+    /** as above, but U and V bytes are swapped */
+    AV_PIX_FMT_NV42 = AV_PIX_FMT_GBRP + 119,
+
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 114;
+    AV_PIX_FMT_NB = AV_PIX_FMT_GBRP + 120;
 
 // #if AV_HAVE_BIGENDIAN
 // #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
@@ -2927,6 +2941,10 @@ public static native @MemberGetter int AV_PIX_FMT_YUVA422P10();
 public static final int AV_PIX_FMT_YUVA422P10 = AV_PIX_FMT_YUVA422P10();
 public static native @MemberGetter int AV_PIX_FMT_YUVA444P10();
 public static final int AV_PIX_FMT_YUVA444P10 = AV_PIX_FMT_YUVA444P10();
+public static native @MemberGetter int AV_PIX_FMT_YUVA422P12();
+public static final int AV_PIX_FMT_YUVA422P12 = AV_PIX_FMT_YUVA422P12();
+public static native @MemberGetter int AV_PIX_FMT_YUVA444P12();
+public static final int AV_PIX_FMT_YUVA444P12 = AV_PIX_FMT_YUVA444P12();
 public static native @MemberGetter int AV_PIX_FMT_YUVA420P16();
 public static final int AV_PIX_FMT_YUVA420P16 = AV_PIX_FMT_YUVA420P16();
 public static native @MemberGetter int AV_PIX_FMT_YUVA422P16();
@@ -3280,7 +3298,20 @@ public static final int
      * The timecode format is described in the av_timecode_get_smpte_from_framenum()
      * function in libavutil/timecode.c.
      */
-    AV_FRAME_DATA_S12M_TIMECODE = 18;
+    AV_FRAME_DATA_S12M_TIMECODE = 18,
+
+    /**
+     * HDR dynamic metadata associated with a video frame. The payload is
+     * an AVDynamicHDRPlus type and contains information for color
+     * volume transform - application 4 of SMPTE 2094-40:2016 standard.
+     */
+    AV_FRAME_DATA_DYNAMIC_HDR_PLUS = 19,
+
+    /**
+     * Regions Of Interest, the data is an array of AVRegionOfInterest type, the number of
+     * array element is implied by AVFrameSideData.size / AVRegionOfInterest.self_size.
+     */
+    AV_FRAME_DATA_REGIONS_OF_INTEREST = 20;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3292,6 +3323,9 @@ public static final int
     AV_AFD_16_9_SP_14_9 = 14,
     AV_AFD_SP_4_3       = 15;
 // Targeting ../avutil/AVFrameSideData.java
+
+
+// Targeting ../avutil/AVRegionOfInterest.java
 
 
 // Targeting ../avutil/AVFrame.java
@@ -6537,7 +6571,7 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
 /* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "4.1.4";
+public static final String FFMPEG_VERSION = "4.2";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

@@ -556,15 +556,19 @@ public static final int FF_MB_DECISION_RD =     2;
 
     /**
      * custom intra quantization matrix
-     * - encoding: Set by user, can be NULL.
-     * - decoding: Set by libavcodec.
+     * Must be allocated with the av_malloc() family of functions, and will be freed in
+     * avcodec_free_context().
+     * - encoding: Set/allocated by user, freed by libavcodec. Can be NULL.
+     * - decoding: Set/allocated/freed by libavcodec.
      */
     public native @Cast("uint16_t*") ShortPointer intra_matrix(); public native AVCodecContext intra_matrix(ShortPointer setter);
 
     /**
      * custom inter quantization matrix
-     * - encoding: Set by user, can be NULL.
-     * - decoding: Set by libavcodec.
+     * Must be allocated with the av_malloc() family of functions, and will be freed in
+     * avcodec_free_context().
+     * - encoding: Set/allocated by user, freed by libavcodec. Can be NULL.
+     * - decoding: Set/allocated/freed by libavcodec.
      */
     public native @Cast("uint16_t*") ShortPointer inter_matrix(); public native AVCodecContext inter_matrix(ShortPointer setter);
 
@@ -1215,7 +1219,10 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
     /**
      * opaque 64-bit number (generally a PTS) that will be reordered and
      * output in AVFrame.reordered_opaque
-     * - encoding: unused
+     * - encoding: Set by libavcodec to the reordered_opaque of the input
+     *             frame corresponding to the last returned packet. Only
+     *             supported by encoders with the
+     *             AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE capability.
      * - decoding: Set by user.
      */
     public native @Cast("int64_t") long reordered_opaque(); public native AVCodecContext reordered_opaque(long setter);
@@ -1533,6 +1540,16 @@ public static final int FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS =                0xc3;
 public static final int FF_PROFILE_MJPEG_JPEG_LS =                         0xf7;
 
 public static final int FF_PROFILE_SBC_MSBC =                         1;
+
+public static final int FF_PROFILE_PRORES_PROXY =     0;
+public static final int FF_PROFILE_PRORES_LT =        1;
+public static final int FF_PROFILE_PRORES_STANDARD =  2;
+public static final int FF_PROFILE_PRORES_HQ =        3;
+public static final int FF_PROFILE_PRORES_4444 =      4;
+public static final int FF_PROFILE_PRORES_XQ =        5;
+
+public static final int FF_PROFILE_ARIB_PROFILE_A = 0;
+public static final int FF_PROFILE_ARIB_PROFILE_C = 1;
 
     /**
      * level
@@ -1873,4 +1890,12 @@ public static final int FF_SUB_TEXT_FMT_ASS_WITH_TIMINGS = 1;
      * used as reference pictures).
      */
     public native int extra_hw_frames(); public native AVCodecContext extra_hw_frames(int setter);
+
+    /**
+     * The percentage of damaged samples to discard a frame.
+     *
+     * - decoding: set by user
+     * - encoding: unused
+     */
+    public native int discard_damaged_percentage(); public native AVCodecContext discard_damaged_percentage(int setter);
 }
