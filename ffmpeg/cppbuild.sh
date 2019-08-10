@@ -23,13 +23,13 @@ OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
 OPENSSL=openssl-1.1.1c
 OPENH264_VERSION=2.0.0
-X265=3.1.1
-VPX_VERSION=1.8.0
+X265=3.1.2
+VPX_VERSION=1.8.1
 ALSA_VERSION=1.1.9
 FREETYPE_VERSION=2.10.1
 MFX_VERSION=1.25
 NVCODEC_VERSION=9.0.18.1
-FFMPEG_VERSION=4.1.4
+FFMPEG_VERSION=4.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -186,7 +186,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ || true
         sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
         sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
@@ -199,7 +199,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -299,7 +299,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ || true
         sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
         sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
@@ -312,7 +312,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -413,7 +413,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -422,7 +422,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -522,7 +522,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86_64-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -531,7 +531,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -1162,10 +1162,10 @@ EOF
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec
         else
           echo "configure ffmpeg cross compile"
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec
         fi
         make -j $MAKEJ
         make install

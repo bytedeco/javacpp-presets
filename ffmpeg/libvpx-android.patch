@@ -1,59 +1,42 @@
-diff -ruN libvpx-1.8.0/build/make/configure.sh libvpx-1.8.0-android/build/make/configure.sh
---- libvpx-1.8.0/build/make/configure.sh	2019-02-05 02:02:33.000000000 +0900
-+++ libvpx-1.8.0-android/build/make/configure.sh	2019-02-13 21:25:00.403389514 +0900
-@@ -1105,45 +1105,24 @@
+diff -ruN libvpx-1.8.1/build/make/configure.sh libvpx-1.8.1-android/build/make/configure.sh
+--- libvpx-1.8.1/build/make/configure.sh	2019-07-16 06:55:33.000000000 +0900
++++ libvpx-1.8.1-android/build/make/configure.sh	2019-08-10 13:40:49.859895140 +0900
+@@ -1098,10 +1098,30 @@
            ;;
  
          android*)
--          if [ -n "${sdk_path}" ]; then
--            SDK_PATH=${sdk_path}
--            COMPILER_LOCATION=`find "${SDK_PATH}" \
--              -name "arm-linux-androideabi-gcc*" -print -quit`
--            TOOLCHAIN_PATH=${COMPILER_LOCATION%/*}/arm-linux-androideabi-
--            CC=${TOOLCHAIN_PATH}gcc
--            CXX=${TOOLCHAIN_PATH}g++
+-          echo "Assuming standalone build with NDK toolchain."
+-          echo "See build/make/Android.mk for details."
+-          check_add_ldflags -static
+-          soft_enable unit_tests
 +          if [ -n "${ANDROID_NDK}" ]; then
 +            TOOLCHAIN_PATH=${ANDROID_PREFIX}-
 +            CC=${ANDROID_CC}
 +            CXX=${ANDROID_CC}++
-             AR=${TOOLCHAIN_PATH}ar
--            LD=${TOOLCHAIN_PATH}gcc
++            AR=${TOOLCHAIN_PATH}ar
 +            LD=${ANDROID_CC}
-             AS=${TOOLCHAIN_PATH}as
-             STRIP=${TOOLCHAIN_PATH}strip
-             NM=${TOOLCHAIN_PATH}nm
--
--            if [ -z "${alt_libc}" ]; then
--              alt_libc=`find "${SDK_PATH}" -name arch-arm -print | \
--                awk '{n = split($0,a,"/"); \
--                split(a[n-1],b,"-"); \
--                print $0 " " b[2]}' | \
--                sort -g -k 2 | \
--                awk '{ print $1 }' | tail -1`
--            fi
++            AS=${TOOLCHAIN_PATH}as
++            STRIP=${TOOLCHAIN_PATH}strip
++            NM=${TOOLCHAIN_PATH}nm
 +            alt_libc=$ANDROID_ROOT
++
++            if [ -d "${alt_libc}" ]; then
++              add_cflags "--sysroot=${alt_libc}"
++              add_ldflags "--sysroot=${alt_libc}"
++            fi
++
++            enable_feature pic
++            soft_enable realtime_only
++          else
++            echo "Assuming standalone build with NDK toolchain."
++            echo "See build/make/Android.mk for details."
++            check_add_ldflags -static
++            soft_enable unit_tests
++          fi
+           ;;
  
-             if [ -d "${alt_libc}" ]; then
-               add_cflags "--sysroot=${alt_libc}"
-               add_ldflags "--sysroot=${alt_libc}"
-             fi
- 
--            # linker flag that routes around a CPU bug in some
--            # Cortex-A8 implementations (NDK Dev Guide)
--            add_ldflags "-Wl,--fix-cortex-a8"
--
-             enable_feature pic
-             soft_enable realtime_only
--            if [ ${tgt_isa} = "armv7" ]; then
--              soft_enable runtime_cpu_detect
--            fi
--            if enabled runtime_cpu_detect; then
--              add_cflags "-I${SDK_PATH}/sources/android/cpufeatures"
--            fi
-           else
-             echo "Assuming standalone build with NDK toolchain."
-             echo "See build/make/Android.mk for details."
-@@ -1298,8 +1277,32 @@
+         darwin*)
+@@ -1252,8 +1272,32 @@
        ;;
      x86*)
        case  ${tgt_os} in

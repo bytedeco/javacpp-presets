@@ -476,6 +476,11 @@ public static final int
     AV_CODEC_ID_MWSC = 0x8000 + 38,
     AV_CODEC_ID_WCMV = 0x8000 + 39,
     AV_CODEC_ID_RASC = 0x8000 + 40,
+    AV_CODEC_ID_HYMT = 0x8000 + 41,
+    AV_CODEC_ID_ARBC = 0x8000 + 42,
+    AV_CODEC_ID_AGM = 0x8000 + 43,
+    AV_CODEC_ID_LSCR = 0x8000 + 44,
+    AV_CODEC_ID_VP4 = 0x8000 + 45,
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -561,6 +566,7 @@ public static final int
     AV_CODEC_ID_ADPCM_AICA = 0x11800 + 7,
     AV_CODEC_ID_ADPCM_IMA_DAT4 = 0x11800 + 8,
     AV_CODEC_ID_ADPCM_MTAF = 0x11800 + 9,
+    AV_CODEC_ID_ADPCM_AGM = 0x11800 + 10,
 
     /* AMR */
     AV_CODEC_ID_AMR_NB = 0x12000,
@@ -672,6 +678,7 @@ public static final int
     AV_CODEC_ID_APTX_HD = 0x15800 + 18,
     AV_CODEC_ID_SBC = 0x15800 + 19,
     AV_CODEC_ID_ATRAC9 = 0x15800 + 20,
+    AV_CODEC_ID_HCOM = 0x15800 + 21,
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -703,6 +710,7 @@ public static final int
     AV_CODEC_ID_ASS = 0x17800 + 13,
     AV_CODEC_ID_HDMV_TEXT_SUBTITLE = 0x17800 + 14,
     AV_CODEC_ID_TTML = 0x17800 + 15,
+    AV_CODEC_ID_ARIB_CAPTION = 0x17800 + 16,
 
     /* other specific kind of codecs (generally used for attachments) */
     /** A dummy ID pointing at the start of various fake codecs. */
@@ -856,6 +864,11 @@ public static final int AV_CODEC_FLAG_OUTPUT_CORRUPT =  (1 <<  3);
  * Use qpel MC.
  */
 public static final int AV_CODEC_FLAG_QPEL =            (1 <<  4);
+/**
+ * Don't output frames whose parameters differ from first
+ * decoded frame in stream.
+ */
+public static final int AV_CODEC_FLAG_DROPCHANGED =     (1 <<  5);
 /**
  * Use internal 2pass ratecontrol in first pass mode.
  */
@@ -1074,6 +1087,13 @@ public static final int AV_CODEC_CAP_HARDWARE =            (1 << 18);
  * implementation provides some sort of internal fallback.
  */
 public static final int AV_CODEC_CAP_HYBRID =              (1 << 19);
+
+/**
+ * This codec takes the reordered_opaque field from input AVFrames
+ * and returns it in the corresponding field in AVCodecContext after
+ * encoding.
+ */
+public static final int AV_CODEC_CAP_ENCODER_REORDERED_OPAQUE = (1 << 20);
 // Targeting ../avcodec/AVPanScan.java
 
 
@@ -1871,7 +1891,7 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  * Initialize a reference-counted packet from av_malloc()ed data.
  *
  * @param pkt packet to be initialized. This function will set the data, size,
- *        buf and destruct fields, all others are left untouched.
+ *        and buf fields, all others are left untouched.
  * @param data Data allocated by av_malloc() to be used as packet data. If this
  *        function returns successfully, the data is owned by the underlying AVBuffer.
  *        The caller may not access the data through other means.
@@ -2409,6 +2429,9 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
  *      AVERROR_EOF:       the decoder has been fully flushed, and there will be
  *                         no more output frames
  *      AVERROR(EINVAL):   codec not opened, or it is an encoder
+ *      AVERROR_INPUT_CHANGED:   current decoded frame has changed parameters
+ *                               with respect to first decoded frame. Applicable
+ *                               when flag AV_CODEC_FLAG_DROPCHANGED is set.
  *      other negative values: legitimate decoding errors
  */
 @NoException public static native int avcodec_receive_frame(AVCodecContext avctx, AVFrame frame);

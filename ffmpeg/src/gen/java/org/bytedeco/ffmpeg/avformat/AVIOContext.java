@@ -150,7 +150,7 @@ public class AVIOContext extends Pointer {
     public native Seek_Pointer_long_int seek(); public native AVIOContext seek(Seek_Pointer_long_int setter);
     /** position in the file of the current buffer */
     public native @Cast("int64_t") long pos(); public native AVIOContext pos(long setter);
-    /** true if eof reached */
+    /** true if was unable to read due to error or eof */
     public native int eof_reached(); public native AVIOContext eof_reached(int setter);
     /** true if open for writing */
     public native int write_flag(); public native AVIOContext write_flag(int setter);
