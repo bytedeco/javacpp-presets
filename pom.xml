@@ -1072,6 +1072,8 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1120,6 +1122,8 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1168,6 +1172,8 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1221,6 +1227,8 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1412,6 +1420,8 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>

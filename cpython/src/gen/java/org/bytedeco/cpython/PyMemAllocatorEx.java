@@ -69,5 +69,5 @@ public class PyMemAllocatorEx extends Pointer {
         private native void allocate();
         public native void call(Pointer ctx, Pointer ptr);
     }
-    public native Free_Pointer_Pointer free(); public native PyMemAllocatorEx free(Free_Pointer_Pointer setter);
+    public native @Name("free") Free_Pointer_Pointer _free(); public native PyMemAllocatorEx _free(Free_Pointer_Pointer setter);
 }

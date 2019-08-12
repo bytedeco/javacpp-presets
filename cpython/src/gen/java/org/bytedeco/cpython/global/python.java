@@ -1990,8 +1990,7 @@ public static final long SIZEOF_PY_UHASH_T = SIZEOF_PY_UHASH_T();
 // #endif
 
 /* Largest possible value of size_t. */
-public static native @MemberGetter long PY_SIZE_MAX();
-public static final long PY_SIZE_MAX = PY_SIZE_MAX();
+// #define PY_SIZE_MAX SIZE_MAX
 
 /* Largest positive value of type Py_ssize_t. */
 public static native @MemberGetter long PY_SSIZE_T_MAX();
@@ -14532,33 +14531,6 @@ public static final int Py_DTST_NAN = 2;
 
 // #ifndef Py_LIMITED_API
 // #ifndef PY_NO_SHORT_FLOAT_REPR
-// #ifdef __cplusplus
-// #endif
-
-@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") PointerPointer ptr);
-@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr BytePointer ptr);
-@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
-@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr byte[] ptr);
-@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr BytePointer ptr);
-@NoException public static native double _Py_dg_strtod(@Cast("const char*") BytePointer str, @Cast("char**") @ByPtrPtr ByteBuffer ptr);
-@NoException public static native double _Py_dg_strtod(String str, @Cast("char**") @ByPtrPtr byte[] ptr);
-@NoException public static native @Cast("char*") BytePointer _Py_dg_dtoa(double d, int mode, int ndigits,
-                        IntPointer decpt, IntPointer sign, @Cast("char**") PointerPointer rve);
-@NoException public static native @Cast("char*") BytePointer _Py_dg_dtoa(double d, int mode, int ndigits,
-                        IntPointer decpt, IntPointer sign, @Cast("char**") @ByPtrPtr BytePointer rve);
-@NoException public static native @Cast("char*") ByteBuffer _Py_dg_dtoa(double d, int mode, int ndigits,
-                        IntBuffer decpt, IntBuffer sign, @Cast("char**") @ByPtrPtr ByteBuffer rve);
-@NoException public static native @Cast("char*") byte[] _Py_dg_dtoa(double d, int mode, int ndigits,
-                        int[] decpt, int[] sign, @Cast("char**") @ByPtrPtr byte[] rve);
-@NoException public static native void _Py_dg_freedtoa(@Cast("char*") BytePointer s);
-@NoException public static native void _Py_dg_freedtoa(@Cast("char*") ByteBuffer s);
-@NoException public static native void _Py_dg_freedtoa(@Cast("char*") byte[] s);
-@NoException public static native double _Py_dg_stdnan(int sign);
-@NoException public static native double _Py_dg_infinity(int sign);
-
-
-// #ifdef __cplusplus
-// #endif
 // #endif
 // #endif
 

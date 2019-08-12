@@ -180,10 +180,10 @@ public class python implements InfoMapper {
         infoMap.put(new Info("Python-ast.h").linePatterns("#define Module.*",
                                                           "int PyAST_Check.*").skip())
 
-               .put(new Info("COMPILER", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
+               .put(new Info("COMPILER", "TIMEMODULE_LIB", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
                              "copysign", "hypot", "timezone", "daylight", "tzname",
                              "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented",
-                             "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T",
+                             "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T", "PY_SIZE_MAX",
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "_Py_HOT_FUNCTION", "_Py_NO_INLINE", "PyMODINIT_FUNC", "Py_VA_COPY",
                              "__inline__", "Py_HUGE_VAL", "Py_FORCE_DOUBLE", "Py_NAN",
                              "PyMem_Del", "PyMem_DEL", "PyDescr_COMMON", "PY_UNICODE_TYPE",
@@ -222,11 +222,10 @@ public class python implements InfoMapper {
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
-               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD").cppTypes().define(true))
+               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD", "PY_NO_SHORT_FLOAT_REPR").cppTypes().define(true))
 
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX",
-                             "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T",
-                             "PY_SIZE_MAX", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
+                             "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
                              "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE").cppTypes("long long").translate(false))
 
                .put(new Info("PyHash_FuncDef").purify())

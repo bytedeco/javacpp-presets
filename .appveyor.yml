@@ -22,6 +22,8 @@ environment:
       OS: windows-x86
     - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86
+    - PROJ: "cpython,numpy"
+      OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
     - PROJ: "leptonica,tesseract"
