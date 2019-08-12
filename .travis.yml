@@ -181,6 +181,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=cpython,numpy OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=llvm OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -211,6 +215,10 @@ matrix:
         script: ./ci/install-arm.sh
       - os: linux
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=cpython,numpy OS=linux-arm64
         install: true
         script: ./ci/install-arm.sh
       - os: linux
@@ -248,6 +256,10 @@ matrix:
         script: ./ci/install-ppc.sh
       - os: linux
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-ppc64le
+        install: true
+        script: ./ci/install-ppc.sh
+      - os: linux
+        env: PROJ=cpython,numpy OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -293,6 +305,10 @@ matrix:
         script: ./ci/install-travis.sh
       - os: linux
         env: PROJ=arpack-ng,cminpack,fftw,gsl OS=linux-x86
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
+        env: PROJ=cpython,numpy OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux

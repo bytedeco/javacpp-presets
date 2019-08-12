@@ -178,7 +178,7 @@ if [ "$OS" == "linux-armhf" ]; then
     sudo dpkg --add-architecture i386
     sudo apt-get update
     sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev zlib1g
+    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libssl-dev zlib1g-dev
     curl -L https://github.com/raspberrypi/tools/archive/master.tar.gz -o $HOME/tools-master.tar.gz
     curl -L https://github.com/raspberrypi/userland/archive/master.tar.gz -o $HOME/userland-master.tar.gz
     mkdir -p $HOME/tools $HOME/userland
@@ -186,7 +186,7 @@ if [ "$OS" == "linux-armhf" ]; then
     tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
     export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
     export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-    export BUILD_OPTIONS=-Djava.library.path=
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/lib/
     pushd $HOME/userland
     bash buildme
     popd

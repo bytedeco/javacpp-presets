@@ -76,5 +76,5 @@ public class PyObjectArenaAllocator extends Pointer {
         private native void allocate();
         public native void call(Pointer ctx, Pointer ptr, @Cast("size_t") long size);
     }
-    public native Free_Pointer_Pointer_long free(); public native PyObjectArenaAllocator free(Free_Pointer_Pointer_long setter);
+    public native @Name("free") Free_Pointer_Pointer_long _free(); public native PyObjectArenaAllocator _free(Free_Pointer_Pointer_long setter);
 }

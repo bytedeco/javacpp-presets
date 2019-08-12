@@ -29,7 +29,7 @@ public class NpyAuxData extends PyObject {
         return (NpyAuxData)super.position(position);
     }
 
-    public native NpyAuxData_FreeFunc free(); public native NpyAuxData free(NpyAuxData_FreeFunc setter);
+    public native @Name("free") NpyAuxData_FreeFunc _free(); public native NpyAuxData _free(NpyAuxData_FreeFunc setter);
     public native NpyAuxData_CloneFunc clone(); public native NpyAuxData clone(NpyAuxData_CloneFunc setter);
     /* To allow for a bit of expansion without breaking the ABI */
     public native Pointer reserved(int i); public native NpyAuxData reserved(int i, Pointer setter);
