@@ -16,7 +16,8 @@ import org.bytedeco.javacpp.tools.*;
                         "windows-x86_64"
                     },
                     include = "helloworld.h",
-                    link = "helloworld"
+                    link = "helloworld",
+		    preload = "libhelloworld-0"
             )
         }
 )
