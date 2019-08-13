@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gsl</groupId>
     <artifactId>demo</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Demo</exec.mainClass>
     </properties>
@@ -42,39 +42,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.5-1.5.1-SNAPSHOT</version>
+            <version>2.5-1.5.2-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.4-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86_64-redist</classifier>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2019.4-1.5.2-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

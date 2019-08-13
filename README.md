@@ -24,27 +24,27 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5</version>
+    <version>${moduleVersion}-1.5.1</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5'
+    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.1'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.1")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.1"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
@@ -102,15 +102,15 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.1  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.1.0  https://opencv.org/releases.html
- * FFmpeg 4.1.x  http://ffmpeg.org/download.html
+ * OpenCV 4.1.1  https://opencv.org/releases.html
+ * FFmpeg 4.2.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
  * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
- * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
+ * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.1  https://github.com/IntelRealSense/librealsense
@@ -120,32 +120,32 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.4  https://software.intel.com/intel-mkl
- * MKL-DNN 0.20-rc  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.20.1  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.6  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.7.3  https://www.python.org/downloads/
- * NumPy 1.16.4  https://github.com/numpy/numpy
- * LLVM 8.0.0  http://llvm.org/releases/download.html
+ * CPython 3.7.4  https://www.python.org/downloads/
+ * NumPy 1.17.0  https://github.com/numpy/numpy
+ * LLVM 8.0.1  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
- * Tesseract 4.1.0-rc4  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.1.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.1 Update 1  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6  https://developer.nvidia.com/cudnn
    * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.5.0.rc1  https://github.com/dmlc/mxnet
+ * MXNet 1.5.0  https://github.com/dmlc/mxnet
  * TensorFlow 1.14.0  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.22.0  https://github.com/NervanaSystems/ngraph
+ * nGraph 0.24.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.13.0  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
- * cpu_features 0.3.0  https://github.com/google/cpu_features
+ * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/

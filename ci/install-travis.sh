@@ -58,7 +58,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     fi
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
@@ -174,30 +174,32 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
 fi
 
 if [ "$OS" == "linux-armhf" ]; then
-	echo "Setting up tools for linux-armhf build"
-	sudo dpkg --add-architecture i386
-	sudo apt-get update
-	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-	sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev zlib1g
-	git -C $HOME clone https://github.com/raspberrypi/tools
-	git -C $HOME clone https://github.com/raspberrypi/userland
-	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
-	export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-	export BUILD_OPTIONS=-Djava.library.path=
-	pushd $HOME/userland
-	bash buildme
-	popd
+    echo "Setting up tools for linux-armhf build"
+    sudo dpkg --add-architecture i386
+    sudo apt-get update
+    sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
+    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libssl-dev zlib1g-dev
+    curl -L https://github.com/raspberrypi/tools/archive/master.tar.gz -o $HOME/tools-master.tar.gz
+    curl -L https://github.com/raspberrypi/userland/archive/master.tar.gz -o $HOME/userland-master.tar.gz
+    mkdir -p $HOME/tools $HOME/userland
+    tar xzf $HOME/tools-master.tar.gz --strip-components=1 -C $HOME/tools
+    tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
+    export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+    export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/lib/
+    pushd $HOME/userland
+    bash buildme
+    popd
 
-	if [[ "$PROJ" =~ flycapture ]]; then
-          if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+    if [[ "$PROJ" =~ flycapture ]]; then
+        if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
-          else
+        else
             echo "Downloading flycap-armhf as not found in cache or too small" 
             python $TRAVIS_BUILD_DIR/ci/gDownload.py 16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
-          fi
-	  cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
         fi
-
+        cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
+    fi
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then

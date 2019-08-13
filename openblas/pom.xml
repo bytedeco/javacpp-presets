@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -60,6 +60,13 @@
               <outputDirectory>${project.basedir}/src/gen/java</outputDirectory>
               <classOrPackageName>org.bytedeco.openblas.presets.*</classOrPackageName>
             </configuration>
+          </execution>
+          <execution>
+            <id>javacpp-validate-package</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

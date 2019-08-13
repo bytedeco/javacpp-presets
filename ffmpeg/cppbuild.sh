@@ -18,18 +18,18 @@ NASM_VERSION=2.14
 ZLIB=zlib-1.2.11
 LAME=lame-3.100
 SPEEX=speex-1.2.0
-OPUS=opus-1.3
+OPUS=opus-1.3.1
 OPENCORE_AMR=opencore-amr-0.1.5
 VO_AMRWBENC=vo-amrwbenc-0.1.3
-OPENSSL=openssl-1.1.1b
-OPENH264_VERSION=1.8.0
-X265=3.0
-VPX_VERSION=1.8.0
-ALSA_VERSION=1.1.8
-FREETYPE_VERSION=2.10.0
+OPENSSL=openssl-1.1.1c
+OPENH264_VERSION=2.0.0
+X265=3.1.2
+VPX_VERSION=1.8.1
+ALSA_VERSION=1.1.9
+FREETYPE_VERSION=2.10.1
 MFX_VERSION=1.25
 NVCODEC_VERSION=9.0.18.1
-FFMPEG_VERSION=4.1.3
+FFMPEG_VERSION=4.2
 download https://download.videolan.org/contrib/nasm/nasm-$NASM_VERSION.tar.gz nasm-$NASM_VERSION.tar.gz
 download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
 download http://downloads.sourceforge.net/project/lame/lame/3.100/$LAME.tar.gz $LAME.tar.gz
@@ -43,7 +43,7 @@ download https://download.videolan.org/x264/snapshots/last_stable_x264.tar.bz2 l
 download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
-download https://ftp.osuosl.org/pub/blfs/conglomeration/freetype/freetype-$FREETYPE_VERSION.tar.bz2 freetype-$FREETYPE_VERSION.tar.bz2
+download https://ftp.osuosl.org/pub/blfs/conglomeration/freetype/freetype-$FREETYPE_VERSION.tar.xz freetype-$FREETYPE_VERSION.tar.xz
 download https://github.com/lu-zero/mfx_dispatch/archive/$MFX_VERSION.tar.gz mfx_dispatch-$MFX_VERSION.tar.gz
 download https://github.com/FFmpeg/nv-codec-headers/archive/n$NVCODEC_VERSION.tar.gz nv-codec-headers-$NVCODEC_VERSION.tar.gz
 download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -64,7 +64,7 @@ tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
 tar --totals -xjf ../last_stable_x264.tar.bz2
 tar --totals -xzf ../x265-$X265.tar.gz
 tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
-tar --totals -xjf ../freetype-$FREETYPE_VERSION.tar.bz2
+tar --totals -xJf ../freetype-$FREETYPE_VERSION.tar.xz
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -186,7 +186,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ || true
         sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
         sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
@@ -199,7 +199,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=arm --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -299,7 +299,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=arm64-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
         make -j $MAKEJ || true
         sedinplace 's/_neon/_c/g' vpx_dsp_rtcd.h vpx_scale_rtcd.h vp8_rtcd.h vp9_rtcd.h
         sedinplace 's/vp8_loop_filter_mbhs_c/vp8_loop_filter_simple_horizontal_edge_c/g' vp8_rtcd.h
@@ -312,7 +312,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=aarch64 --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -413,7 +413,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -422,7 +422,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -522,7 +522,7 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-android.patch
-        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --sdk-path=$ANDROID_NDK --disable-tools --target=x86_64-android-gcc --as=nasm
+        CFLAGS="$ANDROID_FLAGS" CXXFLAGS="$ANDROID_FLAGS" LDFLAGS="$ANDROID_FLAGS" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --disable-tools --target=x86_64-android-gcc --as=nasm
         make -j $MAKEJ
         make install
         cd ../freetype-$FREETYPE_VERSION
@@ -531,7 +531,7 @@ EOF
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         sedinplace 's/unsigned long int/unsigned int/g' libavdevice/v4l2.c
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ranlib="$ANDROID_PREFIX-ranlib" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' ./configure --prefix=.. $DISABLE $ENABLE --enable-jni --enable-mediacodec --enable-pthreads --enable-cross-compile --cross-prefix="$ANDROID_PREFIX-" --ar="$AR" --ranlib="$RANLIB" --cc="$CC" --strip="$STRIP" --sysroot="$ANDROID_ROOT" --target-os=android --arch=atom --extra-cflags="-I../include/ $ANDROID_FLAGS" --extra-ldflags="-L../lib/ $ANDROID_FLAGS" --extra-libs="$ANDROID_LIBS -lz" --disable-symver
         make -j $MAKEJ
         make install
         ;;
@@ -918,7 +918,7 @@ EOF
         echo "--------------------"
         echo ""
         cd $ZLIB
-        CC="gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
+        CC="aarch64-linux-gnu-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --static
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -927,7 +927,7 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$LAME
-        CC="gcc" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         echo ""
@@ -936,29 +936,29 @@ EOF
         echo "--------------------"
         echo ""
         cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPUS
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$VO_AMRWBENC
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install
         cd ../$OPENSSL
-        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH  "$CFLAGS" no-shared no-afalgeng no-idea no-mdc2 no-rc5 no-zlib no-ssl3 no-ssl3-method enable-rfc3779 enable-cms
+        ./Configure linux-aarch64 -fPIC --prefix=$INSTALL_PATH --cross-compile-prefix=aarch64-linux-gnu- "$CFLAGS" no-shared
         make -s -j $MAKEJ
         make install_sw
         cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=gcc CXX=g++
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. OS=linux ARCH=arm64 USE_ASM=No install-static CC=aarch64-linux-gnu-gcc CXX=aarch64-linux-gnu-g++
         cd ../$X264
-        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl  --disable-cli --enable-asm --host=aarch64-linux --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations"
+        LDFLAGS="-Wl,-z,relro" ./configure --prefix=$INSTALL_PATH --enable-pic --enable-static --disable-shared --disable-opencl --disable-cli --enable-asm --host=aarch64-linux-gnu --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --cross-prefix="aarch64-linux-gnu-"
         make -j $MAKEJ V=0
         make install
         cd ../x265-$X265/build/linux
@@ -966,17 +966,17 @@ EOF
         mkdir -p 8bit 10bit 12bit
 
         cd 12bit
-        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
         make -j $MAKEJ
 
         cd ../10bit
-        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
+        $CMAKE ../../../source -DHIGH_BIT_DEPTH=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF
         make -j $MAKEJ
 
         cd ../8bit
         ln -sf ../10bit/libx265.a libx265_main10.a
         ln -sf ../12bit/libx265.a libx265_main12.a
-        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
+        $CMAKE ../../../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DENABLE_SHARED:BOOL=OFF -DENABLE_LIBNUMA=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv8 -DCMAKE_CXX_FLAGS="$CXXFLAGS" -DCMAKE_C_FLAGS="$CFLAGS" -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_BUILD_TYPE=Release -DENABLE_ASSEMBLY=OFF -DENABLE_CLI=OFF
         make -j $MAKEJ
 
         # rename the 8bit library, then combine all three into libx265.a
@@ -994,19 +994,19 @@ EOF
         cd ../../../
         cd ../libvpx-$VPX_VERSION
         patch -Np1 < ../../../libvpx-linux-arm.patch
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests
+        CROSS=aarch64-linux-gnu- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --disable-unit-tests --target=armv8-linux-gcc
         make -j $MAKEJ
         make install
         cd ../alsa-lib-$ALSA_VERSION/
-        ./configure --host=aarch64-linux --prefix=$INSTALL_PATH --disable-python
+        ./configure --host=aarch64-linux-gnu --prefix=$INSTALL_PATH --disable-python
         make -j $MAKEJ V=0
         make install
         cd ../freetype-$FREETYPE_VERSION
-        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux
+        ./configure --prefix=$INSTALL_PATH --with-bzip2=no --with-harfbuzz=no --with-png=no --enable-static --disable-shared --with-pic --host=aarch64-linux-gnu
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' LD_LIBRARY_PATH=../lib/ CC="gcc" CXX="g++" PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure  --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
+        LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --extra-cflags="$CFLAGS -fno-aggressive-loop-optimizations" --enable-pthreads --cc="aarch64-linux-gnu-gcc" --extra-cflags="-I../include/" --extra-ldflags="-Wl,-z,relro -L../lib/" --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --enable-cross-compile --arch=arm64 --target-os=linux --cross-prefix="aarch64-linux-gnu-"
         make -j $MAKEJ
         make install
         ;;
@@ -1162,10 +1162,10 @@ EOF
         make install 
         cd ../ffmpeg-$FFMPEG_VERSION
         if [[ "$MACHINE_TYPE" =~ ppc64 ]]; then
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl -lz -lm" --disable-altivec
         else
           echo "configure ffmpeg cross compile"
-          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm"
+          LDEXEFLAGS='-Wl,-rpath,\$$ORIGIN/' PKG_CONFIG_PATH=../lib/pkgconfig/:/usr/lib/powerpc64le-linux-gnu/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-pthreads --enable-libxcb --cc="powerpc64le-linux-gnu-gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --enable-cross-compile --target-os=linux --arch=ppc64le-linux --extra-libs="-lstdc++ -lpthread -ldl -lz -lm" --disable-altivec
         fi
         make -j $MAKEJ
         make install

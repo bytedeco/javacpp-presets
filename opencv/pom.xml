@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for OpenCV</name>
 
   <properties>
-    <revision>4.1.0-${project.parent.version}</revision>
+    <revision>4.1.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

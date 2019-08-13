@@ -44,7 +44,7 @@ import org.bytedeco.openblas.presets.*;
  * @author Samuel Audet
  */
 @Properties(inherit = {opencv_highgui.class, hdf5.class, openblas.class}, target = "org.bytedeco.caffe", global = "org.bytedeco.caffe.global.caffe", value = {
-    @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
+    @Platform(value = {"linux", "macosx"}, compiler = "cpp11", define = {"NDEBUG", "CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp",
         "caffe/util/device_alternate.hpp", "google/protobuf/stubs/common.h", "google/protobuf/arena.h", "google/protobuf/descriptor.h", "google/protobuf/message_lite.h", "google/protobuf/message.h", "caffe/common.hpp",
         "google/protobuf/generated_message_table_driven.h", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", /*"caffe/data_reader.hpp",*/ "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
         "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
@@ -65,7 +65,7 @@ import org.bytedeco.openblas.presets.*;
         "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
         "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link = "caffe@.1.0.0", /*resource = {"include", "lib"},*/ includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
-    @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
+    @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV", "USE_CUDNN"}, extension = "-gpu") })
 public class caffe implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "caffe"); }
 
@@ -83,6 +83,8 @@ public class caffe implements LoadEnabled, InfoMapper {
         String[] libs = {"cudart", "cublasLt", "cublas", "curand", "cudnn"};
         for (String lib : libs) {
             switch (platform) {
+                case "linux-arm64":
+                case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
                     lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.1" : "@.10";

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.packageName>mkldnn</javacpp.packageName>
-    <revision>0.20-rc-${project.parent.version}</revision>
+    <revision>0.20.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=4.1.0-rc4
+TESSERACT_VERSION=4.1.0
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -28,6 +28,10 @@ export AUTOCONF=:
 export AUTOHEADER=:
 export AUTOMAKE=:
 export ACLOCAL=:
+
+# Disable external dependencies on libarchive and libtiff
+sedinplace 's/"libarchive"//g' configure
+sedinplace 's/-ltiff//g' src/api/Makefile.in
 
 LEPTONICA_PATH=$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/
 

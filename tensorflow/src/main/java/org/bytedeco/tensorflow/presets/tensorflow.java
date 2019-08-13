@@ -58,7 +58,7 @@ import java.util.List;
  */
 @Properties(value = {
         @Platform(
-                value = {"linux-x86", "macosx", "windows"},
+                value = {"linux", "macosx", "windows"},
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
                 include = {
@@ -150,6 +150,9 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/env.h",
+                        "tensorflow/c/kernels.h",
+                        "tensorflow/c/ops.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -219,13 +222,17 @@ import java.util.List;
                         "tensorflow/cc/ops/standard_ops.h",
                         "tensorflow/cc/ops/const_op.h",
                         "tensorflow/cc/ops/array_ops.h",
+                        "tensorflow/cc/ops/audio_ops.h",
                         "tensorflow/cc/ops/candidate_sampling_ops.h",
                         "tensorflow/cc/ops/control_flow_ops.h",
                         "tensorflow/cc/ops/data_flow_ops.h",
                         "tensorflow/cc/ops/image_ops.h",
                         "tensorflow/cc/ops/io_ops.h",
                         "tensorflow/cc/ops/linalg_ops.h",
+                        "tensorflow/cc/ops/list_ops.h",
                         "tensorflow/cc/ops/logging_ops.h",
+                        "tensorflow/cc/ops/lookup_ops.h",
+                        "tensorflow/cc/ops/manip_ops.h",
                         "tensorflow/cc/ops/math_ops.h",
                         "tensorflow/cc/ops/nn_ops.h",
                         "tensorflow/cc/ops/nn_ops_internal.h",
@@ -239,7 +246,7 @@ import java.util.List;
                         "tensorflow/cc/ops/user_ops.h"},
                 link = "tensorflow_cc@.1", preload = {"iomp5", "mklml", "mklml_intel", "tensorflow_framework"}, preloadresource = "/org/bytedeco/mkldnn/"),
         @Platform(
-                value = {"linux-x86_64", "macosx-x86_64"},
+                value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64"},
                 extension = {"-gpu", "-python", "-python-gpu"},
                 link = "tensorflow_cc#",
                 preload = {"iomp5", "mklml", "mklml_intel", "python3.7m@.1.0!", "python3.7!", "tensorflow_framework", "tensorflow_cc:python/tensorflow/python/_pywrap_tensorflow_internal.so", "tensorflow_cc:libtensorflow_cc.so.1"},
@@ -382,6 +389,9 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/env.h",
+                        "tensorflow/c/kernels.h",
+                        "tensorflow/c/ops.h",
                         "tensorflow/core/framework/op_def_builder.h",
                         "tensorflow/core/framework/op_def_util.h",
                         "tensorflow/core/framework/op.h",
@@ -415,7 +425,7 @@ import java.util.List;
                         "tensorflow/core/protobuf/saver.pb.h",
                         "tensorflow/core/protobuf/meta_graph.pb.h",
                         "tensorflow_adapters.h"},
-                link = "tensorflow_cc@.1", preload = "tensorflow_framework"),
+                link = "tensorflow_cc", preload = "tensorflow_framework"),
         },
         target = "org.bytedeco.tensorflow",
         global = "org.bytedeco.tensorflow.global.tensorflow")
@@ -499,6 +509,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvinfer"};
         for (String lib : libs) {
             switch (platform) {
+                case "linux-arm64":
+                case "linux-ppx64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
                     lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvinfer") ? "@.5" : lib.equals("cudart") ? "@.10.1" : "@.10";
@@ -992,6 +1004,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TFE_MonitoringIntGaugeCell::cell").javaText("public native @MemberGetter @ByRef IntGaugeCell cell();"))
                .put(new Info("TFE_MonitoringStringGaugeCell::cell").javaText("public native @MemberGetter @ByRef StringGaugeCell cell();"))
                .put(new Info("TFE_MonitoringBoolGaugeCell::cell").javaText("public native @MemberGetter @ByRef BoolGaugeCell cell();"))
+               .put(new Info("TF_ShapeInferenceContextDimValueKnown").skip())
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));
 

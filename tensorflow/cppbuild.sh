@@ -145,24 +145,28 @@ fi
 
 case $PLATFORM in
     android-arm)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-arm64)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86_64)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
@@ -306,6 +310,7 @@ cp -r tensorflow/java/src/main/java/* ../java
 cp -r tensorflow/contrib/android/java/* ../java
 cp -r tensorflow/lite/java/src/main/java/* ../java
 cp -r bazel-genfiles/tensorflow/java/ops/src/main/java/* ../java
+cp -r bazel-genfiles/tensorflow/java/_javac/tensorflow/libtensorflow_sourcegenfiles/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 # remove lines that require the Android SDK to compile
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>numpy</javacpp.moduleId>
-    <revision>1.16.4-${project.parent.version}</revision>
+    <revision>1.17.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -29,12 +29,18 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cpython-platform</artifactId>
-      <version>3.7.3-${project.parent.version}</version>
+      <version>3.7.4-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-x86}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -46,7 +52,31 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-armhf}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
       <classifier>${javacpp.platform.macosx-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.windows-x86}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -66,7 +96,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -111,8 +141,13 @@
                   <file>${project.build.directory}/${project.artifactId}.jar</file>
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
+                      requires org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.armhf;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.arm64;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
                       requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
+                      requires org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires org.bytedeco.${javacpp.moduleId}.windows.x86_64;
                     }
                   </moduleInfoSource>

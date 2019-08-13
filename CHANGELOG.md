@@ -1,4 +1,16 @@
 
+ * Add `linux-armhf`, `linux-arm64`, `linux-ppc64le`, and `windows-x86` builds for CPython, NumPy, and LLVM ([pull #768](https://github.com/bytedeco/javacpp-presets/pull/768))
+ * Include `audio_ops.h`, `list_ops.h`, `lookup_ops.h`, and `manip_ops.h` for TensorFlow
+ * Add necessary platform properties to build `-gpu` extensions on `linux-arm64` and `linux-ppc64le` ([issue #769](https://github.com/bytedeco/javacpp-presets/issues/769))
+ * Add packages missing from TensorFlow ([issue #773](https://github.com/bytedeco/javacpp-presets/issues/773))
+ * Fix JPMS module names for OpenBLAS and Tesseract ([issue #772](https://github.com/bytedeco/javacpp-presets/issues/772))
+ * Include `env.h`, `kernels.h`, and `ops.h` to allow creating custom operations using the C API of TensorFlow
+ * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
+ * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
+ * Upgrade presets for OpenCV 4.1.1, FFmpeg 4.2, MKL-DNN 0.20.1, CPython 3.7.4, NumPy 1.17.0, LLVM 8.0.1, MXNet 1.5.0, nGraph 0.24.0, cpu_features 0.4.1, and their dependencies
+
+### July 9, 2019 version 1.5.1
+ * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))
  * Add convenient `Tensor.create(boolean[] data, shape)` factory methods for TensorFlow
  * Set correct default path to `javacpp.platform.compiler` for Android builds on Mac OS X ([issue #733](https://github.com/bytedeco/javacpp-presets/issues/733))
  * Call `Loader.checkVersion()` in all presets to log warnings with potentially incompatible versions of JavaCPP
@@ -12,7 +24,7 @@
  * Load the symbols from the `python` library globally as often required by Python libraries ([issue ContinuumIO/anaconda-issues#6401](https://github.com/ContinuumIO/anaconda-issues/issues/6401))
  * Link OpenCV with OpenBLAS/MKL to accelerate some matrix operations
  * Add presets for the `quality` module of OpenCV
- * Upgrade presets for OpenCV 4.1.0, libdc1394 2.2.6, MKL 2019.4, MKL-DNN 0.20-rc, OpenBLAS 0.3.6, CPython 3.7.3, NumPy 1.16.4, Tesseract 4.1.0-rc4, CUDA 10.1 Update 1, cuDNN 7.6, MXNet 1.5.0.rc1, TensorFlow 1.14.0, ONNX 1.5.0, nGraph 0.22.0, Qt 5.13.0, cpu_features 0.3.0, and their dependencies
+ * Upgrade presets for OpenCV 4.1.0, libdc1394 2.2.6, MKL 2019.4, MKL-DNN 0.20, OpenBLAS 0.3.6, CPython 3.7.3, NumPy 1.16.4, Tesseract 4.1.0, CUDA 10.1 Update 1, cuDNN 7.6, MXNet 1.5.0.rc2, TensorFlow 1.14.0, ONNX 1.5.0, nGraph 0.22.0, Qt 5.13.0, cpu_features 0.3.0, and their dependencies
 
 ### April 11, 2019 version 1.5
  * Include `setlocale()` in presets for Tesseract to work around issues with locale ([issue #694](https://github.com/bytedeco/javacpp-presets/issues/694))
