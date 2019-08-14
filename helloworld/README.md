@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.helloworld</groupId>
     <artifactId>helloworld-test</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2-SNAPSHOT</version>
     <properties>
         <exec.mainClass>HelloWorldTest</exec.mainClass>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,7 +45,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>helloworld-platform</artifactId>
-            <version>2.0-1.5.1-SNAPSHOT</version>
+            <version>2.0-1.5.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -56,7 +56,6 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
 
 ### The `HelloWorldTest.java` source file
 ```java
-
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
