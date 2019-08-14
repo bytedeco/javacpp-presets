@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-HELLOWORLD_VERSION=1.0
+HELLOWORLD_VERSION=2.0
 download https://github.com/bytedeco/helloworld/archive/$HELLOWORLD_VERSION.zip helloworld-$HELLOWORLD_VERSION.zip
 
 mkdir -p $PLATFORM
