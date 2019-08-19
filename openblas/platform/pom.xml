@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>openblas</javacpp.moduleId>
-    <revision>0.3.6-${project.parent.version}</revision>
+    <revision>0.3.7-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -10,22 +10,31 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.ngraph.global.ngraph.*;
 
-        /** \brief ONNXIFI backend manager */
-        @Namespace("ngraph::onnxifi") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+
+@Name("ngraph::runtime::BackendManager") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class BackendManager extends Pointer {
-            static { Loader.load(); }
-            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-            public BackendManager(Pointer p) { super(p); }
-        
-            
-            
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public BackendManager() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BackendManager(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BackendManager(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public BackendManager position(long position) {
+        return (BackendManager)super.position(position);
+    }
 
-            
-            
+    /** \brief Used by build-in backends to register their name and constructor.
+     *     This function is not used if the backend is build as a shared library.
+     *  @param name The name of the registering backend in UPPER CASE.
+     *  @param backend_constructor A BackendConstructor which will be called to
+    ////     construct an instance of the registered backend. */
+    public static native void register_backend(@StdString BytePointer name, BackendConstructor backend_constructor);
+    public static native void register_backend(@StdString String name, BackendConstructor backend_constructor);
 
-            public static native void get_backend_ids(@ByPtrPtr onnxBackendID backend_ids, @Cast("std::size_t*") SizeTPointer count);
-
-            
-
-            
-        }
+    /** \brief Query the list of registered devices
+     *  @return A vector of all registered devices. */
+    public static native @ByVal StringVector get_registered_backends();
+}

@@ -21,6 +21,10 @@ public class Parameter extends Op {
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameter(Pointer p) { super(p); }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            
+            ///
+            public native @StdString BytePointer description();
             /** \brief Constructions a tensor-typed parameter node.
              * 
              *  @param element_type The element type of the parameter.

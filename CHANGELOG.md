@@ -7,7 +7,7 @@
  * Include `env.h`, `kernels.h`, and `ops.h` to allow creating custom operations using the C API of TensorFlow
  * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
- * Upgrade presets for OpenCV 4.1.1, FFmpeg 4.2, MKL-DNN 0.20.1, CPython 3.7.4, NumPy 1.17.0, LLVM 8.0.1, MXNet 1.5.0, nGraph 0.24.0, cpu_features 0.4.1, and their dependencies
+ * Upgrade presets for OpenCV 4.1.1, FFmpeg 4.2, MKL-DNN 0.20.1, OpenBLAS 0.3.7, CPython 3.7.4, NumPy 1.17.0, LLVM 8.0.1, MXNet 1.5.0, nGraph 0.25.0, cpu_features 0.4.1, and their dependencies
 
 ### July 9, 2019 version 1.5.1
  * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))

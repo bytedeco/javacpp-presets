@@ -29,9 +29,6 @@ public class Adjoints extends Pointer {
             public Adjoints(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector y, @Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector c) { super((Pointer)null); allocate(y, c); }
             private native void allocate(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector y, @Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector c);
 
-            public Adjoints(@Const @ByRef NodeVector y, @Const @ByRef NodeVector c) { super((Pointer)null); allocate(y, c); }
-            private native void allocate(@Const @ByRef NodeVector y, @Const @ByRef NodeVector c);
-
             public Adjoints(@Const @ByRef Adjoints adjoints) { super((Pointer)null); allocate(adjoints); }
             private native void allocate(@Const @ByRef Adjoints adjoints);
             public native @ByRef @Name("operator =") Adjoints put(@Const @ByRef Adjoints adjoints);

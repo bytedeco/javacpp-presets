@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.compiler.option>-O3</javacpp.compiler.option>
-    <revision>0.3.6-${project.parent.version}</revision>
+    <revision>0.3.7-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -56,4 +56,6 @@ public class Add extends BinaryElementwiseArithmetic {
                             @Const @ByRef NodeOutput arg1);
 
             public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+
+            public native @Cast("bool") boolean is_commutative();
         }

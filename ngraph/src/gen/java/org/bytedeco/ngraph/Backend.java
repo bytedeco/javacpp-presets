@@ -119,18 +119,6 @@ public class Backend extends Pointer {
     public native @SharedPtr @ByVal Node get_backend_op(@StdString BytePointer op_name);
     public native @SharedPtr @ByVal Node get_backend_op(@StdString String op_name);
 
-    /** \brief Returns memory allocator used by backend for host allocations */
-    public native Allocator get_host_memory_allocator();
-    /** \brief Set the host memory allocator to be used by the backend
-     *  @param allocator is pointer to host memory allocator object */
-    public native void set_host_memory_allocator(@MoveUniquePtr Allocator allocator);
-    /** \brief Returns memory allocator used by backend for device allocations */
-    public native Allocator get_device_memory_allocator();
-
-    /** \brief method for each supported backend to determine if the passed pointer is in device pinned memory or not
-     *  @param ptr pointer to the memory to determine if its in device memory or not */
-    public native @Cast("bool") boolean is_device_memory(Pointer ptr);
-
     /** \brief Allows sending backend specific configuration. The map contains key, value pairs
      *      specific to a particluar backend. The definition of these key, value pairs is
      *      defined by each backend.
@@ -139,4 +127,20 @@ public class Backend extends Pointer {
      *  @return true if the configuration is supported, false otherwise. On false the error
      *      parameter value is valid. */
     public native @Cast("bool") boolean set_config(@Const @ByRef StringStringMap config, @StdString @ByRef BytePointer error);
+
+    public static native void set_backend_shared_library_search_directory(@StdString BytePointer path);
+    public static native void set_backend_shared_library_search_directory(@StdString String path);
+    public static native @StdString BytePointer get_backend_shared_library_search_directory();
+
+    /** \brief Returns memory allocator used by backend for host allocations */
+    public native Allocator get_host_memory_allocator();
+    /** \brief Set the host memory allocator to be used by the backend
+     *  @param allocator is pointer to host memory allocator object */
+    public native void set_host_memory_allocator(Allocator allocator);
+    /** \brief Returns memory allocator used by backend for device allocations */
+    public native Allocator get_device_memory_allocator();
+
+    /** \brief method for each supported backend to determine if the passed pointer is in device pinned memory or not
+     *  @param ptr pointer to the memory to determine if its in device memory or not */
+    public native @Cast("bool") boolean is_device_memory(Pointer ptr);
 }

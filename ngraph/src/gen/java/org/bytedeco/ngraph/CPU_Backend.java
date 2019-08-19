@@ -10,7 +10,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.ngraph.global.ngraph.*;
 
-
             @Namespace("ngraph::runtime::cpu") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class CPU_Backend extends Backend {
                 static { Loader.load(); }
@@ -49,7 +48,7 @@ public class CPU_Backend extends Backend {
                 public native void remove_compiled_function(@SharedPtr Executable exec);
 
                 public native Allocator get_host_memory_allocator();
-                public native void set_host_memory_allocator(@MoveUniquePtr Allocator allocator);
+                public native void set_host_memory_allocator(Allocator allocator);
 
                 public native @Cast("bool") boolean is_supported(@Const @ByRef Node node);
                 public native @Cast("bool") boolean is_supported_property(@Cast("const ngraph::runtime::cpu::CPU_Backend::Property") int prop);

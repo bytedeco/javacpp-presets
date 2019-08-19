@@ -58,6 +58,10 @@ public class NodeOutput extends Pointer {
          * 
          *  TODO: Make a plan to deprecate this. */
         public native @SharedPtr @ByVal Node get_node_shared_ptr();
+        /** @return A useable shared pointer to this output. If index 0, the node,
+         *  otherwise find or create a GOE. */
+        public native @SharedPtr @ByVal Node as_single_output_node();
+
         /** @return The index of the output referred to by this output handle. */
         public native @Cast("size_t") long get_index();
         /** @return A reference to the tensor descriptor for this output. */
