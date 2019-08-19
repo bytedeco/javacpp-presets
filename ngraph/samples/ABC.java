@@ -28,7 +28,7 @@ public class ABC {
         Parameter c = new Parameter(f32(), new PartialShape(s), false);
 
         Op t0 = new Add(new NodeOutput(a), new NodeOutput(b));
-        Op t1 = new Multiply(t0, c);
+        Op t1 = new Multiply(new NodeOutput(t0), new NodeOutput(c));
 
         // Make the function
         Function f = new Function(new NodeVector(t1),

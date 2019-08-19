@@ -11,27 +11,42 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief Elementwise multiplication operation. */
-        @Namespace("ngraph::op") @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
+        @Namespace("ngraph::op") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class Multiply extends BinaryElementwiseArithmetic {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Multiply(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public Multiply(long size) { super((Pointer)null); allocateArray(size); }
+            private native void allocateArray(long size);
+            @Override public Multiply position(long position) {
+                return (Multiply)super.position(position);
+            }
         
+            @MemberGetter public static native @StdString BytePointer type_name();
+            public native @StdString BytePointer description();
+            /** \brief Constructs a multiplication operation. */
+            
+            ///
+            public Multiply() { super((Pointer)null); allocate(); }
+            private native void allocate();
             /** \brief Constructs a multiplication operation.
              * 
              *  @param arg0 Node that produces the first input tensor.
              *  @param arg1 Node that produces the second input tensor.
              *  @param autob Auto broadcast specification */
-            public Multiply(@Const @SharedPtr @ByRef Node arg0,
-                                 @Const @SharedPtr @ByRef Node arg1,
+            public Multiply(@Const @ByRef NodeOutput arg0,
+                                 @Const @ByRef NodeOutput arg1,
                                  @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob) { super((Pointer)null); allocate(arg0, arg1, autob); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg0,
-                                 @Const @SharedPtr @ByRef Node arg1,
+            private native void allocate(@Const @ByRef NodeOutput arg0,
+                                 @Const @ByRef NodeOutput arg1,
                                  @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob);
-            public Multiply(@Const @SharedPtr @ByRef Node arg0,
-                                 @Const @SharedPtr @ByRef Node arg1) { super((Pointer)null); allocate(arg0, arg1); }
-            private native void allocate(@Const @SharedPtr @ByRef Node arg0,
-                                 @Const @SharedPtr @ByRef Node arg1);
+            public Multiply(@Const @ByRef NodeOutput arg0,
+                                 @Const @ByRef NodeOutput arg1) { super((Pointer)null); allocate(arg0, arg1); }
+            private native void allocate(@Const @ByRef NodeOutput arg0,
+                                 @Const @ByRef NodeOutput arg1);
 
             public native @SharedPtr @ByVal Node copy_with_new_args(@Const @ByRef NodeVector new_args);
+
+            public native @Cast("bool") boolean is_commutative();
         }

@@ -122,6 +122,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #pragma once
 
 // #include <map>
+// #include <string>
     
 
 // Targeting ../PassConfig.java
@@ -957,7 +958,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 /** \brief Macro to signal a code path that is unreachable in a successful execution. It's
  *  implemented with NGRAPH_CHECK macro.
  *  @param ... Additional error message that should describe why that execution path is unreachable.
- *  @throws ::ngrap::CheckFailure if the macro is executed. */
+ *  @throws ::ngraph::CheckFailure if the macro is executed. */
 // #define NGRAPH_UNREACHABLE(...) NGRAPH_CHECK(false, "Unreachable: ", ##__VA_ARGS__)
 
 
@@ -1334,8 +1335,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
     
 
-    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @SharedPtr @ByRef Node arg0,
-                                                @Const @SharedPtr @ByRef Node arg1);
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator +") Node add(@Const @ByRef NodeOutput arg0, @Const @ByRef NodeOutput arg1);
 
 
 
@@ -1365,8 +1365,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
     
 
-    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator *") Node multiply(@Const @SharedPtr @ByVal Node arg0,
-                                                @Const @SharedPtr @ByVal Node arg1);
+    @Namespace("ngraph") public static native @SharedPtr @ByVal @Name("operator *") Node multiply(@Const @ByRef NodeOutput arg0, @Const @ByRef NodeOutput arg1);
 
 
 
@@ -1607,6 +1606,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #pragma once
 
 // #include <memory>
+// #include <mutex>
 
 // #include "ngraph/function.hpp"
 // #include "ngraph/pass/pass_config.hpp"
@@ -1619,6 +1619,49 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
     
 
 // Targeting ../Backend.java
+
+
+
+
+// Parsed from ngraph/runtime/backend_manager.hpp
+
+//*****************************************************************************
+// Copyright 2017-2019 Intel Corporation
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//*****************************************************************************
+
+// #pragma once
+
+// #include <functional>
+// #include <map>
+// #include <memory>
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+
+// #ifdef _WIN32
+// #include <windows.h>
+// #define DL_HANDLE HMODULE
+// #else
+// #define DL_HANDLE void*
+// #endif
+    
+
+// Targeting ../BackendConstructor.java
+
+
+// Targeting ../BackendManager.java
 
 
 
@@ -1651,12 +1694,14 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include "ngraph/pass/pass_config.hpp"
 // #include "ngraph/runtime/allocator.hpp"
 // #include "ngraph/runtime/backend.hpp"
+// #include "ngraph/runtime/backend_manager.hpp"
 // Targeting ../CPU_ExternalFunction.java
 
 
 // Targeting ../CPU_CallFrame.java
 
 
+            @Namespace("ngraph::runtime::cpu") public static native BackendConstructor get_backend_constructor_pointer();
 // Targeting ../CPU_Backend.java
 
 
@@ -1763,9 +1808,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 
 // #include "backend.hpp"
 // #include "ngraph/runtime/backend.hpp"
-// Targeting ../BackendManager.java
-
-
+        /** \brief ONNXIFI backend manager */
 
      // namespace onnxifi
 
@@ -2417,6 +2460,7 @@ public static final int ONNXIFI_DATATYPE_UINT32 = 12;
 public static final int ONNXIFI_DATATYPE_UINT64 = 13;
 public static final int ONNXIFI_DATATYPE_COMPLEX64 = 14;
 public static final int ONNXIFI_DATATYPE_COMPLEX128 = 15;
+public static final int ONNXIFI_DATATYPE_BFLOAT16 = 16;
 
 /** Cacheable CPU memory */
 public static final int ONNXIFI_MEMORY_TYPE_CPU = 0;

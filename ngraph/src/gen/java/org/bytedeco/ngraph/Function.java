@@ -34,6 +34,23 @@ public class Function extends Pointer {
                          @Const @ByRef ParameterVector parameters,
                          @StdString String name/*=""*/);
 
+        public Function(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters,
+                         @StdString BytePointer name/*=""*/) { super((Pointer)null); allocate(results, parameters, name); }
+        private native void allocate(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters,
+                         @StdString BytePointer name/*=""*/);
+        public Function(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters) { super((Pointer)null); allocate(results, parameters); }
+        private native void allocate(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters);
+        public Function(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters,
+                         @StdString String name/*=""*/) { super((Pointer)null); allocate(results, parameters, name); }
+        private native void allocate(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector results,
+                         @Const @ByRef ParameterVector parameters,
+                         @StdString String name/*=""*/);
+
         public Function(@Const @SharedPtr @ByRef Node result,
                          @Const @ByRef ParameterVector parameters,
                          @StdString BytePointer name/*=""*/) { super((Pointer)null); allocate(result, parameters, name); }
@@ -74,6 +91,8 @@ public class Function extends Pointer {
 
         /** Return the op that generates output i */
         public native @SharedPtr @ByVal Node get_output_op(@Cast("size_t") long i);
+
+        public native @ByVal NodeOutput output(@Cast("size_t") long i);
 
         /** Return the element type of output i */
         public native @Const @ByRef Type get_output_element_type(@Cast("size_t") long i);

@@ -154,6 +154,8 @@ public class Node extends Pointer {
         /** Returns the partial shape for output i */
         public native @Const @ByRef PartialShape get_output_partial_shape(@Cast("size_t") long i);
 
+        public native @SharedPtr @ByVal Node get_output_as_single_output_node(@Cast("size_t") long i);
+
         /** Checks that there is exactly one output and returns its shape */
         // TODO: deprecate in favor of node->output(0).get_shape() with a suitable check in the
         // calling code, or updates to the calling code if it is making an invalid assumption of

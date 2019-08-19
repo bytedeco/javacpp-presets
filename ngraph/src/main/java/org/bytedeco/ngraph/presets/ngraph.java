@@ -77,6 +77,7 @@ import java.lang.annotation.Target;
         "ngraph/runtime/executable.hpp",
         "ngraph/runtime/tensor.hpp",
         "ngraph/runtime/backend.hpp",
+        "ngraph/runtime/backend_manager.hpp",
         "ngraph/runtime/cpu/cpu_backend.hpp",
 //        "ngraph/runtime/cpu/cpu_external_function.hpp",
         "ngraph/runtime/performance_counter.hpp",
@@ -141,7 +142,7 @@ public class ngraph implements InfoMapper {
                .put(new Info("std::enable_shared_from_this<ngraph::Node>", "std::enable_shared_from_this<ngraph::runtime::cpu::CPU_ExternalFunction>").pointerTypes("Pointer"))
                .put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))
                .put(new Info("std::list<std::shared_ptr<Node> >", "std::pair<std::shared_ptr<ngraph::op::Result>,std::shared_ptr<ngraph::op::Parameter> >", "std::deque<ngraph::Node::descriptor::Input>", "std::deque<descriptor::Output>", "std::set<ngraph::Node::descriptor::Input*>", "std::unordered_set<descriptor::Tensor*>", "std::stringstream", "ngraph::Node::has_same_type", "ngraph::descriptor::Tensor::set_tensor_layout", "ngraph::runtime::cpu::CPU_ExternalFunction::get_executor", "ngraph::runtime::cpu::CPU_ExternalFunction::get_callees", "ngraph::runtime::cpu::CPU_ExternalFunction::get_halide_functions", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_params", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_sizes", "ngraph::runtime::cpu::CPU_ExternalFunction::get_subgraph_param_ptrs", "ngraph::runtime::cpu::CPU_ExternalFunction::get_parameter_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_result_layout_descriptors", "ngraph::runtime::cpu::CPU_ExternalFunction::get_mkldnn_emitter", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::add_state", "ngraph::runtime::cpu::CPU_ExternalFunction::get_functors", "ngraph::runtime::cpu::CPU_Backend::make_call_frame", "ngraph::onnxifi::BackendManager::unregister", "ngraph::onnxifi::BackendManager::get", "ngraph::onnx_import::register_operator").skip())
-               .put(new Info("ONNXIFI_ABI", "ONNXIFI_PUBLIC", "ONNXIFI_CHECK_RESULT", "NGRAPH_API").cppTypes().annotations())
+               .put(new Info("ONNXIFI_ABI", "ONNXIFI_PUBLIC", "ONNXIFI_CHECK_RESULT", "NGRAPH_API", "DL_HANDLE").cppTypes().annotations())
                .put(new Info("std::initializer_list", "from<char>", "from<bool>", "from<float>", "from<double>", "from<int8_t>", "from<int16_t>", "from<int32_t>",
                              "from<int64_t>", "from<uint8_t>", "from<uint16_t>", "from<uint32_t>", "from<uint64_t>", "from<ngraph::bfloat16>").skip())
                .put(new Info("std::map<std::string,bool>").pointerTypes("StringBoolMap").define())

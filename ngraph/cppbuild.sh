@@ -14,7 +14,7 @@ if [[ $PLATFORM == windows* ]]; then
 fi
 
 NCURSES=6.1
-NGRAPH=0.24.0
+NGRAPH=0.25.0
 download https://ftp.gnu.org/pub/gnu/ncurses/ncurses-$NCURSES.tar.gz ncurses-$NCURSES.tar.gz
 download https://github.com/NervanaSystems/ngraph/archive/v$NGRAPH.tar.gz ngraph-$NGRAPH.tar.gz
 
@@ -53,5 +53,6 @@ make install/strip
 cp onnx/bin/libonnxifi.so ../lib/
 cp onnx/src/onnx/onnxifi.h ../include/ngraph/frontend/onnxifi/
 sedinplace  's/#include <onnxifi.h>/#include "onnxifi.h"/g' ../include/ngraph/frontend/onnxifi/backend_manager.hpp
+sedinplace  's/#include <onnx\/onnxifi.h>/#include "onnxifi.h"/g' ../include/ngraph/frontend/onnxifi/backend_manager.hpp
 
 cd ../..
