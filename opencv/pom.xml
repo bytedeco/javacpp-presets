@@ -126,7 +126,6 @@
                 <exclude>${javacpp.platform.library.path}/lib/*.so*</exclude>
                 <exclude>${javacpp.platform.library.path}/sdk/**/*.so*</exclude>
                 <exclude>${javacpp.platform.library.path}/sdk/native/jni/include/**</exclude>
-                <exclude>${javacpp.platform.library.path}/**/*cascade*</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
@@ -146,7 +145,6 @@
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.lib</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.dll</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/x64/**/*.exe</exclude>
-                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/**/*cascade*</exclude>
               </excludes>
             </configuration>
           </execution>
