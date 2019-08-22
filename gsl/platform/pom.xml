@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>gsl</javacpp.moduleId>
-    <revision>2.5-${project.parent.version}</revision>
+    <revision>2.6-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

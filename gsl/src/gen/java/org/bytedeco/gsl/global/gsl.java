@@ -1000,17 +1000,14 @@ public static final int _GSL_PREC_T_NUM = 3;
 // #ifdef INFINITY
 // #elif defined(HUGE_VAL)
 // #else
-public static native @MemberGetter int GSL_POSINF();
-public static final int GSL_POSINF = GSL_POSINF();
-public static native @MemberGetter int GSL_NEGINF();
-public static final int GSL_NEGINF = GSL_NEGINF();
+public static final double GSL_POSINF = (gsl_posinf());
+public static final double GSL_NEGINF = (gsl_neginf());
 // #endif
 
 // #ifdef NAN
 // #elif defined(INFINITY)
 // #else
-public static native @MemberGetter int GSL_NAN();
-public static final int GSL_NAN = GSL_NAN();
+public static final double GSL_NAN = (gsl_nan());
 // #endif
 
 public static final double GSL_POSZERO = (+0.0);
@@ -1526,9 +1523,9 @@ public static native int gsl_test_summary();
 // #endif
 
 
-public static final String GSL_VERSION = "2.5";
+public static final String GSL_VERSION = "2.6";
 public static final int GSL_MAJOR_VERSION = 2;
-public static final int GSL_MINOR_VERSION = 5;
+public static final int GSL_MINOR_VERSION = 6;
 
 public static native @Cast("const char*") BytePointer gsl_version(); public static native void gsl_version(BytePointer setter);
 
@@ -2574,6 +2571,7 @@ public static native int gsl_vector_complex_mul(gsl_vector_complex a, @Const gsl
 public static native int gsl_vector_complex_div(gsl_vector_complex a, @Const gsl_vector_complex b);
 public static native int gsl_vector_complex_scale(gsl_vector_complex a, @Const @ByVal gsl_complex x);
 public static native int gsl_vector_complex_add_constant(gsl_vector_complex a, @Const @ByVal gsl_complex x);
+public static native int gsl_vector_complex_axpby(@Const @ByVal gsl_complex alpha, @Const gsl_vector_complex x, @Const @ByVal gsl_complex beta, gsl_vector_complex y);
 
 /* */ public static native @ByVal gsl_complex gsl_vector_complex_get(@Const gsl_vector_complex v, @Cast("const size_t") long i);
 /* */ public static native void gsl_vector_complex_set(gsl_vector_complex v, @Cast("const size_t") long i, @ByVal gsl_complex z);
@@ -2759,6 +2757,7 @@ public static native int gsl_vector_complex_float_mul(gsl_vector_complex_float a
 public static native int gsl_vector_complex_float_div(gsl_vector_complex_float a, @Const gsl_vector_complex_float b);
 public static native int gsl_vector_complex_float_scale(gsl_vector_complex_float a, @Const @ByVal gsl_complex_float x);
 public static native int gsl_vector_complex_float_add_constant(gsl_vector_complex_float a, @Const @ByVal gsl_complex_float x);
+public static native int gsl_vector_complex_float_axpby(@Const @ByVal gsl_complex_float alpha, @Const gsl_vector_complex_float x, @Const @ByVal gsl_complex_float beta, gsl_vector_complex_float y);
 
 /* */ public static native @ByVal gsl_complex_float gsl_vector_complex_float_get(@Const gsl_vector_complex_float v, @Cast("const size_t") long i);
 /* */ public static native void gsl_vector_complex_float_set(gsl_vector_complex_float v, @Cast("const size_t") long i, @ByVal gsl_complex_float z);
@@ -2922,6 +2921,7 @@ public static native int gsl_vector_mul(gsl_vector a, @Const gsl_vector b);
 public static native int gsl_vector_div(gsl_vector a, @Const gsl_vector b);
 public static native int gsl_vector_scale(gsl_vector a, double x);
 public static native int gsl_vector_add_constant(gsl_vector a, double x);
+public static native int gsl_vector_axpby(double alpha, @Const gsl_vector x, double beta, gsl_vector y);
 
 public static native int gsl_vector_equal(@Const gsl_vector u, 
                             @Const gsl_vector v);
@@ -3091,8 +3091,9 @@ public static native int gsl_vector_float_add(gsl_vector_float a, @Const gsl_vec
 public static native int gsl_vector_float_sub(gsl_vector_float a, @Const gsl_vector_float b);
 public static native int gsl_vector_float_mul(gsl_vector_float a, @Const gsl_vector_float b);
 public static native int gsl_vector_float_div(gsl_vector_float a, @Const gsl_vector_float b);
-public static native int gsl_vector_float_scale(gsl_vector_float a, double x);
+public static native int gsl_vector_float_scale(gsl_vector_float a, float x);
 public static native int gsl_vector_float_add_constant(gsl_vector_float a, double x);
+public static native int gsl_vector_float_axpby(float alpha, @Const gsl_vector_float x, float beta, gsl_vector_float y);
 
 public static native int gsl_vector_float_equal(@Const gsl_vector_float u, 
                             @Const gsl_vector_float v);
@@ -3244,8 +3245,9 @@ public static native int gsl_vector_ulong_add(gsl_vector_ulong a, @Const gsl_vec
 public static native int gsl_vector_ulong_sub(gsl_vector_ulong a, @Const gsl_vector_ulong b);
 public static native int gsl_vector_ulong_mul(gsl_vector_ulong a, @Const gsl_vector_ulong b);
 public static native int gsl_vector_ulong_div(gsl_vector_ulong a, @Const gsl_vector_ulong b);
-public static native int gsl_vector_ulong_scale(gsl_vector_ulong a, double x);
+public static native int gsl_vector_ulong_scale(gsl_vector_ulong a, @Cast("const unsigned long") long x);
 public static native int gsl_vector_ulong_add_constant(gsl_vector_ulong a, double x);
+public static native int gsl_vector_ulong_axpby(@Cast("const unsigned long") long alpha, @Const gsl_vector_ulong x, @Cast("const unsigned long") long beta, gsl_vector_ulong y);
 
 public static native int gsl_vector_ulong_equal(@Const gsl_vector_ulong u, 
                             @Const gsl_vector_ulong v);
@@ -3397,8 +3399,9 @@ public static native int gsl_vector_long_add(gsl_vector_long a, @Const gsl_vecto
 public static native int gsl_vector_long_sub(gsl_vector_long a, @Const gsl_vector_long b);
 public static native int gsl_vector_long_mul(gsl_vector_long a, @Const gsl_vector_long b);
 public static native int gsl_vector_long_div(gsl_vector_long a, @Const gsl_vector_long b);
-public static native int gsl_vector_long_scale(gsl_vector_long a, double x);
+public static native int gsl_vector_long_scale(gsl_vector_long a, long x);
 public static native int gsl_vector_long_add_constant(gsl_vector_long a, double x);
+public static native int gsl_vector_long_axpby(long alpha, @Const gsl_vector_long x, long beta, gsl_vector_long y);
 
 public static native int gsl_vector_long_equal(@Const gsl_vector_long u, 
                             @Const gsl_vector_long v);
@@ -3568,8 +3571,9 @@ public static native int gsl_vector_uint_add(gsl_vector_uint a, @Const gsl_vecto
 public static native int gsl_vector_uint_sub(gsl_vector_uint a, @Const gsl_vector_uint b);
 public static native int gsl_vector_uint_mul(gsl_vector_uint a, @Const gsl_vector_uint b);
 public static native int gsl_vector_uint_div(gsl_vector_uint a, @Const gsl_vector_uint b);
-public static native int gsl_vector_uint_scale(gsl_vector_uint a, double x);
+public static native int gsl_vector_uint_scale(gsl_vector_uint a, @Cast("const unsigned int") int x);
 public static native int gsl_vector_uint_add_constant(gsl_vector_uint a, double x);
+public static native int gsl_vector_uint_axpby(@Cast("const unsigned int") int alpha, @Const gsl_vector_uint x, @Cast("const unsigned int") int beta, gsl_vector_uint y);
 
 public static native int gsl_vector_uint_equal(@Const gsl_vector_uint u, 
                             @Const gsl_vector_uint v);
@@ -3739,8 +3743,9 @@ public static native int gsl_vector_int_add(gsl_vector_int a, @Const gsl_vector_
 public static native int gsl_vector_int_sub(gsl_vector_int a, @Const gsl_vector_int b);
 public static native int gsl_vector_int_mul(gsl_vector_int a, @Const gsl_vector_int b);
 public static native int gsl_vector_int_div(gsl_vector_int a, @Const gsl_vector_int b);
-public static native int gsl_vector_int_scale(gsl_vector_int a, double x);
+public static native int gsl_vector_int_scale(gsl_vector_int a, int x);
 public static native int gsl_vector_int_add_constant(gsl_vector_int a, double x);
+public static native int gsl_vector_int_axpby(int alpha, @Const gsl_vector_int x, int beta, gsl_vector_int y);
 
 public static native int gsl_vector_int_equal(@Const gsl_vector_int u, 
                             @Const gsl_vector_int v);
@@ -3910,8 +3915,9 @@ public static native int gsl_vector_ushort_add(gsl_vector_ushort a, @Const gsl_v
 public static native int gsl_vector_ushort_sub(gsl_vector_ushort a, @Const gsl_vector_ushort b);
 public static native int gsl_vector_ushort_mul(gsl_vector_ushort a, @Const gsl_vector_ushort b);
 public static native int gsl_vector_ushort_div(gsl_vector_ushort a, @Const gsl_vector_ushort b);
-public static native int gsl_vector_ushort_scale(gsl_vector_ushort a, double x);
+public static native int gsl_vector_ushort_scale(gsl_vector_ushort a, @Cast("const unsigned short") short x);
 public static native int gsl_vector_ushort_add_constant(gsl_vector_ushort a, double x);
+public static native int gsl_vector_ushort_axpby(@Cast("const unsigned short") short alpha, @Const gsl_vector_ushort x, @Cast("const unsigned short") short beta, gsl_vector_ushort y);
 
 public static native int gsl_vector_ushort_equal(@Const gsl_vector_ushort u, 
                             @Const gsl_vector_ushort v);
@@ -4081,8 +4087,9 @@ public static native int gsl_vector_short_add(gsl_vector_short a, @Const gsl_vec
 public static native int gsl_vector_short_sub(gsl_vector_short a, @Const gsl_vector_short b);
 public static native int gsl_vector_short_mul(gsl_vector_short a, @Const gsl_vector_short b);
 public static native int gsl_vector_short_div(gsl_vector_short a, @Const gsl_vector_short b);
-public static native int gsl_vector_short_scale(gsl_vector_short a, double x);
+public static native int gsl_vector_short_scale(gsl_vector_short a, short x);
 public static native int gsl_vector_short_add_constant(gsl_vector_short a, double x);
+public static native int gsl_vector_short_axpby(short alpha, @Const gsl_vector_short x, short beta, gsl_vector_short y);
 
 public static native int gsl_vector_short_equal(@Const gsl_vector_short u, 
                             @Const gsl_vector_short v);
@@ -4252,8 +4259,9 @@ public static native int gsl_vector_uchar_add(gsl_vector_uchar a, @Const gsl_vec
 public static native int gsl_vector_uchar_sub(gsl_vector_uchar a, @Const gsl_vector_uchar b);
 public static native int gsl_vector_uchar_mul(gsl_vector_uchar a, @Const gsl_vector_uchar b);
 public static native int gsl_vector_uchar_div(gsl_vector_uchar a, @Const gsl_vector_uchar b);
-public static native int gsl_vector_uchar_scale(gsl_vector_uchar a, double x);
+public static native int gsl_vector_uchar_scale(gsl_vector_uchar a, @Cast("const unsigned char") byte x);
 public static native int gsl_vector_uchar_add_constant(gsl_vector_uchar a, double x);
+public static native int gsl_vector_uchar_axpby(@Cast("const unsigned char") byte alpha, @Const gsl_vector_uchar x, @Cast("const unsigned char") byte beta, gsl_vector_uchar y);
 
 public static native int gsl_vector_uchar_equal(@Const gsl_vector_uchar u, 
                             @Const gsl_vector_uchar v);
@@ -4419,8 +4427,9 @@ public static native int gsl_vector_char_add(gsl_vector_char a, @Const gsl_vecto
 public static native int gsl_vector_char_sub(gsl_vector_char a, @Const gsl_vector_char b);
 public static native int gsl_vector_char_mul(gsl_vector_char a, @Const gsl_vector_char b);
 public static native int gsl_vector_char_div(gsl_vector_char a, @Const gsl_vector_char b);
-public static native int gsl_vector_char_scale(gsl_vector_char a, double x);
+public static native int gsl_vector_char_scale(gsl_vector_char a, byte x);
 public static native int gsl_vector_char_add_constant(gsl_vector_char a, double x);
+public static native int gsl_vector_char_axpby(byte alpha, @Const gsl_vector_char x, byte beta, gsl_vector_char y);
 
 public static native int gsl_vector_char_equal(@Const gsl_vector_char u, 
                             @Const gsl_vector_char v);
@@ -4472,6 +4481,51 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
 // #endif /* __GSL_MATRIX_H__ */
 
 
+// Parsed from gsl/gsl_blas_types.h
+
+/* blas/gsl_blas_types.h
+ * 
+ * Copyright (C) 1996, 1997, 1998, 1999, 2000 Gerard Jungman
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/*
+ * Author:  G. Jungman
+ */
+/* Based on draft BLAST C interface specification  [Jul 7 1998]
+ */
+// #ifndef __GSL_BLAS_TYPES_H__
+// #define __GSL_BLAS_TYPES_H__
+
+// #include <gsl/gsl_cblas.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/* typedef  gsl_complex  COMPLEX; */
+
+
+// #endif /* __GSL_BLAS_TYPES_H__ */
+
+
 // Parsed from gsl/gsl_matrix_complex_double.h
 
 /* matrix/gsl_matrix_complex_double.h
@@ -4502,6 +4556,7 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
 // #include <gsl/gsl_complex.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_complex_double.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -4670,7 +4725,7 @@ public static native int gsl_matrix_complex_fprintf(FILE stream, @Const gsl_matr
 
 public static native int gsl_matrix_complex_memcpy(gsl_matrix_complex dest, @Const gsl_matrix_complex src);
 public static native int gsl_matrix_complex_swap(gsl_matrix_complex m1, gsl_matrix_complex m2);
-public static native int gsl_matrix_complex_tricpy(byte uplo_src, int copy_diag, gsl_matrix_complex dest, @Const gsl_matrix_complex src);
+public static native int gsl_matrix_complex_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_complex dest, @Const gsl_matrix_complex src);
 
 public static native int gsl_matrix_complex_swap_rows(gsl_matrix_complex m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_complex_swap_columns(gsl_matrix_complex m, @Cast("const size_t") long i, @Cast("const size_t") long j);
@@ -4678,7 +4733,7 @@ public static native int gsl_matrix_complex_swap_rowcol(gsl_matrix_complex m, @C
 
 public static native int gsl_matrix_complex_transpose(gsl_matrix_complex m);
 public static native int gsl_matrix_complex_transpose_memcpy(gsl_matrix_complex dest, @Const gsl_matrix_complex src);
-public static native int gsl_matrix_complex_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_complex dest, @Const gsl_matrix_complex src);
+public static native int gsl_matrix_complex_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_complex dest, @Const gsl_matrix_complex src);
 
 public static native int gsl_matrix_complex_equal(@Const gsl_matrix_complex a, @Const gsl_matrix_complex b);
 
@@ -4749,6 +4804,7 @@ public static native int gsl_matrix_complex_set_col(gsl_matrix_complex m, @Cast(
 // #include <gsl/gsl_complex.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_complex_float.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -4917,7 +4973,7 @@ public static native int gsl_matrix_complex_float_fprintf(FILE stream, @Const gs
 
 public static native int gsl_matrix_complex_float_memcpy(gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
 public static native int gsl_matrix_complex_float_swap(gsl_matrix_complex_float m1, gsl_matrix_complex_float m2);
-public static native int gsl_matrix_complex_float_tricpy(byte uplo_src, int copy_diag, gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
+public static native int gsl_matrix_complex_float_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
 
 public static native int gsl_matrix_complex_float_swap_rows(gsl_matrix_complex_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_complex_float_swap_columns(gsl_matrix_complex_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
@@ -4925,7 +4981,7 @@ public static native int gsl_matrix_complex_float_swap_rowcol(gsl_matrix_complex
 
 public static native int gsl_matrix_complex_float_transpose(gsl_matrix_complex_float m);
 public static native int gsl_matrix_complex_float_transpose_memcpy(gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
-public static native int gsl_matrix_complex_float_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
+public static native int gsl_matrix_complex_float_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_complex_float dest, @Const gsl_matrix_complex_float src);
 
 public static native int gsl_matrix_complex_float_equal(@Const gsl_matrix_complex_float a, @Const gsl_matrix_complex_float b);
 
@@ -4996,6 +5052,7 @@ public static native int gsl_matrix_complex_float_set_col(gsl_matrix_complex_flo
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_double.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -5164,14 +5221,14 @@ public static native int gsl_matrix_fprintf(FILE stream, @Const gsl_matrix m, St
  
 public static native int gsl_matrix_memcpy(gsl_matrix dest, @Const gsl_matrix src);
 public static native int gsl_matrix_swap(gsl_matrix m1, gsl_matrix m2);
-public static native int gsl_matrix_tricpy(byte uplo_src, int copy_diag, gsl_matrix dest, @Const gsl_matrix src);
+public static native int gsl_matrix_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix dest, @Const gsl_matrix src);
 
 public static native int gsl_matrix_swap_rows(gsl_matrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_swap_columns(gsl_matrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_swap_rowcol(gsl_matrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_transpose(gsl_matrix m);
 public static native int gsl_matrix_transpose_memcpy(gsl_matrix dest, @Const gsl_matrix src);
-public static native int gsl_matrix_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix dest, @Const gsl_matrix src);
+public static native int gsl_matrix_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix dest, @Const gsl_matrix src);
 
 public static native double gsl_matrix_max(@Const gsl_matrix m);
 public static native double gsl_matrix_min(@Const gsl_matrix m);
@@ -5251,6 +5308,7 @@ public static native int gsl_matrix_set_col(gsl_matrix m, @Cast("const size_t") 
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_float.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -5419,14 +5477,14 @@ public static native int gsl_matrix_float_fprintf(FILE stream, @Const gsl_matrix
  
 public static native int gsl_matrix_float_memcpy(gsl_matrix_float dest, @Const gsl_matrix_float src);
 public static native int gsl_matrix_float_swap(gsl_matrix_float m1, gsl_matrix_float m2);
-public static native int gsl_matrix_float_tricpy(byte uplo_src, int copy_diag, gsl_matrix_float dest, @Const gsl_matrix_float src);
+public static native int gsl_matrix_float_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_float dest, @Const gsl_matrix_float src);
 
 public static native int gsl_matrix_float_swap_rows(gsl_matrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_float_swap_columns(gsl_matrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_float_swap_rowcol(gsl_matrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_float_transpose(gsl_matrix_float m);
 public static native int gsl_matrix_float_transpose_memcpy(gsl_matrix_float dest, @Const gsl_matrix_float src);
-public static native int gsl_matrix_float_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_float dest, @Const gsl_matrix_float src);
+public static native int gsl_matrix_float_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_float dest, @Const gsl_matrix_float src);
 
 public static native float gsl_matrix_float_max(@Const gsl_matrix_float m);
 public static native float gsl_matrix_float_min(@Const gsl_matrix_float m);
@@ -5506,6 +5564,7 @@ public static native int gsl_matrix_float_set_col(gsl_matrix_float m, @Cast("con
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_ulong.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -5646,14 +5705,14 @@ public static native int gsl_matrix_ulong_fprintf(FILE stream, @Const gsl_matrix
  
 public static native int gsl_matrix_ulong_memcpy(gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
 public static native int gsl_matrix_ulong_swap(gsl_matrix_ulong m1, gsl_matrix_ulong m2);
-public static native int gsl_matrix_ulong_tricpy(byte uplo_src, int copy_diag, gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
+public static native int gsl_matrix_ulong_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
 
 public static native int gsl_matrix_ulong_swap_rows(gsl_matrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ulong_swap_columns(gsl_matrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ulong_swap_rowcol(gsl_matrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ulong_transpose(gsl_matrix_ulong m);
 public static native int gsl_matrix_ulong_transpose_memcpy(gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
-public static native int gsl_matrix_ulong_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
+public static native int gsl_matrix_ulong_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_ulong dest, @Const gsl_matrix_ulong src);
 
 public static native @Cast("unsigned long") long gsl_matrix_ulong_max(@Const gsl_matrix_ulong m);
 public static native @Cast("unsigned long") long gsl_matrix_ulong_min(@Const gsl_matrix_ulong m);
@@ -5731,6 +5790,7 @@ public static native int gsl_matrix_ulong_set_col(gsl_matrix_ulong m, @Cast("con
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_long.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -5871,14 +5931,14 @@ public static native int gsl_matrix_long_fprintf(FILE stream, @Const gsl_matrix_
  
 public static native int gsl_matrix_long_memcpy(gsl_matrix_long dest, @Const gsl_matrix_long src);
 public static native int gsl_matrix_long_swap(gsl_matrix_long m1, gsl_matrix_long m2);
-public static native int gsl_matrix_long_tricpy(byte uplo_src, int copy_diag, gsl_matrix_long dest, @Const gsl_matrix_long src);
+public static native int gsl_matrix_long_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_long dest, @Const gsl_matrix_long src);
 
 public static native int gsl_matrix_long_swap_rows(gsl_matrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_long_swap_columns(gsl_matrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_long_swap_rowcol(gsl_matrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_long_transpose(gsl_matrix_long m);
 public static native int gsl_matrix_long_transpose_memcpy(gsl_matrix_long dest, @Const gsl_matrix_long src);
-public static native int gsl_matrix_long_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_long dest, @Const gsl_matrix_long src);
+public static native int gsl_matrix_long_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_long dest, @Const gsl_matrix_long src);
 
 public static native long gsl_matrix_long_max(@Const gsl_matrix_long m);
 public static native long gsl_matrix_long_min(@Const gsl_matrix_long m);
@@ -5956,6 +6016,7 @@ public static native int gsl_matrix_long_set_col(gsl_matrix_long m, @Cast("const
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_uint.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -6124,14 +6185,14 @@ public static native int gsl_matrix_uint_fprintf(FILE stream, @Const gsl_matrix_
  
 public static native int gsl_matrix_uint_memcpy(gsl_matrix_uint dest, @Const gsl_matrix_uint src);
 public static native int gsl_matrix_uint_swap(gsl_matrix_uint m1, gsl_matrix_uint m2);
-public static native int gsl_matrix_uint_tricpy(byte uplo_src, int copy_diag, gsl_matrix_uint dest, @Const gsl_matrix_uint src);
+public static native int gsl_matrix_uint_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_uint dest, @Const gsl_matrix_uint src);
 
 public static native int gsl_matrix_uint_swap_rows(gsl_matrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uint_swap_columns(gsl_matrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uint_swap_rowcol(gsl_matrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uint_transpose(gsl_matrix_uint m);
 public static native int gsl_matrix_uint_transpose_memcpy(gsl_matrix_uint dest, @Const gsl_matrix_uint src);
-public static native int gsl_matrix_uint_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_uint dest, @Const gsl_matrix_uint src);
+public static native int gsl_matrix_uint_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_uint dest, @Const gsl_matrix_uint src);
 
 public static native @Cast("unsigned int") int gsl_matrix_uint_max(@Const gsl_matrix_uint m);
 public static native @Cast("unsigned int") int gsl_matrix_uint_min(@Const gsl_matrix_uint m);
@@ -6211,6 +6272,7 @@ public static native int gsl_matrix_uint_set_col(gsl_matrix_uint m, @Cast("const
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_int.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -6379,14 +6441,14 @@ public static native int gsl_matrix_int_fprintf(FILE stream, @Const gsl_matrix_i
  
 public static native int gsl_matrix_int_memcpy(gsl_matrix_int dest, @Const gsl_matrix_int src);
 public static native int gsl_matrix_int_swap(gsl_matrix_int m1, gsl_matrix_int m2);
-public static native int gsl_matrix_int_tricpy(byte uplo_src, int copy_diag, gsl_matrix_int dest, @Const gsl_matrix_int src);
+public static native int gsl_matrix_int_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_int dest, @Const gsl_matrix_int src);
 
 public static native int gsl_matrix_int_swap_rows(gsl_matrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_int_swap_columns(gsl_matrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_int_swap_rowcol(gsl_matrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_int_transpose(gsl_matrix_int m);
 public static native int gsl_matrix_int_transpose_memcpy(gsl_matrix_int dest, @Const gsl_matrix_int src);
-public static native int gsl_matrix_int_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_int dest, @Const gsl_matrix_int src);
+public static native int gsl_matrix_int_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_int dest, @Const gsl_matrix_int src);
 
 public static native int gsl_matrix_int_max(@Const gsl_matrix_int m);
 public static native int gsl_matrix_int_min(@Const gsl_matrix_int m);
@@ -6466,6 +6528,7 @@ public static native int gsl_matrix_int_set_col(gsl_matrix_int m, @Cast("const s
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_ushort.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -6634,14 +6697,14 @@ public static native int gsl_matrix_ushort_fprintf(FILE stream, @Const gsl_matri
  
 public static native int gsl_matrix_ushort_memcpy(gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
 public static native int gsl_matrix_ushort_swap(gsl_matrix_ushort m1, gsl_matrix_ushort m2);
-public static native int gsl_matrix_ushort_tricpy(byte uplo_src, int copy_diag, gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
+public static native int gsl_matrix_ushort_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
 
 public static native int gsl_matrix_ushort_swap_rows(gsl_matrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ushort_swap_columns(gsl_matrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ushort_swap_rowcol(gsl_matrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_ushort_transpose(gsl_matrix_ushort m);
 public static native int gsl_matrix_ushort_transpose_memcpy(gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
-public static native int gsl_matrix_ushort_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
+public static native int gsl_matrix_ushort_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_ushort dest, @Const gsl_matrix_ushort src);
 
 public static native @Cast("unsigned short") short gsl_matrix_ushort_max(@Const gsl_matrix_ushort m);
 public static native @Cast("unsigned short") short gsl_matrix_ushort_min(@Const gsl_matrix_ushort m);
@@ -6721,6 +6784,7 @@ public static native int gsl_matrix_ushort_set_col(gsl_matrix_ushort m, @Cast("c
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_short.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -6889,14 +6953,14 @@ public static native int gsl_matrix_short_fprintf(FILE stream, @Const gsl_matrix
  
 public static native int gsl_matrix_short_memcpy(gsl_matrix_short dest, @Const gsl_matrix_short src);
 public static native int gsl_matrix_short_swap(gsl_matrix_short m1, gsl_matrix_short m2);
-public static native int gsl_matrix_short_tricpy(byte uplo_src, int copy_diag, gsl_matrix_short dest, @Const gsl_matrix_short src);
+public static native int gsl_matrix_short_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_short dest, @Const gsl_matrix_short src);
 
 public static native int gsl_matrix_short_swap_rows(gsl_matrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_short_swap_columns(gsl_matrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_short_swap_rowcol(gsl_matrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_short_transpose(gsl_matrix_short m);
 public static native int gsl_matrix_short_transpose_memcpy(gsl_matrix_short dest, @Const gsl_matrix_short src);
-public static native int gsl_matrix_short_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_short dest, @Const gsl_matrix_short src);
+public static native int gsl_matrix_short_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_short dest, @Const gsl_matrix_short src);
 
 public static native short gsl_matrix_short_max(@Const gsl_matrix_short m);
 public static native short gsl_matrix_short_min(@Const gsl_matrix_short m);
@@ -6976,6 +7040,7 @@ public static native int gsl_matrix_short_set_col(gsl_matrix_short m, @Cast("con
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_uchar.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -7144,14 +7209,14 @@ public static native int gsl_matrix_uchar_fprintf(FILE stream, @Const gsl_matrix
  
 public static native int gsl_matrix_uchar_memcpy(gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
 public static native int gsl_matrix_uchar_swap(gsl_matrix_uchar m1, gsl_matrix_uchar m2);
-public static native int gsl_matrix_uchar_tricpy(byte uplo_src, int copy_diag, gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
+public static native int gsl_matrix_uchar_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
 
 public static native int gsl_matrix_uchar_swap_rows(gsl_matrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uchar_swap_columns(gsl_matrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uchar_swap_rowcol(gsl_matrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_uchar_transpose(gsl_matrix_uchar m);
 public static native int gsl_matrix_uchar_transpose_memcpy(gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
-public static native int gsl_matrix_uchar_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
+public static native int gsl_matrix_uchar_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_uchar dest, @Const gsl_matrix_uchar src);
 
 public static native @Cast("unsigned char") byte gsl_matrix_uchar_max(@Const gsl_matrix_uchar m);
 public static native @Cast("unsigned char") byte gsl_matrix_uchar_min(@Const gsl_matrix_uchar m);
@@ -7231,6 +7296,7 @@ public static native int gsl_matrix_uchar_set_col(gsl_matrix_uchar m, @Cast("con
 // #include <gsl/gsl_inline.h>
 // #include <gsl/gsl_check_range.h>
 // #include <gsl/gsl_vector_char.h>
+// #include <gsl/gsl_blas_types.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -7392,14 +7458,14 @@ public static native int gsl_matrix_char_fprintf(FILE stream, @Const gsl_matrix_
  
 public static native int gsl_matrix_char_memcpy(gsl_matrix_char dest, @Const gsl_matrix_char src);
 public static native int gsl_matrix_char_swap(gsl_matrix_char m1, gsl_matrix_char m2);
-public static native int gsl_matrix_char_tricpy(byte uplo_src, int copy_diag, gsl_matrix_char dest, @Const gsl_matrix_char src);
+public static native int gsl_matrix_char_tricpy(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_char dest, @Const gsl_matrix_char src);
 
 public static native int gsl_matrix_char_swap_rows(gsl_matrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_char_swap_columns(gsl_matrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_char_swap_rowcol(gsl_matrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 public static native int gsl_matrix_char_transpose(gsl_matrix_char m);
 public static native int gsl_matrix_char_transpose_memcpy(gsl_matrix_char dest, @Const gsl_matrix_char src);
-public static native int gsl_matrix_char_transpose_tricpy(byte uplo_src, int copy_diag, gsl_matrix_char dest, @Const gsl_matrix_char src);
+public static native int gsl_matrix_char_transpose_tricpy(@Cast("CBLAS_UPLO_t") int Uplo_src, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_char dest, @Const gsl_matrix_char src);
 
 public static native @Cast("char") byte gsl_matrix_char_max(@Const gsl_matrix_char m);
 public static native @Cast("char") byte gsl_matrix_char_min(@Const gsl_matrix_char m);
@@ -7447,51 +7513,6 @@ public static native int gsl_matrix_char_set_col(gsl_matrix_char m, @Cast("const
 // #endif
 
 // #endif /* __GSL_MATRIX_CHAR_H__ */
-
-
-// Parsed from gsl/gsl_blas_types.h
-
-/* blas/gsl_blas_types.h
- * 
- * Copyright (C) 1996, 1997, 1998, 1999, 2000 Gerard Jungman
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/*
- * Author:  G. Jungman
- */
-/* Based on draft BLAST C interface specification  [Jul 7 1998]
- */
-// #ifndef __GSL_BLAS_TYPES_H__
-// #define __GSL_BLAS_TYPES_H__
-
-// #include <gsl/gsl_cblas.h>
-
-// #undef __BEGIN_DECLS
-// #undef __END_DECLS
-// #ifdef __cplusplus
-// # define __BEGIN_DECLS extern "C" {
-// # define __END_DECLS }
-// #else
-// #endif
-
-/* typedef  gsl_complex  COMPLEX; */
-
-
-// #endif /* __GSL_BLAS_TYPES_H__ */
 
 
 // Parsed from gsl/gsl_blas.h
@@ -10341,7 +10362,7 @@ public static native @Cast("size_t") long gsl_interp_accel_find(gsl_interp_accel
 
 /* linalg/gsl_linalg.h
  * 
- * Copyright (C) 1996, 1997, 1998, 1999, 2000, 2006, 2007 Gerard Jungman, Brian Gough, Patrick Alken
+ * Copyright (C) 1996, 1997, 1998, 1999, 2000, 2006, 2007, 2019 Gerard Jungman, Brian Gough, Patrick Alken
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10383,7 +10404,6 @@ public static final int
     GSL_LINALG_MOD_NONE = 0,
     GSL_LINALG_MOD_TRANSPOSE = 1,
     GSL_LINALG_MOD_CONJUGATE = 2;
-
 
 /* Note: You can now use the gsl_blas_dgemm function instead of matmult */
 
@@ -10441,6 +10461,16 @@ public static native int gsl_linalg_householder_hv(double tau,
                                @Const gsl_vector v, 
                                gsl_vector w);
 
+public static native int gsl_linalg_householder_left(double tau,
+                                @Const gsl_vector v,
+                                gsl_matrix A,
+                                gsl_vector work);
+
+public static native int gsl_linalg_householder_right(double tau,
+                                 @Const gsl_vector v,
+                                 gsl_matrix A,
+                                 gsl_vector work);
+
 public static native int gsl_linalg_householder_hm1(double tau, 
                                 gsl_matrix A);
 
@@ -10455,6 +10485,11 @@ public static native int gsl_linalg_complex_householder_mh(@ByVal gsl_complex ta
 public static native int gsl_linalg_complex_householder_hv(@ByVal gsl_complex tau, 
                                        @Const gsl_vector_complex v, 
                                        gsl_vector_complex w);
+
+public static native int gsl_linalg_complex_householder_left(@Const @ByVal gsl_complex tau,
+                                         @Const gsl_vector_complex v,
+                                         gsl_matrix_complex A,
+                                         gsl_vector_complex work);
 
 /* Hessenberg reduction */
 
@@ -10528,6 +10563,7 @@ public static native int gsl_linalg_LU_refine(@Const gsl_matrix A,
 public static native int gsl_linalg_LU_invert(@Const gsl_matrix LU,
                           @Const gsl_permutation p,
                           gsl_matrix inverse);
+public static native int gsl_linalg_LU_invx(gsl_matrix LU, @Const gsl_permutation p);
 
 public static native double gsl_linalg_LU_det(gsl_matrix LU, int signum);
 public static native double gsl_linalg_LU_lndet(gsl_matrix LU);
@@ -10564,6 +10600,7 @@ public static native int gsl_linalg_complex_LU_refine(@Const gsl_matrix_complex 
 public static native int gsl_linalg_complex_LU_invert(@Const gsl_matrix_complex LU,
                                   @Const gsl_permutation p,
                                   gsl_matrix_complex inverse);
+public static native int gsl_linalg_complex_LU_invx(gsl_matrix_complex LU, @Const gsl_permutation p);
 
 public static native @ByVal gsl_complex gsl_linalg_complex_LU_det(gsl_matrix_complex LU,
                                        int signum);
@@ -10575,70 +10612,53 @@ public static native @ByVal gsl_complex gsl_linalg_complex_LU_sgndet(gsl_matrix_
 
 /* QR decomposition */
 
-public static native int gsl_linalg_QR_decomp(gsl_matrix A,
-                          gsl_vector tau);
+public static native int gsl_linalg_QR_decomp(gsl_matrix A, gsl_vector tau);
 
-public static native int gsl_linalg_QR_solve(@Const gsl_matrix QR,
-                         @Const gsl_vector tau,
-                         @Const gsl_vector b,
-                         gsl_vector x);
+public static native int gsl_linalg_QR_decomp_r(gsl_matrix A, gsl_matrix T);
 
-public static native int gsl_linalg_QR_svx(@Const gsl_matrix QR,
-                       @Const gsl_vector tau,
-                       gsl_vector x);
+public static native int gsl_linalg_QR_solve(@Const gsl_matrix QR, @Const gsl_vector tau, @Const gsl_vector b, gsl_vector x);
 
-public static native int gsl_linalg_QR_lssolve(@Const gsl_matrix QR, 
-                           @Const gsl_vector tau, 
-                           @Const gsl_vector b, 
-                           gsl_vector x, 
-                           gsl_vector residual);
+public static native int gsl_linalg_QR_solve_r(@Const gsl_matrix QR, @Const gsl_matrix T, @Const gsl_vector b, gsl_vector x);
 
+public static native int gsl_linalg_QR_svx(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_vector x);
 
-public static native int gsl_linalg_QR_QRsolve(gsl_matrix Q,
-                           gsl_matrix R,
-                           @Const gsl_vector b,
-                           gsl_vector x);
+public static native int gsl_linalg_QR_lssolve(@Const gsl_matrix QR, @Const gsl_vector tau, @Const gsl_vector b, 
+                           gsl_vector x, gsl_vector residual);
 
-public static native int gsl_linalg_QR_Rsolve(@Const gsl_matrix QR,
-                          @Const gsl_vector b,
-                          gsl_vector x);
+public static native int gsl_linalg_QR_lssolve_r(@Const gsl_matrix QR, @Const gsl_matrix T, @Const gsl_vector b,
+                             gsl_vector x, gsl_vector work);
 
-public static native int gsl_linalg_QR_Rsvx(@Const gsl_matrix QR,
-                        gsl_vector x);
+public static native int gsl_linalg_QR_QRsolve(gsl_matrix Q, gsl_matrix R, @Const gsl_vector b, gsl_vector x);
 
-public static native int gsl_linalg_QR_update(gsl_matrix Q,
-                          gsl_matrix R,
-                          gsl_vector w,
-                          @Const gsl_vector v);
+public static native int gsl_linalg_QR_Rsolve(@Const gsl_matrix QR, @Const gsl_vector b, gsl_vector x);
 
-public static native int gsl_linalg_QR_QTvec(@Const gsl_matrix QR,
-                         @Const gsl_vector tau,
-                         gsl_vector v);
+public static native int gsl_linalg_QR_Rsvx(@Const gsl_matrix QR, gsl_vector x);
 
-public static native int gsl_linalg_QR_Qvec(@Const gsl_matrix QR,
-                        @Const gsl_vector tau,
-                        gsl_vector v);
+public static native int gsl_linalg_QR_update(gsl_matrix Q, gsl_matrix R, gsl_vector w, @Const gsl_vector v);
 
-public static native int gsl_linalg_QR_QTmat(@Const gsl_matrix QR,
-                         @Const gsl_vector tau,
-                         gsl_matrix A);
+public static native int gsl_linalg_QR_QTvec(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_vector v);
 
-public static native int gsl_linalg_QR_matQ(@Const gsl_matrix QR,
-                        @Const gsl_vector tau,
-                        gsl_matrix A);
+public static native int gsl_linalg_QR_QTvec_r(@Const gsl_matrix QR, @Const gsl_matrix T, gsl_vector b, gsl_vector work);
 
-public static native int gsl_linalg_QR_unpack(@Const gsl_matrix QR,
-                          @Const gsl_vector tau,
-                          gsl_matrix Q,
-                          gsl_matrix R);
+public static native int gsl_linalg_QR_Qvec(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_vector v);
 
-public static native int gsl_linalg_R_solve(@Const gsl_matrix R,
-                        @Const gsl_vector b,
-                        gsl_vector x);
+public static native int gsl_linalg_QR_QTmat(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_matrix A);
 
-public static native int gsl_linalg_R_svx(@Const gsl_matrix R,
-                      gsl_vector x);
+public static native int gsl_linalg_QR_QTmat_r(@Const gsl_matrix QR, @Const gsl_matrix T, gsl_matrix B, gsl_matrix work);
 
+public static native int gsl_linalg_QR_matQ(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_matrix A);
+
+public static native int gsl_linalg_QR_unpack(@Const gsl_matrix QR, @Const gsl_vector tau, gsl_matrix Q, gsl_matrix R);
+
+public static native int gsl_linalg_QR_unpack_r(@Const gsl_matrix QR, @Const gsl_matrix T, gsl_matrix Q, gsl_matrix R);
+
+public static native int gsl_linalg_R_solve(@Const gsl_matrix R, @Const gsl_vector b, gsl_vector x);
+
+public static native int gsl_linalg_R_svx(@Const gsl_matrix R, gsl_vector x);
+
+public static native int gsl_linalg_QR_rcond(@Const gsl_matrix QR, DoublePointer rcond, gsl_vector work);
+public static native int gsl_linalg_QR_rcond(@Const gsl_matrix QR, DoubleBuffer rcond, gsl_vector work);
+public static native int gsl_linalg_QR_rcond(@Const gsl_matrix QR, double[] rcond, gsl_vector work);
 
 /* Q R P^T decomposition */
 
@@ -10730,6 +10750,10 @@ public static native int gsl_linalg_QRPT_rcond(@Const gsl_matrix QR, DoublePoint
 public static native int gsl_linalg_QRPT_rcond(@Const gsl_matrix QR, DoubleBuffer rcond, gsl_vector work);
 public static native int gsl_linalg_QRPT_rcond(@Const gsl_matrix QR, double[] rcond, gsl_vector work);
 
+/* triangle on top of rectangle QR decomposition */
+
+public static native int gsl_linalg_QR_TR_decomp(gsl_matrix S, gsl_matrix A, gsl_matrix T);
+
 /* COD decomposition */
 
 public static native int gsl_linalg_COD_decomp(gsl_matrix A, gsl_vector tau_Q, gsl_vector tau_Z,
@@ -10756,6 +10780,11 @@ public static native int gsl_linalg_COD_matZ(@Const gsl_matrix QRZT, @Const gsl_
 /* LQ decomposition */
 
 public static native int gsl_linalg_LQ_decomp(gsl_matrix A, gsl_vector tau);
+
+public static native int gsl_linalg_LQ_lssolve(@Const gsl_matrix LQ, @Const gsl_vector tau,
+                          @Const gsl_vector b, gsl_vector x, gsl_vector residual);
+
+public static native int gsl_linalg_LQ_QTvec(@Const gsl_matrix LQ, @Const gsl_vector tau, gsl_vector v);
 
 public static native int gsl_linalg_LQ_solve_T(@Const gsl_matrix LQ, @Const gsl_vector tau, 
 			 @Const gsl_vector b, gsl_vector x);
@@ -10966,6 +10995,49 @@ public static native int gsl_linalg_mcholesky_rcond(@Const gsl_matrix LDLT, @Con
 public static native int gsl_linalg_mcholesky_invert(@Const gsl_matrix LDLT, @Const gsl_permutation p,
                                 gsl_matrix Ainv);
 
+/* Banded Cholesky decomposition */
+
+public static native int gsl_linalg_cholesky_band_decomp(gsl_matrix A);
+
+public static native int gsl_linalg_cholesky_band_solve(@Const gsl_matrix LLT, @Const gsl_vector b,
+                                    gsl_vector x);
+
+public static native int gsl_linalg_cholesky_band_svx(@Const gsl_matrix LLT, gsl_vector x);
+
+public static native int gsl_linalg_cholesky_band_invert(@Const gsl_matrix LLT, gsl_matrix Ainv);
+
+public static native int gsl_linalg_cholesky_band_unpack(@Const gsl_matrix LLT, gsl_matrix L);
+
+public static native int gsl_linalg_cholesky_band_rcond(@Const gsl_matrix LLT, DoublePointer rcond, gsl_vector work);
+public static native int gsl_linalg_cholesky_band_rcond(@Const gsl_matrix LLT, DoubleBuffer rcond, gsl_vector work);
+public static native int gsl_linalg_cholesky_band_rcond(@Const gsl_matrix LLT, double[] rcond, gsl_vector work);
+
+/* L D L^T decomposition */
+
+public static native int gsl_linalg_ldlt_decomp(gsl_matrix A);
+
+public static native int gsl_linalg_ldlt_solve(@Const gsl_matrix LDLT, @Const gsl_vector b, gsl_vector x);
+
+public static native int gsl_linalg_ldlt_svx(@Const gsl_matrix LDLT, gsl_vector x);
+
+public static native int gsl_linalg_ldlt_rcond(@Const gsl_matrix LDLT, DoublePointer rcond, gsl_vector work);
+public static native int gsl_linalg_ldlt_rcond(@Const gsl_matrix LDLT, DoubleBuffer rcond, gsl_vector work);
+public static native int gsl_linalg_ldlt_rcond(@Const gsl_matrix LDLT, double[] rcond, gsl_vector work);
+
+/* Banded L D L^T decomposition */
+
+public static native int gsl_linalg_ldlt_band_decomp(gsl_matrix A);
+
+public static native int gsl_linalg_ldlt_band_solve(@Const gsl_matrix LDLT, @Const gsl_vector b, gsl_vector x);
+
+public static native int gsl_linalg_ldlt_band_svx(@Const gsl_matrix LDLT, gsl_vector x);
+
+public static native int gsl_linalg_ldlt_band_unpack(@Const gsl_matrix LDLT, gsl_matrix L, gsl_vector D);
+
+public static native int gsl_linalg_ldlt_band_rcond(@Const gsl_matrix LDLT, DoublePointer rcond, gsl_vector work);
+public static native int gsl_linalg_ldlt_band_rcond(@Const gsl_matrix LDLT, DoubleBuffer rcond, gsl_vector work);
+public static native int gsl_linalg_ldlt_band_rcond(@Const gsl_matrix LDLT, double[] rcond, gsl_vector work);
+
 /* Symmetric to symmetric tridiagonal decomposition */
 
 public static native int gsl_linalg_symmtd_decomp(gsl_matrix A, 
@@ -11101,6 +11173,9 @@ public static native int gsl_linalg_balance_columns(gsl_matrix A, gsl_vector D);
 
 /* condition estimation */
 
+public static native int gsl_linalg_tri_rcond(@Cast("CBLAS_UPLO_t") int Uplo, @Const gsl_matrix A, DoublePointer rcond, gsl_vector work);
+public static native int gsl_linalg_tri_rcond(@Cast("CBLAS_UPLO_t") int Uplo, @Const gsl_matrix A, DoubleBuffer rcond, gsl_vector work);
+public static native int gsl_linalg_tri_rcond(@Cast("CBLAS_UPLO_t") int Uplo, @Const gsl_matrix A, double[] rcond, gsl_vector work);
 public static native int gsl_linalg_tri_upper_rcond(@Const gsl_matrix A, DoublePointer rcond, gsl_vector work);
 public static native int gsl_linalg_tri_upper_rcond(@Const gsl_matrix A, DoubleBuffer rcond, gsl_vector work);
 public static native int gsl_linalg_tri_upper_rcond(@Const gsl_matrix A, double[] rcond, gsl_vector work);
@@ -11126,6 +11201,14 @@ public static native int gsl_linalg_tri_upper_invert(gsl_matrix T);
 public static native int gsl_linalg_tri_lower_invert(gsl_matrix T);
 public static native int gsl_linalg_tri_upper_unit_invert(gsl_matrix T);
 public static native int gsl_linalg_tri_lower_unit_invert(gsl_matrix T);
+
+public static native int gsl_linalg_tri_invert(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix T);
+public static native int gsl_linalg_complex_tri_invert(@Cast("CBLAS_UPLO_t") int Uplo, @Cast("CBLAS_DIAG_t") int Diag, gsl_matrix_complex T);
+
+public static native int gsl_linalg_tri_LTL(gsl_matrix L);
+public static native int gsl_linalg_tri_UL(gsl_matrix LU);
+public static native int gsl_linalg_complex_tri_LHL(gsl_matrix_complex L);
+public static native int gsl_linalg_complex_tri_UL(gsl_matrix_complex LU);
 
 /* */ public static native void gsl_linalg_givens(double a, double b,
                                     DoublePointer c, DoublePointer s);
@@ -12726,116 +12809,61 @@ public static native int gsl_rstat_reset(gsl_rstat_workspace w);
 
 // Parsed from gsl/gsl_spmatrix.h
 
-/* gsl_spmatrix.h
- * 
- * Copyright (C) 2012-2014 Patrick Alken
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
 // #ifndef __GSL_SPMATRIX_H__
 // #define __GSL_SPMATRIX_H__
 
-// #include <stdlib.h>
-
-// #include <gsl/gsl_math.h>
-// #include <gsl/gsl_vector.h>
-// #include <gsl/gsl_matrix.h>
-
-// #undef __BEGIN_DECLS
-// #undef __END_DECLS
-// #ifdef __cplusplus
-// # define __BEGIN_DECLS extern "C" {
-// # define __END_DECLS }
-// #else
-// #endif
-// Targeting ../gsl_spmatrix_tree.java
+/** enum  */
+public static final int
+  GSL_SPMATRIX_COO = 0, /* coordinate/triplet representation */
+  GSL_SPMATRIX_CSC = 1, /* compressed sparse column */
+  GSL_SPMATRIX_CSR = 2, /* compressed sparse row */
+  GSL_SPMATRIX_TRIPLET = GSL_SPMATRIX_COO,
+  GSL_SPMATRIX_CCS = GSL_SPMATRIX_CSC,
+  GSL_SPMATRIX_CRS = GSL_SPMATRIX_CSR;
+// Targeting ../gsl_spmatrix_pool_node.java
 
 
-// Targeting ../gsl_spmatrix.java
+// Targeting ../gsl_spmatrix_pool.java
 
 
 
-public static final int GSL_SPMATRIX_TRIPLET =      (0);
-public static final int GSL_SPMATRIX_CCS =          (1);
-public static final int GSL_SPMATRIX_CRS =          (2);
+// #define GSL_SPMATRIX_ISCOO(m)         ((m)->sptype == GSL_SPMATRIX_COO)
+// #define GSL_SPMATRIX_ISCSC(m)         ((m)->sptype == GSL_SPMATRIX_CSC)
+// #define GSL_SPMATRIX_ISCSR(m)         ((m)->sptype == GSL_SPMATRIX_CSR)
 
-// #define GSL_SPMATRIX_ISTRIPLET(m) ((m)->sptype == GSL_SPMATRIX_TRIPLET)
-// #define GSL_SPMATRIX_ISCCS(m)     ((m)->sptype == GSL_SPMATRIX_CCS)
-// #define GSL_SPMATRIX_ISCRS(m)     ((m)->sptype == GSL_SPMATRIX_CRS)
+// #define GSL_SPMATRIX_ISTRIPLET(m)     GSL_SPMATRIX_ISCOO(m)
+// #define GSL_SPMATRIX_ISCCS(m)         GSL_SPMATRIX_ISCSC(m)
+// #define GSL_SPMATRIX_ISCRS(m)         GSL_SPMATRIX_ISCSR(m)
 
-/*
- * Prototypes
- */
+public static final int GSL_SPMATRIX_FLG_GROW =         (1 << 0); /* allow size of matrix to grow as elements are added */
+public static final int GSL_SPMATRIX_FLG_FIXED =        (1 << 1); /* sparsity pattern is fixed */
 
-public static native gsl_spmatrix gsl_spmatrix_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
-public static native gsl_spmatrix gsl_spmatrix_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
-                                       @Cast("const size_t") long nzmax, @Cast("const size_t") long flags);
-public static native void gsl_spmatrix_free(gsl_spmatrix m);
-public static native int gsl_spmatrix_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix m);
-public static native int gsl_spmatrix_set_zero(gsl_spmatrix m);
-public static native @Cast("size_t") long gsl_spmatrix_nnz(@Const gsl_spmatrix m);
-public static native int gsl_spmatrix_compare_idx(@Cast("const size_t") long ia, @Cast("const size_t") long ja,
-                             @Cast("const size_t") long ib, @Cast("const size_t") long jb);
-public static native int gsl_spmatrix_tree_rebuild(gsl_spmatrix m);
+/* compare matrix entries (ia,ja) and (ib,jb) - sort by rows first, then by columns */
+// #define GSL_SPMATRIX_COMPARE_ROWCOL(m,ia,ja,ib,jb)   ((ia) < (ib) ? -1 : ((ia) > (ib) ? 1 : ((ja) < (jb) ? -1 : ((ja) > (jb)))))
 
-/* spcopy.c */
-public static native int gsl_spmatrix_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+/* common/utility functions */
 
-/* spgetset.c */
-public static native double gsl_spmatrix_get(@Const gsl_spmatrix m, @Cast("const size_t") long i,
-                        @Cast("const size_t") long j);
-public static native int gsl_spmatrix_set(gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j,
-                     double x);
-public static native DoublePointer gsl_spmatrix_ptr(gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
 
-/* spcompress.c */
-public static native gsl_spmatrix gsl_spmatrix_compcol(@Const gsl_spmatrix T);
-public static native gsl_spmatrix gsl_spmatrix_ccs(@Const gsl_spmatrix T);
-public static native gsl_spmatrix gsl_spmatrix_crs(@Const gsl_spmatrix T);
-public static native void gsl_spmatrix_cumsum(@Cast("const size_t") long n, @Cast("size_t*") SizeTPointer c);
 
-/* spio.c */
-public static native int gsl_spmatrix_fprintf(FILE stream, @Const gsl_spmatrix m,
-                         @Cast("const char*") BytePointer format);
-public static native int gsl_spmatrix_fprintf(FILE stream, @Const gsl_spmatrix m,
-                         String format);
-public static native gsl_spmatrix gsl_spmatrix_fscanf(FILE stream);
-public static native int gsl_spmatrix_fwrite(FILE stream, @Const gsl_spmatrix m);
-public static native int gsl_spmatrix_fread(FILE stream, gsl_spmatrix m);
+// #include <gsl/gsl_spmatrix_complex_long_double.h>
+// #include <gsl/gsl_spmatrix_complex_double.h>
+// #include <gsl/gsl_spmatrix_complex_float.h>
 
-/* spoper.c */
-public static native int gsl_spmatrix_scale(gsl_spmatrix m, double x);
-public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoublePointer min_out,
-                        DoublePointer max_out);
-public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoubleBuffer min_out,
-                        DoubleBuffer max_out);
-public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, double[] min_out,
-                        double[] max_out);
-public static native int gsl_spmatrix_add(gsl_spmatrix c, @Const gsl_spmatrix a,
-                     @Const gsl_spmatrix b);
-public static native int gsl_spmatrix_d2sp(gsl_spmatrix S, @Const gsl_matrix A);
-public static native int gsl_spmatrix_sp2d(gsl_matrix A, @Const gsl_spmatrix S);
+// #include <gsl/gsl_spmatrix_long_double.h>
+// #include <gsl/gsl_spmatrix_double.h>
+// #include <gsl/gsl_spmatrix_float.h>
 
-/* spprop.c */
-public static native int gsl_spmatrix_equal(@Const gsl_spmatrix a, @Const gsl_spmatrix b);
+// #include <gsl/gsl_spmatrix_ulong.h>
+// #include <gsl/gsl_spmatrix_long.h>
 
-/* spswap.c */
-public static native int gsl_spmatrix_transpose(gsl_spmatrix m);
-public static native int gsl_spmatrix_transpose2(gsl_spmatrix m);
-public static native int gsl_spmatrix_transpose_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+// #include <gsl/gsl_spmatrix_uint.h>
+// #include <gsl/gsl_spmatrix_int.h>
+
+// #include <gsl/gsl_spmatrix_ushort.h>
+// #include <gsl/gsl_spmatrix_short.h>
+
+// #include <gsl/gsl_spmatrix_uchar.h>
+// #include <gsl/gsl_spmatrix_char.h>
 
 // #endif /* __GSL_SPMATRIX_H__ */
 
@@ -12890,14 +12918,14 @@ public static native int gsl_spblas_dgemv(@Cast("const CBLAS_TRANSPOSE_t") int T
 public static native int gsl_spblas_dgemm(double alpha, @Const gsl_spmatrix A,
                      @Const gsl_spmatrix B, gsl_spmatrix C);
 public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
-                          double alpha, @Cast("size_t*") SizeTPointer w, DoublePointer x,
-                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+                          double alpha, IntPointer w, DoublePointer x,
+                          int mark, gsl_spmatrix C, @Cast("size_t") long nz);
 public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
-                          double alpha, @Cast("size_t*") SizeTPointer w, DoubleBuffer x,
-                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+                          double alpha, IntBuffer w, DoubleBuffer x,
+                          int mark, gsl_spmatrix C, @Cast("size_t") long nz);
 public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
-                          double alpha, @Cast("size_t*") SizeTPointer w, double[] x,
-                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+                          double alpha, int[] w, double[] x,
+                          int mark, gsl_spmatrix C, @Cast("size_t") long nz);
 
 // #endif /* __GSL_SPBLAS_H__ */
 
@@ -13075,6 +13103,8 @@ public static native int gsl_interp2d_eval_e(@Const gsl_interp2d interp, @Const 
                         double x, double y, gsl_interp_accel xa,
                         gsl_interp_accel ya, double[] z);
 
+// #ifndef GSL_DISABLE_DEPRECATED
+
 public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
                                @Const DoublePointer xarr,
                                @Const DoublePointer yarr,
@@ -13094,6 +13124,36 @@ public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
                                gsl_interp_accel ya,
                                DoubleBuffer z);
 public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
+                               @Const double[] xarr,
+                               @Const double[] yarr,
+                               @Const double[] zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               double[] z);
+
+// #endif /* !GSL_DISABLE_DEPRECATED */
+
+public static native int gsl_interp2d_eval_extrap_e(@Const gsl_interp2d interp,
+                               @Const DoublePointer xarr,
+                               @Const DoublePointer yarr,
+                               @Const DoublePointer zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               DoublePointer z);
+public static native int gsl_interp2d_eval_extrap_e(@Const gsl_interp2d interp,
+                               @Const DoubleBuffer xarr,
+                               @Const DoubleBuffer yarr,
+                               @Const DoubleBuffer zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               DoubleBuffer z);
+public static native int gsl_interp2d_eval_extrap_e(@Const gsl_interp2d interp,
                                @Const double[] xarr,
                                @Const double[] yarr,
                                @Const double[] zarr,
@@ -13385,6 +13445,1572 @@ public static native double gsl_spline2d_get(@Const gsl_spline2d interp, @Const 
                         @Cast("const size_t") long i, @Cast("const size_t") long j);
 
 // #endif /* __GSL_SPLINE2D_H__ */
+
+
+// Parsed from gsl/gsl_bst_avl.h
+
+/* bst/gsl_bst_avl.h
+ * 
+ * Copyright (C) 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_BST_AVL_H__
+// #define __GSL_BST_AVL_H__
+
+// #include <gsl/gsl_bst_types.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+// #ifndef GSL_BST_AVL_MAX_HEIGHT
+public static final int GSL_BST_AVL_MAX_HEIGHT = 32;
+// Targeting ../gsl_bst_avl_node.java
+
+
+// Targeting ../gsl_bst_avl_table.java
+
+
+// Targeting ../gsl_bst_avl_traverser.java
+
+
+
+// #endif /* __GSL_BST_AVL_H__ */
+
+
+// Parsed from gsl/gsl_bst_rb.h
+
+/* bst/gsl_bst_rb.h
+ * 
+ * Copyright (C) 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_BST_RB_H__
+// #define __GSL_BST_RB_H__
+
+// #include <gsl/gsl_bst_types.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+// #ifndef GSL_BST_RB_MAX_HEIGHT
+public static final int GSL_BST_RB_MAX_HEIGHT = 48;
+// Targeting ../gsl_bst_rb_node.java
+
+
+// Targeting ../gsl_bst_rb_table.java
+
+
+// Targeting ../gsl_bst_rb_traverser.java
+
+
+
+// #endif /* __GSL_BST_RB_H__ */
+
+
+// Parsed from gsl/gsl_bst_types.h
+
+/* bst/gsl_bst_types.h
+ * 
+ * Copyright (C) 2019 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_BST_TYPES_H__
+// #define __GSL_BST_TYPES_H__
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// Targeting ../gsl_bst_cmp_function.java
+
+
+// Targeting ../gsl_bst_allocator.java
+
+
+
+// #endif /* __GSL_BST_TYPES_H__ */
+
+
+// Parsed from gsl/gsl_bst.h
+
+/* bst/gsl_bst.h
+ * 
+ * Copyright (C) 2018, 2019 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_BST_H__
+// #define __GSL_BST_H__
+
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst_avl.h>
+// #include <gsl/gsl_bst_rb.h>
+// #include <gsl/gsl_bst_types.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_bst_type.java
+
+
+// Targeting ../gsl_bst_workspace.java
+
+
+// Targeting ../gsl_bst_trav.java
+
+
+
+/* tree types */
+public static native @Const gsl_bst_type gsl_bst_avl(); public static native void gsl_bst_avl(gsl_bst_type setter);
+public static native @Const gsl_bst_type gsl_bst_rb(); public static native void gsl_bst_rb(gsl_bst_type setter);
+
+/*
+ * Prototypes
+ */
+
+public static native gsl_bst_workspace gsl_bst_alloc(@Const gsl_bst_type T, @Const gsl_bst_allocator allocator,
+                                  gsl_bst_cmp_function compare, Pointer params);
+public static native void gsl_bst_free(gsl_bst_workspace w);
+public static native int gsl_bst_empty(gsl_bst_workspace w);
+public static native Pointer gsl_bst_insert(Pointer item, gsl_bst_workspace w);
+public static native Pointer gsl_bst_find(@Const Pointer item, @Const gsl_bst_workspace w);
+public static native Pointer gsl_bst_remove(@Const Pointer item, gsl_bst_workspace w);
+public static native @Cast("size_t") long gsl_bst_nodes(@Const gsl_bst_workspace w);
+public static native @Cast("size_t") long gsl_bst_node_size(@Const gsl_bst_workspace w);
+public static native @Cast("const char*") BytePointer gsl_bst_name(@Const gsl_bst_workspace w);
+
+public static native int gsl_bst_trav_init(gsl_bst_trav trav, @Const gsl_bst_workspace w);
+public static native Pointer gsl_bst_trav_first(gsl_bst_trav trav, @Const gsl_bst_workspace w);
+public static native Pointer gsl_bst_trav_last(gsl_bst_trav trav, @Const gsl_bst_workspace w);
+public static native Pointer gsl_bst_trav_find(@Const Pointer item, gsl_bst_trav trav, @Const gsl_bst_workspace w);
+public static native Pointer gsl_bst_trav_insert(Pointer item, gsl_bst_trav trav, gsl_bst_workspace w);
+public static native Pointer gsl_bst_trav_copy(gsl_bst_trav dest, @Const gsl_bst_trav src);
+public static native Pointer gsl_bst_trav_next(gsl_bst_trav trav);
+public static native Pointer gsl_bst_trav_prev(gsl_bst_trav trav);
+public static native Pointer gsl_bst_trav_cur(@Const gsl_bst_trav trav);
+public static native Pointer gsl_bst_trav_replace(gsl_bst_trav trav, Pointer new_item);
+
+// #endif /* __GSL_BST_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_complex_double.h
+
+/* spmatrix/gsl_spmatrix_double.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_COMPLEX_DOUBLE_H__
+// #define __GSL_SPMATRIX_COMPLEX_DOUBLE_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_complex_double.h>
+// #include <gsl/gsl_matrix_complex_double.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_complex.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_complex_free(gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_complex m);
+public static native @Cast("size_t") long gsl_spmatrix_complex_nnz(@Const gsl_spmatrix_complex m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_complex_type(@Const gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_set_zero(gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_tree_rebuild(gsl_spmatrix_complex m);
+
+/* compress */
+
+public static native int gsl_spmatrix_complex_csc(gsl_spmatrix_complex dest, @Const gsl_spmatrix_complex src);
+public static native int gsl_spmatrix_complex_csr(gsl_spmatrix_complex dest, @Const gsl_spmatrix_complex src);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_compress(@Const gsl_spmatrix_complex src, int sptype);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_compcol(@Const gsl_spmatrix_complex src);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_ccs(@Const gsl_spmatrix_complex src);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_crs(@Const gsl_spmatrix_complex src);
+
+/* copy */
+
+public static native int gsl_spmatrix_complex_memcpy(gsl_spmatrix_complex dest, @Const gsl_spmatrix_complex src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_complex_fprintf(FILE stream, @Const gsl_spmatrix_complex m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_complex_fprintf(FILE stream, @Const gsl_spmatrix_complex m, String format);
+public static native gsl_spmatrix_complex gsl_spmatrix_complex_fscanf(FILE stream);
+public static native int gsl_spmatrix_complex_fwrite(FILE stream, @Const gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_fread(FILE stream, gsl_spmatrix_complex m);
+
+/* get/set */
+
+public static native @ByVal gsl_complex gsl_spmatrix_complex_get(@Const gsl_spmatrix_complex m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_complex_set(gsl_spmatrix_complex m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Const @ByVal gsl_complex x);
+public static native gsl_complex gsl_spmatrix_complex_ptr(@Const gsl_spmatrix_complex m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* operations */
+
+public static native int gsl_spmatrix_complex_scale(gsl_spmatrix_complex m, @Const @ByVal gsl_complex x);
+public static native int gsl_spmatrix_complex_scale_columns(gsl_spmatrix_complex m, @Const gsl_vector_complex x);
+public static native int gsl_spmatrix_complex_scale_rows(gsl_spmatrix_complex m, @Const gsl_vector_complex x);
+public static native int gsl_spmatrix_complex_add(gsl_spmatrix_complex c, @Const gsl_spmatrix_complex a, @Const gsl_spmatrix_complex b);
+public static native int gsl_spmatrix_complex_add_to_dense(gsl_matrix_complex a, @Const gsl_spmatrix_complex b);
+public static native int gsl_spmatrix_complex_d2sp(gsl_spmatrix_complex T, @Const gsl_matrix_complex A);
+public static native int gsl_spmatrix_complex_sp2d(gsl_matrix_complex A, @Const gsl_spmatrix_complex S);
+
+/* properties */
+
+public static native int gsl_spmatrix_complex_equal(@Const gsl_spmatrix_complex a, @Const gsl_spmatrix_complex b);
+
+/* swap */
+
+public static native int gsl_spmatrix_complex_transpose(gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_transpose2(gsl_spmatrix_complex m);
+public static native int gsl_spmatrix_complex_transpose_memcpy(gsl_spmatrix_complex dest, @Const gsl_spmatrix_complex src);
+
+// #endif /* __GSL_SPMATRIX_COMPLEX_DOUBLE_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_complex_float.h
+
+/* spmatrix/gsl_spmatrix_float.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_COMPLEX_FLOAT_H__
+// #define __GSL_SPMATRIX_COMPLEX_FLOAT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_complex_float.h>
+// #include <gsl/gsl_matrix_complex_float.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_complex_float.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_complex_float_free(gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_complex_float m);
+public static native @Cast("size_t") long gsl_spmatrix_complex_float_nnz(@Const gsl_spmatrix_complex_float m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_complex_float_type(@Const gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_set_zero(gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_tree_rebuild(gsl_spmatrix_complex_float m);
+
+/* compress */
+
+public static native int gsl_spmatrix_complex_float_csc(gsl_spmatrix_complex_float dest, @Const gsl_spmatrix_complex_float src);
+public static native int gsl_spmatrix_complex_float_csr(gsl_spmatrix_complex_float dest, @Const gsl_spmatrix_complex_float src);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_compress(@Const gsl_spmatrix_complex_float src, int sptype);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_compcol(@Const gsl_spmatrix_complex_float src);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_ccs(@Const gsl_spmatrix_complex_float src);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_crs(@Const gsl_spmatrix_complex_float src);
+
+/* copy */
+
+public static native int gsl_spmatrix_complex_float_memcpy(gsl_spmatrix_complex_float dest, @Const gsl_spmatrix_complex_float src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_complex_float_fprintf(FILE stream, @Const gsl_spmatrix_complex_float m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_complex_float_fprintf(FILE stream, @Const gsl_spmatrix_complex_float m, String format);
+public static native gsl_spmatrix_complex_float gsl_spmatrix_complex_float_fscanf(FILE stream);
+public static native int gsl_spmatrix_complex_float_fwrite(FILE stream, @Const gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_fread(FILE stream, gsl_spmatrix_complex_float m);
+
+/* get/set */
+
+public static native @ByVal gsl_complex_float gsl_spmatrix_complex_float_get(@Const gsl_spmatrix_complex_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_complex_float_set(gsl_spmatrix_complex_float m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Const @ByVal gsl_complex_float x);
+public static native gsl_complex_float gsl_spmatrix_complex_float_ptr(@Const gsl_spmatrix_complex_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* operations */
+
+public static native int gsl_spmatrix_complex_float_scale(gsl_spmatrix_complex_float m, @Const @ByVal gsl_complex_float x);
+public static native int gsl_spmatrix_complex_float_scale_columns(gsl_spmatrix_complex_float m, @Const gsl_vector_complex_float x);
+public static native int gsl_spmatrix_complex_float_scale_rows(gsl_spmatrix_complex_float m, @Const gsl_vector_complex_float x);
+public static native int gsl_spmatrix_complex_float_add(gsl_spmatrix_complex_float c, @Const gsl_spmatrix_complex_float a, @Const gsl_spmatrix_complex_float b);
+public static native int gsl_spmatrix_complex_float_add_to_dense(gsl_matrix_complex_float a, @Const gsl_spmatrix_complex_float b);
+public static native int gsl_spmatrix_complex_float_d2sp(gsl_spmatrix_complex_float T, @Const gsl_matrix_complex_float A);
+public static native int gsl_spmatrix_complex_float_sp2d(gsl_matrix_complex_float A, @Const gsl_spmatrix_complex_float S);
+
+/* properties */
+
+public static native int gsl_spmatrix_complex_float_equal(@Const gsl_spmatrix_complex_float a, @Const gsl_spmatrix_complex_float b);
+
+/* swap */
+
+public static native int gsl_spmatrix_complex_float_transpose(gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_transpose2(gsl_spmatrix_complex_float m);
+public static native int gsl_spmatrix_complex_float_transpose_memcpy(gsl_spmatrix_complex_float dest, @Const gsl_spmatrix_complex_float src);
+
+// #endif /* __GSL_SPMATRIX_COMPLEX_FLOAT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_double.h
+
+/* spmatrix/gsl_spmatrix_double.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_DOUBLE_H__
+// #define __GSL_SPMATRIX_DOUBLE_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_double.h>
+// #include <gsl/gsl_matrix_double.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix gsl_spmatrix_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix gsl_spmatrix_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_free(gsl_spmatrix m);
+public static native int gsl_spmatrix_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix m);
+public static native @Cast("size_t") long gsl_spmatrix_nnz(@Const gsl_spmatrix m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_type(@Const gsl_spmatrix m);
+public static native int gsl_spmatrix_set_zero(gsl_spmatrix m);
+public static native int gsl_spmatrix_tree_rebuild(gsl_spmatrix m);
+
+/* compress */
+
+public static native int gsl_spmatrix_csc(gsl_spmatrix dest, @Const gsl_spmatrix src);
+public static native int gsl_spmatrix_csr(gsl_spmatrix dest, @Const gsl_spmatrix src);
+public static native gsl_spmatrix gsl_spmatrix_compress(@Const gsl_spmatrix src, int sptype);
+public static native gsl_spmatrix gsl_spmatrix_compcol(@Const gsl_spmatrix src);
+public static native gsl_spmatrix gsl_spmatrix_ccs(@Const gsl_spmatrix src);
+public static native gsl_spmatrix gsl_spmatrix_crs(@Const gsl_spmatrix src);
+
+/* copy */
+
+public static native int gsl_spmatrix_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_fprintf(FILE stream, @Const gsl_spmatrix m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_fprintf(FILE stream, @Const gsl_spmatrix m, String format);
+public static native gsl_spmatrix gsl_spmatrix_fscanf(FILE stream);
+public static native int gsl_spmatrix_fwrite(FILE stream, @Const gsl_spmatrix m);
+public static native int gsl_spmatrix_fread(FILE stream, gsl_spmatrix m);
+
+/* get/set */
+
+public static native double gsl_spmatrix_get(@Const gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_set(gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j, double x);
+public static native DoublePointer gsl_spmatrix_ptr(@Const gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoublePointer min_out, DoublePointer max_out);
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoubleBuffer min_out, DoubleBuffer max_out);
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, double[] min_out, double[] max_out);
+public static native int gsl_spmatrix_min_index(@Const gsl_spmatrix m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_scale(gsl_spmatrix m, double x);
+public static native int gsl_spmatrix_scale_columns(gsl_spmatrix m, @Const gsl_vector x);
+public static native int gsl_spmatrix_scale_rows(gsl_spmatrix m, @Const gsl_vector x);
+public static native int gsl_spmatrix_add(gsl_spmatrix c, @Const gsl_spmatrix a, @Const gsl_spmatrix b);
+public static native int gsl_spmatrix_add_to_dense(gsl_matrix a, @Const gsl_spmatrix b);
+public static native int gsl_spmatrix_d2sp(gsl_spmatrix T, @Const gsl_matrix A);
+public static native int gsl_spmatrix_sp2d(gsl_matrix A, @Const gsl_spmatrix S);
+
+/* properties */
+
+public static native int gsl_spmatrix_equal(@Const gsl_spmatrix a, @Const gsl_spmatrix b);
+
+/* swap */
+
+public static native int gsl_spmatrix_transpose(gsl_spmatrix m);
+public static native int gsl_spmatrix_transpose2(gsl_spmatrix m);
+public static native int gsl_spmatrix_transpose_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+
+// #endif /* __GSL_SPMATRIX_DOUBLE_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_float.h
+
+/* spmatrix/gsl_spmatrix_float.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_FLOAT_H__
+// #define __GSL_SPMATRIX_FLOAT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_float.h>
+// #include <gsl/gsl_matrix_float.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_float.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_float gsl_spmatrix_float_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_float gsl_spmatrix_float_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_float_free(gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_float m);
+public static native @Cast("size_t") long gsl_spmatrix_float_nnz(@Const gsl_spmatrix_float m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_float_type(@Const gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_set_zero(gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_tree_rebuild(gsl_spmatrix_float m);
+
+/* compress */
+
+public static native int gsl_spmatrix_float_csc(gsl_spmatrix_float dest, @Const gsl_spmatrix_float src);
+public static native int gsl_spmatrix_float_csr(gsl_spmatrix_float dest, @Const gsl_spmatrix_float src);
+public static native gsl_spmatrix_float gsl_spmatrix_float_compress(@Const gsl_spmatrix_float src, int sptype);
+public static native gsl_spmatrix_float gsl_spmatrix_float_compcol(@Const gsl_spmatrix_float src);
+public static native gsl_spmatrix_float gsl_spmatrix_float_ccs(@Const gsl_spmatrix_float src);
+public static native gsl_spmatrix_float gsl_spmatrix_float_crs(@Const gsl_spmatrix_float src);
+
+/* copy */
+
+public static native int gsl_spmatrix_float_memcpy(gsl_spmatrix_float dest, @Const gsl_spmatrix_float src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_float_fprintf(FILE stream, @Const gsl_spmatrix_float m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_float_fprintf(FILE stream, @Const gsl_spmatrix_float m, String format);
+public static native gsl_spmatrix_float gsl_spmatrix_float_fscanf(FILE stream);
+public static native int gsl_spmatrix_float_fwrite(FILE stream, @Const gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_fread(FILE stream, gsl_spmatrix_float m);
+
+/* get/set */
+
+public static native float gsl_spmatrix_float_get(@Const gsl_spmatrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_float_set(gsl_spmatrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j, float x);
+public static native FloatPointer gsl_spmatrix_float_ptr(@Const gsl_spmatrix_float m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_float_minmax(@Const gsl_spmatrix_float m, FloatPointer min_out, FloatPointer max_out);
+public static native int gsl_spmatrix_float_minmax(@Const gsl_spmatrix_float m, FloatBuffer min_out, FloatBuffer max_out);
+public static native int gsl_spmatrix_float_minmax(@Const gsl_spmatrix_float m, float[] min_out, float[] max_out);
+public static native int gsl_spmatrix_float_min_index(@Const gsl_spmatrix_float m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_float_scale(gsl_spmatrix_float m, float x);
+public static native int gsl_spmatrix_float_scale_columns(gsl_spmatrix_float m, @Const gsl_vector_float x);
+public static native int gsl_spmatrix_float_scale_rows(gsl_spmatrix_float m, @Const gsl_vector_float x);
+public static native int gsl_spmatrix_float_add(gsl_spmatrix_float c, @Const gsl_spmatrix_float a, @Const gsl_spmatrix_float b);
+public static native int gsl_spmatrix_float_add_to_dense(gsl_matrix_float a, @Const gsl_spmatrix_float b);
+public static native int gsl_spmatrix_float_d2sp(gsl_spmatrix_float T, @Const gsl_matrix_float A);
+public static native int gsl_spmatrix_float_sp2d(gsl_matrix_float A, @Const gsl_spmatrix_float S);
+
+/* properties */
+
+public static native int gsl_spmatrix_float_equal(@Const gsl_spmatrix_float a, @Const gsl_spmatrix_float b);
+
+/* swap */
+
+public static native int gsl_spmatrix_float_transpose(gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_transpose2(gsl_spmatrix_float m);
+public static native int gsl_spmatrix_float_transpose_memcpy(gsl_spmatrix_float dest, @Const gsl_spmatrix_float src);
+
+// #endif /* __GSL_SPMATRIX_FLOAT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_ulong.h
+
+/* spmatrix/gsl_spmatrix_ulong.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_ULONG_H__
+// #define __GSL_SPMATRIX_ULONG_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_ulong.h>
+// #include <gsl/gsl_matrix_ulong.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_ulong.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_ulong_free(gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_ulong m);
+public static native @Cast("size_t") long gsl_spmatrix_ulong_nnz(@Const gsl_spmatrix_ulong m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_ulong_type(@Const gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_set_zero(gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_tree_rebuild(gsl_spmatrix_ulong m);
+
+/* compress */
+
+public static native int gsl_spmatrix_ulong_csc(gsl_spmatrix_ulong dest, @Const gsl_spmatrix_ulong src);
+public static native int gsl_spmatrix_ulong_csr(gsl_spmatrix_ulong dest, @Const gsl_spmatrix_ulong src);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_compress(@Const gsl_spmatrix_ulong src, int sptype);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_compcol(@Const gsl_spmatrix_ulong src);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_ccs(@Const gsl_spmatrix_ulong src);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_crs(@Const gsl_spmatrix_ulong src);
+
+/* copy */
+
+public static native int gsl_spmatrix_ulong_memcpy(gsl_spmatrix_ulong dest, @Const gsl_spmatrix_ulong src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_ulong_fprintf(FILE stream, @Const gsl_spmatrix_ulong m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_ulong_fprintf(FILE stream, @Const gsl_spmatrix_ulong m, String format);
+public static native gsl_spmatrix_ulong gsl_spmatrix_ulong_fscanf(FILE stream);
+public static native int gsl_spmatrix_ulong_fwrite(FILE stream, @Const gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_fread(FILE stream, gsl_spmatrix_ulong m);
+
+/* get/set */
+
+public static native @Cast("unsigned long") long gsl_spmatrix_ulong_get(@Const gsl_spmatrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_ulong_set(gsl_spmatrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Cast("const unsigned long") long x);
+public static native @Cast("unsigned long*") CLongPointer gsl_spmatrix_ulong_ptr(@Const gsl_spmatrix_ulong m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_ulong_minmax(@Const gsl_spmatrix_ulong m, @Cast("unsigned long*") CLongPointer min_out, @Cast("unsigned long*") CLongPointer max_out);
+public static native int gsl_spmatrix_ulong_min_index(@Const gsl_spmatrix_ulong m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_ulong_scale(gsl_spmatrix_ulong m, @Cast("const unsigned long") long x);
+public static native int gsl_spmatrix_ulong_scale_columns(gsl_spmatrix_ulong m, @Const gsl_vector_ulong x);
+public static native int gsl_spmatrix_ulong_scale_rows(gsl_spmatrix_ulong m, @Const gsl_vector_ulong x);
+public static native int gsl_spmatrix_ulong_add(gsl_spmatrix_ulong c, @Const gsl_spmatrix_ulong a, @Const gsl_spmatrix_ulong b);
+public static native int gsl_spmatrix_ulong_add_to_dense(gsl_matrix_ulong a, @Const gsl_spmatrix_ulong b);
+public static native int gsl_spmatrix_ulong_d2sp(gsl_spmatrix_ulong T, @Const gsl_matrix_ulong A);
+public static native int gsl_spmatrix_ulong_sp2d(gsl_matrix_ulong A, @Const gsl_spmatrix_ulong S);
+
+/* properties */
+
+public static native int gsl_spmatrix_ulong_equal(@Const gsl_spmatrix_ulong a, @Const gsl_spmatrix_ulong b);
+
+/* swap */
+
+public static native int gsl_spmatrix_ulong_transpose(gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_transpose2(gsl_spmatrix_ulong m);
+public static native int gsl_spmatrix_ulong_transpose_memcpy(gsl_spmatrix_ulong dest, @Const gsl_spmatrix_ulong src);
+
+// #endif /* __GSL_SPMATRIX_ULONG_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_long.h
+
+/* spmatrix/gsl_spmatrix_long.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_LONG_H__
+// #define __GSL_SPMATRIX_LONG_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_long.h>
+// #include <gsl/gsl_matrix_long.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_long.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_long gsl_spmatrix_long_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_long gsl_spmatrix_long_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_long_free(gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_long m);
+public static native @Cast("size_t") long gsl_spmatrix_long_nnz(@Const gsl_spmatrix_long m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_long_type(@Const gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_set_zero(gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_tree_rebuild(gsl_spmatrix_long m);
+
+/* compress */
+
+public static native int gsl_spmatrix_long_csc(gsl_spmatrix_long dest, @Const gsl_spmatrix_long src);
+public static native int gsl_spmatrix_long_csr(gsl_spmatrix_long dest, @Const gsl_spmatrix_long src);
+public static native gsl_spmatrix_long gsl_spmatrix_long_compress(@Const gsl_spmatrix_long src, int sptype);
+public static native gsl_spmatrix_long gsl_spmatrix_long_compcol(@Const gsl_spmatrix_long src);
+public static native gsl_spmatrix_long gsl_spmatrix_long_ccs(@Const gsl_spmatrix_long src);
+public static native gsl_spmatrix_long gsl_spmatrix_long_crs(@Const gsl_spmatrix_long src);
+
+/* copy */
+
+public static native int gsl_spmatrix_long_memcpy(gsl_spmatrix_long dest, @Const gsl_spmatrix_long src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_long_fprintf(FILE stream, @Const gsl_spmatrix_long m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_long_fprintf(FILE stream, @Const gsl_spmatrix_long m, String format);
+public static native gsl_spmatrix_long gsl_spmatrix_long_fscanf(FILE stream);
+public static native int gsl_spmatrix_long_fwrite(FILE stream, @Const gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_fread(FILE stream, gsl_spmatrix_long m);
+
+/* get/set */
+
+public static native long gsl_spmatrix_long_get(@Const gsl_spmatrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_long_set(gsl_spmatrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j, long x);
+public static native CLongPointer gsl_spmatrix_long_ptr(@Const gsl_spmatrix_long m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_long_minmax(@Const gsl_spmatrix_long m, CLongPointer min_out, CLongPointer max_out);
+public static native int gsl_spmatrix_long_min_index(@Const gsl_spmatrix_long m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_long_scale(gsl_spmatrix_long m, long x);
+public static native int gsl_spmatrix_long_scale_columns(gsl_spmatrix_long m, @Const gsl_vector_long x);
+public static native int gsl_spmatrix_long_scale_rows(gsl_spmatrix_long m, @Const gsl_vector_long x);
+public static native int gsl_spmatrix_long_add(gsl_spmatrix_long c, @Const gsl_spmatrix_long a, @Const gsl_spmatrix_long b);
+public static native int gsl_spmatrix_long_add_to_dense(gsl_matrix_long a, @Const gsl_spmatrix_long b);
+public static native int gsl_spmatrix_long_d2sp(gsl_spmatrix_long T, @Const gsl_matrix_long A);
+public static native int gsl_spmatrix_long_sp2d(gsl_matrix_long A, @Const gsl_spmatrix_long S);
+
+/* properties */
+
+public static native int gsl_spmatrix_long_equal(@Const gsl_spmatrix_long a, @Const gsl_spmatrix_long b);
+
+/* swap */
+
+public static native int gsl_spmatrix_long_transpose(gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_transpose2(gsl_spmatrix_long m);
+public static native int gsl_spmatrix_long_transpose_memcpy(gsl_spmatrix_long dest, @Const gsl_spmatrix_long src);
+
+// #endif /* __GSL_SPMATRIX_LONG_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_uint.h
+
+/* spmatrix/gsl_spmatrix_uint.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_UINT_H__
+// #define __GSL_SPMATRIX_UINT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_uint.h>
+// #include <gsl/gsl_matrix_uint.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_uint.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_uint_free(gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_uint m);
+public static native @Cast("size_t") long gsl_spmatrix_uint_nnz(@Const gsl_spmatrix_uint m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_uint_type(@Const gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_set_zero(gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_tree_rebuild(gsl_spmatrix_uint m);
+
+/* compress */
+
+public static native int gsl_spmatrix_uint_csc(gsl_spmatrix_uint dest, @Const gsl_spmatrix_uint src);
+public static native int gsl_spmatrix_uint_csr(gsl_spmatrix_uint dest, @Const gsl_spmatrix_uint src);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_compress(@Const gsl_spmatrix_uint src, int sptype);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_compcol(@Const gsl_spmatrix_uint src);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_ccs(@Const gsl_spmatrix_uint src);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_crs(@Const gsl_spmatrix_uint src);
+
+/* copy */
+
+public static native int gsl_spmatrix_uint_memcpy(gsl_spmatrix_uint dest, @Const gsl_spmatrix_uint src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_uint_fprintf(FILE stream, @Const gsl_spmatrix_uint m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_uint_fprintf(FILE stream, @Const gsl_spmatrix_uint m, String format);
+public static native gsl_spmatrix_uint gsl_spmatrix_uint_fscanf(FILE stream);
+public static native int gsl_spmatrix_uint_fwrite(FILE stream, @Const gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_fread(FILE stream, gsl_spmatrix_uint m);
+
+/* get/set */
+
+public static native @Cast("unsigned int") int gsl_spmatrix_uint_get(@Const gsl_spmatrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_uint_set(gsl_spmatrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Cast("const unsigned int") int x);
+public static native @Cast("unsigned int*") IntPointer gsl_spmatrix_uint_ptr(@Const gsl_spmatrix_uint m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_uint_minmax(@Const gsl_spmatrix_uint m, @Cast("unsigned int*") IntPointer min_out, @Cast("unsigned int*") IntPointer max_out);
+public static native int gsl_spmatrix_uint_minmax(@Const gsl_spmatrix_uint m, @Cast("unsigned int*") IntBuffer min_out, @Cast("unsigned int*") IntBuffer max_out);
+public static native int gsl_spmatrix_uint_minmax(@Const gsl_spmatrix_uint m, @Cast("unsigned int*") int[] min_out, @Cast("unsigned int*") int[] max_out);
+public static native int gsl_spmatrix_uint_min_index(@Const gsl_spmatrix_uint m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_uint_scale(gsl_spmatrix_uint m, @Cast("const unsigned int") int x);
+public static native int gsl_spmatrix_uint_scale_columns(gsl_spmatrix_uint m, @Const gsl_vector_uint x);
+public static native int gsl_spmatrix_uint_scale_rows(gsl_spmatrix_uint m, @Const gsl_vector_uint x);
+public static native int gsl_spmatrix_uint_add(gsl_spmatrix_uint c, @Const gsl_spmatrix_uint a, @Const gsl_spmatrix_uint b);
+public static native int gsl_spmatrix_uint_add_to_dense(gsl_matrix_uint a, @Const gsl_spmatrix_uint b);
+public static native int gsl_spmatrix_uint_d2sp(gsl_spmatrix_uint T, @Const gsl_matrix_uint A);
+public static native int gsl_spmatrix_uint_sp2d(gsl_matrix_uint A, @Const gsl_spmatrix_uint S);
+
+/* properties */
+
+public static native int gsl_spmatrix_uint_equal(@Const gsl_spmatrix_uint a, @Const gsl_spmatrix_uint b);
+
+/* swap */
+
+public static native int gsl_spmatrix_uint_transpose(gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_transpose2(gsl_spmatrix_uint m);
+public static native int gsl_spmatrix_uint_transpose_memcpy(gsl_spmatrix_uint dest, @Const gsl_spmatrix_uint src);
+
+// #endif /* __GSL_SPMATRIX_UINT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_int.h
+
+/* spmatrix/gsl_spmatrix_int.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_INT_H__
+// #define __GSL_SPMATRIX_INT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_int.h>
+// #include <gsl/gsl_matrix_int.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_int.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_int gsl_spmatrix_int_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_int gsl_spmatrix_int_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_int_free(gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_int m);
+public static native @Cast("size_t") long gsl_spmatrix_int_nnz(@Const gsl_spmatrix_int m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_int_type(@Const gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_set_zero(gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_tree_rebuild(gsl_spmatrix_int m);
+
+/* compress */
+
+public static native int gsl_spmatrix_int_csc(gsl_spmatrix_int dest, @Const gsl_spmatrix_int src);
+public static native int gsl_spmatrix_int_csr(gsl_spmatrix_int dest, @Const gsl_spmatrix_int src);
+public static native gsl_spmatrix_int gsl_spmatrix_int_compress(@Const gsl_spmatrix_int src, int sptype);
+public static native gsl_spmatrix_int gsl_spmatrix_int_compcol(@Const gsl_spmatrix_int src);
+public static native gsl_spmatrix_int gsl_spmatrix_int_ccs(@Const gsl_spmatrix_int src);
+public static native gsl_spmatrix_int gsl_spmatrix_int_crs(@Const gsl_spmatrix_int src);
+
+/* copy */
+
+public static native int gsl_spmatrix_int_memcpy(gsl_spmatrix_int dest, @Const gsl_spmatrix_int src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_int_fprintf(FILE stream, @Const gsl_spmatrix_int m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_int_fprintf(FILE stream, @Const gsl_spmatrix_int m, String format);
+public static native gsl_spmatrix_int gsl_spmatrix_int_fscanf(FILE stream);
+public static native int gsl_spmatrix_int_fwrite(FILE stream, @Const gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_fread(FILE stream, gsl_spmatrix_int m);
+
+/* get/set */
+
+public static native int gsl_spmatrix_int_get(@Const gsl_spmatrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_int_set(gsl_spmatrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j, int x);
+public static native IntPointer gsl_spmatrix_int_ptr(@Const gsl_spmatrix_int m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_int_minmax(@Const gsl_spmatrix_int m, IntPointer min_out, IntPointer max_out);
+public static native int gsl_spmatrix_int_minmax(@Const gsl_spmatrix_int m, IntBuffer min_out, IntBuffer max_out);
+public static native int gsl_spmatrix_int_minmax(@Const gsl_spmatrix_int m, int[] min_out, int[] max_out);
+public static native int gsl_spmatrix_int_min_index(@Const gsl_spmatrix_int m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_int_scale(gsl_spmatrix_int m, int x);
+public static native int gsl_spmatrix_int_scale_columns(gsl_spmatrix_int m, @Const gsl_vector_int x);
+public static native int gsl_spmatrix_int_scale_rows(gsl_spmatrix_int m, @Const gsl_vector_int x);
+public static native int gsl_spmatrix_int_add(gsl_spmatrix_int c, @Const gsl_spmatrix_int a, @Const gsl_spmatrix_int b);
+public static native int gsl_spmatrix_int_add_to_dense(gsl_matrix_int a, @Const gsl_spmatrix_int b);
+public static native int gsl_spmatrix_int_d2sp(gsl_spmatrix_int T, @Const gsl_matrix_int A);
+public static native int gsl_spmatrix_int_sp2d(gsl_matrix_int A, @Const gsl_spmatrix_int S);
+
+/* properties */
+
+public static native int gsl_spmatrix_int_equal(@Const gsl_spmatrix_int a, @Const gsl_spmatrix_int b);
+
+/* swap */
+
+public static native int gsl_spmatrix_int_transpose(gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_transpose2(gsl_spmatrix_int m);
+public static native int gsl_spmatrix_int_transpose_memcpy(gsl_spmatrix_int dest, @Const gsl_spmatrix_int src);
+
+// #endif /* __GSL_SPMATRIX_INT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_ushort.h
+
+/* spmatrix/gsl_spmatrix_ushort.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_USHORT_H__
+// #define __GSL_SPMATRIX_USHORT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_ushort.h>
+// #include <gsl/gsl_matrix_ushort.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_ushort.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_ushort_free(gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_ushort m);
+public static native @Cast("size_t") long gsl_spmatrix_ushort_nnz(@Const gsl_spmatrix_ushort m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_ushort_type(@Const gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_set_zero(gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_tree_rebuild(gsl_spmatrix_ushort m);
+
+/* compress */
+
+public static native int gsl_spmatrix_ushort_csc(gsl_spmatrix_ushort dest, @Const gsl_spmatrix_ushort src);
+public static native int gsl_spmatrix_ushort_csr(gsl_spmatrix_ushort dest, @Const gsl_spmatrix_ushort src);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_compress(@Const gsl_spmatrix_ushort src, int sptype);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_compcol(@Const gsl_spmatrix_ushort src);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_ccs(@Const gsl_spmatrix_ushort src);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_crs(@Const gsl_spmatrix_ushort src);
+
+/* copy */
+
+public static native int gsl_spmatrix_ushort_memcpy(gsl_spmatrix_ushort dest, @Const gsl_spmatrix_ushort src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_ushort_fprintf(FILE stream, @Const gsl_spmatrix_ushort m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_ushort_fprintf(FILE stream, @Const gsl_spmatrix_ushort m, String format);
+public static native gsl_spmatrix_ushort gsl_spmatrix_ushort_fscanf(FILE stream);
+public static native int gsl_spmatrix_ushort_fwrite(FILE stream, @Const gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_fread(FILE stream, gsl_spmatrix_ushort m);
+
+/* get/set */
+
+public static native @Cast("unsigned short") short gsl_spmatrix_ushort_get(@Const gsl_spmatrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_ushort_set(gsl_spmatrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Cast("const unsigned short") short x);
+public static native @Cast("unsigned short*") ShortPointer gsl_spmatrix_ushort_ptr(@Const gsl_spmatrix_ushort m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_ushort_minmax(@Const gsl_spmatrix_ushort m, @Cast("unsigned short*") ShortPointer min_out, @Cast("unsigned short*") ShortPointer max_out);
+public static native int gsl_spmatrix_ushort_minmax(@Const gsl_spmatrix_ushort m, @Cast("unsigned short*") ShortBuffer min_out, @Cast("unsigned short*") ShortBuffer max_out);
+public static native int gsl_spmatrix_ushort_minmax(@Const gsl_spmatrix_ushort m, @Cast("unsigned short*") short[] min_out, @Cast("unsigned short*") short[] max_out);
+public static native int gsl_spmatrix_ushort_min_index(@Const gsl_spmatrix_ushort m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_ushort_scale(gsl_spmatrix_ushort m, @Cast("const unsigned short") short x);
+public static native int gsl_spmatrix_ushort_scale_columns(gsl_spmatrix_ushort m, @Const gsl_vector_ushort x);
+public static native int gsl_spmatrix_ushort_scale_rows(gsl_spmatrix_ushort m, @Const gsl_vector_ushort x);
+public static native int gsl_spmatrix_ushort_add(gsl_spmatrix_ushort c, @Const gsl_spmatrix_ushort a, @Const gsl_spmatrix_ushort b);
+public static native int gsl_spmatrix_ushort_add_to_dense(gsl_matrix_ushort a, @Const gsl_spmatrix_ushort b);
+public static native int gsl_spmatrix_ushort_d2sp(gsl_spmatrix_ushort T, @Const gsl_matrix_ushort A);
+public static native int gsl_spmatrix_ushort_sp2d(gsl_matrix_ushort A, @Const gsl_spmatrix_ushort S);
+
+/* properties */
+
+public static native int gsl_spmatrix_ushort_equal(@Const gsl_spmatrix_ushort a, @Const gsl_spmatrix_ushort b);
+
+/* swap */
+
+public static native int gsl_spmatrix_ushort_transpose(gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_transpose2(gsl_spmatrix_ushort m);
+public static native int gsl_spmatrix_ushort_transpose_memcpy(gsl_spmatrix_ushort dest, @Const gsl_spmatrix_ushort src);
+
+// #endif /* __GSL_SPMATRIX_USHORT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_short.h
+
+/* spmatrix/gsl_spmatrix_short.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_SHORT_H__
+// #define __GSL_SPMATRIX_SHORT_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_short.h>
+// #include <gsl/gsl_matrix_short.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_short.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_short gsl_spmatrix_short_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_short gsl_spmatrix_short_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_short_free(gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_short m);
+public static native @Cast("size_t") long gsl_spmatrix_short_nnz(@Const gsl_spmatrix_short m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_short_type(@Const gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_set_zero(gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_tree_rebuild(gsl_spmatrix_short m);
+
+/* compress */
+
+public static native int gsl_spmatrix_short_csc(gsl_spmatrix_short dest, @Const gsl_spmatrix_short src);
+public static native int gsl_spmatrix_short_csr(gsl_spmatrix_short dest, @Const gsl_spmatrix_short src);
+public static native gsl_spmatrix_short gsl_spmatrix_short_compress(@Const gsl_spmatrix_short src, int sptype);
+public static native gsl_spmatrix_short gsl_spmatrix_short_compcol(@Const gsl_spmatrix_short src);
+public static native gsl_spmatrix_short gsl_spmatrix_short_ccs(@Const gsl_spmatrix_short src);
+public static native gsl_spmatrix_short gsl_spmatrix_short_crs(@Const gsl_spmatrix_short src);
+
+/* copy */
+
+public static native int gsl_spmatrix_short_memcpy(gsl_spmatrix_short dest, @Const gsl_spmatrix_short src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_short_fprintf(FILE stream, @Const gsl_spmatrix_short m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_short_fprintf(FILE stream, @Const gsl_spmatrix_short m, String format);
+public static native gsl_spmatrix_short gsl_spmatrix_short_fscanf(FILE stream);
+public static native int gsl_spmatrix_short_fwrite(FILE stream, @Const gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_fread(FILE stream, gsl_spmatrix_short m);
+
+/* get/set */
+
+public static native short gsl_spmatrix_short_get(@Const gsl_spmatrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_short_set(gsl_spmatrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j, short x);
+public static native ShortPointer gsl_spmatrix_short_ptr(@Const gsl_spmatrix_short m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_short_minmax(@Const gsl_spmatrix_short m, ShortPointer min_out, ShortPointer max_out);
+public static native int gsl_spmatrix_short_minmax(@Const gsl_spmatrix_short m, ShortBuffer min_out, ShortBuffer max_out);
+public static native int gsl_spmatrix_short_minmax(@Const gsl_spmatrix_short m, short[] min_out, short[] max_out);
+public static native int gsl_spmatrix_short_min_index(@Const gsl_spmatrix_short m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_short_scale(gsl_spmatrix_short m, short x);
+public static native int gsl_spmatrix_short_scale_columns(gsl_spmatrix_short m, @Const gsl_vector_short x);
+public static native int gsl_spmatrix_short_scale_rows(gsl_spmatrix_short m, @Const gsl_vector_short x);
+public static native int gsl_spmatrix_short_add(gsl_spmatrix_short c, @Const gsl_spmatrix_short a, @Const gsl_spmatrix_short b);
+public static native int gsl_spmatrix_short_add_to_dense(gsl_matrix_short a, @Const gsl_spmatrix_short b);
+public static native int gsl_spmatrix_short_d2sp(gsl_spmatrix_short T, @Const gsl_matrix_short A);
+public static native int gsl_spmatrix_short_sp2d(gsl_matrix_short A, @Const gsl_spmatrix_short S);
+
+/* properties */
+
+public static native int gsl_spmatrix_short_equal(@Const gsl_spmatrix_short a, @Const gsl_spmatrix_short b);
+
+/* swap */
+
+public static native int gsl_spmatrix_short_transpose(gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_transpose2(gsl_spmatrix_short m);
+public static native int gsl_spmatrix_short_transpose_memcpy(gsl_spmatrix_short dest, @Const gsl_spmatrix_short src);
+
+// #endif /* __GSL_SPMATRIX_SHORT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_uchar.h
+
+/* spmatrix/gsl_spmatrix_uchar.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_UCHAR_H__
+// #define __GSL_SPMATRIX_UCHAR_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_uchar.h>
+// #include <gsl/gsl_matrix_uchar.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_uchar.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_uchar_free(gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_uchar m);
+public static native @Cast("size_t") long gsl_spmatrix_uchar_nnz(@Const gsl_spmatrix_uchar m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_uchar_type(@Const gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_set_zero(gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_tree_rebuild(gsl_spmatrix_uchar m);
+
+/* compress */
+
+public static native int gsl_spmatrix_uchar_csc(gsl_spmatrix_uchar dest, @Const gsl_spmatrix_uchar src);
+public static native int gsl_spmatrix_uchar_csr(gsl_spmatrix_uchar dest, @Const gsl_spmatrix_uchar src);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_compress(@Const gsl_spmatrix_uchar src, int sptype);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_compcol(@Const gsl_spmatrix_uchar src);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_ccs(@Const gsl_spmatrix_uchar src);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_crs(@Const gsl_spmatrix_uchar src);
+
+/* copy */
+
+public static native int gsl_spmatrix_uchar_memcpy(gsl_spmatrix_uchar dest, @Const gsl_spmatrix_uchar src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_uchar_fprintf(FILE stream, @Const gsl_spmatrix_uchar m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_uchar_fprintf(FILE stream, @Const gsl_spmatrix_uchar m, String format);
+public static native gsl_spmatrix_uchar gsl_spmatrix_uchar_fscanf(FILE stream);
+public static native int gsl_spmatrix_uchar_fwrite(FILE stream, @Const gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_fread(FILE stream, gsl_spmatrix_uchar m);
+
+/* get/set */
+
+public static native @Cast("unsigned char") byte gsl_spmatrix_uchar_get(@Const gsl_spmatrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_uchar_set(gsl_spmatrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j, @Cast("const unsigned char") byte x);
+public static native @Cast("unsigned char*") BytePointer gsl_spmatrix_uchar_ptr(@Const gsl_spmatrix_uchar m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_uchar_minmax(@Const gsl_spmatrix_uchar m, @Cast("unsigned char*") BytePointer min_out, @Cast("unsigned char*") BytePointer max_out);
+public static native int gsl_spmatrix_uchar_minmax(@Const gsl_spmatrix_uchar m, @Cast("unsigned char*") ByteBuffer min_out, @Cast("unsigned char*") ByteBuffer max_out);
+public static native int gsl_spmatrix_uchar_minmax(@Const gsl_spmatrix_uchar m, @Cast("unsigned char*") byte[] min_out, @Cast("unsigned char*") byte[] max_out);
+public static native int gsl_spmatrix_uchar_min_index(@Const gsl_spmatrix_uchar m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_uchar_scale(gsl_spmatrix_uchar m, @Cast("const unsigned char") byte x);
+public static native int gsl_spmatrix_uchar_scale_columns(gsl_spmatrix_uchar m, @Const gsl_vector_uchar x);
+public static native int gsl_spmatrix_uchar_scale_rows(gsl_spmatrix_uchar m, @Const gsl_vector_uchar x);
+public static native int gsl_spmatrix_uchar_add(gsl_spmatrix_uchar c, @Const gsl_spmatrix_uchar a, @Const gsl_spmatrix_uchar b);
+public static native int gsl_spmatrix_uchar_add_to_dense(gsl_matrix_uchar a, @Const gsl_spmatrix_uchar b);
+public static native int gsl_spmatrix_uchar_d2sp(gsl_spmatrix_uchar T, @Const gsl_matrix_uchar A);
+public static native int gsl_spmatrix_uchar_sp2d(gsl_matrix_uchar A, @Const gsl_spmatrix_uchar S);
+
+/* properties */
+
+public static native int gsl_spmatrix_uchar_equal(@Const gsl_spmatrix_uchar a, @Const gsl_spmatrix_uchar b);
+
+/* swap */
+
+public static native int gsl_spmatrix_uchar_transpose(gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_transpose2(gsl_spmatrix_uchar m);
+public static native int gsl_spmatrix_uchar_transpose_memcpy(gsl_spmatrix_uchar dest, @Const gsl_spmatrix_uchar src);
+
+// #endif /* __GSL_SPMATRIX_UCHAR_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix_char.h
+
+/* spmatrix/gsl_spmatrix_char.h
+ * 
+ * Copyright (C) 2012, 2013, 2014, 2015, 2016, 2017, 2018 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_CHAR_H__
+// #define __GSL_SPMATRIX_CHAR_H__
+
+// #include <stdlib.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_bst.h>
+// #include <gsl/gsl_vector_char.h>
+// #include <gsl/gsl_matrix_char.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+// Targeting ../gsl_spmatrix_char.java
+
+
+
+/*
+ * Prototypes
+ */
+
+/* allocation / initialization */
+
+public static native gsl_spmatrix_char gsl_spmatrix_char_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix_char gsl_spmatrix_char_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                                     @Cast("const size_t") long nzmax, int sptype);
+public static native void gsl_spmatrix_char_free(gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix_char m);
+public static native @Cast("size_t") long gsl_spmatrix_char_nnz(@Const gsl_spmatrix_char m);
+public static native @Cast("const char*") BytePointer gsl_spmatrix_char_type(@Const gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_set_zero(gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_tree_rebuild(gsl_spmatrix_char m);
+
+/* compress */
+
+public static native int gsl_spmatrix_char_csc(gsl_spmatrix_char dest, @Const gsl_spmatrix_char src);
+public static native int gsl_spmatrix_char_csr(gsl_spmatrix_char dest, @Const gsl_spmatrix_char src);
+public static native gsl_spmatrix_char gsl_spmatrix_char_compress(@Const gsl_spmatrix_char src, int sptype);
+public static native gsl_spmatrix_char gsl_spmatrix_char_compcol(@Const gsl_spmatrix_char src);
+public static native gsl_spmatrix_char gsl_spmatrix_char_ccs(@Const gsl_spmatrix_char src);
+public static native gsl_spmatrix_char gsl_spmatrix_char_crs(@Const gsl_spmatrix_char src);
+
+/* copy */
+
+public static native int gsl_spmatrix_char_memcpy(gsl_spmatrix_char dest, @Const gsl_spmatrix_char src);
+
+/* file I/O */
+
+public static native int gsl_spmatrix_char_fprintf(FILE stream, @Const gsl_spmatrix_char m, @Cast("const char*") BytePointer format);
+public static native int gsl_spmatrix_char_fprintf(FILE stream, @Const gsl_spmatrix_char m, String format);
+public static native gsl_spmatrix_char gsl_spmatrix_char_fscanf(FILE stream);
+public static native int gsl_spmatrix_char_fwrite(FILE stream, @Const gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_fread(FILE stream, gsl_spmatrix_char m);
+
+/* get/set */
+
+public static native @Cast("char") byte gsl_spmatrix_char_get(@Const gsl_spmatrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_spmatrix_char_set(gsl_spmatrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j, byte x);
+public static native @Cast("char*") BytePointer gsl_spmatrix_char_ptr(@Const gsl_spmatrix_char m, @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+/* minmax */
+
+public static native int gsl_spmatrix_char_minmax(@Const gsl_spmatrix_char m, @Cast("char*") BytePointer min_out, @Cast("char*") BytePointer max_out);
+public static native int gsl_spmatrix_char_minmax(@Const gsl_spmatrix_char m, @Cast("char*") ByteBuffer min_out, @Cast("char*") ByteBuffer max_out);
+public static native int gsl_spmatrix_char_minmax(@Const gsl_spmatrix_char m, @Cast("char*") byte[] min_out, @Cast("char*") byte[] max_out);
+public static native int gsl_spmatrix_char_min_index(@Const gsl_spmatrix_char m, @Cast("size_t*") SizeTPointer imin_out, @Cast("size_t*") SizeTPointer jmin_out);
+
+/* operations */
+
+public static native int gsl_spmatrix_char_scale(gsl_spmatrix_char m, byte x);
+public static native int gsl_spmatrix_char_scale_columns(gsl_spmatrix_char m, @Const gsl_vector_char x);
+public static native int gsl_spmatrix_char_scale_rows(gsl_spmatrix_char m, @Const gsl_vector_char x);
+public static native int gsl_spmatrix_char_add(gsl_spmatrix_char c, @Const gsl_spmatrix_char a, @Const gsl_spmatrix_char b);
+public static native int gsl_spmatrix_char_add_to_dense(gsl_matrix_char a, @Const gsl_spmatrix_char b);
+public static native int gsl_spmatrix_char_d2sp(gsl_spmatrix_char T, @Const gsl_matrix_char A);
+public static native int gsl_spmatrix_char_sp2d(gsl_matrix_char A, @Const gsl_spmatrix_char S);
+
+/* properties */
+
+public static native int gsl_spmatrix_char_equal(@Const gsl_spmatrix_char a, @Const gsl_spmatrix_char b);
+
+/* swap */
+
+public static native int gsl_spmatrix_char_transpose(gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_transpose2(gsl_spmatrix_char m);
+public static native int gsl_spmatrix_char_transpose_memcpy(gsl_spmatrix_char dest, @Const gsl_spmatrix_char src);
+
+// #endif /* __GSL_SPMATRIX_CHAR_H__ */
 
 
 // Parsed from gsl/gsl_const.h
