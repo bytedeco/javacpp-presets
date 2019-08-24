@@ -163,7 +163,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1P01vTBzZYi5m3GMtXVDO00-z4rowmcR3 $HOME/downloads/nccl_x86_64.txz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1WF2Pv1aQxLm-42euWamlF8dc4KMQRn2a $HOME/downloads/nccl_x86_64.txz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
@@ -186,7 +186,7 @@ if [ "$OS" == "linux-armhf" ]; then
     tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
     export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
     export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/lib/
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/
     pushd $HOME/userland
     bash buildme
     popd
@@ -287,11 +287,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_mac.dmg -o $HOME/cuda_10.1.168_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.0/cudnn-10.1-osx-x64-v7.6.0.64.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.0.64.tgz
+        curl -L http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_mac.dmg -o $HOME/cuda_10.1.243_mac.dmg
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.2/cudnn-10.1-osx-x64-v7.6.2.24.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.2.24.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda_10.1.168_mac.dmg
+        hdiutil mount $HOME/cuda_10.1.243_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -301,7 +301,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.0.64.tgz
+        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.2.24.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
