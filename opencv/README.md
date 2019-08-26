@@ -61,6 +61,13 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <version>10.1-7.6-1.5.2-SNAPSHOT</version>
         </dependency>
 
+        <!-- Additional dependencies to use bundled full version of MKL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2019.4-1.5.2-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
     <build>
         <sourceDirectory>.</sourceDirectory>
@@ -125,6 +132,9 @@ public class Stitching {
     static String result_name = "result.jpg";
 
     public static void main(String[] args) {
+        /* try to use MKL when available */
+        System.setProperty("org.bytedeco.openblas.load", "mkl");
+
         int retval = parseCmdArgs(args);
         if (retval != 0) {
             System.exit(-1);
