@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.4  https://software.intel.com/intel-mkl
- * MKL-DNN 0.20.2  https://github.com/intel/mkl-dnn
+ * MKL-DNN 0.21  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.7  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
@@ -136,14 +136,14 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CUDA 10.1 Update 2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
    * NCCL 2.4.x  https://developer.nvidia.com/nccl
- * MXNet 1.5.0  https://github.com/dmlc/mxnet
+ * MXNet 1.5.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.14.0  https://github.com/tensorflow/tensorflow
  * TensorRT 5.1  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
  * nGraph 0.25.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.13.0  https://download.qt.io/archive/qt/
+ * Qt 5.13.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
  * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:

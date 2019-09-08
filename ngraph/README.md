@@ -82,12 +82,12 @@ public class ABC {
         Parameter b = new Parameter(f32(), new PartialShape(s), false);
         Parameter c = new Parameter(f32(), new PartialShape(s), false);
 
-        Op t0 = new Add(a, b);
-        Op t1 = new Multiply(t0, c);
+        Op t0 = new Add(new NodeOutput(a), new NodeOutput(b));
+        Op t1 = new Multiply(new NodeOutput(t0), new NodeOutput(c));
 
         // Make the function
-        Function f = new Function(new NodeVector(new NgraphNodeVector(t1)),
-                                  new ParameterVector(new NgraphParameterVector(a, b, c)));
+        Function f = new Function(new NodeVector(t1),
+                                  new ParameterVector(a, b, c));
 
         // Create the backend
         Backend backend = Backend.create("CPU");
@@ -109,8 +109,8 @@ public class ABC {
         t_c.write(new FloatPointer(v_c), 0, v_c.length * 4);
 
         // Invoke the function
-        backend.compile(f);
-        backend.call(f, new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
+        Executable exec = backend.compile(f);
+        exec.call(new TensorVector(t_result), new TensorVector(t_a, t_b, t_c));
 
         // Get the result
         float[] r = new float[2 * 3];

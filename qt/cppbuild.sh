@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-QT_VERSION=5.13.0
+QT_VERSION=5.13.1
 download https://download.qt.io/archive/qt/${QT_VERSION%.*}/$QT_VERSION/single/qt-everywhere-src-$QT_VERSION.tar.xz qt-$QT_VERSION.tar.xz
 
 mkdir -p "$PLATFORM$EXTENSION"
