@@ -5598,23 +5598,27 @@ public static native int MXEnginePushSync(EngineSyncFunc sync_func, Pointer func
   * @param wait Whether this is a WaitForVar operation.
   */
 public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
-                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                                NDArrayHandle const_nds_handle, int num_const_nds,
-                                NDArrayHandle mutable_nds_handle, int num_mutable_nds,
-                                EngineFnPropertyHandle prop_handle/*=NULL*/,
-                                int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/,
-                                @Cast("bool") boolean wait/*=false*/);
+                                  EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                  PointerPointer const_nds_handle, int num_const_nds,
+                                  PointerPointer mutable_nds_handle, int num_mutable_nds,
+                                  EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                  int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/,
+                                  @Cast("bool") boolean wait/*=false*/);
 public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
-                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                                NDArrayHandle const_nds_handle, int num_const_nds,
-                                NDArrayHandle mutable_nds_handle, int num_mutable_nds);
+                                  EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                  PointerPointer const_nds_handle, int num_const_nds,
+                                  PointerPointer mutable_nds_handle, int num_mutable_nds);
 public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
-                                EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                                NDArrayHandle const_nds_handle, int num_const_nds,
-                                NDArrayHandle mutable_nds_handle, int num_mutable_nds,
-                                EngineFnPropertyHandle prop_handle/*=NULL*/,
-                                int priority/*=0*/, String opr_name/*=NULL*/,
-                                @Cast("bool") boolean wait/*=false*/);
+                                  EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle const_nds_handle, int num_const_nds,
+                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle mutable_nds_handle, int num_mutable_nds,
+                                  EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                  int priority/*=0*/, String opr_name/*=NULL*/,
+                                  @Cast("bool") boolean wait/*=false*/);
+public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer func_param,
+                                  EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle const_nds_handle, int num_const_nds,
+                                  @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle mutable_nds_handle, int num_mutable_nds);
 
 /**
   * \brief Push a synchronous operation to the engine.
@@ -5632,21 +5636,25 @@ public static native int MXEnginePushAsyncND(EngineAsyncFunc async_func, Pointer
   * @param opr_name The operation name.
   */
 public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
-                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                               NDArrayHandle const_nds_handle, int num_const_nds,
-                               NDArrayHandle mutable_nds_handle, int num_mutable_nds,
-                               EngineFnPropertyHandle prop_handle/*=NULL*/,
-                               int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/);
+                                 EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                 PointerPointer const_nds_handle, int num_const_nds,
+                                 PointerPointer mutable_nds_handle, int num_mutable_nds,
+                                 EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                 int priority/*=0*/, @Cast("const char*") BytePointer opr_name/*=NULL*/);
 public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
-                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                               NDArrayHandle const_nds_handle, int num_const_nds,
-                               NDArrayHandle mutable_nds_handle, int num_mutable_nds);
+                                 EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                 PointerPointer const_nds_handle, int num_const_nds,
+                                 PointerPointer mutable_nds_handle, int num_mutable_nds);
 public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
-                               EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
-                               NDArrayHandle const_nds_handle, int num_const_nds,
-                               NDArrayHandle mutable_nds_handle, int num_mutable_nds,
-                               EngineFnPropertyHandle prop_handle/*=NULL*/,
-                               int priority/*=0*/, String opr_name/*=NULL*/);
+                                 EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle const_nds_handle, int num_const_nds,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle mutable_nds_handle, int num_mutable_nds,
+                                 EngineFnPropertyHandle prop_handle/*=NULL*/,
+                                 int priority/*=0*/, String opr_name/*=NULL*/);
+public static native int MXEnginePushSyncND(EngineSyncFunc sync_func, Pointer func_param,
+                                 EngineFuncParamDeleter deleter, ContextHandle ctx_handle,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle const_nds_handle, int num_const_nds,
+                                 @Cast("NDArrayHandle*") @ByPtrPtr NDArrayHandle mutable_nds_handle, int num_mutable_nds);
 
 // #ifdef __cplusplus
 // #endif  // __cplusplus

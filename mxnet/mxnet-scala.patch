@@ -1,6 +1,6 @@
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala	2019-06-10 17:34:59.370090088 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/javaapi/NDArrayBase.scala	2019-09-08 20:42:08.576980836 +0900
 @@ -0,0 +1,13781 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -81,7 +81,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -431,7 +431,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -637,7 +637,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -789,7 +789,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1118,7 +1118,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1276,7 +1276,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1302,7 +1302,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1327,7 +1327,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1547,7 +1547,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1595,7 +1595,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -1709,7 +1709,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1730,7 +1730,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -1918,7 +1918,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -1981,7 +1981,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2446,7 +2446,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2497,7 +2497,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2525,7 +2525,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -2743,7 +2743,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -2773,7 +2773,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3257,7 +3257,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3297,7 +3297,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3384,7 +3384,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3631,7 +3631,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3696,7 +3696,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -3765,7 +3765,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3795,7 +3795,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -3922,7 +3922,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4049,7 +4049,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4070,7 +4070,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4145,7 +4145,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4174,7 +4174,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4268,7 +4268,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4297,7 +4297,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -4400,7 +4400,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -4462,7 +4462,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4513,7 +4513,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4642,7 +4642,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4704,7 +4704,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -4729,7 +4729,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -4840,7 +4840,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5205,7 +5205,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -5279,7 +5279,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -5519,7 +5519,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -5571,7 +5571,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -6043,7 +6043,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6138,7 +6138,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -6286,7 +6286,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6406,7 +6406,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6490,7 +6490,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -6601,7 +6601,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6616,7 +6616,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -6702,7 +6702,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -6918,7 +6918,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -7011,7 +7011,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7072,7 +7072,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7410,7 +7410,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -7466,7 +7466,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -7858,7 +7858,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -7971,7 +7971,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -8045,7 +8045,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -8103,7 +8103,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @return Array[org.apache.mxnet.javaapi.NDArray]
@@ -8293,7 +8293,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -13783,9 +13783,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 + def getOut() = this.out
 + 
 + }
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala	2019-06-10 17:34:59.206089931 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayAPIBase.scala	2019-09-08 20:42:08.407980551 +0900
 @@ -0,0 +1,9276 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -14093,7 +14093,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -14182,7 +14182,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -14516,7 +14516,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @param data		Input array to which dropout will be applied.
@@ -14656,7 +14656,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -15565,7 +15565,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @param data		Input data to reshape.
@@ -16270,7 +16270,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16428,7 +16428,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16447,7 +16447,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16475,7 +16475,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16498,7 +16498,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16525,7 +16525,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -16548,7 +16548,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -17527,7 +17527,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -17608,7 +17608,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -17636,7 +17636,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -17733,7 +17733,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -17810,7 +17810,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -17831,7 +17831,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -17889,7 +17889,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -17982,7 +17982,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18028,7 +18028,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -18263,7 +18263,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18283,7 +18283,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18308,7 +18308,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18327,7 +18327,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -18352,7 +18352,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18393,7 +18393,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18432,7 +18432,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -18460,7 +18460,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -18489,7 +18489,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18655,7 +18655,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -18671,7 +18671,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -19431,7 +19431,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -19451,7 +19451,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -19476,7 +19476,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -19496,7 +19496,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -19573,7 +19573,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -20442,7 +20442,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -20709,7 +20709,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -20731,7 +20731,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -20793,7 +20793,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -20870,7 +20870,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @param data		Input data to reshape.
@@ -20913,7 +20913,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -20942,7 +20942,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -20973,7 +20973,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21103,7 +21103,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21128,7 +21128,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21621,7 +21621,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -21663,7 +21663,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21689,7 +21689,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21811,7 +21811,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -21831,7 +21831,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -21889,7 +21889,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -21927,7 +21927,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -21994,7 +21994,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -22171,7 +22171,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22257,7 +22257,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -22362,7 +22362,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22391,7 +22391,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22485,7 +22485,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22740,7 +22740,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22765,7 +22765,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -22813,7 +22813,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -22902,7 +22902,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -22932,7 +22932,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -23063,9 +23063,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +def zeros_like (data : org.apache.mxnet.NDArray, out : Option[NDArray] = None): org.apache.mxnet.NDArrayFuncReturn
 +}
 +
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala	2019-06-10 17:34:59.323090043 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayBase.scala	2019-09-08 20:42:08.512980728 +0900
 @@ -0,0 +1,16769 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -23579,7 +23579,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23618,7 +23618,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23758,7 +23758,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -23782,7 +23782,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24309,7 +24309,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24352,7 +24352,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24572,7 +24572,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -24611,7 +24611,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26184,7 +26184,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -26259,7 +26259,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27525,7 +27525,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27551,7 +27551,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27809,7 +27809,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27833,7 +27833,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27851,7 +27851,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27870,7 +27870,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27897,7 +27897,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27925,7 +27925,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27947,7 +27947,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27970,7 +27970,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -27996,7 +27996,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -28023,7 +28023,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -28045,7 +28045,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -28068,7 +28068,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -29891,7 +29891,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -29915,7 +29915,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30042,7 +30042,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30071,7 +30071,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30098,7 +30098,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30126,7 +30126,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30272,7 +30272,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30310,7 +30310,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30431,7 +30431,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30454,7 +30454,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30474,7 +30474,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30495,7 +30495,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30552,7 +30552,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30610,7 +30610,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30751,7 +30751,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30776,7 +30776,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30821,7 +30821,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -30867,7 +30867,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31286,7 +31286,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31306,7 +31306,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31325,7 +31325,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31345,7 +31345,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31369,7 +31369,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31394,7 +31394,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31412,7 +31412,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31431,7 +31431,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31454,7 +31454,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31478,7 +31478,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31527,7 +31527,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31554,7 +31554,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31592,7 +31592,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31631,7 +31631,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31658,7 +31658,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31686,7 +31686,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31713,7 +31713,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -31741,7 +31741,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -32004,7 +32004,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -32023,7 +32023,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -32036,7 +32036,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -32050,7 +32050,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33474,7 +33474,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33494,7 +33494,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33513,7 +33513,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33533,7 +33533,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33557,7 +33557,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33582,7 +33582,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33601,7 +33601,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33621,7 +33621,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33731,7 +33731,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -33766,7 +33766,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35035,7 +35035,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35060,7 +35060,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35499,7 +35499,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35522,7 +35522,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35543,7 +35543,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35565,7 +35565,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35650,7 +35650,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35687,7 +35687,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35761,7 +35761,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35836,7 +35836,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35874,7 +35874,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35913,7 +35913,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35940,7 +35940,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35968,7 +35968,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -35997,7 +35997,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -36027,7 +36027,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -36216,7 +36216,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -36242,7 +36242,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -36266,7 +36266,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -36291,7 +36291,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37169,7 +37169,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37189,7 +37189,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37242,7 +37242,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37263,7 +37263,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37288,7 +37288,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37314,7 +37314,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37503,7 +37503,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37528,7 +37528,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37547,7 +37547,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37567,7 +37567,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37624,7 +37624,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37682,7 +37682,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37716,7 +37716,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37751,7 +37751,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37814,7 +37814,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -37878,7 +37878,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38186,7 +38186,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38207,7 +38207,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38325,7 +38325,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38373,7 +38373,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38544,7 +38544,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38573,7 +38573,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38601,7 +38601,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38630,7 +38630,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38770,7 +38770,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -38809,7 +38809,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39213,7 +39213,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39240,7 +39240,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39264,7 +39264,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39289,7 +39289,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39336,7 +39336,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39384,7 +39384,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39505,7 +39505,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39546,7 +39546,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39574,7 +39574,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39603,7 +39603,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.NDArrayFuncReturn
@@ -39836,9 +39836,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +           
 +}
 +
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala	2019-06-10 17:34:59.261089984 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/NDArrayRandomAPIBase.scala	2019-09-08 20:42:08.457980635 +0900
 @@ -0,0 +1,502 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -40342,9 +40342,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +def uniform_like[T: NDArrayOrScalar : ClassTag] (low : Option[T] = None, high : Option[T] = None, data : T, out : Option[NDArray] = None): org.apache.mxnet.NDArrayFuncReturn
 +}
 +
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala	2019-06-10 17:34:59.129089858 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolAPIBase.scala	2019-09-08 20:42:08.333980427 +0900
 @@ -0,0 +1,9276 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -40652,7 +40652,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -40741,7 +40741,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -41075,7 +41075,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @param data		Input array to which dropout will be applied.
@@ -41215,7 +41215,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -42124,7 +42124,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @param data		Input data to reshape.
@@ -42829,7 +42829,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -42987,7 +42987,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -43006,7 +43006,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -43034,7 +43034,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -43057,7 +43057,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -43084,7 +43084,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -43107,7 +43107,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44086,7 +44086,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @param data		The input.
@@ -44167,7 +44167,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44195,7 +44195,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44292,7 +44292,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -44369,7 +44369,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44390,7 +44390,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44448,7 +44448,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -44541,7 +44541,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44587,7 +44587,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -44822,7 +44822,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44842,7 +44842,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44867,7 +44867,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44886,7 +44886,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -44911,7 +44911,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44952,7 +44952,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -44991,7 +44991,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @param data		Input array.
@@ -45019,7 +45019,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -45048,7 +45048,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -45214,7 +45214,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -45230,7 +45230,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -45990,7 +45990,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -46010,7 +46010,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -46035,7 +46035,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -46055,7 +46055,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -46132,7 +46132,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47001,7 +47001,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47268,7 +47268,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47290,7 +47290,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47352,7 +47352,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -47429,7 +47429,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @param data		Input data to reshape.
@@ -47472,7 +47472,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @param lhs		First input.
@@ -47501,7 +47501,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -47532,7 +47532,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47662,7 +47662,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -47687,7 +47687,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48180,7 +48180,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -48222,7 +48222,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48248,7 +48248,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48370,7 +48370,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48390,7 +48390,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Input Array.
@@ -48448,7 +48448,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -48486,7 +48486,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -48553,7 +48553,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -48730,7 +48730,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48816,7 +48816,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @param data		Input ndarray
@@ -48921,7 +48921,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -48950,7 +48950,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49044,7 +49044,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49299,7 +49299,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49324,7 +49324,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49372,7 +49372,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @param data		Input data array
@@ -49461,7 +49461,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @param data		Source input
@@ -49491,7 +49491,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @param data		The input array.
@@ -49622,9 +49622,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +def zeros_like (data : Option[org.apache.mxnet.Symbol] = None, name : String = null, attr : Map[String, String] = null): org.apache.mxnet.Symbol
 +}
 +
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala	2019-06-10 17:34:59.298090019 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolBase.scala	2019-09-08 20:42:08.484980681 +0900
 @@ -0,0 +1,8763 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -49915,7 +49915,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -50000,7 +50000,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -50297,7 +50297,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *    [ 2.    -0.4    7.     3.     0.2  ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/nn/dropout.cc:L97
++  * Defined in src/operator/nn/dropout.cc:L95
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -50431,7 +50431,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -51282,7 +51282,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -51946,7 +51946,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L690
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L708
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52096,7 +52096,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L123
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L179
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52116,7 +52116,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L264
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L320
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52145,7 +52145,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L104
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L160
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52169,7 +52169,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L250
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L306
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52197,7 +52197,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L144
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L200
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -52221,7 +52221,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L337
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53191,7 +53191,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L616
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L634
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53272,7 +53272,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L932
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L950
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53301,7 +53301,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L768
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L786
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53396,7 +53396,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L725
++  * Defined in src/operator/tensor/matrix_op.cc:L723
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53471,7 +53471,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L63
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L89
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53493,7 +53493,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L216
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L272
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53552,7 +53552,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53638,7 +53638,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L163
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L219
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53685,7 +53685,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [15, 21, 16, 22, 17, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1052
++  * Defined in src/operator/tensor/matrix_op.cc:L1050
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53915,7 +53915,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L946
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L964
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53936,7 +53936,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L967
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L985
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53962,7 +53962,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1026
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1044
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -53982,7 +53982,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L418
++  * Defined in src/operator/tensor/matrix_op.cc:L416
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54007,7 +54007,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1189
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54048,7 +54048,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L843
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54088,7 +54088,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L293
++  * Defined in src/operator/tensor/matrix_op.cc:L291
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54117,7 +54117,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54146,7 +54146,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L787
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L805
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54296,7 +54296,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L115
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L133
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -54311,7 +54311,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *
 +  * Returns a copy of the input.
 +  * 
-+  * From:src/operator/tensor/elemwise_unary_op_basic.cc:200
++  * From:src/operator/tensor/elemwise_unary_op_basic.cc:218
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55057,7 +55057,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1039
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1057
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55078,7 +55078,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1056
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1074
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55104,7 +55104,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1153
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1171
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55125,7 +55125,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1068
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1086
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55202,7 +55202,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L314
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L332
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -55888,7 +55888,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L182
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L238
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56134,7 +56134,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L986
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L1004
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56157,7 +56157,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L668
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L686
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56221,7 +56221,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L798
++  * Defined in src/operator/tensor/matrix_op.cc:L796
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56297,7 +56297,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L201
++  * Defined in src/operator/tensor/matrix_op.cc:L202
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56337,7 +56337,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L467
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L485
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56366,7 +56366,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                         [ 9.,  8.,  7.,  6.,  5.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L900
++  * Defined in src/operator/tensor/matrix_op.cc:L898
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56397,7 +56397,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L749
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L767
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56509,7 +56509,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L728
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L746
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -56535,7 +56535,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L909
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L927
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57002,7 +57002,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L526
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L544
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57042,7 +57042,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L101
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L119
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57069,7 +57069,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L709
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L727
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57182,7 +57182,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L201
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L257
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57203,7 +57203,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L578
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57262,7 +57262,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                                             [1.,  3.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L508
++  * Defined in src/operator/tensor/matrix_op.cc:L506
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57298,7 +57298,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                              [ 10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L598
++  * Defined in src/operator/tensor/matrix_op.cc:L596
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57363,7 +57363,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [  9.,  10.,  11.] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L667
++  * Defined in src/operator/tensor/matrix_op.cc:L665
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57535,7 +57535,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L145
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L163
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57621,7 +57621,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                             [21, 22, 23] ] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L1106
++  * Defined in src/operator/tensor/matrix_op.cc:L1104
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57724,7 +57724,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L889
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L907
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57754,7 +57754,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L865
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L883
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -57848,7 +57848,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L281
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L299
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58071,7 +58071,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L83
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L139
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58097,7 +58097,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L234
++  * Defined in src/operator/tensor/elemwise_unary_op_trig.cc:L290
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58146,7 +58146,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                               [ 3.,  4.,  3.,  4.,  3.,  4.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L859
++  * Defined in src/operator/tensor/matrix_op.cc:L857
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58230,7 +58230,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  *                                  [ 7.,  8.] ] ]
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/matrix_op.cc:L377
++  * Defined in src/operator/tensor/matrix_op.cc:L375
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58260,7 +58260,7 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +  * 
 +  * 
 +  * 
-+  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L807
++  * Defined in src/operator/tensor/elemwise_unary_op_basic.cc:L825
 +  * }}}
 +  * 
 +  * @return org.apache.mxnet.Symbol
@@ -58389,9 +58389,9 @@ diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scal
 +           
 +}
 +
-diff -ruN apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala
---- apache-mxnet-src-1.5.0.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
-+++ apache-mxnet-src-1.5.0.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala	2019-06-10 17:34:59.238089962 +0900
+diff -ruN apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala
+--- apache-mxnet-src-1.5.1.rc0-incubating/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala	1970-01-01 09:00:00.000000000 +0900
++++ apache-mxnet-src-1.5.1.rc0-incubating-scala/scala-package/core/src/main/scala/org/apache/mxnet/SymbolRandomAPIBase.scala	2019-09-08 20:42:08.436980600 +0900
 @@ -0,0 +1,502 @@
 +/*
 + * Licensed to the Apache Software Foundation (ASF) under one or more

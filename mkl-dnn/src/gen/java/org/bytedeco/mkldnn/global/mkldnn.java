@@ -562,6 +562,8 @@ public static final int
     mkldnn_eltwise_logistic = 0xaf,
     /** Eltwise: exponent */
     mkldnn_eltwise_exp = 0xbf,
+    /** Eltwise: gelu */
+    mkldnn_eltwise_gelu = 0xcf,
     /** Max pooling */
     mkldnn_pooling_max = 0x1ff,
     /** Average pooling include padding */
@@ -3313,6 +3315,7 @@ public static final int
     eltwise_soft_relu = mkldnn_eltwise_soft_relu,
     eltwise_logistic = mkldnn_eltwise_logistic,
     eltwise_exp = mkldnn_eltwise_exp,
+    eltwise_gelu = mkldnn_eltwise_gelu,
     lrn_across_channels = mkldnn_lrn_across_channels,
     lrn_within_channel  = mkldnn_lrn_within_channel,
     pooling_max = mkldnn_pooling_max,
