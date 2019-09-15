@@ -12,6 +12,17 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Computes inverse hyperbolic tangent of x element-wise.
  * 
+ *    Given an input tensor, this function computes inverse hyperbolic tangent
+ *    for every element in the tensor. Input range is {@code [-1,1]} and output range is
+ *    {@code [-inf, inf]}. If input is {@code -1}, output will be {@code -inf} and if the
+ *    input is {@code 1}, output will be {@code inf}. Values outside the range will have
+ *    {@code nan} as output.
+ * 
+ *    <pre>{@code python
+ *    x = tf.constant([-float("inf"), -1, -0.5, 1, 0, 0.5, 10, float("inf")])
+ *    tf.math.atanh(x) ==> [nan -inf -0.54930615 inf  0. 0.54930615 nan nan]
+ *    }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  * 

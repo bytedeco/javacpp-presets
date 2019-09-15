@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-  // "SYCL"
+     // "SYCL"
 
 @Name("tensorflow::DeviceName<Eigen::ThreadPoolDevice>") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class DeviceName extends Pointer {

@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.14.0</tensorflow.version>
+    <tensorflow.version>1.15.0-rc0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
     <revision>${tensorflow.version}-${project.parent.version}</revision>
   </properties>
@@ -118,6 +118,7 @@
             <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_absl/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_protobuf/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/zlib_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/grpc/include/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/farmhash_archive/src/</includePath>

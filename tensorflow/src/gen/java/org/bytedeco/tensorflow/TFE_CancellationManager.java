@@ -11,19 +11,19 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
 @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
-public class TFE_ProfilerContext extends Pointer {
+public class TFE_CancellationManager extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public TFE_ProfilerContext() { super((Pointer)null); allocate(); }
+    public TFE_CancellationManager() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TFE_ProfilerContext(long size) { super((Pointer)null); allocateArray(size); }
+    public TFE_CancellationManager(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TFE_ProfilerContext(Pointer p) { super(p); }
+    public TFE_CancellationManager(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(long size);
-    @Override public TFE_ProfilerContext position(long position) {
-        return (TFE_ProfilerContext)super.position(position);
+    @Override public TFE_CancellationManager position(long position) {
+        return (TFE_CancellationManager)super.position(position);
     }
 
-  public native @ByRef ProfilerContext profiler_context(); public native TFE_ProfilerContext profiler_context(ProfilerContext setter);
+  public native @MemberGetter @ByRef CancellationManager cancellation_manager();
 }

@@ -24,8 +24,7 @@ public class ProfilerSession extends Pointer {
     public ProfilerSession(Pointer p) { super(p); }
 
   // Creates and ProfilerSession and starts profiling.
-  public static native @MoveUniquePtr ProfilerSession Create(
-        ProfilerContext context);
+  public static native @MoveUniquePtr ProfilerSession Create();
 
   // Deletes an exsiting Profiler and enables starting a new one.
 

@@ -96,7 +96,7 @@ public class UnknownField extends Pointer {
           return (LengthDelimited)super.position(position);
       }
   
-    public native @StdString @Cast({"char*", "std::string*"}) BytePointer string_value_(); public native LengthDelimited string_value_(BytePointer setter);
+    public native @StdString @Cast({"char*", "std::string*"}) BytePointer string_value(); public native LengthDelimited string_value(BytePointer setter);
   }
 
   public native @Cast("google::protobuf::uint32") int number_(); public native UnknownField number_(int setter);

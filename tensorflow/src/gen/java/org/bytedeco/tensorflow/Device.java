@@ -49,12 +49,6 @@ public class Device extends DeviceBase {
   public native void ConsumeListOfAccessedTensors(
         DeviceContext context, @Cast("const tensorflow::TensorReferenceVector*") @ByRef TensorValueVector tensors);
 
-  // If true, and tracing is enabled, the `tracing::ScopedAnnotation()` tracing
-  // mechanism will be used instead of `tracing::ScopedActivity()`. Some devices
-  // may override this method to use annotations, which enable child activities
-  // (such as GPU kernel launches) to be related to the OpKernel invocation.
-  public native @Cast("bool") boolean TraceUsingAnnotations();
-
   // Blocks until all operations queued on the device at the time of
   // the call have completed.  Returns any error pending on the device
   // at completion.
@@ -111,10 +105,6 @@ public class Device extends DeviceBase {
   // Returns the resource manager associated w/ this device.
   public native ResourceMgr resource_manager();
 
-  // Returns the device manager that owns this device, or nullptr if this Device
-  // is not owned by a device manager.
-  public native DeviceMgr device_mgr();
-
   // Summarizes the status of this Device, for debugging.
   public native @StdString BytePointer DebugString();
 
@@ -135,4 +125,6 @@ public class Device extends DeviceBase {
 
   // Clears the resource manager associated with this device.
   public native void ClearResourceMgr();
+
+  public native @Cast("bool") boolean IsLocal();
 }

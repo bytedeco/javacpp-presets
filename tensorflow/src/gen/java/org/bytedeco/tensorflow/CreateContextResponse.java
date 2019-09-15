@@ -30,9 +30,10 @@ public class CreateContextResponse extends MessageLite {
   private native void allocate(@Const @ByRef CreateContextResponse from);
 
   public native @ByRef @Name("operator =") CreateContextResponse put(@Const @ByRef CreateContextResponse from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CreateContextResponse default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -85,11 +86,4 @@ public class CreateContextResponse extends MessageLite {
   public native DeviceAttributes mutable_device_attributes(int index);
   public native @Const @ByRef DeviceAttributes device_attributes(int index);
   public native DeviceAttributes add_device_attributes();
-
-  // fixed64 context_id = 1;
-  public native void clear_context_id();
-  @MemberGetter public static native int kContextIdFieldNumber();
-  public static final int kContextIdFieldNumber = kContextIdFieldNumber();
-  public native @Cast("google::protobuf::uint64") long context_id();
-  public native void set_context_id(@Cast("google::protobuf::uint64") long value);
 }

@@ -30,11 +30,12 @@ public class RunGraphRequest extends MessageLite {
   private native void allocate(@Const @ByRef RunGraphRequest from);
 
   public native @ByRef @Name("operator =") RunGraphRequest put(@Const @ByRef RunGraphRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RunGraphRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -98,15 +99,11 @@ public class RunGraphRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_recv_key(int index);
   public native void set_recv_key(int index, @StdString BytePointer value);
   public native void set_recv_key(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_recv_key(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_recv_key(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_recv_key();
   public native void add_recv_key(@StdString BytePointer value);
   public native void add_recv_key(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_recv_key(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_recv_key(String value, @Cast("size_t") long size);
 
@@ -117,8 +114,6 @@ public class RunGraphRequest extends MessageLite {
   public native @StdString BytePointer graph_handle();
   public native void set_graph_handle(@StdString BytePointer value);
   public native void set_graph_handle(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_graph_handle(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_graph_handle(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_graph_handle();
@@ -135,8 +130,6 @@ public class RunGraphRequest extends MessageLite {
   public native @StdString BytePointer session_handle();
   public native void set_session_handle(@StdString BytePointer value);
   public native void set_session_handle(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_session_handle(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_session_handle(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_session_handle();

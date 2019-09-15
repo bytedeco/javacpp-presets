@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
+// #else
 // #endif
 
 // Arena allocator. Arena allocation replaces ordinary (heap-based) allocation
@@ -60,9 +61,6 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 // well as protobuf container types like RepeatedPtrField and Map. The protocol
 // is internal to protobuf and is not guaranteed to be stable. Non-proto types
 // should not rely on this protocol.
-//
-// Do NOT subclass Arena. This class will be marked as final when C++11 is
-// enabled.
 @Namespace("google::protobuf") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class Arena extends Pointer {
     static { Loader.load(); }
@@ -173,13 +171,13 @@ public class Arena extends Pointer {
       private native void allocate();
       public native void call(Pointer arg0);
   }
-  public native void OwnCustomDestructor(
-        Pointer object, Destruct_Pointer destruct);
+  public native void OwnCustomDestructor(Pointer object,
+                                               Destruct_Pointer destruct);
 
   // Retrieves the arena associated with |value| if |value| is an arena-capable
-  // message, or NULL otherwise. This differs from value->GetArena() in that the
-  // latter is a virtual call, while this method is a templated call that
-  // resolves at compile-time.
+  // message, or NULL otherwise. If possible, the call resolves at compile time.
+  // Note that we can often devirtualize calls to `value->GetArena()` so usually
+  // calling this method is unnecessary.
 
   // Helper typetraits that indicates support for arenas in a type T at compile
   // time. This is public only to allow construction of higher-level templated

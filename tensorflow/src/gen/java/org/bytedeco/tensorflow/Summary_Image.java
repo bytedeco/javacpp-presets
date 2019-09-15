@@ -30,11 +30,12 @@ public class Summary_Image extends MessageLite {
   private native void allocate(@Const @ByRef Summary_Image from);
 
   public native @ByRef @Name("operator =") Summary_Image put(@Const @ByRef Summary_Image from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef Summary_Image default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class Summary_Image extends MessageLite {
   public native @StdString BytePointer encoded_image_string();
   public native void set_encoded_image_string(@StdString BytePointer value);
   public native void set_encoded_image_string(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_encoded_image_string(@Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_encoded_image_string();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_encoded_image_string();

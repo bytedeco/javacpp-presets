@@ -30,11 +30,12 @@ public class CostGraphDef_Node_OutputInfo extends MessageLite {
   private native void allocate(@Const @ByRef CostGraphDef_Node_OutputInfo from);
 
   public native @ByRef @Name("operator =") CostGraphDef_Node_OutputInfo put(@Const @ByRef CostGraphDef_Node_OutputInfo from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CostGraphDef_Node_OutputInfo default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

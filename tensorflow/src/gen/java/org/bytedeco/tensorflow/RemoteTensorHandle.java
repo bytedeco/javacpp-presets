@@ -31,9 +31,10 @@ public class RemoteTensorHandle extends MessageLite {
   private native void allocate(@Const @ByRef RemoteTensorHandle from);
 
   public native @ByRef @Name("operator =") RemoteTensorHandle put(@Const @ByRef RemoteTensorHandle from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RemoteTensorHandle default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -78,6 +79,32 @@ public class RemoteTensorHandle extends MessageLite {
 
   // accessors -------------------------------------------------------
 
+  // string device = 3;
+  public native void clear_device();
+  @MemberGetter public static native int kDeviceFieldNumber();
+  public static final int kDeviceFieldNumber = kDeviceFieldNumber();
+  public native @StdString BytePointer device();
+  public native void set_device(@StdString BytePointer value);
+  public native void set_device(@StdString String value);
+  public native void set_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_device(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_device();
+  public native void set_allocated_device(@StdString @Cast({"char*", "std::string*"}) BytePointer device);
+
+  // string op_device = 4;
+  public native void clear_op_device();
+  @MemberGetter public static native int kOpDeviceFieldNumber();
+  public static final int kOpDeviceFieldNumber = kOpDeviceFieldNumber();
+  public native @StdString BytePointer op_device();
+  public native void set_op_device(@StdString BytePointer value);
+  public native void set_op_device(@StdString String value);
+  public native void set_op_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_op_device(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op_device();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_op_device();
+  public native void set_allocated_op_device(@StdString @Cast({"char*", "std::string*"}) BytePointer op_device);
+
   // int64 op_id = 1;
   public native void clear_op_id();
   @MemberGetter public static native int kOpIdFieldNumber();
@@ -91,4 +118,11 @@ public class RemoteTensorHandle extends MessageLite {
   public static final int kOutputNumFieldNumber = kOutputNumFieldNumber();
   public native @Cast("google::protobuf::int32") int output_num();
   public native void set_output_num(@Cast("google::protobuf::int32") int value);
+
+  // .tensorflow.DataType dtype = 5;
+  public native void clear_dtype();
+  @MemberGetter public static native int kDtypeFieldNumber();
+  public static final int kDtypeFieldNumber = kDtypeFieldNumber();
+  public native @Cast("tensorflow::DataType") int dtype();
+  public native void set_dtype(@Cast("tensorflow::DataType") int value);
 }

@@ -33,6 +33,8 @@ public class WorkerSession extends Pointer {
   // DeviceMgr (typically the `worker_env.device_mgr`).
   public native DeviceMgr device_mgr();
 
+  public native DeviceMgr remote_device_mgr();
+
   // graph_mgr keeps track of the registered graphs of this session.
   //
   // Note: graph_mgr must be deleted before rendezvous_mgr!

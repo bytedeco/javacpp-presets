@@ -30,11 +30,12 @@ public class ScopedAllocatorOptions extends MessageLite {
   private native void allocate(@Const @ByRef ScopedAllocatorOptions from);
 
   public native @ByRef @Name("operator =") ScopedAllocatorOptions put(@Const @ByRef ScopedAllocatorOptions from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ScopedAllocatorOptions default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,15 +90,11 @@ public class ScopedAllocatorOptions extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_enable_op(int index);
   public native void set_enable_op(int index, @StdString BytePointer value);
   public native void set_enable_op(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_enable_op(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_enable_op(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_enable_op();
   public native void add_enable_op(@StdString BytePointer value);
   public native void add_enable_op(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_enable_op(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_enable_op(String value, @Cast("size_t") long size);
 }

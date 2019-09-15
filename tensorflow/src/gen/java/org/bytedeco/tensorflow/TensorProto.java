@@ -31,11 +31,12 @@ public class TensorProto extends MessageLite {
   private native void allocate(@Const @ByRef TensorProto from);
 
   public native @ByRef @Name("operator =") TensorProto put(@Const @ByRef TensorProto from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef TensorProto default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -117,14 +118,10 @@ public class TensorProto extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_string_val(int index);
   public native void set_string_val(int index, @StdString BytePointer value);
   public native void set_string_val(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_string_val(int index, @Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_string_val();
   public native void add_string_val(@StdString BytePointer value);
   public native void add_string_val(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_string_val(@Const Pointer value, @Cast("size_t") long size);
 
   // repeated float scomplex_val = 9 [packed = true];
@@ -215,8 +212,6 @@ public class TensorProto extends MessageLite {
   public native @StdString BytePointer tensor_content();
   public native void set_tensor_content(@StdString BytePointer value);
   public native void set_tensor_content(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_tensor_content(@Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensor_content();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_tensor_content();

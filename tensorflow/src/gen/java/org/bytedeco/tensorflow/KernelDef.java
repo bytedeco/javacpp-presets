@@ -30,11 +30,12 @@ public class KernelDef extends MessageLite {
   private native void allocate(@Const @ByRef KernelDef from);
 
   public native @ByRef @Name("operator =") KernelDef put(@Const @ByRef KernelDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef KernelDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -98,15 +99,11 @@ public class KernelDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_host_memory_arg(int index);
   public native void set_host_memory_arg(int index, @StdString BytePointer value);
   public native void set_host_memory_arg(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_host_memory_arg(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_host_memory_arg(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_host_memory_arg();
   public native void add_host_memory_arg(@StdString BytePointer value);
   public native void add_host_memory_arg(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_host_memory_arg(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_host_memory_arg(String value, @Cast("size_t") long size);
 
@@ -117,8 +114,6 @@ public class KernelDef extends MessageLite {
   public native @StdString BytePointer op();
   public native void set_op(@StdString BytePointer value);
   public native void set_op(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_op(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_op(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op();
@@ -135,8 +130,6 @@ public class KernelDef extends MessageLite {
   public native @StdString BytePointer device_type();
   public native void set_device_type(@StdString BytePointer value);
   public native void set_device_type(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_device_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_device_type(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device_type();
@@ -153,8 +146,6 @@ public class KernelDef extends MessageLite {
   public native @StdString BytePointer label();
   public native void set_label(@StdString BytePointer value);
   public native void set_label(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_label(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_label(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_label();

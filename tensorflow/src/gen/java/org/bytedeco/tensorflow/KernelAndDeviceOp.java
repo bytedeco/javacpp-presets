@@ -34,12 +34,14 @@ public class KernelAndDeviceOp extends KernelAndDevice {
 
   public native @ByVal Status Run(@Const @ByRef TensorValueVector inputs,
                TensorVector outputs, NodeExecStats stats,
-               StepStats step_stats, GraphCollector graph_collector);
+               StepStats step_stats, GraphCollector graph_collector,
+               CancellationManager cancellation_manager);
 
   public native @ByVal Status Run(ScopedStepContainer step_container,
                @Const @ByRef TensorValueVector inputs,
                TensorVector outputs, NodeExecStats stats,
-               StepStats step_stats, GraphCollector graph_collector);
+               StepStats step_stats, GraphCollector graph_collector,
+               CancellationManager cancellation_manager);
 
   public native @Const OpKernel kernel();
 

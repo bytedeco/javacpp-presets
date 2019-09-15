@@ -30,11 +30,12 @@ public class TrackableObjectGraph_TrackableObject_SerializedTensor extends Messa
   private native void allocate(@Const @ByRef TrackableObjectGraph_TrackableObject_SerializedTensor from);
 
   public native @ByRef @Name("operator =") TrackableObjectGraph_TrackableObject_SerializedTensor put(@Const @ByRef TrackableObjectGraph_TrackableObject_SerializedTensor from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef TrackableObjectGraph_TrackableObject_SerializedTensor default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class TrackableObjectGraph_TrackableObject_SerializedTensor extends Messa
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -105,8 +104,6 @@ public class TrackableObjectGraph_TrackableObject_SerializedTensor extends Messa
   public native @StdString BytePointer full_name();
   public native void set_full_name(@StdString BytePointer value);
   public native void set_full_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_full_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_full_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_full_name();
@@ -123,8 +120,6 @@ public class TrackableObjectGraph_TrackableObject_SerializedTensor extends Messa
   public native @StdString BytePointer checkpoint_key();
   public native void set_checkpoint_key(@StdString BytePointer value);
   public native void set_checkpoint_key(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_checkpoint_key(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_checkpoint_key(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_checkpoint_key();

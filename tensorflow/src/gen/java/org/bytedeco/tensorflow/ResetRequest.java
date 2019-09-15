@@ -30,11 +30,12 @@ public class ResetRequest extends MessageLite {
   private native void allocate(@Const @ByRef ResetRequest from);
 
   public native @ByRef @Name("operator =") ResetRequest put(@Const @ByRef ResetRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ResetRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,15 +90,11 @@ public class ResetRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_container(int index);
   public native void set_container(int index, @StdString BytePointer value);
   public native void set_container(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_container(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_container(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_container();
   public native void add_container(@StdString BytePointer value);
   public native void add_container(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_container(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_container(String value, @Cast("size_t") long size);
 
@@ -110,15 +107,11 @@ public class ResetRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device_filters(int index);
   public native void set_device_filters(int index, @StdString BytePointer value);
   public native void set_device_filters(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_device_filters(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_device_filters(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_device_filters();
   public native void add_device_filters(@StdString BytePointer value);
   public native void add_device_filters(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_device_filters(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_device_filters(String value, @Cast("size_t") long size);
 }

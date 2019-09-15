@@ -31,6 +31,10 @@ public class StatusGroup extends Pointer {
   public static native @ByVal Status MakeDerived(@Const @ByRef Status s);
   public static native @Cast("bool") boolean IsDerived(@Const @ByRef Status s);
 
+  // Enable warning and error log collection for appending to the aggregated
+  // status. This function may be called more than once.
+  public static native void ConfigureLogHistory();
+
   // Return a merged status with combined child status messages with a summary.
   public native @ByVal Status as_summary_status();
   // Return a merged status with combined child status messages with
@@ -41,4 +45,8 @@ public class StatusGroup extends Pointer {
 
   // Augment this group with the child status `status`.
   public native void Update(@Const @ByRef Status status);
+
+  // Attach recent warning and error log messages
+  public native void AttachLogMessages();
+  public native @Cast("bool") boolean HasLogMessages();
 }

@@ -147,4 +147,16 @@ public class FunctionLibraryDefinition extends OpRegistryInterface {
   // reachable from the nodes of `graph` or `func`.
   public native @ByVal FunctionLibraryDefinition ReachableDefinitions(@Const @ByRef GraphDef graph);
   public native @ByVal FunctionLibraryDefinition ReachableDefinitions(@Const @ByRef FunctionDef func);
+
+  // Copies the function named `func` from `other` to this
+  // FunctionLibraryDefinition.
+  // REQUIRES: `this->default_registry() == other.default_registry()`.
+  // Returns OK on success, or error otherwise. This is a no-op if a function
+  // name `func` already exists in this function library, and has the same
+  // implementation as in `other`. If the implementations conflict, an invalid
+  // argument error is returned.
+  public native @ByVal Status CopyFunctionDefFrom(@StdString BytePointer func,
+                               @Const @ByRef FunctionLibraryDefinition other);
+  public native @ByVal Status CopyFunctionDefFrom(@StdString String func,
+                               @Const @ByRef FunctionLibraryDefinition other);
 }

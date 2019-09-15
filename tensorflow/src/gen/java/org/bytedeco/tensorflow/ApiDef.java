@@ -30,11 +30,12 @@ public class ApiDef extends MessageLite {
   private native void allocate(@Const @ByRef ApiDef from);
 
   public native @ByRef @Name("operator =") ApiDef put(@Const @ByRef ApiDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ApiDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -93,7 +94,6 @@ public class ApiDef extends MessageLite {
   @MemberGetter public static native int Visibility_ARRAYSIZE();
   public static final int Visibility_ARRAYSIZE = Visibility_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Visibility_descriptor();
-  public static native @StdString BytePointer Visibility_Name(@Cast("tensorflow::ApiDef::Visibility") int value);
   public static native @Cast("bool") boolean Visibility_Parse(@StdString BytePointer name,
         @Cast("tensorflow::ApiDef::Visibility*") IntPointer value);
   public static native @Cast("bool") boolean Visibility_Parse(@StdString String name,
@@ -154,15 +154,11 @@ public class ApiDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_arg_order(int index);
   public native void set_arg_order(int index, @StdString BytePointer value);
   public native void set_arg_order(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_arg_order(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_arg_order(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_arg_order();
   public native void add_arg_order(@StdString BytePointer value);
   public native void add_arg_order(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_arg_order(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_arg_order(String value, @Cast("size_t") long size);
 
@@ -173,8 +169,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer graph_op_name();
   public native void set_graph_op_name(@StdString BytePointer value);
   public native void set_graph_op_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_graph_op_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_graph_op_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_graph_op_name();
@@ -191,8 +185,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer summary();
   public native void set_summary(@StdString BytePointer value);
   public native void set_summary(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_summary(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_summary(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
@@ -209,8 +201,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer description();
   public native void set_description(@StdString BytePointer value);
   public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_description(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();
@@ -227,8 +217,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer description_prefix();
   public native void set_description_prefix(@StdString BytePointer value);
   public native void set_description_prefix(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_description_prefix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_description_prefix(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_prefix();
@@ -245,8 +233,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer description_suffix();
   public native void set_description_suffix(@StdString BytePointer value);
   public native void set_description_suffix(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_description_suffix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_description_suffix(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description_suffix();
@@ -263,8 +249,6 @@ public class ApiDef extends MessageLite {
   public native @StdString BytePointer deprecation_message();
   public native void set_deprecation_message(@StdString BytePointer value);
   public native void set_deprecation_message(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_deprecation_message(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_deprecation_message(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_deprecation_message();

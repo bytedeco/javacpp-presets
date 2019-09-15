@@ -19,40 +19,34 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 // TODO(agarwal): Support out-of-order execution and dispatching multiple
 // EagerNode in parallel.
 // TODO(agarwal): Implement optimizations over EagerNode traces.
-@Namespace("tensorflow") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+@Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class EagerExecutor extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public EagerExecutor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public EagerExecutor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EagerExecutor(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public EagerExecutor position(long position) {
-        return (EagerExecutor)super.position(position);
-    }
 
+  public EagerExecutor(@Cast("bool") boolean async) { super((Pointer)null); allocate(async); }
+  private native void allocate(@Cast("bool") boolean async);
 
-  // This is called whenever async mode is enabled. Note that it may be called
-  // multiple times as different calling threads may switch async mode on or off
-  // independently.
-  public native void EnableAsync();
+  // Puts this in a shutdown state. In this state, Add() will return an error
+  // and not add new EagerNodes. After putting this in the shutdown state,
+  // blocks until all pendings nodes have finished running.
+  // Returns the status of executing pending nodes.
+  // If async was not enabled, aborts and destroys all pending nodes.
+  public native @ByVal Status ShutDown();
 
-  // Helper function to create monotonically increasing ids unique to this
-  // object.
-  public native @Cast("tensorflow::uint64") long NextId();
+  public native @Cast("bool") boolean Async();
 
-  // Schedules `node` for execution.
-  // Note that Add must be called in monotonically increasing order of node->id.
-  public native void Add(EagerNode node);
-
-  // Causes the caller to block till node with id `node_id` has finished
-  // execution.
-  public native @ByVal Status WaitFor(@Cast("tensorflow::uint64") long node_id);
+  // Schedules `node` for execution. If an error occurs (e.g. EagerExecutor
+  // has already been shut down), the `node` is not added to this executor
+  // and its Abort() method is called.
+  public native @ByVal Status Add(@MoveUniquePtr EagerNode node);
 
   // Blocks till all currently pending ops are done.
+  // In particular, if EnableAsync() has not beed called, it will not return
+  // until that happens (and pendings, at the time of call, nodes finish
+  // running). If this executor has already been shut down, its final status is
+  // returned.
   public native @ByVal Status WaitForAllPendingNodes();
 
   // Clears all currently set errors which re-enables async execution.

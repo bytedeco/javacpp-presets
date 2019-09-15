@@ -29,13 +29,10 @@ public class WorkerCacheInterface extends Pointer {
   // or can be constructed, returns a pointer to a WorkerInterface object
   // wrapping that channel. The returned value must be destroyed by
   // calling `this->ReleaseWorker(target, ret)`
-  // TODO(mrry): rename this to GetOrCreateWorker() or something that
-  // makes it more obvious that this method returns a potentially
-  // shared object.
-  public native WorkerInterface CreateWorker(@StdString BytePointer target);
-  public native WorkerInterface CreateWorker(@StdString String target);
+  public native WorkerInterface GetOrCreateWorker(@StdString BytePointer target);
+  public native WorkerInterface GetOrCreateWorker(@StdString String target);
 
-  // Release a worker previously returned by this->CreateWorker(target).
+  // Release a worker previously returned by this->GetOrCreateWorker(target).
   //
   // TODO(jeff,sanjay): Consider moving target into WorkerInterface.
   // TODO(jeff,sanjay): Unify all worker-cache impls and factor out a
@@ -61,6 +58,10 @@ public class WorkerCacheInterface extends Pointer {
   public native void GetDeviceLocalityAsync(@StdString String device,
                                         DeviceLocality locality,
                                         @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
+
+  // Build and return a EagerClientCache object wrapping that channel.
+  public native @ByVal Status GetEagerClientCache(
+        @UniquePtr EagerClientCache eager_client_cache);
 
   // Start/stop logging activity.
   public native void SetLogging(@Cast("bool") boolean active);

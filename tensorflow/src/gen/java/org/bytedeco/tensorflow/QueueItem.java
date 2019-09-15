@@ -30,15 +30,17 @@ public class QueueItem extends MessageLite {
   private native void allocate(@Const @ByRef QueueItem from);
 
   public native @ByRef @Name("operator =") QueueItem put(@Const @ByRef QueueItem from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef QueueItem default_instance();
 
   /** enum tensorflow::eager::QueueItem::ItemCase */
   public static final int
     kHandleToDecref = 1,
     kOperation = 2,
+    kSendTensor = 3,
     ITEM_NOT_SET = 0;
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -102,6 +104,16 @@ public class QueueItem extends MessageLite {
   public native Eager_Operation release_operation();
   public native Eager_Operation mutable_operation();
   public native void set_allocated_operation(Eager_Operation operation);
+
+  // .tensorflow.eager.SendTensorOp send_tensor = 3;
+  public native @Cast("bool") boolean has_send_tensor();
+  public native void clear_send_tensor();
+  @MemberGetter public static native int kSendTensorFieldNumber();
+  public static final int kSendTensorFieldNumber = kSendTensorFieldNumber();
+  public native @Const @ByRef SendTensorOp send_tensor();
+  public native SendTensorOp release_send_tensor();
+  public native SendTensorOp mutable_send_tensor();
+  public native void set_allocated_send_tensor(SendTensorOp send_tensor);
 
   public native void clear_item();
   public native @Cast("tensorflow::eager::QueueItem::ItemCase") int item_case();

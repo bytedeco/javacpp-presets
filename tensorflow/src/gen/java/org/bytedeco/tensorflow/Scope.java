@@ -160,7 +160,7 @@ public class Scope extends Pointer {
    *  Note: The status object is shared between all children of this scope.
    *  If the resulting status is not Status::OK() and exit_on_error_ is set on
    *  this scope, this function exits by calling LOG(FATAL). */
-  public native void UpdateStatus(@Const @ByVal Status s);
+  public native void UpdateStatus(@Const @ByRef Status s);
 
   // START_SKIP_DOXYGEN
 

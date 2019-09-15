@@ -52,4 +52,7 @@ public class PeerAccessInterface extends Pointer {
                             @Const Tensor from_tensor,
                             @Const @ByRef DeviceLocality client_locality,
                             @Cast("const tensorflow::StatusCallback*") @ByRef Pointer done);
+
+  // Runs the potentially-blocking closure/expensive callback.
+  public native void RunClosure(@ByVal Fn closure);
 }

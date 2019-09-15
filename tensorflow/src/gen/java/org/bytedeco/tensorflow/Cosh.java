@@ -12,6 +12,15 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Computes hyperbolic cosine of x element-wise.
  * 
+ *    Given an input tensor, this function computes hyperbolic cosine of every
+ *    element in the tensor. Input range is {@code [-inf, inf]} and output range
+ *    is {@code [1, inf]}.
+ * 
+ *    <pre>{@code python
+ *    x = tf.constant([-float("inf"), -9, -0.5, 1, 1.2, 2, 10, float("inf")])
+ *    tf.math.cosh(x) ==> [inf 4.0515420e+03 1.1276259e+00 1.5430807e+00 1.8106556e+00 3.7621956e+00 1.1013233e+04 inf]
+ *    }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  * 

@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-     // defined in arenastring.h
+  // defined in arenastring.h
 @Namespace("google::protobuf::internal") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class LazyField extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */

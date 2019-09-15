@@ -33,6 +33,15 @@ public class TensorValue extends Pointer {
   public native @Name("operator ->") Tensor access();
   public native @Cast("bool") boolean is_ref();
 
+  // Return the dtype of the Tensor. For references, return the underlying type.
+  public native @Cast("tensorflow::DataType") int dtype();
+
+  // Return the dtype of the Tensor. For references, return the underlying type.
+  // This variation on the dtype() acquires the lock for references.
+  //
+  // TODO(b/133843385): Disallow dtype modifications
+  public native @Cast("tensorflow::DataType") int dtype_safe();
+
   public native @Cast("tensorflow::mutex*") Pointer mutex_if_ref(); public native TensorValue mutex_if_ref(Pointer setter);  // nullptr if not a ref, != nullptr if a ref
   public native Tensor tensor(); public native TensorValue tensor(Tensor setter);
 }

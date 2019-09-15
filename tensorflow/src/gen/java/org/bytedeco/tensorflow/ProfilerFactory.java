@@ -17,5 +17,5 @@ public class ProfilerFactory extends FunctionPointer {
     public    ProfilerFactory(Pointer p) { super(p); }
     protected ProfilerFactory() { allocate(); }
     private native void allocate();
-    public native @MoveUniquePtr ProfilerInterface call(@Const ProfilerContext arg0);
+    public native @MoveUniquePtr ProfilerInterface call();
 }

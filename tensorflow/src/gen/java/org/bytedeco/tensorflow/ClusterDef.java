@@ -30,11 +30,12 @@ public class ClusterDef extends MessageLite {
   private native void allocate(@Const @ByRef ClusterDef from);
 
   public native @ByRef @Name("operator =") ClusterDef put(@Const @ByRef ClusterDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ClusterDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

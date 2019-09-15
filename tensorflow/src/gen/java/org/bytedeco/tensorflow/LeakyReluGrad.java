@@ -19,7 +19,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  OR the outputs of that operation (both work equivalently).
  * 
  *  Returns:
- *  * {@code Output}: {@code gradients * (features > 0) + alpha * gradients * (featurs <= 0)}. */
+ *  * {@code Output}: {@code gradients * (features > 0) + alpha * gradients * (features <= 0)}. */
 @Namespace("tensorflow::ops::internal") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class LeakyReluGrad extends Pointer {
     static { Loader.load(); }

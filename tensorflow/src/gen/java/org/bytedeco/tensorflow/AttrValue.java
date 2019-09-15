@@ -30,11 +30,12 @@ public class AttrValue extends MessageLite {
   private native void allocate(@Const @ByRef AttrValue from);
 
   public native @ByRef @Name("operator =") AttrValue put(@Const @ByRef AttrValue from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef AttrValue default_instance();
 
   /** enum tensorflow::AttrValue::ValueCase */
@@ -97,8 +98,6 @@ public class AttrValue extends MessageLite {
   public native @StdString BytePointer s();
   public native void set_s(@StdString BytePointer value);
   public native void set_s(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_s(@Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_s();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_s();
@@ -184,8 +183,6 @@ public class AttrValue extends MessageLite {
   public native @StdString BytePointer placeholder();
   public native void set_placeholder(@StdString BytePointer value);
   public native void set_placeholder(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_placeholder(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_placeholder(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_placeholder();

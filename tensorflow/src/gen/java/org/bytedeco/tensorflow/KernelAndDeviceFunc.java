@@ -26,7 +26,7 @@ public class KernelAndDeviceFunc extends KernelAndDevice {
         FunctionLibraryRuntime flr, ProcessFunctionLibraryRuntime pflr,
         @ByVal DeviceVector input_devices,
         @ByVal IntTensorShapeMap input_tensor_shapes,
-        @ByVal IntDataTypeTensorShapePairMap input_resource_dtypes_and_shapes,
+        @ByVal DtypeAndPartialTensorShapeIntMap input_resource_dtypes_and_shapes,
         @Cast("std::function<void(std::function<void()>)>*") Pointer runner,
         @MoveUniquePtr CollectiveExecutor.Handle collective_executor,
         Device host_cpu_device, @StdString BytePointer name,
@@ -35,7 +35,7 @@ public class KernelAndDeviceFunc extends KernelAndDevice {
         FunctionLibraryRuntime flr, ProcessFunctionLibraryRuntime pflr,
         @ByVal DeviceVector input_devices,
         @ByVal IntTensorShapeMap input_tensor_shapes,
-        @ByVal IntDataTypeTensorShapePairMap input_resource_dtypes_and_shapes,
+        @ByVal DtypeAndPartialTensorShapeIntMap input_resource_dtypes_and_shapes,
         @Cast("std::function<void(std::function<void()>)>*") Pointer runner,
         @MoveUniquePtr CollectiveExecutor.Handle collective_executor,
         Device host_cpu_device, @StdString BytePointer name,
@@ -44,7 +44,7 @@ public class KernelAndDeviceFunc extends KernelAndDevice {
         FunctionLibraryRuntime flr, ProcessFunctionLibraryRuntime pflr,
         @ByVal DeviceVector input_devices,
         @ByVal IntTensorShapeMap input_tensor_shapes,
-        @ByVal IntDataTypeTensorShapePairMap input_resource_dtypes_and_shapes,
+        @ByVal DtypeAndPartialTensorShapeIntMap input_resource_dtypes_and_shapes,
         @Cast("std::function<void(std::function<void()>)>*") Pointer runner,
         @MoveUniquePtr CollectiveExecutor.Handle collective_executor,
         Device host_cpu_device, @StdString String name,
@@ -53,7 +53,7 @@ public class KernelAndDeviceFunc extends KernelAndDevice {
         FunctionLibraryRuntime flr, ProcessFunctionLibraryRuntime pflr,
         @ByVal DeviceVector input_devices,
         @ByVal IntTensorShapeMap input_tensor_shapes,
-        @ByVal IntDataTypeTensorShapePairMap input_resource_dtypes_and_shapes,
+        @ByVal DtypeAndPartialTensorShapeIntMap input_resource_dtypes_and_shapes,
         @Cast("std::function<void(std::function<void()>)>*") Pointer runner,
         @MoveUniquePtr CollectiveExecutor.Handle collective_executor,
         Device host_cpu_device, @StdString String name,
@@ -63,11 +63,13 @@ public class KernelAndDeviceFunc extends KernelAndDevice {
 
   public native @ByVal Status Run(@Const @ByRef TensorValueVector inputs,
                TensorVector outputs, NodeExecStats stats,
-               StepStats step_stats, GraphCollector graph_collector);
+               StepStats step_stats, GraphCollector graph_collector,
+               CancellationManager cancellation_manager);
   public native @ByVal Status Run(ScopedStepContainer step_container,
                @Const @ByRef TensorValueVector inputs,
                TensorVector outputs, NodeExecStats stats,
-               StepStats step_stats, GraphCollector graph_collector);
+               StepStats step_stats, GraphCollector graph_collector,
+               CancellationManager cancellation_manager);
 
   public native @Const OpKernel kernel();
 

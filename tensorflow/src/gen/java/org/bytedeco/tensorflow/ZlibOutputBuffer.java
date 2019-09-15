@@ -52,6 +52,9 @@ public class ZlibOutputBuffer extends WritableFile {
   public native @ByVal Status Append(@StringPiece BytePointer data);
   public native @ByVal Status Append(@StringPiece String data);
 
+// #if defined(PLATFORM_GOOGLE)
+// #endif
+
   // Deflates any cached input and writes all output to file.
   public native @ByVal Status Flush();
 

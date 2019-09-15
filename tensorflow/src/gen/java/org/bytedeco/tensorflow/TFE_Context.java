@@ -17,12 +17,14 @@ public class TFE_Context extends Pointer {
     public TFE_Context(Pointer p) { super(p); }
 
   public TFE_Context(@Const @ByRef SessionOptions opts,
-                @Cast("TFE_ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
+                @Cast("TFE_ContextDevicePlacementPolicy") int default_device_placement_policy,
+                @ByVal @Cast("TFE_ContextMirroringPolicy*") Pointer default_mirroring_policy, @Cast("bool") boolean async,
                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
                 Rendezvous rendezvous,
-                @Const CustomKernelCreator custom_kernel_creator) { super((Pointer)null); allocate(opts, default_policy, async, device_mgr, device_mgr_owned, rendezvous, custom_kernel_creator); }
+                @Const CustomKernelCreator custom_kernel_creator) { super((Pointer)null); allocate(opts, default_device_placement_policy, default_mirroring_policy, async, device_mgr, device_mgr_owned, rendezvous, custom_kernel_creator); }
   private native void allocate(@Const @ByRef SessionOptions opts,
-                @Cast("TFE_ContextDevicePlacementPolicy") int default_policy, @Cast("bool") boolean async,
+                @Cast("TFE_ContextDevicePlacementPolicy") int default_device_placement_policy,
+                @ByVal @Cast("TFE_ContextMirroringPolicy*") Pointer default_mirroring_policy, @Cast("bool") boolean async,
                 @Const DeviceMgr device_mgr, @Cast("bool") boolean device_mgr_owned,
                 Rendezvous rendezvous,
                 @Const CustomKernelCreator custom_kernel_creator);

@@ -1,8 +1,8 @@
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-unsecure/tensorflow/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-unsecure/tensorflow/BUILD	2019-05-29 12:58:35.842955673 +0900
-@@ -455,7 +455,7 @@
-     name = "grpc",
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/BUILD tensorflow-1.15.0-rc0-unsecure/tensorflow/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-unsecure/tensorflow/BUILD	2019-09-11 11:18:43.767410112 +0900
+@@ -491,7 +491,7 @@
+     visibility = ["//visibility:public"],
      deps = select({
          ":linux_s390x": ["@grpc//:grpc_unsecure"],
 -        "//conditions:default": ["@grpc"],
@@ -10,8 +10,8 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-unsecure/
      }),
  )
  
-@@ -463,7 +463,7 @@
-     name = "grpc++",
+@@ -500,7 +500,7 @@
+     visibility = ["//visibility:public"],
      deps = select({
          ":linux_s390x": ["@grpc//:grpc++_unsecure"],
 -        "//conditions:default": ["@grpc//:grpc++"],
@@ -19,10 +19,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-unsecure/
      }),
  )
  
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-rc0-unsecure/tensorflow/core/kernels/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-unsecure/tensorflow/core/kernels/BUILD	2019-05-29 13:41:49.890086020 +0900
-@@ -753,10 +753,7 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.15.0-rc0-unsecure/tensorflow/core/kernels/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/core/kernels/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-unsecure/tensorflow/core/kernels/BUILD	2019-09-11 11:18:43.770410115 +0900
+@@ -768,10 +768,7 @@
          "//tensorflow:ios": [],
          "//tensorflow:linux_aarch64": [],
          "//tensorflow:linux_ppc64le": [],
@@ -34,7 +34,7 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-
      }),
      deps = [
          "//third_party/eigen3",
-@@ -766,7 +763,7 @@
+@@ -781,7 +778,7 @@
          "//tensorflow:ios": [],
          "//tensorflow:linux_aarch64": [],
          "//tensorflow:linux_ppc64le": [],
@@ -43,7 +43,7 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-
      }),
  )
  
-@@ -2842,7 +2839,7 @@
+@@ -2987,7 +2984,7 @@
          "//tensorflow:ios": [],
          "//tensorflow:linux_ppc64le": [],
          ":no_mkldnn_contraction_kernel": [],
@@ -52,9 +52,9 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-
      }),
      tags = ["mkldnn_contraction_kernel"],
      deps = [
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/platform/default/build_config.bzl tensorflow-1.14.0-rc0-unsecure/tensorflow/core/platform/default/build_config.bzl
---- tensorflow-1.14.0-rc0/tensorflow/core/platform/default/build_config.bzl	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-unsecure/tensorflow/core/platform/default/build_config.bzl	2019-05-29 12:58:35.843955674 +0900
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/platform/default/build_config.bzl tensorflow-1.15.0-rc0-unsecure/tensorflow/core/platform/default/build_config.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/core/platform/default/build_config.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-unsecure/tensorflow/core/platform/default/build_config.bzl	2019-09-11 11:18:43.774410120 +0900
 @@ -212,7 +212,7 @@
      if use_grpc_plugin:
          cc_libs += select({
@@ -63,18 +63,28 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/platform/default/build_config.bz
 +            "//conditions:default": ["//external:grpc_lib_unsecure"],
          })
  
-     if default_header:
-diff -ruN tensorflow-1.14.0-rc0/third_party/hwloc/BUILD.bazel tensorflow-1.14.0-rc0-unsecure/third_party/hwloc/BUILD.bazel
---- tensorflow-1.14.0-rc0/third_party/hwloc/BUILD.bazel	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-unsecure/third_party/hwloc/BUILD.bazel	2019-05-29 12:59:13.657977118 +0900
-@@ -243,10 +243,6 @@
+     if make_default_target_header_only:
+diff -ruN tensorflow-1.15.0-rc0/third_party/hwloc/BUILD.bazel tensorflow-1.15.0-rc0-unsecure/third_party/hwloc/BUILD.bazel
+--- tensorflow-1.15.0-rc0/third_party/hwloc/BUILD.bazel	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-unsecure/third_party/hwloc/BUILD.bazel	2019-09-11 11:19:53.317489702 +0900
+@@ -51,7 +51,6 @@
+     src = "include/hwloc/autogen/config.h.in",
+     out = "include/hwloc/autogen/config.h",
+     substitutions = select({
+-        "@org_tensorflow//tensorflow:linux_x86_64": _INCLUDE_HWLOC_AUTOIGEN_CONFIG_H_LINUX_SUBS,
+         "//conditions:default": _INCLUDE_HWLOC_AUTOIGEN_CONFIG_H_COMMON_SUBS,
+     }),
+ )
+@@ -256,12 +255,6 @@
          "include/private/private.h",
          "include/private/xml.h",
      ] + select({
 -        "@org_tensorflow//tensorflow:linux_x86_64": [
+-            "hwloc/topology-linux.c",
+-            "include/hwloc/linux.h",
 -            "hwloc/topology-x86.c",
 -            "include/private/cpuid-x86.h",
 -        ],
-         "//conditions:default": [],
-     }),
-     hdrs = [
+         "@org_tensorflow//tensorflow:freebsd": [
+             "hwloc/topology-freebsd.c",
+             "hwloc/topology-x86.c",

@@ -30,11 +30,12 @@ public class RecvBufRequest extends MessageLite {
   private native void allocate(@Const @ByRef RecvBufRequest from);
 
   public native @ByRef @Name("operator =") RecvBufRequest put(@Const @ByRef RecvBufRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RecvBufRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class RecvBufRequest extends MessageLite {
   public native @StdString BytePointer buf_rendezvous_key();
   public native void set_buf_rendezvous_key(@StdString BytePointer value);
   public native void set_buf_rendezvous_key(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_buf_rendezvous_key(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_buf_rendezvous_key(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_buf_rendezvous_key();
@@ -105,8 +104,6 @@ public class RecvBufRequest extends MessageLite {
   public native @StdString BytePointer src_device();
   public native void set_src_device(@StdString BytePointer value);
   public native void set_src_device(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_src_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_src_device(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_src_device();
@@ -123,8 +120,6 @@ public class RecvBufRequest extends MessageLite {
   public native @StdString BytePointer dst_device();
   public native void set_dst_device(@StdString BytePointer value);
   public native void set_dst_device(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_dst_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_dst_device(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_dst_device();
@@ -200,4 +195,11 @@ public class RecvBufRequest extends MessageLite {
   public static final int kRequestIdFieldNumber = kRequestIdFieldNumber();
   public native @Cast("google::protobuf::int64") long request_id();
   public native void set_request_id(@Cast("google::protobuf::int64") long value);
+
+  // uint64 src_incarnation = 11;
+  public native void clear_src_incarnation();
+  @MemberGetter public static native int kSrcIncarnationFieldNumber();
+  public static final int kSrcIncarnationFieldNumber = kSrcIncarnationFieldNumber();
+  public native @Cast("google::protobuf::uint64") long src_incarnation();
+  public native void set_src_incarnation(@Cast("google::protobuf::uint64") long value);
 }

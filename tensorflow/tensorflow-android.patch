@@ -1,7 +1,7 @@
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-android/tensorflow/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/BUILD	2019-05-29 11:38:49.994397264 +0900
-@@ -565,16 +565,24 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/BUILD tensorflow-1.15.0-rc0-android/tensorflow/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/BUILD	2019-09-11 11:21:39.076610726 +0900
+@@ -639,16 +639,24 @@
  
  tf_cc_shared_object(
      name = "tensorflow_cc",
@@ -36,7 +36,7 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-android/t
      per_os_targets = True,
      soversion = VERSION,
      visibility = ["//visibility:public"],
-@@ -585,15 +593,7 @@
+@@ -659,15 +667,7 @@
          "//conditions:default": None,
      }),
      deps = [
@@ -53,10 +53,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-android/t
      ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/c/BUILD tensorflow-1.14.0-rc0-android/tensorflow/c/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/c/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/c/BUILD	2019-05-29 11:16:03.213603331 +0900
-@@ -172,6 +172,22 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/c/BUILD tensorflow-1.15.0-rc0-android/tensorflow/c/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/c/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/c/BUILD	2019-09-11 11:21:39.077610727 +0900
+@@ -280,6 +280,22 @@
      visibility = ["//visibility:public"],
  )
  
@@ -79,10 +79,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/c/BUILD tensorflow-1.14.0-rc0-android
  tf_cuda_library(
      name = "tf_status_helper",
      srcs = ["tf_status_helper.cc"],
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/BUILD tensorflow-1.14.0-rc0-android/tensorflow/core/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/core/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/core/BUILD	2019-05-28 09:25:45.556417788 +0900
-@@ -2001,7 +2001,11 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/BUILD tensorflow-1.15.0-rc0-android/tensorflow/core/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/core/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/core/BUILD	2019-09-11 11:21:39.079610729 +0900
+@@ -2023,7 +2023,11 @@
  # binary size (by packaging a reduced operator set) is a concern.
  cc_library(
      name = "android_tensorflow_lib",
@@ -95,37 +95,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/BUILD tensorflow-1.14.0-rc0-andr
      copts = tf_copts(),
      tags = [
          "manual",
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.14.0-rc0-android/tensorflow/core/framework/tensor.h
---- tensorflow-1.14.0-rc0/tensorflow/core/framework/tensor.h	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/core/framework/tensor.h	2019-05-28 09:25:45.557417785 +0900
-@@ -193,6 +193,11 @@
-   /// are not valid.
-   Tensor(Tensor&& other);
- 
-+  // Creates a tensor with the input datatype, shape and buf.
-+  //
-+  // Acquires a ref on buf that belongs to this Tensor.
-+  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
-+
-   ~Tensor();
- 
-   /// Returns the data type.
-@@ -639,11 +644,6 @@
-   friend class NumpyTensorBuffer;  // For access to the private constructor
-                                    // taking the buffer.
- 
--  // Creates a tensor with the input datatype, shape and buf.
--  //
--  // Acquires a ref on buf that belongs to this Tensor.
--  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
--
-   bool CanUseDMA() const;
- 
-   // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-rc0-android/tensorflow/core/kernels/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/core/kernels/BUILD	2019-05-28 09:25:45.558417783 +0900
-@@ -5969,6 +5969,7 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.15.0-rc0-android/tensorflow/core/kernels/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/core/kernels/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/core/kernels/BUILD	2019-09-11 11:21:39.083610734 +0900
+@@ -6218,6 +6218,7 @@
          "transpose_op.h",
          "where_op.h",
          "xent_op.h",
@@ -133,10 +106,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/kernels/BUILD tensorflow-1.14.0-
      ],
  )
  
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/BUILD tensorflow-1.14.0-rc0-android/tensorflow/java/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/java/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/java/BUILD	2019-05-28 09:26:04.786370607 +0900
-@@ -23,7 +23,7 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/BUILD tensorflow-1.15.0-rc0-android/tensorflow/java/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/java/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/java/BUILD	2019-09-11 11:21:39.085610736 +0900
+@@ -24,7 +24,7 @@
          ":java_op_sources",
          ":java_sources",
      ],
@@ -145,9 +118,20 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/BUILD tensorflow-1.14.0-rc0-andr
      javacopts = JAVACOPTS,
      plugins = [":processor"],
      visibility = ["//visibility:public"],
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.14.0-rc0-android/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/java/src/main/native/BUILD	2019-05-28 09:25:45.558417783 +0900
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/build_defs.bzl tensorflow-1.15.0-rc0-android/tensorflow/java/build_defs.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/java/build_defs.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/java/build_defs.bzl	2019-09-12 11:09:05.986979575 +0900
+@@ -13,7 +13,6 @@
+ # Java source to improve code consistency.
+ 
+ XLINT_OPTS = [
+-    "-Werror",
+     "-Xlint:all",
+     "-Xlint:-processing",
+     "-Xlint:-serial",
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.15.0-rc0-android/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/java/src/main/native/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/java/src/main/native/BUILD	2019-09-11 11:21:39.086610737 +0900
 @@ -86,3 +86,15 @@
      ),
      visibility = ["//tensorflow:__subpackages__"],
@@ -164,22 +148,165 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow
 +    ),
 +    visibility = ["//visibility:public"],
 +)
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.14.0-rc0-android/tensorflow/tensorflow.bzl
---- tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/tensorflow/tensorflow.bzl	2019-05-29 11:14:58.474536642 +0900
-@@ -274,7 +274,7 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.15.0-rc0-android/tensorflow/tensorflow.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/tensorflow.bzl	2019-09-11 11:23:44.343754076 +0900
+@@ -277,7 +277,7 @@
+     # To clear this value, and allow the CROSSTOOL default
      # to be used, pass android_optimization_level_override=None
      android_copts = [
-         "-std=c++11",
 -        "-DTF_LEAN_BINARY",
 +#        "-DTF_LEAN_BINARY",
          "-Wno-narrowing",
          "-fomit-frame-pointer",
      ]
-diff -ruN tensorflow-1.14.0-rc0/WORKSPACE tensorflow-1.14.0-rc0-android/WORKSPACE
---- tensorflow-1.14.0-rc0/WORKSPACE	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-android/WORKSPACE	2019-05-28 09:25:45.559417781 +0900
-@@ -90,6 +90,16 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/workspace.bzl tensorflow-1.15.0-rc0-android/tensorflow/workspace.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/workspace.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/tensorflow/workspace.bzl	2019-09-11 12:50:39.508189010 +0900
+@@ -606,10 +606,10 @@
+     tf_http_archive(
+         name = "fft2d",
+         build_file = clean_dep("//third_party/fft2d:fft2d.BUILD"),
+-        sha256 = "ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9",
++        sha256 = "52bb637c70b971958ec79c9c8752b1df5ff0218a4db4510e60826e0cb79b5296",
+         urls = [
+-            "https://storage.googleapis.com/mirror.tensorflow.org/www.kurims.kyoto-u.ac.jp/~ooura/fft2d.tgz",
+-            "http://www.kurims.kyoto-u.ac.jp/~ooura/fft2d.tgz",
++            "http://mirror.tensorflow.org/www.kurims.kyoto-u.ac.jp/~ooura/fft.tgz",
++            "http://www.kurims.kyoto-u.ac.jp/~ooura/fft.tgz",
+         ],
+     )
+ 
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/BUILD tensorflow-1.15.0-rc0-android/third_party/fft2d/BUILD
+--- tensorflow-1.15.0-rc0/third_party/fft2d/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/third_party/fft2d/BUILD	2019-06-19 07:48:23.000000000 +0900
+@@ -1,5 +1,5 @@
+ # Headers for 2D Fast Fourier Transform package
+-# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html
++# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html
+ # This is a separate package because the original downloaded archive doesn't
+ # contain any header files.
+ 
+@@ -15,27 +15,18 @@
+ 
+ cc_library(
+     name = "fft2d_headers",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ objc_library(
+     name = "fft2d_headersd_ios",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ # Export the source code so that it could be compiled for Andoid native apps.
+ filegroup(
+     name = "fft2d_headers_srcs",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ filegroup(
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.BUILD tensorflow-1.15.0-rc0-android/third_party/fft2d/fft2d.BUILD
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/third_party/fft2d/fft2d.BUILD	2019-06-19 07:48:23.000000000 +0900
+@@ -1,5 +1,5 @@
+ # 2D Fast Fourier Transform package
+-# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html
++# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html
+ 
+ package(
+     default_visibility = ["//visibility:public"],
+@@ -8,11 +8,10 @@
+ # Unrestricted use; can only distribute original package.
+ licenses(["notice"])
+ 
+-exports_files(["fft2d/readme2d.txt"])
++exports_files(["fft/readme.txt"])
+ 
+ FFT2D_SRCS = [
+-    "fft2d/fftsg.c",
+-    "fft2d/fftsg2d.c",
++    "fft/fftsg.c",
+ ]
+ 
+ config_setting(
+@@ -23,7 +22,7 @@
+ # This is the main 2D FFT library.  The 2D FFTs in this library call
+ # 1D FFTs.  In addition, fast DCTs are provided for the special case
+ # of 8x8 and 16x16.  This code in this library is referred to as
+-# "Version II" on http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html.
++# "Version II" on http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html.
+ cc_library(
+     name = "fft2d",
+     srcs = FFT2D_SRCS,
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.h tensorflow-1.15.0-rc0-android/third_party/fft2d/fft2d.h
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.h	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/third_party/fft2d/fft2d.h	1970-01-01 09:00:00.000000000 +0900
+@@ -1,36 +0,0 @@
+-/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-==============================================================================*/
+-
+-// Declarations for 2D FFT routines in third_party/fft2d/fft2d.
+-
+-#ifndef FFT2D_FFT_H__
+-#define FFT2D_FFT_H__
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-extern void cdft2d(int, int, int, double **, double *, int *, double *);
+-extern void rdft2d(int, int, int, double **, double *, int *, double *);
+-extern void ddct2d(int, int, int, double **, double *, int *, double *);
+-extern void ddst2d(int, int, int, double **, double *, int *, double *);
+-extern void ddct8x8s(int isgn, double **a);
+-extern void ddct16x16s(int isgn, double **a);
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif  // FFT2D_FFT_H__
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft.h tensorflow-1.15.0-rc0-android/third_party/fft2d/fft.h
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft.h	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/third_party/fft2d/fft.h	2019-06-19 07:48:23.000000000 +0900
+@@ -13,7 +13,7 @@
+ limitations under the License.
+ ==============================================================================*/
+ 
+-// Declarations for 1D FFT routines in third_party/fft2d/fft2d.
++// Declarations for 1D FFT routines in third_party/fft2d/fft.
+ 
+ #ifndef FFT2D_FFT_H__
+ #define FFT2D_FFT_H__
+diff -ruN tensorflow-1.15.0-rc0/WORKSPACE tensorflow-1.15.0-rc0-android/WORKSPACE
+--- tensorflow-1.15.0-rc0/WORKSPACE	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-android/WORKSPACE	2019-09-11 11:24:29.527805783 +0900
+@@ -94,6 +94,16 @@
  load("@local_config_android//:android.bzl", "android_workspace")
  android_workspace()
  
@@ -191,8 +318,8 @@ diff -ruN tensorflow-1.14.0-rc0/WORKSPACE tensorflow-1.14.0-rc0-android/WORKSPAC
 +    # archtectures or the Android NDK will automatically select biggest
 +    # API level that it supports without notice.
 +    # Note that the NDK version is not the API level.
-+    api_level=14)
++    api_level=21)
 +
- # Please add all new TensorFlow dependencies in workspace.bzl.
- tf_workspace()
- 
+ # If a target is bound twice, the later one wins, so we have to do tf bindings
+ # at the end of the WORKSPACE file.
+ load("//tensorflow:workspace.bzl", "tf_bind")

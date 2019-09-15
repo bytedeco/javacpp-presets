@@ -30,11 +30,12 @@ public class OptimizerOptions extends MessageLite {
   private native void allocate(@Const @ByRef OptimizerOptions from);
 
   public native @ByRef @Name("operator =") OptimizerOptions put(@Const @ByRef OptimizerOptions from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef OptimizerOptions default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,7 +90,6 @@ public class OptimizerOptions extends MessageLite {
   @MemberGetter public static native int Level_ARRAYSIZE();
   public static final int Level_ARRAYSIZE = Level_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Level_descriptor();
-  public static native @StdString BytePointer Level_Name(@Cast("tensorflow::OptimizerOptions::Level") int value);
   public static native @Cast("bool") boolean Level_Parse(@StdString BytePointer name,
         @Cast("tensorflow::OptimizerOptions::Level*") IntPointer value);
   public static native @Cast("bool") boolean Level_Parse(@StdString String name,
@@ -118,7 +118,6 @@ public class OptimizerOptions extends MessageLite {
   @MemberGetter public static native int GlobalJitLevel_ARRAYSIZE();
   public static final int GlobalJitLevel_ARRAYSIZE = GlobalJitLevel_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer GlobalJitLevel_descriptor();
-  public static native @StdString BytePointer GlobalJitLevel_Name(@Cast("tensorflow::OptimizerOptions::GlobalJitLevel") int value);
   public static native @Cast("bool") boolean GlobalJitLevel_Parse(@StdString BytePointer name,
         @Cast("tensorflow::OptimizerOptions::GlobalJitLevel*") IntPointer value);
   public static native @Cast("bool") boolean GlobalJitLevel_Parse(@StdString String name,

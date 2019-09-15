@@ -13,9 +13,13 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 /** \defgroup string_ops String Ops
  *  \{
  <p>
- *  Converts each entry in the given tensor to strings.  Supports many numeric
+ *  Converts each entry in the given tensor to strings.
  * 
- *  types and boolean.
+ *  Supports many numeric types and boolean.
+ * 
+ *  For Unicode, see the
+ *  [https://www.tensorflow.org/tutorials/representation/unicode](Working with Unicode text)
+ *  tutorial.
  * 
  *  Arguments:
  *  * scope: A Scope object

@@ -30,11 +30,12 @@ public class RunCallableRequest extends MessageLite {
   private native void allocate(@Const @ByRef RunCallableRequest from);
 
   public native @ByRef @Name("operator =") RunCallableRequest put(@Const @ByRef RunCallableRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RunCallableRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -96,8 +97,6 @@ public class RunCallableRequest extends MessageLite {
   public native @StdString BytePointer session_handle();
   public native void set_session_handle(@StdString BytePointer value);
   public native void set_session_handle(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_session_handle(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_session_handle(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_session_handle();

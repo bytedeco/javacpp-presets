@@ -9,7 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-
 // ===================================================================
 
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
@@ -31,9 +30,10 @@ public class StructuredValue extends MessageLite {
   private native void allocate(@Const @ByRef StructuredValue from);
 
   public native @ByRef @Name("operator =") StructuredValue put(@Const @ByRef StructuredValue from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef StructuredValue default_instance();
 
   /** enum tensorflow::StructuredValue::KindCase */
@@ -46,6 +46,7 @@ public class StructuredValue extends MessageLite {
     kTensorShapeValue = 31,
     kTensorDtypeValue = 32,
     kTensorSpecValue = 33,
+    kTypeSpecValue = 34,
     kListValue = 51,
     kTupleValue = 52,
     kDictValue = 53,
@@ -119,8 +120,6 @@ public class StructuredValue extends MessageLite {
   public native @StdString BytePointer string_value();
   public native void set_string_value(@StdString BytePointer value);
   public native void set_string_value(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_string_value(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_string_value(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_string_value();
@@ -156,6 +155,16 @@ public class StructuredValue extends MessageLite {
   public native TensorSpecProto release_tensor_spec_value();
   public native TensorSpecProto mutable_tensor_spec_value();
   public native void set_allocated_tensor_spec_value(TensorSpecProto tensor_spec_value);
+
+  // .tensorflow.TypeSpecProto type_spec_value = 34;
+  public native @Cast("bool") boolean has_type_spec_value();
+  public native void clear_type_spec_value();
+  @MemberGetter public static native int kTypeSpecValueFieldNumber();
+  public static final int kTypeSpecValueFieldNumber = kTypeSpecValueFieldNumber();
+  public native @Const @ByRef TypeSpecProto type_spec_value();
+  public native TypeSpecProto release_type_spec_value();
+  public native TypeSpecProto mutable_type_spec_value();
+  public native void set_allocated_type_spec_value(TypeSpecProto type_spec_value);
 
   // .tensorflow.ListValue list_value = 51;
   public native @Cast("bool") boolean has_list_value();

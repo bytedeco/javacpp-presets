@@ -30,11 +30,12 @@ public class CleanupAllRequest extends MessageLite {
   private native void allocate(@Const @ByRef CleanupAllRequest from);
 
   public native @ByRef @Name("operator =") CleanupAllRequest put(@Const @ByRef CleanupAllRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CleanupAllRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,15 +90,11 @@ public class CleanupAllRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_container(int index);
   public native void set_container(int index, @StdString BytePointer value);
   public native void set_container(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_container(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_container(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_container();
   public native void add_container(@StdString BytePointer value);
   public native void add_container(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_container(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_container(String value, @Cast("size_t") long size);
 }

@@ -30,11 +30,12 @@ public class ApiDef_Arg extends MessageLite {
   private native void allocate(@Const @ByRef ApiDef_Arg from);
 
   public native @ByRef @Name("operator =") ApiDef_Arg put(@Const @ByRef ApiDef_Arg from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ApiDef_Arg default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class ApiDef_Arg extends MessageLite {
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -105,8 +104,6 @@ public class ApiDef_Arg extends MessageLite {
   public native @StdString BytePointer rename_to();
   public native void set_rename_to(@StdString BytePointer value);
   public native void set_rename_to(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_rename_to(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_rename_to(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_rename_to();
@@ -123,8 +120,6 @@ public class ApiDef_Arg extends MessageLite {
   public native @StdString BytePointer description();
   public native void set_description(@StdString BytePointer value);
   public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_description(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();

@@ -30,11 +30,12 @@ public class RunOptions extends MessageLite {
   private native void allocate(@Const @ByRef RunOptions from);
 
   public native @ByRef @Name("operator =") RunOptions put(@Const @ByRef RunOptions from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RunOptions default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -93,7 +94,6 @@ public class RunOptions extends MessageLite {
   @MemberGetter public static native int TraceLevel_ARRAYSIZE();
   public static final int TraceLevel_ARRAYSIZE = TraceLevel_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer TraceLevel_descriptor();
-  public static native @StdString BytePointer TraceLevel_Name(@Cast("tensorflow::RunOptions::TraceLevel") int value);
   public static native @Cast("bool") boolean TraceLevel_Parse(@StdString BytePointer name,
         @Cast("tensorflow::RunOptions::TraceLevel*") IntPointer value);
   public static native @Cast("bool") boolean TraceLevel_Parse(@StdString String name,

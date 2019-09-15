@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-                 // below
+  // below
 
 // An UnknownFieldSet contains fields that were encountered while parsing a
 // message but were not defined by its type.  Keeping track of these can be

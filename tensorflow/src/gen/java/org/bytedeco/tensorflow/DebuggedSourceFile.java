@@ -30,11 +30,12 @@ public class DebuggedSourceFile extends MessageLite {
   private native void allocate(@Const @ByRef DebuggedSourceFile from);
 
   public native @ByRef @Name("operator =") DebuggedSourceFile put(@Const @ByRef DebuggedSourceFile from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef DebuggedSourceFile default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,15 +90,11 @@ public class DebuggedSourceFile extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_lines(int index);
   public native void set_lines(int index, @StdString BytePointer value);
   public native void set_lines(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_lines(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_lines(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_lines();
   public native void add_lines(@StdString BytePointer value);
   public native void add_lines(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_lines(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_lines(String value, @Cast("size_t") long size);
 
@@ -108,8 +105,6 @@ public class DebuggedSourceFile extends MessageLite {
   public native @StdString BytePointer host();
   public native void set_host(@StdString BytePointer value);
   public native void set_host(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_host(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_host(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_host();
@@ -126,8 +121,6 @@ public class DebuggedSourceFile extends MessageLite {
   public native @StdString BytePointer file_path();
   public native void set_file_path(@StdString BytePointer value);
   public native void set_file_path(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_file_path(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_file_path(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_file_path();

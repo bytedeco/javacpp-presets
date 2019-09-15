@@ -31,11 +31,12 @@ public class DebugTensorWatch extends MessageLite {
   private native void allocate(@Const @ByRef DebugTensorWatch from);
 
   public native @ByRef @Name("operator =") DebugTensorWatch put(@Const @ByRef DebugTensorWatch from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef DebugTensorWatch default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -90,15 +91,11 @@ public class DebugTensorWatch extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_debug_ops(int index);
   public native void set_debug_ops(int index, @StdString BytePointer value);
   public native void set_debug_ops(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_debug_ops(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_debug_ops(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_debug_ops();
   public native void add_debug_ops(@StdString BytePointer value);
   public native void add_debug_ops(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_debug_ops(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_debug_ops(String value, @Cast("size_t") long size);
 
@@ -111,15 +108,11 @@ public class DebugTensorWatch extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_debug_urls(int index);
   public native void set_debug_urls(int index, @StdString BytePointer value);
   public native void set_debug_urls(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_debug_urls(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_debug_urls(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_debug_urls();
   public native void add_debug_urls(@StdString BytePointer value);
   public native void add_debug_urls(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_debug_urls(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_debug_urls(String value, @Cast("size_t") long size);
 
@@ -130,8 +123,6 @@ public class DebugTensorWatch extends MessageLite {
   public native @StdString BytePointer node_name();
   public native void set_node_name(@StdString BytePointer value);
   public native void set_node_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_node_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_node_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_node_name();

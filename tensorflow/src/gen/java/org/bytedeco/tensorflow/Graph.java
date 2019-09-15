@@ -46,7 +46,7 @@ public class Graph extends Pointer {
   // Adds a new node to this graph, and returns it. Infers the Op and
   // input/output types for the node. *this owns the returned instance.
   // Returns nullptr and sets *status on error.
-  public native Node AddNode(@Const @ByRef NodeDef node_def, Status status);
+  public native Node AddNode(@ByVal NodeDef node_def, Status status);
 
   // Copies *node, which may belong to another graph, to a new node,
   // which is returned.  Does not copy any edges.  *this owns the

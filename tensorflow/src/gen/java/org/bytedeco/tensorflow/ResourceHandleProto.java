@@ -9,8 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-
-// ===================================================================
+// -------------------------------------------------------------------
 
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class ResourceHandleProto extends MessageLite {
@@ -31,11 +30,12 @@ public class ResourceHandleProto extends MessageLite {
   private native void allocate(@Const @ByRef ResourceHandleProto from);
 
   public native @ByRef @Name("operator =") ResourceHandleProto put(@Const @ByRef ResourceHandleProto from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ResourceHandleProto default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -81,6 +81,15 @@ public class ResourceHandleProto extends MessageLite {
 
   // accessors -------------------------------------------------------
 
+  // repeated .tensorflow.ResourceHandleProto.DtypeAndShape dtypes_and_shapes = 6;
+  public native int dtypes_and_shapes_size();
+  public native void clear_dtypes_and_shapes();
+  @MemberGetter public static native int kDtypesAndShapesFieldNumber();
+  public static final int kDtypesAndShapesFieldNumber = kDtypesAndShapesFieldNumber();
+  public native ResourceHandleProto_DtypeAndShape mutable_dtypes_and_shapes(int index);
+  public native @Const @ByRef ResourceHandleProto_DtypeAndShape dtypes_and_shapes(int index);
+  public native ResourceHandleProto_DtypeAndShape add_dtypes_and_shapes();
+
   // string device = 1;
   public native void clear_device();
   @MemberGetter public static native int kDeviceFieldNumber();
@@ -88,8 +97,6 @@ public class ResourceHandleProto extends MessageLite {
   public native @StdString BytePointer device();
   public native void set_device(@StdString BytePointer value);
   public native void set_device(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_device(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();
@@ -106,8 +113,6 @@ public class ResourceHandleProto extends MessageLite {
   public native @StdString BytePointer container();
   public native void set_container(@StdString BytePointer value);
   public native void set_container(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_container(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_container(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_container();
@@ -124,8 +129,6 @@ public class ResourceHandleProto extends MessageLite {
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -142,8 +145,6 @@ public class ResourceHandleProto extends MessageLite {
   public native @StdString BytePointer maybe_type_name();
   public native void set_maybe_type_name(@StdString BytePointer value);
   public native void set_maybe_type_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_maybe_type_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_maybe_type_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_maybe_type_name();

@@ -15,6 +15,16 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  *  *NOTE*: {@code Equal} supports broadcasting. More about broadcasting
  *  [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
  * 
+ *  <pre>{@code python
+ *  x = tf.constant([2, 4])
+ *  y = tf.constant(2)
+ *  tf.math.equal(x, y) ==> array([True, False])
+ * 
+ *  x = tf.constant([2, 4])
+ *  y = tf.constant([2, 4])
+ *  tf.math.equal(x, y) ==> array([True,  True])
+ *  }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  * 

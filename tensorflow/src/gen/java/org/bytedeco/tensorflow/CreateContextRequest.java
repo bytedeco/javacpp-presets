@@ -30,9 +30,10 @@ public class CreateContextRequest extends MessageLite {
   private native void allocate(@Const @ByRef CreateContextRequest from);
 
   public native @ByRef @Name("operator =") CreateContextRequest put(@Const @ByRef CreateContextRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CreateContextRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -113,12 +114,12 @@ public class CreateContextRequest extends MessageLite {
   public native @Cast("google::protobuf::int64") long keep_alive_secs();
   public native void set_keep_alive_secs(@Cast("google::protobuf::int64") long value);
 
-  // int64 rendezvous_id = 5;
-  public native void clear_rendezvous_id();
-  @MemberGetter public static native int kRendezvousIdFieldNumber();
-  public static final int kRendezvousIdFieldNumber = kRendezvousIdFieldNumber();
-  public native @Cast("google::protobuf::int64") long rendezvous_id();
-  public native void set_rendezvous_id(@Cast("google::protobuf::int64") long value);
+  // fixed64 context_id = 7;
+  public native void clear_context_id();
+  @MemberGetter public static native int kContextIdFieldNumber();
+  public static final int kContextIdFieldNumber = kContextIdFieldNumber();
+  public native @Cast("google::protobuf::uint64") long context_id();
+  public native void set_context_id(@Cast("google::protobuf::uint64") long value);
 
   // bool async = 2;
   public native void clear_async();

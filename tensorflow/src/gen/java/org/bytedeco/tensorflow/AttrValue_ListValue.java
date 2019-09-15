@@ -31,11 +31,12 @@ public class AttrValue_ListValue extends MessageLite {
   private native void allocate(@Const @ByRef AttrValue_ListValue from);
 
   public native @ByRef @Name("operator =") AttrValue_ListValue put(@Const @ByRef AttrValue_ListValue from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef AttrValue_ListValue default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -90,14 +91,10 @@ public class AttrValue_ListValue extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_s(int index);
   public native void set_s(int index, @StdString BytePointer value);
   public native void set_s(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_s(int index, @Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_s();
   public native void add_s(@StdString BytePointer value);
   public native void add_s(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_s(@Const Pointer value, @Cast("size_t") long size);
 
   // repeated int64 i = 3 [packed = true];

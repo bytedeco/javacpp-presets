@@ -30,11 +30,12 @@ public class RewriterConfig extends MessageLite {
   private native void allocate(@Const @ByRef RewriterConfig from);
 
   public native @ByRef @Name("operator =") RewriterConfig put(@Const @ByRef RewriterConfig from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RewriterConfig default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -93,7 +94,6 @@ public class RewriterConfig extends MessageLite {
   @MemberGetter public static native int Toggle_ARRAYSIZE();
   public static final int Toggle_ARRAYSIZE = Toggle_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Toggle_descriptor();
-  public static native @StdString BytePointer Toggle_Name(@Cast("tensorflow::RewriterConfig::Toggle") int value);
   public static native @Cast("bool") boolean Toggle_Parse(@StdString BytePointer name,
         @Cast("tensorflow::RewriterConfig::Toggle*") IntPointer value);
   public static native @Cast("bool") boolean Toggle_Parse(@StdString String name,
@@ -120,7 +120,6 @@ public class RewriterConfig extends MessageLite {
   @MemberGetter public static native int NumIterationsType_ARRAYSIZE();
   public static final int NumIterationsType_ARRAYSIZE = NumIterationsType_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer NumIterationsType_descriptor();
-  public static native @StdString BytePointer NumIterationsType_Name(@Cast("tensorflow::RewriterConfig::NumIterationsType") int value);
   public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString BytePointer name,
         @Cast("tensorflow::RewriterConfig::NumIterationsType*") IntPointer value);
   public static native @Cast("bool") boolean NumIterationsType_Parse(@StdString String name,
@@ -155,7 +154,6 @@ public class RewriterConfig extends MessageLite {
   @MemberGetter public static native int MemOptType_ARRAYSIZE();
   public static final int MemOptType_ARRAYSIZE = MemOptType_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer MemOptType_descriptor();
-  public static native @StdString BytePointer MemOptType_Name(@Cast("tensorflow::RewriterConfig::MemOptType") int value);
   public static native @Cast("bool") boolean MemOptType_Parse(@StdString BytePointer name,
         @Cast("tensorflow::RewriterConfig::MemOptType*") IntPointer value);
   public static native @Cast("bool") boolean MemOptType_Parse(@StdString String name,
@@ -180,15 +178,11 @@ public class RewriterConfig extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_optimizers(int index);
   public native void set_optimizers(int index, @StdString BytePointer value);
   public native void set_optimizers(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_optimizers(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_optimizers(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_optimizers();
   public native void add_optimizers(@StdString BytePointer value);
   public native void add_optimizers(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_optimizers(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_optimizers(String value, @Cast("size_t") long size);
 
@@ -208,8 +202,6 @@ public class RewriterConfig extends MessageLite {
   public native @StdString BytePointer memory_optimizer_target_node_name_scope();
   public native void set_memory_optimizer_target_node_name_scope(@StdString BytePointer value);
   public native void set_memory_optimizer_target_node_name_scope(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_memory_optimizer_target_node_name_scope(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_memory_optimizer_target_node_name_scope(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_memory_optimizer_target_node_name_scope();

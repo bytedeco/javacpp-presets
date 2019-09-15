@@ -19,22 +19,64 @@ public class TensorHandle extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorHandle(Pointer p) { super(p); }
 
-  public TensorHandle(@Const @ByRef Tensor t, Device d, Device op_device,
-                 EagerContext ctx) { super((Pointer)null); allocate(t, d, op_device, ctx); }
-  private native void allocate(@Const @ByRef Tensor t, Device d, Device op_device,
-                 EagerContext ctx);
-  public TensorHandle(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device,
-                 Device resource_device, @Cast("tensorflow::DataType") int dtype, EagerContext ctx) { super((Pointer)null); allocate(node_id, d, op_device, resource_device, dtype, ctx); }
-  private native void allocate(@Cast("tensorflow::uint64") long node_id, Device d, Device op_device,
-                 Device resource_device, @Cast("tensorflow::DataType") int dtype, EagerContext ctx);
-
-  // Remote tensor handle constructor.
-  public TensorHandle(@Cast("tensorflow::int64") long op_id, int output_num, @Cast("tensorflow::uint64") long remote_shape_node_id,
-                 @Cast("tensorflow::DataType") int dtype, @ByVal Fn call_on_destroy, Device d,
-                 Device op_device, Device resource_device, EagerContext ctx) { super((Pointer)null); allocate(op_id, output_num, remote_shape_node_id, dtype, call_on_destroy, d, op_device, resource_device, ctx); }
-  private native void allocate(@Cast("tensorflow::int64") long op_id, int output_num, @Cast("tensorflow::uint64") long remote_shape_node_id,
-                 @Cast("tensorflow::DataType") int dtype, @ByVal Fn call_on_destroy, Device d,
-                 Device op_device, Device resource_device, EagerContext ctx);
+  // TensorHandle with no assigned device
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, @ByPtrPtr TensorHandle h);
+  // TensorHandle with device == op_device
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, Device d,
+                                    EagerContext ctx, @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, Device d,
+                                    EagerContext ctx, @ByPtrPtr TensorHandle h);
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, Device d,
+                                    Device op_device, EagerContext ctx,
+                                    @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateLocalHandle(@Const @ByRef Tensor t, Device d,
+                                    Device op_device, EagerContext ctx,
+                                    @ByPtrPtr TensorHandle h);
+  public static native @ByVal Status CreateAsyncLocalHandle(Device d, Device op_device,
+                                         Device resource_device, @Cast("tensorflow::DataType") int dtype,
+                                         EagerContext ctx, @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateAsyncLocalHandle(Device d, Device op_device,
+                                         Device resource_device, @Cast("tensorflow::DataType") int dtype,
+                                         EagerContext ctx, @ByPtrPtr TensorHandle h);
+// #if !defined(IS_MOBILE_PLATFORM)
+  public static native @ByVal Status CreateRemoteHandle(@Cast("tensorflow::int64") long op_id, int output_num,
+                                     @Const @ByRef TensorShape shape,
+                                     EagerClient eager_client,
+                                     @Cast("tensorflow::uint64") long context_id, @Cast("tensorflow::DataType") int dtype, Device d,
+                                     Device resource_device, EagerContext ctx,
+                                     @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateRemoteHandle(@Cast("tensorflow::int64") long op_id, int output_num,
+                                     @Const @ByRef TensorShape shape,
+                                     EagerClient eager_client,
+                                     @Cast("tensorflow::uint64") long context_id, @Cast("tensorflow::DataType") int dtype, Device d,
+                                     Device resource_device, EagerContext ctx,
+                                     @ByPtrPtr TensorHandle h);
+  public static native @ByVal Status CreateRemoteHandle(@MoveUniquePtr RemoteTensorHandleData t,
+                                     @Cast("tensorflow::DataType") int dtype, Device d,
+                                     Device resource_device, EagerContext ctx,
+                                     @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateRemoteHandle(@MoveUniquePtr RemoteTensorHandleData t,
+                                     @Cast("tensorflow::DataType") int dtype, Device d,
+                                     Device resource_device, EagerContext ctx,
+                                     @ByPtrPtr TensorHandle h);
+  public static native @ByVal Status CreateUnshapedRemoteHandle(@Cast("tensorflow::int64") long op_id, int output_num,
+                                             EagerClient eager_client,
+                                             @Cast("tensorflow::uint64") long context_id, @Cast("tensorflow::DataType") int dtype,
+                                             Device device, EagerContext ctx,
+                                             @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateUnshapedRemoteHandle(@Cast("tensorflow::int64") long op_id, int output_num,
+                                             EagerClient eager_client,
+                                             @Cast("tensorflow::uint64") long context_id, @Cast("tensorflow::DataType") int dtype,
+                                             Device device, EagerContext ctx,
+                                             @ByPtrPtr TensorHandle h);
+  public static native @ByVal Status CreateUnshapedRemoteHandle(
+        @MoveUniquePtr UnshapedRemoteTensorHandleData t, @Cast("tensorflow::DataType") int dtype,
+        Device device, EagerContext ctx, @Cast("tensorflow::TensorHandle**") PointerPointer h);
+  public static native @ByVal Status CreateUnshapedRemoteHandle(
+        @MoveUniquePtr UnshapedRemoteTensorHandleData t, @Cast("tensorflow::DataType") int dtype,
+        Device device, EagerContext ctx, @ByPtrPtr TensorHandle h);
+// #endif  // IS_MOBILE_PLATFORM
 
   // Symbolic tensor constructor.
   public TensorHandle(@ByVal OutputGraphNode symbolic_tensor, @Cast("tensorflow::DataType") int dtype) { super((Pointer)null); allocate(symbolic_tensor, dtype); }
@@ -49,12 +91,7 @@ public class TensorHandle extends Pointer {
   public native Device op_device();
   public native Device resource_device();
 
-  public native @ByVal Status TensorAndDevice(@Cast("const tensorflow::Tensor**") PointerPointer tensor,
-                           @Cast("tensorflow::Device**") PointerPointer device,
-                           @Cast("tensorflow::Device**") PointerPointer op_device);
-  public native @ByVal Status TensorAndDevice(@Const @ByPtrPtr Tensor tensor,
-                           @ByPtrPtr Device device,
-                           @ByPtrPtr Device op_device);
+  public native Device DeviceOrHostCPU(EagerContext ctx);
 
   public native @ByVal Status Shape(TensorShape shape);
 
@@ -68,29 +105,56 @@ public class TensorHandle extends Pointer {
   public native @ByVal Status NumElements(@Cast("tensorflow::int64*") LongBuffer num_elements);
   public native @ByVal Status NumElements(@Cast("tensorflow::int64*") long... num_elements);
 
+// #if !defined(IS_MOBILE_PLATFORM)
+  public native @Cast("bool") boolean HasRemoteMirror(Device d);
+
+  public native @ByVal Status AddUnshapedRemoteMirror(
+        @MoveUniquePtr UnshapedRemoteTensorHandleData t, Device d);
+  public native @ByVal Status AddRemoteMirror(@MoveUniquePtr RemoteTensorHandleData t, Device d);
+
   // Return the op_id and output num if the handle refers to a remote tensor.
-  public native @ByVal Status RemoteAddress(@Cast("tensorflow::int64*") LongPointer op_id, IntPointer output_num);
-  public native @ByVal Status RemoteAddress(@Cast("tensorflow::int64*") LongBuffer op_id, IntBuffer output_num);
-  public native @ByVal Status RemoteAddress(@Cast("tensorflow::int64*") long[] op_id, int... output_num);
+  public native @ByVal Status RemoteAddress(Device d, @Cast("tensorflow::int64*") LongPointer op_id, IntPointer output_num);
+  public native @ByVal Status RemoteAddress(Device d, @Cast("tensorflow::int64*") LongBuffer op_id, IntBuffer output_num);
+  public native @ByVal Status RemoteAddress(Device d, @Cast("tensorflow::int64*") long[] op_id, int... output_num);
 
-  // Note that this can be called at most once, and only on non-ready handles,
-  // and makes them ready.
-  public native void SetTensor(@Const @ByRef Tensor tensor);
+  // Set remote_op_id_ and remote_output_num_ if the handle refers to a local
+  // tensor that needs to be copied to remote workers.
+  public native void SetRemoteOpIdAndOutputNumToLocalTensorHandle(@Cast("const tensorflow::int64") long op_id,
+                                                      int output_num);
+
+  // Called on an async remote tensor once it's shape has been determined. This
+  // transitions the tensor handle from a non-ready to a ready state by
+  // replacing the backing data abstraction to allow for the shape to be
+  // queried.
+  // This method or Poison must be called exactly once for remote tensors that
+  // were created without a known shape.
+  public native @ByVal Status SetRemoteShape(@Const @ByRef TensorShape shape, Device d);
+// #endif
+
+  // Sets the `tensor` for this async non-ready handle making it ready.
+  // This method or Poison must be called exactly once for non-ready async
+  // handles to make them ready.
+  public native @ByVal Status SetTensor(@Const @ByRef Tensor tensor);
+
+  // Poisons this non-ready handle with an error `status`.
+  // Poisoning means that the handle will become ready and methods trying
+  // to access the actual tensor or shape will return this error `status`.
+  // Exactly one of SetTensor, SetRemoteShape, or Poison methods must be called
+  // on a non-ready tensor.
+  public native void Poison(@ByVal Status status);
 
   public native @ByVal Status CopyToDevice(EagerContext ctx, Device dstd,
-                        @Cast("tensorflow::TensorHandle**") PointerPointer output);
-  public native @ByVal Status CopyToDevice(EagerContext ctx, Device dstd,
-                        @ByPtrPtr TensorHandle output);
+                        Tensor output);
 
   // Warning: can return nullptr for CPU tensors.
+  // TODO(b/136608821): Move away from nullptr
   public native EagerContext Context();
 
   // dtype for the handle. It must be the same as t.dtype() once the handle is
   // ready.
   @MemberGetter public native @Cast("const tensorflow::DataType") int dtype();
 
-  public native void SetRemoteShape(@MoveUniquePtr TensorShape remote_shape);
-
+  // TODO(b/136608821): Move away from nullptr
   public native @Cast("bool") boolean OnHostCPU();
 
   public native @Cast("bool") boolean IsRemote();
@@ -99,8 +163,8 @@ public class TensorHandle extends Pointer {
 
   public native @StdString BytePointer DebugString();
 
-  // If this TensorHandle is 1) a local tensor, and 2) a resource variable,
-  // return data type and shape of the resource variable.
-  public native @ByVal Status GetResourceVariableDtypeAndShape(
-        DataTypeTensorShapePair result);
+  // If this TensorHandle is 1) a local tensor, and 2) a resource handle,
+  // return data types and shapes of the underlying resource.
+  public native @ByVal Status GetResourceHandleDtypesAndShapes(
+        @StdVector DtypeAndPartialTensorShape result);
 }

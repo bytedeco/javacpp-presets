@@ -30,11 +30,12 @@ public class RPCOptions extends MessageLite {
   private native void allocate(@Const @ByRef RPCOptions from);
 
   public native @ByRef @Name("operator =") RPCOptions put(@Const @ByRef RPCOptions from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RPCOptions default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class RPCOptions extends MessageLite {
   public native @StdString BytePointer compression_algorithm();
   public native void set_compression_algorithm(@StdString BytePointer value);
   public native void set_compression_algorithm(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_compression_algorithm(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_compression_algorithm(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_compression_algorithm();
@@ -98,6 +97,13 @@ public class RPCOptions extends MessageLite {
   public native void unsafe_arena_set_allocated_compression_algorithm(
         @StdString @Cast({"char*", "std::string*"}) BytePointer compression_algorithm);
 
+  // int32 compression_level = 3;
+  public native void clear_compression_level();
+  @MemberGetter public static native int kCompressionLevelFieldNumber();
+  public static final int kCompressionLevelFieldNumber = kCompressionLevelFieldNumber();
+  public native @Cast("google::protobuf::int32") int compression_level();
+  public native void set_compression_level(@Cast("google::protobuf::int32") int value);
+
   // bool use_rpc_for_inprocess_master = 1;
   public native void clear_use_rpc_for_inprocess_master();
   @MemberGetter public static native int kUseRpcForInprocessMasterFieldNumber();
@@ -105,10 +111,17 @@ public class RPCOptions extends MessageLite {
   public native @Cast("bool") boolean use_rpc_for_inprocess_master();
   public native void set_use_rpc_for_inprocess_master(@Cast("bool") boolean value);
 
-  // int32 compression_level = 3;
-  public native void clear_compression_level();
-  @MemberGetter public static native int kCompressionLevelFieldNumber();
-  public static final int kCompressionLevelFieldNumber = kCompressionLevelFieldNumber();
-  public native @Cast("google::protobuf::int32") int compression_level();
-  public native void set_compression_level(@Cast("google::protobuf::int32") int value);
+  // bool cache_rpc_response = 4;
+  public native void clear_cache_rpc_response();
+  @MemberGetter public static native int kCacheRpcResponseFieldNumber();
+  public static final int kCacheRpcResponseFieldNumber = kCacheRpcResponseFieldNumber();
+  public native @Cast("bool") boolean cache_rpc_response();
+  public native void set_cache_rpc_response(@Cast("bool") boolean value);
+
+  // bool disable_session_connection_sharing = 5;
+  public native void clear_disable_session_connection_sharing();
+  @MemberGetter public static native int kDisableSessionConnectionSharingFieldNumber();
+  public static final int kDisableSessionConnectionSharingFieldNumber = kDisableSessionConnectionSharingFieldNumber();
+  public native @Cast("bool") boolean disable_session_connection_sharing();
+  public native void set_disable_session_connection_sharing(@Cast("bool") boolean value);
 }

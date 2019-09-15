@@ -30,11 +30,12 @@ public class SavedUserObject extends MessageLite {
   private native void allocate(@Const @ByRef SavedUserObject from);
 
   public native @ByRef @Name("operator =") SavedUserObject put(@Const @ByRef SavedUserObject from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef SavedUserObject default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class SavedUserObject extends MessageLite {
   public native @StdString BytePointer identifier();
   public native void set_identifier(@StdString BytePointer value);
   public native void set_identifier(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_identifier(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_identifier(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_identifier();
@@ -97,6 +96,22 @@ public class SavedUserObject extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_identifier();
   public native void unsafe_arena_set_allocated_identifier(
         @StdString @Cast({"char*", "std::string*"}) BytePointer identifier);
+
+  // string metadata = 3;
+  public native void clear_metadata();
+  @MemberGetter public static native int kMetadataFieldNumber();
+  public static final int kMetadataFieldNumber = kMetadataFieldNumber();
+  public native @StdString BytePointer metadata();
+  public native void set_metadata(@StdString BytePointer value);
+  public native void set_metadata(@StdString String value);
+  public native void set_metadata(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_metadata(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_metadata();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_metadata();
+  public native void set_allocated_metadata(@StdString @Cast({"char*", "std::string*"}) BytePointer metadata);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_metadata();
+  public native void unsafe_arena_set_allocated_metadata(
+        @StdString @Cast({"char*", "std::string*"}) BytePointer metadata);
 
   // .tensorflow.VersionDef version = 2;
   public native @Cast("bool") boolean has_version();

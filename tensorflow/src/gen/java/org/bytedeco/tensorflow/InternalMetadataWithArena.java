@@ -8,11 +8,11 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-
-    @Namespace("google::protobuf::internal") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+  // namespace io
+@Namespace("google::protobuf::internal") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class InternalMetadataWithArena extends Pointer {
-        /** Empty constructor. Calls {@code super((Pointer)null)}. */
-        public InternalMetadataWithArena() { super((Pointer)null); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public InternalMetadataWithArena(Pointer p) { super(p); }
-    }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public InternalMetadataWithArena() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InternalMetadataWithArena(Pointer p) { super(p); }
+}
