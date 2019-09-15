@@ -48,14 +48,10 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-7 python27"
+  SCL_ENABLE="devtoolset-7 python27 rh-git29"
   if [[ "cpython mxnet tensorflow onnx ngraph qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE=""
-    # MXNet and TensorFlow don't work well with GCC 6 or 7 for some reason
-    if [[ ! "mxnet tensorflow " =~ "$PROJ " ]]; then
-      SCL_ENABLE="devtoolset-7"
-    fi
+    SCL_ENABLE="devtoolset-7 rh-git29"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
@@ -95,6 +91,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
+
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a /opt/rh/httpd24/root/usr/lib64/* /usr/lib64/"
 
   if [[ "$PROJ" =~ flycapture ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
@@ -154,12 +152,6 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
         export TEST_TMPDIR=$HOME/.cache/bazel
         echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
-
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install --upgrade pip"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/bin/pip /usr/bin/pip3"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user numpy"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_applications==1.0.6 --no-deps"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_preprocessing==1.0.5 --no-deps"
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
@@ -240,7 +232,6 @@ fi
 if [[ "$OS" =~ android ]]; then
    echo "Install android requirements.."
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-   #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
 
    curl -L https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
@@ -325,10 +316,6 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
         fi
         sudo bash $HOME/bazel.sh
         export TEST_TMPDIR=$HOME/.cache/bazel
-
-        pip3 install -U --user numpy
-        pip3 install -U --user keras_applications==1.0.6 --no-deps
-        pip3 install -U --user keras_preprocessing==1.0.5 --no-deps
      fi
 fi  
 

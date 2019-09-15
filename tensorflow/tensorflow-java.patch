@@ -1,16 +1,16 @@
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-java/tensorflow/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/BUILD	2019-05-28 09:24:23.243619762 +0900
-@@ -2,7 +2,7 @@
- # TensorFlow is a computational framework, primarily for use in machine
- # learning applications.
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/BUILD tensorflow-1.15.0-rc0-java/tensorflow/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/BUILD	2019-09-11 11:26:47.160963284 +0900
+@@ -33,7 +33,7 @@
+ )
  
--package(default_visibility = [":internal"])
-+package(default_visibility = ["//visibility:public"])
+ package(
+-    default_visibility = [":internal"],
++    default_visibility = ["//visibility:public"],
+     licenses = ["notice"],  # Apache 2.0
+ )
  
- licenses(["notice"])  # Apache 2.0
- 
-@@ -566,13 +566,10 @@
+@@ -640,13 +640,10 @@
  tf_cc_shared_object(
      name = "tensorflow_cc",
      linkopts = select({
@@ -26,7 +26,7 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-java/tens
          ],
      }),
      per_os_targets = True,
-@@ -588,12 +585,32 @@
+@@ -662,12 +659,32 @@
          "//tensorflow:tf_exported_symbols.lds",
          "//tensorflow:tf_version_script.lds",
          "//tensorflow/c:c_api",
@@ -59,10 +59,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/BUILD tensorflow-1.14.0-rc0-java/tens
      ] + if_ngraph(["@ngraph_tf//:ngraph_tf"]),
  )
  
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/c/BUILD tensorflow-1.14.0-rc0-java/tensorflow/c/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/c/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/c/BUILD	2019-05-28 09:19:31.398270660 +0900
-@@ -500,7 +500,7 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/c/BUILD tensorflow-1.15.0-rc0-java/tensorflow/c/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/c/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/c/BUILD	2019-09-11 11:25:55.448904107 +0900
+@@ -630,7 +630,7 @@
      name = "python_api",
      srcs = ["python_api.cc"],
      hdrs = ["python_api.h"],
@@ -71,23 +71,23 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/c/BUILD tensorflow-1.14.0-rc0-java/te
      deps = [
          ":c_api",
          ":c_api_internal",
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/BUILD tensorflow-1.14.0-rc0-java/tensorflow/core/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/core/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/core/BUILD	2019-05-28 09:20:38.420171394 +0900
-@@ -71,11 +71,7 @@
-     ],
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/core/BUILD tensorflow-1.15.0-rc0-java/tensorflow/core/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/core/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/core/BUILD	2019-09-11 11:27:56.761042933 +0900
+@@ -158,11 +158,7 @@
+ # Placeholder for Google-internal load statements.
+ 
+ package(
+-    default_visibility = [
+-        ":dependency_whitelist",
+-        "//tensorflow:internal",
+-        "//tensorflow_models:__subpackages__",
+-    ],
++    default_visibility = ["//visibility:public"],
+     licenses = ["notice"],  # Apache 2.0
  )
  
--package(default_visibility = [
--    ":dependency_whitelist",
--    "//tensorflow:internal",
--    "//tensorflow_models:__subpackages__",
--])
-+package(default_visibility = ["//visibility:public"])
- 
- licenses(["notice"])  # Apache 2.0
- 
-@@ -2855,6 +2851,7 @@
+@@ -2864,6 +2860,7 @@
  
  tf_cuda_library(
      name = "framework_internal_impl",
@@ -95,46 +95,19 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/BUILD tensorflow-1.14.0-rc0-java
      srcs = FRAMEWORK_INTERNAL_PRIVATE_HEADERS + glob(
          [
              "example/**/*.cc",
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/core/framework/tensor.h tensorflow-1.14.0-rc0-java/tensorflow/core/framework/tensor.h
---- tensorflow-1.14.0-rc0/tensorflow/core/framework/tensor.h	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/core/framework/tensor.h	2019-05-28 09:19:31.401270667 +0900
-@@ -193,6 +193,11 @@
-   /// are not valid.
-   Tensor(Tensor&& other);
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/BUILD tensorflow-1.15.0-rc0-java/tensorflow/java/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/java/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/java/BUILD	2019-09-11 11:28:15.420064286 +0900
+@@ -14,7 +14,7 @@
+ )
  
-+  // Creates a tensor with the input datatype, shape and buf.
-+  //
-+  // Acquires a ref on buf that belongs to this Tensor.
-+  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
-+
-   ~Tensor();
+ package(
+-    default_visibility = ["//visibility:private"],
++    default_visibility = ["//visibility:public"],
+     licenses = ["notice"],  # Apache 2.0
+ )
  
-   /// Returns the data type.
-@@ -639,11 +644,6 @@
-   friend class NumpyTensorBuffer;  // For access to the private constructor
-                                    // taking the buffer.
- 
--  // Creates a tensor with the input datatype, shape and buf.
--  //
--  // Acquires a ref on buf that belongs to this Tensor.
--  Tensor(DataType type, const TensorShape& shape, TensorBuffer* buf);
--
-   bool CanUseDMA() const;
- 
-   // Only needed by variable op to set the shape of an uninitialized
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/BUILD tensorflow-1.14.0-rc0-java/tensorflow/java/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/java/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/java/BUILD	2019-05-28 09:21:31.241041794 +0900
-@@ -1,7 +1,7 @@
- # Description:
- # TensorFlow Java API.
- 
--package(default_visibility = ["//visibility:private"])
-+package(default_visibility = ["//visibility:public"])
- 
- licenses(["notice"])  # Apache 2.0
- 
-@@ -23,7 +23,7 @@
+@@ -24,7 +24,7 @@
          ":java_op_sources",
          ":java_sources",
      ],
@@ -143,9 +116,21 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/BUILD tensorflow-1.14.0-rc0-java
      javacopts = JAVACOPTS,
      plugins = [":processor"],
      visibility = ["//visibility:public"],
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.14.0-rc0-java/tensorflow/java/src/main/native/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/java/src/main/native/BUILD	2019-05-28 09:19:31.402270669 +0900
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/build_defs.bzl tensorflow-1.15.0-rc0-java/tensorflow/java/build_defs.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/java/build_defs.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/java/build_defs.bzl	2019-09-11 12:57:54.313937570 +0900
+@@ -13,8 +13,6 @@
+ # Java source to improve code consistency.
+ 
+ XLINT_OPTS = [
+-    "-Werror",
+-    "-Xlint:all",
+     "-Xlint:-processing",
+     "-Xlint:-serial",
+     "-Xlint:-try",
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow-1.15.0-rc0-java/tensorflow/java/src/main/native/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/java/src/main/native/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/java/src/main/native/BUILD	2019-09-11 11:25:55.453904113 +0900
 @@ -29,6 +29,7 @@
      }),
      hdrs = glob(["*.h"]),
@@ -154,10 +139,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/java/src/main/native/BUILD tensorflow
      includes = select({
          "//tensorflow:android": [],
          "//conditions:default": ["."],
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/python/BUILD tensorflow-1.14.0-rc0-java/tensorflow/python/BUILD
---- tensorflow-1.14.0-rc0/tensorflow/python/BUILD	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/python/BUILD	2019-05-28 09:22:36.997880461 +0900
-@@ -4648,6 +4648,11 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/python/BUILD tensorflow-1.15.0-rc0-java/tensorflow/python/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/python/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/python/BUILD	2019-09-11 11:25:55.455904115 +0900
+@@ -4988,6 +4988,11 @@
          "//tensorflow/c:tf_status_helper",
          "//tensorflow/c/eager:c_api",
          "//tensorflow/c/eager:c_api_experimental",
@@ -169,10 +154,10 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/python/BUILD tensorflow-1.14.0-rc0-ja
          "//tensorflow/core/distributed_runtime/rpc:grpc_rpc_factory_registration",
          "//tensorflow/core/distributed_runtime/rpc:grpc_server_lib",
          "//tensorflow/core/distributed_runtime/rpc:grpc_session",
-diff -ruN tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.14.0-rc0-java/tensorflow/tensorflow.bzl
---- tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl	2019-05-24 03:33:28.000000000 +0900
-+++ tensorflow-1.14.0-rc0-java/tensorflow/tensorflow.bzl	2019-05-28 09:19:31.405270676 +0900
-@@ -1907,12 +1907,9 @@
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.15.0-rc0-java/tensorflow/tensorflow.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/tensorflow.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/tensorflow.bzl	2019-09-11 11:25:55.456904116 +0900
+@@ -1945,12 +1945,9 @@
      )
      extra_linkopts = select({
          "@local_config_cuda//cuda:darwin": [
@@ -185,3 +170,170 @@ diff -ruN tensorflow-1.14.0-rc0/tensorflow/tensorflow.bzl tensorflow-1.14.0-rc0-
          ],
      })
      extra_deps += select({
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/tools/lib_package/BUILD tensorflow-1.15.0-rc0-java/tensorflow/tools/lib_package/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/tools/lib_package/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/tools/lib_package/BUILD	2019-09-12 15:07:23.746308510 +0900
+@@ -148,7 +148,7 @@
+         "@double_conversion//:LICENSE",
+         "@eigen_archive//:COPYING.MPL2",
+         "@farmhash_archive//:COPYING",
+-        "@fft2d//:fft2d/readme2d.txt",
++        "@fft2d//:fft/readme.txt",
+         "@gemmlowp//:LICENSE",
+         "@gif_archive//:COPYING",
+         "@highwayhash//:LICENSE",
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/tools/pip_package/BUILD tensorflow-1.15.0-rc0-java/tensorflow/tools/pip_package/BUILD
+--- tensorflow-1.15.0-rc0/tensorflow/tools/pip_package/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/tools/pip_package/BUILD	2019-09-12 15:07:24.858310440 +0900
+@@ -168,7 +168,7 @@
+         "@eigen_archive//:COPYING.MPL2",
+         "@enum34_archive//:LICENSE",
+         "@farmhash_archive//:COPYING",
+-        "@fft2d//:fft2d/readme2d.txt",
++        "@fft2d//:fft/readme.txt",
+         "@flatbuffers//:LICENSE.txt",
+         "@functools32_archive//:LICENSE",
+         "@gast_archive//:PKG-INFO",
+diff -ruN tensorflow-1.15.0-rc0/tensorflow/workspace.bzl tensorflow-1.15.0-rc0-java/tensorflow/workspace.bzl
+--- tensorflow-1.15.0-rc0/tensorflow/workspace.bzl	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/tensorflow/workspace.bzl	2019-09-11 12:03:25.959433488 +0900
+@@ -606,10 +606,10 @@
+     tf_http_archive(
+         name = "fft2d",
+         build_file = clean_dep("//third_party/fft2d:fft2d.BUILD"),
+-        sha256 = "ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9",
++        sha256 = "52bb637c70b971958ec79c9c8752b1df5ff0218a4db4510e60826e0cb79b5296",
+         urls = [
+-            "https://storage.googleapis.com/mirror.tensorflow.org/www.kurims.kyoto-u.ac.jp/~ooura/fft2d.tgz",
+-            "http://www.kurims.kyoto-u.ac.jp/~ooura/fft2d.tgz",
++            "http://mirror.tensorflow.org/www.kurims.kyoto-u.ac.jp/~ooura/fft.tgz",
++            "http://www.kurims.kyoto-u.ac.jp/~ooura/fft.tgz",
+         ],
+     )
+ 
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/BUILD tensorflow-1.15.0-rc0-java/third_party/fft2d/BUILD
+--- tensorflow-1.15.0-rc0/third_party/fft2d/BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/third_party/fft2d/BUILD	2019-06-19 07:48:23.000000000 +0900
+@@ -1,5 +1,5 @@
+ # Headers for 2D Fast Fourier Transform package
+-# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html
++# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html
+ # This is a separate package because the original downloaded archive doesn't
+ # contain any header files.
+ 
+@@ -15,27 +15,18 @@
+ 
+ cc_library(
+     name = "fft2d_headers",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ objc_library(
+     name = "fft2d_headersd_ios",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ # Export the source code so that it could be compiled for Andoid native apps.
+ filegroup(
+     name = "fft2d_headers_srcs",
+-    srcs = [
+-        "fft.h",
+-        "fft2d.h",
+-    ],
++    srcs = ["fft.h"],
+ )
+ 
+ filegroup(
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.BUILD tensorflow-1.15.0-rc0-java/third_party/fft2d/fft2d.BUILD
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.BUILD	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/third_party/fft2d/fft2d.BUILD	2019-06-19 07:48:23.000000000 +0900
+@@ -1,5 +1,5 @@
+ # 2D Fast Fourier Transform package
+-# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html
++# from http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html
+ 
+ package(
+     default_visibility = ["//visibility:public"],
+@@ -8,11 +8,10 @@
+ # Unrestricted use; can only distribute original package.
+ licenses(["notice"])
+ 
+-exports_files(["fft2d/readme2d.txt"])
++exports_files(["fft/readme.txt"])
+ 
+ FFT2D_SRCS = [
+-    "fft2d/fftsg.c",
+-    "fft2d/fftsg2d.c",
++    "fft/fftsg.c",
+ ]
+ 
+ config_setting(
+@@ -23,7 +22,7 @@
+ # This is the main 2D FFT library.  The 2D FFTs in this library call
+ # 1D FFTs.  In addition, fast DCTs are provided for the special case
+ # of 8x8 and 16x16.  This code in this library is referred to as
+-# "Version II" on http://momonga.t.u-tokyo.ac.jp/~ooura/fft2d.html.
++# "Version II" on http://momonga.t.u-tokyo.ac.jp/~ooura/fft.html.
+ cc_library(
+     name = "fft2d",
+     srcs = FFT2D_SRCS,
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.h tensorflow-1.15.0-rc0-java/third_party/fft2d/fft2d.h
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft2d.h	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/third_party/fft2d/fft2d.h	1970-01-01 09:00:00.000000000 +0900
+@@ -1,36 +0,0 @@
+-/* Copyright 2017 The TensorFlow Authors. All Rights Reserved.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-==============================================================================*/
+-
+-// Declarations for 2D FFT routines in third_party/fft2d/fft2d.
+-
+-#ifndef FFT2D_FFT_H__
+-#define FFT2D_FFT_H__
+-
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+-extern void cdft2d(int, int, int, double **, double *, int *, double *);
+-extern void rdft2d(int, int, int, double **, double *, int *, double *);
+-extern void ddct2d(int, int, int, double **, double *, int *, double *);
+-extern void ddst2d(int, int, int, double **, double *, int *, double *);
+-extern void ddct8x8s(int isgn, double **a);
+-extern void ddct16x16s(int isgn, double **a);
+-
+-#ifdef __cplusplus
+-}
+-#endif
+-
+-#endif  // FFT2D_FFT_H__
+diff -ruN tensorflow-1.15.0-rc0/third_party/fft2d/fft.h tensorflow-1.15.0-rc0-java/third_party/fft2d/fft.h
+--- tensorflow-1.15.0-rc0/third_party/fft2d/fft.h	2019-09-09 05:24:52.000000000 +0900
++++ tensorflow-1.15.0-rc0-java/third_party/fft2d/fft.h	2019-06-19 07:48:23.000000000 +0900
+@@ -13,7 +13,7 @@
+ limitations under the License.
+ ==============================================================================*/
+ 
+-// Declarations for 1D FFT routines in third_party/fft2d/fft2d.
++// Declarations for 1D FFT routines in third_party/fft2d/fft.
+ 
+ #ifndef FFT2D_FFT_H__
+ #define FFT2D_FFT_H__

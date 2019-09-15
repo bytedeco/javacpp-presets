@@ -12,6 +12,15 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Computes hyperbolic sine of x element-wise.
  * 
+ *    Given an input tensor, this function computes hyperbolic sine of every
+ *    element in the tensor. Input range is {@code [-inf,inf]} and output range
+ *    is {@code [-inf,inf]}.
+ * 
+ *    <pre>{@code python
+ *    x = tf.constant([-float("inf"), -9, -0.5, 1, 1.2, 2, 10, float("inf")])
+ *    tf.math.sinh(x) ==> [-inf -4.0515420e+03 -5.2109528e-01 1.1752012e+00 1.5094614e+00 3.6268604e+00 1.1013232e+04 inf]
+ *    }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  * 

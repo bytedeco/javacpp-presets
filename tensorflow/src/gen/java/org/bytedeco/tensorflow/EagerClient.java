@@ -41,9 +41,21 @@ public class EagerClient extends Pointer {
   public native void RegisterFunctionAsync(@Const RegisterFunctionRequest request,
                                RegisterFunctionResponse response,
                                @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
-  public native void SendTensorAsync(@Const SendTensorRequest request,
-                               SendTensorResponse response,
-                               @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
 
 // #undef CLIENT_METHOD
+
+  // Feeds `request` into the request stream of EagerService::StreamingEnqueue.
+  // `response` will be filled with the response for this `request`. The
+  // 1-to-1 correspondence between requests and responses is a property
+  // of the current service implementation. When the response is received,
+  // `done` is invoked with the current status of the StreamingEnqueue call.
+  // The status can contain an error because of an earlier request in the
+  // current streaming call.
+  // The client initiates a streaming call the first time StreamingEnqueueAsync
+  // is invoked and keeps it open until some error condition.
+  // Similarly to the methods above, the request can be deleted as soon as
+  // StreamingEnqueueAsync returns.
+  public native @ByVal Status StreamingEnqueueAsync(@Const EnqueueRequest request,
+                                         EnqueueResponse response,
+                                         @ByVal @Cast("tensorflow::StatusCallback*") Pointer done);
 }

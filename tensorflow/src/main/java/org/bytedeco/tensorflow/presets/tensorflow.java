@@ -61,7 +61,9 @@ import java.util.List;
                 value = {"linux", "macosx", "windows"},
                 compiler = "cpp11",
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
+                exclude = "google/protobuf/port_def.inc",
                 include = {
+                        "google/protobuf/port_def.inc",
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
                         "google/protobuf/unknown_field_set.h",
@@ -77,6 +79,7 @@ import java.util.List;
                         "tensorflow/core/lib/core/errors.h",
                         "tensorflow/core/platform/logging.h",
                         "tensorflow/core/lib/core/status.h",
+                        "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/lib/io/zlib_compression_options.h",
                         "tensorflow/core/lib/io/zlib_outputbuffer.h",
                         "tensorflow/core/lib/io/inputstream_interface.h",
@@ -146,7 +149,10 @@ import java.util.List;
                         "tensorflow/core/profiler/internal/profiler_interface.h",
                         "tensorflow/core/profiler/lib/profiler_session.h",
                         "tensorflow/c/tf_attrtype.h",
+                        "tensorflow/c/tf_datatype.h",
+                        "tensorflow/c/tf_status.h",
                         "tensorflow/c/tf_status_helper.h",
+                        "tensorflow/c/tf_tensor.h",
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
@@ -161,7 +167,6 @@ import java.util.List;
                         "tensorflow/core/lib/gtl/iterator_range.h",
                         //        "tensorflow/core/lib/gtl/inlined_vector.h",
                         "tensorflow/core/framework/function.h",
-                        "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/framework/device_base.h",
                         "tensorflow/core/common_runtime/device.h",
@@ -199,6 +204,8 @@ import java.util.List;
                         "tensorflow/core/platform/fingerprint.h",
                         "tensorflow/core/distributed_runtime/server_lib.h",
                         "tensorflow/core/distributed_runtime/eager/eager_client.h",
+                        "tensorflow/core/common_runtime/eager/tensor_handle_data.h",
+                        "tensorflow/core/distributed_runtime/eager/remote_tensor_handle_data.h",
                         "tensorflow/core/protobuf/eager_service.pb.h",
                         "tensorflow/core/protobuf/tensorflow_server.pb.h",
                         "tensorflow/core/protobuf/named_tensor.pb.h",
@@ -217,6 +224,7 @@ import java.util.List;
                         "tensorflow/core/common_runtime/eager/kernel_and_device.h",
                         "tensorflow/core/common_runtime/eager/tensor_handle.h",
                         "tensorflow/c/eager/c_api.h",
+//                        "tensorflow/c/eager/c_api_experimental.h",
                         "tensorflow/c/eager/c_api_internal.h",
                         "tensorflow/c/python_api.h",
                         "tensorflow/cc/ops/standard_ops.h",
@@ -300,7 +308,9 @@ import java.util.List;
                 value = {"android"},
                 compiler = {"cpp11"},
                 define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std", "SHARED_PTR_NAMESPACE std"},
+                exclude = "google/protobuf/port_def.inc",
                 include = {
+                        "google/protobuf/port_def.inc",
                         "google/protobuf/arena.h",
                         "google/protobuf/message_lite.h",
                         "google/protobuf/unknown_field_set.h",
@@ -316,6 +326,7 @@ import java.util.List;
                         "tensorflow/core/lib/core/errors.h",
                         "tensorflow/core/platform/logging.h",
                         "tensorflow/core/lib/core/status.h",
+                        "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/lib/io/zlib_compression_options.h",
                         "tensorflow/core/lib/io/zlib_outputbuffer.h",
                         "tensorflow/core/lib/io/inputstream_interface.h",
@@ -385,7 +396,10 @@ import java.util.List;
                         "tensorflow/core/profiler/internal/profiler_interface.h",
                         "tensorflow/core/profiler/lib/profiler_session.h",
                         "tensorflow/c/tf_attrtype.h",
+                        "tensorflow/c/tf_datatype.h",
+                        "tensorflow/c/tf_status.h",
                         "tensorflow/c/tf_status_helper.h",
+                        "tensorflow/c/tf_tensor.h",
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
@@ -400,7 +414,6 @@ import java.util.List;
                         "tensorflow/core/lib/gtl/iterator_range.h",
                         //        "tensorflow/core/lib/gtl/inlined_vector.h",
                         "tensorflow/core/framework/function.h",
-                        "tensorflow/core/util/device_name_utils.h",
                         "tensorflow/core/framework/device_attributes.pb.h",
                         "tensorflow/core/framework/device_base.h",
                         "tensorflow/core/common_runtime/device.h",
@@ -536,10 +549,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("bfloat16.h").linePatterns("struct half;").skip())
                .put(new Info("tensorflow_adapters.h").skip())
                .put(new Info("B16_DEVICE_FUNC", "EIGEN_ALWAYS_INLINE", "EIGEN_DEVICE_FUNC", "EIGEN_STRONG_INLINE", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
-                             "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "TF_ATTRIBUTE_UNUSED",
+                             "TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE", "TF_ATTRIBUTE_UNUSED", "PROTOC_EXPORT",
                              "TF_ATTRIBUTE_COLD", "TF_ATTRIBUTE_WEAK", "TF_PACKED", "TF_MUST_USE_RESULT", "GUARDED_BY", "SHOULD_REGISTER_OP_GRADIENT",
-                             "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_NOINLINE", "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE",
-                             "ACQUIRED_AFTER", "PROTOBUF_EXPORT", "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_NOINLINE").cppTypes().annotations())
+                             "TF_EXPORT", "TF_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_ALWAYS_INLINE", "GOOGLE_ATTRIBUTE_FUNC_ALIGN", "GOOGLE_ATTRIBUTE_NOINLINE",
+                             "GOOGLE_PROTOBUF_ATTRIBUTE_NOINLINE", "GOOGLE_PREDICT_TRUE", "GOOGLE_PREDICT_FALSE", "GOOGLE_PROTOBUF_ATTRIBUTE_RETURNS_NONNULL",
+                             "ACQUIRED_AFTER", "PROTOBUF_EXPORT", "PROTOBUF_ATTRIBUTE_REINITIALIZES", "PROTOBUF_ALWAYS_INLINE", "PROTOBUF_NOINLINE", "PROTOBUF_RETURNS_NONNULL",
+                             "PROTOBUF_NAMESPACE_ID", "PROTOBUF_NAMESPACE_OPEN", "PROTOBUF_NAMESPACE_CLOSE", "PROTOBUF_FALLTHROUGH_INTENDED", "PROTOBUF_UNUSED").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
 
@@ -566,8 +581,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
                .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
-               .put(new Info("absl::optional", "absl::Span", "std::initializer_list", "std::iterator").skip())
-               .put(new Info("string", "std::string", "tensorflow::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("absl::optional", "absl::Span", "absl::LogSink", "TFLogSink", "std::initializer_list", "std::iterator").skip())
+               .put(new Info("absl::string_view", "string", "std::string", "tensorflow::string", "tensorflow::tstring").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::set<tensorflow::string>").pointerTypes("StringSet").define())
                .put(new Info("std::list<tensorflow::string>").pointerTypes("StringList").define())
                .put(new Info("std::unordered_map<tensorflow::string,tensorflow::int32>").pointerTypes("StringIntUnorderedMap").define())
@@ -578,7 +593,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::vector<std::pair<unsigned,unsigned> >").pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<tensorflow::string,tensorflow::string> >").pointerTypes("StringStringPairVector").define())
                .put(new Info("std::condition_variable", "std::mutex", "std::type_info", "std::unique_lock<std::mutex>", "Eigen::Allocator",
-                             "tensorflow::condition_variable", "tensorflow::mutex", "tensorflow::mutex_lock").cast().pointerTypes("Pointer"))
+                             "Eigen::ThreadPoolInterface", "tensorflow::thread::ThreadPoolInterface", "tensorflow::condition_variable",
+                             "tensorflow::mutex", "tensorflow::mutex_lock", "tensorflow::tf_shared_lock").cast().pointerTypes("Pointer"))
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
@@ -586,14 +602,15 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("std::pair<google::protobuf::uint64,google::protobuf::uint64>").pointerTypes("LongLongPair").define())
                .put(new Info("google::protobuf::Message").cast().pointerTypes("MessageLite"))
-               .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata").cast().pointerTypes("Pointer"))
+               .put(new Info("google::protobuf::Any", "google::protobuf::Descriptor", "google::protobuf::EnumDescriptor", "google::protobuf::Metadata",
+                             "google::protobuf::Reflection").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "protobuf::RepeatedPtrField",
                              "google::protobuf::internal::ExplicitlyConstructed", "google::protobuf::internal::MapEntry", "google::protobuf::internal::MapField",
                              "google::protobuf::internal::AuxillaryParseTableField", "google::protobuf::internal::ParseTableField", "google::protobuf::internal::ParseTable",
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
-                             "google::protobuf::arena_metrics::EnableArenaMetrics", "google::quality_webanswers::TempPrivateWorkAround",
-                             "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor").skip())
+                             "google::protobuf::arena_metrics::EnableArenaMetrics", "google::protobuf::GetEnumDescriptor", "google::quality_webanswers::TempPrivateWorkAround",
+                             "google::protobuf::is_proto_enum", "is_proto_enum", "Arena::CreateMaybeMessage", "google::protobuf::internal::DescriptorTable").skip())
                .put(new Info("google::protobuf::Map<std::string,std::string>").pointerTypes("StringStringMap").define())
                .put(new Info("google::protobuf::Map<std::string,google::protobuf::int32>").pointerTypes("StringIntMap").define())
                .put(new Info("google::protobuf::Map<google::protobuf::int32,std::string>").pointerTypes("IntStringMap").define())
@@ -755,7 +772,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "tensorflow::RecvTensorRequestDefaultTypeInternal", "tensorflow::RecvTensorResponseDefaultTypeInternal", "tensorflow::RegisterGraphRequestDefaultTypeInternal",
                              "tensorflow::RegisterGraphResponseDefaultTypeInternal", "tensorflow::RunGraphRequestDefaultTypeInternal", "tensorflow::RunGraphResponseDefaultTypeInternal",
                              "tensorflow::StepSequenceDefaultTypeInternal", "tensorflow::TraceOptsDefaultTypeInternal", "tensorflow::TracingRequestDefaultTypeInternal",
-                             "tensorflow::TracingResponseDefaultTypeInternal").skip())
+                             "tensorflow::TracingResponseDefaultTypeInternal", "tensorflow::SessionMetadataDefaultTypeInternal", "tensorflow::ResourceHandleProto_DtypeAndShapeDefaultTypeInternal",
+                             "tensorflow::TypeSpecProtoDefaultTypeInternal", "tensorflow::TensorInfo_CompositeTensorDefaultTypeInternal", "tensorflow::eager::SendTensorOpDefaultTypeInternal").skip())
 
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
@@ -778,7 +796,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::unique_ptr<tensorflow::TensorShape>").valueTypes("@MoveUniquePtr TensorShape").pointerTypes("@UniquePtr TensorShape"))
                .put(new Info("std::unique_ptr<tensorflow::ServerInterface>").valueTypes("@MoveUniquePtr ServerInterface").pointerTypes("@UniquePtr ServerInterface"))
                .put(new Info("std::unique_ptr<tensorflow::CollectiveExecutor::Handle>").valueTypes("@MoveUniquePtr CollectiveExecutor.Handle").pointerTypes("@UniquePtr CollectiveExecutor.Handle"))
+               .put(new Info("std::unique_ptr<tensorflow::EagerNode>").valueTypes("@MoveUniquePtr EagerNode").pointerTypes("@UniquePtr EagerNode"))
+               .put(new Info("std::unique_ptr<tensorflow::EagerExecutor>").valueTypes("@MoveUniquePtr EagerExecutor").pointerTypes("@UniquePtr EagerExecutor"))
                .put(new Info("std::unique_ptr<tensorflow::eager::EagerClientCache>").valueTypes("@MoveUniquePtr EagerClientCache").pointerTypes("@UniquePtr EagerClientCache"))
+               .put(new Info("std::unique_ptr<tensorflow::eager::RemoteMgr,std::function<void(eager::RemoteMgr*)> >")
+                       .valueTypes("@MoveUniquePtr(\"tensorflow::eager::RemoteMgr,std::function<void(tensorflow::eager::RemoteMgr*)>\") RemoteMgr")
+                       .pointerTypes("@UniquePtr(\"tensorflow::eager::RemoteMgr,std::function<void(tensorflow::eager::RemoteMgr*)>\") RemoteMgr"))
                .put(new Info("std::unique_ptr<tensorflow::kernel_factory::OpKernelFactory>").valueTypes("@MoveUniquePtr OpKernelFactory").pointerTypes("@UniquePtr OpKernelFactory"))
                .put(new Info("std::unique_ptr<tensorflow::port::StringListDecoder>").valueTypes("@MoveUniquePtr StringListDecoder").pointerTypes("@UniquePtr StringListDecoder"))
                .put(new Info("std::unique_ptr<tensorflow::port::StringListEncoder>").valueTypes("@MoveUniquePtr StringListEncoder").pointerTypes("@UniquePtr StringListEncoder"))
@@ -787,7 +810,12 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("std::unique_ptr<tensorflow::profiler::ProfilerInterface>").valueTypes("@MoveUniquePtr ProfilerInterface").pointerTypes("@UniquePtr ProfilerInterface"))
                .put(new Info("std::unique_ptr<tensorflow::WorkerCacheInterface>").valueTypes("@MoveUniquePtr WorkerCacheInterface").pointerTypes("@UniquePtr WorkerCacheInterface"))
                .put(new Info("std::unique_ptr<tensorflow::ClusterFunctionLibraryRuntime>").valueTypes("@MoveUniquePtr ClusterFunctionLibraryRuntime").pointerTypes("@UniquePtr ClusterFunctionLibraryRuntime"))
+               .put(new Info("std::unique_ptr<tensorflow::RemoteTensorHandleData>").valueTypes("@MoveUniquePtr RemoteTensorHandleData").pointerTypes("@UniquePtr RemoteTensorHandleData"))
+               .put(new Info("std::unique_ptr<tensorflow::UnshapedRemoteTensorHandleData>").valueTypes("@MoveUniquePtr UnshapedRemoteTensorHandleData").pointerTypes("@UniquePtr UnshapedRemoteTensorHandleData"))
                .put(new Info("std::unique_ptr<TFE_OpInferenceContext>").valueTypes("@MoveUniquePtr TFE_OpInferenceContext").pointerTypes("@UniquePtr TFE_OpInferenceContext"))
+               .put(new Info("tensorflow::core::RefCountPtr<KernelAndDevice>")
+                       .valueTypes("@MoveUniquePtr(\"tensorflow::KernelAndDevice,tensorflow::core::RefCountDeleter\") KernelAndDevice")
+                       .pointerTypes("@UniquePtr(\"tensorflow::KernelAndDevice,tensorflow::core::RefCountDeleter\") KernelAndDevice"))
                .put(new Info("tensorflow::ProfilerFactory").pointerTypes("@Cast(\"tensorflow::ProfilerFactory\") ProfilerFactory"))
 
                .put(new Info("std::vector<std::unique_ptr<tensorflow::Device> >", "std::vector<std::unique_ptr<tensorflow::profiler::ProfilerInterface> >").skip())
@@ -828,6 +856,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("tensorflow::TensorShapeBase<tensorflow::TensorShape>", "tensorflow::TensorShapeBase<tensorflow::PartialTensorShape>").pointerTypes("TensorShapeBase"))
                .put(new Info("tensorflow::TensorShapeIter<tensorflow::TensorShape>").pointerTypes("TensorShapeIter").define())
                .put(new Info("tensorflow::shape_inference::InferenceContext").purify())
+               .put(new Info("std::vector<tensorflow::TensorShapeProto*>", "std::vector<const tensorflow::TensorShapeProto*>").cast().pointerTypes("TensorShapeProtoVector").define())
                .put(new Info("std::vector<std::unique_ptr<std::vector<tensorflow::shape_inference::ShapeAndType> > >",
                              "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::TensorShapeProto,tensorflow::DataType> > > >",
                              "std::vector<std::unique_ptr<std::vector<std::pair<tensorflow::PartialTensorShape,tensorflow::DataType> > > >").skip())
@@ -864,7 +893,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("mode_t").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::StringPiece>").cast().pointerTypes("StringPieceVector"))
-               .put(new Info("tensorflow::gtl::ArraySlice<std::string>", "tensorflow::gtl::ArraySlice<tensorflow::string>").cast().pointerTypes("StringVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<std::string>", "tensorflow::gtl::ArraySlice<tensorflow::string>",
+                             "tensorflow::gtl::ArraySlice<tensorflow::tstring>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<std::pair<tensorflow::string,tensorflow::string> >").cast().pointerTypes("StringStringPairVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
@@ -912,6 +942,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                              "std::unordered_map<int,TensorShape>").pointerTypes("IntTensorShapeMap").define())
                .put(new Info("std::unordered_map<int,std::pair<tensorflow::DataType,tensorflow::TensorShape> >",
                              "std::unordered_map<int,std::pair<DataType,TensorShape> >").pointerTypes("IntDataTypeTensorShapePairMap").define())
+               .put(new Info("std::unordered_map<int,tensorflow::DtypeAndPartialTensorShape>").pointerTypes("DtypeAndPartialTensorShapeIntMap").define())
                .put(new Info("const std::unordered_map<tensorflow::string,tensorflow::checkpoint::TensorSliceSet::SliceInfo>").pointerTypes("StringSliceInfoMap").define())
                .put(new Info("std::vector<tensorflow::Input>::iterator", "std::vector<tensorflow::Input>::const_iterator").skip())
                .put(new Info("tensorflow::ImportGraphDefResults::Index").cast().valueTypes("int").pointerTypes("IntPointer"))
@@ -1004,6 +1035,8 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("TFE_MonitoringIntGaugeCell::cell").javaText("public native @MemberGetter @ByRef IntGaugeCell cell();"))
                .put(new Info("TFE_MonitoringStringGaugeCell::cell").javaText("public native @MemberGetter @ByRef StringGaugeCell cell();"))
                .put(new Info("TFE_MonitoringBoolGaugeCell::cell").javaText("public native @MemberGetter @ByRef BoolGaugeCell cell();"))
+               .put(new Info("TFE_CancellationManager::cancellation_manager").javaText("public native @MemberGetter @ByRef CancellationManager cancellation_manager();"))
+               .put(new Info("TFE_ContextMirroringPolicy").cast().pointerTypes("Pointer"))
                .put(new Info("TF_ShapeInferenceContextDimValueKnown").skip())
                .put(new Info("TF_Session").pointerTypes("TF_Session").base("org.bytedeco.tensorflow.AbstractTF_Session"))
                .put(new Info("TF_Session::extend_before_run").javaText("public native @MemberGetter @ByRef @Cast(\"std::atomic<bool>*\") Pointer extend_before_run();"));

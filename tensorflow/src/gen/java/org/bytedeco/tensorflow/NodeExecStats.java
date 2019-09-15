@@ -30,11 +30,12 @@ public class NodeExecStats extends MessageLite {
   private native void allocate(@Const @ByRef NodeExecStats from);
 
   public native @ByRef @Name("operator =") NodeExecStats put(@Const @ByRef NodeExecStats from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef NodeExecStats default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -114,8 +115,6 @@ public class NodeExecStats extends MessageLite {
   public native @StdString BytePointer node_name();
   public native void set_node_name(@StdString BytePointer value);
   public native void set_node_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_node_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_node_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_node_name();
@@ -132,8 +131,6 @@ public class NodeExecStats extends MessageLite {
   public native @StdString BytePointer timeline_label();
   public native void set_timeline_label(@StdString BytePointer value);
   public native void set_timeline_label(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_timeline_label(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_timeline_label(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_timeline_label();

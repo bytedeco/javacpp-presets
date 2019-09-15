@@ -30,11 +30,12 @@ public class OpDef extends MessageLite {
   private native void allocate(@Const @ByRef OpDef from);
 
   public native @ByRef @Name("operator =") OpDef put(@Const @ByRef OpDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef OpDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -116,15 +117,11 @@ public class OpDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_control_output(int index);
   public native void set_control_output(int index, @StdString BytePointer value);
   public native void set_control_output(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_control_output(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_control_output(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_control_output();
   public native void add_control_output(@StdString BytePointer value);
   public native void add_control_output(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_control_output(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_control_output(String value, @Cast("size_t") long size);
 
@@ -135,8 +132,6 @@ public class OpDef extends MessageLite {
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -153,8 +148,6 @@ public class OpDef extends MessageLite {
   public native @StdString BytePointer summary();
   public native void set_summary(@StdString BytePointer value);
   public native void set_summary(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_summary(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_summary(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_summary();
@@ -171,8 +164,6 @@ public class OpDef extends MessageLite {
   public native @StdString BytePointer description();
   public native void set_description(@StdString BytePointer value);
   public native void set_description(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_description(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_description(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_description();

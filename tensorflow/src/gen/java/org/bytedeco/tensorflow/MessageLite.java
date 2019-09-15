@@ -90,6 +90,18 @@ public class MessageLite extends Pointer {
   // results are undefined (probably crash).
   public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
 
+  // These methods return a human-readable summary of the message. Note that
+  // since the MessageLite interface does not support reflection, there is very
+  // little information that these methods can provide. They are shadowed by
+  // methods of the same name on the Message interface which provide much more
+  // information. The methods here are intended primarily to facilitate code
+  // reuse for logic that needs to interoperate with both full and lite protos.
+  //
+  // The format of the returned string is subject to change, so please do not
+  // assume it will remain stable over time.
+  public native @StdString BytePointer DebugString();
+  public native @StdString BytePointer ShortDebugString();
+
   // Parsing ---------------------------------------------------------
   // Methods for parsing in protocol buffer format.  Most of these are
   // just simple wrappers around MergeFromCodedStream().  Clear() will be
@@ -113,11 +125,11 @@ public class MessageLite extends Pointer {
   // Read a protocol buffer from the given zero-copy input stream, expecting
   // the message to be exactly "size" bytes long.  If successful, exactly
   // this many bytes will have been consumed from the input.
-  public native @Cast("bool") boolean MergePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
+  public native @Cast("bool") boolean MergePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input,
+                                               int size);
   // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
   // missing required fields.
-  public native @Cast("bool") boolean MergeFromBoundedZeroCopyStream(ZeroCopyInputStream input,
-                                               int size);
+  public native @Cast("bool") boolean MergeFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
   public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
   // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
   // missing required fields.
@@ -205,8 +217,8 @@ public class MessageLite extends Pointer {
   // Like SerializeAsString(), but allows missing required fields.
   public native @StdString BytePointer SerializePartialAsString();
 
-  // Like SerializeToString(), but appends to the data to the string's existing
-  // contents.  All required fields must be set.
+  // Like SerializeToString(), but appends to the data to the string's
+  // existing contents.  All required fields must be set.
   public native @Cast("bool") boolean AppendToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
   // Like AppendToString(), but allows missing required fields.
   public native @Cast("bool") boolean AppendPartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
@@ -224,8 +236,7 @@ public class MessageLite extends Pointer {
   // Serializes the message without recomputing the size.  The message must not
   // have changed since the last call to ByteSize(), and the value returned by
   // ByteSize must be non-negative.  Otherwise the results are undefined.
-  public native void SerializeWithCachedSizes(
-        CodedOutputStream output);
+  public native void SerializeWithCachedSizes(CodedOutputStream output);
 
   // Functions below here are not part of the public interface.  It isn't
   // enforced, but they should be treated as private, and will be private

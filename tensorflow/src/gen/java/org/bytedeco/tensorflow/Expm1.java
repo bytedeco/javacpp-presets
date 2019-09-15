@@ -10,9 +10,21 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Computes exponential of x - 1 element-wise.
+/** Computes {@code exp(x) - 1} element-wise.
  * 
- *  I.e., \(y = (\exp x) - 1\).
+ *    i.e. {@code exp(x) - 1} or {@code e^(x) - 1}, where {@code x} is the input tensor.
+ *    {@code e} denotes Euler's number and is approximately equal to 2.718281.
+ * 
+ *    <pre>{@code python
+ *    x = tf.constant(2.0)
+ *    tf.math.expm1(x) ==> 6.389056
+ * 
+ *    x = tf.constant([2.0, 8.0])
+ *    tf.math.expm1(x) ==> array([6.389056, 2979.958], dtype=float32)
+ * 
+ *    x = tf.constant(1 + 1j)
+ *    tf.math.expm1(x) ==> (0.46869393991588515+2.2873552871788423j)
+ *    }</pre>
  * 
  *  Arguments:
  *  * scope: A Scope object

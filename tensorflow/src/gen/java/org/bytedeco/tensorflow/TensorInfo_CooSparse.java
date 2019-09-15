@@ -30,11 +30,12 @@ public class TensorInfo_CooSparse extends MessageLite {
   private native void allocate(@Const @ByRef TensorInfo_CooSparse from);
 
   public native @ByRef @Name("operator =") TensorInfo_CooSparse put(@Const @ByRef TensorInfo_CooSparse from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef TensorInfo_CooSparse default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class TensorInfo_CooSparse extends MessageLite {
   public native @StdString BytePointer values_tensor_name();
   public native void set_values_tensor_name(@StdString BytePointer value);
   public native void set_values_tensor_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_values_tensor_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_values_tensor_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_values_tensor_name();
@@ -105,8 +104,6 @@ public class TensorInfo_CooSparse extends MessageLite {
   public native @StdString BytePointer indices_tensor_name();
   public native void set_indices_tensor_name(@StdString BytePointer value);
   public native void set_indices_tensor_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_indices_tensor_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_indices_tensor_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_indices_tensor_name();
@@ -123,8 +120,6 @@ public class TensorInfo_CooSparse extends MessageLite {
   public native @StdString BytePointer dense_shape_tensor_name();
   public native void set_dense_shape_tensor_name(@StdString BytePointer value);
   public native void set_dense_shape_tensor_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_dense_shape_tensor_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_dense_shape_tensor_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_dense_shape_tensor_name();

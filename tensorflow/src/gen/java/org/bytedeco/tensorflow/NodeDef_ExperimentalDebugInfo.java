@@ -31,11 +31,12 @@ public class NodeDef_ExperimentalDebugInfo extends MessageLite {
   private native void allocate(@Const @ByRef NodeDef_ExperimentalDebugInfo from);
 
   public native @ByRef @Name("operator =") NodeDef_ExperimentalDebugInfo put(@Const @ByRef NodeDef_ExperimentalDebugInfo from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef NodeDef_ExperimentalDebugInfo default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -90,15 +91,28 @@ public class NodeDef_ExperimentalDebugInfo extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_original_node_names(int index);
   public native void set_original_node_names(int index, @StdString BytePointer value);
   public native void set_original_node_names(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_original_node_names(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_original_node_names(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_original_node_names();
   public native void add_original_node_names(@StdString BytePointer value);
   public native void add_original_node_names(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_original_node_names(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_original_node_names(String value, @Cast("size_t") long size);
+
+  // repeated string original_func_names = 2;
+  public native int original_func_names_size();
+  public native void clear_original_func_names();
+  @MemberGetter public static native int kOriginalFuncNamesFieldNumber();
+  public static final int kOriginalFuncNamesFieldNumber = kOriginalFuncNamesFieldNumber();
+  public native @StdString BytePointer original_func_names(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_original_func_names(int index);
+  public native void set_original_func_names(int index, @StdString BytePointer value);
+  public native void set_original_func_names(int index, @StdString String value);
+  public native void set_original_func_names(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_original_func_names(int index, String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_original_func_names();
+  public native void add_original_func_names(@StdString BytePointer value);
+  public native void add_original_func_names(@StdString String value);
+  public native void add_original_func_names(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void add_original_func_names(String value, @Cast("size_t") long size);
 }

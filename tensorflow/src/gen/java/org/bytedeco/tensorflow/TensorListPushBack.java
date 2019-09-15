@@ -10,7 +10,7 @@ import org.bytedeco.javacpp.annotation.*;
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 
-/** Returns a list list which has the passed-in {@code Tensor} as last element and the other elements of the given list in {@code input_handle}.
+/** Returns a list which has the passed-in {@code Tensor} as last element and the other elements of the given list in {@code input_handle}.
  * 
  *  tensor: The tensor to put on the list.
  *  input_handle: The old list.

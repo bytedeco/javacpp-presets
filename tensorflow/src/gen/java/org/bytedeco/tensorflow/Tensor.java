@@ -8,10 +8,9 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
-  // namespace batch_util
 
-/** \ingroup core
- *  Represents an n-dimensional array of values. */
+
+/** Represents an n-dimensional array of values. */
 @Namespace("tensorflow") @NoOffset @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class Tensor extends AbstractTensor {
     static { Loader.load(); }
@@ -82,6 +81,23 @@ public class Tensor extends AbstractTensor {
   private native void allocate(Allocator a, @Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
            @Const @ByRef AllocationAttributes allocation_attr);
 
+  /** \brief Creates a tensor with the input datatype, shape and buf.
+   * 
+   *  Acquires a ref on buf that belongs to this Tensor. */
+  
+  ///
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }
+  private native void allocate(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);
+  private TensorBuffer buffer; // a reference to prevent deallocation
+  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, final Pointer data) {
+      this(type, shape, new TensorBuffer(data) {
+          @Override public Pointer data() { return data; }
+          @Override public long size() { return data.limit(); }
+          @Override public TensorBuffer root_buffer() { return this; }
+          @Override public void FillAllocationDescription(AllocationDescription proto) { }
+      });
+  }
+
   /** \brief Creates an empty Tensor of the given data type.
    * 
    *  Like Tensor(), returns a 1-dimensional, 0-element Tensor with
@@ -133,21 +149,6 @@ public class Tensor extends AbstractTensor {
   /** \brief Move constructor. After this call, <other> is safely destructible
    *  and can be assigned to, but other calls on it (e.g. shape manipulation)
    *  are not valid. */
-
-  // Creates a tensor with the input datatype, shape and buf.
-  //
-  // Acquires a ref on buf that belongs to this Tensor.
-  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, TensorBuffer buf) { super((Pointer)null); allocate(type, shape, buf); this.buffer = buf; }
-  private native void allocate(@Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape, TensorBuffer buf);
-  private TensorBuffer buffer; // a reference to prevent deallocation
-  public Tensor(@Cast("tensorflow::DataType") int type, TensorShape shape, final Pointer data) {
-      this(type, shape, new TensorBuffer(data) {
-          @Override public Pointer data() { return data; }
-          @Override public long size() { return data.limit(); }
-          @Override public TensorBuffer root_buffer() { return this; }
-          @Override public void FillAllocationDescription(AllocationDescription proto) { }
-      });
-  }
 
   /** Returns the data type. */
   public native @Cast("tensorflow::DataType") int dtype();

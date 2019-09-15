@@ -30,9 +30,10 @@ public class KeepAliveRequest extends MessageLite {
   private native void allocate(@Const @ByRef KeepAliveRequest from);
 
   public native @ByRef @Name("operator =") KeepAliveRequest put(@Const @ByRef KeepAliveRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef KeepAliveRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

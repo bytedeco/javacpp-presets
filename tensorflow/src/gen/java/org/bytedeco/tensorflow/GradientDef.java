@@ -30,11 +30,12 @@ public class GradientDef extends MessageLite {
   private native void allocate(@Const @ByRef GradientDef from);
 
   public native @ByRef @Name("operator =") GradientDef put(@Const @ByRef GradientDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef GradientDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class GradientDef extends MessageLite {
   public native @StdString BytePointer function_name();
   public native void set_function_name(@StdString BytePointer value);
   public native void set_function_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_function_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_function_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_function_name();
@@ -105,8 +104,6 @@ public class GradientDef extends MessageLite {
   public native @StdString BytePointer gradient_func();
   public native void set_gradient_func(@StdString BytePointer value);
   public native void set_gradient_func(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_gradient_func(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_gradient_func(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_gradient_func();

@@ -30,11 +30,12 @@ public class NodeDef extends MessageLite {
   private native void allocate(@Const @ByRef NodeDef from);
 
   public native @ByRef @Name("operator =") NodeDef put(@Const @ByRef NodeDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef NodeDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,15 +90,11 @@ public class NodeDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_input(int index);
   public native void set_input(int index, @StdString BytePointer value);
   public native void set_input(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_input(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_input(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_input();
   public native void add_input(@StdString BytePointer value);
   public native void add_input(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_input(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_input(String value, @Cast("size_t") long size);
 
@@ -116,8 +113,6 @@ public class NodeDef extends MessageLite {
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -134,8 +129,6 @@ public class NodeDef extends MessageLite {
   public native @StdString BytePointer op();
   public native void set_op(@StdString BytePointer value);
   public native void set_op(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_op(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_op(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_op();
@@ -152,8 +145,6 @@ public class NodeDef extends MessageLite {
   public native @StdString BytePointer device();
   public native void set_device(@StdString BytePointer value);
   public native void set_device(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_device(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_device(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_device();

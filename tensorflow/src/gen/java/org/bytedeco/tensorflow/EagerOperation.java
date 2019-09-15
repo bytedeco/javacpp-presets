@@ -33,18 +33,26 @@ public class EagerOperation extends Pointer {
 
   public native @Const @ByRef TensorHandleVector Inputs();
   public native TensorHandleVector MutableInputs();
+
   public native void AddInput(TensorHandle h);
+  public native void UpdateInput(int i, TensorHandle h);
   public native void ConsumeInput(TensorHandle h);
 
   public native @StdString BytePointer Name();
   public native @Cast("const tensorflow::AttrTypeMap*") StringIntUnorderedMap AttrTypes();
 
   public native Device Device();
-  public native @ByVal Status SetDevice(@Cast("const char*") BytePointer device);
-  public native @ByVal Status SetDevice(String device);
   public native void SetDevice(Device device);
+  public native @Const @ByRef DeviceNameUtils.ParsedName GetDeviceName();
+  public native @ByVal Status SetDeviceName(@Cast("const char*") BytePointer device);
+  public native @ByVal Status SetDeviceName(String device);
 
   public native void SetUseXla(@Cast("bool") boolean use_xla);
+
+  public native CancellationManager GetCancellationManager();
+  public native void SetCancellationManager(CancellationManager cancellation_manager);
+
+  public native EagerExecutor Executor();
 
   public native @StdString BytePointer DebugString();
 }

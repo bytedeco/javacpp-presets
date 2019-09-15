@@ -146,6 +146,14 @@ public class DeviceNameUtils extends Pointer {
   public static native @Cast("bool") boolean IsSameAddressSpace(@StringPiece String src, @StringPiece String dst);
   public static native @Cast("bool") boolean IsSameAddressSpace(@Const @ByRef ParsedName src, @Const @ByRef ParsedName dst);
 
+  // Returns true iff devices identified by 'a' and 'b' are in different
+  // address space.
+  public static native @Cast("bool") boolean IsDifferentAddressSpace(@Const @ByRef ParsedName a, @Const @ByRef ParsedName b);
+
+  // Returns the an address space specification containing only the
+  // job/replica/task of the given name.
+  public static native @Const @ByVal ParsedName AddressSpace(@Const @ByRef ParsedName name);
+
   // Returns the local device given its "type" and "id".
   public static native @StdString BytePointer LocalName(@StringPiece BytePointer type, int id);
   public static native @StdString String LocalName(@StringPiece String type, int id);
@@ -170,6 +178,10 @@ public class DeviceNameUtils extends Pointer {
   // component to be fully specified.
   public static native @Cast("bool") boolean SplitDeviceName(@StringPiece BytePointer name, @StdString @Cast({"char*", "std::string*"}) BytePointer task, @StdString @Cast({"char*", "std::string*"}) BytePointer device);
   public static native @Cast("bool") boolean SplitDeviceName(@StringPiece String name, @StdString @Cast({"char*", "std::string*"}) BytePointer task, @StdString @Cast({"char*", "std::string*"}) BytePointer device);
+
+  // Get the task name from ParsedName. Return false if the task component is
+  // not fully specified.
+  public static native @Cast("bool") boolean GetTaskName(@Const @ByRef ParsedName pn, @StdString @Cast({"char*", "std::string*"}) BytePointer task);
 
   public static native @StdString BytePointer ParsedNameToString(@Const @ByRef ParsedName pn);
 

@@ -30,11 +30,12 @@ public class ExecutorOpts extends MessageLite {
   private native void allocate(@Const @ByRef ExecutorOpts from);
 
   public native @ByRef @Name("operator =") ExecutorOpts put(@Const @ByRef ExecutorOpts from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ExecutorOpts default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

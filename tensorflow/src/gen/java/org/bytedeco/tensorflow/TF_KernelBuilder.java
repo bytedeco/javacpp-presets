@@ -9,7 +9,6 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-// #endif
 
 // --------------------------------------------------------------------------
 // C API for TensorFlow Kernels.

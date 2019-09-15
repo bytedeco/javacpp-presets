@@ -12,7 +12,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 // Eigen makes it extremely difficult to dereference a tensor of string* into
 // string, so we roll our own loop instead.
-@Name("tensorflow::CopyThatWorksWithStringPointer<tensorflow::string>") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+@Name("tensorflow::CopyThatWorksWithStringPointer<tensorflow::tstring>") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class CopyThatWorksWithStringPointer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */

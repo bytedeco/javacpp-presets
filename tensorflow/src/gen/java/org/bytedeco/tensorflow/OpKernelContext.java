@@ -41,6 +41,9 @@ public class OpKernelContext extends Pointer {
     // The step being executed.
     public native @Cast("tensorflow::int64") long step_id(); public native Params step_id(long setter);
 
+    // True if the op is created by eager runtime.
+    public native @Cast("bool") boolean is_eager(); public native Params is_eager(boolean setter);
+
     // The op kernel being computed.
     public native OpKernel op_kernel(); public native Params op_kernel(OpKernel setter);
 
@@ -89,6 +92,9 @@ public class OpKernelContext extends Pointer {
 
     // Unique session identifier. Can be empty.
     public native @StdString BytePointer session_handle(); public native Params session_handle(BytePointer setter);
+
+    // Metadata about the session. Can be nullptr.
+    public native @Const SessionMetadata session_metadata(); public native Params session_metadata(SessionMetadata setter);
 
     // The tensor store for this op.
     public native TensorStore tensor_store(); public native Params tensor_store(TensorStore setter);
@@ -142,6 +148,8 @@ public class OpKernelContext extends Pointer {
   public native Env env();
 
   public native @Cast("tensorflow::int64") long step_id();
+
+  public native @Cast("bool") boolean is_eager();
 
   public native @Const @ByRef OpKernel op_kernel();
 
@@ -566,6 +574,9 @@ public class OpKernelContext extends Pointer {
   // Unique identifier of the session it belongs to. Can be empty.
   public native @StdString BytePointer session_handle();
 
+  // Metadata about the session. Can be nullptr.
+  public native @Const SessionMetadata session_metadata();
+
   // An op kernel can access the tensor store of the run it belongs to.
   public native TensorStore tensor_store();
 
@@ -693,4 +704,6 @@ public class OpKernelContext extends Pointer {
   // device execution, respectively.
   
   
+
+  public native Allocator get_allocator(@ByVal AllocatorAttributes attr);
 }

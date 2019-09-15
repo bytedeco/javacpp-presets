@@ -12,9 +12,15 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Add all input tensors element wise.
  * 
+ *    Inputs must be of same size and shape.
+ * 
+ *    <pre>{@code python
+ *    x = [9, 7, 10]
+ *    tf.math.add_n(x) ==> 26
+ *    }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
- *  * inputs: Must all be the same size and shape.
  * 
  *  Returns:
  *  * {@code Output}: The sum tensor. */

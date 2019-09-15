@@ -30,11 +30,12 @@ public class CollectionDef_BytesList extends MessageLite {
   private native void allocate(@Const @ByRef CollectionDef_BytesList from);
 
   public native @ByRef @Name("operator =") CollectionDef_BytesList put(@Const @ByRef CollectionDef_BytesList from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CollectionDef_BytesList default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -89,13 +90,9 @@ public class CollectionDef_BytesList extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_value(int index);
   public native void set_value(int index, @StdString BytePointer value);
   public native void set_value(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_value(int index, @Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_value();
   public native void add_value(@StdString BytePointer value);
   public native void add_value(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_value(@Const Pointer value, @Cast("size_t") long size);
 }

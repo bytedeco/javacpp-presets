@@ -15,9 +15,15 @@ public class TFE_Profiler extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TFE_Profiler(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TFE_Profiler(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TFE_Profiler position(long position) {
+        return (TFE_Profiler)super.position(position);
+    }
 
-  public TFE_Profiler(TFE_ProfilerContext ctx) { super((Pointer)null); allocate(ctx); }
-  private native void allocate(TFE_ProfilerContext ctx);
+  public TFE_Profiler() { super((Pointer)null); allocate(); }
+  private native void allocate();
 
   public native @MoveUniquePtr ProfilerSession profiler(); public native TFE_Profiler profiler(ProfilerSession setter);
 }

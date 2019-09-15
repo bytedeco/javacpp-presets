@@ -172,8 +172,11 @@ public class NodeDefBuilder extends Pointer {
 
   // Finish building the NodeDef, returning any errors or setting
   // *node_def if none.
+  // If `consume` is true, the builder state will be moved into `node_def`,
+  // and the builder will be left in an undefined state.
   // WARNING: Not all problems are detected!  The resulting NodeDef may
   // not be valid!  Call ValidateNodeDef() from node_def_utils to be sure.
+  public native @ByVal Status Finalize(NodeDef node_def, @Cast("bool") boolean consume/*=false*/);
   public native @ByVal Status Finalize(NodeDef node_def);
 
   // Accessors for the values set in the constructor.

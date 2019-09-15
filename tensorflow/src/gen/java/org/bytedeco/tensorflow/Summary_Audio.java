@@ -30,11 +30,12 @@ public class Summary_Audio extends MessageLite {
   private native void allocate(@Const @ByRef Summary_Audio from);
 
   public native @ByRef @Name("operator =") Summary_Audio put(@Const @ByRef Summary_Audio from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef Summary_Audio default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class Summary_Audio extends MessageLite {
   public native @StdString BytePointer encoded_audio_string();
   public native void set_encoded_audio_string(@StdString BytePointer value);
   public native void set_encoded_audio_string(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_encoded_audio_string(@Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_encoded_audio_string();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_encoded_audio_string();
@@ -104,8 +103,6 @@ public class Summary_Audio extends MessageLite {
   public native @StdString BytePointer content_type();
   public native void set_content_type(@StdString BytePointer value);
   public native void set_content_type(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_content_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_content_type(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_content_type();

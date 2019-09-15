@@ -14,7 +14,7 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
  * 
  *  Note that this routine only supports wildcard characters in the
  *  basename portion of the pattern, not in the directory portion.
- *  Note also that the order of filenames returned can be non-deterministic.
+ *  Note also that the order of filenames returned is deterministic.
  * 
  *  Arguments:
  *  * scope: A Scope object

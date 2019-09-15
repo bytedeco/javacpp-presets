@@ -8,7 +8,10 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
+  // namespace tensorflow
 
+// Internal structures used by the C API. These are likely to change and should
+// not be depended on.
 
 @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class TF_SessionOptions extends org.bytedeco.tensorflow.AbstractTF_SessionOptions {

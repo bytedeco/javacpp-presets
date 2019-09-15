@@ -30,11 +30,12 @@ public class TrackableObjectGraph_TrackableObject_SlotVariableReference extends 
   private native void allocate(@Const @ByRef TrackableObjectGraph_TrackableObject_SlotVariableReference from);
 
   public native @ByRef @Name("operator =") TrackableObjectGraph_TrackableObject_SlotVariableReference put(@Const @ByRef TrackableObjectGraph_TrackableObject_SlotVariableReference from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef TrackableObjectGraph_TrackableObject_SlotVariableReference default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class TrackableObjectGraph_TrackableObject_SlotVariableReference extends 
   public native @StdString BytePointer slot_name();
   public native void set_slot_name(@StdString BytePointer value);
   public native void set_slot_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_slot_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_slot_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_slot_name();

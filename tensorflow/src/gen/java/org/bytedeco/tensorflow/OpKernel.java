@@ -84,7 +84,6 @@ public class OpKernel extends Pointer {
   public native @StdString BytePointer name();              // Same as def().name()
   public native @StdString BytePointer type_string();       // Same as def().op()
   public native @StdString BytePointer requested_device();  // Same as def().device()
-  public native @Cast("bool") boolean is_internal();
 
   public native int num_inputs();
   public native @Cast("tensorflow::DataType") int input_type(int i);

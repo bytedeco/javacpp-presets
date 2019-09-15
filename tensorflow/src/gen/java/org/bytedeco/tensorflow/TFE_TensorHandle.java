@@ -16,13 +16,10 @@ public class TFE_TensorHandle extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TFE_TensorHandle(Pointer p) { super(p); }
 
-  public TFE_TensorHandle(@Const @ByRef Tensor t, Device d,
-                     Device op_device) { super((Pointer)null); allocate(t, d, op_device); }
-  private native void allocate(@Const @ByRef Tensor t, Device d,
-                     Device op_device);
-
-  public TFE_TensorHandle(TensorHandle handle) { super((Pointer)null); allocate(handle); }
-  private native void allocate(TensorHandle handle);
+  public TFE_TensorHandle(TensorHandle h) { super((Pointer)null); allocate(h); }
+  private native void allocate(TensorHandle h);
+  public static native TFE_TensorHandle CreateLocalHandle(@Const @ByRef Tensor t,
+                                               TF_Status s);
 
   public native TensorHandle handle(); public native TFE_TensorHandle handle(TensorHandle setter);
 

@@ -9,6 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
+// LINT.ThenChange(//tensorflow/c/eager/c_api_experimental.h)
 
 @Namespace("tensorflow") @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class RunMetadataListener extends Pointer {

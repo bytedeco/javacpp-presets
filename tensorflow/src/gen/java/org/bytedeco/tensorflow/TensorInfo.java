@@ -30,17 +30,19 @@ public class TensorInfo extends MessageLite {
   private native void allocate(@Const @ByRef TensorInfo from);
 
   public native @ByRef @Name("operator =") TensorInfo put(@Const @ByRef TensorInfo from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef TensorInfo default_instance();
 
   /** enum tensorflow::TensorInfo::EncodingCase */
   public static final int
     kName = 1,
     kCooSparse = 4,
+    kCompositeTensor = 5,
     ENCODING_NOT_SET = 0;
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -111,8 +113,6 @@ public class TensorInfo extends MessageLite {
   public native @StdString BytePointer name();
   public native void set_name(@StdString BytePointer value);
   public native void set_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
@@ -134,6 +134,19 @@ public class TensorInfo extends MessageLite {
   public native void unsafe_arena_set_allocated_coo_sparse(
         TensorInfo_CooSparse coo_sparse);
   public native TensorInfo_CooSparse unsafe_arena_release_coo_sparse();
+
+  // .tensorflow.TensorInfo.CompositeTensor composite_tensor = 5;
+  public native @Cast("bool") boolean has_composite_tensor();
+  public native void clear_composite_tensor();
+  @MemberGetter public static native int kCompositeTensorFieldNumber();
+  public static final int kCompositeTensorFieldNumber = kCompositeTensorFieldNumber();
+  public native @Const @ByRef TensorInfo_CompositeTensor composite_tensor();
+  public native TensorInfo_CompositeTensor release_composite_tensor();
+  public native TensorInfo_CompositeTensor mutable_composite_tensor();
+  public native void set_allocated_composite_tensor(TensorInfo_CompositeTensor composite_tensor);
+  public native void unsafe_arena_set_allocated_composite_tensor(
+        TensorInfo_CompositeTensor composite_tensor);
+  public native TensorInfo_CompositeTensor unsafe_arena_release_composite_tensor();
 
   public native void clear_encoding();
   public native @Cast("tensorflow::TensorInfo::EncodingCase") int encoding_case();

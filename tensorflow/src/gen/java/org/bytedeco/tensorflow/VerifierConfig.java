@@ -30,11 +30,12 @@ public class VerifierConfig extends MessageLite {
   private native void allocate(@Const @ByRef VerifierConfig from);
 
   public native @ByRef @Name("operator =") VerifierConfig put(@Const @ByRef VerifierConfig from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef VerifierConfig default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -91,7 +92,6 @@ public class VerifierConfig extends MessageLite {
   @MemberGetter public static native int Toggle_ARRAYSIZE();
   public static final int Toggle_ARRAYSIZE = Toggle_ARRAYSIZE();
   public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Toggle_descriptor();
-  public static native @StdString BytePointer Toggle_Name(@Cast("tensorflow::VerifierConfig::Toggle") int value);
   public static native @Cast("bool") boolean Toggle_Parse(@StdString BytePointer name,
         @Cast("tensorflow::VerifierConfig::Toggle*") IntPointer value);
   public static native @Cast("bool") boolean Toggle_Parse(@StdString String name,

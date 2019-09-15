@@ -23,6 +23,9 @@ public class InputStreamInterface extends Pointer {
   //  * OUT_OF_RANGE - not enough bytes remaining before end of file.
   public native @ByVal Status ReadNBytes(@Cast("tensorflow::int64") long bytes_to_read, @StdString @Cast({"char*", "std::string*"}) BytePointer result);
 
+// #if defined(PLATFORM_GOOGLE)
+// #endif
+
   // Skips bytes_to_skip before next ReadNBytes. bytes_to_skip should be >= 0.
   // Typical return codes:
   //  * OK - in case of success.

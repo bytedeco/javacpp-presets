@@ -142,8 +142,11 @@ public class NodeBuilder extends Pointer {
   // Validates the described node and adds it to *graph, adding edges
   // for all (non-back) inputs.  If created_node is not nullptr,
   // *created_node will be set to the new node (or nullptr on error).
-  public native @ByVal Status Finalize(Graph graph, @Cast("tensorflow::Node**") PointerPointer created_node);
+  // If `consume` is true, the builder state will be moved into `node_def`,
+  // and the builder will be left in an undefined state.
+  public native @ByVal Status Finalize(Graph graph, @Cast("tensorflow::Node**") PointerPointer created_node, @Cast("bool") boolean consume/*=false*/);
   public native @ByVal Status Finalize(Graph graph, @ByPtrPtr Node created_node);
+  public native @ByVal Status Finalize(Graph graph, @ByPtrPtr Node created_node, @Cast("bool") boolean consume/*=false*/);
 
   // Accessors for the values set in the constructor.
   public native @StdString BytePointer node_name();

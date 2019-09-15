@@ -30,11 +30,12 @@ public class Summary_Value extends MessageLite {
   private native void allocate(@Const @ByRef Summary_Value from);
 
   public native @ByRef @Name("operator =") Summary_Value put(@Const @ByRef Summary_Value from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef Summary_Value default_instance();
 
   /** enum tensorflow::Summary_Value::ValueCase */
@@ -97,8 +98,6 @@ public class Summary_Value extends MessageLite {
   public native @StdString BytePointer tag();
   public native void set_tag(@StdString BytePointer value);
   public native void set_tag(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_tag(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_tag(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tag();
@@ -115,8 +114,6 @@ public class Summary_Value extends MessageLite {
   public native @StdString BytePointer node_name();
   public native void set_node_name(@StdString BytePointer value);
   public native void set_node_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_node_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_node_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_node_name();
@@ -149,8 +146,6 @@ public class Summary_Value extends MessageLite {
   public native @StdString BytePointer obsolete_old_style_histogram();
   public native void set_obsolete_old_style_histogram(@StdString BytePointer value);
   public native void set_obsolete_old_style_histogram(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_obsolete_old_style_histogram(@Const Pointer value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_obsolete_old_style_histogram();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_obsolete_old_style_histogram();

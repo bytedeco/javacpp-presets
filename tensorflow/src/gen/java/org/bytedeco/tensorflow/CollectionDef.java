@@ -30,11 +30,12 @@ public class CollectionDef extends MessageLite {
   private native void allocate(@Const @ByRef CollectionDef from);
 
   public native @ByRef @Name("operator =") CollectionDef put(@Const @ByRef CollectionDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CollectionDef default_instance();
 
   /** enum tensorflow::CollectionDef::KindCase */

@@ -30,11 +30,12 @@ public class RunStepRequest extends MessageLite {
   private native void allocate(@Const @ByRef RunStepRequest from);
 
   public native @ByRef @Name("operator =") RunStepRequest put(@Const @ByRef RunStepRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef RunStepRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -98,15 +99,11 @@ public class RunStepRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_fetch(int index);
   public native void set_fetch(int index, @StdString BytePointer value);
   public native void set_fetch(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_fetch(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_fetch(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_fetch();
   public native void add_fetch(@StdString BytePointer value);
   public native void add_fetch(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_fetch(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_fetch(String value, @Cast("size_t") long size);
 
@@ -119,15 +116,11 @@ public class RunStepRequest extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_target(int index);
   public native void set_target(int index, @StdString BytePointer value);
   public native void set_target(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_target(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_target(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_target();
   public native void add_target(@StdString BytePointer value);
   public native void add_target(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_target(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_target(String value, @Cast("size_t") long size);
 
@@ -138,8 +131,6 @@ public class RunStepRequest extends MessageLite {
   public native @StdString BytePointer session_handle();
   public native void set_session_handle(@StdString BytePointer value);
   public native void set_session_handle(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_session_handle(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_session_handle(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_session_handle();
@@ -156,8 +147,6 @@ public class RunStepRequest extends MessageLite {
   public native @StdString BytePointer partial_run_handle();
   public native void set_partial_run_handle(@StdString BytePointer value);
   public native void set_partial_run_handle(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_partial_run_handle(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_partial_run_handle(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_partial_run_handle();

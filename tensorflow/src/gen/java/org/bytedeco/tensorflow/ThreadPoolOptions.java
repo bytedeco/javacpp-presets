@@ -9,10 +9,11 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
-@Namespace("Eigen") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
-public class ThreadPoolInterface extends Pointer {
+
+@Namespace("tensorflow::thread") @Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+public class ThreadPoolOptions extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public ThreadPoolInterface() { super((Pointer)null); }
+    public ThreadPoolOptions() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ThreadPoolInterface(Pointer p) { super(p); }
+    public ThreadPoolOptions(Pointer p) { super(p); }
 }

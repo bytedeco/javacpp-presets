@@ -31,11 +31,12 @@ public class MetaGraphDef_MetaInfoDef extends MessageLite {
   private native void allocate(@Const @ByRef MetaGraphDef_MetaInfoDef from);
 
   public native @ByRef @Name("operator =") MetaGraphDef_MetaInfoDef put(@Const @ByRef MetaGraphDef_MetaInfoDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef MetaGraphDef_MetaInfoDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -90,15 +91,11 @@ public class MetaGraphDef_MetaInfoDef extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tags(int index);
   public native void set_tags(int index, @StdString BytePointer value);
   public native void set_tags(int index, @StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_tags(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_tags(int index, String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_tags();
   public native void add_tags(@StdString BytePointer value);
   public native void add_tags(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void add_tags(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void add_tags(String value, @Cast("size_t") long size);
 
@@ -109,8 +106,6 @@ public class MetaGraphDef_MetaInfoDef extends MessageLite {
   public native @StdString BytePointer meta_graph_version();
   public native void set_meta_graph_version(@StdString BytePointer value);
   public native void set_meta_graph_version(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_meta_graph_version(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_meta_graph_version(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_meta_graph_version();
@@ -127,8 +122,6 @@ public class MetaGraphDef_MetaInfoDef extends MessageLite {
   public native @StdString BytePointer tensorflow_version();
   public native void set_tensorflow_version(@StdString BytePointer value);
   public native void set_tensorflow_version(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_tensorflow_version(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_tensorflow_version(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensorflow_version();
@@ -145,8 +138,6 @@ public class MetaGraphDef_MetaInfoDef extends MessageLite {
   public native @StdString BytePointer tensorflow_git_version();
   public native void set_tensorflow_git_version(@StdString BytePointer value);
   public native void set_tensorflow_git_version(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_tensorflow_git_version(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_tensorflow_git_version(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_tensorflow_git_version();

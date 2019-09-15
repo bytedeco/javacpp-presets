@@ -57,8 +57,8 @@ public class AttrBuilder extends Pointer {
   // value type in this Node. This is not an issue, because Get is used rarely
   // and nodes have a small number of attributes.
 
-  public native @ByVal Fprint128 CacheKey(@StdString BytePointer device);
-  public native @ByVal Fprint128 CacheKey(@StdString String device);
+  public native @ByVal Fprint128 CacheKey(@StringPiece BytePointer device);
+  public native @ByVal Fprint128 CacheKey(@StringPiece String device);
 
   public native void FillAttrValueMap(@Cast("tensorflow::AttrValueMap*") StringAttrValueMap m);
   public native @Const @ByRef NodeDef BuildNodeDef();

@@ -47,8 +47,12 @@ public class QuantizeAndDequantizeV3 extends Pointer {
     /** Defaults to true */
     public native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
 
+    /** Defaults to false */
+    public native @ByVal Attrs NarrowRange(@Cast("bool") boolean x);
+
     public native @Cast("bool") boolean signed_input_(); public native Attrs signed_input_(boolean setter);
     public native @Cast("bool") boolean range_given_(); public native Attrs range_given_(boolean setter);
+    public native @Cast("bool") boolean narrow_range_(); public native Attrs narrow_range_(boolean setter);
   }
   public QuantizeAndDequantizeV3(@Const @ByRef Scope scope, @ByVal Input input, @ByVal Input input_min,
                           @ByVal Input input_max, @ByVal Input num_bits) { super((Pointer)null); allocate(scope, input, input_min, input_max, num_bits); }
@@ -64,6 +68,7 @@ public class QuantizeAndDequantizeV3 extends Pointer {
 
   public static native @ByVal Attrs SignedInput(@Cast("bool") boolean x);
   public static native @ByVal Attrs RangeGiven(@Cast("bool") boolean x);
+  public static native @ByVal Attrs NarrowRange(@Cast("bool") boolean x);
 
   public native @ByRef Operation operation(); public native QuantizeAndDequantizeV3 operation(Operation setter);
   public native @ByRef Output output(); public native QuantizeAndDequantizeV3 output(Output setter);

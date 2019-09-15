@@ -9,24 +9,29 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.tensorflow.global.tensorflow.*;
 
+// #endif
 
-@Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
+// --------------------------------------------------------------------------
+// TF_Tensor holds a multi-dimensional array of elements of a single data type.
+// For all types other than TF_STRING, the data buffer stores elements
+// in row major order.  E.g. if data is treated as a vector of TF_DataType:
+//
+//   element 0:   index (0, ..., 0)
+//   element 1:   index (0, ..., 1)
+//   ...
+//
+// The format for TF_STRING tensors is:
+//   start_offset: array[uint64]
+//   data:         byte[...]
+//
+//   The string length (as a varint), followed by the contents of the string
+//   is encoded at data[start_offset[i]]]. TF_StringEncode and TF_StringDecode
+//   facilitate this encoding.
+
+@Opaque @Properties(inherit = org.bytedeco.tensorflow.presets.tensorflow.class)
 public class TF_Tensor extends org.bytedeco.tensorflow.AbstractTF_Tensor {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public TF_Tensor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public TF_Tensor(long size) { super((Pointer)null); allocateArray(size); }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Tensor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TF_Tensor(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public TF_Tensor position(long position) {
-        return (TF_Tensor)super.position(position);
-    }
-
-
-  public native @Cast("TF_DataType") int dtype(); public native TF_Tensor dtype(int setter);
-  public native @ByRef TensorShape shape(); public native TF_Tensor shape(TensorShape setter);
-  public native TensorBuffer buffer(); public native TF_Tensor buffer(TensorBuffer setter);
 }

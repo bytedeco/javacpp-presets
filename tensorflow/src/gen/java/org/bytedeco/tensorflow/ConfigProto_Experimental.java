@@ -31,11 +31,12 @@ public class ConfigProto_Experimental extends MessageLite {
   private native void allocate(@Const @ByRef ConfigProto_Experimental from);
 
   public native @ByRef @Name("operator =") ConfigProto_Experimental put(@Const @ByRef ConfigProto_Experimental from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef ConfigProto_Experimental default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -88,8 +89,6 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @StdString BytePointer collective_group_leader();
   public native void set_collective_group_leader(@StdString BytePointer value);
   public native void set_collective_group_leader(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_collective_group_leader(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_collective_group_leader(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_collective_group_leader();
@@ -106,8 +105,6 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @StdString BytePointer executor_type();
   public native void set_executor_type(@StdString BytePointer value);
   public native void set_executor_type(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_executor_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_executor_type(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_executor_type();
@@ -116,6 +113,19 @@ public class ConfigProto_Experimental extends MessageLite {
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer unsafe_arena_release_executor_type();
   public native void unsafe_arena_set_allocated_executor_type(
         @StdString @Cast({"char*", "std::string*"}) BytePointer executor_type);
+
+  // .tensorflow.SessionMetadata session_metadata = 11;
+  public native @Cast("bool") boolean has_session_metadata();
+  public native void clear_session_metadata();
+  @MemberGetter public static native int kSessionMetadataFieldNumber();
+  public static final int kSessionMetadataFieldNumber = kSessionMetadataFieldNumber();
+  public native @Const @ByRef SessionMetadata session_metadata();
+  public native SessionMetadata release_session_metadata();
+  public native SessionMetadata mutable_session_metadata();
+  public native void set_allocated_session_metadata(SessionMetadata session_metadata);
+  public native void unsafe_arena_set_allocated_session_metadata(
+        SessionMetadata session_metadata);
+  public native SessionMetadata unsafe_arena_release_session_metadata();
 
   // int32 recv_buf_max_chunk = 4;
   public native void clear_recv_buf_max_chunk();
@@ -165,4 +175,11 @@ public class ConfigProto_Experimental extends MessageLite {
   public static final int kShareClusterDevicesInSessionFieldNumber = kShareClusterDevicesInSessionFieldNumber();
   public native @Cast("bool") boolean share_cluster_devices_in_session();
   public native void set_share_cluster_devices_in_session(@Cast("bool") boolean value);
+
+  // bool optimize_for_static_graph = 12;
+  public native void clear_optimize_for_static_graph();
+  @MemberGetter public static native int kOptimizeForStaticGraphFieldNumber();
+  public static final int kOptimizeForStaticGraphFieldNumber = kOptimizeForStaticGraphFieldNumber();
+  public native @Cast("bool") boolean optimize_for_static_graph();
+  public native void set_optimize_for_static_graph(@Cast("bool") boolean value);
 }

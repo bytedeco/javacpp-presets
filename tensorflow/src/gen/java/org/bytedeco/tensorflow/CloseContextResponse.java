@@ -30,9 +30,10 @@ public class CloseContextResponse extends MessageLite {
   private native void allocate(@Const @ByRef CloseContextResponse from);
 
   public native @ByRef @Name("operator =") CloseContextResponse put(@Const @ByRef CloseContextResponse from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef CloseContextResponse default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

@@ -59,6 +59,11 @@ public class ResourceHandle extends Pointer {
   public native void set_maybe_type_name(@StdString BytePointer value);
   public native void set_maybe_type_name(@StdString String value);
 
+  // Data types and shapes for the underlying resource.
+  public native @StdVector DtypeAndPartialTensorShape dtypes_and_shapes();
+  public native void set_dtypes_and_shapes(
+        @StdVector DtypeAndPartialTensorShape dtypes_and_shapes);
+
   // Conversion to and from ResourceHandleProto
   public native void AsProto(ResourceHandleProto proto);
   public native void FromProto(@Const @ByRef ResourceHandleProto proto);
@@ -78,4 +83,5 @@ public class ResourceHandle extends Pointer {
   public native @StdString BytePointer name_(); public native ResourceHandle name_(BytePointer setter);
   public native @Cast("tensorflow::uint64") long hash_code_(); public native ResourceHandle hash_code_(long setter);
   public native @StdString BytePointer maybe_type_name_(); public native ResourceHandle maybe_type_name_(BytePointer setter);
+  public native @StdVector DtypeAndPartialTensorShape dtypes_and_shapes_(); public native ResourceHandle dtypes_and_shapes_(DtypeAndPartialTensorShape setter);
 }

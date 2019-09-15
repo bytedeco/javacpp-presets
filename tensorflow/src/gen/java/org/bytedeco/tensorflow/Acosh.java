@@ -12,6 +12,14 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Computes inverse hyperbolic cosine of x element-wise.
  * 
+ *  Given an input tensor, the function computes inverse hyperbolic cosine of every element.
+ *  Input range is {@code [1, inf]}. It returns {@code nan} if the input lies outside the range.
+ * 
+ *  <pre>{@code python
+ *  x = tf.constant([-2, -0.5, 1, 1.2, 200, 10000, float("inf")])
+ *  tf.math.acosh(x) ==> [nan nan 0. 0.62236255 5.9914584 9.903487 inf]
+ *  }</pre>
+ * 
  *  Arguments:
  *  * scope: A Scope object
  * 

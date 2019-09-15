@@ -30,9 +30,10 @@ public class WaitQueueDoneRequest extends MessageLite {
   private native void allocate(@Const @ByRef WaitQueueDoneRequest from);
 
   public native @ByRef @Name("operator =") WaitQueueDoneRequest put(@Const @ByRef WaitQueueDoneRequest from);
-//   #if LANG_CXX11
-//   #endif
+
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef WaitQueueDoneRequest default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY

@@ -26,14 +26,16 @@ public class ProcessFunctionLibraryRuntime extends Pointer {
         @Const @ByRef OptimizerOptions optimizer_options,
         ThreadPool thread_pool/*=nullptr*/,
         DistributedFunctionLibraryRuntime parent/*=nullptr*/,
-        @Const CustomKernelCreator custom_kernel_creator/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, thread_pool, parent, custom_kernel_creator); }
+        @Const CustomKernelCreator custom_kernel_creator/*=nullptr*/,
+        @Const SessionMetadata metadata/*=nullptr*/) { super((Pointer)null); allocate(device_mgr, env, graph_def_version, lib_def, optimizer_options, thread_pool, parent, custom_kernel_creator, metadata); }
   private native void allocate(
         @Const DeviceMgr device_mgr, Env env, int graph_def_version,
         @Const FunctionLibraryDefinition lib_def,
         @Const @ByRef OptimizerOptions optimizer_options,
         ThreadPool thread_pool/*=nullptr*/,
         DistributedFunctionLibraryRuntime parent/*=nullptr*/,
-        @Const CustomKernelCreator custom_kernel_creator/*=nullptr*/);
+        @Const CustomKernelCreator custom_kernel_creator/*=nullptr*/,
+        @Const SessionMetadata metadata/*=nullptr*/);
   public ProcessFunctionLibraryRuntime(
         @Const DeviceMgr device_mgr, Env env, int graph_def_version,
         @Const FunctionLibraryDefinition lib_def,
@@ -190,4 +192,8 @@ public class ProcessFunctionLibraryRuntime extends Pointer {
              @ByVal @Cast("tensorflow::FunctionLibraryRuntime::DoneCallback*") Pointer done);
 
   public native @Const DeviceMgr device_mgr();
+
+  public native @Const DeviceSet device_set();
+
+  public native @Const FunctionLibraryDefinition GetFunctionLibraryDefinition();
 }

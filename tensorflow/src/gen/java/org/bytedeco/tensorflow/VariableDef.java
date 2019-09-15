@@ -30,11 +30,12 @@ public class VariableDef extends MessageLite {
   private native void allocate(@Const @ByRef VariableDef from);
 
   public native @ByRef @Name("operator =") VariableDef put(@Const @ByRef VariableDef from);
-//   #if LANG_CXX11
-//   #endif
+
   public native Arena GetArena();
   public native Pointer GetMaybeArenaPointer();
   public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer GetDescriptor();
+  public static native @Cast("const google::protobuf::Reflection*") Pointer GetReflection();
   public static native @Const @ByRef VariableDef default_instance();
 
   public static native void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
@@ -87,8 +88,6 @@ public class VariableDef extends MessageLite {
   public native @StdString BytePointer variable_name();
   public native void set_variable_name(@StdString BytePointer value);
   public native void set_variable_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_variable_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_variable_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_variable_name();
@@ -105,8 +104,6 @@ public class VariableDef extends MessageLite {
   public native @StdString BytePointer initializer_name();
   public native void set_initializer_name(@StdString BytePointer value);
   public native void set_initializer_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_initializer_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_initializer_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_initializer_name();
@@ -123,8 +120,6 @@ public class VariableDef extends MessageLite {
   public native @StdString BytePointer snapshot_name();
   public native void set_snapshot_name(@StdString BytePointer value);
   public native void set_snapshot_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_snapshot_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_snapshot_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_snapshot_name();
@@ -141,8 +136,6 @@ public class VariableDef extends MessageLite {
   public native @StdString BytePointer initial_value_name();
   public native void set_initial_value_name(@StdString BytePointer value);
   public native void set_initial_value_name(@StdString String value);
-//   #if LANG_CXX11
-//   #endif
   public native void set_initial_value_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_initial_value_name(String value, @Cast("size_t") long size);
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_initial_value_name();

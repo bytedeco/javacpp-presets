@@ -12,13 +12,13 @@ import static org.bytedeco.tensorflow.global.tensorflow.*;
 
 /** Gather slices from {@code params} into a Tensor with shape specified by {@code indices}.
  * 
- *  {@code indices} is an K-dimensional integer tensor, best thought of as a
+ *  {@code indices} is a K-dimensional integer tensor, best thought of as a
  *  (K-1)-dimensional tensor of indices into {@code params}, where each element defines a
  *  slice of {@code params}:
  * 
  *      output[\(i_0, ..., i_{K-2}\)] = params[indices[\(i_0, ..., i_{K-2}\)]]
  * 
- *  Whereas in {@code tf.gather} {@code indices} defines slices into the first
+ *  Whereas in {@code tf.gather} {@code indices} defines slices into the {@code axis}
  *  dimension of {@code params}, in {@code tf.gather_nd}, {@code indices} defines slices into the
  *  first {@code N} dimensions of {@code params}, where {@code N = indices.shape[-1]}.
  * 
