@@ -136,7 +136,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.21-rc-${project.version}</version>
+      <version>0.21-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -211,7 +211,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.15.0-rc0-${project.version}</version>
+      <version>1.15.0-rc1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

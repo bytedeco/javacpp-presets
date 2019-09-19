@@ -34,10 +34,8 @@ export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.4
 export TF_TENSORRT_VERSION=5.1
-export GCC_HOST_COMPILER_PATH=$(which -a gcc | sed -n 2p) # skip ccache
-if [[ -z "$GCC_HOST_COMPILER_PATH" ]]; then
-    export GCC_HOST_COMPILER_PATH=$(which gcc)
-fi
+export GCC_HOST_COMPILER_PATH=$(which gcc)
+export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
@@ -47,7 +45,7 @@ export TF_SET_ANDROID_WORKSPACE=0
 export TF_IGNORE_MAX_BAZEL_VERSION=1
 export TF_CONFIGURE_IOS=0
 
-TENSORFLOW_VERSION=1.15.0-rc0
+TENSORFLOW_VERSION=1.15.0-rc1
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -196,7 +194,7 @@ case $PLATFORM in
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
         if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
-            sedinplace "s:%{gcc_host_compiler_path}:$GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{gcc_host_compiler_path}:$ACTUAL_GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
             sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
         fi
         ;;
@@ -218,7 +216,7 @@ case $PLATFORM in
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:${LD_LIBRARY_PATH:-}
         export PATH=$DYLD_LIBRARY_PATH:$PATH
         if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
-            sedinplace "s:%{gcc_host_compiler_path}:$GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{gcc_host_compiler_path}:$ACTUAL_GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
             sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
         fi
         ;;

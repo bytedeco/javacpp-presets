@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>tensorflow</javacpp.moduleId>
-    <revision>1.15.0-rc0-${project.parent.version}</revision>
+    <revision>1.15.0-rc1-${project.parent.version}</revision>
     <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 
@@ -31,7 +31,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.21-rc-${project.parent.version}</version>
+      <version>0.21-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
