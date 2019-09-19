@@ -26,13 +26,39 @@ public class NotEqual extends Pointer {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NotEqual(Pointer p) { super(p); }
 
+  /** Optional attribute setters for NotEqual */
+  public static class Attrs extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public Attrs() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Attrs(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Attrs(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public Attrs position(long position) {
+          return (Attrs)super.position(position);
+      }
+  
+    /** Defaults to true */
+    public native @ByVal Attrs IncompatibleShapeError(@Cast("bool") boolean x);
+
+    public native @Cast("bool") boolean incompatible_shape_error_(); public native Attrs incompatible_shape_error_(boolean setter);
+  }
   public NotEqual(@Const @ByRef Scope scope, @ByVal Input x,
            @ByVal Input y) { super((Pointer)null); allocate(scope, x, y); }
   private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
            @ByVal Input y);
+  public NotEqual(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y, @Const @ByRef Attrs attrs) { super((Pointer)null); allocate(scope, x, y, attrs); }
+  private native void allocate(@Const @ByRef Scope scope, @ByVal Input x,
+           @ByVal Input y, @Const @ByRef Attrs attrs);
   public native @ByVal @Name("operator tensorflow::Output") Output asOutput();
   public native @ByVal @Name("operator tensorflow::Input") Input asInput();
   public native Node node();
+
+  public static native @ByVal Attrs IncompatibleShapeError(@Cast("bool") boolean x);
 
   public native @ByRef Operation operation(); public native NotEqual operation(Operation setter);
   public native @ByRef Output z(); public native NotEqual z(Output setter);

@@ -51,7 +51,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   SCL_ENABLE="devtoolset-7 python27 rh-git29"
   if [[ "cpython mxnet tensorflow onnx ngraph qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE="devtoolset-7 rh-git29"
+    SCL_ENABLE="devtoolset-7 rh-git218"
   fi
   echo "Starting docker for x86_64 and x86 linux"
   docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
