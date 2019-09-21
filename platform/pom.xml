@@ -23,6 +23,7 @@
     <module>../libfreenect/platform</module>
     <module>../libfreenect2/platform</module>
     <module>../librealsense/platform</module>
+    <module>../librealsense2/platform</module>
     <module>../videoinput/platform</module>
     <module>../artoolkitplus/platform</module>
     <module>../chilitags/platform</module>
@@ -101,7 +102,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>librealsense-platform</artifactId>
-      <version>1.12.1-${project.version}</version>
+      <version>1.12.4-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>librealsense2-platform</artifactId>
+      <version>2.25.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
