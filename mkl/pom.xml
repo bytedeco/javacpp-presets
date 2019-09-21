@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for MKL</name>
 
   <properties>
-    <revision>2019.4-${project.parent.version}</revision>
+    <revision>2019.5-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

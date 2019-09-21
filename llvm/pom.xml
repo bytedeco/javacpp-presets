@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for LLVM</name>
 
   <properties>
-    <revision>8.0.1-${project.parent.version}</revision>
+    <revision>9.0.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

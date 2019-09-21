@@ -120,7 +120,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
- * MKL 2019.4  https://software.intel.com/intel-mkl
+ * MKL 2019.5  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.7  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
@@ -129,7 +129,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.4  https://www.python.org/downloads/
  * NumPy 1.17.x  https://github.com/numpy/numpy
- * LLVM 8.0.1  http://llvm.org/releases/download.html
+ * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
  * Tesseract 4.1.0  https://github.com/tesseract-ocr/tesseract
