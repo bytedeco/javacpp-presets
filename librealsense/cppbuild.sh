@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBREALSENSE_VERSION=1.12.1
-LIBUSB_VERSION=1.0.21
+LIBREALSENSE_VERSION=1.12.4
+LIBUSB_VERSION=1.0.22
 download https://github.com/IntelRealSense/librealsense/archive/v$LIBREALSENSE_VERSION.tar.gz librealsense-$LIBREALSENSE_VERSION.tar.gz
 download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-$LIBUSB_VERSION/libusb-$LIBUSB_VERSION.tar.bz2/download libusb-$LIBUSB_VERSION.tar.bz2
 
@@ -21,7 +21,7 @@ tar --totals -xzf ../librealsense-$LIBREALSENSE_VERSION.tar.gz
 tar --totals -xjf ../libusb-$LIBUSB_VERSION.tar.bz2
 
 cd librealsense-$LIBREALSENSE_VERSION
-patch -Np1 < ../../../librealsense.patch || true
+patch -Np1 --binary < ../../../librealsense.patch || true
 
 case $PLATFORM in
     linux-x86)

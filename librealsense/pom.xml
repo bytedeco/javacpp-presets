@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for librealsense</name>
 
   <properties>
-    <revision>1.12.1-${project.parent.version}</revision>
+    <revision>1.12.4-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

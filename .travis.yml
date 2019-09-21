@@ -288,7 +288,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=flycapture,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86
+        env: PROJ=flycapture,libdc1394,libfreenect,libfreenect2,librealsense,librealsense2 OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -357,7 +357,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense OS=linux-x86_64
+        env: PROJ=flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,librealsense2 OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -457,7 +457,7 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode8.3
-        env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense OS=macosx-x86_64
+        env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense,librealsense2 OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
