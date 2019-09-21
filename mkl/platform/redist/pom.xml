@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>mkl</javacpp.moduleId>
-    <revision>2019.4-${project.parent.version}</revision>
+    <revision>2019.5-${project.parent.version}</revision>
     <javacpp.platform.extension>-redist</javacpp.platform.extension>
   </properties>
 

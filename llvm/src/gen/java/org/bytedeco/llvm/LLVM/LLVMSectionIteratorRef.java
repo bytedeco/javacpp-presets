@@ -8,6 +8,16 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
+// #endif
+
+/**
+ * \defgroup LLVMCObject Object file reading and writing
+ * \ingroup LLVMC
+ *
+ * \{
+ */
+
+// Opaque type wrappers
 @Name("LLVMOpaqueSectionIterator") @Opaque @Properties(inherit = org.bytedeco.llvm.presets.LLVM.class)
 public class LLVMSectionIteratorRef extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
