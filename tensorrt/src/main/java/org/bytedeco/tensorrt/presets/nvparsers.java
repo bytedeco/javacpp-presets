@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Samuel Audet
+ * Copyright (C) 2018-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = nvinfer.class,
     value = @Platform(
         include = {"NvCaffeParser.h", "NvUffParser.h"},
-        link = "nvparsers@.5"),
+        link = "nvparsers@.6"),
     target = "org.bytedeco.tensorrt.nvparsers",
     global = "org.bytedeco.tensorrt.global.nvparsers")
 public class nvparsers implements InfoMapper {

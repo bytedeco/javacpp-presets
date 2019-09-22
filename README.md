@@ -139,7 +139,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
    * NCCL 2.4.x  https://developer.nvidia.com/nccl
  * MXNet 1.5.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.15.0  https://github.com/tensorflow/tensorflow
- * TensorRT 5.1  https://developer.nvidia.com/tensorrt
+ * TensorRT 6.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.5.0  https://github.com/onnx/onnx
  * nGraph 0.25.0  https://github.com/NervanaSystems/ngraph
