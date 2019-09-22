@@ -160,7 +160,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
   if [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1qMv0yCejWqQVt8v51ydysL2L3A51Lc8s $HOME/downloads/tensorrt.tar.gz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 18JwlxoAtL6kq-GyWUg4JPBeJQpncpRzd $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi

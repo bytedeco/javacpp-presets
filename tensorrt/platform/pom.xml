@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>tensorrt</javacpp.moduleId>
-    <revision>5.1-${project.parent.version}</revision>
+    <revision>6.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -33,7 +33,7 @@ export TF_CUDA_VERSION=10.1
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.4
-export TF_TENSORRT_VERSION=5.1
+export TF_TENSORRT_VERSION=6.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
 export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
@@ -125,6 +125,10 @@ sedinplace 's/constexpr//g' tensorflow/core/grappler/optimizers/data/rebatch.cc
 
 # Fix incorrect function declarations
 sedinplace 's/std::vector<TensorShape> value/std::vector<TensorShape>* value/g' tensorflow/core/framework/node_def_util.h
+
+# Fix support for TensorRT 6.0
+sedinplace 's/NvInferRTSafe.h/NvInferRuntimeCommon.h/g' third_party/tensorrt/tensorrt_configure.bzl
+sedinplace 's/NvInferRTExt.h/NvInferRuntime.h/g' third_party/tensorrt/tensorrt_configure.bzl
 
 export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
