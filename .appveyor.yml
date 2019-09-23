@@ -33,7 +33,7 @@ environment:
     - PROJ: "cpu_features,systems"
       OS: windows-x86
 
-    - PROJ: "opencv,artoolkitplus,chilitags,flandmark"
+    - PROJ: "opencv,artoolkitplus,chilitags,flandmark,imbs-mt"
       OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
