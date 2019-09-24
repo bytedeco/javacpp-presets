@@ -1,6 +1,6 @@
 version: '{build}'
 
-os: Previous Visual Studio 2015
+os: Previous Visual Studio 2017
 
 cache:
   - C:\Users\appveyor\.m2 -> .appveyor.yml

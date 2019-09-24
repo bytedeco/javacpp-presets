@@ -50,13 +50,13 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DBUILD_UNIT_TESTS=OFF .
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release
         cp -a include/* ../include/
         cp -a Release/* ../lib/

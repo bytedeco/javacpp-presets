@@ -1,4 +1,5 @@
 
+ * Update presets for Visual Studio 2017
  * Bundle the `opencv_annotation`, `opencv_interactive-calibration`, `opencv_version`, `opencv_visualisation`, and `tesseract` programs
  * Add `linux-armhf`, `linux-arm64`, `linux-ppc64le`, and `windows-x86` builds for CPython, NumPy, and LLVM ([pull #768](https://github.com/bytedeco/javacpp-presets/pull/768))
  * Include `audio_ops.h`, `list_ops.h`, `lookup_ops.h`, and `manip_ops.h` for TensorFlow

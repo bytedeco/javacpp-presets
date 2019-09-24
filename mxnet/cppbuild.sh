@@ -110,10 +110,11 @@ case $PLATFORM in
         USE_X="-DCUDA_ARCH_LIST=3.0+PTX -DUSE_CUDA=$USE_CUDA -DUSE_CUDNN=$USE_CUDNN -DUSE_OPENCV=ON -DUSE_MKLDNN=$USE_MKLDNN"
         OPENCV="-DOpenCV_DIR=$OPENCV_PATH/ -DOpenCV_CONFIG_PATH=$OPENCV_PATH/"
         OPENBLAS="-DOpenBLAS_INCLUDE_DIR=$OPENBLAS_PATH/include/ -DOpenBLAS_LIB=$OPENBLAS_PATH/lib/openblas.lib"
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" $USE_X $OPENCV $OPENBLAS ../apache-mxnet-src-$MXNET_VERSION-incubating
 
-        # build the project without compiler parallelism to avoid "out of heap space"
-        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=1 //maxcpucount:$MAKEJ
+        # try to rebuild the project without compiler parallelism to avoid "out of heap space"
+        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ || \
+        MSBuild.exe ALL_BUILD.vcxproj //p:Configuration=Release //p:CL_MPCount=1
 
         # copy binary files
         mkdir -p ../bin

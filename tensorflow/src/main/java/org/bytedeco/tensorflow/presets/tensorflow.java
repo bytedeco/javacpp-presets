@@ -484,6 +484,7 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         String extension = properties.getProperty("platform.extension");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
 
         // Only apply this at load time
         if (!Loader.isLoadLibraries()) {
@@ -541,6 +542,22 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         if (i > 0) {
             resources.add("/org/bytedeco/cuda/");
             resources.add("/org/bytedeco/tensorrt/");
+        }
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
         }
     }
 

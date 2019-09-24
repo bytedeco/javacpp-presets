@@ -98,6 +98,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
         String extension = properties.getProperty("platform.extension");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
@@ -126,6 +127,22 @@ public class opencv_core implements LoadEnabled, InfoMapper {
         }
         if (i > 0) {
             resources.add("/org/bytedeco/cuda/");
+        }
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
         }
     }
 

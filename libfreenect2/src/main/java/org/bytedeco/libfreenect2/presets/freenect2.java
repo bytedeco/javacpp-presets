@@ -21,6 +21,9 @@
  */
 package org.bytedeco.libfreenect2.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -52,8 +55,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "vcruntime140", "msvcp140", "concrt140", "libusb-1.0", "glfw3", "turbojpeg", "freenect2-openni2"},
             preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                            "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
-public class freenect2 implements InfoMapper {
+public class freenect2 implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "libfreenect2"); }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
+    }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LIBFREENECT2_WITH_CUDA_SUPPORT", "LIBFREENECT2_WITH_OPENCL_SUPPORT").define(false))

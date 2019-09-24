@@ -21,11 +21,10 @@
  */
 package org.bytedeco.librealsense2.presets;
 
-import org.bytedeco.javacpp.FunctionPointer;
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.ByVal;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -80,8 +79,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     target = "org.bytedeco.librealsense2",
     global = "org.bytedeco.librealsense2.global.realsense2"
 )
-public class realsense2 implements InfoMapper {
+public class realsense2 implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "librealsense2"); }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
+    }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("rs2_camera_info", "rs2_stream").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
