@@ -273,22 +273,22 @@ case $PLATFORM in
         sedinplace "s/.${OPENCV_VERSION%-*}.dylib/.dylib/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     windows-x86)
-        "$CMAKE" -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe" .
+        "$CMAKE" -G "Visual Studio 15 2017" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
             $CMAKE .
         fi
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-        cp -r ../x86/vc14/lib ..
-        cp -r ../x86/vc14/bin ..
+        cp -r ../x86/vc15/lib ..
+        cp -r ../x86/vc15/bin ..
         cp lib/Release/opencv_java.lib ../lib
         cp lib/Release/opencv_java.dll ../bin
-        sedinplace "s:/x86/vc14/lib/:/lib/:g" ../x86/vc14/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x86/vc14/bin/:/:g" ../x86/vc14/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc15/lib/:/lib/:g" ../x86/vc15/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x86/vc15/bin/:/:g" ../x86/vc15/lib/OpenCVModules-release.cmake
         ;;
     windows-x86_64)
-        "$CMAKE" -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe" .
+        "$CMAKE" -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=ON $WITH_X $GPU_FLAGS $BUILD_CONTRIB_X -DPYTHON_EXECUTABLE="C:/Python27/python.exe" .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -297,12 +297,12 @@ case $PLATFORM in
         # work around some bug in the CUDA build
         [[ ! -f modules/cudev/opencv_cudev_main.cpp ]] || sedinplace '/__termination/d' modules/cudev/opencv_cudev_main.cpp
         MSBuild.exe INSTALL.vcxproj //p:Configuration=Release //p:CL_MPCount=$MAKEJ
-        cp -r ../x64/vc14/lib ..
-        cp -r ../x64/vc14/bin ..
+        cp -r ../x64/vc15/lib ..
+        cp -r ../x64/vc15/bin ..
         cp lib/Release/opencv_java.lib ../lib
         cp lib/Release/opencv_java.dll ../bin
-        sedinplace "s:/x64/vc14/lib/:/lib/:g" ../x64/vc14/lib/OpenCVModules-release.cmake
-        sedinplace "s:/x64/vc14/bin/:/:g" ../x64/vc14/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc15/lib/:/lib/:g" ../x64/vc15/lib/OpenCVModules-release.cmake
+        sedinplace "s:/x64/vc15/bin/:/:g" ../x64/vc15/lib/OpenCVModules-release.cmake
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

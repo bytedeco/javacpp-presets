@@ -21,7 +21,10 @@
  */
 package org.bytedeco.librealsense.presets;
 
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.ByVal;
@@ -57,8 +60,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                     "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
     @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
                                                        "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}) })
-public class RealSense implements InfoMapper {
+public class RealSense implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "librealsense"); }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
+    }
 
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("std::runtime_error").cast().pointerTypes("Pointer"))

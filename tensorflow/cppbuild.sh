@@ -232,14 +232,14 @@ case $PLATFORM in
         if [[ ! -f $PYTHON_BIN_PATH ]]; then
             export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
         fi
-        export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/"
+        export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/"
         # try not to use /WHOLEARCHIVE as it crashes link.exe
         export NO_WHOLE_ARCHIVE_OPTION=1
         # disable __forceinline for Eigen to speed up the build
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
         export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
-        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
+        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         export CUDA_HOME="$CUDA_TOOLKIT_PATH"
         export CUDNN_INSTALL_PATH="$CUDA_TOOLKIT_PATH"
@@ -293,6 +293,7 @@ unset PLATFORM_ARTIFACTS
 unset PLATFORM_INCLUDEPATH
 unset PLATFORM_LINKPATH
 unset PLATFORM_PRELOADPATH
+unset __VSCMD_PREINIT_PATH
 
 bash configure
 bazel build -c opt $BUILDTARGETS --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures

@@ -24,6 +24,9 @@ package org.bytedeco.cpython.presets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -162,7 +165,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     helper = "org.bytedeco.cpython.helper.python"
 )
 @NoException
-public class python implements InfoMapper {
+public class python implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
@@ -174,6 +177,27 @@ public class python implements InfoMapper {
     public static File[] cachePackages() throws IOException {
         File f = cachePackage();
         return new File[] {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")};
+    }
+
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
     }
 
     public void map(InfoMap infoMap) {
