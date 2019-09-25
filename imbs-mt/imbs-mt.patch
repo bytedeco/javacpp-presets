@@ -1,5 +1,5 @@
---- CMakeLists.txt	2019-09-12 12:48:12.682454834 +0200
-+++ CMakeLists.txt	2019-09-18 14:00:48.784178804 +0200
+--- CMakeLists.txt	2016-12-29 06:34:50.000000000 -0800
++++ CMakeLists.txt.new	2019-09-25 13:20:33.242434700 -0700
 @@ -2,9 +2,22 @@
  
  cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
@@ -24,15 +24,20 @@
  
  include(CheckCXXCompilerFlag)
  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-@@ -19,10 +32,9 @@
+@@ -19,10 +32,12 @@
  
  set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
  
 -add_executable (${PROJECT_NAME} imbs.cpp imbsmultithread.cpp imagemanager.cpp main.cpp)
-+add_library(${PROJECT_NAME} SHARED imbs.cpp imbsmultithread.cpp imagemanager.cpp)
++add_library(${PROJECT_NAME} STATIC imbs.cpp imbsmultithread.cpp imagemanager.cpp)
++add_library(${PROJECT_NAME}-shared SHARED imbs.cpp imbsmultithread.cpp imagemanager.cpp)
  if (WIN32)
- target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS})
+-target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS})
++target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS})
++target_link_libraries (${PROJECT_NAME}-shared ${OpenCV_LIBS})
  else ()
- target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS} -lm -lpthread)
+-target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS} -lm -lpthread)
++target_link_libraries (${PROJECT_NAME} ${OpenCV_LIBS} -lm -lpthread)
++target_link_libraries (${PROJECT_NAME}-shared ${OpenCV_LIBS} -lm -lpthread)
  endif()
 -
