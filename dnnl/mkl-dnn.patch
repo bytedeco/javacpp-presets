@@ -1,0 +1,79 @@
+diff -ruN mkl-dnn-1.1-rc/include/dnnl.hpp mkl-dnn-1.1-rc-patch/include/dnnl.hpp
+--- mkl-dnn-1.1-rc/include/dnnl.hpp	2019-09-17 03:13:10.000000000 +0900
++++ mkl-dnn-1.1-rc-patch/include/dnnl.hpp	2019-09-24 21:49:35.485243430 +0900
+@@ -71,6 +71,8 @@
+     static void wrap_c_api(dnnl_status_t status, const char *message) {
+         if (status != dnnl_success) throw error(status, message);
+     }
++
++    const std::string& toStdString() { return std::string(message).append(": status = ").append(std::to_string(status)); }
+ };
+ 
+ /// A class that provides the destructor for an DNNL C handle
+diff -ruN mkl-dnn-1.1-rc/src/cpu/cpu_engine.cpp mkl-dnn-1.1-rc-patch/src/cpu/cpu_engine.cpp
+--- mkl-dnn-1.1-rc/src/cpu/cpu_engine.cpp	2019-09-17 03:13:10.000000000 +0900
++++ mkl-dnn-1.1-rc-patch/src/cpu/cpu_engine.cpp	2019-09-24 21:50:55.625287653 +0900
+@@ -78,6 +78,23 @@
+ namespace impl {
+ namespace cpu {
+ 
++template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_fwd_kernel<sse41, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_data_kernel<sse41, data_type::f32>;
++
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
++        data_type::bf16>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
++        data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
++template struct jit_uni_dw_conv_bwd_weights_kernel<sse41, data_type::f32>;
++
+ status_t cpu_engine_t::create_memory_storage(
+         memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
+     return safe_ptr_assign<memory_storage_t>(
+diff -ruN mkl-dnn-1.1-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- mkl-dnn-1.1-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-09-17 03:13:10.000000000 +0900
++++ mkl-dnn-1.1-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-09-24 21:50:50.079284593 +0900
+@@ -192,11 +192,6 @@
+         scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
+ }
+ 
+-template struct jit_uni_dw_conv_fwd_kernel<avx512_core, data_type::bf16>;
+-template struct jit_uni_dw_conv_fwd_kernel<avx512_common, data_type::f32>;
+-template struct jit_uni_dw_conv_fwd_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_fwd_kernel<sse41, data_type::f32>;
+-
+ template <cpu_isa_t isa, data_type_t kernel_dt>
+ struct jit_uni_dw_conv_bwd_data_kernel {
+ 
+@@ -324,11 +319,6 @@
+     UNUSED(jcp);
+ }
+ 
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx512_core, data_type::bf16>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx512_common, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_data_kernel<sse41, data_type::f32>;
+-
+ template <cpu_isa_t isa, data_type_t kernel_dt>
+ struct jit_uni_dw_conv_bwd_weights_kernel {
+ 
+@@ -505,12 +495,6 @@
+     jcp.nthr = jcp.nthr_g * jcp.nthr_mb;
+ }
+ 
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_core,
+-        data_type::bf16>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx512_common,
+-        data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<avx2, data_type::f32>;
+-template struct jit_uni_dw_conv_bwd_weights_kernel<sse41, data_type::f32>;
+ } // namespace cpu
+ } // namespace impl
+ } // namespace dnnl

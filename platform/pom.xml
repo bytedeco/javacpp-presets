@@ -31,6 +31,7 @@
     <module>../hdf5/platform</module>
     <module>../mkl/platform</module>
     <module>../mkl-dnn/platform</module>
+    <module>../dnnl/platform</module>
     <module>../openblas/platform</module>
     <module>../arpack-ng/platform</module>
     <module>../cminpack/platform</module>
@@ -143,6 +144,11 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
       <version>0.21-${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>dnnl-platform</artifactId>
+      <version>1.1-rc-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

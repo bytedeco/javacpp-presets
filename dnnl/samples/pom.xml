@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.dnnl</groupId>
+    <artifactId>samples</artifactId>
+    <version>1.5.2-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>CpuCnnInferenceInt8</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>dnnl-platform</artifactId>
+            <version>1.1-rc-1.5.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
