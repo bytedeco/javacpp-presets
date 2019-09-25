@@ -45,7 +45,7 @@ environment:
       OS: windows-x86_64
     - PROJ: "mkl"
       OS: windows-x86_64
-    - PROJ: "mkl-dnn"
+    - PROJ: "mkl-dnn,dnnl"
       OS: windows-x86_64
     - PROJ: "openblas"
       OS: windows-x86_64

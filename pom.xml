@@ -588,6 +588,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1286,6 +1287,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1353,6 +1355,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1479,6 +1482,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
