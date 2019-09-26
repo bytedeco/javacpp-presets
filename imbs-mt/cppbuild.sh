@@ -33,11 +33,11 @@ fi
 
 case $PLATFORM in
     linux-x86_64)
-        $CMAKE -j $MAKEJ -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/cmake/opencv4/ .
+        CXX="g++ -m64 -fPIC" $CMAKE -j $MAKEJ -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/cmake/opencv4/ .
         make -j $MAKEJ
         cp *.h ../include
         cp *.hpp ../include
-        cp *.so ../lib
+        cp *.a ../lib
         ;;
     windows-x86_64)
 	"$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$INSTALL_PATH/../../../opencv/target/native/org/bytedeco/opencv/windows-x86_64/x64/vc14/lib/ .
