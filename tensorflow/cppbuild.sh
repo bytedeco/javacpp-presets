@@ -239,7 +239,7 @@ case $PLATFORM in
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
         export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
-        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH --copt=//machine:x64 --linkopt=//machine:x64"
+        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH --host_copt=//D_ALLOW_COMPILER_AND_STL_VERSION_MISMATCH --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         export CUDA_HOME="$CUDA_TOOLKIT_PATH"
         export CUDNN_INSTALL_PATH="$CUDA_TOOLKIT_PATH"
