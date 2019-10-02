@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for ONNX</name>
 
   <properties>
-    <revision>1.5.0-${project.parent.version}</revision>
+    <revision>1.6.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
