@@ -142,7 +142,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * TensorFlow 1.15.0  https://github.com/tensorflow/tensorflow
  * TensorRT 6.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.5.0  https://github.com/onnx/onnx
+ * ONNX 1.6.0  https://github.com/onnx/onnx
  * nGraph 0.25.0  https://github.com/NervanaSystems/ngraph
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.13.x  https://download.qt.io/archive/qt/
