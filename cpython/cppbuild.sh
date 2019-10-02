@@ -69,7 +69,7 @@ case $PLATFORM in
     windows-x86)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
-        cmd.exe /c 'build.bat -p x86'
+        cmd.exe //c 'build.bat -p x86'
         cp win32/python*.exe win32/python*.dll ../../bin/
         cp win32/python*.lib ../../libs/
         cp win32/*.dll win32/*.pyd ../../lib/
@@ -82,7 +82,7 @@ case $PLATFORM in
     windows-x86_64)
         mkdir -p ../include ../lib ../libs ../bin
         cd PCbuild
-        cmd.exe /c 'build.bat -p x64'
+        cmd.exe //c 'build.bat -p x64'
         cp amd64/python*.exe amd64/python*.dll ../../bin/
         cp amd64/python*.lib ../../libs/
         cp amd64/*.dll amd64/*.pyd ../../lib/

@@ -29,7 +29,8 @@ case $PLATFORM in
         fi
         ;;
     windows-*)
-        if [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
+        if [[ ! -d "/C/Program Files/Spinnaker/" ]] && [[ ! -d "/C/Program Files (x86)/Spinnaker/" ]] &&
+           [[ ! -d "/C/Program Files/Point Grey Research/" ]] && [[ ! -d "/C/Program Files (x86)/Point Grey Research/" ]]; then
             echo "Please install Spinnaker under the default installation directory"
             exit 1
         fi
