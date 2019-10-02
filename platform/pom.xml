@@ -218,12 +218,12 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mxnet-platform</artifactId>
-      <version>1.5.1.rc0-${project.version}</version>
+      <version>1.5.1-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>tensorflow-platform</artifactId>
-      <version>1.15.0-rc1-${project.version}</version>
+      <version>1.15.0-rc2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
