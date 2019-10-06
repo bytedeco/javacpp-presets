@@ -1,6 +1,6 @@
 #!/bin/bash
 # Fix GCC library incorrectly linking for rpath on Mac
-for VER in 5 6 7 8; do
+for VER in 5 6 7 8 9; do
     for LIB in libdnnl.1.dylib libjnidnnl.dylib; do
         LIBFILE=target/native/org/bytedeco/dnnl/macosx-x86_64/$LIB
         if [[ -f $LIBFILE ]]; then

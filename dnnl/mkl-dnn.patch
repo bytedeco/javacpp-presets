@@ -1,6 +1,6 @@
-diff -ruN mkl-dnn-1.1-rc/include/dnnl.hpp mkl-dnn-1.1-rc-patch/include/dnnl.hpp
---- mkl-dnn-1.1-rc/include/dnnl.hpp	2019-09-17 03:13:10.000000000 +0900
-+++ mkl-dnn-1.1-rc-patch/include/dnnl.hpp	2019-09-24 21:49:35.485243430 +0900
+diff -ruN mkl-dnn-1.1/include/dnnl.hpp mkl-dnn-1.1-patch/include/dnnl.hpp
+--- mkl-dnn-1.1/include/dnnl.hpp	2019-10-03 10:48:17.000000000 +0900
++++ mkl-dnn-1.1-patch/include/dnnl.hpp	2019-10-06 12:31:52.722868200 +0900
 @@ -71,6 +71,8 @@
      static void wrap_c_api(dnnl_status_t status, const char *message) {
          if (status != dnnl_success) throw error(status, message);
@@ -10,9 +10,46 @@ diff -ruN mkl-dnn-1.1-rc/include/dnnl.hpp mkl-dnn-1.1-rc-patch/include/dnnl.hpp
  };
  
  /// A class that provides the destructor for an DNNL C handle
-diff -ruN mkl-dnn-1.1-rc/src/cpu/cpu_engine.cpp mkl-dnn-1.1-rc-patch/src/cpu/cpu_engine.cpp
---- mkl-dnn-1.1-rc/src/cpu/cpu_engine.cpp	2019-09-17 03:13:10.000000000 +0900
-+++ mkl-dnn-1.1-rc-patch/src/cpu/cpu_engine.cpp	2019-09-24 21:50:55.625287653 +0900
+diff -ruN mkl-dnn-1.1/src/CMakeLists.txt mkl-dnn-1.1-patch/src/CMakeLists.txt
+--- mkl-dnn-1.1/src/CMakeLists.txt	2019-10-03 10:48:17.000000000 +0900
++++ mkl-dnn-1.1-patch/src/CMakeLists.txt	2019-10-06 12:32:11.847277900 +0900
+@@ -131,33 +131,6 @@
+     -DDIR=${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/cmake
+     -P ${PROJECT_SOURCE_DIR}/cmake/gen_mkldnn_compat_cmakes.cmake)")
+ 
+-# MKL-DNN compat libraries
+-if (WIN32)
+-    add_custom_target(compat_libs ALL
+-        ${CMAKE_COMMAND} -E copy
+-        $<TARGET_FILE_DIR:${LIB_NAME}>/dnnl.lib
+-        $<TARGET_FILE_DIR:${LIB_NAME}>/mkldnn.lib
+-        DEPENDS ${LIB_NAME})
+-    install(FILES $<TARGET_FILE_DIR:${LIB_NAME}>/mkldnn.lib
+-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+-else()
+-    if(DNNL_LIBRARY_TYPE STREQUAL "SHARED")
+-        set_ternary(ext APPLE "dylib" "so")
+-        set(vers ".${DNNL_VERSION_MAJOR};.${DNNL_VERSION_MAJOR}.${DNNL_VERSION_MINOR}")
+-    else()
+-        set(ext "a")
+-        set(vers "")
+-    endif()
+-    foreach(ver "" ${vers})
+-        add_custom_target(compat_libs${ver} ALL
+-            ${CMAKE_COMMAND} -E remove -f libmkldnn.${ext}${ver} # to make the next command work fine
+-            COMMAND ${CMAKE_COMMAND} -E create_symlink libdnnl.${ext}${ver} libmkldnn.${ext}${ver}
+-            DEPENDS ${LIB_NAME})
+-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libmkldnn.${ext}${ver}
+-            DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+-    endforeach()
+-endif()
+-
+ # Install custom find modules for transitive dependencies
+ if(DNNL_CPU_RUNTIME STREQUAL "TBB")
+     if(WIN32)
+diff -ruN mkl-dnn-1.1/src/cpu/cpu_engine.cpp mkl-dnn-1.1-patch/src/cpu/cpu_engine.cpp
+--- mkl-dnn-1.1/src/cpu/cpu_engine.cpp	2019-10-03 10:48:17.000000000 +0900
++++ mkl-dnn-1.1-patch/src/cpu/cpu_engine.cpp	2019-10-06 12:31:52.722868200 +0900
 @@ -78,6 +78,23 @@
  namespace impl {
  namespace cpu {
@@ -37,9 +74,9 @@ diff -ruN mkl-dnn-1.1-rc/src/cpu/cpu_engine.cpp mkl-dnn-1.1-rc-patch/src/cpu/cpu
  status_t cpu_engine_t::create_memory_storage(
          memory_storage_t **storage, unsigned flags, size_t size, void *handle) {
      return safe_ptr_assign<memory_storage_t>(
-diff -ruN mkl-dnn-1.1-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
---- mkl-dnn-1.1-rc/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-09-17 03:13:10.000000000 +0900
-+++ mkl-dnn-1.1-rc-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-09-24 21:50:50.079284593 +0900
+diff -ruN mkl-dnn-1.1/src/cpu/jit_uni_dw_conv_kernel_utils.hpp mkl-dnn-1.1-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp
+--- mkl-dnn-1.1/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-10-03 10:48:17.000000000 +0900
++++ mkl-dnn-1.1-patch/src/cpu/jit_uni_dw_conv_kernel_utils.hpp	2019-10-06 12:31:52.738522800 +0900
 @@ -192,11 +192,6 @@
          scratchpad.book(key_conv_padded_bias, sizeof(float) * jcp.oc);
  }
