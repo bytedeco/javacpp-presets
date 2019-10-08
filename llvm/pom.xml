@@ -71,6 +71,7 @@
               <compilerOptions>
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/FORCE:MULTIPLE</compilerOption>
+                <compilerOption>/WHOLEARCHIVE</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>
