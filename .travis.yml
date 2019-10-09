@@ -537,6 +537,11 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode8.3
+        env: PROJ=ngraph OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode8.3
         env: PROJ=liquidfun OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh

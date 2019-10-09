@@ -91,9 +91,8 @@ import java.lang.annotation.Target;
 //        "core/tensor.hpp",
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
-    preload = {"iomp5", "mklml", "mklml_intel"}, preloadresource = "/org/bytedeco/mkldnn/",
-    link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
-//@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
+    preload = {"iomp5", "mklml", "mklml_intel", "mkldnn", "ncurses@.6", "onnxifi"}, preloadresource = "/org/bytedeco/mkldnn/",
+    link = {"ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
 )})
 public class ngraph implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "ngraph"); }

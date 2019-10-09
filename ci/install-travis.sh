@@ -253,7 +253,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "cpython mxnet tensorflow onnx " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
+      if [[ "cpython mxnet tensorflow onnx ngraph " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
