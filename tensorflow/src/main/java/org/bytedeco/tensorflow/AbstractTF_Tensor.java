@@ -37,14 +37,7 @@ public abstract class AbstractTF_Tensor extends Pointer {
     /** TensorFlow crashes if we don't pass it a deallocator, so... */
     protected static Deallocator_Pointer_long_Pointer dummyDeallocator = new Deallocator_Pointer_long_Pointer() {
         @Override public void call(Pointer data, long len, Pointer arg) { }
-    };
-
-    static {
-        PointerScope s = PointerScope.getInnerScope();
-        if (s != null) {
-            s.detach(dummyDeallocator);
-        }
-    }
+    }.retainReference();
 
     /** A reference to prevent deallocation. */
     protected Pointer pointer;
