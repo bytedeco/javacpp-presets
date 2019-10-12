@@ -49,7 +49,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-7 python27 rh-git29"
-  if [[ "cpython mxnet tensorflow onnx ngraph qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
+  if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="devtoolset-7 rh-git218"
   fi
@@ -253,7 +253,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "cpython mxnet tensorflow onnx ngraph " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
+      if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /

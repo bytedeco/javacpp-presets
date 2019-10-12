@@ -173,6 +173,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=hdf5 OS=linux-armhf
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=openblas OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
@@ -207,6 +211,10 @@ matrix:
         script: ./ci/install-arm.sh
       - os: linux
         env: PROJ=flycapture,libdc1394,libfreenect OS=linux-arm64
+        install: true
+        script: ./ci/install-arm.sh
+      - os: linux
+        env: PROJ=hdf5 OS=linux-arm64
         install: true
         script: ./ci/install-arm.sh
       - os: linux
@@ -429,6 +437,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=onnxruntime OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=liquidfun OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -538,6 +550,11 @@ matrix:
       - os: osx
         osx_image: xcode8.3
         env: PROJ=ngraph OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode9.4
+        env: PROJ=onnxruntime OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
