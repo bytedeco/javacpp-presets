@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target = "org.bytedeco.hdf5", global = "org.bytedeco.hdf5.global.hdf5", value = {
-    @Platform(value = {"linux-x86", "linux-ppc64le", "macosx", "windows"},
+    @Platform(value = {"linux", "macosx", "windows"},
             define = {"GENERIC_EXCEPTION_CLASS H5::Exception", "GENERIC_EXCEPTION_TOSTRING getCDetailMsg()"},
             include = {"H5pubconf.h", /* "H5version.h", */ "H5public.h", "H5Cpublic.h", "H5Ipublic.h",
         "H5Tpublic.h", "H5Lpublic.h", "H5Opublic.h", "H5Zpublic.h",  "H5Apublic.h", "H5ACpublic.h", "H5Dpublic.h", "H5Epublic.h", "H5Fpublic.h",

@@ -1,0 +1,413 @@
+diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
+index f6252b90..16380b24 100644
+--- a/cmake/CMakeLists.txt
++++ b/cmake/CMakeLists.txt
+@@ -423,8 +423,8 @@ if (WIN32)
+ else()
+   add_definitions(-DPLATFORM_POSIX)
+   # Enable warning and enable space optimization in Linux
+-  string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -ffunction-sections -fdata-sections")
+-  string(APPEND CMAKE_C_FLAGS " -Wall -Wextra -ffunction-sections -fdata-sections")
++  string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra")
++  string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
+ 
+   if(onnxruntime_DEV_MODE)
+     string(APPEND CMAKE_CXX_FLAGS " -Werror")
+diff --git a/cmake/onnxruntime.cmake b/cmake/onnxruntime.cmake
+index 91508a8a..2da0110f 100644
+--- a/cmake/onnxruntime.cmake
++++ b/cmake/onnxruntime.cmake
+@@ -37,13 +37,13 @@ endif()
+ 
+ if(UNIX)
+   if (APPLE)
+-    set(BEGIN_WHOLE_ARCHIVE -Xlinker -all_load)
+-    set(END_WHOLE_ARCHIVE -Xlinker -noall_load)
+-    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker -dead_strip")
++    set(BEGIN_WHOLE_ARCHIVE "")
++    set(END_WHOLE_ARCHIVE "")
++    set(ONNXRUNTIME_SO_LINK_FLAG "")
+   else()
+-    set(BEGIN_WHOLE_ARCHIVE -Xlinker --whole-archive)
+-    set(END_WHOLE_ARCHIVE -Xlinker --no-whole-archive)
+-    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker --version-script=${SYMBOL_FILE} -Xlinker --no-undefined -Xlinker --gc-sections")
++    set(BEGIN_WHOLE_ARCHIVE "")
++    set(END_WHOLE_ARCHIVE "")
++    set(ONNXRUNTIME_SO_LINK_FLAG "-Xlinker --no-undefined -Xlinker -z -Xlinker noexecstack")
+   endif()
+ else()
+   set(ONNXRUNTIME_SO_LINK_FLAG "-DEF:${SYMBOL_FILE}")
+diff --git a/onnxruntime/core/framework/allocatormgr.cc b/onnxruntime/core/framework/allocatormgr.cc
+index 27c0b19e..d859cd71 100644
+--- a/onnxruntime/core/framework/allocatormgr.cc
++++ b/onnxruntime/core/framework/allocatormgr.cc
+@@ -18,7 +18,7 @@ AllocatorPtr CreateAllocator(DeviceAllocatorRegistrationInfo info, int device_id
+     return std::shared_ptr<IArenaAllocator>(
+         std::make_unique<BFCArena>(std::move(device_allocator), info.max_mem));
+ 
+-  return device_allocator;
++  return std::move(device_allocator);
+ }
+ 
+ DeviceAllocatorRegistry& DeviceAllocatorRegistry::Instance() {
+diff --git a/onnxruntime/core/mlas/lib/erf.cpp b/onnxruntime/core/mlas/lib/erf.cpp
+index 12fd0a36..c1f4a7e6 100644
+--- a/onnxruntime/core/mlas/lib/erf.cpp
++++ b/onnxruntime/core/mlas/lib/erf.cpp
+@@ -29,7 +29,7 @@ Abstract:
+ // Bundles the constants for use by kernels written in assembly.
+ //
+ 
+-extern "C" const struct {
++MLAS_INTERNAL_DATA const struct {
+     float ErfUpperAbsRange;
+     float ErfSplitBoundary;
+     float ErfSMALL_P0;
+diff --git a/onnxruntime/core/mlas/lib/logistic.cpp b/onnxruntime/core/mlas/lib/logistic.cpp
+index 03061bb6..9e657f18 100644
+--- a/onnxruntime/core/mlas/lib/logistic.cpp
++++ b/onnxruntime/core/mlas/lib/logistic.cpp
+@@ -26,7 +26,7 @@ Abstract:
+ // Bundles the floating point constants for use by kernels written in assembly.
+ //
+ 
+-extern "C" const struct {
++MLAS_INTERNAL_DATA const struct {
+     float LowerRange;
+     float UpperRange;
+     float alpha_9;
+diff --git a/onnxruntime/core/mlas/lib/mlasi.h b/onnxruntime/core/mlas/lib/mlasi.h
+index b191c155..28dddf57 100644
+--- a/onnxruntime/core/mlas/lib/mlasi.h
++++ b/onnxruntime/core/mlas/lib/mlasi.h
+@@ -56,6 +56,18 @@ Abstract:
+ #define MLAS_FORCEINLINE __attribute__ ((always_inline)) inline
+ #endif
+ 
++//
++// Macro to tag globals as internal data shared with kernels written in
++// assembly. These globals are marked with having hidden visibility to avoid
++// needing to access the data through the global object table.
++//
++
++#if defined(_MSC_VER)
++#define MLAS_INTERNAL_DATA extern "C"
++#else
++#define MLAS_INTERNAL_DATA extern "C" __attribute ((visibility("hidden")))
++#endif
++
+ //
+ // Macro to suppress unreferenced parameter warnings.
+ //
+diff --git a/onnxruntime/core/mlas/lib/sgemm.cpp b/onnxruntime/core/mlas/lib/sgemm.cpp
+index f436f17e..5250c844 100644
+--- a/onnxruntime/core/mlas/lib/sgemm.cpp
++++ b/onnxruntime/core/mlas/lib/sgemm.cpp
+@@ -55,7 +55,7 @@ struct MLAS_SGEMM_WORK_BLOCK {
+ // Stores a vector to build a conditional load/store mask for vmaskmovps.
+ //
+ 
+-extern "C" MLAS_DECLSPEC_ALIGN(const uint32_t MlasMaskMoveAvx[8], 8 * sizeof(float)) = { 0, 1, 2, 3, 4, 5, 6, 7 };
++MLAS_INTERNAL_DATA MLAS_DECLSPEC_ALIGN(const uint32_t MlasMaskMoveAvx[8], 8 * sizeof(float)) = { 0, 1, 2, 3, 4, 5, 6, 7 };
+ 
+ #endif
+ 
+diff --git a/onnxruntime/core/mlas/lib/tanh.cpp b/onnxruntime/core/mlas/lib/tanh.cpp
+index 430afdf6..2fbeaef3 100644
+--- a/onnxruntime/core/mlas/lib/tanh.cpp
++++ b/onnxruntime/core/mlas/lib/tanh.cpp
+@@ -26,7 +26,7 @@ Abstract:
+ // Bundles the floating point constants for use by kernels written in assembly.
+ //
+ 
+-extern "C" const struct {
++MLAS_INTERNAL_DATA const struct {
+     float LowerRange;
+     float UpperRange;
+     float alpha_13;
+diff --git a/onnxruntime/core/mlas/lib/x86_64/ErfKernelFma3.S b/onnxruntime/core/mlas/lib/x86_64/ErfKernelFma3.S
+index 29518fb9..4d638783 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/ErfKernelFma3.S
++++ b/onnxruntime/core/mlas/lib/x86_64/ErfKernelFma3.S
+@@ -92,7 +92,7 @@ Return Value:
+         .globl  C_UNDERSCORE(MlasErfKernelFma3)
+ C_UNDERSCORE(MlasErfKernelFma3):
+         sub     rsp,ErfKernelFrame_ReturnAddress
+-        mov     rax,C_UNDERSCORE(MlasErfConstants)@GOTPCREL[rip]
++        lea     rax,[C_UNDERSCORE(MlasErfConstants)+rip]
+ 
+         sub     rdx,8*4
+         jb      .LErfProcessRemainingCount
+@@ -376,10 +376,9 @@ C_UNDERSCORE(MlasErfKernelFma3):
+ 
+ .LErfProcess1x8:
+         mov     DWORD PTR ErfKernelFrame_CountN[rsp],edx
+-        mov     rcx,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vbroadcastss ymm3,DWORD PTR ErfKernelFrame_CountN[rsp]
+ 
+-        vpcmpgtd ymm3,ymm3,YMMWORD PTR [rcx]
++        vpcmpgtd ymm3,ymm3,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vbroadcastss ymm15,ErfNegZero[rax]
+         vmaskmovps ymm0,ymm3,YMMWORD PTR [rdi]  # original input vx0
+ 
+diff --git a/onnxruntime/core/mlas/lib/x86_64/LogisticKernelFma3.S b/onnxruntime/core/mlas/lib/x86_64/LogisticKernelFma3.S
+index 8b7b27dc..2fdb8442 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/LogisticKernelFma3.S
++++ b/onnxruntime/core/mlas/lib/x86_64/LogisticKernelFma3.S
+@@ -72,7 +72,7 @@ Return Value:
+         .globl  C_UNDERSCORE(MlasLogisticKernelFma3)
+ C_UNDERSCORE(MlasLogisticKernelFma3):
+ 
+-        mov     rax,C_UNDERSCORE(MlasLogisticConstants)@GOTPCREL[rip]
++        lea     rax,[C_UNDERSCORE(MlasLogisticConstants)+rip]
+         vbroadcastss ymm4,LogisticConstants_LowerRange[rax]
+         vbroadcastss ymm5,LogisticConstants_UpperRange[rax]
+         vbroadcastss ymm6,LogisticConstants_alpha_9[rax]
+@@ -119,10 +119,9 @@ C_UNDERSCORE(MlasLogisticKernelFma3):
+ .LProcessRemainingCount:
+         add     rdx,8                           # correct for over-subtract above
+         jz      .LExitKernel
+-        mov     DWORD PTR LogisticKernelFrame_CountN[rsp],edx
+-        mov     rcx,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+-        vbroadcastss ymm2,DWORD PTR LogisticKernelFrame_CountN[rsp]
+-        vpcmpgtd ymm2,ymm2,YMMWORD PTR [rcx]
++        mov     DWORD PTR [LogisticKernelFrame_CountN+rsp],edx
++        vbroadcastss ymm2,DWORD PTR [LogisticKernelFrame_CountN+rsp]
++        vpcmpgtd ymm2,ymm2,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vmaskmovps ymm0,ymm2,YMMWORD PTR [rdi]
+         vmaxps  ymm0,ymm4,ymm0                  # clamp lower bound
+         vminps  ymm0,ymm5,ymm0                  # clamp upper bound
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx.S b/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx.S
+index 61711976..2163708d 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx.S
+@@ -257,9 +257,15 @@ Arguments:
+         .macro PostProcessBlock FilterCount, OutputCount
+ 
+         .globl  MlasConvPostProcessFloatAvxFilter\FilterCount\()Output\OutputCount\()
++#if !defined(__APPLE__)
++        .hidden MlasConvPostProcessFloatAvxFilter\FilterCount\()Output\OutputCount\()
++#endif
+ MlasConvPostProcessFloatAvxFilter\FilterCount\()Output\OutputCount\():
+ 
+         .globl  MlasConvPostProcessFloatFma3Filter\FilterCount\()Output\OutputCount\()
++#if !defined(__APPLE__)
++        .hidden MlasConvPostProcessFloatFma3Filter\FilterCount\()Output\OutputCount\()
++#endif
+ MlasConvPostProcessFloatFma3Filter\FilterCount\()Output\OutputCount\():
+ 
+ .if \FilterCount\() > 2
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx512F.S b/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx512F.S
+index 873cb4db..55d2aa61 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx512F.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SconvKernelAvx512F.S
+@@ -361,6 +361,9 @@ Arguments:
+         .macro PostProcessBlock FilterCount, OutputCount
+ 
+         .globl  MlasConvPostProcessFloatAvx512FFilter\FilterCount\()Output\OutputCount\()
++#if !defined(__APPLE__)
++        .hidden MlasConvPostProcessFloatAvx512FFilter\FilterCount\()Output\OutputCount\()
++#endif
+ MlasConvPostProcessFloatAvx512FFilter\FilterCount\()Output\OutputCount\():
+ 
+ .if \FilterCount\() > 2
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SconvKernelSse2.S b/onnxruntime/core/mlas/lib/x86_64/SconvKernelSse2.S
+index e5505ea4..4dbbf696 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SconvKernelSse2.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SconvKernelSse2.S
+@@ -249,6 +249,9 @@ Arguments:
+         .macro PostProcessBlock FilterCount, OutputCount
+ 
+         .globl  MlasConvPostProcessFloatSseFilter\FilterCount\()Output\OutputCount\()
++#if !defined(__APPLE__)
++        .hidden MlasConvPostProcessFloatSseFilter\FilterCount\()Output\OutputCount\()
++#endif
+ MlasConvPostProcessFloatSseFilter\FilterCount\()Output\OutputCount\():
+ 
+ .if \FilterCount\() > 2
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelAvx.S b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelAvx.S
+index 0147f08e..167a7fcb 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelAvx.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelAvx.S
+@@ -374,10 +374,9 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Avx):
+ 
+ .L\Mode\().OutputMasked8x4Block:
+         vmovd   xmm0,r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vshufps xmm0,xmm0,xmm0,0
+-        vpcmpgtd xmm1,xmm0,XMMWORD PTR [rbp+16]
+-        vpcmpgtd xmm0,xmm0,XMMWORD PTR [rbp]
++        vpcmpgtd xmm1,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip+16]
++        vpcmpgtd xmm0,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vinsertf128 ymm0,ymm0,xmm1,1
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm8,ymm0,YMMWORD PTR [rdx]
+@@ -473,10 +472,9 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Avx):
+ 
+ .L\Mode\().OutputMasked8x2Block:
+         vmovd   xmm0,r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vshufps xmm0,xmm0,xmm0,0
+-        vpcmpgtd xmm1,xmm0,XMMWORD PTR [rbp+16]
+-        vpcmpgtd xmm0,xmm0,XMMWORD PTR [rbp]
++        vpcmpgtd xmm1,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip+16]
++        vpcmpgtd xmm0,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vinsertf128 ymm0,ymm0,xmm1,1
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm8,ymm0,YMMWORD PTR [rdx]
+@@ -540,10 +538,9 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Avx):
+ 
+ .L\Mode\().OutputMasked8x1Block:
+         vmovd   xmm0,r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vshufps xmm0,xmm0,xmm0,0
+-        vpcmpgtd xmm1,xmm0,XMMWORD PTR [rbp+16]
+-        vpcmpgtd xmm0,xmm0,XMMWORD PTR [rbp]
++        vpcmpgtd xmm1,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip+16]
++        vpcmpgtd xmm0,xmm0,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vinsertf128 ymm0,ymm0,xmm1,1
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm8,ymm0,YMMWORD PTR [rdx]
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelFma3.S b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelFma3.S
+index cfeceb6b..99c816c2 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelFma3.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelFma3.S
+@@ -435,9 +435,8 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Fma3):
+ 
+ .L\Mode\().OutputMasked8x6Block:
+         mov     DWORD PTR [rsp+SgemmKernelFrame_mask],r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vbroadcastss ymm0,DWORD PTR [rsp+SgemmKernelFrame_mask]
+-        vpcmpgtd ymm0,ymm0,YMMWORD PTR [rbp]
++        vpcmpgtd ymm0,ymm0,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm4,ymm0,YMMWORD PTR [rdx]
+         vmaskmovps ymm6,ymm0,YMMWORD PTR [rdx+rax]
+@@ -550,9 +549,8 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Fma3):
+ 
+ .L\Mode\().OutputMasked8x3Block:
+         mov     DWORD PTR [rsp+SgemmKernelFrame_mask],r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vbroadcastss ymm0,DWORD PTR [rsp+SgemmKernelFrame_mask]
+-        vpcmpgtd ymm0,ymm0,YMMWORD PTR [rbp]
++        vpcmpgtd ymm0,ymm0,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm4,ymm0,YMMWORD PTR [rdx]
+         vmaskmovps ymm6,ymm0,YMMWORD PTR [rdx+rax]
+@@ -653,9 +651,8 @@ C_UNDERSCORE(MlasSgemmKernel\Mode\()Fma3):
+ 
+ .L\Mode\().OutputMasked8x1Block:
+         mov     DWORD PTR [rsp+SgemmKernelFrame_mask],r9d
+-        mov     rbp,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vbroadcastss ymm0,DWORD PTR [rsp+SgemmKernelFrame_mask]
+-        vpcmpgtd ymm0,ymm0,YMMWORD PTR [rbp]
++        vpcmpgtd ymm0,ymm0,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+ .ifeqs "\Mode\()","Add"
+         vmaskmovps ymm4,ymm0,YMMWORD PTR [rdx]
+         vfmadd213ps ymm5,ymm2,ymm4
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1Avx.S b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1Avx.S
+index 28fca0e9..f7954fdd 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1Avx.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1Avx.S
+@@ -80,10 +80,9 @@ C_UNDERSCORE(MlasSgemmKernelM1Avx):
+         mov     eax,r8d
+         and     eax,7
+         vmovd   xmm7,eax
+-        mov     rbx,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vshufps xmm7,xmm7,xmm7,0
+-        vpcmpgtd xmm6,xmm7,XMMWORD PTR [rbx+16]
+-        vpcmpgtd xmm7,xmm7,XMMWORD PTR [rbx]
++        vpcmpgtd xmm6,xmm7,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip+16]
++        vpcmpgtd xmm7,xmm7,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vinsertf128 ymm7,ymm7,xmm6,1
+ 
+ //
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1TransposeBAvx.S b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1TransposeBAvx.S
+index 8d5ff17f..7adcd234 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1TransposeBAvx.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SgemmKernelM1TransposeBAvx.S
+@@ -79,10 +79,9 @@ C_UNDERSCORE(MlasSgemmKernelM1TransposeBAvx):
+         mov     eax,ecx
+         and     eax,7
+         vmovd   xmm7,eax
+-        mov     rbx,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+         vshufps xmm7,xmm7,xmm7,0
+-        vpcmpgtd xmm6,xmm7,XMMWORD PTR [rbx+16]
+-        vpcmpgtd xmm7,xmm7,XMMWORD PTR [rbx]
++        vpcmpgtd xmm6,xmm7,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip+16]
++        vpcmpgtd xmm7,xmm7,XMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vinsertf128 ymm7,ymm7,xmm6,1
+ 
+ //
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx.S b/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx.S
+index 87490903..495cba0c 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx.S
+@@ -43,8 +43,8 @@ Implicit Arguments:
+         .macro InitializeKernel PoolingType
+ 
+ .ifeqs "\PoolingType\()","Maximum"
+-        mov     DWORD PTR .LSpoolKernelFrame_BroadcastValue[rsp],0xFF7FFFFF
+-        vbroadcastss ymm5,DWORD PTR .LSpoolKernelFrame_BroadcastValue[rsp]
++        mov     DWORD PTR [.LSpoolKernelFrame_BroadcastValue+rsp],0xFF7FFFFF
++        vbroadcastss ymm5,DWORD PTR [.LSpoolKernelFrame_BroadcastValue+rsp]
+ .else
+         vxorps  xmm5,xmm5,xmm5              # initialize default divisor vector
+ .ifeqs "\PoolingType\()","AverageExcludePad"
+diff --git a/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx512F.S b/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx512F.S
+index 9433ce85..c0ee77d5 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx512F.S
++++ b/onnxruntime/core/mlas/lib/x86_64/SpoolKernelAvx512F.S
+@@ -43,8 +43,8 @@ Implicit Arguments:
+         .macro InitializeKernel PoolingType
+ 
+ .ifeqs "\PoolingType\()","Maximum"
+-        mov     DWORD PTR .LSpoolKernelFrame_BroadcastValue[rsp],0xFF7FFFFF
+-        vbroadcastss zmm5,DWORD PTR .LSpoolKernelFrame_BroadcastValue[rsp]
++        mov     DWORD PTR [.LSpoolKernelFrame_BroadcastValue+rsp],0xFF7FFFFF
++        vbroadcastss zmm5,DWORD PTR [.LSpoolKernelFrame_BroadcastValue+rsp]
+ .else
+         vxorps  xmm5,xmm5,xmm5              # initialize default divisor vector
+ .ifeqs "\PoolingType\()","AverageExcludePad"
+diff --git a/onnxruntime/core/mlas/lib/x86_64/TanhKernelFma3.S b/onnxruntime/core/mlas/lib/x86_64/TanhKernelFma3.S
+index 61bbef5c..5ac0d3ac 100644
+--- a/onnxruntime/core/mlas/lib/x86_64/TanhKernelFma3.S
++++ b/onnxruntime/core/mlas/lib/x86_64/TanhKernelFma3.S
+@@ -72,7 +72,7 @@ Return Value:
+         .globl  C_UNDERSCORE(MlasTanhKernelFma3)
+ C_UNDERSCORE(MlasTanhKernelFma3):
+ 
+-        mov     rax,C_UNDERSCORE(MlasTanhConstants)@GOTPCREL[rip]
++        lea     rax,[C_UNDERSCORE(MlasTanhConstants)+rip]
+         vbroadcastss ymm4,TanhConstants_LowerRange[rax]
+         vbroadcastss ymm5,TanhConstants_UpperRange[rax]
+         vbroadcastss ymm6,TanhConstants_alpha_13[rax]
+@@ -115,10 +115,9 @@ C_UNDERSCORE(MlasTanhKernelFma3):
+ .LProcessRemainingCount:
+         add     rdx,8                           # correct for over-subtract above
+         jz      .LExitKernel
+-        mov     DWORD PTR TanhKernelFrame_CountN[rsp],edx
+-        mov     rcx,QWORD PTR C_UNDERSCORE(MlasMaskMoveAvx)@GOTPCREL[rip]
+-        vbroadcastss ymm2,DWORD PTR TanhKernelFrame_CountN[rsp]
+-        vpcmpgtd ymm2,ymm2,YMMWORD PTR [rcx]
++        mov     DWORD PTR [TanhKernelFrame_CountN+rsp],edx
++        vbroadcastss ymm2,DWORD PTR [TanhKernelFrame_CountN+rsp]
++        vpcmpgtd ymm2,ymm2,YMMWORD PTR [C_UNDERSCORE(MlasMaskMoveAvx)+rip]
+         vmaskmovps ymm0,ymm2,YMMWORD PTR [rdi]
+         vmaxps  ymm0,ymm4,ymm0                  # clamp lower bound
+         vminps  ymm0,ymm5,ymm0                  # clamp upper bound
+diff --git a/tools/ci_build/build.py b/tools/ci_build/build.py
+index 9da8b5d0..2ac25722 100755
+--- a/tools/ci_build/build.py
++++ b/tools/ci_build/build.py
+@@ -318,7 +318,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, cuda_home, cudnn_home
+     cmake_args = [cmake_path, cmake_dir,
+                  "-Donnxruntime_RUN_ONNX_TESTS=" + ("ON" if args.enable_onnx_tests else "OFF"),
+                  "-Donnxruntime_GENERATE_TEST_REPORTS=ON",
+-                 "-Donnxruntime_DEV_MODE=ON",
++                 "-Donnxruntime_DEV_MODE=OFF",
++                 "-Donnxruntime_ENABLE_LTO=OFF",
++                 "-Donnxruntime_BUILD_UNIT_TESTS=OFF",
+                  "-DPYTHON_EXECUTABLE=" + sys.executable,
+                  "-Donnxruntime_USE_CUDA=" + ("ON" if args.use_cuda else "OFF"),
+                  "-Donnxruntime_USE_NSYNC=" + ("OFF" if is_windows() or not args.use_nsync else "ON"),
