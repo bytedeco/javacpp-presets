@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief ONNXIFI extensions to nGraph backend */

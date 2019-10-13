@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -154,6 +157,8 @@ public class Node extends Pointer {
         /** Returns the partial shape for output i */
         public native @Const @ByRef PartialShape get_output_partial_shape(@Cast("size_t") long i);
 
+        public native @SharedPtr @ByVal Node get_output_as_single_output_node(@Cast("size_t") long i,
+                                                                       @Cast("bool") boolean for_get_output_element/*=true*/);
         public native @SharedPtr @ByVal Node get_output_as_single_output_node(@Cast("size_t") long i);
 
         /** Checks that there is exactly one output and returns its shape */
@@ -226,8 +231,14 @@ public class Node extends Pointer {
         public native void set_placement_index(@Cast("size_t") long placement);
         public native void add_provenance_tag(@StdString BytePointer tag);
         public native void add_provenance_tag(@StdString String tag);
+        /** \brief Adds tag_set to this node and all intermediate nodes above base */
         public native void remove_provenance_tag(@StdString BytePointer tag);
         public native void remove_provenance_tag(@StdString String tag);
+        /** \brief Add node to additional nodes that receive tags */
+        public native void add_provenance_group_member(@Const @SharedPtr @ByRef Node node);
+        /** \brief Add all nodes between this node and nodes in base as additional nodes to receive
+         *  provenance tags. */
+        public native @SharedPtr @ByVal Node add_provenance_group_members_above(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector base);
 
         // to be used when nodes are replaced
         public native void merge_provenance_tags_from(@Const @Cast("const ngraph::Node*") @SharedPtr @ByRef Node source);
@@ -236,6 +247,8 @@ public class Node extends Pointer {
         public native @ByVal NodeVector get_users(@Cast("bool") boolean check_is_used/*=false*/);
         public native @ByVal NodeVector get_users();
 
+        /** @return Version of this node */
+        public native @Cast("size_t") long get_version();
         public native @SharedPtr @ByVal Node get_default_value();
         /** Use instance ids for comparison instead of memory addresses to improve determinism */
         public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef Node other);
@@ -247,6 +260,9 @@ public class Node extends Pointer {
         public native @ByVal NodeInputVector inputs();
 
         /** @return A vector containing a handle for each of this node's inputs, in order. */
+
+        /** @return A vector containing the values for each input */
+        public native @ByVal NodeOutputVector input_values();
 
         /** @return A vector containing a handle for each of this node's outputs, in order. */
         // TODO: Rename to get_outputs()?
@@ -260,6 +276,8 @@ public class Node extends Pointer {
 
         /** @return A handle to the {@code input_index}th input of this node.
          *  @throws std::out_of_range if the node does not have at least {@code input_index+1} inputs. */
+
+        public native @ByVal NodeOutput input_value(@Cast("size_t") long input_index);
 
         /** @return A handle to the {@code output_index}th output of this node.
          *  @throws std::out_of_range if the node does not have at least {@code output_index+1} outputs. */

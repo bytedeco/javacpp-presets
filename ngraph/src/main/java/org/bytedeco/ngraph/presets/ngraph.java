@@ -28,6 +28,7 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
+import org.bytedeco.openblas.presets.*;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -35,7 +36,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Properties(target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
+@Properties(inherit = {openblas.class}, target = "org.bytedeco.ngraph", global = "org.bytedeco.ngraph.global.ngraph", value = {@Platform(
     value = {"linux", "macosx"},
     define = {"SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
     compiler = "cpp11",
@@ -91,8 +92,9 @@ import java.lang.annotation.Target;
 //        "core/tensor.hpp",
         "ngraph/frontend/onnx_import/onnx.hpp"
     },
-    preload = {"iomp5", "mklml", "mklml_intel", "mkldnn", "ncurses@.6", "onnxifi"}, preloadresource = "/org/bytedeco/mkldnn/",
-    link = {"ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
+    preload = {"iomp5"}, preloadresource = "/org/bytedeco/mkldnn/",
+    link = {"mkldnn", "ncurses@.6", "onnxifi", "ngraph", "onnxifi-ngraph", "codegen", "tbb@.2", "cpu_backend"}
+//@Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 )})
 public class ngraph implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "ngraph"); }

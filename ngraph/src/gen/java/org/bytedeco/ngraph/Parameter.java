@@ -8,23 +8,35 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief A function parameter.
          * 
-         *  Parameters are nodes that represent the arguments that will be passed to user-defined functions.
-         *  Function creation requires a sequence of parameters.
-         *  Basic graph operations do not need parameters attached to a function. */
+         *  Parameters are nodes that represent the arguments that will be passed to user-defined
+         *  functions. Function creation requires a sequence of parameters. Basic graph operations
+         *  do not need parameters attached to a function. */
         @Namespace("ngraph::op") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class Parameter extends Op {
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameter(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public Parameter(long size) { super((Pointer)null); allocateArray(size); }
+            private native void allocateArray(long size);
+            @Override public Parameter position(long position) {
+                return (Parameter)super.position(position);
+            }
         
             @MemberGetter public static native @StdString BytePointer type_name();
+            public native @StdString BytePointer description();
+            /** \brief Constructions a tensor-typed parameter node. */
             
             ///
-            public native @StdString BytePointer description();
+            public Parameter() { super((Pointer)null); allocate(); }
+            private native void allocate();
             /** \brief Constructions a tensor-typed parameter node.
              * 
              *  @param element_type The element type of the parameter.
@@ -48,4 +60,9 @@ public class Parameter extends Op {
 
             public native @Cast("bool") boolean is_relevant_to_shapes();
             public native void set_is_relevant_to_shapes(@Cast("bool") boolean is_relevant);
+            public native @ByRef PartialShape get_partial_shape();
+            public native void set_partial_shape(@Const @ByRef PartialShape partial_shape);
+
+            public native @Const @ByRef Type get_element_type();
+            public native void set_element_type(@Const @ByRef Type element_type);
         }

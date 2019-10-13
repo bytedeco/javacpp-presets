@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
     /** A user-defined function. */
@@ -115,7 +118,8 @@ public class Function extends Pointer {
         public native @StdString BytePointer get_name();
 
         /** \brief Sets a friendly name for a function. This does not overwrite the unique name
-         *         of the function and is retrieved via get_friendly_name(). Used mainly for debugging.
+         *         of the function and is retrieved via get_friendly_name(). Used mainly for
+         *         debugging.
          *         The friendly name may be set exactly once.
          *  @param name is the friendly name to set */
         public native void set_friendly_name(@StdString BytePointer name);
@@ -145,5 +149,18 @@ public class Function extends Pointer {
         public native void set_placement(@Cast("size_t") long placement);
 
         /** \brief Returns true if any of the op's defined in the function contains partial shape */
+        
+        ///
+        ///
         public native @Cast("bool") boolean is_dynamic();
+
+        /** \brief Replace the {@code parameter_index}th parameter of the function with {@code parameter}.
+         * 
+         *  All users of the {@code parameter_index}th parameter are redirected to {@code parameter}, and the
+         *  {@code parameter_index}th entry in the function parameter list is replaced with {@code parameter}.
+         * 
+         *  @param parameter_index The index of the parameter to replace.
+         *  @param parameter The parameter to substitute for the {@code parameter_index}th parameter. */
+        public native void replace_parameter(@Cast("size_t") long parameter_index,
+                                       @Const @SharedPtr @ByRef Parameter parameter);
     }

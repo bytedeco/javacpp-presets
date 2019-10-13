@@ -1,21 +1,6 @@
-diff -ruN ngraph-0.25.0/CMakeLists.txt ngraph-0.25.0-patch/CMakeLists.txt
---- ngraph-0.25.0/CMakeLists.txt	2019-08-13 12:33:27.000000000 -0500
-+++ ngraph-0.25.0-patch/CMakeLists.txt	2019-10-09 01:39:12.000000000 -0500
-@@ -107,7 +107,10 @@
-             set(XCODE_ISYSROOT ${APPLE_DEV_DIR}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX${OSX_SHORT_VERSION}.sdk)
-             message(STATUS "Trying Xcode sdk at ${XCODE_ISYSROOT}.")
-             if(NOT EXISTS ${XCODE_ISYSROOT})
--                message(FATAL_ERROR "Cannot find macos sdk.")
-+                set(XCODE_ISYSROOT ${APPLE_DEV_DIR}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
-+                if(NOT EXISTS ${XCODE_ISYSROOT})
-+                    message(FATAL_ERROR "Cannot find macos sdk.")
-+                endif()
-             endif()
-         endif()
-         message(STATUS "Setting CMAKE_OSX_SYSROOT for macos ${OSX_SHORT_VERSION} to ${XCODE_ISYSROOT}")
-diff -ruN ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.25.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp
---- ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.cpp	2019-08-13 12:33:27.000000000 -0500
-+++ ngraph-0.25.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp	2019-10-09 01:38:28.000000000 -0500
+diff -ruN ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp
+--- ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.cpp	2019-04-11 03:46:07.000000000 +0900
++++ ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.cpp	2019-04-12 21:02:25.093051724 +0900
 @@ -33,18 +33,10 @@
          {
              namespace error
@@ -80,9 +65,9 @@ diff -ruN ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.cpp ngraph-0.25.0-p
          void register_operator(const std::string& name,
                                 std::int64_t version,
                                 const std::string& domain,
-diff -ruN ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.25.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp
---- ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.hpp	2019-08-13 12:33:27.000000000 -0500
-+++ ngraph-0.25.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp	2019-10-09 01:38:28.000000000 -0500
+diff -ruN ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp
+--- ngraph-0.18.0/src/ngraph/frontend/onnx_import/onnx.hpp	2019-04-11 03:46:07.000000000 +0900
++++ ngraph-0.18.0-patch/src/ngraph/frontend/onnx_import/onnx.hpp	2019-04-12 20:59:22.724355142 +0900
 @@ -73,19 +73,7 @@
          ///                   and providing through this parameters is invalid (the weights from
          ///                   the model  will take precedence).
@@ -104,3 +89,263 @@ diff -ruN ngraph-0.25.0/src/ngraph/frontend/onnx_import/onnx.hpp ngraph-0.25.0-p
  
      } // namespace onnx_import
  
+diff -ruN ngraph-0.22.0/src/ngraph/cpu/mkldnn_utils.hpp ngraph-0.22.0-patch/src/ngraph/runtime/cpu/mkldnn_utils.hpp
+--- ngraph-0.22.0/src/ngraph/runtime/cpu/mkldnn_utils.hpp	2019-06-18 17:55:23.000000000 -0400
++++ ngraph-0.22.0-patch/src/ngraph/runtime/cpu/mkldnn_utils.hpp	2019-06-29 21:45:57.845370074 -0400
+@@ -34,7 +34,7 @@
+             {
+                 extern mkldnn::engine global_cpu_engine;
+ #ifndef _WIN32
+-                extern "C" void mkl_serv_free_buffers();
++
+ #endif
+                 mkldnn::memory::format
+                     CreateNativeDataFormat(const ngraph::runtime::cpu::LayoutDescriptor& layout);
+diff -ruN ngraph-0.22.0/src/ngraph/runtime/cpu/mkldnn_emitter.cpp ngraph-0.22.0-patch/src/runtime/cpu/mkldnn_emitter.cpp	2019-06-18 17:55:23.000000000 -0400
+--- ngraph-0.22.0/src/ngraph/runtime/cpu/mkldnn_emitter.cpp.ORIG	2019-10-10 19:00:12.361505257 -0300
++++ ngraph-0.22.0/src/ngraph/runtime/cpu/mkldnn_emitter.cpp	2019-10-10 19:00:01.945482769 -0300
+@@ -65,7 +65,6 @@
+     // To avoid memory leak in mkldnn, release any buffers that are not free'd yet.
+     // https://software.intel.com/en-us/mkl-linux-developer-guide-avoiding-memory-leaks-in-intel-mkl
+     // mkl_free_buffers() is not exposed at this point, hence using mkl_serv_free_buffers()
+-    mkldnn_utils::mkl_serv_free_buffers();
+ #endif
+ }
+
+diff -ruN ngraph-0.22.0/src/ngraph/runtime/cpu/cpu_kernels.hpp ngraph-0.22.0-patch/src/ngraph/runtime/cpu_kernels.hpp	2019-06-18 17:55:23.000000000 -0400
+--- ngraph-0.22.0/src/ngraph/runtime/cpu/cpu_kernels.hpp	2019-06-18 17:55:23.000000000 -0400
++++ ngraph-0.22.0-patch/src/ngraph/runtime/cpu/cpu_kernels.hpp	2019-06-30 13:49:25.523977737 -0400
+@@ -89,23 +89,6 @@
+                      const float beta,
+                      float* C,
+                      const int64_t ldc);
+-
+-    void cblas_sgemm_batch(const Layout Layout,
+-                           const Transpose* transa_array,
+-                           const Transpose* transb_array,
+-                           const int64_t* m_array,
+-                           const int64_t* n_array,
+-                           const int64_t* k_array,
+-                           const float* alpha_array,
+-                           const float** a_array,
+-                           const int64_t* lda_array,
+-                           const float** b_array,
+-                           const int64_t* ldb_array,
+-                           const float* beta_array,
+-                           float** c_array,
+-                           const int64_t* ldc_array,
+-                           const int64_t group_count,
+-                           const int64_t* group_size);
+     }
+ }
+
+diff -ruN ngraph-0.22.0/src/ngraph/runtime/cpu/builder/matmul_bias.cpp ngraph-0.22.0-patch/src/ngraph/runtime/cpu/builder/matmul_bias.cpp	2019-06-18 17:55:23.000000000 -0400
+--- ngraph-0.22.0/src/ngraph/runtime/cpu/builder/matmul_bias.cpp.ORIGI	2019-10-10 19:00:31.593543245 -0300
++++ ngraph-0.22.0/src/ngraph/runtime/cpu/builder/matmul_bias.cpp	2019-10-10 19:02:08.977670710 -0300
+@@ -198,206 +198,9 @@
+                 functors.emplace_back(functor);
+             }
+ 
+-            struct CblasGemmOptions
+-            {
+-                CblasGemmOptions(size_t& dai, size_t& dbi, size_t& dci)
+-                    : data_a_index(dai)
+-                    , data_b_index(dbi)
+-                    , data_c_index(dci)
+-                {
+-                }
+-
+-                std::vector<cblas::Transpose> transa_array;
+-                std::vector<cblas::Transpose> transb_array;
+-                std::vector<int64_t> m_array;
+-                std::vector<int64_t> n_array;
+-                std::vector<int64_t> k_array;
+-                std::vector<int64_t> lda_array;
+-                std::vector<int64_t> ldb_array;
+-                std::vector<int64_t> ldc_array;
+-                std::vector<int64_t> group_sizes;
+-                std::vector<float> alpha_array;
+-                std::vector<float> beta_array;
+-                size_t offset_a;
+-                size_t offset_b;
+-                size_t offset_c;
+-                size_t data_a_index;
+-                size_t data_b_index;
+-                size_t data_c_index;
+-                int64_t group_count;
+-
+-                void call(CPURuntimeContext* ctx, CPUExecutionContext* ectx)
+-                {
+-                    std::vector<float*> a_array(group_sizes[0]);
+-                    std::vector<float*> b_array(group_sizes[0]);
+-                    std::vector<float*> c_array(group_sizes[0]);
+-
+-                    auto populate_array = [](std::vector<float*>& offsets_vector,
+-                                             void* data,
+-                                             int64_t size,
+-                                             size_t offset) {
+-                        for (size_t i = 0; i < size; ++i)
+-                        {
+-                            offsets_vector.at(i) = static_cast<float*>(data) + (i * offset);
+-                        }
+-                    };
+-
+-                    populate_array(
+-                        a_array, ctx->buffer_data[data_a_index], group_sizes[0], offset_a);
+-                    populate_array(
+-                        b_array, ctx->buffer_data[data_b_index], group_sizes[0], offset_b);
+-                    populate_array(
+-                        c_array, ctx->buffer_data[data_c_index], group_sizes[0], offset_c);
+-
+-                    const float** a = const_cast<const float**>(&a_array[0]);
+-                    const float** b = const_cast<const float**>(&b_array[0]);
+-
+-                    cblas_sgemm_batch(cblas::Layout::RowMajor,
+-                                      &transa_array[0],
+-                                      &transb_array[0],
+-                                      &m_array[0],
+-                                      &n_array[0],
+-                                      &k_array[0],
+-                                      &alpha_array[0],
+-                                      a,
+-                                      &lda_array[0],
+-                                      b,
+-                                      &ldb_array[0],
+-                                      &beta_array[0],
+-                                      &c_array[0],
+-                                      &ldc_array[0],
+-                                      group_count,
+-                                      &group_sizes[0]);
+-                }
+-            };
+-
+-            static CPUKernelFunctor emitCblasSgemmBatch(const Shape& shape_a,
+-                                                        const Shape& shape_b,
+-                                                        const Shape& shape_c,
+-                                                        bool transpose_a,
+-                                                        bool transpose_b,
+-                                                        size_t& data_a_index,
+-                                                        size_t& data_b_index,
+-                                                        size_t& data_c_index,
+-                                                        const float alpha,
+-                                                        const float beta,
+-                                                        size_t group_size)
+-            {
+-                size_t m = shape_a[1];
+-                size_t k = shape_a[2];
+-                size_t n = shape_b[2];
+-                size_t lda = std::max<size_t>(1, k);
+-                size_t ldb = std::max<size_t>(1, n);
+-                cblas::Transpose ctranspose_a = cblas::Transpose::None;
+-                cblas::Transpose ctranspose_b = cblas::Transpose::None;
+-
+-                if (transpose_a)
+-                {
+-                    ctranspose_a = cblas::Transpose::Transpose;
+-                    m = shape_a[2];
+-                    k = shape_a[1];
+-                    lda = std::max<size_t>(1, m);
+-                }
+-                if (transpose_b)
+-                {
+-                    ctranspose_b = cblas::Transpose::Transpose;
+-                    n = shape_b[1];
+-                    ldb = std::max<size_t>(1, k);
+-                }
+-                size_t ldc = std::max<size_t>(1, n);
+-
+-                CblasGemmOptions options(data_a_index, data_b_index, data_c_index);
+-
+-                const size_t offset_a = (shape_a.at(0) > 1) ? m * k : 0;
+-                const size_t offset_b = (shape_b.at(0) > 1) ? k * n : 0;
+-                const size_t offset_c = (shape_c.at(0) > 1) ? m * n : 0;
+-
+-                options.offset_a = offset_a;
+-                options.offset_b = offset_b;
+-                options.offset_c = offset_c;
+-
+-                // if we were to support more groups
+-                const size_t group_count = 1;
+-                options.group_count = group_count;
+-
+-                options.transa_array.push_back(ctranspose_a);
+-                options.transb_array.push_back(ctranspose_b);
+-
+-                options.m_array.push_back(m);
+-                options.n_array.push_back(n);
+-                options.k_array.push_back(k);
+-
+-                options.alpha_array.push_back(alpha);
+-                options.beta_array.push_back(beta);
+-
+-                options.lda_array.push_back(lda);
+-                options.ldb_array.push_back(ldb);
+-                options.ldc_array.push_back(ldc);
+-                options.group_sizes.push_back(group_size);
+-
+-                CPUKernelFunctor cblas_func = [options](CPURuntimeContext* ctx,
+-                                                        CPUExecutionContext* ectx) mutable {
+-                    options.call(ctx, ectx);
+-                };
+-                return cblas_func;
+-            }
+-
+-            static void batchMatMul(CPU_ExternalFunction* external_function,
+-                                    const ngraph::Node* node,
+-                                    const std::vector<TensorViewWrapper>& args,
+-                                    const std::vector<TensorViewWrapper>& out,
+-                                    bool transpose0,
+-                                    bool transpose1)
+-            {
+-                auto& functors = external_function->get_functors();
+-
+-                auto mat_a_index = external_function->get_buffer_index(args[0].get_name());
+-                auto mat_b_index = external_function->get_buffer_index(args[1].get_name());
+-                auto mat_c_index = external_function->get_buffer_index(out[0].get_name());
+-
+-                const auto& shape_a = node->get_input_shape(0);
+-                const auto& shape_b = node->get_input_shape(1);
+-                const auto& shape_c = out[0].get_shape();
+-
+-                const size_t group_size = shape_a.at(0);
+-                auto func = emitCblasSgemmBatch(shape_a,
+-                                                shape_b,
+-                                                shape_c,
+-                                                transpose0,
+-                                                transpose1,
+-                                                mat_a_index,
+-                                                mat_b_index,
+-                                                mat_c_index,
+-                                                1.f,
+-                                                0.f,
+-                                                group_size);
+-
+-                functors.emplace_back(func);
+-            }
+-
+-            template <>
+-            void Builder::BUILDER_DECL(ngraph::op::BatchMatMul)
+-            {
+-                batchMatMul(external_function, node, args, out, false, false);
+-            }
+-
+-            template <>
+-            void Builder::BUILDER_DECL(ngraph::op::BatchMatMulTranspose)
+-            {
+-                const auto* cg = static_cast<const ngraph::op::BatchMatMulTranspose*>(node);
+-                batchMatMul(external_function,
+-                            node,
+-                            args,
+-                            out,
+-                            cg->get_transpose_arg0(),
+-                            cg->get_transpose_arg1());
+-            }
+-
+             void register_builders_matmul_bias_cpp()
+             {
+                 REGISTER_OP_BUILDER(MatmulBias);
+-                REGISTER_OP_BUILDER(BatchMatMul);
+-                REGISTER_OP_BUILDER(BatchMatMulTranspose);
+             }
+         }
+     }

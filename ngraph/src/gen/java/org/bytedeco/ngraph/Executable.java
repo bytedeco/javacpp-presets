@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -75,9 +78,9 @@ public class Executable extends Pointer {
 
     /** \brief Create a vector of output Tensors
      *  @param output_index The index position in the output Result vector. This would be the same
-     *  order of Results passed into the outputs in the call() method.
-     *  @param pipeline_depth The number of stages in the output pipeline. For double-buffered output
-     *  you would specify pipeline_depth=2
+     *                      order of Results passed into the outputs in the call() method.
+     *  @param pipeline_depth The number of stages in the output pipeline. For double-buffered
+     *                        output you would specify pipeline_depth=2
      *  @return A vector of Tensors, one for each stage of the pipeline */
     public native @ByVal TensorVector create_output_tensor(@Cast("size_t") long output_index, @Cast("size_t") long pipeline_depth);
 }

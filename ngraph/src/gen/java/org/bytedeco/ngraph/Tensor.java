@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         @Namespace("ngraph::runtime") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
@@ -76,8 +79,4 @@ public class Tensor extends Pointer {
             /** \brief copy bytes directly from source to this tensor
              *  @param source The source tensor */
             public native void copy_from(@Const @ByRef Tensor source);
-
-            public native @Deprecated void write(@Const Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
-
-            public native @Deprecated void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
         }

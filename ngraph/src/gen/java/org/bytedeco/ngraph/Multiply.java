@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
         /** \brief Elementwise multiplication operation. */
@@ -34,13 +37,13 @@ public class Multiply extends BinaryElementwiseArithmetic {
              * 
              *  @param arg0 Node that produces the first input tensor.
              *  @param arg1 Node that produces the second input tensor.
-             *  @param autob Auto broadcast specification */
+             *  @param auto_broadcast Auto broadcast specification */
             public Multiply(@Const @ByRef NodeOutput arg0,
                                  @Const @ByRef NodeOutput arg1,
-                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob) { super((Pointer)null); allocate(arg0, arg1, autob); }
+                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec auto_broadcast) { super((Pointer)null); allocate(arg0, arg1, auto_broadcast); }
             private native void allocate(@Const @ByRef NodeOutput arg0,
                                  @Const @ByRef NodeOutput arg1,
-                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec autob);
+                                 @Const @ByRef(nullValue = "ngraph::op::AutoBroadcastSpec()") AutoBroadcastSpec auto_broadcast);
             public Multiply(@Const @ByRef NodeOutput arg0,
                                  @Const @ByRef NodeOutput arg1) { super((Pointer)null); allocate(arg0, arg1); }
             private native void allocate(@Const @ByRef NodeOutput arg0,

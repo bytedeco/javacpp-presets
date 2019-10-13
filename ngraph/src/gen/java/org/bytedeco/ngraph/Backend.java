@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -140,7 +143,14 @@ public class Backend extends Pointer {
     /** \brief Returns memory allocator used by backend for device allocations */
     public native Allocator get_device_memory_allocator();
 
-    /** \brief method for each supported backend to determine if the passed pointer is in device pinned memory or not
+    /** \brief method for each supported backend to determine if the passed pointer is in device
+     *         pinned memory or not
      *  @param ptr pointer to the memory to determine if its in device memory or not */
     public native @Cast("bool") boolean is_device_memory(Pointer ptr);
+
+    public native @Cast("bool") boolean executable_can_create_tensors();
+
+    /** \brief Get the version of the backend
+     *  The default value of 0.0.0 is chosen to be a parsable version number */
+    public native @StdString BytePointer get_version();
 }

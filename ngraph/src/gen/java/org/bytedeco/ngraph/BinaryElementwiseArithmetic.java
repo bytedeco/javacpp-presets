@@ -8,14 +8,22 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
-            /** \brief Abstract base class for elementwise binary arithmetic operations, i.e., operations where the same
-             *         scalar binary arithmetic operation is applied to each corresponding pair of elements in the two
-             *         input tensors. Implicit broadcast of input tensors is supported through one of the AutoBroadcast modes
+            // clang-format off
+            /** \brief Abstract base class for elementwise binary arithmetic operations, i.e.,
+             *         operations where the same scalar binary arithmetic operation is applied to
+             *         each corresponding pair of elements in the two input tensors. Implicit
+             *         broadcast of input tensors is supported through one of the AutoBroadcast
+             *         modes.
              * 
-             *  For example, if the underlying arithmetic operation (determined by the subclass) is {@code \mathit{op}(x,y)}, the input tensors
-             *  {@code [[x_0,y_0],[z_0,w_0]]} and {@code [[x_1,y_1],[z_1,w_1]]} will be mapped to {@code [[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]}.
+             *  For example, if the underlying arithmetic operation (determined by the subclass) is
+             *  {@code \mathit{op}(x,y)}, the input tensors
+             *  {@code [[x_0,y_0],[z_0,w_0]]} and {@code [[x_1,y_1],[z_1,w_1]]} will be mapped to
+             *  {@code [[\mathit{op}(x_0,x_1),\mathit{op}(y_0,y_1)],[\mathit{op}(z_0,z_1),\mathit{op}(w_0,w_1)]]}.
              * 
              *  ## Inputs
              * 
@@ -27,9 +35,10 @@ import static org.bytedeco.ngraph.global.ngraph.*;
              * 
              *  ## Output
              * 
-             *  | Type                   | Description                                                                                                                                                                                            |
-             *  | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+             *  | Type                   | Description                                                                                                                                                                                                                      |
+             *  | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
              *  | {@code N[d_1,\dots,d_n]} | The tensor {@code T}, where {@code T[i_1,\dots,i_n] = \mathit{op}(\texttt{arg0}[i_1,\dots,i_n],\texttt{arg1}[i_1,\dots,i_n])}. This will always have the same shape and element type as the input tensors (after auto broadcasting). | */
+            // clang-format on
             @Namespace("ngraph::op::util") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class BinaryElementwiseArithmetic extends Op {
                 static { Loader.load(); }

@@ -8,6 +8,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.openblas.global.openblas_nolapack.*;
+import static org.bytedeco.openblas.global.openblas.*;
+
 import static org.bytedeco.ngraph.global.ngraph.*;
 
 
@@ -95,4 +98,7 @@ public class Type extends Pointer {
              *            merge(dst,t1,t2) where t1, t2 both static and unequal
              *               does nothing to dst, and returns false */
             public static native @Cast("bool") boolean merge(@ByRef Type dst, @Const @ByRef Type t1, @Const @ByRef Type t2);
+
+            // \brief This allows switch(element_type)
+            public native @Cast("ngraph::element::Type_t") @Name("operator ngraph::element::Type_t") int asInt();
         }

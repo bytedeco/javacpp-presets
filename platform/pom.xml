@@ -243,7 +243,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>ngraph-platform</artifactId>
-      <version>0.25.0-${project.version}</version>
+      <version>0.26.0-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
