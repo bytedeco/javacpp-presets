@@ -65,7 +65,7 @@ $CMAKE -DCMAKE_INSTALL_PREFIX=$INSTALL_PATH -DCMAKE_INSTALL_LIBDIR=lib -DNGRAPH_
 make -j $MAKEJ
 make install/strip
 
-cp onnx/bin/libonnxifi.so ../lib/
+cp onnx/bin/libonnxifi.* ../lib/
 cp onnx/src/onnx/onnxifi.h ../include/ngraph/frontend/onnxifi/
 sedinplace  's/#include <onnxifi.h>/#include "onnxifi.h"/g' ../include/ngraph/frontend/onnxifi/backend_manager.hpp
 sedinplace  's/#include <onnx\/onnxifi.h>/#include "onnxifi.h"/g' ../include/ngraph/frontend/onnxifi/backend_manager.hpp
