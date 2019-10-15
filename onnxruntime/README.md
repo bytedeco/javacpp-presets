@@ -195,10 +195,10 @@ public class CApiSample {
       OrtReleaseAllocatorInfo(allocator_info);
 
       // score model & input tensor, get back output tensor
-      PointerPointer<OrtValue> input_tensor_array = new PointerPointer<OrtValue>(1).put(input_tensor);
-      PointerPointer<OrtValue> output_tensor_array = new PointerPointer<OrtValue>(5);
-      CheckStatus(OrtRun(session, null, input_node_names, input_tensor_array, 1, output_node_names, 1, output_tensor_array));
-      OrtValue output_tensor = output_tensor_array.get(OrtValue.class);
+      PointerPointer<OrtValue> input_tensors = new PointerPointer<OrtValue>(1).put(input_tensor);
+      PointerPointer<OrtValue> output_tensors = new PointerPointer<OrtValue>(1);
+      CheckStatus(OrtRun(session, null, input_node_names, input_tensors, 1, output_node_names, 1, output_tensors));
+      OrtValue output_tensor = output_tensors.get(OrtValue.class);
       CheckStatus(OrtIsTensor(output_tensor, is_tensor));
       assert is_tensor[0] != 0;
 
@@ -218,7 +218,6 @@ public class CApiSample {
       // Score for class[3] = 0.001180
       // Score for class[4] = 0.001317
 
-      input_tensor_values.deallocate();
       OrtReleaseValue(output_tensor);
       OrtReleaseValue(input_tensor);
       OrtReleaseSession(session);

@@ -33,6 +33,14 @@ mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
+if [[ -f "lib/libmxnet.so" ]]; then
+    echo libmxnet.so already exists!
+    return 0
+elif [[ -f "lib/libmxnet.dll" ]]; then
+    echo libmxnet.dll already exists!
+    return 0
+fi
+
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 
