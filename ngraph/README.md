@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * nGraph 0.25.0  https://ai.intel.com/intel-ngraph/
+ * nGraph 0.26.0  https://ai.intel.com/intel-ngraph/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>ngraph-platform</artifactId>
-            <version>0.25.0-1.5.2-SNAPSHOT</version>
+            <version>0.26.0-1.5.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -104,9 +104,9 @@ public class ABC {
         float[] v_b = {7, 8, 9, 10, 11, 12};
         float[] v_c = {1, 0, -1, -1, 1, 2};
 
-        t_a.write(new FloatPointer(v_a), 0, v_a.length * 4);
-        t_b.write(new FloatPointer(v_b), 0, v_b.length * 4);
-        t_c.write(new FloatPointer(v_c), 0, v_c.length * 4);
+        t_a.write(new FloatPointer(v_a), v_a.length * 4);
+        t_b.write(new FloatPointer(v_b), v_b.length * 4);
+        t_c.write(new FloatPointer(v_c), v_c.length * 4);
 
         // Invoke the function
         Executable exec = backend.compile(f);
@@ -115,7 +115,7 @@ public class ABC {
         // Get the result
         float[] r = new float[2 * 3];
         FloatPointer p = new FloatPointer(r);
-        t_result.read(p, 0, r.length * 4);
+        t_result.read(p, r.length * 4);
         p.get(r);
 
         System.out.println("[");

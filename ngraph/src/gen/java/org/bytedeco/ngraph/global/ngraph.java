@@ -160,6 +160,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include <string>
 // #include <vector>
 
+// #include "ngraph/deprecated.hpp"
 // #include "ngraph/except.hpp"
 // #include "ngraph/ngraph_visibility.hpp"
 // #include "ngraph/type/bfloat16.hpp"
@@ -200,31 +201,31 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u32();
         @Namespace("ngraph::element") @MemberGetter public static native @Const @ByRef Type u64();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<char>") Type fromChar();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<char>") Type fromChar();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<bool>") Type fromBool();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<bool>") Type fromBool();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<float>") Type fromFloat();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<float>") Type fromFloat();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<double>") Type fromDouble();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<double>") Type fromDouble();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int8_t>") Type fromInt8t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<int8_t>") Type fromInt8t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int16_t>") Type fromInt16t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<int16_t>") Type fromInt16t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int32_t>") Type fromInt32t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<int32_t>") Type fromInt32t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<int64_t>") Type fromInt64t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<int64_t>") Type fromInt64t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint8_t>") Type fromUInt8t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<uint8_t>") Type fromUInt8t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint16_t>") Type fromUInt16t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<uint16_t>") Type fromUInt16t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint32_t>") Type fromUInt32t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<uint32_t>") Type fromUInt32t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<uint64_t>") Type fromUInt64t();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<uint64_t>") Type fromUInt64t();
 
-        @Namespace("ngraph::element") public static native @Const @ByRef @Name("from<ngraph::bfloat16>") Type fromNGraphBFloat16();
+        @Namespace("ngraph::element") public static native @ByVal @Name("from<ngraph::bfloat16>") Type fromNGraphBFloat16();
         
 
         @Namespace("ngraph::element") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Type obj);
@@ -1014,6 +1015,7 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
     @Namespace("ngraph") public static native @Const @ByRef NodeVector check_single_output_args(@Const @ByRef NodeVector args);
 
     @Namespace("ngraph") public static native @ByVal @Cast("ngraph::OutputVector*") NodeOutputVector as_output_vector(@Const @ByRef NodeVector args);
+    @Namespace("ngraph") public static native @ByVal NodeVector as_node_vector(@Cast("const ngraph::OutputVector*") @ByRef NodeOutputVector values);
 
     /** Alias useful for cloning */
 // Targeting ../Node.java
@@ -1025,6 +1027,10 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // Targeting ../NodeOutput.java
 
 
+
+    
+
+    
 
     
 
@@ -1178,7 +1184,6 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
 // #include "ngraph/coordinate_diff.hpp"
 // #include "ngraph/node.hpp"
 // #include "ngraph/runtime/aligned_buffer.hpp"
-// #include "ngraph/type/bfloat16.hpp"
 // #include "ngraph/type/element_type.hpp"
 // #include "ngraph/util.hpp"
 // Targeting ../Constant.java
@@ -1270,6 +1275,14 @@ public class ngraph extends org.bytedeco.ngraph.presets.ngraph {
         public static final int
             NONE = 0,
             NUMPY = 1;
+
+        /** \brief Specifies how eps is combined with L2 value */
+        /** enum class ngraph::op::EpsMode */
+        public static final int
+            // Add bias to norm
+            ADD = 0,
+            // Calculate max of norm and bias
+            MAX = 1;
 // Targeting ../AutoBroadcastSpec.java
 
 

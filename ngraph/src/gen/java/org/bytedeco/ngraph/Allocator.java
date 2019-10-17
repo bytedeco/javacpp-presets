@@ -20,7 +20,8 @@ public class Allocator extends Pointer {
 
     /** \brief allocates memory with the given size and alignment requirement
      *  @param size exact size of bytes to allocate
-     *  @param alignment specifies the alignment. Must be a valid alignment supported by the implementation. */
+     *  @param alignment specifies the alignment. Must be a valid alignment supported by the
+     *                   implementation. */
     public native Pointer malloc(@Cast("size_t") long size, @Cast("size_t") long alignment);
 
     /** \brief deallocates the memory pointed by ptr
