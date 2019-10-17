@@ -76,8 +76,4 @@ public class Tensor extends Pointer {
             /** \brief copy bytes directly from source to this tensor
              *  @param source The source tensor */
             public native void copy_from(@Const @ByRef Tensor source);
-
-            public native @Deprecated void write(@Const Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
-
-            public native @Deprecated void read(Pointer p, @Cast("size_t") long offset, @Cast("size_t") long n);
         }

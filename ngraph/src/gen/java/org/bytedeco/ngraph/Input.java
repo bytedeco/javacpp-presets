@@ -46,11 +46,13 @@ public class Input extends Pointer {
             /** @return the tensor of the connected output */
             public native @ByRef DescriptorTensor get_tensor();
 
-            /** \brief Replace the current output that supplies a value for this input with output i of node */
+            /** \brief Replace the current output that supplies a value for this input with output i
+             *         of node */
             public native void replace_output(@SharedPtr @ByVal Node node, @Cast("size_t") long i);
             /** \brief Replace the current output that supplies a value for this input with output */
             public native void replace_output(@ByRef Output output);
-            /** \brief Remove the output from this input. The node will not be valid until another output is supplied. */
+            /** \brief Remove the output from this input. The node will not be valid until another
+             *         output is supplied. */
             
             ///
             public native void remove_output();

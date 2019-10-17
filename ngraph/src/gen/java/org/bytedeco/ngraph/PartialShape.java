@@ -19,7 +19,7 @@ import static org.bytedeco.ngraph.global.ngraph.*;
      *  \li Dynamic rank. (Informal notation: {@code ?})
      *  \li Static rank, but dynamic dimensions on some or all axes.
      *      (Informal notation examples: {@code {1,2,?,4}}, {@code {?,?,?}})
-     *  \li Static rank, and dynamic dimensions on all axes.
+     *  \li Static rank, and static dimensions on all axes.
      *      (Informal notation examples: {@code {1,2,3,4}}, {@code {6}}, {@code {}}) */
     @Namespace("ngraph") @NoOffset @Properties(inherit = org.bytedeco.ngraph.presets.ngraph.class)
 public class PartialShape extends Pointer {
