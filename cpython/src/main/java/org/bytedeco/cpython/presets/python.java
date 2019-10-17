@@ -280,7 +280,7 @@ public class python implements LoadEnabled, InfoMapper {
                              "__PyCodeExtraState::co_extra_freefuncs", "_PyDict_NewKeysForClass", "_PyDictView_New",
                              "_PyDict_KeysSize", "_PyDict_SizeOf", "_PyDict_Pop_KnownHash", "_PyDict_FromKeys",
                              "_PyObjectDict_SetItem", "_PyDict_LoadGlobal", "__PyCodeExtraState_Get",
-                             "_Py_asdl_seq_new", "_Py_asdl_int_seq_new").skip())
+                             "_Py_asdl_seq_new", "_Py_asdl_int_seq_new", "_PyTime_MIN", "_PyTime_MAX").skip())
 
                .put(new Info("mod_ty").valueTypes("_mod").pointerTypes("@ByPtrPtr _mod"))
                .put(new Info("stmt_ty").valueTypes("_stmt").pointerTypes("@ByPtrPtr _stmt"))

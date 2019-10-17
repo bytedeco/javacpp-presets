@@ -193,12 +193,12 @@ public static final int PY_RELEASE_LEVEL_FINAL =  0xF;     /* Serial should be 0
 /*--start constants--*/
 public static final int PY_MAJOR_VERSION =        3;
 public static final int PY_MINOR_VERSION =        7;
-public static final int PY_MICRO_VERSION =        4;
+public static final int PY_MICRO_VERSION =        5;
 public static final int PY_RELEASE_LEVEL =        PY_RELEASE_LEVEL_FINAL;
 public static final int PY_RELEASE_SERIAL =       0;
 
 /* Version as a string */
-public static final String PY_VERSION =              "3.7.4";
+public static final String PY_VERSION =              "3.7.5";
 /*--end constants--*/
 
 /* Version as a single 4-byte hex number, e.g. 0x010502B2 == 1.5.2b2.
@@ -755,9 +755,9 @@ public static final int HAVE_KILLPG = 1;
 public static final int HAVE_LANGINFO_H = 1;
 
 /* Defined to enable large file support when an off_t is bigger than a long
-   and long long is available and at least as big as an off_t. You may need to
-   add some flags for configuration and compilation to enable this mode. (For
-   Solaris and Linux, the necessary defines are already defined.) */
+   and long long is at least as big as an off_t. You may need to add some
+   flags for configuration and compilation to enable this mode. (For Solaris
+   and Linux, the necessary defines are already defined.) */
 /* #undef HAVE_LARGEFILE_SUPPORT */
 
 /* Define to 1 if you have the 'lchflags' function. */
@@ -2204,7 +2204,7 @@ public static final int S_IFLNK = 0120000;
 //         }
 //     } while(0)
 
-/* Py_SET_ERANGE_ON_OVERFLOW(x)
+/* Py_SET_ERANGE_IF_OVERFLOW(x)
  * An alias of Py_SET_ERRNO_ON_MATH_ERROR for backward-compatibility.
  */
 // #define Py_SET_ERANGE_IF_OVERFLOW(X) Py_SET_ERRNO_ON_MATH_ERROR(X)
@@ -2921,10 +2921,8 @@ functions and constants
 /* _PyTime_t: Python timestamp with subsecond precision. It can be used to
    store a duration, and so indirectly a date (related to another date, like
    UNIX epoch). */
-public static native @MemberGetter long _PyTime_MIN();
-public static final long _PyTime_MIN = _PyTime_MIN();
-public static native @MemberGetter long _PyTime_MAX();
-public static final long _PyTime_MAX = _PyTime_MAX();
+// #define _PyTime_MIN INT64_MIN
+// #define _PyTime_MAX INT64_MAX
 
 /** enum _PyTime_round_t */
 public static final int

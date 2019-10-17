@@ -1,7 +1,7 @@
 
  * Add `linux-armhf` and `linux-arm64` builds for HDF5 ([issue #794](https://github.com/bytedeco/javacpp-presets/issues/794))
  * Add build for Mac OS X to presets for nGraph ([issue #799](https://github.com/bytedeco/javacpp-presets/issues/799))
- * Update presets for Visual Studio 2017
+ * Update presets for Visual Studio 2017 on Windows
  * Bundle the `opencv_annotation`, `opencv_interactive-calibration`, `opencv_version`, `opencv_visualisation`, and `tesseract` programs
  * Add `linux-armhf`, `linux-arm64`, `linux-ppc64le`, and `windows-x86` builds for CPython, NumPy, and LLVM ([pull #768](https://github.com/bytedeco/javacpp-presets/pull/768))
  * Include `audio_ops.h`, `list_ops.h`, `lookup_ops.h`, and `manip_ops.h` for TensorFlow
@@ -9,10 +9,10 @@
  * Add packages missing from TensorFlow ([issue #773](https://github.com/bytedeco/javacpp-presets/issues/773))
  * Fix JPMS module names for OpenBLAS and Tesseract ([issue #772](https://github.com/bytedeco/javacpp-presets/issues/772))
  * Include `env.h`, `kernels.h`, and `ops.h` to allow creating custom operations using the C API of TensorFlow
- * Add profiles to parent `pom.xml` to detect host and use its artifacts: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
+ * Add profiles to parent `pom.xml` to detect host and use its artifacts, for example: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
  * Add presets for librealsense2 2.29.0, DNNL 1.1, ONNX Runtime 0.5.0
- * Upgrade presets for OpenCV 4.1.1, FFmpeg 4.2.1, librealsense 1.12.4, MKL 2019.5, MKL-DNN 0.21.2, OpenBLAS 0.3.7, GSL 2.6, CPython 3.7.4, NumPy 1.17.2, LLVM 9.0.0, CUDA 10.1 Update 2, cuDNN 7.6.2, NCCL 2.4.8, MXNet 1.5.1, TensorFlow 1.15.0-rc3, TensorRT 6.0, ONNX 1.6.0 (pull #795), nGraph 0.26.0, Qt 5.13.1, cpu_features 0.4.1, and their dependencies
+ * Upgrade presets for OpenCV 4.1.1, FFmpeg 4.2.1, librealsense 1.12.4, MKL 2019.5, MKL-DNN 0.21.2, OpenBLAS 0.3.7, GSL 2.6, CPython 3.7.5, NumPy 1.17.2, LLVM 9.0.0, CUDA 10.1 Update 2, cuDNN 7.6.2, NCCL 2.4.8, MXNet 1.5.1, TensorFlow 1.15.0, TensorRT 6.0, ONNX 1.6.0 (pull #795), nGraph 0.26.0, Qt 5.13.1, cpu_features 0.4.1, and their dependencies
 
 ### July 9, 2019 version 1.5.1
  * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))
