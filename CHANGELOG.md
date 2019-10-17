@@ -1,4 +1,6 @@
 
+ * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
+ * Fix mapping of `warpAffine` and `warpPerspective` from `opencv_cudawarping` ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
  * Add `linux-armhf` and `linux-arm64` builds for HDF5 ([issue #794](https://github.com/bytedeco/javacpp-presets/issues/794))
  * Add build for Mac OS X to presets for nGraph ([issue #799](https://github.com/bytedeco/javacpp-presets/issues/799))
  * Update presets for Visual Studio 2017 on Windows

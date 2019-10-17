@@ -157,15 +157,9 @@ INTER_NEAREST , INTER_LINEAR , and INTER_CUBIC interpolation methods are support
 <p>
 @see warpAffine
  */
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
-    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
-    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize);
+@Namespace("cv::cuda") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize);
 
 /** \brief Builds transformation maps for affine transformation.
 <p>
@@ -201,15 +195,9 @@ INTER_NEAREST , INTER_LINEAR , and INTER_CUBIC interpolation methods are support
 <p>
 @see warpPerspective
  */
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
+@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
     int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
-    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal UMat src, @ByVal UMat dst, @ByVal UMat M, @ByVal Size dsize);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,
-    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = "cv::Scalar()") Scalar borderValue, @ByRef(nullValue = "cv::cuda::Stream::Null()") Stream stream);
-@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal GpuMat M, @ByVal Size dsize);
+@Namespace("cv::cuda") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize);
 
 /** \brief Builds transformation maps for perspective transformation.
 <p>
