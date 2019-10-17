@@ -128,7 +128,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.7.4  https://www.python.org/downloads/
+ * CPython 3.7.5  https://www.python.org/downloads/
  * NumPy 1.17.x  https://github.com/numpy/numpy
  * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal

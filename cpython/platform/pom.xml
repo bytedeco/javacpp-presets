@@ -17,7 +17,7 @@
 
   <properties>
     <javacpp.moduleId>cpython</javacpp.moduleId>
-    <revision>3.7.4-${project.parent.version}</revision>
+    <revision>3.7.5-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

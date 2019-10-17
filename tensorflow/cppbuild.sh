@@ -45,7 +45,7 @@ export TF_SET_ANDROID_WORKSPACE=0
 export TF_IGNORE_MAX_BAZEL_VERSION=1
 export TF_CONFIGURE_IOS=0
 
-TENSORFLOW_VERSION=1.15.0-rc3
+TENSORFLOW_VERSION=1.15.0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
