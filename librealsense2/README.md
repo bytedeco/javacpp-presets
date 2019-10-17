@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * librealsense2 2.25.0  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.29.0  https://github.com/IntelRealSense/librealsense
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -15,6 +15,8 @@ Documentation
 Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/librealsense2/apidocs/
+
+&lowast; Bindings are currently available only for the C API of librealsense2.
 
 
 Sample Usage
@@ -42,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>librealsense2-platform</artifactId>
-            <version>2.25.0-1.5.2-SNAPSHOT</version>
+            <version>2.29.0-1.5.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
