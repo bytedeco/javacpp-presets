@@ -169,7 +169,9 @@ public static final int
     RS2_EXTENSION_GLOBAL_TIMER = 36,
     RS2_EXTENSION_UPDATABLE = 37,
     RS2_EXTENSION_UPDATE_DEVICE = 38,
-    RS2_EXTENSION_COUNT = 39;
+    RS2_EXTENSION_L500_DEPTH_SENSOR = 39,
+    RS2_EXTENSION_TM2_SENSOR = 40,
+    RS2_EXTENSION_COUNT = 41;
 public static native @Cast("const char*") BytePointer rs2_extension_type_to_string(@Cast("rs2_extension") int type);
 public static native @Cast("const char*") BytePointer rs2_extension_to_string(@Cast("rs2_extension") int type);
 
@@ -652,6 +654,23 @@ public static native void rs2_connect_tm2_controller(@Const rs2_device device, @
 public static native void rs2_disconnect_tm2_controller(@Const rs2_device device, int id, @Cast("rs2_error**") PointerPointer error);
 public static native void rs2_disconnect_tm2_controller(@Const rs2_device device, int id, @ByPtrPtr rs2_error error);
 
+
+/** 
+* Reset device to factory calibration
+* @param device [in]       The RealSense device
+* @param error [out]       If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_reset_to_factory_calibration(@Const rs2_device device, @Cast("rs2_error**") PointerPointer e);
+public static native void rs2_reset_to_factory_calibration(@Const rs2_device device, @ByPtrPtr rs2_error e);
+
+/**
+* Write calibration to device's EEPROM
+* @param device [in]       The RealSense device
+* @param error [out]       If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_write_calibration(@Const rs2_device device, @Cast("rs2_error**") PointerPointer e);
+public static native void rs2_write_calibration(@Const rs2_device device, @ByPtrPtr rs2_error e);
+
 /**
 * Update device to the provided firmware, the device must be extendable to RS2_EXTENSION_UPDATABLE.
 * This call is executed on the caller's thread and it supports progress notifications via the optional callback.
@@ -697,6 +716,39 @@ public static native @Const rs2_raw_data_buffer rs2_create_flash_backup_cpp(@Con
 */
 public static native @Const rs2_raw_data_buffer rs2_create_flash_backup(@Const rs2_device device, rs2_update_progress_callback_ptr callback, Pointer client_data, @Cast("rs2_error**") PointerPointer error);
 public static native @Const rs2_raw_data_buffer rs2_create_flash_backup(@Const rs2_device device, rs2_update_progress_callback_ptr callback, Pointer client_data, @ByPtrPtr rs2_error error);
+
+public static final int RS2_UNSIGNED_UPDATE_MODE_UPDATE =     0;
+public static final int RS2_UNSIGNED_UPDATE_MODE_READ_ONLY =  1;
+public static final int RS2_UNSIGNED_UPDATE_MODE_FULL =       2;
+
+/**
+* Update device to the provided firmware by writing raw data directly to the flash, this command can be executed only on unlocked camera.
+* The device must be extendable to RS2_EXTENSION_UPDATABLE.
+* This call is executed on the caller's thread and it supports progress notifications via the optional callback.
+* @param device [in]        Device to update
+* @param fw_image [in]      Firmware image buffer
+* @param fw_image_size [in] Firmware image buffer size
+* @param callback [in]      Optional callback for update progress notifications, the progress value is normailzed to 1
+* @param update_mode [in]   Select one of RS2_UNSIGNED_UPDATE_MODE, WARNING!!! setting to any option other than RS2_UNSIGNED_UPDATE_MODE_UPDATE will make this call unsafe and might damage the camera
+* @param error [out]         If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_update_firmware_unsigned_cpp(@Const rs2_device device, @Const Pointer fw_image, int fw_image_size, rs2_update_progress_callback callback, int update_mode, @Cast("rs2_error**") PointerPointer error);
+public static native void rs2_update_firmware_unsigned_cpp(@Const rs2_device device, @Const Pointer fw_image, int fw_image_size, rs2_update_progress_callback callback, int update_mode, @ByPtrPtr rs2_error error);
+
+/**
+* Update device to the provided firmware by writing raw data directly to the flash, this command can be executed only on unlocked camera.
+* The device must be extendable to RS2_EXTENSION_UPDATABLE.
+* This call is executed on the caller's thread and it supports progress notifications via the optional callback.
+* @param device [in]        Device to update
+* @param fw_image [in]      Firmware image buffer
+* @param fw_image_size [in] Firmware image buffer size
+* @param callback [in]      Optional callback for update progress notifications, the progress value is normailzed to 1
+* @param client_data [in]   Optional client data for the callback
+* @param update_mode [in]   Select one of RS2_UNSIGNED_UPDATE_MODE, WARNING!!! setting to any option other than RS2_UNSIGNED_UPDATE_MODE_UPDATE will make this call unsafe and might damage the camera
+* @param error [out]         If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_update_firmware_unsigned(@Const rs2_device device, @Const Pointer fw_image, int fw_image_size, rs2_update_progress_callback_ptr callback, Pointer client_data, int update_mode, @Cast("rs2_error**") PointerPointer error);
+public static native void rs2_update_firmware_unsigned(@Const rs2_device device, @Const Pointer fw_image, int fw_image_size, rs2_update_progress_callback_ptr callback, Pointer client_data, int update_mode, @ByPtrPtr rs2_error error);
 
 /**
 * Enter the device to update state, this will cause the updatable device to disconnect and reconnect as update device.
@@ -865,6 +917,15 @@ public static native rs2_sensor rs2_get_frame_sensor(@Const rs2_frame frame, @By
 */
 public static native @Cast("unsigned long long") long rs2_get_frame_number(@Const rs2_frame frame, @Cast("rs2_error**") PointerPointer error);
 public static native @Cast("unsigned long long") long rs2_get_frame_number(@Const rs2_frame frame, @ByPtrPtr rs2_error error);
+
+/**
+* retrieve data size from frame handle
+* @param frame [in]      handle returned from a callback
+* @param error [out]     if non-null, receives any error that occurs during this call, otherwise, errors are ignored
+* @return               the size of the frame data
+*/
+public static native int rs2_get_frame_data_size(@Const rs2_frame frame, @Cast("rs2_error**") PointerPointer error);
+public static native int rs2_get_frame_data_size(@Const rs2_frame frame, @ByPtrPtr rs2_error error);
 
 /**
 * retrieve data from frame handle
@@ -1224,8 +1285,10 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
         RS2_OPTION_ENABLE_POSE_JUMPING = 57,
         /** Enable dynamic calibration */
         RS2_OPTION_ENABLE_DYNAMIC_CALIBRATION = 58,
+        /** Offset from sensor to depth origin in millimetrers*/
+        RS2_OPTION_DEPTH_OFFSET = 59,
         /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
-        RS2_OPTION_COUNT = 59;
+        RS2_OPTION_COUNT = 60;
 
     // This function is being deprecated. For existing options it will return option name, but for future API additions the user should call rs2_get_option_name instead.
     public static native @Cast("const char*") BytePointer rs2_option_to_string(@Cast("rs2_option") int option);
@@ -1964,8 +2027,10 @@ public static final int
     RS2_CAMERA_INFO_PRODUCT_LINE = 10,
     /** ASIC serial number */
     RS2_CAMERA_INFO_ASIC_SERIAL_NUMBER = 11,
+    /** Firmware update ID */
+    RS2_CAMERA_INFO_FIRMWARE_UPDATE_ID = 12,
     /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
-    RS2_CAMERA_INFO_COUNT = 12;
+    RS2_CAMERA_INFO_COUNT = 13;
 public static native @Cast("const char*") BytePointer rs2_camera_info_to_string(@Cast("rs2_camera_info") int info);
 
 /** \brief Streams are different types of data provided by RealSense devices. */
@@ -2040,8 +2105,10 @@ public static final int
     RS2_FORMAT_Y10BPACK = 20,
     /** 32-bit float-point depth distance value.  */
     RS2_FORMAT_DISTANCE = 21,
+    /** Bitstream encoding for video in which an image of each frame is encoded as JPEG-DIB   */
+    RS2_FORMAT_MJPEG = 22,
     /** Number of enumeration values. Not a valid input: intended to be used in for-loops. */
-    RS2_FORMAT_COUNT = 22;
+    RS2_FORMAT_COUNT = 23;
 public static native @Cast("const char*") BytePointer rs2_format_to_string(@Cast("rs2_format") int format);
 // Targeting ../rs2_extrinsics.java
 
@@ -2349,6 +2416,22 @@ public static native rs2_stream_profile rs2_clone_stream_profile(@Const rs2_stre
 public static native rs2_stream_profile rs2_clone_stream_profile(@Const rs2_stream_profile mode, @Cast("rs2_stream") int stream, int index, @Cast("rs2_format") int format, @ByPtrPtr rs2_error error);
 
 /**
+* Creates a copy of stream profile, assigning new values to some of the fields
+* @param mode [in]        input stream profile
+* @param stream [in]      stream type for the profile
+* @param format [in]      binary data format of the profile
+* @param width [in]       new width for the profile
+* @param height [in]      new height for the profile
+* @param intr [in]        new intrinsics for the profile
+* @param index [in]       stream index the profile in case there are multiple streams of the same type
+* @param error [out]      if non-null, receives any error that occurs during this call, otherwise, errors are ignored
+* @return                new stream profile, must be deleted by rs2_delete_stream_profile
+*/
+public static native rs2_stream_profile rs2_clone_video_stream_profile(@Const rs2_stream_profile mode, @Cast("rs2_stream") int stream, int index, @Cast("rs2_format") int format, int width, int height, @Const rs2_intrinsics intr, @Cast("rs2_error**") PointerPointer error);
+public static native rs2_stream_profile rs2_clone_video_stream_profile(@Const rs2_stream_profile mode, @Cast("rs2_stream") int stream, int index, @Cast("rs2_format") int format, int width, int height, @Const rs2_intrinsics intr, @ByPtrPtr rs2_error error);
+
+
+/**
 * Delete stream profile allocated by rs2_clone_stream_profile
 * Should not be called on stream profiles returned by the device
 * @param mode [in]        input stream profile
@@ -2550,6 +2633,39 @@ public static native int rs2_send_wheel_odometry(@Const rs2_sensor sensor, @Cast
     @Const @ByVal rs2_vector translational_velocity, @Cast("rs2_error**") PointerPointer error);
 public static native int rs2_send_wheel_odometry(@Const rs2_sensor sensor, @Cast("char") byte wo_sensor_id, @Cast("unsigned int") int frame_num,
     @Const @ByVal rs2_vector translational_velocity, @ByPtrPtr rs2_error error);
+
+/**
+* Set intrinsics of a given sensor
+* @param sensor [in]       The RealSense device
+* @param profile [in]      Target stream profile
+* @param intrinsics [in]   Intrinsics value to be written to the device
+* @param error [out]       If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_set_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_intrinsics intrinsics, @Cast("rs2_error**") PointerPointer error);
+public static native void rs2_set_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_intrinsics intrinsics, @ByPtrPtr rs2_error error);
+
+/**
+ * Set extrinsics between two sensors
+ * @param from_sensor [in]  Origin sensor
+ * @param from_profile [in] Origin profile
+ * @param to_sensor [in]    Target sensor
+ * @param to_profile [in]   Target profile
+ * @param extrinsics [out]   Extrinsics from origin to target
+ * @param error [out]        If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+ */
+public static native void rs2_set_extrinsics(@Const rs2_sensor from_sensor, @Const rs2_stream_profile from_profile, rs2_sensor to_sensor, @Const rs2_stream_profile to_profile, @Const rs2_extrinsics extrinsics, @Cast("rs2_error**") PointerPointer error);
+public static native void rs2_set_extrinsics(@Const rs2_sensor from_sensor, @Const rs2_stream_profile from_profile, rs2_sensor to_sensor, @Const rs2_stream_profile to_profile, @Const rs2_extrinsics extrinsics, @ByPtrPtr rs2_error error);
+
+/**
+* Set motion device intrinsics
+* @param sensor [in]       Motion sensor 
+* @param profile [in]      Motion stream profile
+* @param intrinsics [out]   Pointer to the struct to store the data in
+* @param error [out]        If non-null, receives any error that occurs during this call, otherwise, errors are ignored
+*/
+public static native void rs2_set_motion_device_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_motion_device_intrinsic intrinsics, @Cast("rs2_error**") PointerPointer error);
+public static native void rs2_set_motion_device_intrinsics(@Const rs2_sensor sensor, @Const rs2_stream_profile profile, @Const rs2_motion_device_intrinsic intrinsics, @ByPtrPtr rs2_error error);
+
 
 // #ifdef __cplusplus
 // #endif
@@ -3134,7 +3250,7 @@ Copyright(c) 2017 Intel Corporation. All Rights Reserved. */
 // #include "h/rs_sensor.h"
 
 public static final int RS2_API_MAJOR_VERSION =    2;
-public static final int RS2_API_MINOR_VERSION =    25;
+public static final int RS2_API_MINOR_VERSION =    29;
 public static final int RS2_API_PATCH_VERSION =    0;
 public static final int RS2_API_BUILD_VERSION =    0;
 
