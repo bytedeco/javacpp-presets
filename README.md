@@ -114,7 +114,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
  * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
- * librealsense 2.29.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.29.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
@@ -122,7 +122,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.5  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
- * DNNL 1.1  https://github.com/intel/mkl-dnn
+ * DNNL 1.1.x  https://github.com/intel/mkl-dnn
  * OpenBLAS 0.3.7  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
