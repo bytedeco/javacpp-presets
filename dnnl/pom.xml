@@ -15,7 +15,7 @@
   <name>JavaCPP Presets for DNNL</name>
 
   <properties>
-    <revision>1.1-${project.parent.version}</revision>
+    <revision>1.1.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
