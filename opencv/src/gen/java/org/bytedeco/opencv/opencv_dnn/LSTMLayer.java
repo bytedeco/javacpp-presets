@@ -37,7 +37,7 @@ public class LSTMLayer extends Layer {
         h_t &= o_t \odot tanh(c_t),               \\
         c_t &= f_t \odot c_{t-1} + i_t \odot g_t, \\
         \end{eqnarray*}}</pre>
-        where {@code \odot} is per-element multiply operation and {@code i_t, f_t, o_t, g_t} is internal gates that are computed using learned wights.
+        where {@code \odot} is per-element multiply operation and {@code i_t, f_t, o_t, g_t} is internal gates that are computed using learned weights.
         <p>
         Gates are computed as follows:
         <pre>{@code \begin{eqnarray*}

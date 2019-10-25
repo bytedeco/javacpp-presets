@@ -99,6 +99,8 @@ Useful links:
 http://www.inf.ufrgs.br/~eslgastal/DomainTransform
 <p>
 https://www.learnopencv.com/non-photorealistic-rendering-using-opencv-python-c/
+    <p>
+    \defgroup photo_c C API
 \}
   */
 

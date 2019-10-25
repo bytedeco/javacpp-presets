@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,16 +33,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(
-    inherit = opencv_core.class,
+    inherit = opencv_dnn.class,
     value = {
-        @Platform(include = {"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link = "opencv_flann@.4.1"),
-        @Platform(value = "ios", preload = "libopencv_flann"),
-        @Platform(value = "windows", link = "opencv_flann412")},
-    target = "org.bytedeco.opencv.opencv_flann",
-    global = "org.bytedeco.opencv.global.opencv_flann"
+        @Platform(include = "<opencv2/dnn_superres.hpp>", link = "opencv_dnn_superres@.4.1"),
+        @Platform(value = "ios", preload = "libopencv_dnn_superres"),
+        @Platform(value = "windows", link = "opencv_dnn_superres412")},
+    target = "org.bytedeco.opencv.opencv_dnn_superres",
+    global = "org.bytedeco.opencv.global.opencv_dnn_superres"
 )
-public class opencv_flann implements InfoMapper {
+public class opencv_dnn_superres implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("FLANN_EXPORT", "FLANN_DEPRECATED").cppTypes());
     }
 }

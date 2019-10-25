@@ -50,6 +50,8 @@ public class opencv_flann extends org.bytedeco.opencv.presets.opencv_flann {
 // #ifndef OPENCV_FLANN_DEFINES_H_
 // #define OPENCV_FLANN_DEFINES_H_
 
+/** \cond IGNORED */
+
 // #include "config.h"
 
 // #ifdef FLANN_EXPORT
@@ -172,6 +174,8 @@ public static final int
 
 
 
+/** \endcond */
+
 // #endif /* OPENCV_FLANN_DEFINES_H_ */
 
 
@@ -221,6 +225,8 @@ public static final int
 
 // #ifndef OPENCV_MINIFLANN_HPP
 // #define OPENCV_MINIFLANN_HPP
+
+/** \cond IGNORED */
 
 // #include "opencv2/core.hpp"
 // #include "opencv2/flann/defines.h"
@@ -273,6 +279,8 @@ public static final int
 
 
   // namespace cv::flann
+
+/** \endcond */
 
 // #endif
 

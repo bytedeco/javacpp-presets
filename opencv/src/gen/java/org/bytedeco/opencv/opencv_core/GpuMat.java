@@ -93,7 +93,7 @@ public class GpuMat extends Pointer {
     public GpuMat(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
     private native void allocate(@ByVal Size size, int type);
 
-    /** constucts GpuMat and fills it with the specified value _s */
+    /** constructs GpuMat and fills it with the specified value _s */
     public GpuMat(int rows, int cols, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/) { super((Pointer)null); allocate(rows, cols, type, s, allocator); }
     private native void allocate(int rows, int cols, int type, @ByVal Scalar s, Allocator allocator/*=cv::cuda::GpuMat::defaultAllocator()*/);
     public GpuMat(int rows, int cols, int type, @ByVal Scalar s) { super((Pointer)null); allocate(rows, cols, type, s); }

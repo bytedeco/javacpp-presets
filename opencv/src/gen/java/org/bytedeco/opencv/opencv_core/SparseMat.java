@@ -309,7 +309,7 @@ public class SparseMat extends Pointer {
      <p>
      {@code ref<_Tp>(i0,...[,hashval])} is equivalent to {@code *(_Tp*)ptr(i0,...,true[,hashval])}.
      The methods always return a valid reference.
-     If the element did not exist, it is created and initialiazed with 0.
+     If the element did not exist, it is created and initialized with 0.
     */
     /** returns reference to the specified element (1D case) */
     /** returns reference to the specified element (2D case) */

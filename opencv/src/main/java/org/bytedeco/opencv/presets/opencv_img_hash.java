@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             link = "opencv_img_hash@.4.1"
         ),
         @Platform(value = "ios", preload = "libopencv_img_hash"),
-        @Platform(value = "windows", link = "opencv_img_hash411")
+        @Platform(value = "windows", link = "opencv_img_hash412")
     },
     target = "org.bytedeco.opencv.opencv_img_hash",
     global = "org.bytedeco.opencv.global.opencv_img_hash"
