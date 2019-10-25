@@ -30,6 +30,9 @@ public class opencv_dnn extends org.bytedeco.opencv.presets.opencv_dnn {
 // Targeting ../opencv_dnn/MatPointerVector.java
 
 
+// Targeting ../opencv_dnn/IntFloatPair.java
+
+
 // Parsed from <opencv2/dnn.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +125,7 @@ Check \ref tutorial_dnn_yolo "the corresponding tutorial" for more details
 // #define OPENCV_DNN_VERSION_HPP
 
 /** Use with major OpenCV version only. */
-public static final int OPENCV_DNN_API_VERSION = 20190621;
+public static final int OPENCV_DNN_API_VERSION = 20190902;
 
 // #if !defined CV_DOXYGEN && !defined CV_STATIC_ANALYSIS && !defined CV_DNN_DONT_ADD_INLINE_NS
 // #define CV__DNN_INLINE_NS __CV_CAT(dnn4_v, OPENCV_DNN_API_VERSION)
@@ -989,6 +992,18 @@ public static final int OPENCV_DNN_API_VERSION = 20190621;
     @Namespace("cv::dnn") public static native @Name("NMSBoxes") void NMSBoxesRotated(@StdVector RotatedRect bboxes, @StdVector float[] scores,
                                  float score_threshold, float nms_threshold,
                                  @StdVector int[] indices);
+// Targeting ../opencv_dnn/Model.java
+
+
+// Targeting ../opencv_dnn/ClassificationModel.java
+
+
+// Targeting ../opencv_dnn/SegmentationModel.java
+
+
+// Targeting ../opencv_dnn/DetectionModel.java
+
+
 
 /** \} */
 

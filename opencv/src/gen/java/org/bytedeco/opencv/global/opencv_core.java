@@ -509,6 +509,8 @@ public static final int CV_CPU_AVX_5124FMAPS =    27;
 
 public static final int CV_CPU_NEON =             100;
 
+public static final int CV_CPU_MSA =              150;
+
 public static final int CV_CPU_VSX =              200;
 public static final int CV_CPU_VSX3 =             201;
 
@@ -518,7 +520,7 @@ public static final int CV_CPU_AVX512_COMMON =    257;
 public static final int CV_CPU_AVX512_KNL =       258;
 public static final int CV_CPU_AVX512_KNM =       259;
 public static final int CV_CPU_AVX512_CNL =       260;
-public static final int CV_CPU_AVX512_CEL =       261;
+public static final int CV_CPU_AVX512_CLX =       261;
 public static final int CV_CPU_AVX512_ICL =       262;
 
 // when adding to this list remember to update the following enum
@@ -560,6 +562,8 @@ public static final int
 
     CPU_NEON            = 100,
 
+    CPU_MSA             = 150,
+
     CPU_VSX             = 200,
     CPU_VSX3            = 201,
 
@@ -573,8 +577,8 @@ public static final int
     CPU_AVX512_KNM      = 259,
     /** Cannon Lake with AVX-512F/CD/BW/DQ/VL/IFMA/VBMI */
     CPU_AVX512_CNL      = 260,
-    /** Cascade Lake with AVX-512F/CD/BW/DQ/VL/IFMA/VBMI/VNNI */
-    CPU_AVX512_CEL      = 261,
+    /** Cascade Lake with AVX-512F/CD/BW/DQ/VL/VNNI */
+    CPU_AVX512_CLX      = 261,
     /** Ice Lake with AVX-512F/CD/BW/DQ/VL/IFMA/VBMI/VNNI/VBMI2/BITALG/VPOPCNTDQ */
     CPU_AVX512_ICL      = 262,
 
@@ -918,6 +922,7 @@ public static final int CV_STATIC_ANALYSIS = 1;
 // #endif
 
 public static final int CV_CXX_MOVE_SEMANTICS = 1;
+// #define CV_CXX_MOVE(x) std::move(x)
 public static final int CV_CXX_STD_ARRAY = 1;
 // #include <array>
 // #ifndef CV_OVERRIDE
@@ -1558,12 +1563,6 @@ public static final int CV_CXX_STD_ARRAY = 1;
 
 // #include "opencv2/core/cvdef.h"
 
-// #if ((defined _MSC_VER && defined _M_X64) || (defined __GNUC__ && defined __x86_64__
-//     && defined __SSE2__ && !defined __APPLE__)) && !defined(__CUDACC__)
-// #include <emmintrin.h>
-// #endif
-
-
 /** \addtogroup core_utils
  *  \{
 <p>
@@ -1576,7 +1575,24 @@ public static final int CV_CXX_STD_ARRAY = 1;
 // #else
 // #endif
 
-// #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__ && !defined(__CUDACC__)
+// #if defined(__CUDACC__)
+  // nothing, intrinsics/asm code is not supported
+// #else
+//   #if ((defined _MSC_VER && defined _M_X64)
+//       || (defined __GNUC__ && defined __x86_64__ && defined __SSE2__))
+//       && !defined(OPENCV_SKIP_INCLUDE_EMMINTRIN_H)
+//     #include <emmintrin.h>
+//   #endif
+
+//   #if defined __PPC64__ && defined __GNUC__ && defined _ARCH_PWR8
+//       && !defined(OPENCV_SKIP_INCLUDE_ALTIVEC_H)
+//     #include <altivec.h>
+//   #endif
+
+//   #if defined(CV_INLINE_ROUND_FLT)
+    // user-specified version
+    // CV_INLINE_ROUND_DBL should be defined too
+//   #elif defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__
     // 1. general scheme
 //     #define ARM_ROUND(_value, _asm_string)
 //         int res;
@@ -1585,13 +1601,64 @@ public static final int CV_CXX_STD_ARRAY = 1;
 //         return res
     // 2. version for double
 //     #ifdef __clang__
-//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %[value] \n vmov %[res], %[temp]")
+//         #define CV_INLINE_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %[value] \n vmov %[res], %[temp]")
 //     #else
-//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %P[value] \n vmov %[res], %[temp]")
+//         #define CV_INLINE_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %P[value] \n vmov %[res], %[temp]")
 //     #endif
     // 3. version for float
-//     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
-// #endif
+//     #define CV_INLINE_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
+//   #elif defined __PPC64__ && defined __GNUC__ && defined _ARCH_PWR8
+    // P8 and newer machines can convert fp32/64 to int quickly.
+//     #define CV_INLINE_ROUND_DBL(value)
+//         int out;
+//         double temp;
+//         __asm__( "fctiw %[temp],%[in]\n\tmfvsrwz %[out],%[temp]\n\t" : [out] "=r" (out), [temp] "=d" (temp) : [in] "d" ((double)(value)) : );
+//         return out;
+
+    // FP32 also works with FP64 routine above
+//     #define CV_INLINE_ROUND_FLT(value) CV_INLINE_ROUND_DBL(value)
+//   #endif
+
+//   #ifdef CV_INLINE_ISINF_FLT
+    // user-specified version
+    // CV_INLINE_ISINF_DBL should be defined too
+//   #elif defined __PPC64__ && defined _ARCH_PWR9 && defined(scalar_test_data_class)
+//     #define CV_INLINE_ISINF_DBL(value) return scalar_test_data_class(value, 0x30);
+//     #define CV_INLINE_ISINF_FLT(value) CV_INLINE_ISINF_DBL(value)
+//   #endif
+
+//   #ifdef CV_INLINE_ISNAN_FLT
+    // user-specified version
+    // CV_INLINE_ISNAN_DBL should be defined too
+//   #elif defined __PPC64__ && defined _ARCH_PWR9 && defined(scalar_test_data_class)
+//     #define CV_INLINE_ISNAN_DBL(value) return scalar_test_data_class(value, 0x40);
+//     #define CV_INLINE_ISNAN_FLT(value) CV_INLINE_ISNAN_DBL(value)
+//   #endif
+
+//   #if !defined(OPENCV_USE_FASTMATH_BUILTINS)
+//     && (
+//         defined(__x86_64__) || defined(__i686__)
+//         || defined(__arm__)
+//         || defined(__PPC64__)
+//     )
+    /* Let builtin C math functions when available. Dedicated hardware is available to
+       round and convert FP values. */
+    public static final int OPENCV_USE_FASTMATH_BUILTINS = 1;
+//   #endif
+
+  /* Enable builtin math functions if possible, desired, and available.
+     Note, not all math functions inline equally. E.g lrint will not inline
+     without the -fno-math-errno option. */
+//   #if defined(CV_ICC)
+    // nothing
+//   #elif defined(OPENCV_USE_FASTMATH_BUILTINS) && OPENCV_USE_FASTMATH_BUILTINS
+//     #if defined(__clang__)
+//     #elif defined(__GNUC__)
+//     #elif defined(_MSC_VER)
+//     #endif
+//   #endif
+
+// #endif // defined(__CUDACC__)
 
 /** \brief Rounds floating-point number to the nearest integer
  <p>
@@ -1845,7 +1912,7 @@ public static native int cvIsInf( float value );
 
 public static final int CV_VERSION_MAJOR =    4;
 public static final int CV_VERSION_MINOR =    1;
-public static final int CV_VERSION_REVISION = 1;
+public static final int CV_VERSION_REVISION = 2;
 public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
@@ -4324,7 +4391,7 @@ public static final int CV_SEQ_INDEX =           (CV_SEQ_KIND_GENERIC  | CV_SEQ_
                           which is incompatible with C
 
    It is OK to disable it because we only extend few plain structures with
-   C++ construrtors for simpler interoperability with C++ API of the library
+   C++ constructors for simpler interoperability with C++ API of the library
 */
 // #    pragma warning(disable:4190)
 // #  elif defined __clang__ && __clang_major__ >= 3
@@ -7215,8 +7282,10 @@ public static final String cvFuncName = "";
     \defgroup core_cluster Clustering
     \defgroup core_utils Utility and system functions and macros
     \{
+        \defgroup core_logging Logging facilities
         \defgroup core_utils_sse SSE utilities
         \defgroup core_utils_neon NEON utilities
+        \defgroup core_utils_vsx VSX utilities
         \defgroup core_utils_softfloat Softfloat support
         \defgroup core_utils_samples Utility functions for OpenCV samples
     \}
@@ -11031,7 +11100,7 @@ number of components (vectors/matrices) of the outer vector.
 <p>
 In general, type support is limited to cv::Mat types. Other types are forbidden.
 But in some cases we need to support passing of custom non-general Mat types, like arrays of cv::KeyPoint, cv::DMatch, etc.
-This data is not intented to be interpreted as an image data, or processed somehow like regular cv::Mat.
+This data is not intended to be interpreted as an image data, or processed somehow like regular cv::Mat.
 To pass such custom type use rawIn() / rawOut() / rawInOut() wrappers.
 Custom type is wrapped as Mat-compatible {@code CV_8UC<N>} values (N = sizeof(T), N <= CV_CN_MAX).
  */

@@ -74,4 +74,7 @@ public class ORB extends Feature2DAsync {
     /** if true, image will be blurred before descriptors calculation */
     public native void setBlurForDescriptor(@Cast("bool") boolean blurForDescriptor);
     public native @Cast("bool") boolean getBlurForDescriptor();
+
+    public native void setFastThreshold(int fastThreshold);
+    public native int getFastThreshold();
 }

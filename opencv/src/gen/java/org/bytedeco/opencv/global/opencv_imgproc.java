@@ -4696,7 +4696,10 @@ coordinate origin is assumed to be the top-left corner).
 <p>
 @see  getAffineTransform, warpAffine, transform
  */
-@Namespace("cv") public static native @ByVal Mat getRotationMatrix2D( @ByVal Point2f center, double angle, double scale );
+@Namespace("cv") public static native @ByVal Mat getRotationMatrix2D(@ByVal Point2f center, double angle, double scale);
+
+/** @see getRotationMatrix2D */
+@Namespace("cv") public static native @ByVal @Cast("cv::Matx23d*") DoublePointer getRotationMatrix2D_(@ByVal Point2f center, double angle, double scale);
 
 /** \brief Calculates an affine transform from three pairs of the corresponding points.
 <p>
@@ -7421,7 +7424,9 @@ public static final int
     /** ![twilight](pics/colormaps/colorscale_twilight.jpg) */
     COLORMAP_TWILIGHT = 18,
     /** ![twilight shifted](pics/colormaps/colorscale_twilight_shifted.jpg) */
-    COLORMAP_TWILIGHT_SHIFTED = 19;
+    COLORMAP_TWILIGHT_SHIFTED = 19,
+    /** ![turbo](pics/colormaps/colorscale_turbo.jpg) */
+    COLORMAP_TURBO = 20;
 
 /** \example samples/cpp/falsecolor.cpp
 An example using applyColorMap function

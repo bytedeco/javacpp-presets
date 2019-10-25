@@ -36,7 +36,7 @@ INSTALL_PATH=`pwd`
 if [[ -f "lib/libmxnet.so" ]]; then
     echo libmxnet.so already exists!
     return 0
-elif [[ -f "lib/libmxnet.dll" ]]; then
+elif [[ -f "bin/libmxnet.dll" ]]; then
     echo libmxnet.dll already exists!
     return 0
 fi

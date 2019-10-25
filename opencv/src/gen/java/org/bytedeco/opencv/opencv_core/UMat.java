@@ -34,7 +34,7 @@ public class UMat extends Pointer {
     private native void allocate(@ByVal Size size, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
     public UMat(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
     private native void allocate(@ByVal Size size, int type);
-    /** constucts 2D matrix and fills it with the specified value _s. */
+    /** constructs 2D matrix and fills it with the specified value _s. */
     public UMat(int rows, int cols, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(rows, cols, type, s, usageFlags); }
     private native void allocate(int rows, int cols, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
     public UMat(int rows, int cols, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(rows, cols, type, s); }

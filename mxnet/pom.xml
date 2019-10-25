@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>opencv</artifactId>
-      <version>4.1.1-${project.parent.version}</version>
+      <version>4.1.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -84,7 +84,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.1.1-${project.parent.version}</version>
+            <version>4.1.2-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
@@ -99,7 +99,7 @@
           <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.1.1-${project.parent.version}</version>
+            <version>4.1.2-${project.parent.version}</version>
             <classifier>${javacpp.platform}</classifier>
           </dependency>
           <dependency>
@@ -322,7 +322,7 @@
               <dependency>
                 <groupId>org.bytedeco</groupId>
                 <artifactId>opencv</artifactId>
-                <version>4.1.1-${project.parent.version}</version>
+                <version>4.1.2-${project.parent.version}</version>
                 <classifier>linux-x86_64</classifier>
               </dependency>
               <dependency>

@@ -108,7 +108,11 @@ This section describes approaches based on local 2D features and used to categor
         opencv_source_code/samples/cpp/bagofwords_classification.cpp
     -   (Python) An example using the features2D framework to perform object categorization can be
         found at opencv_source_code/samples/python/find_obj.py
-  <p>
+    <p>
+    \defgroup feature2d_hal Hardware Acceleration Layer
+    \{
+        \defgroup features2d_hal_interface Interface
+    \}
   \}
  */
 // Targeting ../opencv_features2d/KeyPointsFilter.java

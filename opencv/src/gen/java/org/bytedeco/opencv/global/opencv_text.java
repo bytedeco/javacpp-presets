@@ -373,6 +373,8 @@ public static final int
     finds the branches corresponding to text groups by traversing this dendrogram with a stopping rule
     that combines the output of a rotation invariant text group classifier and a probabilistic measure
     for hierarchical clustering validity assessment.
+    <p>
+    \note This mode is not supported due NFA code removal ( https://github.com/opencv/opencv_contrib/issues/2235 )
      */
     ERGROUPING_ORIENTATION_ANY = 1;
 

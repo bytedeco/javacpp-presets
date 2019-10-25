@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         @Platform(include = {"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc.hpp>",
             "<opencv2/imgproc/detail/gcgraph.hpp>"}, link = "opencv_imgproc@.4.1"),
         @Platform(value = "ios", preload = "libopencv_imgproc"),
-        @Platform(value = "windows", link = "opencv_imgproc411")},
+        @Platform(value = "windows", link = "opencv_imgproc412")},
     target = "org.bytedeco.opencv.opencv_imgproc",
     global = "org.bytedeco.opencv.global.opencv_imgproc",
     helper = "org.bytedeco.opencv.helper.opencv_imgproc"
@@ -50,6 +50,7 @@ public class opencv_imgproc implements InfoMapper {
                .put(new Info("CvContourScanner").valueTypes("CvContourScanner").pointerTypes("@ByPtrPtr CvContourScanner"))
                .put(new Info("cvCalcBackProject").cppTypes("void", "IplImage**", "CvArr*", "CvHistogram*"))
                .put(new Info("cvCalcBackProjectPatch").cppTypes("void", "IplImage**", "CvArr*", "CvSize", "CvHistogram*", "int", "double"))
+               .put(new Info("cv::Matx23d").cast().pointerTypes("DoublePointer"))
                .put(new Info("cv::Vec6f").cast().pointerTypes("FloatPointer"))
                .put(new Info("std::vector<cv::Vec2f>").pointerTypes("Vec2fVector").define())
                .put(new Info("std::vector<cv::Vec3f>").pointerTypes("Vec3fVector").define())
