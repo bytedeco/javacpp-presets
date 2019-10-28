@@ -12,12 +12,11 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>onnxruntime-platform</artifactId>
-  <version>${revision}</version>
+  <version>0.5.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ONNX Runtime</name>
 
   <properties>
     <javacpp.moduleId>onnxruntime</javacpp.moduleId>
-    <revision>0.5.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

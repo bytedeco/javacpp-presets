@@ -11,13 +11,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>skia</artifactId>
-  <version>${revision}</version>
+  <version>${skia.version}-${project.parent.version}</version>
   <name>JavaCPP Presets for Skia</name>
 
   <properties>
     <!-- Must be kept in sync with SKIA_VERSION in cppbuild.sh -->
     <skia.version>1.68.0</skia.version>
-    <revision>${skia.version}-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

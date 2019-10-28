@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.annotation.Properties;
 /**
  * With this class, we can extract easily the {@code tesseract} program ready for execution:
  * <pre>{@code
- *     String tesseract = Loader.load(org.bytedeco.tesseract.tesseract.class);
+ *     String tesseract = Loader.load(org.bytedeco.tesseract.program.tesseract.class);
  *     ProcessBuilder pb = new ProcessBuilder(tesseract, ...);
  *     pb.inheritIO().start().waitFor();
  * }</pre>

@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>qt</artifactId>
-  <version>${revision}</version>
+  <version>5.13.1-${project.parent.version}</version>
   <name>JavaCPP Presets for Qt</name>
-
-  <properties>
-    <revision>5.13.1-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

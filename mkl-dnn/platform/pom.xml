@@ -12,13 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mkl-dnn-platform</artifactId>
-  <version>${revision}</version>
+  <version>0.21.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for MKL-DNN</name>
 
   <properties>
     <javacpp.moduleId>mkl-dnn</javacpp.moduleId>
     <javacpp.packageName>mkldnn</javacpp.packageName>
-    <revision>0.21.2-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

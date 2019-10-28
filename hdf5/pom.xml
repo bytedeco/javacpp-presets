@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>hdf5</artifactId>
-  <version>${revision}</version>
+  <version>1.10.5-${project.parent.version}</version>
   <name>JavaCPP Presets for HDF5</name>
-
-  <properties>
-    <revision>1.10.5-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>
