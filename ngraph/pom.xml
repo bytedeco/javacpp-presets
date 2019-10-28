@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ngraph</artifactId>
-  <version>${revision}</version>
+  <version>0.26.0-${project.parent.version}</version>
   <name>JavaCPP Presets for nGraph</name>
-
-  <properties>
-    <revision>0.26.0-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

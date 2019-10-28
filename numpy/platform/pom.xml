@@ -12,12 +12,11 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>numpy-platform</artifactId>
-  <version>${revision}</version>
+  <version>1.17.3-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for NumPy</name>
 
   <properties>
     <javacpp.moduleId>numpy</javacpp.moduleId>
-    <revision>1.17.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

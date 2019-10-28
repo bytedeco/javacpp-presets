@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>fftw</artifactId>
-  <version>${revision}</version>
+  <version>3.3.8-${project.parent.version}</version>
   <name>JavaCPP Presets for FFTW</name>
-
-  <properties>
-    <revision>3.3.8-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

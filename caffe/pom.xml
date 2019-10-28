@@ -11,12 +11,8 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>caffe</artifactId>
-  <version>${revision}</version>
+  <version>1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Caffe</name>
-
-  <properties>
-    <revision>1.0-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

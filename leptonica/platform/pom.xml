@@ -12,12 +12,11 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>leptonica-platform</artifactId>
-  <version>${revision}</version>
+  <version>1.78.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Leptonica</name>
 
   <properties>
     <javacpp.moduleId>leptonica</javacpp.moduleId>
-    <revision>1.78.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -12,12 +12,11 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>mxnet-platform-gpu</artifactId>
-  <version>${revision}</version>
+  <version>1.5.1-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for MXNet</name>
 
   <properties>
     <javacpp.moduleId>mxnet</javacpp.moduleId>
-    <revision>1.5.1-${project.parent.version}</revision>
     <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 

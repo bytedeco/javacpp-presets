@@ -12,13 +12,12 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>arpack-ng-platform</artifactId>
-  <version>${revision}</version>
+  <version>3.7.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for ARPACK-NG</name>
 
   <properties>
     <javacpp.moduleId>arpack-ng</javacpp.moduleId>
     <javacpp.packageName>arpackng</javacpp.packageName>
-    <revision>3.7.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

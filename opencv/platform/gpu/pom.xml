@@ -12,12 +12,11 @@
 
   <groupId>org.bytedeco</groupId>
   <artifactId>opencv-platform-gpu</artifactId>
-  <version>${revision}</version>
+  <version>4.1.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform GPU for OpenCV</name>
 
   <properties>
     <javacpp.moduleId>opencv</javacpp.moduleId>
-    <revision>4.1.2-${project.parent.version}</revision>
     <javacpp.platform.extension>-gpu</javacpp.platform.extension>
   </properties>
 
