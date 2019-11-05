@@ -5,6 +5,7 @@ org.tensorflow
 org.tensorflow.contrib.android
 org.tensorflow.examples
 org.tensorflow.lite
+org.tensorflow.lite.nnapi
 org.tensorflow.op
 org.tensorflow.op.annotation
 org.tensorflow.op.audio

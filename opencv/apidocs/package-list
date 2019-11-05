@@ -7,11 +7,16 @@ org.bytedeco.opencv.opencv_bioinspired
 org.bytedeco.opencv.opencv_calib3d
 org.bytedeco.opencv.opencv_core
 org.bytedeco.opencv.opencv_cudaarithm
+org.bytedeco.opencv.opencv_cudabgsegm
+org.bytedeco.opencv.opencv_cudacodec
+org.bytedeco.opencv.opencv_cudafeatures2d
 org.bytedeco.opencv.opencv_cudafilters
 org.bytedeco.opencv.opencv_cudaimgproc
 org.bytedeco.opencv.opencv_cudaobjdetect
 org.bytedeco.opencv.opencv_cudaoptflow
+org.bytedeco.opencv.opencv_cudastereo
 org.bytedeco.opencv.opencv_dnn
+org.bytedeco.opencv.opencv_dnn_superres
 org.bytedeco.opencv.opencv_face
 org.bytedeco.opencv.opencv_features2d
 org.bytedeco.opencv.opencv_flann

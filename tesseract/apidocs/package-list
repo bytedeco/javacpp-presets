@@ -1,3 +1,4 @@
 org.bytedeco.tesseract
 org.bytedeco.tesseract.global
 org.bytedeco.tesseract.presets
+org.bytedeco.tesseract.program
