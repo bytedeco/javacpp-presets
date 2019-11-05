@@ -41,7 +41,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.cpython</groupId>
     <artifactId>simple</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>Simple</exec.mainClass>
     </properties>
@@ -49,7 +49,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cpython-platform</artifactId>
-            <version>3.7.5-1.5.2-SNAPSHOT</version>
+            <version>3.7.5-1.5.2</version>
         </dependency>
     </dependencies>
     <build>

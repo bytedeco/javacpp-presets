@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -51,21 +51,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform</artifactId>
-            <version>1.5.1-1.5.2-SNAPSHOT</version>
+            <version>1.5.1-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mxnet-platform-gpu</artifactId>
-            <version>1.5.1-1.5.2-SNAPSHOT</version>
+            <version>1.5.1-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>10.1-7.6-1.5.2-SNAPSHOT</version>
+            <version>10.1-7.6-1.5.2</version>
         </dependency>
 
     </dependencies>

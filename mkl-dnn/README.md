@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.mkl-dnn</groupId>
     <artifactId>mkl-dnn</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>SimpleNetInt8</exec.mainClass>
     </properties>
@@ -44,14 +44,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-dnn-platform</artifactId>
-            <version>0.21.2-1.5.2-SNAPSHOT</version>
+            <version>0.21.2-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
-            <version>2019.5-1.5.2-SNAPSHOT</version>
+            <version>2019.5-1.5.2</version>
         </dependency>
 
     </dependencies>

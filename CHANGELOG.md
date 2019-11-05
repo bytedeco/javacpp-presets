@@ -1,4 +1,5 @@
 
+### November 5, 2019 version 1.5.2
  * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
  * Fix mapping of `warpAffine` and `warpPerspective` from `opencv_cudawarping` ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
  * Add `linux-armhf` and `linux-arm64` builds for HDF5 ([issue #794](https://github.com/bytedeco/javacpp-presets/issues/794))

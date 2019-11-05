@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.leptonica</groupId>
     <artifactId>sudokutest</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>SudokuTest</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>leptonica-platform</artifactId>
-            <version>1.78.0-1.5.1</version>
+            <version>1.78.0-1.5.2</version>
         </dependency>
     </dependencies>
     <build>

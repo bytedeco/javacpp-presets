@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnxruntime</groupId>
     <artifactId>capisample</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>CApiSample</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>0.5.0-1.5.2-SNAPSHOT</version>
+            <version>0.5.0-1.5.2</version>
         </dependency>
     </dependencies>
     <build>
