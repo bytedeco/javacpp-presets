@@ -38,7 +38,7 @@ Please see the samples directory for more Qt examples ported to Java from C++.
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.qt</groupId>
     <artifactId>gettingstarted</artifactId>
-    <version>1.5.2-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>GettingStarted</exec.mainClass>
     </properties>
@@ -46,7 +46,7 @@ Please see the samples directory for more Qt examples ported to Java from C++.
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>qt-platform</artifactId>
-            <version>5.13.1-1.5.2-SNAPSHOT</version>
+            <version>5.13.1-1.5.2</version>
         </dependency>
     </dependencies>
     <build>

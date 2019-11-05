@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.6.0-1.5.2-SNAPSHOT</version>
+            <version>1.6.0-1.5.2</version>
         </dependency>
     </dependencies>
     <build>
