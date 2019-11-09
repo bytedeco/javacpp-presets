@@ -1,4 +1,6 @@
 
+ * Upgrade presets for ONNX Runtime 1.0.0
+
 ### November 5, 2019 version 1.5.2
  * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
  * Fix mapping of `warpAffine` and `warpPerspective` from `opencv_cudawarping` ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))

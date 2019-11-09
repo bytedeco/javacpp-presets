@@ -144,7 +144,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.6.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
- * ONNX Runtime 0.5.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.0.0  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.13.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia

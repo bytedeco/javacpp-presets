@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX Runtime 0.5.0  https://github.com/microsoft/onnxruntime
+ * ONNX Runtime 1.0.0  https://github.com/microsoft/onnxruntime
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -23,7 +23,7 @@ Sample Usage
 ------------
 Here is a simple example of ONNX ported to Java from this C source file:
 
- * https://github.com/microsoft/onnxruntime/blob/v0.5.0/csharp/test/Microsoft.ML.OnnxRuntime.EndToEndTests.Capi/C_Api_Sample.cpp
+ * https://github.com/microsoft/onnxruntime/blob/v1.0.0/csharp/test/Microsoft.ML.OnnxRuntime.EndToEndTests.Capi/C_Api_Sample.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `CApiSample.java` source files below, simply execute on the command line:
 ```bash
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnxruntime</groupId>
     <artifactId>capisample</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>CApiSample</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnxruntime-platform</artifactId>
-            <version>0.5.0-1.5.2</version>
+            <version>1.0.0-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -67,13 +67,15 @@ import static org.bytedeco.onnxruntime.global.onnxruntime.*;
 
 public class CApiSample {
 
+    static final OrtApi g_ort = OrtGetApiBase().GetApi().call(ORT_API_VERSION);
+
     //*****************************************************************************
     // helper function to check for status
     static void CheckStatus(OrtStatus status) {
         if (status != null && !status.isNull()) {
-          String msg = OrtGetErrorMessage(status).getString();
+          String msg = g_ort.GetErrorMessage().call(status).getString();
           System.err.println(msg);
-          OrtReleaseStatus(status);
+          g_ort.ReleaseStatus().call(status);
           System.exit(1);
         }
     }
@@ -82,19 +84,18 @@ public class CApiSample {
       //*************************************************************************
       // initialize  enviroment...one enviroment per process
       // enviroment maintains thread pools and other state info
-      OrtEnv env = new OrtEnv();
-      CheckStatus(OrtCreateEnv(ORT_LOGGING_LEVEL_WARNING, "test", env));
+      PointerPointer<OrtEnv> envs = new PointerPointer<OrtEnv>(1);
+      CheckStatus(g_ort.CreateEnv().call(ORT_LOGGING_LEVEL_WARNING, new BytePointer("test"), envs));
+      OrtEnv env = envs.get(OrtEnv.class);
 
       // initialize session options if needed
-      OrtSessionOptions session_options = new OrtSessionOptions();
-      CheckStatus(OrtCreateSessionOptions(session_options));
-      OrtSetSessionThreadPoolSize(session_options, 1);
+      PointerPointer<OrtSessionOptions> sessions_options = new PointerPointer<OrtSessionOptions>(1);
+      CheckStatus(g_ort.CreateSessionOptions().call(sessions_options));
+      OrtSessionOptions session_options = sessions_options.get(OrtSessionOptions.class);
+      g_ort.SetIntraOpNumThreads().call(session_options, 1);
 
-      // Available levels are
-      // 0 -> To disable all optimizations
-      // 1 -> To enable basic optimizations (Such as redundant node removals)
-      // 2 -> To enable all optimizations (Includes level 1 + more complex optimizations like node fusions)
-      OrtSetSessionGraphOptimizationLevel(session_options, 1);
+      // Sets graph optimization level
+      g_ort.SetSessionGraphOptimizationLevel().call(session_options, ORT_ENABLE_BASIC);
 
       // Optionally add more execution providers via session_options
       // E.g. for CUDA include cuda_provider_factory.h and uncomment the following line:
@@ -104,21 +105,23 @@ public class CApiSample {
       // create session and load model into memory
       // using squeezenet version 1.3
       // URL = https://github.com/onnx/models/tree/master/squeezenet
-      OrtSession session = new OrtSession();
+      PointerPointer<OrtSession> sessions = new PointerPointer<OrtSession>(1);
       String model_path = args.length > 0 ? args[0] : "squeezenet.onnx";
 
       System.out.println("Using Onnxruntime C API");
-      CheckStatus(OrtCreateSession(env, model_path, session_options, session));
+      CheckStatus(g_ort.CreateSession().call(env, new BytePointer(model_path), session_options, sessions));
+      OrtSession session = sessions.get(OrtSession.class);
 
       //*************************************************************************
       // print model input layer (node names, types, shape etc.)
       SizeTPointer num_input_nodes = new SizeTPointer(1);
       OrtStatus status;
-      OrtAllocator allocator = new OrtAllocator();
-      CheckStatus(OrtCreateDefaultAllocator(allocator));
+      PointerPointer<OrtAllocator> allocators = new PointerPointer<OrtAllocator>(1);
+      CheckStatus(g_ort.GetAllocatorWithDefaultOptions().call(allocators));
+      OrtAllocator allocator = allocators.get(OrtAllocator.class);
 
       // print number of model input nodes
-      status = OrtSessionGetInputCount(session, num_input_nodes);
+      status = g_ort.SessionGetInputCount().call(session, num_input_nodes);
       PointerPointer input_node_names = new PointerPointer(num_input_nodes.get());
       LongPointer input_node_dims = null;  // simplify... this model has only 1 input node {1, 3, 224, 224}.
                                            // Otherwise need vector<vector<>>
@@ -128,32 +131,34 @@ public class CApiSample {
       // iterate over all input nodes
       for (long i = 0; i < num_input_nodes.get(); i++) {
         // print input node names
-        BytePointer input_name = new BytePointer();
-        status = OrtSessionGetInputName(session, i, allocator, input_name);
+        PointerPointer<BytePointer> input_names = new PointerPointer<BytePointer>(1);
+        status = g_ort.SessionGetInputName().call(session, i, allocator, input_names);
+        BytePointer input_name = input_names.get(BytePointer.class);
         System.out.println("Input " + i + " : name=" + input_name.getString());
         input_node_names.put(i, input_name);
 
         // print input node types
-        OrtTypeInfo typeinfo = new OrtTypeInfo();
-        status = OrtSessionGetInputTypeInfo(session, i, typeinfo);
-        OrtTensorTypeAndShapeInfo tensor_info = new OrtTensorTypeAndShapeInfo();
-        CheckStatus(OrtCastTypeInfoToTensorInfo(typeinfo, tensor_info));
-        int[] type = {0};
-        CheckStatus(OrtGetTensorElementType(tensor_info, type));
-        System.out.println("Input " + i + " : type=" + type[0]);
+        PointerPointer<OrtTypeInfo> typeinfos = new PointerPointer<OrtTypeInfo>(1);
+        status = g_ort.SessionGetInputTypeInfo().call(session, i, typeinfos);
+        OrtTypeInfo typeinfo = typeinfos.get(OrtTypeInfo.class);
+        PointerPointer<OrtTensorTypeAndShapeInfo> tensor_infos = new PointerPointer<OrtTensorTypeAndShapeInfo>(1);
+        CheckStatus(g_ort.CastTypeInfoToTensorInfo().call(typeinfo, tensor_infos));
+        OrtTensorTypeAndShapeInfo tensor_info = tensor_infos.get(OrtTensorTypeAndShapeInfo.class);
+        IntPointer type = new IntPointer(1);
+        CheckStatus(g_ort.GetTensorElementType().call(tensor_info, type));
+        System.out.println("Input " + i + " : type=" + type.get());
 
         // print input shapes/dims
         SizeTPointer num_dims = new SizeTPointer(1);
-        CheckStatus(OrtGetDimensionsCount(tensor_info, num_dims));
+        CheckStatus(g_ort.GetDimensionsCount().call(tensor_info, num_dims));
         System.out.println("Input " + i + " : num_dims=" + num_dims.get());
         input_node_dims = new LongPointer(num_dims.get());
-        OrtGetDimensions(tensor_info, input_node_dims, num_dims.get());
+        g_ort.GetDimensions().call(tensor_info, input_node_dims, num_dims.get());
         for (long j = 0; j < num_dims.get(); j++)
           System.out.println("Input " + i + " : dim " + j + "=" + input_node_dims.get(j));
 
-        OrtReleaseTypeInfo(typeinfo);
+        g_ort.ReleaseTypeInfo().call(typeinfo);
       }
-      OrtReleaseAllocator(allocator);
 
       // Results should be...
       // Number of inputs = 1
@@ -185,26 +190,27 @@ public class CApiSample {
         idx.put(i, (float)i / (input_tensor_size + 1));
 
       // create input tensor object from data values
-      OrtAllocatorInfo allocator_info = new OrtAllocatorInfo();
-      CheckStatus(OrtCreateCpuAllocatorInfo(OrtArenaAllocator, OrtMemTypeDefault, allocator_info));
-      OrtValue input_tensor = new OrtValue();
-      CheckStatus(OrtCreateTensorWithDataAsOrtValue(allocator_info, input_tensor_values, input_tensor_size * Float.SIZE / 8, input_node_dims, 4, ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, input_tensor));
-      int[] is_tensor = {0};
-      CheckStatus(OrtIsTensor(input_tensor, is_tensor));
-      assert is_tensor[0] != 0;
-      OrtReleaseAllocatorInfo(allocator_info);
+      PointerPointer<OrtMemoryInfo> memory_infos = new PointerPointer<OrtMemoryInfo>(1);
+      CheckStatus(g_ort.CreateCpuMemoryInfo().call(OrtArenaAllocator, OrtMemTypeDefault, memory_infos));
+      OrtMemoryInfo memory_info = memory_infos.get(OrtMemoryInfo.class);
+      PointerPointer<OrtValue> input_tensors = new PointerPointer<OrtValue>(1).put(0, null);
+      CheckStatus(g_ort.CreateTensorWithDataAsOrtValue().call(memory_info, input_tensor_values, input_tensor_size * Float.SIZE / 8, input_node_dims, 4, ONNX_TENSOR_ELEMENT_DATA_TYPE_FLOAT, input_tensors));
+      OrtValue input_tensor = input_tensors.get(OrtValue.class);
+      IntPointer is_tensor = new IntPointer(1);
+      CheckStatus(g_ort.IsTensor().call(input_tensor, is_tensor));
+      assert is_tensor.get() != 0;
 
       // score model & input tensor, get back output tensor
-      PointerPointer<OrtValue> input_tensors = new PointerPointer<OrtValue>(1).put(input_tensor);
-      PointerPointer<OrtValue> output_tensors = new PointerPointer<OrtValue>(1);
-      CheckStatus(OrtRun(session, null, input_node_names, input_tensors, 1, output_node_names, 1, output_tensors));
+      PointerPointer<OrtValue> output_tensors = new PointerPointer<OrtValue>(1).put(0, null);
+      CheckStatus(g_ort.Run().call(session, null, input_node_names, input_tensors, 1, output_node_names, 1, output_tensors));
       OrtValue output_tensor = output_tensors.get(OrtValue.class);
-      CheckStatus(OrtIsTensor(output_tensor, is_tensor));
-      assert is_tensor[0] != 0;
+      CheckStatus(g_ort.IsTensor().call(output_tensor, is_tensor));
+      assert is_tensor.get() != 0;
 
       // Get pointer to output tensor float values
-      FloatPointer floatarr = new FloatPointer();
-      CheckStatus(OrtGetTensorMutableData(output_tensor, floatarr));
+      PointerPointer<FloatPointer> floatarrs = new PointerPointer<FloatPointer>(1);
+      CheckStatus(g_ort.GetTensorMutableData().call(output_tensor, floatarrs));
+      FloatPointer floatarr = floatarrs.get(FloatPointer.class);
       assert Math.abs(floatarr.get(0) - 0.000045) < 1e-6;
 
       // score the model, and print scores for first 5 classes
@@ -218,11 +224,12 @@ public class CApiSample {
       // Score for class[3] = 0.001180
       // Score for class[4] = 0.001317
 
-      OrtReleaseValue(output_tensor);
-      OrtReleaseValue(input_tensor);
-      OrtReleaseSession(session);
-      OrtReleaseSessionOptions(session_options);
-      OrtReleaseEnv(env);
+      g_ort.ReleaseMemoryInfo().call(memory_info);
+      g_ort.ReleaseValue().call(output_tensor);
+      g_ort.ReleaseValue().call(input_tensor);
+      g_ort.ReleaseSession().call(session);
+      g_ort.ReleaseSessionOptions().call(session_options);
+      g_ort.ReleaseEnv().call(env);
       System.out.println("Done!");
       System.exit(0);
     }
