@@ -44,8 +44,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "onnxruntime/core/session/onnxruntime_c_api.h",
 //                "onnxruntime/core/session/onnxruntime_cxx_api.h"
             },
-            link = "onnxruntime@.0.5.0",
-            preload = {"iomp5", "mklml", "mklml_intel", "mkldnn@.0"},
+            link = "onnxruntime@.1.0.0",
+            preload = {"iomp5", "mklml", "mklml_intel", "mkldnn@.1"},
             preloadresource = "/org/bytedeco/mkldnn/"
         ),
     },
@@ -56,6 +56,6 @@ public class onnxruntime implements InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "onnxruntime"); }
 
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("ORTCHAR_T", "ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL").cppTypes().annotations());
+        infoMap.put(new Info("ORTCHAR_T", "ORT_EXPORT", "ORT_API_CALL", "NO_EXCEPTION", "ORT_ALL_ARGS_NONNULL", "OrtCustomOpApi").cppTypes().annotations());
     }
 }
