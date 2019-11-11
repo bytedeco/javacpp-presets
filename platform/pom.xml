@@ -259,7 +259,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>qt-platform</artifactId>
-      <version>5.13.1-${project.version}</version>
+      <version>5.13.2-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
