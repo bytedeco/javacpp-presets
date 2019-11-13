@@ -7,6 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.systems.global.macosx.*;
+ /* __darwin_suseconds_t */
 
 @Properties(inherit = org.bytedeco.systems.presets.macosx.class)
 public class timeval extends Pointer {

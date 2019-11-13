@@ -32,7 +32,7 @@ public class rusage_info_v0 extends Pointer {
 	public native @Cast("uint64_t") long ri_interrupt_wkups(); public native rusage_info_v0 ri_interrupt_wkups(long setter);
 	public native @Cast("uint64_t") long ri_pageins(); public native rusage_info_v0 ri_pageins(long setter);
 	public native @Cast("uint64_t") long ri_wired_size(); public native rusage_info_v0 ri_wired_size(long setter);
-	public native @Cast("uint64_t") long ri_resident_size(); public native rusage_info_v0 ri_resident_size(long setter);	
+	public native @Cast("uint64_t") long ri_resident_size(); public native rusage_info_v0 ri_resident_size(long setter);
 	public native @Cast("uint64_t") long ri_phys_footprint(); public native rusage_info_v0 ri_phys_footprint(long setter);
 	public native @Cast("uint64_t") long ri_proc_start_abstime(); public native rusage_info_v0 ri_proc_start_abstime(long setter);
 	public native @Cast("uint64_t") long ri_proc_exit_abstime(); public native rusage_info_v0 ri_proc_exit_abstime(long setter);

@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.systems.global.macosx.*;
-
+ /* size_t */
 @Properties(inherit = org.bytedeco.systems.presets.macosx.class)
 public class iovec extends Pointer {
     static { Loader.load(); }

@@ -7,9 +7,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.systems.global.macosx.*;
+ /* __darwin_size_t */
 
-// #else /* !__DARWIN_UNIX03 */
-// #endif /* __DARWIN_UNIX03 */
 @Name("__darwin_sigaltstack") @Properties(inherit = org.bytedeco.systems.presets.macosx.class)
 public class stack_t extends Pointer {
     static { Loader.load(); }

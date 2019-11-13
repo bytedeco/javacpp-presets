@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -143,6 +143,8 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("__cpuid").cppTypes("void", "int", "int&", "int&", "int&", "int&"))
                .put(new Info("__cpuid_count").cppTypes("void", "int", "int", "int&", "int&", "int&", "int&"))
+
+               .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
                .put(new Info("getwd", "mkstemp_dprotected_np").skip());
     }

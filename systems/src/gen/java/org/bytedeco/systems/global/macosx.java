@@ -94,7 +94,7 @@ public static final int signature_VORTEX_ebx = 0x74726f56;
 public static final int signature_VORTEX_edx = 0x36387865;
 public static final int signature_VORTEX_ecx = 0x436f5320;
 
-/* Features in %ecx for level 1 */
+/* Features in %ecx for leaf 1 */
 public static final int bit_SSE3 =        0x00000001;
 public static final int bit_PCLMULQDQ =   0x00000002;
 public static final int bit_PCLMUL =      bit_PCLMULQDQ;   /* for gcc compat */
@@ -129,7 +129,7 @@ public static final int bit_AVX =         0x10000000;
 public static final int bit_F16C =        0x20000000;
 public static final int bit_RDRND =       0x40000000;
 
-/* Features in %edx for level 1 */
+/* Features in %edx for leaf 1 */
 public static final int bit_FPU =         0x00000001;
 public static final int bit_VME =         0x00000002;
 public static final int bit_DE =          0x00000004;
@@ -162,36 +162,107 @@ public static final int bit_HTT =         0x10000000;
 public static final int bit_TM =          0x20000000;
 public static final int bit_PBE =         0x80000000;
 
-/* Features in %ebx for level 7 sub-leaf 0 */
+/* Features in %ebx for leaf 7 sub-leaf 0 */
 public static final int bit_FSGSBASE =    0x00000001;
+public static final int bit_SGX =         0x00000004;
+public static final int bit_BMI =         0x00000008;
+public static final int bit_HLE =         0x00000010;
+public static final int bit_AVX2 =        0x00000020;
 public static final int bit_SMEP =        0x00000080;
+public static final int bit_BMI2 =        0x00000100;
 public static final int bit_ENH_MOVSB =   0x00000200;
+public static final int bit_RTM =         0x00000800;
+public static final int bit_MPX =         0x00004000;
+public static final int bit_AVX512F =     0x00010000;
+public static final int bit_AVX512DQ =    0x00020000;
+public static final int bit_RDSEED =      0x00040000;
+public static final int bit_ADX =         0x00080000;
+public static final int bit_AVX512IFMA =  0x00200000;
+public static final int bit_CLFLUSHOPT =  0x00800000;
+public static final int bit_CLWB =        0x01000000;
+public static final int bit_AVX512PF =    0x04000000;
+public static final int bit_AVX51SER =    0x08000000;
+public static final int bit_AVX512CD =    0x10000000;
+public static final int bit_SHA =         0x20000000;
+public static final int bit_AVX512BW =    0x40000000;
+public static final int bit_AVX512VL =    0x80000000;
+
+/* Features in %ecx for leaf 7 sub-leaf 0 */
+public static final int bit_PREFTCHWT1 =  0x00000001;
+public static final int bit_AVX512VBMI =  0x00000002;
+public static final int bit_PKU =         0x00000004;
+public static final int bit_OSPKE =       0x00000010;
+public static final int bit_AVX512VPOPCNTDQ =  0x00004000;
+public static final int bit_RDPID =       0x00400000;
+
+/* Features in %edx for leaf 7 sub-leaf 0 */
+public static final int bit_AVX5124VNNIW =  0x00000004;
+public static final int bit_AVX5124FMAPS =  0x00000008;
+
+/* Features in %eax for leaf 13 sub-leaf 1 */
+public static final int bit_XSAVEOPT =    0x00000001;
+public static final int bit_XSAVEC =      0x00000002;
+public static final int bit_XSAVES =      0x00000008;
+
+/* Features in %ecx for leaf 0x80000001 */
+public static final int bit_LAHF_LM =     0x00000001;
+public static final int bit_ABM =         0x00000020;
+public static final int bit_SSE4a =       0x00000040;
+public static final int bit_PRFCHW =      0x00000100;
+public static final int bit_XOP =         0x00000800;
+public static final int bit_LWP =         0x00008000;
+public static final int bit_FMA4 =        0x00010000;
+public static final int bit_TBM =         0x00200000;
+public static final int bit_MWAITX =      0x20000000;
+
+/* Features in %edx for leaf 0x80000001 */
+public static final int bit_MMXEXT =      0x00400000;
+public static final int bit_LM =          0x20000000;
+public static final int bit_3DNOWP =      0x40000000;
+public static final int bit_3DNOW =       0x80000000;
+
+/* Features in %ebx for leaf 0x80000001 */
+public static final int bit_CLZERO =      0x00000001;
+
 
 // #if __i386__
-public static native void __cpuid(int __level, @ByRef IntPointer __eax, @ByRef IntPointer __ebx, @ByRef IntPointer __ecx, @ByRef IntPointer __edx);
-public static native void __cpuid(int __level, @ByRef IntBuffer __eax, @ByRef IntBuffer __ebx, @ByRef IntBuffer __ecx, @ByRef IntBuffer __edx);
-public static native void __cpuid(int __level, @ByRef int[] __eax, @ByRef int[] __ebx, @ByRef int[] __ecx, @ByRef int[] __edx);
+public static native void __cpuid(int __leaf, @ByRef IntPointer __eax, @ByRef IntPointer __ebx, @ByRef IntPointer __ecx, @ByRef IntPointer __edx);
+public static native void __cpuid(int __leaf, @ByRef IntBuffer __eax, @ByRef IntBuffer __ebx, @ByRef IntBuffer __ecx, @ByRef IntBuffer __edx);
+public static native void __cpuid(int __leaf, @ByRef int[] __eax, @ByRef int[] __ebx, @ByRef int[] __ecx, @ByRef int[] __edx);
 
-public static native void __cpuid_count(int __level, int __count, @ByRef IntPointer __eax, @ByRef IntPointer __ebx, @ByRef IntPointer __ecx, @ByRef IntPointer __edx);
-public static native void __cpuid_count(int __level, int __count, @ByRef IntBuffer __eax, @ByRef IntBuffer __ebx, @ByRef IntBuffer __ecx, @ByRef IntBuffer __edx);
-public static native void __cpuid_count(int __level, int __count, @ByRef int[] __eax, @ByRef int[] __ebx, @ByRef int[] __ecx, @ByRef int[] __edx);
+public static native void __cpuid_count(int __leaf, int __count, @ByRef IntPointer __eax, @ByRef IntPointer __ebx, @ByRef IntPointer __ecx, @ByRef IntPointer __edx);
+public static native void __cpuid_count(int __leaf, int __count, @ByRef IntBuffer __eax, @ByRef IntBuffer __ebx, @ByRef IntBuffer __ecx, @ByRef IntBuffer __edx);
+public static native void __cpuid_count(int __leaf, int __count, @ByRef int[] __eax, @ByRef int[] __ebx, @ByRef int[] __ecx, @ByRef int[] __edx);
 // #else
 /* x86-64 uses %rbx as the base register, so preserve it. */
 // #endif
 
-public static native int __get_cpuid(@Cast("unsigned int") int __level, @Cast("unsigned int*") IntPointer __eax,
+public static native int __get_cpuid_max(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") IntPointer __sig);
+public static native int __get_cpuid_max(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") IntBuffer __sig);
+public static native int __get_cpuid_max(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") int[] __sig);
+
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") IntPointer __eax,
                                  @Cast("unsigned int*") IntPointer __ebx, @Cast("unsigned int*") IntPointer __ecx,
                                  @Cast("unsigned int*") IntPointer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __level, @Cast("unsigned int*") IntBuffer __eax,
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") IntBuffer __eax,
                                  @Cast("unsigned int*") IntBuffer __ebx, @Cast("unsigned int*") IntBuffer __ecx,
                                  @Cast("unsigned int*") IntBuffer __edx);
-public static native int __get_cpuid(@Cast("unsigned int") int __level, @Cast("unsigned int*") int[] __eax,
+public static native int __get_cpuid(@Cast("unsigned int") int __leaf, @Cast("unsigned int*") int[] __eax,
                                  @Cast("unsigned int*") int[] __ebx, @Cast("unsigned int*") int[] __ecx,
                                  @Cast("unsigned int*") int[] __edx);
 
-public static native int __get_cpuid_max(@Cast("unsigned int") int __level, @Cast("unsigned int*") IntPointer __sig);
-public static native int __get_cpuid_max(@Cast("unsigned int") int __level, @Cast("unsigned int*") IntBuffer __sig);
-public static native int __get_cpuid_max(@Cast("unsigned int") int __level, @Cast("unsigned int*") int[] __sig);
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf,
+                                       @Cast("unsigned int") int __subleaf,
+                                       @Cast("unsigned int*") IntPointer __eax, @Cast("unsigned int*") IntPointer __ebx,
+                                       @Cast("unsigned int*") IntPointer __ecx, @Cast("unsigned int*") IntPointer __edx);
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf,
+                                       @Cast("unsigned int") int __subleaf,
+                                       @Cast("unsigned int*") IntBuffer __eax, @Cast("unsigned int*") IntBuffer __ebx,
+                                       @Cast("unsigned int*") IntBuffer __ecx, @Cast("unsigned int*") IntBuffer __edx);
+public static native int __get_cpuid_count(@Cast("unsigned int") int __leaf,
+                                       @Cast("unsigned int") int __subleaf,
+                                       @Cast("unsigned int*") int[] __eax, @Cast("unsigned int*") int[] __ebx,
+                                       @Cast("unsigned int*") int[] __ecx, @Cast("unsigned int*") int[] __edx);
 
 
 // Parsed from dlfcn.h
@@ -830,6 +901,7 @@ public static native @Cast("ssize_t") long writev(int arg0, @Const iovec arg1, i
  */
 // #ifndef _STRUCT_IOVEC
 // #define	_STRUCT_IOVEC
+// #include <sys/_types/_size_t.h>
 // Targeting ../macosx/iovec.java
 
 
@@ -1131,7 +1203,8 @@ public static final long SAE_CONNID_ALL = SAE_CONNID_ALL();
 
 /* connectx() flag parameters */
 public static final int CONNECT_RESUME_ON_READ_WRITE =	0x1; /* resume connect() on read/write */
-public static final int CONNECT_DATA_IDEMPOTENT =		0x2;
+public static final int CONNECT_DATA_IDEMPOTENT =		0x2; /* data is idempotent */
+public static final int CONNECT_DATA_AUTHENTICATED =	0x4;
 // Targeting ../macosx/sa_endpoints_t.java
 
 
@@ -1228,7 +1301,6 @@ public static final int _SS_PAD1SIZE = _SS_PAD1SIZE();
 public static native @MemberGetter int _SS_PAD2SIZE();
 public static final int _SS_PAD2SIZE = _SS_PAD2SIZE();
 // Targeting ../macosx/sockaddr_storage.java
-
 
 
 
@@ -1459,13 +1531,10 @@ public static native int sendfile(int arg0, int arg1, @Cast("off_t") long arg2, 
 
 // #if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
 public static native void pfctlinput(int arg0, sockaddr arg1);
-public static native int connectx(int arg0, @Const sa_endpoints_t arg1, @Cast("sae_associd_t") int arg2, @Cast("unsigned int") int arg3,
-    @Const iovec arg4, @Cast("unsigned int") int arg5, @Cast("size_t*") SizeTPointer arg6, @Cast("sae_connid_t*") IntPointer arg7);
-public static native int connectx(int arg0, @Const sa_endpoints_t arg1, @Cast("sae_associd_t") int arg2, @Cast("unsigned int") int arg3,
-    @Const iovec arg4, @Cast("unsigned int") int arg5, @Cast("size_t*") SizeTPointer arg6, @Cast("sae_connid_t*") IntBuffer arg7);
-public static native int connectx(int arg0, @Const sa_endpoints_t arg1, @Cast("sae_associd_t") int arg2, @Cast("unsigned int") int arg3,
-    @Const iovec arg4, @Cast("unsigned int") int arg5, @Cast("size_t*") SizeTPointer arg6, @Cast("sae_connid_t*") int[] arg7);
-public static native int disconnectx(int arg0, @Cast("sae_associd_t") int arg1, @Cast("sae_connid_t") int arg2);
+
+
+
+
 // #endif	/* (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
 // #endif /* !_SYS_SOCKET_H_ */
 
@@ -1807,7 +1876,7 @@ public static final int ELAST =		106;		/* Must be equal largest errno */
 
 /* ANSI-C */
 
-public static native Pointer memchr(@Const Pointer __s, int __c, @Cast("size_t") long __n);
+public static native Pointer memchr(Pointer __s, int __c, @Cast("size_t") long __n);
 public static native int memcmp(@Const Pointer __s1, @Const Pointer __s2, @Cast("size_t") long __n);
 public static native Pointer memcpy(Pointer __dst, @Const Pointer __src, @Cast("size_t") long __n);
 public static native Pointer memmove(Pointer __dst, @Const Pointer __src, @Cast("size_t") long __len);
@@ -1974,6 +2043,8 @@ public static native @Cast("char*") byte[] strsep(@Cast("char**") @ByPtrPtr byte
 
 /* SUS places swab() in unistd.h.  It is listed here for source compatibility */
 public static native void swab(@Const Pointer arg0, Pointer arg1, @Cast("ssize_t") long arg2);
+
+public static native int timingsafe_bcmp(@Const Pointer __b1, @Const Pointer __b2, @Cast("size_t") long __len);
 /* Some functions historically defined in string.h were placed in strings.h
  * by SUS.  We are using "strings.h" instead of <strings.h> to avoid an issue
  * where /Developer/Headers/FlatCarbon/Strings.h could be included instead on
@@ -2105,6 +2176,14 @@ public static final int RAND_MAX =	0x7fffffff;
 // #define	MB_CUR_MAX_L(x)	(___mb_cur_max_l(x))
 // #endif
 
+// #ifndef __alloc_size
+// #if __has_attribute(alloc_size)
+// #define __alloc_size(...) __attribute__((alloc_size(__VA_ARGS__)))
+// #else
+// #define __alloc_size(...)
+// #endif
+// #endif // __alloc_size
+
 public static native void abort();
 public static native int abs(int arg0);
 // Targeting ../macosx/_Nonnull.java
@@ -2128,7 +2207,7 @@ public static native Pointer bsearch(@Const Pointer __key, @Const Pointer __base
 public static native Pointer calloc(@Cast("size_t") long __count, @Cast("size_t") long __size);
 public static native @ByVal div_t div(int arg0, int arg1);
 public static native void exit(int arg0);
-public static native void free(Pointer arg0);
+public static native @Name("free") void _free(Pointer arg0);
 public static native @Cast("char*") BytePointer getenv(@Cast("const char*") BytePointer arg0);
 public static native @Cast("char*") ByteBuffer getenv(String arg0);
 public static native long labs(long arg0);
@@ -2496,6 +2575,8 @@ public static native Pointer valloc(@Cast("size_t") long arg0);
  */
 // #ifndef _STRUCT_TIMESPEC
 // #define _STRUCT_TIMESPEC	struct timespec
+
+// #include <machine/types.h>
 // Targeting ../macosx/timespec.java
 
 
@@ -2533,6 +2614,9 @@ public static native Pointer valloc(@Cast("size_t") long arg0);
  */
 // #ifndef _STRUCT_TIMEVAL
 // #define _STRUCT_TIMEVAL		struct timeval
+
+// #include <machine/types.h> /* __darwin_time_t */
+// #include <sys/_types.h>
 // Targeting ../macosx/timeval.java
 
 
@@ -2704,6 +2788,7 @@ public static final int DST_CAN =		6;	/* Canada */
 
 
 // #endif /* (!_POSIX_C_SOURCE || _DARWIN_C_SOURCE) */
+
 
 
 // #if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
@@ -3368,7 +3453,10 @@ public static final int UF_COMPRESSED =	0x00000020;	/* file is compressed (some 
    notifications for deletes or renames for files which have UF_TRACKED set. */
 public static final int UF_TRACKED =		0x00000040;
 
-/* Bits 0x0080 through 0x4000 are currently undefined. */
+public static final int UF_DATAVAULT =	0x00000080;	/* entitlement required for reading */
+					/* and writing */
+
+/* Bits 0x0100 through 0x4000 are currently undefined. */
 public static final int UF_HIDDEN =	0x00008000;	/* hint that this item should not be */
 					/* displayed in a GUI */
 /*
@@ -3379,7 +3467,7 @@ public static final int SF_SETTABLE =	0xffff0000;	/* mask of superuser changeabl
 public static final int SF_ARCHIVED =	0x00010000;	/* file is archived */
 public static final int SF_IMMUTABLE =	0x00020000;	/* file may not be changed */
 public static final int SF_APPEND =	0x00040000;	/* writes to file may only append */
-public static final int SF_RESTRICTED =	0x00080000;	/* restricted access */
+public static final int SF_RESTRICTED =	0x00080000;	/* entitlement required for writing */
 public static final int SF_NOUNLINK =	0x00100000;	/* Item may not be removed, renamed or mounted on */
 
 /*
@@ -3416,6 +3504,15 @@ public static native int fstatat(int arg0, @Cast("const char*") BytePointer arg1
 public static native int fstatat(int arg0, String arg1, stat arg2, int arg3);
 public static native int mkdirat(int arg0, @Cast("const char*") BytePointer arg1, @Cast("mode_t") short arg2);
 public static native int mkdirat(int arg0, String arg1, @Cast("mode_t") short arg2);
+
+public static final int UTIME_NOW =	-1;
+public static final int UTIME_OMIT =	-2;
+
+public static native int futimens(int __fd, @Const timespec __times);
+public static native int utimensat(int __fd, @Cast("const char*") BytePointer __path, @Const timespec __times,
+		int __flag);
+public static native int utimensat(int __fd, String __path, @Const timespec __times,
+		int __flag);
 // #endif
 
 // #if !defined(_POSIX_C_SOURCE) || defined(_DARWIN_C_SOURCE)
@@ -3829,8 +3926,15 @@ public static native int getpwuuid_r(@Cast("unsigned char*") byte[] arg0, passwd
 
 /* Structure used in sigaltstack call. */
 // #ifndef _STRUCT_SIGALTSTACK
+
+// #include <sys/cdefs.h> /* __DARWIN_UNIX03 */
+
 // #if __DARWIN_UNIX03
 // #define _STRUCT_SIGALTSTACK	struct __darwin_sigaltstack
+// #else /* !__DARWIN_UNIX03 */
+// #endif /* __DARWIN_UNIX03 */
+
+// #include <machine/types.h>
 // Targeting ../macosx/stack_t.java
 
  /* [???] signal stack */
@@ -4353,8 +4457,8 @@ public static native int __sigbits(int __signo);
 // #ifndef _SCHED_H_
 // #define _SCHED_H_
 
-// #include <pthread_impl.h>
 // #include <sys/cdefs.h>
+// #include <pthread_impl.h>
 // Targeting ../macosx/sched_param.java
 
 
@@ -4370,7 +4474,8 @@ public static native int sched_get_priority_max(int arg0);
 // Parsed from mach/machine.h
 
 /*
- * Copyright (c) 2000-2007 Apple Computer, Inc. All rights reserved.
+ * Copyright (c) 2007-2016 Apple, Inc. All rights reserved.
+ * Copyright (c) 2000 Apple Computer, Inc. All rights reserved.
  *
  * @APPLE_OSREFERENCE_LICENSE_HEADER_START@
  * 
@@ -4737,6 +4842,7 @@ public static final int CPUFAMILY_INTEL_IVYBRIDGE =	0x1f65e835;
 public static final int CPUFAMILY_INTEL_HASWELL =		0x10b282dc;
 public static final int CPUFAMILY_INTEL_BROADWELL =	0x582ed09c;
 public static final int CPUFAMILY_INTEL_SKYLAKE =		0x37fc219f;
+public static final int CPUFAMILY_INTEL_KABYLAKE =	0x0f817246;
 public static final int CPUFAMILY_ARM_9 =			0xe73283ae;
 public static final int CPUFAMILY_ARM_11 =		0x8ff620d8;
 public static final int CPUFAMILY_ARM_XSCALE =		0x53b005f5;
@@ -4749,6 +4855,7 @@ public static final int CPUFAMILY_ARM_CYCLONE =		0x37a09642;
 public static final int CPUFAMILY_ARM_TYPHOON =		0x2c91a47e;
 public static final int CPUFAMILY_ARM_TWISTER =		0x92fb37c8;
 public static final int CPUFAMILY_ARM_HURRICANE =		0x67ceee93;
+public static final int CPUFAMILY_ARM_MONSOON_MISTRAL =	0xe81e7ef6;
 
 /* The following synonyms are deprecated: */
 public static final int CPUFAMILY_INTEL_6_23 =	CPUFAMILY_INTEL_PENRYN;
@@ -5094,12 +5201,24 @@ public static native int posix_spawn_file_actions_addinherit_np(@Cast("posix_spa
  * @APPLE_OSREFERENCE_LICENSE_HEADER_END@
  */
 
+// #include <sys/cdefs.h>
+
 /* whence values for lseek(2) */
 // #ifndef SEEK_SET
 public static final int SEEK_SET =	0;	/* set file offset to offset */
 public static final int SEEK_CUR =	1;	/* set file offset to current plus offset */
 public static final int SEEK_END =	2;	/* set file offset to EOF plus offset */
 // #endif	/* !SEEK_SET */
+
+// #if __DARWIN_C_LEVEL >= __DARWIN_C_FULL
+// #ifndef SEEK_HOLE
+public static final int SEEK_HOLE =	3;	/* set file offset to the start of the next hole greater than or equal to the supplied offset */
+// #endif
+
+// #ifndef SEEK_DATA
+public static final int SEEK_DATA =	4;	/* set file offset to the start of the next non-hole file region greater than or equal to the supplied offset */
+// #endif
+// #endif /* __DARWIN_C_LEVEL >= __DARWIN_C_FULL */
 
 
 // Parsed from sys/unistd.h
@@ -5271,6 +5390,7 @@ public static final int _PC_REC_XFER_ALIGN =	23;	/* Recommended buffer alignment
 public static final int _PC_SYMLINK_MAX =		24;	/* Max # of bytes in symlink name */
 public static final int _PC_SYNC_IO =		25;	/* Sync I/O [SIO] supported? */
 public static final int _PC_XATTR_SIZE_BITS = 	26;	/* # of bits to represent maximum xattr size */
+public static final int _PC_MIN_HOLE_SIZE =	27;	/* Recommended minimum hole size for sparse files */
 
 /* configurable system strings */
 public static final int _CS_PATH =		 1;
@@ -5280,9 +5400,14 @@ public static final int _CS_PATH =		 1;
 // #include <machine/_types.h>
 // #include <sys/_types/_size_t.h>
 // #include <_types/_uint64_t.h>
+// #include <_types/_uint32_t.h>
 // #include <Availability.h>
 
 public static native int getattrlistbulk(int arg0, Pointer arg1, Pointer arg2, @Cast("size_t") long arg3, @Cast("uint64_t") long arg4);
+public static native int getattrlistat(int arg0, @Cast("const char*") BytePointer arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("unsigned long") long arg5);
+public static native int getattrlistat(int arg0, String arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("unsigned long") long arg5);
+public static native int setattrlistat(int arg0, @Cast("const char*") BytePointer arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("uint32_t") int arg5);
+public static native int setattrlistat(int arg0, String arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("uint32_t") int arg5);
 
 // #endif /* __DARWIN_C_LEVEL >= __DARWIN_C_FULL */
 
@@ -5312,8 +5437,6 @@ public static native int symlinkat(@Cast("const char*") BytePointer arg0, int ar
 public static native int symlinkat(String arg0, int arg1, String arg2);
 public static native int unlinkat(int arg0, @Cast("const char*") BytePointer arg1, int arg2);
 public static native int unlinkat(int arg0, String arg1, int arg2);
-public static native int getattrlistat(int arg0, @Cast("const char*") BytePointer arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("unsigned long") long arg5);
-public static native int getattrlistat(int arg0, String arg1, Pointer arg2, Pointer arg3, @Cast("size_t") long arg4, @Cast("unsigned long") long arg5);
 
 // #endif /* __DARWIN_C_LEVEL >= 200809L */
 
@@ -6075,14 +6198,25 @@ public static native int mkostemps(@Cast("char*") ByteBuffer path, int slen, int
 public static native int mkostemps(@Cast("char*") byte[] path, int slen, int oflags);
 /* Non-portable mkstemp that uses open_dprotected_np */
 
+public static native @Cast("char*") BytePointer mkdtempat_np(int dfd, @Cast("char*") BytePointer path);
+public static native @Cast("char*") ByteBuffer mkdtempat_np(int dfd, @Cast("char*") ByteBuffer path);
+public static native @Cast("char*") byte[] mkdtempat_np(int dfd, @Cast("char*") byte[] path);
+public static native int mkstempsat_np(int dfd, @Cast("char*") BytePointer path, int slen);
+public static native int mkstempsat_np(int dfd, @Cast("char*") ByteBuffer path, int slen);
+public static native int mkstempsat_np(int dfd, @Cast("char*") byte[] path, int slen);
+public static native int mkostempsat_np(int dfd, @Cast("char*") BytePointer path, int slen, int oflags);
+public static native int mkostempsat_np(int dfd, @Cast("char*") ByteBuffer path, int slen, int oflags);
+public static native int mkostempsat_np(int dfd, @Cast("char*") byte[] path, int slen, int oflags);
 public static native int nfssvc(int arg0, Pointer arg1);
 public static native int profil(@Cast("char*") BytePointer arg0, @Cast("size_t") long arg1, @Cast("unsigned long") long arg2, @Cast("unsigned int") int arg3);
 public static native int profil(@Cast("char*") ByteBuffer arg0, @Cast("size_t") long arg1, @Cast("unsigned long") long arg2, @Cast("unsigned int") int arg3);
 public static native int profil(@Cast("char*") byte[] arg0, @Cast("size_t") long arg1, @Cast("unsigned long") long arg2, @Cast("unsigned int") int arg3);
+
 public static native int pthread_setugid_np(@Cast("uid_t") int arg0, @Cast("gid_t") int arg1);
 public static native int pthread_getugid_np( @Cast("uid_t*") IntPointer arg0, @Cast("gid_t*") IntPointer arg1);
 public static native int pthread_getugid_np( @Cast("uid_t*") IntBuffer arg0, @Cast("gid_t*") IntBuffer arg1);
 public static native int pthread_getugid_np( @Cast("uid_t*") int[] arg0, @Cast("gid_t*") int[] arg1);
+
 public static native int reboot(int arg0);
 public static native int revoke(@Cast("const char*") BytePointer arg0);
 public static native int revoke(String arg0);
@@ -6405,6 +6539,11 @@ public static final int RB_PANIC =	0x800;   /* panic the kernel */
 
 /* userspace reboot control */
 public static native int usrctl(@Cast("uint32_t") int flags);
+/* The normal reboot syscall. */
+/* Used with RB_PANIC to panic the kernel from userspace with a message.
+ * Requires an entitlement on Release. */
+public static native int reboot_np(int howto, @Cast("const char*") BytePointer message);
+public static native int reboot_np(int howto, String message);
 // #endif /* __APPLE_API_PRIVATE */
 
 // #ifdef __APPLE_API_OBSOLETE
@@ -6444,6 +6583,7 @@ public static final int B_DEVMAGIC =	0xa0000000;
 // 	((partition) << B_PARTITIONSHIFT) | B_DEVMAGIC)
 
 // #endif /* __APPLE_API_OBSOLETE */
+
 
 
 // #endif	/* _SYS_REBOOT_H_ */
@@ -6603,7 +6743,8 @@ public static final int RUSAGE_INFO_V0 =	0;
 public static final int RUSAGE_INFO_V1 =	1;
 public static final int RUSAGE_INFO_V2 =	2;
 public static final int RUSAGE_INFO_V3 =	3;
-public static final int RUSAGE_INFO_CURRENT = RUSAGE_INFO_V3;
+public static final int RUSAGE_INFO_V4 =	4;
+public static final int RUSAGE_INFO_CURRENT =	RUSAGE_INFO_V4;
 // Targeting ../macosx/rusage_info_t.java
 
 
@@ -6617,6 +6758,9 @@ public static final int RUSAGE_INFO_CURRENT = RUSAGE_INFO_V3;
 
 
 // Targeting ../macosx/rusage_info_v3.java
+
+
+// Targeting ../macosx/rusage_info_v4.java
 
 
 // Targeting ../macosx/rusage_info_current.java
