@@ -7,7 +7,7 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.systems.global.macosx.*;
- /* data is idempotent */
+ /* data includes security that replaces the TFO-cookie */
 
 /* sockaddr endpoints */
 @Properties(inherit = org.bytedeco.systems.presets.macosx.class)

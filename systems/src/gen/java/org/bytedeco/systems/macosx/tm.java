@@ -33,6 +33,6 @@ public class tm extends Pointer {
 	public native int tm_wday(); public native tm tm_wday(int setter);	/* days since Sunday [0-6] */
 	public native int tm_yday(); public native tm tm_yday(int setter);	/* days since January 1 [0-365] */
 	public native int tm_isdst(); public native tm tm_isdst(int setter);	/* Daylight Savings Time flag */
-	public native long tm_gmtoff(); public native tm tm_gmtoff(long setter);	/* offset from CUT in seconds */
+	public native long tm_gmtoff(); public native tm tm_gmtoff(long setter);	/* offset from UTC in seconds */
 	public native @Cast("char*") BytePointer tm_zone(); public native tm tm_zone(BytePointer setter);	/* timezone abbreviation */
 }
