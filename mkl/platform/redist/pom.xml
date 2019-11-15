@@ -23,7 +23,7 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>${javacpp.moduleId}</artifactId>
+      <artifactId>${javacpp.moduleId}-platform</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
