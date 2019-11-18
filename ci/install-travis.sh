@@ -195,6 +195,9 @@ if [ "$OS" == "linux-armhf" ]; then
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+   # get rid of some stuff we don't use to avoid running out of disk space
+   sudo rm -Rf /Library/Developer/CoreSimulator/*
+
    echo "performing brew update and install of dependencies, please wait.."
    brew update
    brew upgrade cmake maven openssl@1.1
