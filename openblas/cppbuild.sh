@@ -192,10 +192,9 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
-        export LDFLAGS='-s -Wl,-rpath,@loader_path/'
+        export LDFLAGS='-s -Wl,-rpath,@loader_path/ -lgfortran'
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
         export NO_AVX512=1
         ;;
     windows-x86)

@@ -1,4 +1,5 @@
 
+ * Add presets for SciPy 1.3.2 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
  * Upgrade presets for NumPy 1.17.4, ONNX Runtime 1.0.0, Qt 5.13.2
 
 ### November 5, 2019 version 1.5.2

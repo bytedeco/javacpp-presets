@@ -596,6 +596,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1077,6 +1078,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1128,6 +1130,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1178,6 +1181,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1234,6 +1238,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1298,6 +1303,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1367,6 +1373,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1435,6 +1442,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1496,6 +1504,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>

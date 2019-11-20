@@ -185,7 +185,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=cpython,numpy OS=linux-armhf
+        env: PROJ=cpython,numpy,scipy OS=linux-armhf
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -226,7 +226,7 @@ matrix:
         install: true
         script: ./ci/install-arm.sh
       - os: linux
-        env: PROJ=cpython,numpy OS=linux-arm64
+        env: PROJ=cpython,numpy,scipy OS=linux-arm64
         install: true
         script: ./ci/install-arm.sh
       - os: linux
@@ -267,7 +267,7 @@ matrix:
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
-        env: PROJ=cpython,numpy OS=linux-ppc64le
+        env: PROJ=cpython,numpy,scipy OS=linux-ppc64le
         install: true
         script: ./ci/install-ppc.sh
       - os: linux
@@ -316,7 +316,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=cpython,numpy OS=linux-x86
+        env: PROJ=cpython,numpy,scipy OS=linux-x86
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -389,7 +389,7 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
-        env: PROJ=cpython,numpy OS=linux-x86_64
+        env: PROJ=cpython,numpy,scipy OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: linux
@@ -499,7 +499,7 @@ matrix:
         script: ./ci/install-travis.sh
       - os: osx
         osx_image: xcode9.3
-        env: PROJ=cpython,numpy OS=macosx-x86_64
+        env: PROJ=cpython,numpy,scipy OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
