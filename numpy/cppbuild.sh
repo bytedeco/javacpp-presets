@@ -52,7 +52,7 @@ case $PLATFORM in
         "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv
         "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$CPYTHON_PATH/bin/python3.7" crossenv
         source crossenv/bin/activate
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 -march=armv6 -mfpu=vfp -mfloat-abi=hard" python setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 -march=armv6 -mfpu=vfp -mfloat-abi=hard" python setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
@@ -63,7 +63,7 @@ case $PLATFORM in
         "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv
         "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$CPYTHON_PATH/bin/python3.7" crossenv
         source crossenv/bin/activate
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" python setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" python setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
@@ -74,7 +74,7 @@ case $PLATFORM in
         "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv
         "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$CPYTHON_PATH/bin/python3.7" crossenv
         source crossenv/bin/activate
-        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" python setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" python setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
@@ -83,16 +83,16 @@ case $PLATFORM in
         export PYTHONPATH="$INSTALL_PATH/lib/python3.7/site-packages/"
         mkdir -p "$PYTHONPATH"
         chmod +x "$CPYTHON_PATH/bin/python3.7"
-        ATLAS=None CC="gcc -m32" "$CPYTHON_PATH/bin/python3.7" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m32" "$CPYTHON_PATH/bin/python3.7" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     linux-x86_64)
-        # setup.py won't pick up the right libgfortran.so without this
+        # setup.py  won't pick up the right libgfortran.so without this
         export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
         export PYTHONPATH="$INSTALL_PATH/lib/python3.7/site-packages/"
         mkdir -p "$PYTHONPATH"
         chmod +x "$CPYTHON_PATH/bin/python3.7"
-        ATLAS=None CC="gcc -m64" "$CPYTHON_PATH/bin/python3.7" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m64" "$CPYTHON_PATH/bin/python3.7" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
@@ -100,7 +100,7 @@ case $PLATFORM in
         export PYTHONPATH="$INSTALL_PATH/lib/python3.7/site-packages/"
         mkdir -p "$PYTHONPATH"
         chmod +x "$CPYTHON_PATH/bin/python3.7"
-        ATLAS=None "$CPYTHON_PATH/bin/python3.7" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
+        ATLAS=None "$CPYTHON_PATH/bin/python3.7" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f; done
         ;;
@@ -115,7 +115,7 @@ case $PLATFORM in
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
+        ATLAS=None "$CPYTHON_PATH/bin/python.exe" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
         ;;
     windows-x86_64)
         CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
@@ -126,7 +126,7 @@ case $PLATFORM in
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$CPYTHON_PATH/bin/python.exe" setup.py build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
+        ATLAS=None "$CPYTHON_PATH/bin/python.exe" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ install --prefix ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

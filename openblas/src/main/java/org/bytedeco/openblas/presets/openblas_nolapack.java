@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
               preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
     @Platform(value = "android", link = "openblas", preload = ""),
-    @Platform(value = "macosx",  link = "openblas_nolapack", preload = "openblas#openblas_nolapack"),
+    @Platform(value = "macosx",  preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
     @Platform(value = "windows", preload = "libopenblas#libopenblas_nolapack"),
     @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/",
                                                        "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/"}),

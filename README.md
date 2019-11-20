@@ -130,6 +130,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
  * CPython 3.7.5  https://www.python.org/downloads/
  * NumPy 1.17.x  https://github.com/numpy/numpy
+ * SciPy 1.3.x  https://github.com/scipy/scipy
  * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html

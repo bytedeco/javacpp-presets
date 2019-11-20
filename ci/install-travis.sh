@@ -206,7 +206,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
    # Try to use ccache to speed up the build
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
-   if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]]; then
+   if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]] || [[ "$PROJ" =~ scipy ]]; then
        brew install gcc@7
        brew link --overwrite gcc@7
 
