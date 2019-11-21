@@ -67,6 +67,21 @@
               <goal>build</goal>
             </goals>
           </execution>
+          <execution>
+            <id>javacpp-postbuild</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${javacpp.compiler.skip}</skip>
+              <buildCommand>
+                <program>bash</program>
+                <argument>${project.basedir}/postbuild.sh</argument>
+              </buildCommand>
+              <workingDirectory>${project.basedir}</workingDirectory>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
