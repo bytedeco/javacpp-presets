@@ -22,11 +22,7 @@
 
 package org.bytedeco.systems.presets;
 
-import java.nio.ByteBuffer;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -53,6 +49,7 @@ import org.bytedeco.javacpp.tools.Logger;
         target = "org.bytedeco.systems.windows", global = "org.bytedeco.systems.global.windows")
 @NoException
 public class windows implements BuildEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;
@@ -114,7 +111,7 @@ public class windows implements BuildEnabled, InfoMapper {
                              "_Post_", "_Post_equals_last_error_", "_Post_invalid_", "_Post_readable_byte_size_", "_Post_writable_byte_size_", "_Post_satisfies_",
                              "_IRQL_requires_same_", "_IRQL_requires_max_", "_Function_class_", "__forceinline", "_Interlocked_operand_", "_Struct_size_bytes_",
                              "_Maybe_raises_SEH_exception_", "__drv_aliasesMem", "__drv_freesMem", "__drv_preferredFunction", "__out_data_source",
-                             "_In_", "_In_reads_", "_In_reads_bytes_", "_In_reads_opt_", "_In_opt_", "_In_reads_bytes_opt_",
+                             "_In_", "_In_reads_", "_In_reads_bytes_", "_In_reads_opt_", "_In_opt_", "_In_reads_bytes_opt_", "_Ret_range_",
                              "_Out_", "_Outptr_", "_Out_writes_", "_Out_writes_all_", "_Out_writes_bytes_", "_Out_writes_bytes_to_", "_Out_writes_to_",
                              "_Out_opt_", "_Outptr_opt_", "_Out_writes_opt_", "_Out_writes_to_opt_", "_Out_writes_bytes_opt_", "_Out_writes_bytes_to_opt_",
                              "_Out_writes_bytes_all_", "_Outptr_opt_result_bytebuffer_all_", "_Outptr_opt_result_maybenull_",

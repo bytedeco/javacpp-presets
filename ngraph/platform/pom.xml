@@ -6,25 +6,24 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>ngraph-platform</artifactId>
-  <version>${revision}</version>
+  <version>0.26.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for nGraph</name>
 
   <properties>
     <javacpp.moduleId>ngraph</javacpp.moduleId>
-    <revision>0.18.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.18.1-${project.parent.version}</version>
+      <version>0.21.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -36,6 +35,12 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-x86_64}</classifier>
     </dependency>
   </dependencies>
 
@@ -49,7 +54,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -95,6 +100,7 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                      requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                     }
                   </moduleInfoSource>
                 </module>

@@ -13,12 +13,12 @@ set MAKEJ=%NUMBER_OF_PROCESSORS%
 IF "%OS%"=="windows-x86_64" (
    set MSYSTEM=MINGW64
    echo Callings vcvarsall for amd64
-   call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+   call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
 )
 IF "%OS%"=="windows-x86" (
    set MSYSTEM=MINGW32
    echo Callings vcvarsall for x86
-   call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+   call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
 )
 echo on
 
@@ -33,7 +33,7 @@ rem C:\msys64\usr\bin\bash -lc "pacman -Su --noconfirm"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm base-devel git tar nasm yasm pkg-config unzip p7zip zip autoconf autoconf-archive automake libtool make patch gnupg"
 C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-libtool mingw-w64-x86_64-cmake mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gcc-fortran mingw-w64-i686-gcc-fortran mingw-w64-x86_64-libwinpthread-git mingw-w64-i686-libwinpthread-git mingw-w64-x86_64-SDL mingw-w64-i686-SDL"
 
-SET "PATH=C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
+SET "PATH=C:\Program Files (x86)\CMake\bin;C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 C:\msys64\usr\bin\bash -c "ci/install-windows.sh %PROJ%"
 if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
     SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.1"

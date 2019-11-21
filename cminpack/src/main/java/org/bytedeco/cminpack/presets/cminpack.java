@@ -22,6 +22,7 @@
 
 package org.bytedeco.cminpack.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -44,6 +45,8 @@ import org.bytedeco.openblas.presets.openblas;
     global = "org.bytedeco.cminpack.global.cminpack")
 @NoException
 public class cminpack implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "cminpack"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cminpack_double__").define(true));
         mapCommon(infoMap);

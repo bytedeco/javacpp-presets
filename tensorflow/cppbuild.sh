@@ -33,16 +33,19 @@ export TF_CUDA_VERSION=10.1
 export TF_CUDNN_VERSION=7
 export TF_DOWNLOAD_CLANG=0
 export TF_NCCL_VERSION=2.4
-export TF_TENSORRT_VERSION=5.1
+export TF_TENSORRT_VERSION=6.0
 export GCC_HOST_COMPILER_PATH=$(which gcc)
+export ACTUAL_GCC_HOST_COMPILER_PATH=$(which -a gcc | grep -v /ccache/ | head -1) # skip ccache
 export CUDA_TOOLKIT_PATH=/usr/local/cuda
 export CUDNN_INSTALL_PATH=$CUDA_TOOLKIT_PATH
 export NCCL_INSTALL_PATH=$CUDA_TOOLKIT_PATH
-export TENSORRT_INSTALL_PATH=/usr/local/tensorrt/lib
+export TENSORRT_INSTALL_PATH=/usr/local/tensorrt
 export TF_CUDA_COMPUTE_CAPABILITIES=3.0
 export TF_SET_ANDROID_WORKSPACE=0
+export TF_IGNORE_MAX_BAZEL_VERSION=1
+export TF_CONFIGURE_IOS=0
 
-TENSORFLOW_VERSION=1.13.1
+TENSORFLOW_VERSION=1.15.0
 
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
@@ -51,6 +54,7 @@ cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
 CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
+MKLDNN_PATH="$INSTALL_PATH/../../../mkl-dnn/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
 NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
 
@@ -65,6 +69,14 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
             export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/python3.7/"
             export USE_DEFAULT_PYTHON_LIB_PATH=0
             chmod +x "$PYTHON_BIN_PATH"
+        elif [[ -f "$P/include/Python.h" ]]; then
+            CPYTHON_PATH="$P"
+            export PYTHON_BIN_PATH="$CPYTHON_PATH/python.exe"
+            export PYTHON_INCLUDE_PATH="$CPYTHON_PATH/include/"
+            export PYTHON_LIB_PATH="$CPYTHON_PATH/lib/"
+            export USE_DEFAULT_PYTHON_LIB_PATH=0
+        elif [[ -f "$P/include/mkldnn.h" ]]; then
+            MKLDNN_PATH="$P"
         elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
         elif [[ -f "$P/python/numpy/core/include/numpy/arrayobject.h" ]]; then
@@ -75,6 +87,7 @@ if [[ -n "${BUILD_PATH:-}" ]]; then
 fi
 
 CPYTHON_PATH="${CPYTHON_PATH//\\//}"
+MKLDNN_PATH="${MKLDNN_PATH//\\//}"
 OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
 NUMPY_PATH="${NUMPY_PATH//\\//}"
 
@@ -102,6 +115,21 @@ sedinplace '/\(foo\|bar\|ops.withSubScope\)/d' tensorflow/java/src/gen/java/org/
 # https://github.com/tensorflow/tensorflow/issues/26155
 patch -Np1 < ../../../tensorflow-cuda.patch || true
 
+# Work around more compile issues with CUDA 10.1
+sedinplace 's/constexpr auto kComputeInNHWC/auto kComputeInNHWC/g' tensorflow/core/kernels/*.cc
+sedinplace 's/constexpr auto kComputeInNCHW/auto kComputeInNCHW/g' tensorflow/core/kernels/*.cc
+sedinplace 's/constexpr auto get_matrix_op/auto get_matrix_op/g' tensorflow/compiler/tf2tensorrt/convert/convert_nodes.cc
+
+# Work around crash in MSVC compiler
+sedinplace 's/constexpr//g' tensorflow/core/grappler/optimizers/data/rebatch.cc
+
+# Fix incorrect function declarations
+sedinplace 's/std::vector<TensorShape> value/std::vector<TensorShape>* value/g' tensorflow/core/framework/node_def_util.h
+
+# Fix support for TensorRT 6.0
+sedinplace 's/NvInferRTSafe.h/NvInferRuntimeCommon.h/g' third_party/tensorrt/tensorrt_configure.bzl
+sedinplace 's/NvInferRTExt.h/NvInferRuntime.h/g' third_party/tensorrt/tensorrt_configure.bzl
+
 export GPU_FLAGS=
 export CMAKE_GPU_FLAGS=
 if [[ "$EXTENSION" == *gpu ]]; then
@@ -124,30 +152,32 @@ if [[ "$EXTENSION" =~ python ]]; then
     export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/"
     export PYTHONPATH="$NUMPY_PATH/python/"
     ln -sf $OPENBLAS_PATH/libopenblas.* $NUMPY_PATH/
-    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_applications==1.0.6 --no-deps
-    pip3 install --target=$CPYTHON_PATH/lib/python3.7/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 case $PLATFORM in
     android-arm)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=armeabi-v7a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-arm64)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=arm64-v8a --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
         export BUILDFLAGS="--android_compiler=clang --crosstool_top=//external:android/crosstool --cpu=x86 --host_crosstool_top=@bazel_tools//tools/cpp:toolchain --linkopt=-s"
         ;;
     android-x86_64)
+        sedinplace '/soversion/d' tensorflow/BUILD
         patch -Np1 < ../../../tensorflow-android.patch
         sedinplace "/    path=\"<PATH_TO_NDK>\",/c\    path=\"${ANDROID_NDK}\"," ./WORKSPACE
         sedinplace "s/api_level=14/api_level=21/g" WORKSPACE
@@ -164,18 +194,22 @@ case $PLATFORM in
     linux-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
         export TF_NEED_MKL=1
-        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
+        export BUILDFLAGS="--config=mkl --copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --action_env LD_LIBRARY_PATH --copt=-m64 --linkopt=-m64 --linkopt=-s"
         export CUDA_HOME=$CUDA_TOOLKIT_PATH
         export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64:${LD_LIBRARY_PATH:-}
-        if [[ -f /usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache ]]; then
-            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
-            sedinplace "s:%{nvcc_path}:/usr/local/cuda-$TF_CUDA_VERSION/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+        if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
+            sedinplace "s:%{gcc_host_compiler_path}:$ACTUAL_GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
         fi
         ;;
     macosx-*)
         # https://github.com/tensorflow/tensorflow/issues/14174
         sedinplace 's/__align__(sizeof(T))//g' tensorflow/core/kernels/*.cu.cc
+        sedinplace 's/__align__(ALIGN)//g' tensorflow/core/util/gpu_kernel_helper.h
         sedinplace '/-lgomp/d' third_party/gpus/cuda/BUILD.tpl
+        sedinplace 's/cp -rLf/cp -RLf/g' third_party/gpus/cuda_configure.bzl
+        sedinplace 's/check_soname = version and not static/check_soname = False/g' third_party/gpus/cuda_configure.bzl
+        sedinplace 's/#if __clang__/#if 0/g' tensorflow/core/util/gpu_device_functions.h
         patch -Np1 < ../../../tensorflow-java.patch
         # allows us to use ccache with Bazel
         export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
@@ -186,26 +220,37 @@ case $PLATFORM in
         export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:${LD_LIBRARY_PATH:-}
         export PATH=$DYLD_LIBRARY_PATH:$PATH
         if [[ -f /usr/local/cuda/bin/nvcccache ]]; then
-            sedinplace "s:%{gcc_host_compiler_path}:/usr/bin/gcc:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+            sedinplace "s:%{gcc_host_compiler_path}:$ACTUAL_GCC_HOST_COMPILER_PATH:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
             sedinplace "s:%{nvcc_path}:/usr/local/cuda/bin/nvcccache:g" third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
         fi
         ;;
     windows-x86_64)
         patch -Np1 < ../../../tensorflow-java.patch
-        sedinplace 's:cuda/include/cuda_fp16.h:cuda_fp16.h:g' tensorflow/core/util/cuda_kernel_helper.h
+        # https://github.com/tensorflow/tensorflow/issues/25213
+        patch -Np1 < ../../../tensorflow-windows.patch
         sedinplace 's/{diff_dst_index}, diff_src_index/{(int)diff_dst_index}, (int)diff_src_index/g' tensorflow/core/kernels/mkl_relu_op.cc
-        export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
-        export BAZEL_VC="C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/"
+        if [[ ! -f $PYTHON_BIN_PATH ]]; then
+            export PYTHON_BIN_PATH="C:/Program Files/Python36/python.exe"
+        fi
+        export BAZEL_VC="${VCINSTALLDIR:-}"
+        export BAZEL_VC_FULL_VERSION="${VCToolsVersion:-}"
         # try not to use /WHOLEARCHIVE as it crashes link.exe
         export NO_WHOLE_ARCHIVE_OPTION=1
         # disable __forceinline for Eigen to speed up the build
         export TF_OVERRIDE_EIGEN_STRONG_INLINE=1
         export TF_NEED_MKL=1
         export BUILDTARGETS="///tensorflow:tensorflow_static ///tensorflow/java:tensorflow"
-        export BUILDFLAGS="--config=mkl --copt=/arch:AVX `#--copt=/arch:AVX2` $GPU_FLAGS --copt=/machine:x64 --linkopt=/machine:x64"
+        export BUILDFLAGS="--config=mkl --copt=//arch:AVX `#--copt=//arch:AVX2` $GPU_FLAGS --action_env PYTHONPATH --action_env PATH --copt=//DGRPC_ARES=0 --copt=//DPB_FIELD_16BIT=1 --copt=//machine:x64 --linkopt=//machine:x64"
         export CUDA_TOOLKIT_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
         export CUDA_HOME="$CUDA_TOOLKIT_PATH"
         export CUDNN_INSTALL_PATH="$CUDA_TOOLKIT_PATH"
+        if [[ "$EXTENSION" =~ python ]]; then
+            CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+            MKLDNN_PATH=$(cygpath $MKLDNN_PATH)
+            OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
+            export BUILDTARGETS="///tensorflow/tools/pip_package:build_pip_package ///tensorflow/java:tensorflow"
+            export PATH="$CPYTHON_PATH:$MKLDNN_PATH:$OPENBLAS_PATH:$PATH"
+        fi
 # old hacks for the now obsolete CMake build
 #        # help cmake's findCuda-method to find the right cuda version
 #        export CUDA_PATH="C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v$TF_CUDA_VERSION"
@@ -239,6 +284,20 @@ case $PLATFORM in
         ;;
 esac
 
+if [[ "$EXTENSION" =~ python ]]; then
+    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH keras_applications==1.0.8 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH keras_preprocessing==1.0.5 --no-deps
+fi
+
+# prevent Bazel from exceeding maximum command line length on Windows
+unset BUILD_PATH
+unset ORIGINAL_PATH
+unset PLATFORM_ARTIFACTS
+unset PLATFORM_INCLUDEPATH
+unset PLATFORM_LINKPATH
+unset PLATFORM_PRELOADPATH
+unset __VSCMD_PREINIT_PATH
+
 bash configure
 bazel build -c opt $BUILDTARGETS --config=monolithic $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --output_filter=DONT_MATCH_ANYTHING --verbose_failures
 
@@ -266,7 +325,9 @@ cp -r tensorflow/java/src/gen/java/* ../java
 cp -r tensorflow/java/src/main/java/* ../java
 cp -r tensorflow/contrib/android/java/* ../java
 cp -r tensorflow/lite/java/src/main/java/* ../java
+cp -r tensorflow/lite/delegates/nnapi/java/src/main/java/* ../java
 cp -r bazel-genfiles/tensorflow/java/ops/src/main/java/* ../java
+cp -r bazel-genfiles/tensorflow/java/_javac/tensorflow/libtensorflow_sourcegenfiles/* ../java
 sedinplace '/TensorFlow.version/d' ../java/org/tensorflow/NativeLibrary.java
 # remove lines that require the Android SDK to compile
 sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInferenceInterface.java
@@ -275,16 +336,27 @@ sedinplace '/Trace/d' ../java/org/tensorflow/contrib/android/TensorFlowInference
 
 if [[ "$EXTENSION" =~ python ]]; then
     # adjust the directory structure a bit to facilitate packaging in JAR files
-    ln -snf tensorflow-$TENSORFLOW_VERSION/bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/org_tensorflow ../python
-    ln -sf python/_pywrap_tensorflow_internal.so bazel-bin/tensorflow/libtensorflow_cc.so
+    if [[ "$PLATFORM" == windows* ]]; then
+        echo "Unzipping simple_console_for_windows.zip to create runfiles tree..."
+        unzip -o -q ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_windows.zip -d ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip
+        echo "Unzip finished."
+        rm -Rf ../python
+        mv ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip/runfiles/org_tensorflow ../python
+        mv ./bazel-bin/tensorflow/tools/pip_package/simple_console_for_window_unzip/runfiles ../python/external
+    else
+        ln -snf tensorflow-$TENSORFLOW_VERSION/bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/org_tensorflow ../python
+        ln -sf python/_pywrap_tensorflow_internal.so bazel-bin/tensorflow/libtensorflow_cc.so
+    fi
     ln -sf external/absl_py/absl/ ../python/
     ln -sf external/astor_archive/astor/ ../python/
     ln -sf external/gast_archive/gast/ ../python/
-    ln -sf external/protobuf_archive/python/google/ ../python/
+    ln -sf external/com_google_protobuf/python/google/ ../python/
+#    ln -sf external/protobuf_archive/python/google/ ../python/
     ln -sf external/six_archive/six.py ../python/
     ln -sf external/termcolor_archive/termcolor.py ../python/
-    pip3 install --target=../python/ keras_applications==1.0.6 --no-deps
-    pip3 install --target=../python/ keras_preprocessing==1.0.5 --no-deps
+    ln -sf external/wrapt/ ../python/
+    $PYTHON_BIN_PATH -m pip install --target=../python/ keras_applications==1.0.8 --no-deps
+    $PYTHON_BIN_PATH -m pip install --target=../python/ keras_preprocessing==1.0.5 --no-deps
 fi
 
 cd ../..

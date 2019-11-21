@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-OPENBLAS_VERSION=0.3.6
+OPENBLAS_VERSION=0.3.7
 
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS_VERSION.tar.gz OpenBLAS-$OPENBLAS_VERSION.tar.gz
 
@@ -138,12 +138,14 @@ case $PLATFORM in
     linux-x86)
         export CC="gcc -m32"
         export FC="gfortran -m32"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/'
         export BINARY=32
         export DYNAMIC_ARCH=1
         ;;
     linux-x86_64)
         export CC="gcc -m64"
         export FC="gfortran -m64"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/'
         export BINARY=64
         export DYNAMIC_ARCH=1
         ;;
@@ -160,27 +162,28 @@ case $PLATFORM in
           export FC="powerpc64le-linux-gnu-gfortran"
           export CROSS_SUFFIX="powerpc64le-linux-gnu-"
         fi
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/'
         export BINARY=64
         export TARGET=POWER5
         ;;
     linux-mips64el)
         export CC="gcc -mabi=64"
         export FC="gfortran -mabi=64"
-        export LDFLAGS="-Wl,-z,noexecstack"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/ -Wl,-z,noexecstack'
         export BINARY=64
         export TARGET=MIPS
         ;;
     linux-armhf)
         export CC="arm-linux-gnueabihf-gcc"
         export FC="arm-linux-gnueabihf-gfortran"
-        export LDFLAGS="-Wl,-z,noexecstack"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/ -Wl,-z,noexecstack'
         export BINARY=32
         export TARGET=ARMV6
         ;;
     linux-arm64)
         export CC="aarch64-linux-gnu-gcc -mabi=lp64"
         export FC="aarch64-linux-gnu-gfortran"
-        export LDFLAGS="-Wl,-z,noexecstack"
+        export LDFLAGS='-s -Wl,-rpath,\$$ORIGIN/ -Wl,-z,noexecstack'
         export BINARY=64
         export TARGET=ARMV8
         ;;
@@ -189,9 +192,9 @@ case $PLATFORM in
         patch -Np1 -d ../OpenBLAS-$OPENBLAS_VERSION-nolapack/ < ../../../OpenBLAS-macosx.patch
         export CC="$(ls -1 /usr/local/bin/gcc-? | head -n 1)"
         export FC="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
+        export LDFLAGS='-s -Wl,-rpath,@loader_path/ -lgfortran'
         export BINARY=64
         export DYNAMIC_ARCH=1
-        export LDFLAGS="-static-libgcc -static-libgfortran -lgfortran /usr/local/lib/gcc/?/libquadmath.a"
         export NO_AVX512=1
         ;;
     windows-x86)

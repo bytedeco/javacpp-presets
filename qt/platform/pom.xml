@@ -6,18 +6,17 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>qt-platform</artifactId>
-  <version>${revision}</version>
+  <version>5.13.2-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for Qt</name>
 
   <properties>
     <javacpp.moduleId>qt</javacpp.moduleId>
-    <revision>5.12.3-${project.parent.version}</revision>
   </properties>
 
   <dependencies>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2018 Samuel Audet
+ * Copyright (C) 2014-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,6 +22,11 @@
 
 package org.bytedeco.opencv.presets;
 
+import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.ByRef;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -45,17 +50,27 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 "opencv_cudaimgproc@.4.1", "opencv_cudafeatures2d@.4.1", "opencv_cudalegacy@.4.1",
                 "opencv_cudaoptflow@.4.1", "opencv_cudawarping@.4.1"}),
         @Platform(value = "ios", preload = "libopencv_videostab"),
-        @Platform(value = "windows", link = "opencv_videostab410",
-            preload = {"opencv_cuda410", "opencv_cudaarithm410", "opencv_cudafilters410",
-                "opencv_cudaimgproc410", "opencv_cudafeatures2d410", "opencv_cudalegacy410",
-                "opencv_cudaoptflow410", "opencv_cudawarping410"})},
+        @Platform(value = "windows", link = "opencv_videostab412",
+            preload = {"opencv_cuda412", "opencv_cudaarithm412", "opencv_cudafilters412",
+                "opencv_cudaimgproc412", "opencv_cudafeatures2d412", "opencv_cudalegacy412",
+                "opencv_cudaoptflow412", "opencv_cudawarping412"})},
     target = "org.bytedeco.opencv.opencv_videostab",
     global = "org.bytedeco.opencv.global.opencv_videostab"
 )
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("override").annotations()) // pure virtual functions are not mapped unless virtualized, so disable override annotation
+               .put(new Info("std::function<void(Mat&)>").pointerTypes("MaskCallback"))
                .put(new Info("cv::videostab::IFrameSource").virtualize());
+    }
+
+    public static class MaskCallback extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    MaskCallback(Pointer p) { super(p); }
+        protected MaskCallback() { allocate(); }
+        private native void allocate();
+        public native void call(@ByRef @Cast("cv::Mat*") Pointer image);
     }
 }
 

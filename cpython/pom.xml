@@ -6,17 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cpython</artifactId>
-  <version>${revision}</version>
+  <version>3.7.5-${project.parent.version}</version>
   <name>JavaCPP Presets for CPython</name>
-
-  <properties>
-    <revision>3.7.3-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -44,6 +40,7 @@
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/libs/</linkPath>
           </linkPaths>
         </configuration>
       </plugin>

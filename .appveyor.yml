@@ -1,6 +1,6 @@
 version: '{build}'
 
-os: Visual Studio 2015
+os: Visual Studio 2017
 
 cache:
   - C:\Users\appveyor\.m2 -> .appveyor.yml
@@ -12,7 +12,7 @@ environment:
       OS: windows-x86
     - PROJ: "ffmpeg"
       OS: windows-x86
-    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,videoinput"
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,librealsense,librealsense2,videoinput"
       OS: windows-x86
     - PROJ: "hdf5"
       OS: windows-x86
@@ -21,6 +21,8 @@ environment:
     - PROJ: "openblas"
       OS: windows-x86
     - PROJ: "arpack-ng,cminpack,fftw,gsl"
+      OS: windows-x86
+    - PROJ: "cpython,numpy,scipy"
       OS: windows-x86
     - PROJ: "llvm"
       OS: windows-x86
@@ -37,19 +39,19 @@ environment:
       OS: windows-x86_64
     - PROJ: "ffmpeg"
       OS: windows-x86_64
-    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,videoinput"
+    - PROJ: "flycapture,spinnaker,libdc1394,libfreenect,libfreenect2,librealsense,librealsense2,videoinput"
       OS: windows-x86_64
     - PROJ: "hdf5"
       OS: windows-x86_64
     - PROJ: "mkl"
       OS: windows-x86_64
-    - PROJ: "mkl-dnn"
+    - PROJ: "mkl-dnn,dnnl"
       OS: windows-x86_64
     - PROJ: "openblas"
       OS: windows-x86_64
     - PROJ: "arpack-ng,cminpack,fftw,gsl"
       OS: windows-x86_64
-    - PROJ: "cpython,numpy"
+    - PROJ: "cpython,numpy,scipy"
       OS: windows-x86_64
     - PROJ: "llvm"
       OS: windows-x86_64
@@ -83,6 +85,12 @@ environment:
     - PROJ: "tensorflow"
       OS: windows-x86_64
       EXT: -gpu
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python
+#    - PROJ: "tensorflow"
+#      OS: windows-x86_64
+#      EXT: -python-gpu
 
 for:
 -

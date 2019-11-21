@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 8.0.0  http://llvm.org/
+ * LLVM 9.0.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,7 +16,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/llvm/apidocs/
 
-&lowast; Bindings are currently available only for the C API of LLVM.
+&lowast; Bindings are currently available only for the C APIs of LLVM and Clang.  
+&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
 
 
 Sample Usage
@@ -30,15 +31,13 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  $ mvn compile exec:java
 ```
 
-&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
-
 ### The `pom.xml` build file
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>1.5</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>Fac</exec.mainClass>
     </properties>
@@ -46,7 +45,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>llvm-platform</artifactId>
-            <version>8.0.0-1.5</version>
+            <version>9.0.0-1.5.2</version>
         </dependency>
     </dependencies>
     <build>

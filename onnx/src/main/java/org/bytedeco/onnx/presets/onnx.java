@@ -28,12 +28,6 @@ import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 @Properties(target = "org.bytedeco.onnx", global = "org.bytedeco.onnx.global.onnx", value = {@Platform(
     value = {"linux", "macosx"},
     define = {"ONNX_NAMESPACE onnx", "ONNX_USE_LITE_PROTO", "ONNX_ML 1", "SHARED_PTR_NAMESPACE std", "UNIQUE_PTR_NAMESPACE std"},
@@ -74,6 +68,8 @@ import java.lang.annotation.Target;
     link = {"onnx_proto", "onnx", "onnxifi"}),
 @Platform(value = "macosx", link = {"onnx_proto", "onnx"})}) // "onnxifi" not available on Mac
 public class onnx implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "onnx"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("ONNX_NAMESPACE").cppText("#define ONNX_NAMESPACE onnx"))
                .put(new Info("LIBPROTOBUF_EXPORT", "PROTOBUF_EXPORT", "PROTOBUF_CONSTEXPR", "PROTOBUF_FINAL",
@@ -123,7 +119,7 @@ public class onnx implements InfoMapper {
                              "google::protobuf::internal::FieldMetadata", "google::protobuf::internal::SerializationTable", "google::protobuf::internal::proto3_preserve_unknown_",
                              "google::protobuf::internal::MergePartialFromImpl", "google::protobuf::internal::UnknownFieldParse", "google::protobuf::internal::WriteLengthDelimited",
                              "google::protobuf::is_proto_enum", "google::protobuf::GetEnumDescriptor", "google::protobuf::RepeatedField", "onnx::_TypeProto_default_instance_",
-                             "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_",
+                             "onnx::_TypeProto_Map_default_instance_", "onnx::_TypeProto_Sequence_default_instance_", "onnx::_SparseTensorProto_default_instance_",
                              "onnx::_TypeProto_Opaque_default_instance_", "onnx::_TypeProto_SparseTensor_default_instance_",
                              "onnx::_TypeProto_Tensor_default_instance_",  "onnx::_ValueInfoProto_default_instance_", "onnx::_TensorShapeProto_Dimension_default_instance_",
                              "onnx::_TensorShapeProto_default_instance_", "onnx::_TensorProto_Segment_default_instance_","onnx::_TensorProto_default_instance_",

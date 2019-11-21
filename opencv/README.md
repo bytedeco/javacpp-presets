@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 4.1.0  http://opencv.org/
+ * OpenCV 4.1.2  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -23,7 +23,7 @@ Sample Usage
 ------------
 Here is a simple example of OpenCV ported to Java from this C++ source file:
 
- * https://github.com/Itseez/opencv/blob/3.0.0/samples/cpp/stitching.cpp
+ * https://github.com/opencv/opencv/blob/3.0.0/samples/cpp/stitching.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `Stitching.java` source files below, simply execute on the command line:
 ```bash
@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
@@ -44,47 +44,28 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.1.0-1.5.1-SNAPSHOT</version>
+            <version>4.1.2-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.1.0-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.1.0-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>opencv</artifactId>
-            <version>4.1.0-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86_64-gpu</classifier>
+            <artifactId>opencv-platform-gpu</artifactId>
+            <version>4.1.2-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-redist</classifier>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>10.1-7.6-1.5.2</version>
         </dependency>
+
+        <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86_64-redist</classifier>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2019.5-1.5.2</version>
         </dependency>
 
     </dependencies>
@@ -151,6 +132,9 @@ public class Stitching {
     static String result_name = "result.jpg";
 
     public static void main(String[] args) {
+        /* try to use MKL when available */
+        System.setProperty("org.bytedeco.openblas.load", "mkl");
+
         int retval = parseCmdArgs(args);
         if (retval != 0) {
             System.exit(-1);

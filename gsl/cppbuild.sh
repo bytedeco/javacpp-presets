@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-GSL_VERSION=2.5
+GSL_VERSION=2.6
 download http://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -92,6 +92,11 @@ case $PLATFORM in
     linux-armhf)
         export LDFLAGS="-Wl,-rpath-link,$(dirname $(dirname $(which arm-linux-gnueabihf-gcc)))/arm-linux-gnueabihf/lib/"
         ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
+        make -j $MAKEJ V=0
+        make install-strip
+        ;;
+    linux-arm64)
+        ./configure --prefix=$INSTALL_PATH --host=aarch64-linux-gnu
         make -j $MAKEJ V=0
         make install-strip
         ;;

@@ -24,30 +24,30 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco</groupId>
     <artifactId>${moduleName}-platform</artifactId>
-    <version>${moduleVersion}-1.5</version>
+    <version>${moduleVersion}-1.5.2</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5'
+    compile group: 'org.bytedeco', name: moduleName + '-platform', version: moduleVersion + '-1.5.2'
   }
 ```
 
  * Leiningen (inside the `project.clj` file)
 ```clojure
   :dependencies [
-    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5")]
+    [~(symbol (str "org.bytedeco/" moduleName "-platform")) ~(str moduleVersion "-1.5.2")]
   ]
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
-  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5"
+  libraryDependencies += "org.bytedeco" % moduleName + "-platform" % moduleVersion + "-1.5.2"
 ```
 
-where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. This downloads binaries for all platforms, but to get binaries for only one platform we can set the `javacpp.platform` system property (via the `-D` command line option) to something like `android-arm`, `linux-x86_64`, `macosx-x86_64`, `windows-x86_64`, etc. We can also specify more than one platform, see the examples at [Reducing the Number of Dependencies](https://github.com/bytedeco/javacpp-presets/wiki/Reducing-the-Number-of-Dependencies). Another option available for Scala users is [sbt-javacpp](https://github.com/bytedeco/sbt-javacpp).
 
 
 Required Software
@@ -102,50 +102,54 @@ Additionally, one can find on the wiki page additional information about the rec
 The JavaCPP Presets depend on Maven, a powerful build system for Java, so before attempting a build, be sure to install and read up on:
 
  * Maven 3.x  http://maven.apache.org/download.html
- * JavaCPP 1.5  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.5.2  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies by default on the included [`cppbuild.sh` scripts](#the-cppbuildsh-scripts), explained below, to install its corresponding native libraries in the `cppbuild` subdirectory. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 4.1.0  https://opencv.org/releases.html
- * FFmpeg 4.1.x  http://ffmpeg.org/download.html
+ * OpenCV 4.1.2  https://opencv.org/releases.html
+ * FFmpeg 4.2.x  http://ffmpeg.org/download.html
  * FlyCapture 2.13.x  http://www.ptgrey.com/flycapture-sdk
  * Spinnaker 1.19.x https://www.ptgrey.com/spinnaker-sdk
- * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
+ * libdc1394 2.2.6  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.7  https://github.com/OpenKinect/libfreenect
  * libfreenect2 0.2.0  https://github.com/OpenKinect/libfreenect2
- * librealsense 1.12.1  https://github.com/IntelRealSense/librealsense
+ * librealsense 1.12.x  https://github.com/IntelRealSense/librealsense
+ * librealsense2 2.29.x  https://github.com/IntelRealSense/librealsense
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
- * MKL 2019.3  https://software.intel.com/intel-mkl
- * MKL-DNN 0.18.1  https://github.com/intel/mkl-dnn
- * OpenBLAS 0.3.6  http://www.openblas.net/
+ * MKL 2019.5  https://software.intel.com/intel-mkl
+ * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
+ * DNNL 1.1.x  https://github.com/intel/mkl-dnn
+ * OpenBLAS 0.3.7  http://www.openblas.net/
  * ARPACK-NG 3.7.0  https://github.com/opencollab/arpack-ng
  * CMINPACK 1.3.6  https://github.com/devernay/cminpack
  * FFTW 3.3.8  http://www.fftw.org/download.html
- * GSL 2.5  http://www.gnu.org/software/gsl/#downloading
- * CPython 3.7.3  https://www.python.org/downloads/
- * NumPy 1.16.3  https://github.com/numpy/numpy
- * LLVM 8.0.0  http://llvm.org/releases/download.html
+ * GSL 2.6  http://www.gnu.org/software/gsl/#downloading
+ * CPython 3.7.5  https://www.python.org/downloads/
+ * NumPy 1.17.x  https://github.com/numpy/numpy
+ * SciPy 1.3.x  https://github.com/scipy/scipy
+ * LLVM 9.0.0  http://llvm.org/releases/download.html
  * libpostal 1.1-alpha  https://github.com/openvenues/libpostal
  * Leptonica 1.78.0  http://www.leptonica.org/download.html
- * Tesseract 4.0.0  https://github.com/tesseract-ocr/tesseract
+ * Tesseract 4.1.0  https://github.com/tesseract-ocr/tesseract
  * Caffe 1.0  https://github.com/BVLC/caffe
- * CUDA 10.1  https://developer.nvidia.com/cuda-downloads
-   * cuDNN 7.5  https://developer.nvidia.com/cudnn
-   * NCCL 2.4  https://developer.nvidia.com/nccl
- * MXNet 1.4.0  https://github.com/dmlc/mxnet
- * TensorFlow 1.13.1  https://github.com/tensorflow/tensorflow
- * TensorRT 5.1  https://developer.nvidia.com/tensorrt
+ * CUDA 10.1 Update 2  https://developer.nvidia.com/cuda-downloads
+   * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
+   * NCCL 2.4.x  https://developer.nvidia.com/nccl
+ * MXNet 1.5.1  https://github.com/dmlc/mxnet
+ * TensorFlow 1.15.0  https://github.com/tensorflow/tensorflow
+ * TensorRT 6.0  https://developer.nvidia.com/tensorrt
  * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
- * ONNX 1.5.0  https://github.com/onnx/onnx
- * nGraph 0.18.1  https://github.com/NervanaSystems/ngraph
+ * ONNX 1.6.0  https://github.com/onnx/onnx
+ * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
+ * ONNX Runtime 1.0.0  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
- * Qt 5.12.3  https://download.qt.io/archive/qt/
+ * Qt 5.13.x  https://download.qt.io/archive/qt/
  * Mono/Skia 1.68.0  https://github.com/mono/skia
- * cpu_features 0.3.0  https://github.com/google/cpu_features
+ * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/
    * Mac OS X (XNU libc)  https://opensource.apple.com/
@@ -153,9 +157,9 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
 
 Once everything installed and configured, simply execute
 ```bash
-$ mvn install --projects .,opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
+$ mvn install --projects .,opencv,ffmpeg,etc. -Djavacpp.platform.root=/path/to/android-ndk/
 ```
-inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Also specify `-Djavacpp.cppbuild.skip` as option to skip the execution of the `cppbuild.sh` scripts. In addition to `-Djavacpp.platform=...`, some of the presets can also be built against CUDA with `-Djavacpp.platform.extension=-gpu`. Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
+inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `pom.xml` file itself might not get installed.** (The `-Djavacpp.platform.root=...` option is required only for Android builds.) Also specify `-Djavacpp.cppbuild.skip` as option to skip the execution of the `cppbuild.sh` scripts. In addition to `-Djavacpp.platform=...`, some of the presets can also be built against CUDA with `-Djavacpp.platform.extension=-gpu` or CPython with `-Djavacpp.platform.extension=-python`. Please refer to the comments inside the `pom.xml` file for further details. From the "platform" subdirectory, we can also install the "platform" artifacts with a similar command:
 
 ```bash
 $ cd platform
@@ -173,7 +177,7 @@ With the above in working order, the scripts get launched automatically as part 
 ```bash
 $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [-extension <name>] <install | clean> [projects]
 ```
-where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The only extension currently supported by some builds is `-gpu`, requiring CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
+where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `linux-armhf`, `linux-ppc64le`, `linux-mips64el`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. The `-gpu` extension as supported by some builds also require CUDA to be installed. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 

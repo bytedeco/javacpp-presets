@@ -6,18 +6,17 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>llvm-platform</artifactId>
-  <version>${revision}</version>
+  <version>9.0.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for LLVM</name>
 
   <properties>
     <javacpp.moduleId>llvm</javacpp.moduleId>
-    <revision>8.0.0-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
@@ -37,6 +36,24 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-armhf}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
+      <classifier>${javacpp.platform.linux-ppc64le}</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -68,7 +85,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-linux-armhf.jar ${javacpp.moduleId}-linux-arm64.jar ${javacpp.moduleId}-linux-ppc64le.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
                 </manifestEntries>
               </archive>
             </configuration>
@@ -115,6 +132,9 @@
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86;
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86_64;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.armhf;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.arm64;
+                      requires org.bytedeco.${javacpp.moduleId}.linux.ppc64le;
                       requires org.bytedeco.${javacpp.moduleId}.macosx.x86_64;
                       requires org.bytedeco.${javacpp.moduleId}.windows.x86;
                       requires org.bytedeco.${javacpp.moduleId}.windows.x86_64;

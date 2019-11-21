@@ -24,6 +24,9 @@ package org.bytedeco.cpython.presets;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import org.bytedeco.javacpp.ClassProperties;
+import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
@@ -123,7 +126,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "pyfpe.h",
             },
             link = "python3.7m@.1.0!",
-            resource = {"include", "lib", "bin", "share"}
+            resource = {"include", "lib", "libs", "bin", "share"}
         ),
         @Platform(
             value = "macosx",
@@ -162,7 +165,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     helper = "org.bytedeco.cpython.helper.python"
 )
 @NoException
-public class python implements InfoMapper {
+public class python implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "cpython"); }
 
     /** Returns {@code Loader.cacheResource("/org/bytedeco/cpython/" + Loader.getPlatform() + "/lib/")}. */
     public static File cachePackage() throws IOException {
@@ -175,20 +179,41 @@ public class python implements InfoMapper {
         return new File[] {f, new File(f, "python3.7"), new File(f, "python3.7/lib-dynload"), new File(f, "python3.7/site-packages")};
     }
 
+    @Override public void init(ClassProperties properties) {
+        String platform = properties.getProperty("platform");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
+        }
+    }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("Python-ast.h").linePatterns("#define Module.*",
                                                           "int PyAST_Check.*").skip())
 
-               .put(new Info("COMPILER", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
+               .put(new Info("COMPILER", "TIMEMODULE_LIB", "NTDDI_VERSION", "Py_NTDDI", "Py_IS_NAN",
                              "copysign", "hypot", "timezone", "daylight", "tzname",
                              "RETSIGTYPE", "_Py_COUNT_ALLOCS_COMMA", "Py_None", "Py_NotImplemented",
-                             "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T",
+                             "PY_LONG_LONG", "PY_UINT32_T", "PY_UINT64_T", "PY_INT32_T", "PY_INT64_T", "PY_SIZE_MAX",
                              "PY_FORMAT_SIZE_T", "Py_MEMCPY", "_Py_HOT_FUNCTION", "_Py_NO_INLINE", "PyMODINIT_FUNC", "Py_VA_COPY",
                              "__inline__", "Py_HUGE_VAL", "Py_FORCE_DOUBLE", "Py_NAN",
                              "PyMem_Del", "PyMem_DEL", "PyDescr_COMMON", "PY_UNICODE_TYPE",
                              "PyObject_MALLOC", "PyObject_REALLOC", "PyObject_FREE", "PyObject_Del", "PyObject_DEL",
                              "_PyUnicode_AsStringAndSize", "_PyUnicode_AsString",
-                             "PyLong_FromPid", "PyLong_AsPid", "PyLong_AsLong",
+                             "PyLong_FromPid", "PyLong_AsPid", "PyLong_AS_LONG",
                              "Py_False", "Py_True", "Py_RETURN_TRUE", "Py_RETURN_FALSE", "Py_RETURN_NAN",
                              "PyObject_HEAD", "PyObject_VAR_HEAD", "Py_RETURN_NONE", "Py_RETURN_NOTIMPLEMENTED",
                              "PyModuleDef_HEAD_INIT", "_Py_atomic_address", "__declspec",
@@ -219,14 +244,12 @@ public class python implements InfoMapper {
                              "Py_DEBUG",
                              "defined(MS_WIN32) && !defined(HAVE_SNPRINTF)",
                              "defined(MS_WINDOWS) && !defined(Py_LIMITED_API)",
-                             "!defined(PY_SSIZE_T_CLEAN) || !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000",
                              "PY_SSIZE_T_CLEAN").cppTypes().define(false))
 
-               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD").cppTypes().define(true))
+               .put(new Info("!defined(__INTEL_COMPILER)", "WITH_THREAD", "PY_NO_SHORT_FLOAT_REPR").cppTypes().define(true))
 
                .put(new Info("COMPILER", "PY_LLONG_MIN", "PY_LLONG_MAX", "PY_ULLONG_MAX",
-                             "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T",
-                             "PY_SIZE_MAX", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
+                             "SIZEOF_PY_HASH_T", "SIZEOF_PY_UHASH_T", "PY_SSIZE_T_MAX", "PY_SSIZE_T_MIN",
                              "LONG_BIT", "PyLong_BASE", "PyLong_MASK", "Py_UNICODE_SIZE").cppTypes("long long").translate(false))
 
                .put(new Info("PyHash_FuncDef").purify())
@@ -257,7 +280,7 @@ public class python implements InfoMapper {
                              "__PyCodeExtraState::co_extra_freefuncs", "_PyDict_NewKeysForClass", "_PyDictView_New",
                              "_PyDict_KeysSize", "_PyDict_SizeOf", "_PyDict_Pop_KnownHash", "_PyDict_FromKeys",
                              "_PyObjectDict_SetItem", "_PyDict_LoadGlobal", "__PyCodeExtraState_Get",
-                             "_Py_asdl_seq_new", "_Py_asdl_int_seq_new").skip())
+                             "_Py_asdl_seq_new", "_Py_asdl_int_seq_new", "_PyTime_MIN", "_PyTime_MAX").skip())
 
                .put(new Info("mod_ty").valueTypes("_mod").pointerTypes("@ByPtrPtr _mod"))
                .put(new Info("stmt_ty").valueTypes("_stmt").pointerTypes("@ByPtrPtr _stmt"))
@@ -276,5 +299,28 @@ public class python implements InfoMapper {
                .put(new Info("stat").pointerTypes("@Cast(\"struct stat*\") Pointer"))
                .put(new Info("_Py_wreadlink", "_Py_wrealpath", "_Py_get_blocking", "_Py_set_blocking").skip())
         ;
+
+        String PyArg_Parse = "public static native int PyArg_Parse(PyObject arg0, String arg1",
+               PyArg_ParseTuple = "public static native int PyArg_ParseTuple(PyObject arg0, String arg1",
+               PyArg_ParseTupleAndKeywords = "public static native int PyArg_ParseTupleAndKeywords(PyObject arg0, PyObject arg1,\n"
+                                           + "                                                  String arg2, @Cast(\"char**\") PointerPointer arg3";
+
+        String PyArg_ParseText = "", PyArg_ParseTupleText = "", PyArg_ParseTupleAndKeywordsText = "";
+        for (int i = 0; i < 10; i++) {
+            PyArg_ParseText += PyArg_Parse;
+            PyArg_ParseTupleText += PyArg_ParseTuple;
+            PyArg_ParseTupleAndKeywordsText += PyArg_ParseTupleAndKeywords;
+            for (int j = 0; j <= i; j++) {
+                PyArg_ParseText += ", Pointer vararg" + j;
+                PyArg_ParseTupleText += ", Pointer vararg" + j;
+                PyArg_ParseTupleAndKeywordsText += ", Pointer vararg" + j;
+            }
+            PyArg_ParseText += ");\n";
+            PyArg_ParseTupleText += ");\n";
+            PyArg_ParseTupleAndKeywordsText += ");\n";
+        }
+        infoMap.put(new Info("PyArg_Parse").javaText(PyArg_ParseText))
+               .put(new Info("PyArg_ParseTuple").javaText(PyArg_ParseTupleText))
+               .put(new Info("PyArg_ParseTupleAndKeywords").javaText(PyArg_ParseTupleAndKeywordsText));
     }
 }

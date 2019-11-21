@@ -1,10 +1,10 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-  <id>bin</id>
+  <id>${project.version}-bin</id>
   <formats>
     <format>zip</format>
   </formats>
-  <baseDirectory>${project.parent.artifactId}-bin</baseDirectory>
+  <baseDirectory>${project.artifactId}-${project.version}-bin</baseDirectory>
   <fileSets>
     <fileSet>
       <directory>${project.parent.basedir}</directory>
@@ -20,11 +20,14 @@
         <include>**/LGPL*</include>
         <include>**/LICENSE*</include>
         <include>**/*license*</include>
-        <include>NOTICE*</include>
+        <include>**/NOTICE*</include>
+        <include>**/samples/**</include>
       </includes>
       <excludes>
-        <exclude>**/cppbuild/**</exclude>
         <exclude>**/src/**</exclude>
+        <exclude>**/target/**</exclude>
+        <exclude>**/cppbuild/**</exclude>
+        <exclude>**/samples/data/**</exclude>
       </excludes>
     </fileSet>
     <fileSet>

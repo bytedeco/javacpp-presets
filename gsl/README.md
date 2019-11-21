@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * GSL 2.5  http://www.gnu.org/software/gsl/
+ * GSL 2.6  http://www.gnu.org/software/gsl/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.gsl</groupId>
     <artifactId>demo</artifactId>
-    <version>1.5</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>Demo</exec.mainClass>
     </properties>
@@ -42,39 +42,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>gsl-platform</artifactId>
-            <version>2.5-1.5</version>
+            <version>2.6-1.5.2</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.3-1.5</version>
-            <classifier>linux-x86-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.3-1.5</version>
-            <classifier>linux-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.3-1.5</version>
-            <classifier>macosx-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.3-1.5</version>
-            <classifier>windows-x86-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>mkl</artifactId>
-            <version>2019.3-1.5</version>
-            <classifier>windows-x86_64-redist</classifier>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2019.5-1.5.2</version>
         </dependency>
 
     </dependencies>

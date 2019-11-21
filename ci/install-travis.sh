@@ -6,7 +6,7 @@ while true; do uptime; sleep 60; done &
 
 # Abort before the maximum build time to be able to save the cache
 # (needs to be less than 2 hours for this to work on Mac as well)
-(sleep 6600; sudo killall -s SIGINT java; sudo killall bazel) &
+(sleep 6600; sudo killall -s SIGINT java; sudo killall bazel; sudo killall make) &
 
 # Allocate a swapfile on Linux as it's not enabled by default
 sudo fallocate -l 4GB /swapfile
@@ -48,21 +48,17 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
-  SCL_ENABLE="devtoolset-7 python27"
-  if [[ "cpython mxnet tensorflow onnx ngraph qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
+  SCL_ENABLE="devtoolset-7 python27 rh-git29"
+  if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
-    SCL_ENABLE=""
-    # MXNet and TensorFlow don't work well with GCC 6 or 7 for some reason
-    if [[ ! "mxnet tensorflow " =~ "$PROJ " ]]; then
-      SCL_ENABLE="devtoolset-7"
-    fi
+    SCL_ENABLE="devtoolset-7 rh-git218"
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -e "container=docker" -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build -v /sys/fs/cgroup:/sys/fs/cgroup nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel openssl-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -79,7 +75,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda-10.1/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler \"\$@\"' > /usr/local/cuda/bin/nvcccache"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "chmod 755 /usr/local/cuda/bin/nvcccache"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rm -f /usr/lib/libgfortran.so.3* /usr/lib64/libgfortran.so.3*" # not required for GCC 7+
@@ -95,6 +91,8 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/bin/python3.6 /usr/bin/python3"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /opt/apache-maven-3.3.9/bin/mvn /usr/bin/mvn"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mvn -version"
+
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp -a /opt/rh/httpd24/root/usr/lib64/* /usr/lib64/"
 
   if [[ "$PROJ" =~ flycapture ]]; then
     if [ "$OS" == "linux-x86_64" ]; then
@@ -139,14 +137,14 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   fi
   if [[ "$PROJ" == "mkl" ]] && [[ "$OS" =~ linux ]]; then
          #don't put in download dir as will be cached and we can use direct url instead
-         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15275/l_mkl_2019.3.199.tgz -o $HOME/mkl.tgz
+         curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15816/l_mkl_2019.5.281.tgz -o $HOME/mkl.tgz
          tar xzvf $HOME/mkl.tgz -C $TRAVIS_BUILD_DIR/../
-         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.3.199/silent.cfg
-         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.3.199/install.sh -s $HOME/build/l_mkl_2019.3.199/silent.cfg"
+         sed -i -e 's/decline/accept/g' $TRAVIS_BUILD_DIR/../l_mkl_2019.5.281/silent.cfg
+         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "$HOME/build/l_mkl_2019.5.281/install.sh -s $HOME/build/l_mkl_2019.5.281/silent.cfg"
   fi
   if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-linux-x86_64.sh -o $HOME/downloads/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1  
@@ -154,64 +152,66 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "bash $HOME/downloads/bazel.sh"
         export TEST_TMPDIR=$HOME/.cache/bazel
         echo "export TEST_TMPDIR=$HOME/.cache/bazel" | tee --append $HOME/vars.list
-
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install --upgrade pip"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "ln -sf /usr/local/bin/pip /usr/bin/pip3"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user numpy"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_applications==1.0.6 --no-deps"
-        docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip3 install -U --user keras_preprocessing==1.0.5 --no-deps"
   fi
   if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing nccl.."
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1P01vTBzZYi5m3GMtXVDO00-z4rowmcR3 $HOME/downloads/nccl_x86_64.txz
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1WF2Pv1aQxLm-42euWamlF8dc4KMQRn2a $HOME/downloads/nccl_x86_64.txz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/nccl_x86_64.txz --strip-components=1 -C /usr/local/cuda/"
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/local/cuda/lib/* /usr/local/cuda/lib64/"
   fi
-  if [ "$PROJ" == "tensorrt" ]; then
-        python $TRAVIS_BUILD_DIR/ci/gDownload.py 1Q7ljbnIO1xz1hhCveOt3i4hln1K458Dk $HOME/downloads/tensorrt.tar.gz
+  if [[ "$PROJ" == "tensorrt" ]] || [[ "$EXT" =~ gpu ]]; then
+        python $TRAVIS_BUILD_DIR/ci/gDownload.py 18JwlxoAtL6kq-GyWUg4JPBeJQpncpRzd $HOME/downloads/tensorrt.tar.gz
         docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "tar hxvf $HOME/downloads/tensorrt.tar.gz -C /usr/local/; ln -sf /usr/local/TensorRT* /usr/local/tensorrt"
   fi
 fi
 
 if [ "$OS" == "linux-armhf" ]; then
-	echo "Setting up tools for linux-armhf build"
-	sudo dpkg --add-architecture i386
-	sudo apt-get update
-	sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-	sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev zlib1g
-	git -C $HOME clone https://github.com/raspberrypi/tools
-	git -C $HOME clone https://github.com/raspberrypi/userland
-	export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
-	export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
-	export BUILD_OPTIONS=-Djava.library.path=
-	pushd $HOME/userland
-	bash buildme
-	popd
+    echo "Setting up tools for linux-armhf build"
+    sudo dpkg --add-architecture i386
+    sudo apt-get update
+    sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
+    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libssl-dev zlib1g-dev
+    curl -L https://github.com/raspberrypi/tools/archive/master.tar.gz -o $HOME/tools-master.tar.gz
+    curl -L https://github.com/raspberrypi/userland/archive/master.tar.gz -o $HOME/userland-master.tar.gz
+    mkdir -p $HOME/tools $HOME/userland
+    tar xzf $HOME/tools-master.tar.gz --strip-components=1 -C $HOME/tools
+    tar xzf $HOME/userland-master.tar.gz --strip-components=1 -C $HOME/userland
+    export PATH=$PATH:$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin
+    export BUILD_COMPILER=-Djavacpp.platform.compiler=arm-linux-gnueabihf-g++
+    export BUILD_OPTIONS=-Djava.library.path=$HOME/tools/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/arm-linux-gnueabihf/lib/
+    pushd $HOME/userland
+    bash buildme
+    popd
 
-	if [[ "$PROJ" =~ flycapture ]]; then
-          if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
+    if [[ "$PROJ" =~ flycapture ]]; then
+        if [[ $(find $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz -type f -size +1000000c 2>/dev/null) ]]; then
             echo "Found flycap-armhf in cache and size seems ok" 
-          else
+        else
             echo "Downloading flycap-armhf as not found in cache or too small" 
             python $TRAVIS_BUILD_DIR/ci/gDownload.py 16NuUBs2MXQpVYqzDCEr9KdMng-6rHuDI $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz
-          fi
-	  cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
         fi
-
+        cp $HOME/downloads/flycapture.2.13.3.31_armhf.tar.gz $TRAVIS_BUILD_DIR/downloads/
+    fi
 fi
 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+   # get rid of some stuff we don't use to avoid running out of disk space
+   sudo rm -Rf /Library/Developer/CoreSimulator/*
+
    echo "performing brew update and install of dependencies, please wait.."
    brew update
-   brew upgrade cmake maven
+   brew upgrade cmake maven openssl@1.1
    brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 nasm yasm
 
    # Try to use ccache to speed up the build
    export PATH=/usr/local/opt/ccache/libexec/:/usr/local/opt/gpg1/libexec/gpgbin/:$PATH
 
-   if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]]; then
+   if [[ "$PROJ" =~ arpack-ng ]] || [[ "$PROJ" =~ cminpack ]] || [[ "$PROJ" =~ mkl-dnn ]] || [[ "$PROJ" =~ openblas ]] || [[ "$PROJ" =~ scipy ]]; then
        brew install gcc@7
        brew link --overwrite gcc@7
+
+       # Remove "fixed" header files that are actually broken
+       sudo rm -Rf /usr/local/Cellar/gcc@7/7.4.0_2/lib/gcc/7/gcc/x86_64-apple-darwin17.7.0/7.4.0/include-fixed
 
        # Fix up some binaries to support rpath
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
@@ -220,6 +220,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
        sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.4.0/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.4.0_2/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
@@ -238,7 +239,6 @@ fi
 if [[ "$OS" =~ android ]]; then
    echo "Install android requirements.."
    DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
-   #docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "pip install numpy" 
 
    curl -L https://dl.google.com/android/repository/android-ndk-r18b-linux-x86_64.zip -o $HOME/ndk.zip; export CURL_STATUS=$?
    if [ "$CURL_STATUS" != "0" ]; then
@@ -260,7 +260,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "cpython mxnet tensorflow onnx " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
+      if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
@@ -268,13 +268,13 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "mkl" ]; then
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15235/m_mkl_2019.3.199.dmg -o $HOME/mkl.dmg
+        curl -L http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15822/m_mkl_2019.5.281.dmg -o $HOME/mkl.dmg
         echo "Mount mkl dmg"
         hdiutil mount $HOME/mkl.dmg
         sleep 10
-        cp /Volumes/m_mkl_2019.3.199/m_mkl_2019.3.199.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
+        cp /Volumes/m_mkl_2019.5.281/m_mkl_2019.5.281.app/Contents/MacOS/silent.cfg $HOME/silent.cfg
         sed -i -e 's/decline/accept/g' $HOME/silent.cfg
-        sudo /Volumes/m_mkl_2019.3.199/m_mkl_2019.3.199.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
+        sudo /Volumes/m_mkl_2019.5.281/m_mkl_2019.5.281.app/Contents/MacOS/install.sh -s $HOME/silent.cfg; export BREW_STATUS=$?
         echo "mkl status $BREW_STATUS"
         if [ $BREW_STATUS -ne 0 ]; then
           echo "mkl Failed"
@@ -285,11 +285,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_mac.dmg -o $HOME/cuda_10.1.168_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-osx-x64-v7.5.0.56.tgz -o $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
+        curl -L http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_mac.dmg -o $HOME/cuda_10.1.243_mac.dmg
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.4/cudnn-10.1-osx-x64-v7.6.4.38.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.4.38.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda_10.1.168_mac.dmg
+        hdiutil mount $HOME/cuda_10.1.243_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -299,11 +299,12 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.1-osx-x64-v7.5.0.56.tgz
+        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.4.38.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
         sudo cp /usr/local/cuda/lib/* /usr/local/lib/
+        sudo cp /usr/local/cuda/lib/libcuda.dylib /usr/local/cuda/lib/stubs/
 
         # work around issues with CUDA 10.1
         for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.1.dylib}; done
@@ -315,17 +316,13 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
       if [ "$PROJ" == "tensorflow" ]; then
         echo "adding bazel for tensorflow"
-        curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
+        curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-installer-darwin-x86_64.sh -o $HOME/bazel.sh; export CURL_STATUS=$?
         if [ "$CURL_STATUS" != "0" ]; then
           echo "Download failed here, so can't proceed with the build.. Failing.."
           exit 1
         fi
         sudo bash $HOME/bazel.sh
         export TEST_TMPDIR=$HOME/.cache/bazel
-
-        pip3 install -U --user numpy
-        pip3 install -U --user keras_applications==1.0.6 --no-deps
-        pip3 install -U --user keras_preprocessing==1.0.5 --no-deps
      fi
 fi  
 

@@ -23,6 +23,7 @@
 
 package org.bytedeco.spinnaker.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -56,17 +57,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                 linkpath = "/usr/lib/",
                 includepath = "/usr/include/spinnaker/spinc/"),
         @Platform(value = "windows", link = {"SpinnakerC_v140", "Spinnaker_v140", "SpinVideoC_v140", "SpinVideo_v140"},
-                includepath = {"C:/Program Files/Point Grey Research/Spinnaker/include/spinc/",
-                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/include/spinc/"}),
+                includepath = {"C:/Program Files/Spinnaker/include/spinc/", "C:/Program Files/Point Grey Research/Spinnaker/include/spinc/",
+                               "C:/Program Files (x86)/Spinnaker/include/spinc/", "C:/Program Files (x86)/Point Grey Research/Spinnaker/include/spinc/"}),
         @Platform(value = "windows-x86",
-                linkpath    = {"C:/Program Files/Point Grey Research/Spinnaker/lib/vs2015/",
-                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/lib/vs2015/"},
-                preloadpath = {"C:/Program Files/Point Grey Research/Spinnaker/bin/vs2015/",
-                               "C:/Program Files (x86)/Point Grey Research/Spinnaker/bin/vs2015/"}),
+                linkpath    = {"C:/Program Files/Spinnaker/lib/vs2015/", "C:/Program Files/Point Grey Research/Spinnaker/lib/vs2015/",
+                               "C:/Program Files (x86)/Spinnaker/lib/vs2015/", "C:/Program Files (x86)/Point Grey Research/Spinnaker/lib/vs2015/"},
+                preloadpath = {"C:/Program Files/Spinnaker/bin/vs2015/", "C:/Program Files/Point Grey Research/Spinnaker/bin/vs2015/",
+                               "C:/Program Files (x86)/Spinnaker/bin/vs2015/", "C:/Program Files (x86)/Point Grey Research/Spinnaker/bin/vs2015/"}),
         @Platform(value = "windows-x86_64",
-                linkpath    =  "C:/Program Files/Point Grey Research/Spinnaker/lib64/vs2015/",
-                preloadpath = {"C:/Program Files/Point Grey Research/Spinnaker/bin64/vs2015/"})})
+                linkpath    = {"C:/Program Files/Spinnaker/lib64/vs2015/", "C:/Program Files/Point Grey Research/Spinnaker/lib64/vs2015/"},
+                preloadpath = {"C:/Program Files/Spinnaker/bin64/vs2015/", "C:/Program Files/Point Grey Research/Spinnaker/bin64/vs2015/"})})
 public class Spinnaker_C implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "spinnaker"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                 .put(new Info("SPINC_CALLTYPE").cppTypes().annotations().cppText(""))

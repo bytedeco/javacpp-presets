@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
             "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.4.1"),
         @Platform(value = "ios", preload = "libopencv_ximgproc"),
-        @Platform(value = "windows", link = "opencv_ximgproc410")},
+        @Platform(value = "windows", link = "opencv_ximgproc412")},
     target = "org.bytedeco.opencv.opencv_ximgproc",
     global = "org.bytedeco.opencv.global.opencv_ximgproc"
 )

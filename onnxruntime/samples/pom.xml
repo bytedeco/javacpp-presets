@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.onnxruntime</groupId>
+    <artifactId>capisample</artifactId>
+    <version>1.5.3-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>CApiSample</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>onnxruntime-platform</artifactId>
+            <version>1.0.0-1.5.3-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

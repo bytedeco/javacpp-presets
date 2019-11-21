@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow 1.13.1  http://www.tensorflow.org/
+ * TensorFlow 1.15.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -16,7 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/tensorflow/apidocs/
 
-&lowast; Call `Loader.load(org.bytedeco.tensorflow.presets.tensorflow.class)` before using the API in the `org.tensorflow` package.
+&lowast; Call `Loader.load(org.bytedeco.tensorflow.presets.tensorflow.class)` before using the API in the `org.tensorflow` package.  
 &lowast; Call `Py_SetPath(cachePackages())` before calling `Py_Initialize()`.
 
 
@@ -37,7 +37,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -45,78 +45,33 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>tensorflow-platform</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
+            <version>1.15.0-1.5.2</version>
         </dependency>
 
-        <!-- Additional dependencies required to use CUDA, cuDNN, and NCCL -->
+        <!-- Additional dependencies required to use CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86_64-gpu</classifier>
+            <artifactId>tensorflow-platform-gpu</artifactId>
+            <version>1.15.0-1.5.2</version>
         </dependency>
 
-        <!-- Additional dependencies to use bundled CUDA, cuDNN, and NCCL -->
+        <!-- Additional dependencies to use bundled CUDA, cuDNN, NCCL, and TensorRT -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-redist</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>cuda</artifactId>
-            <version>10.1-7.5-1.5.1-SNAPSHOT</version>
-            <classifier>windows-x86_64-redist</classifier>
+            <artifactId>cuda-platform-redist</artifactId>
+            <version>10.1-7.6-1.5.2</version>
         </dependency>
 
         <!-- Optional dependencies to load Python-enabled builds -->
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>numpy-platform</artifactId>
-            <version>1.16.3-1.5.1-SNAPSHOT</version>
+            <artifactId>tensorflow-platform-python</artifactId>
+            <version>1.15.0-1.5.2</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-python</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-python</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>linux-x86_64-python-gpu</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.13.1-1.5.1-SNAPSHOT</version>
-            <classifier>macosx-x86_64-python-gpu</classifier>
+            <artifactId>tensorflow-platform-python-gpu</artifactId>
+            <version>1.15.0-1.5.2</version>
         </dependency>
 
     </dependencies>

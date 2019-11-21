@@ -39,15 +39,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<opencv2/dnn/dnn.hpp>", "<opencv2/dnn/layer.hpp>", "<opencv2/dnn/shape_utils.hpp>"},
             link = "opencv_dnn@.4.1"),
         @Platform(value = "ios", preload = "libopencv_dnn"),
-        @Platform(value = "windows", link = "opencv_dnn410")},
+        @Platform(value = "windows", link = "opencv_dnn412")},
     target = "org.bytedeco.opencv.opencv_dnn",
     global = "org.bytedeco.opencv.global.opencv_dnn"
 )
 public class opencv_dnn implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CV__DNN_EXPERIMENTAL_NS_BEGIN", "CV__DNN_EXPERIMENTAL_NS_END").cppTypes().annotations())
+        infoMap.put(new Info("CV__DNN_EXPERIMENTAL_NS_BEGIN", "CV__DNN_EXPERIMENTAL_NS_END",
+                             "CV__DNN_INLINE_NS_BEGIN", "CV__DNN_INLINE_NS_END", "CV__DNN_INLINE_NS").cppTypes().annotations())
                .put(new Info("!defined CV_DOXYGEN && !defined CV_DNN_DONT_ADD_INLINE_NS").define(false))
                .put(new Info("cv::dnn::MatShape").annotations("@StdVector").pointerTypes("IntPointer"))
+               .put(new Info("std::pair<int,float>").pointerTypes("IntFloatPair").define())
                .put(new Info("std::vector<cv::dnn::MatShape>").pointerTypes("MatShapeVector").define())
                .put(new Info("std::vector<std::vector<cv::dnn::MatShape> >").pointerTypes("MatShapeVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Range> >").pointerTypes("RangeVectorVector").define())

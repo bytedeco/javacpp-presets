@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>1.5.1-SNAPSHOT</version>
+  <version>1.5.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -67,22 +67,22 @@
     <javacpp.platform.compiler></javacpp.platform.compiler>
     <javacpp.platform.extension></javacpp.platform.extension>
     <javacpp.platform.properties>${javacpp.platform}</javacpp.platform.properties>
-    <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
-    <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
-    <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
-    <javacpp.platform.android-x86_64>android-x86_64</javacpp.platform.android-x86_64>
-    <javacpp.platform.ios-arm>ios-arm</javacpp.platform.ios-arm>
-    <javacpp.platform.ios-arm64>ios-arm64</javacpp.platform.ios-arm64>
-    <javacpp.platform.ios-x86>ios-x86</javacpp.platform.ios-x86>
-    <javacpp.platform.ios-x86_64>ios-x86_64</javacpp.platform.ios-x86_64>
-    <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
-    <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
-    <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
-    <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
-    <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
-    <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
-    <javacpp.platform.windows-x86>windows-x86</javacpp.platform.windows-x86>
-    <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+    <javacpp.platform.android-arm>android-arm${javacpp.platform.extension}</javacpp.platform.android-arm>
+    <javacpp.platform.android-arm64>android-arm64${javacpp.platform.extension}</javacpp.platform.android-arm64>
+    <javacpp.platform.android-x86>android-x86${javacpp.platform.extension}</javacpp.platform.android-x86>
+    <javacpp.platform.android-x86_64>android-x86_64${javacpp.platform.extension}</javacpp.platform.android-x86_64>
+    <javacpp.platform.ios-arm>ios-arm${javacpp.platform.extension}</javacpp.platform.ios-arm>
+    <javacpp.platform.ios-arm64>ios-arm64${javacpp.platform.extension}</javacpp.platform.ios-arm64>
+    <javacpp.platform.ios-x86>ios-x86${javacpp.platform.extension}</javacpp.platform.ios-x86>
+    <javacpp.platform.ios-x86_64>ios-x86_64${javacpp.platform.extension}</javacpp.platform.ios-x86_64>
+    <javacpp.platform.linux-armhf>linux-armhf${javacpp.platform.extension}</javacpp.platform.linux-armhf>
+    <javacpp.platform.linux-arm64>linux-arm64${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+    <javacpp.platform.linux-ppc64le>linux-ppc64le${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
+    <javacpp.platform.linux-x86>linux-x86${javacpp.platform.extension}</javacpp.platform.linux-x86>
+    <javacpp.platform.linux-x86_64>linux-x86_64${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+    <javacpp.platform.macosx-x86_64>macosx-x86_64${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+    <javacpp.platform.windows-x86>windows-x86${javacpp.platform.extension}</javacpp.platform.windows-x86>
+    <javacpp.platform.windows-x86_64>windows-x86_64${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
   </properties>
 
   <dependencyManagement>
@@ -236,7 +236,7 @@
           </execution>
           <execution>
             <id>javacpp-cppbuild-install</id>
-            <phase>generate-sources</phase>
+            <phase>initialize</phase>
             <goals>
               <goal>build</goal>
             </goals>
@@ -319,7 +319,6 @@
                 <manifestEntries>
                   <!-- <addClasspath/> is broken: http://jira.codehaus.org/browse/MJAR-61 -->
                   <Class-Path>javacpp.jar</Class-Path>
-                  <Name>org/bytedeco/javacpp/presets/</Name>
                   <Implementation-Title>${project.name}</Implementation-Title>
                   <Implementation-Vendor>Bytedeco</Implementation-Vendor>
                   <Implementation-Version>${project.version}</Implementation-Version>
@@ -581,6 +580,7 @@
         <module>libfreenect</module>
         <module>libfreenect2</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>videoinput</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
@@ -588,6 +588,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -595,6 +596,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -607,6 +609,7 @@
         <module>ale</module>
         <module>onnx</module>
         <module>ngraph</module>
+        <module>onnxruntime</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -626,22 +629,22 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
-        <javacpp.platform.android-arm64>${javacpp.platform}</javacpp.platform.android-arm64>
-        <javacpp.platform.android-x86>${javacpp.platform}</javacpp.platform.android-x86>
-        <javacpp.platform.android-x86_64>${javacpp.platform}</javacpp.platform.android-x86_64>
-        <javacpp.platform.ios-arm>${javacpp.platform}</javacpp.platform.ios-arm>
-        <javacpp.platform.ios-arm64>${javacpp.platform}</javacpp.platform.ios-arm64>
-        <javacpp.platform.ios-x86>${javacpp.platform}</javacpp.platform.ios-x86>
-        <javacpp.platform.ios-x86_64>${javacpp.platform}</javacpp.platform.ios-x86_64>
-        <javacpp.platform.linux-armhf>${javacpp.platform}</javacpp.platform.linux-armhf>
-        <javacpp.platform.linux-arm64>${javacpp.platform}</javacpp.platform.linux-arm64>
-        <javacpp.platform.linux-ppc64le>${javacpp.platform}</javacpp.platform.linux-ppc64le>
-        <javacpp.platform.linux-x86>${javacpp.platform}</javacpp.platform.linux-x86>
-        <javacpp.platform.linux-x86_64>${javacpp.platform}</javacpp.platform.linux-x86_64>
-        <javacpp.platform.macosx-x86_64>${javacpp.platform}</javacpp.platform.macosx-x86_64>
-        <javacpp.platform.windows-x86>${javacpp.platform}</javacpp.platform.windows-x86>
-        <javacpp.platform.windows-x86_64>${javacpp.platform}</javacpp.platform.windows-x86_64>
+        <javacpp.platform.android-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
       </properties>
     </profile>
 
@@ -653,23 +656,51 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
-        <javacpp.platform.android-arm>${os.name}-${os.arch}</javacpp.platform.android-arm>
-        <javacpp.platform.android-arm64>${os.name}-${os.arch}</javacpp.platform.android-arm64>
-        <javacpp.platform.android-x86>${os.name}-${os.arch}</javacpp.platform.android-x86>
-        <javacpp.platform.android-x86_64>${os.name}-${os.arch}</javacpp.platform.android-x86_64>
-        <javacpp.platform.ios-arm>${os.name}-${os.arch}</javacpp.platform.ios-arm>
-        <javacpp.platform.ios-arm64>${os.name}-${os.arch}</javacpp.platform.ios-arm64>
-        <javacpp.platform.ios-x86>${os.name}-${os.arch}</javacpp.platform.ios-x86>
-        <javacpp.platform.ios-x86_64>${os.name}-${os.arch}</javacpp.platform.ios-x86_64>
-        <javacpp.platform.linux-armhf>${os.name}-${os.arch}</javacpp.platform.linux-armhf>
-        <javacpp.platform.linux-arm64>${os.name}-${os.arch}</javacpp.platform.linux-arm64>
-        <javacpp.platform.linux-ppc64le>${os.name}-${os.arch}</javacpp.platform.linux-ppc64le>
-        <javacpp.platform.linux-x86>${os.name}-${os.arch}</javacpp.platform.linux-x86>
-        <javacpp.platform.linux-x86_64>${os.name}-${os.arch}</javacpp.platform.linux-x86_64>
-        <javacpp.platform.macosx-x86_64>${os.name}-${os.arch}</javacpp.platform.macosx-x86_64>
-        <javacpp.platform.windows-x86>${os.name}-${os.arch}</javacpp.platform.windows-x86>
-        <javacpp.platform.windows-x86_64>${os.name}-${os.arch}</javacpp.platform.windows-x86_64>
+        <javacpp.platform>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform>
+        <javacpp.platform.android-arm>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64>${os.name}-${os.arch}${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-true</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.custom</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform></javacpp.platform>
+        <javacpp.platform.android-arm></javacpp.platform.android-arm>
+        <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
+        <javacpp.platform.android-x86></javacpp.platform.android-x86>
+        <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
+        <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
+        <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
+        <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
+        <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
       </properties>
     </profile>
 
@@ -728,9 +759,9 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
-        <javacpp.platform.android-arm>${javacpp.platform}</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
@@ -775,10 +806,10 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-arm64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
-        <javacpp.platform.android-arm64>${javacpp.platform}</javacpp.platform.android-arm64>
+        <javacpp.platform.android-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
@@ -822,11 +853,11 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
-        <javacpp.platform.android-x86>${javacpp.platform}</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86>
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
@@ -869,12 +900,12 @@
         <javacpp.platform.nativeOutputPath>${javacpp.platform.library.path}</javacpp.platform.nativeOutputPath>
         <javacpp.platform>android-x86_64</javacpp.platform>
         <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
-        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.name}-${os.arch}/bin/clang++</javacpp.platform.compiler>
+        <javacpp.platform.compiler>toolchains/llvm/prebuilt/${os.kernel}-${os.arch}/bin/clang++</javacpp.platform.compiler>
         <javacpp.platform.properties>${javacpp.platform}-clang</javacpp.platform.properties>
         <javacpp.platform.android-arm></javacpp.platform.android-arm>
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
-        <javacpp.platform.android-x86_64>${javacpp.platform}</javacpp.platform.android-x86_64>
+        <javacpp.platform.android-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.android-x86_64>
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
@@ -908,7 +939,7 @@
         <javacpp.platform.android-arm64></javacpp.platform.android-arm64>
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
-        <javacpp.platform.ios-arm>${javacpp.platform}</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-arm>
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
@@ -942,7 +973,7 @@
         <javacpp.platform.android-x86></javacpp.platform.android-x86>
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
-        <javacpp.platform.ios-arm64>${javacpp.platform}</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-arm64>
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
@@ -976,7 +1007,7 @@
         <javacpp.platform.android-x86_64></javacpp.platform.android-x86_64>
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
-        <javacpp.platform.ios-x86>${javacpp.platform}</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-x86>
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
@@ -1010,7 +1041,7 @@
         <javacpp.platform.ios-arm></javacpp.platform.ios-arm>
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
-        <javacpp.platform.ios-x86_64>${javacpp.platform}</javacpp.platform.ios-x86_64>
+        <javacpp.platform.ios-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
@@ -1039,11 +1070,16 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
+        <module>scipy</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cpu_features</module>
@@ -1058,7 +1094,7 @@
         <javacpp.platform.ios-arm64></javacpp.platform.ios-arm64>
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
-        <javacpp.platform.linux-armhf>${javacpp.platform}</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-armhf>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-armhf>
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
@@ -1086,11 +1122,16 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
+        <module>scipy</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cpu_features</module>
@@ -1106,7 +1147,7 @@
         <javacpp.platform.ios-x86></javacpp.platform.ios-x86>
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
-        <javacpp.platform.linux-arm64>${javacpp.platform}</javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-arm64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
@@ -1138,6 +1179,10 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
+        <module>scipy</module>
+        <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
         <module>cuda</module>
@@ -1155,7 +1200,7 @@
         <javacpp.platform.ios-x86_64></javacpp.platform.ios-x86_64>
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
-        <javacpp.platform.linux-ppc64le>${javacpp.platform}</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-ppc64le>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
         <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
@@ -1180,6 +1225,7 @@
         <module>libfreenect</module>
         <module>libfreenect2</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
@@ -1190,6 +1236,9 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1214,7 +1263,7 @@
         <javacpp.platform.linux-armhf></javacpp.platform.linux-armhf>
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
-        <javacpp.platform.linux-x86>${javacpp.platform}</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
         <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
         <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
@@ -1239,12 +1288,14 @@
         <module>libfreenect</module>
         <module>libfreenect2</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1252,6 +1303,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1264,6 +1316,7 @@
         <module>ale</module>
         <module>onnx</module>
         <module>ngraph</module>
+        <module>onnxruntime</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1283,7 +1336,7 @@
         <javacpp.platform.linux-arm64></javacpp.platform.linux-arm64>
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
-        <javacpp.platform.linux-x86_64>${javacpp.platform}</javacpp.platform.linux-x86_64>
+        <javacpp.platform.linux-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
         <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
         <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
         <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
@@ -1305,12 +1358,14 @@
         <module>libfreenect</module>
         <module>libfreenect2</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1318,6 +1373,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1328,6 +1384,8 @@
         <module>tensorflow</module>
         <module>ale</module>
         <module>onnx</module>
+        <module>ngraph</module>
+        <module>onnxruntime</module>
         <module>liquidfun</module>
         <module>qt</module>
         <module>skia</module>
@@ -1348,7 +1406,7 @@
         <javacpp.platform.linux-ppc64le></javacpp.platform.linux-ppc64le>
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
-        <javacpp.platform.macosx-x86_64>${javacpp.platform}</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.macosx-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
         <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
         <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
       </properties>
@@ -1370,6 +1428,7 @@
         <module>libdc1394</module>
         <module>libfreenect</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>videoinput</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
@@ -1381,6 +1440,9 @@
         <module>cminpack</module>
         <module>fftw</module>
         <module>gsl</module>
+        <module>cpython</module>
+        <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>leptonica</module>
         <module>tesseract</module>
@@ -1404,7 +1466,7 @@
         <javacpp.platform.linux-x86></javacpp.platform.linux-x86>
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
         <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
-        <javacpp.platform.windows-x86>${javacpp.platform}</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.windows-x86>
         <javacpp.platform.windows-x86_64></javacpp.platform.windows-x86_64>
       </properties>
     </profile>
@@ -1426,6 +1488,7 @@
         <module>libfreenect</module>
         <module>libfreenect2</module>
         <module>librealsense</module>
+        <module>librealsense2</module>
         <module>videoinput</module>
         <module>artoolkitplus</module>
         <module>chilitags</module>
@@ -1433,6 +1496,7 @@
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
+        <module>dnnl</module>
         <module>openblas</module>
         <module>arpack-ng</module>
         <module>cminpack</module>
@@ -1440,6 +1504,7 @@
         <module>gsl</module>
         <module>cpython</module>
         <module>numpy</module>
+        <module>scipy</module>
         <module>llvm</module>
         <module>libpostal</module>
         <module>leptonica</module>
@@ -1468,12 +1533,12 @@
         <javacpp.platform.linux-x86_64></javacpp.platform.linux-x86_64>
         <javacpp.platform.macosx-x86_64></javacpp.platform.macosx-x86_64>
         <javacpp.platform.windows-x86></javacpp.platform.windows-x86>
-        <javacpp.platform.windows-x86_64>${javacpp.platform}</javacpp.platform.windows-x86_64>
+        <javacpp.platform.windows-x86_64>${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
       </properties>
     </profile>
 
     <!-- Profiles to modify the transitive dependencies when picked up from other pom.xml files, for example:
-         mvn -Djavacpp.platform.none -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ... -->
+         mvn -Djavacpp.platform.custom -Djavacpp.platform.host -Djavacpp.platform.linux-x86_64 -Djavacpp.platform.windows-x86_64 ... -->
     <profile>
       <id>javacpp.platform.android-arm-true</id>
       <activation>
@@ -1482,7 +1547,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.android-arm>android-arm</javacpp.platform.android-arm>
+        <javacpp.platform.android-arm>android-arm${javacpp.platform.extension}</javacpp.platform.android-arm>
       </properties>
     </profile>
 
@@ -1494,7 +1559,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.android-arm64>android-arm64</javacpp.platform.android-arm64>
+        <javacpp.platform.android-arm64>android-arm64${javacpp.platform.extension}</javacpp.platform.android-arm64>
       </properties>
     </profile>
 
@@ -1506,7 +1571,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.android-x86>android-x86</javacpp.platform.android-x86>
+        <javacpp.platform.android-x86>android-x86${javacpp.platform.extension}</javacpp.platform.android-x86>
       </properties>
     </profile>
 
@@ -1518,7 +1583,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.android-x86_64>android-x86_64</javacpp.platform.android-x86_64>
+        <javacpp.platform.android-x86_64>android-x86_64${javacpp.platform.extension}</javacpp.platform.android-x86_64>
       </properties>
     </profile>
 
@@ -1530,7 +1595,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.ios-arm>ios-arm</javacpp.platform.ios-arm>
+        <javacpp.platform.ios-arm>ios-arm${javacpp.platform.extension}</javacpp.platform.ios-arm>
       </properties>
     </profile>
 
@@ -1542,7 +1607,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.ios-arm64>ios-arm64</javacpp.platform.ios-arm64>
+        <javacpp.platform.ios-arm64>ios-arm64${javacpp.platform.extension}</javacpp.platform.ios-arm64>
       </properties>
     </profile>
 
@@ -1554,7 +1619,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.ios-x86>ios-x86</javacpp.platform.ios-x86>
+        <javacpp.platform.ios-x86>ios-x86${javacpp.platform.extension}</javacpp.platform.ios-x86>
       </properties>
     </profile>
 
@@ -1566,7 +1631,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.ios-x86_64>ios-x86_64</javacpp.platform.ios-x86_64>
+        <javacpp.platform.ios-x86_64>ios-x86_64${javacpp.platform.extension}</javacpp.platform.ios-x86_64>
       </properties>
     </profile>
 
@@ -1578,7 +1643,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.linux-armhf>linux-armhf</javacpp.platform.linux-armhf>
+        <javacpp.platform.linux-armhf>linux-armhf${javacpp.platform.extension}</javacpp.platform.linux-armhf>
       </properties>
     </profile>
 
@@ -1590,7 +1655,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.linux-arm64>linux-arm64</javacpp.platform.linux-arm64>
+        <javacpp.platform.linux-arm64>linux-arm64${javacpp.platform.extension}</javacpp.platform.linux-arm64>
       </properties>
     </profile>
 
@@ -1602,7 +1667,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.linux-ppc64le>linux-ppc64le</javacpp.platform.linux-ppc64le>
+        <javacpp.platform.linux-ppc64le>linux-ppc64le${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
       </properties>
     </profile>
 
@@ -1614,7 +1679,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.linux-x86>linux-x86</javacpp.platform.linux-x86>
+        <javacpp.platform.linux-x86>linux-x86${javacpp.platform.extension}</javacpp.platform.linux-x86>
       </properties>
     </profile>
 
@@ -1626,7 +1691,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.linux-x86_64>linux-x86_64</javacpp.platform.linux-x86_64>
+        <javacpp.platform.linux-x86_64>linux-x86_64${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
       </properties>
     </profile>
 
@@ -1638,7 +1703,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.macosx-x86_64>macosx-x86_64</javacpp.platform.macosx-x86_64>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
       </properties>
     </profile>
 
@@ -1650,7 +1715,7 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.windows-x86>windows-x86</javacpp.platform.windows-x86>
+        <javacpp.platform.windows-x86>windows-x86${javacpp.platform.extension}</javacpp.platform.windows-x86>
       </properties>
     </profile>
 
@@ -1662,7 +1727,202 @@
         </property>
       </activation>
       <properties>
-        <javacpp.platform.windows-x86_64>windows-x86_64</javacpp.platform.windows-x86_64>
+        <javacpp.platform.windows-x86_64>windows-x86_64${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-arm</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>arm</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-armhf>linux-armhf${javacpp.platform.extension}</javacpp.platform.linux-armhf>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-armhf</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>armhf</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-armhf>linux-armhf${javacpp.platform.extension}</javacpp.platform.linux-armhf>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-aarch64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-armv8</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>armv8</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-arm64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>arm64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-arm64>linux-arm64${javacpp.platform.extension}</javacpp.platform.linux-arm64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-ppc64le</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>ppc64le</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-ppc64le>linux-ppc64le${javacpp.platform.extension}</javacpp.platform.linux-ppc64le>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-linux-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>linux</name><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.linux-x86_64>linux-x86_64${javacpp.platform.extension}</javacpp.platform.linux-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-macosx-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><name>mac os x</name><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.macosx-x86_64>macosx-x86_64${javacpp.platform.extension}</javacpp.platform.macosx-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-amd64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-x86-64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>javacpp.platform.custom-windows-x86_64</id>
+      <activation>
+        <property>
+          <name>javacpp.platform.host</name>
+        </property>
+        <os><family>windows</family><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <javacpp.platform.windows-x86_64>windows-x86_64${javacpp.platform.extension}</javacpp.platform.windows-x86_64>
       </properties>
     </profile>
 
@@ -1673,6 +1933,7 @@
         <os><name>linux</name></os>
       </activation>
       <properties>
+        <os.kernel>linux</os.kernel>
         <os.name>linux</os.name>
       </properties>
     </profile>
@@ -1682,6 +1943,7 @@
         <os><name>mac os x</name></os>
       </activation>
       <properties>
+        <os.kernel>darwin</os.kernel>
         <os.name>macosx</os.name>
       </properties>
     </profile>
@@ -1691,7 +1953,35 @@
         <os><family>windows</family></os>
       </activation>
       <properties>
+        <os.kernel>windows</os.kernel>
         <os.name>windows</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>arm</id>
+      <activation>
+        <os><arch>arm</arch></os>
+      </activation>
+      <properties>
+        <os.arch>armhf</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>aarch64</id>
+      <activation>
+        <os><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>arm64</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>armv8</id>
+      <activation>
+        <os><arch>armv8</arch></os>
+      </activation>
+      <properties>
+        <os.arch>arm64</os.arch>
       </properties>
     </profile>
     <profile>

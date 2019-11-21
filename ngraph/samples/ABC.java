@@ -27,12 +27,12 @@ public class ABC {
         Parameter b = new Parameter(f32(), new PartialShape(s), false);
         Parameter c = new Parameter(f32(), new PartialShape(s), false);
 
-        Op t0 = new Add(a, b);
-        Op t1 = new Multiply(t0, c);
+        Op t0 = new Add(new NodeOutput(a), new NodeOutput(b));
+        Op t1 = new Multiply(new NodeOutput(t0), new NodeOutput(c));
 
         // Make the function
-        Function f = new Function(new NodeVector(new NgraphNodeVector(t1)),
-                                  new ParameterVector(new NgraphParameterVector(a, b, c)));
+        Function f = new Function(new NodeVector(t1),
+                                  new ParameterVector(a, b, c));
 
         // Create the backend
         Backend backend = Backend.create("CPU");
@@ -49,18 +49,18 @@ public class ABC {
         float[] v_b = {7, 8, 9, 10, 11, 12};
         float[] v_c = {1, 0, -1, -1, 1, 2};
 
-        t_a.write(new FloatPointer(v_a), 0, v_a.length * 4);
-        t_b.write(new FloatPointer(v_b), 0, v_b.length * 4);
-        t_c.write(new FloatPointer(v_c), 0, v_c.length * 4);
+        t_a.write(new FloatPointer(v_a), v_a.length * 4);
+        t_b.write(new FloatPointer(v_b), v_b.length * 4);
+        t_c.write(new FloatPointer(v_c), v_c.length * 4);
 
         // Invoke the function
         Executable exec = backend.compile(f);
-        exec.call(new NgraphTensorVector(t_result), new NgraphTensorVector(t_a, t_b, t_c));
+        exec.call(new TensorVector(t_result), new TensorVector(t_a, t_b, t_c));
 
         // Get the result
         float[] r = new float[2 * 3];
         FloatPointer p = new FloatPointer(r);
-        t_result.read(p, 0, r.length * 4);
+        t_result.read(p, r.length * 4);
         p.get(r);
 
         System.out.println("[");

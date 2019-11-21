@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Sam Carlberg, Samuel Audet
+ * Copyright (C) 2017-2019 Sam Carlberg, Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         ),
         @Platform(
             value = "windows",
-            link = "opencv_cudawarping410",
+            link = "opencv_cudawarping412",
             extension = "-gpu"
         )
     },
@@ -48,6 +48,13 @@ public class opencv_cudawarping implements InfoMapper {
 
     @Override
     public void map(InfoMap infoMap) {
-
+        infoMap.put(new Info("cv::cuda::warpAffine").javaText(
+                        "@Namespace(\"cv::cuda\") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,\n"
+                      + "    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = \"cv::Scalar()\") Scalar borderValue, @ByRef(nullValue = \"cv::cuda::Stream::Null()\") Stream stream);\n"
+                      + "@Namespace(\"cv::cuda\") public static native void warpAffine(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize);\n"))
+               .put(new Info("cv::cuda::warpPerspective").javaText(
+                        "@Namespace(\"cv::cuda\") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize, int flags/*=cv::INTER_LINEAR*/,\n"
+                      + "    int borderMode/*=cv::BORDER_CONSTANT*/, @ByVal(nullValue = \"cv::Scalar()\") Scalar borderValue, @ByRef(nullValue = \"cv::cuda::Stream::Null()\") Stream stream);\n"
+                      + "@Namespace(\"cv::cuda\") public static native void warpPerspective(@ByVal GpuMat src, @ByVal GpuMat dst, @ByVal Mat M, @ByVal Size dsize);\n"));
     }
 }

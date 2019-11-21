@@ -27,7 +27,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bytedeco.javacpp.ClassProperties;
@@ -57,17 +56,18 @@ import org.bytedeco.openblas.presets.*;
             "<algorithm>", "<map>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
             "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.4.1", "opencv_imgproc@.4.1"},
+            "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.4.1", "opencv_imgproc@.4.1"},
             resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}, linkresource = "lib",
             preload = {"gomp@.1", "opencv_cudev@.4.1"}, compiler = "cpp11"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
         @Platform(value = "linux",        preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
         @Platform(value = "linux-armhf",  preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
+        @Platform(value = "linux-arm64",  preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
         @Platform(value = "linux-x86",    preloadpath = {"/usr/lib32/", "/usr/lib/"}),
         @Platform(value = "linux-x86_64", preloadpath = {"/usr/lib64/", "/usr/lib/"}),
         @Platform(value = "linux-ppc64",  preloadpath = {"/usr/lib/powerpc64-linux-gnu/", "/usr/lib/powerpc64le-linux-gnu/"}),
-        @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core410", "opencv_imgproc410"}, preload = {
+        @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core412", "opencv_imgproc412"}, preload = {
             "api-ms-win-crt-locale-l1-1-0", "api-ms-win-crt-string-l1-1-0", "api-ms-win-crt-stdio-l1-1-0", "api-ms-win-crt-math-l1-1-0",
             "api-ms-win-crt-heap-l1-1-0", "api-ms-win-crt-runtime-l1-1-0", "api-ms-win-crt-convert-l1-1-0", "api-ms-win-crt-environment-l1-1-0",
             "api-ms-win-crt-time-l1-1-0", "api-ms-win-crt-filesystem-l1-1-0", "api-ms-win-crt-utility-l1-1-0", "api-ms-win-crt-multibyte-l1-1-0",
@@ -78,25 +78,27 @@ import org.bytedeco.openblas.presets.*;
             "api-ms-win-core-sysinfo-l1-1-0", "api-ms-win-core-synch-l1-2-0", "api-ms-win-core-console-l1-1-0", "api-ms-win-core-debug-l1-1-0",
             "api-ms-win-core-rtlsupport-l1-1-0", "api-ms-win-core-processthreads-l1-1-1", "api-ms-win-core-file-l1-2-0", "api-ms-win-core-profile-l1-1-0",
             "api-ms-win-core-memory-l1-1-0", "api-ms-win-core-util-l1-1-0", "api-ms-win-core-interlocked-l1-1-0", "ucrtbase",
-            "vcruntime140", "msvcp140", "concrt140", "vcomp140", "opencv_cudev410"}),
+            "vcruntime140", "msvcp140", "concrt140", "vcomp140", "opencv_cudev412"}),
         @Platform(value = "windows-x86", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.CRT/",
             "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x86/Microsoft.VC140.OpenMP/",
             "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x86/"}),
         @Platform(value = "windows-x86_64", preloadpath = {"C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.CRT/",
             "C:/Program Files (x86)/Microsoft Visual Studio 14.0/VC/redist/x64/Microsoft.VC140.OpenMP/",
             "C:/Program Files (x86)/Windows Kits/10/Redist/ucrt/DLLs/x64/"}),
-        @Platform(value = {"linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
+        @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"}, extension = "-gpu")},
     target = "org.bytedeco.opencv.opencv_core",
     global = "org.bytedeco.opencv.global.opencv_core",
     helper = "org.bytedeco.opencv.helper.opencv_core"
 )
 public class opencv_core implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "opencv"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
         String extension = properties.getProperty("platform.extension");
         List<String> preloads = properties.get("platform.preload");
         List<String> resources = properties.get("platform.preloadresource");
+        List<String> preloadpaths = properties.get("platform.preloadpath");
 
         // Only apply this at load time since we don't want to copy the CUDA libraries here
         if (!Loader.isLoadLibraries() || extension == null || !extension.equals("-gpu")) {
@@ -107,6 +109,8 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                          "nppidei", "nppif", "nppig", "nppim", "nppist", "nppisu", "nppitc", "npps"};
         for (String lib : libs) {
             switch (platform) {
+                case "linux-arm64":
+                case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
                     lib += lib.equals("cudart") ? "@.10.1" : "@.10";
@@ -123,6 +127,22 @@ public class opencv_core implements LoadEnabled, InfoMapper {
         }
         if (i > 0) {
             resources.add("/org/bytedeco/cuda/");
+        }
+
+        String vcredistdir = System.getenv("VCToolsRedistDir");
+        if (vcredistdir != null && vcredistdir.length() > 0) {
+            switch (platform) {
+                case "windows-x86":
+                    preloadpaths.add(0, vcredistdir + "\\x86\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x86\\Microsoft.VC141.OpenMP");
+                    break;
+                case "windows-x86_64":
+                    preloadpaths.add(0, vcredistdir + "\\x64\\Microsoft.VC141.CRT");
+                    preloadpaths.add(1, vcredistdir + "\\x64\\Microsoft.VC141.OpenMP");
+                    break;
+                default:
+                    // not Windows
+            }
         }
     }
 

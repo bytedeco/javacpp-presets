@@ -70,6 +70,16 @@ public class cusparse implements InfoMapper {
                              "cusparseCreateDnMat", "cusparseDestroyDnMat", "cusparseDnMatGet", "cusparseDnMatGetValues",
                              "cusparseDnMatSetValues", "cusparseDnMatSetStridedBatch", "cusparseDnMatGetStridedBatch", "cusparseSpVV",
                              "cusparseSpVV_bufferSize", "cusparseSpMV", "cusparseSpMV_bufferSize", "cusparseSpMM",
-                             "cusparseSpMM_bufferSize").skip());
+                             "cusparseSpMM_bufferSize", "cusparseCopyMatDescr", "cusparseGetColorAlgs", "cusparseSetColorAlgs", "cusparseXgebsr2csr",
+                             "cusparseCbsric02_bufferSizeExt", "cusparseCbsrilu02_bufferSizeExt", "cusparseCbsrsm2_bufferSizeExt", "cusparseCbsrsv2_bufferSizeExt",
+                             "cusparseCcsr2gebsr_bufferSizeExt", "cusparseCcsric02_bufferSizeExt", "cusparseCcsrilu02_bufferSizeExt", "cusparseCcsrsv2_bufferSizeExt",
+                             "cusparseCgebsr2gebsc_bufferSizeExt", "cusparseCgebsr2gebsr_bufferSizeExt", "cusparseDbsric02_bufferSizeExt", "cusparseDbsrilu02_bufferSizeExt",
+                             "cusparseDbsrsm2_bufferSizeExt", "cusparseDbsrsv2_bufferSizeExt", "cusparseDcsr2gebsr_bufferSizeExt", "cusparseDcsric02_bufferSizeExt",
+                             "cusparseDcsrilu02_bufferSizeExt", "cusparseDcsrsv2_bufferSizeExt", "cusparseDgebsr2gebsc_bufferSizeExt", "cusparseDgebsr2gebsr_bufferSizeExt",
+                             "cusparseSbsric02_bufferSizeExt", "cusparseSbsrilu02_bufferSizeExt", "cusparseSbsrsm2_bufferSizeExt", "cusparseSbsrsv2_bufferSizeExt",
+                             "cusparseScsr2gebsr_bufferSizeExt", "cusparseScsric02_bufferSizeExt", "cusparseScsrilu02_bufferSizeExt", "cusparseScsrsv2_bufferSizeExt",
+                             "cusparseSgebsr2gebsc_bufferSizeExt", "cusparseSgebsr2gebsr_bufferSizeExt", "cusparseZbsric02_bufferSizeExt", "cusparseZbsrilu02_bufferSizeExt",
+                             "cusparseZbsrsm2_bufferSizeExt", "cusparseZbsrsv2_bufferSizeExt", "cusparseZcsr2gebsr_bufferSizeExt", "cusparseZcsric02_bufferSizeExt",
+                             "cusparseZcsrilu02_bufferSizeExt", "cusparseZcsrsv2_bufferSizeExt", "cusparseZgebsr2gebsc_bufferSizeExt", "cusparseZgebsr2gebsr_bufferSizeExt").skip());
     }
 }

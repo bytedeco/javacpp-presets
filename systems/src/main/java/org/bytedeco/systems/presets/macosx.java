@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Samuel Audet
+ * Copyright (C) 2017-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -22,11 +22,7 @@
 
 package org.bytedeco.systems.presets;
 
-import java.nio.ByteBuffer;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -51,6 +47,7 @@ import org.bytedeco.javacpp.tools.Logger;
     includepath = "/usr/include")}, target = "org.bytedeco.systems.macosx", global = "org.bytedeco.systems.global.macosx")
 @NoException
 public class macosx implements BuildEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;
@@ -146,6 +143,8 @@ public class macosx implements BuildEnabled, InfoMapper {
 
                .put(new Info("__cpuid").cppTypes("void", "int", "int&", "int&", "int&", "int&"))
                .put(new Info("__cpuid_count").cppTypes("void", "int", "int", "int&", "int&", "int&", "int&"))
+
+               .put(new Info("memchr").javaText("public static native Pointer memchr(Pointer __s, int __c, @Cast(\"size_t\") long __n);"))
 
                .put(new Info("getwd", "mkstemp_dprotected_np").skip());
     }

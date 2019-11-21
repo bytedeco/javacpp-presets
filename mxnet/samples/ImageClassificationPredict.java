@@ -240,10 +240,10 @@ public class ImageClassificationPredict {
         }
 
         // Models path for your model, you have to modify it
-        final String json_file = "model/Inception/Inception-BN-symbol.json";
-        final String param_file = "model/Inception/Inception-BN-0126.params";
-        final String synset_file = "model/Inception/synset.txt";
-        final String nd_file = "model/Inception/mean_224.nd";
+        final String json_file = "data/model/Inception/Inception-BN-symbol.json";
+        final String param_file = "data/model/Inception/Inception-BN-0126.params";
+        final String synset_file = "data/model/Inception/synset.txt";
+        final String nd_file = "data/model/Inception/mean_224.nd";
 
         BufferFile json_data = new BufferFile(json_file);
         BufferFile param_data = new BufferFile(param_file);

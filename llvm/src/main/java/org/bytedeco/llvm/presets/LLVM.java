@@ -22,17 +22,20 @@
 
 package org.bytedeco.llvm.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
 
 @Properties(target = "org.bytedeco.llvm.LLVM", global = "org.bytedeco.llvm.global.LLVM", value = {@Platform(
-    value = {"linux-x86", "macosx", "windows"}, define = {"__STDC_LIMIT_MACROS", "__STDC_CONSTANT_MACROS"},
+    value = {"linux", "macosx", "windows"}, define = {"__STDC_LIMIT_MACROS", "__STDC_CONSTANT_MACROS"},
     include = {"<llvm-c/Types.h>", "<llvm-c/Support.h>", "<llvm-c/Core.h>", "<llvm-c/Analysis.h>", "<llvm-c/BitReader.h>", "<llvm-c/BitWriter.h>",
                "<llvm-c/DisassemblerTypes.h>", "<llvm-c/Disassembler.h>", "<llvm-c/Initialization.h>", "<llvm-c/IRReader.h>", "<llvm-c/Linker.h>", "<llvm-c/LinkTimeOptimizer.h>",
                "<llvm-c/lto.h>", "<llvm-c/Object.h>", "<llvm-c/Target.h>", "<llvm-c/TargetMachine.h>", "<llvm-c/ExecutionEngine.h>",
                "<llvm-c/Transforms/IPO.h>", "<llvm-c/Transforms/PassManagerBuilder.h>", "<llvm-c/Transforms/Scalar.h>", "<llvm-c/Transforms/Utils.h>", "<llvm-c/Transforms/Vectorize.h>"},
-    compiler = "cpp11", link = {"LLVM-8", "LTO"}), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
+    compiler = "cpp11", link = {"LLVM-9", "LTO@.9"}, preload = "LLVM-C"), @Platform(value = {"macosx", "windows"}, link = {"LTO", "LLVM"}) })
 public class LLVM implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "llvm"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LLVMOpaqueContext").pointerTypes("LLVMContextRef"))
                .put(new Info("LLVMOpaqueModule").pointerTypes("LLVMModuleRef"))
@@ -49,6 +52,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaqueUse").pointerTypes("LLVMUseRef"))
                .put(new Info("LLVMOpaqueAttributeRef").pointerTypes("LLVMAttributeRef"))
                .put(new Info("LLVMOpaqueJITEventListener").pointerTypes("LLVMJITEventListenerRef"))
+               .put(new Info("LLVMOpaqueBinary").pointerTypes("LLVMBinaryRef"))
                .put(new Info("LLVMOpaqueDiagnosticInfo").pointerTypes("LLVMDiagnosticInfoRef"))
                .put(new Info("LLVMOpaqueTargetData").pointerTypes("LLVMTargetDataRef"))
                .put(new Info("LLVMOpaqueTargetLibraryInfotData").pointerTypes("LLVMTargetLibraryInfoRef"))
@@ -60,6 +64,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMOpaqueLTOModule").pointerTypes("lto_module_t"))
                .put(new Info("LLVMOpaqueLTOCodeGenerator").pointerTypes("lto_code_gen_t"))
                .put(new Info("LLVMOpaqueThinLTOCodeGenerator").pointerTypes("thinlto_code_gen_t"))
+               .put(new Info("LLVMOpaqueLTOInput").pointerTypes("lto_input_t"))
                .put(new Info("LLVMOpaqueObjectFile").pointerTypes("LLVMObjectFileRef"))
                .put(new Info("LLVMOpaqueSectionIterator").pointerTypes("LLVMSectionIteratorRef"))
                .put(new Info("LLVMOpaqueSymbolIterator").pointerTypes("LLVMSymbolIteratorRef"))
@@ -81,6 +86,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("LLVMUseRef").valueTypes("LLVMUseRef").pointerTypes("@ByPtrPtr LLVMUseRef", "@Cast(\"LLVMUseRef*\") PointerPointer"))
                .put(new Info("LLVMAttributeRef").valueTypes("LLVMAttributeRef").pointerTypes("@ByPtrPtr LLVMAttributeRef", "@Cast(\"LLVMAttributeRef*\") PointerPointer"))
                .put(new Info("LLVMJITEventListenerRef").valueTypes("LLVMJITEventListenerRef").pointerTypes("@ByPtrPtr LLVMJITEventListenerRef", "@Cast(\"LLVMJITEventListenerRef*\") PointerPointer"))
+               .put(new Info("LLVMBinaryRef").valueTypes("LLVMBinaryRef").pointerTypes("@ByPtrPtr LLVMBinaryRef", "@Cast(\"LLVMBinaryRef*\") PointerPointer"))
                .put(new Info("LLVMDiagnosticInfoRef").valueTypes("LLVMDiagnosticInfoRef").pointerTypes("@ByPtrPtr LLVMDiagnosticInfoRef", "@Cast(\"LLVMDiagnosticInfoRef*\") PointerPointer"))
                .put(new Info("LLVMTargetDataRef").valueTypes("LLVMTargetDataRef").pointerTypes("@ByPtrPtr LLVMTargetDataRef", "@Cast(\"LLVMTargetDataRef*\") PointerPointer"))
                .put(new Info("LLVMTargetLibraryInfoRef").valueTypes("LLVMTargetLibraryInfoRef").pointerTypes("@ByPtrPtr LLVMTargetLibraryInfoRef", "@Cast(\"LLVMTargetLibraryInfoRef*\") PointerPointer"))
@@ -92,6 +98,7 @@ public class LLVM implements InfoMapper {
                .put(new Info("lto_module_t").valueTypes("lto_module_t").pointerTypes("@ByPtrPtr lto_module_t", "@Cast(\"lto_module_t*\") PointerPointer"))
                .put(new Info("lto_code_gen_t").valueTypes("lto_code_gen_t").pointerTypes("@ByPtrPtr lto_code_gen_t", "@Cast(\"lto_code_gen_t*\") PointerPointer"))
                .put(new Info("thinlto_code_gen_t").valueTypes("thinlto_code_gen_t").pointerTypes("@ByPtrPtr thinlto_code_gen_t", "@Cast(\"thinlto_code_gen_t*\") PointerPointer"))
+               .put(new Info("lto_input_t").valueTypes("lto_input_t").pointerTypes("@ByPtrPtr lto_input_t", "@Cast(\"lto_input_t*\") PointerPointer"))
                .put(new Info("LLVMObjectFileRef").valueTypes("LLVMObjectFileRef").pointerTypes("@ByPtrPtr LLVMObjectFileRef", "@Cast(\"LLVMObjectFileRef*\") PointerPointer"))
                .put(new Info("LLVMSectionIteratorRef").valueTypes("LLVMSectionIteratorRef").pointerTypes("@ByPtrPtr LLVMSectionIteratorRef", "@Cast(\"LLVMSectionIteratorRef*\") PointerPointer"))
                .put(new Info("LLVMSymbolIteratorRef").valueTypes("LLVMSymbolIteratorRef").pointerTypes("@ByPtrPtr LLVMSymbolIteratorRef", "@Cast(\"LLVMSymbolIteratorRef*\") PointerPointer"))

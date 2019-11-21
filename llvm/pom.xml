@@ -6,17 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>llvm</artifactId>
-  <version>${revision}</version>
+  <version>9.0.0-${project.parent.version}</version>
   <name>JavaCPP Presets for LLVM</name>
-
-  <properties>
-    <revision>8.0.0-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -55,5 +51,29 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>msvc</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <compilerOptions>
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/FORCE:MULTIPLE</compilerOption>
+                <compilerOption>/WHOLEARCHIVE</compilerOption>
+              </compilerOptions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

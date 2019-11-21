@@ -23,14 +23,10 @@
 package org.bytedeco.systems.presets;
 
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.util.List;
-import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
@@ -57,6 +53,7 @@ import org.bytedeco.javacpp.tools.Logger;
     link = "dl")}, target = "org.bytedeco.systems.linux", global = "org.bytedeco.systems.global.linux")
 @NoException
 public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "systems"); }
 
     private Logger logger;
     private java.util.Properties properties;
@@ -161,7 +158,7 @@ public class linux implements BuildEnabled, LoadEnabled, InfoMapper {
                .put(new Info("struct sysinfo").pointerTypes("sysinfo"))
                .put(new Info("struct timezone").pointerTypes("timezone"))
                .put(new Info("struct sigaction").pointerTypes("sigaction"))
-               .put(new Info("struct sigvec").pointerTypes("sigvec"))
+               .put(new Info("struct sigvec").pointerTypes("sigvec").skip())
                .put(new Info("__sigset_t").pointerTypes("sigset_t"))
                .put(new Info("sigval_t").pointerTypes("sigval"))
                .put(new Info("struct sigstack").pointerTypes("sigstack"))

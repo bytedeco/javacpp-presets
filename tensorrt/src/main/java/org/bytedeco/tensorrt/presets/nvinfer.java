@@ -26,7 +26,6 @@ import java.util.List;
 import org.bytedeco.javacpp.ClassProperties;
 import org.bytedeco.javacpp.LoadEnabled;
 import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.annotation.NoException;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -44,13 +43,14 @@ import org.bytedeco.cuda.presets.cudart;
     value = @Platform(
         value = "linux-x86_64",
         compiler = "cpp11",
-        include = {"NvInfer.h", "NvUtils.h"},
+        include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
         includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-        link = "nvinfer@.5",
+        link = "nvinfer@.6",
         linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}),
     target = "org.bytedeco.tensorrt.nvinfer",
     global = "org.bytedeco.tensorrt.global.nvinfer")
 public class nvinfer implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "tensorrt"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
@@ -77,12 +77,20 @@ public class nvinfer implements LoadEnabled, InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().enumerate())
                .put(new Info("NV_TENSORRT_FINAL", "_TENSORRT_FINAL", "_TENSORRT_OVERRIDE", "TENSORRTAPI").cppTypes().annotations())
+
+               .put(new Info("TRT_DEPRECATED").cppText("#define TRT_DEPRECATED deprecated").cppTypes())
+               .put(new Info("TRT_DEPRECATED_API").cppText("#define TRT_DEPRECATED_API deprecated").cppTypes())
+               .put(new Info("deprecated").annotations("@Deprecated"))
+
                .put(new Info("std::size_t").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Info("const char").pointerTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::IErrorRecorder::ErrorDesc").valueTypes("String", "@Cast(\"const char*\") BytePointer"))
+               .put(new Info("nvinfer1::PluginFormat").cast().valueTypes("TensorFormat", "int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("nvinfer1::EnumMax").skip())
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
-                             "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator", "nvinfer1::IInt8EntropyCalibrator2").purify())
+                             "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator", "nvinfer1::IInt8EntropyCalibrator2",
+                             "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger").purify().virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(

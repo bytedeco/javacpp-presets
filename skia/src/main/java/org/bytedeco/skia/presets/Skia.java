@@ -22,13 +22,9 @@
 
 package org.bytedeco.skia.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.annotation.*;
 import org.bytedeco.javacpp.tools.*;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 @Properties(
     target = "org.bytedeco.skia",
@@ -73,6 +69,8 @@ import java.lang.annotation.Target;
     }
 )
 public class Skia implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "skia"); }
+
     public void map(InfoMap infoMap) {
         infoMap
             .put(new Info("SK_API", "SK_C_API").cppTypes().annotations())

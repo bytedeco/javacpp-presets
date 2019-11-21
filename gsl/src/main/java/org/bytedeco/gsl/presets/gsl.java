@@ -22,6 +22,7 @@
 
 package org.bytedeco.gsl.presets;
 
+import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Const;
 import org.bytedeco.javacpp.annotation.MemberGetter;
@@ -53,17 +54,21 @@ import org.bytedeco.openblas.presets.openblas;
         "gsl/gsl_vector_long.h", "gsl/gsl_vector_uint.h", "gsl/gsl_vector_int.h", "gsl/gsl_vector_ushort.h", "gsl/gsl_vector_short.h",
         "gsl/gsl_vector_uchar.h", "gsl/gsl_vector_char.h",
 
-        "gsl/gsl_matrix.h", /*"gsl/gsl_matrix_complex_long_double.h",*/ "gsl/gsl_matrix_complex_double.h", "gsl/gsl_matrix_complex_float.h",
+        "gsl/gsl_matrix.h", "gsl/gsl_blas_types.h", /*"gsl/gsl_matrix_complex_long_double.h",*/ "gsl/gsl_matrix_complex_double.h", "gsl/gsl_matrix_complex_float.h",
         /*"gsl/gsl_matrix_long_double.h",*/ "gsl/gsl_matrix_double.h", "gsl/gsl_matrix_float.h", "gsl/gsl_matrix_ulong.h", "gsl/gsl_matrix_long.h",
         "gsl/gsl_matrix_uint.h", "gsl/gsl_matrix_int.h", "gsl/gsl_matrix_ushort.h", "gsl/gsl_matrix_short.h", "gsl/gsl_matrix_uchar.h", "gsl/gsl_matrix_char.h",
 
-        /* "gsl/gsl_cblas.h", */ "gsl/gsl_blas_types.h", "gsl/gsl_blas.h", "gsl/gsl_bspline.h", "gsl/gsl_cdf.h", "gsl/gsl_chebyshev.h", "gsl/gsl_combination.h",
+        /*"gsl/gsl_cblas.h",*/ "gsl/gsl_blas.h", "gsl/gsl_bspline.h", "gsl/gsl_cdf.h", "gsl/gsl_chebyshev.h", "gsl/gsl_combination.h",
         "gsl/gsl_deriv.h", "gsl/gsl_dht.h", "gsl/gsl_diff.h", "gsl/gsl_eigen.h", "gsl/gsl_fit.h", "gsl/gsl_permutation.h", "gsl/gsl_heapsort.h",
         "gsl/gsl_histogram2d.h", "gsl/gsl_histogram.h", "gsl/gsl_integration.h", "gsl/gsl_interp.h", "gsl/gsl_linalg.h", "gsl/gsl_poly.h", "gsl/gsl_rng.h",
         "gsl/gsl_qrng.h", "gsl/gsl_randist.h", "gsl/gsl_roots.h",  "gsl/gsl_siman.h", "gsl/gsl_spline.h", "gsl/gsl_sum.h", "gsl/gsl_wavelet.h",
         "gsl/gsl_wavelet2d.h",
 
         "gsl/gsl_multilarge.h", "gsl/gsl_rstat.h", "gsl/gsl_spmatrix.h", "gsl/gsl_spblas.h", "gsl/gsl_splinalg.h", "gsl/gsl_interp2d.h", "gsl/gsl_spline2d.h",
+        "gsl/gsl_bst_avl.h", "gsl/gsl_bst_rb.h", "gsl/gsl_bst_types.h", "gsl/gsl_bst.h",
+        /*"gsl/gsl_spmatrix_complex_long_double.h",*/ "gsl/gsl_spmatrix_complex_double.h", "gsl/gsl_spmatrix_complex_float.h", /*"gsl/gsl_spmatrix_long_double.h",*/
+        "gsl/gsl_spmatrix_double.h", "gsl/gsl_spmatrix_float.h", "gsl/gsl_spmatrix_ulong.h", "gsl/gsl_spmatrix_long.h", "gsl/gsl_spmatrix_uint.h",
+        "gsl/gsl_spmatrix_int.h", "gsl/gsl_spmatrix_ushort.h", "gsl/gsl_spmatrix_short.h", "gsl/gsl_spmatrix_uchar.h", "gsl/gsl_spmatrix_char.h",
 
         "gsl/gsl_const.h", "gsl/gsl_const_num.h", "gsl/gsl_const_cgs.h", "gsl/gsl_const_mks.h", "gsl/gsl_const_cgsm.h", "gsl/gsl_const_mksa.h",
 
@@ -103,11 +108,13 @@ import org.bytedeco.openblas.presets.openblas;
         "gsl/gsl_statistics.h", /*"gsl/gsl_statistics_long_double.h",*/ "gsl/gsl_statistics_double.h", "gsl/gsl_statistics_float.h",
         "gsl/gsl_statistics_ulong.h", "gsl/gsl_statistics_long.h", "gsl/gsl_statistics_uint.h", "gsl/gsl_statistics_int.h",
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"},
-     define = "__GSL_CBLAS_H__", link = "gsl@.23"),
+     define = "__GSL_CBLAS_H__", link = "gsl@.25"),
     @Platform(value = "android", link = "gsl"),
-    @Platform(value = "windows", preload = "libgsl-23") })
+    @Platform(value = "windows", preload = "libgsl-25") })
 @NoException
 public class gsl implements InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "gsl"); }
+
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())
                .put(new Info("FILE").pointerTypes("FILE"))
@@ -118,7 +125,8 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_complex").base("DoublePointer"))
                .put(new Info("gsl_complex_float").base("FloatPointer"))
                .put(new Info("GSL_COMPLEX_ONE", "GSL_COMPLEX_ZERO", "GSL_COMPLEX_NEGONE").cppTypes("gsl_complex"))
-               .put(new Info("GSL_MACH_EPS").cppTypes("double").translate())
+               .put(new Info("GSL_MACH_EPS", "GSL_POSINF", "GSL_NEGINF", "GSL_NAN").cppTypes("double").translate())
+               .put(new Info("gsl_bst_type").purify())
                .put(new Info("gsl_function_struct").pointerTypes("gsl_function"))
                .put(new Info("gsl_function_fdf_struct").pointerTypes("gsl_function_fdf"))
                .put(new Info("gsl_function_vec_struct").pointerTypes("gsl_function_vec"))
@@ -154,7 +162,7 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
                .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
                              "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf",
-                             "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e").skip());
+                             "gsl_sf_coupling_6j_INCORRECT", "gsl_sf_coupling_6j_INCORRECT_e", "gsl_spmatrix_cumsum").skip());
     }
 
     @Opaque public static class FILE extends Pointer {

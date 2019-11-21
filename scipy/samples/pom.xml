@@ -1,0 +1,27 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.scipy</groupId>
+    <artifactId>sparselinalg</artifactId>
+    <version>1.5.3-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>SparseLinalg</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>scipy-platform</artifactId>
+            <version>1.3.2-1.5.3-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Additional dependencies to use bundled full version of MKL -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>mkl-platform-redist</artifactId>
+            <version>2019.5-1.5.3-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>

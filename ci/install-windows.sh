@@ -40,7 +40,7 @@ pip --version
 unzip --version
 gpg --version
 
-pip install requests
+/c/python27/python -m pip install requests
 
 mkdir -p /c/Downloads
 
@@ -62,7 +62,7 @@ if [[ "$PROJ" =~ flycapture ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 14QM7W5RHhvZanF1UBobgEIvwdy6VwTht /c/Downloads/FlyCapture_2.13.3.31_x64.msi
            fi
            # we can get this msi file by starting the installation from the exe file
-           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x64.msi ADDLOCAL=ALL'
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/FlyCapture_2.13.3.31_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found flycap32 in cache and size seems ok"
@@ -71,7 +71,7 @@ if [[ "$PROJ" =~ flycapture ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1ctSSAMF5IkxTKWiiLtID-ltmm27pHFdr /c/Downloads/FlyCapture_2.13.3.31_x86.msi
            fi
            # we can get this msi file by starting the installation from the exe file
-           cmd /c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\FlyCapture_2.13.3.31_x86.msi ADDLOCAL=ALL'
        fi
        echo "Finished flycapture install"
 fi
@@ -87,8 +87,8 @@ if [[ "$PROJ" =~ spinnaker ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1gLfpCE3XkcXbWaoFqT6kQqQm_EO55vYS /c/Downloads/Spinnaker_SourceCode_v140_x64.msi
            fi
            # we can get these msi files by starting the installation from the exe file
-           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
-           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x64.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files\Point Grey Research\Spinnaker"'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x64.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x64.msi ADDLOCAL=ALL'
        elif [ "$OS" == "windows-x86" ]; then
            if [[ $(find /c/Downloads/Spinnaker_*_v140_x86.msi -type f -size +1000000c 2>/dev/null) ]]; then
              echo "Found spinnaker32 in cache and size seems ok"
@@ -98,15 +98,15 @@ if [[ "$PROJ" =~ spinnaker ]]; then
              /c/python27/python $APPVEYOR_BUILD_FOLDER/ci/gDownload.py 1BG51avW4q605c2KGGJ3ehjhUlVFBObqh /c/Downloads/Spinnaker_SourceCode_v140_x86.msi
            fi
            # we can get these msi files by starting the installation from the exe file
-           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
-           cmd /c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x86.msi ADDLOCAL=ALL INSTALLFOLDER="C:\Program Files (x86)\Point Grey Research\Spinnaker"'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_Binaries_v140_x86.msi ADDLOCAL=ALL'
+           cmd.exe //c 'msiexec /quiet /i C:\Downloads\Spinnaker_SourceCode_v140_x86.msi ADDLOCAL=ALL'
        fi
        echo "Finished spinnaker install"
 fi
 
 if [ "$PROJ" == "mkl" ]; then
        echo Installing mkl 
-       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15247/w_mkl_2019.3.203.exe"
+       curl -L  -o mkl.exe "http://registrationcenter-download.intel.com/akdlm/irc_nas/tec/15806/w_mkl_2019.5.281.exe"
        ./mkl.exe --s --x --f .
        ./install.exe install --output=mkllog.txt -eula=accept
        sleep 60
@@ -116,11 +116,11 @@ fi
 
 if [ "$PROJ" == "cuda" ] || [ "$EXT" == "-gpu" ]; then
        echo Installing cuda 
-       curl -L -o cuda_10.1.168_425.25_windows.exe "https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.168_425.25_windows.exe"
-       curl -L -o cudnn-10.1-windows7-x64-v7.5.0.56.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.5.0/cudnn-10.1-windows7-x64-v7.5.0.56.zip"
-       ./cuda_10.1.168_425.25_windows.exe -s
+       curl -L -o cuda_10.1.243_426.00_windows.exe "http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_426.00_windows.exe"
+       curl -L -o cudnn-10.1-windows7-x64-v7.6.4.38.zip "https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.4/cudnn-10.1-windows7-x64-v7.6.4.38.zip"
+       ./cuda_10.1.243_426.00_windows.exe -s
        sleep 60
-       unzip ./cudnn-10.1-windows7-x64-v7.5.0.56.zip
+       unzip ./cudnn-10.1-windows7-x64-v7.6.4.38.zip
        mv ./cuda/bin/*.dll /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/bin
        mv ./cuda/include/*.h /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/include
        mv ./cuda/lib/x64/*.lib /c/Program\ Files/NVIDIA\ GPU\ Computing\ Toolkit/CUDA/v10.1/lib/x64
@@ -132,15 +132,11 @@ if [ "$PROJ" == "tensorflow" ]; then
        unzip -o swigwin-3.0.12.zip -d /c/
 
        echo "adding bazel for tensorflow"
-       curl -L https://github.com/bazelbuild/bazel/releases/download/0.19.2/bazel-0.19.2-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
+       curl -L https://github.com/bazelbuild/bazel/releases/download/0.25.3/bazel-0.25.3-windows-x86_64.exe -o /c/msys64/usr/bin/bazel.exe; export CURL_STATUS=$?
        if [ "$CURL_STATUS" != "0" ]; then
          echo "Download failed here, so can't proceed with the build.. Failing.."
          exit 1
        fi
-
-       /c/Python36-x64/python -m pip install -U --user numpy
-       /c/Python36-x64/python -m pip install -U --user keras_applications==1.0.6 --no-deps
-       /c/Python36-x64/python -m pip install -U --user keras_preprocessing==1.0.5 --no-deps
 fi
 
 # copy Python 3.6 back to default installation directory
@@ -186,8 +182,11 @@ rm -Rf /c/cygwin*
 #rm -Rf /c/Libraries/boost*
 rm -Rf /c/Libraries/llvm*
 rm -Rf /c/Program\ Files/LLVM*
-rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/ProgramData/Microsoft/AndroidNDK*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Tools/MSVC/14.12*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Redist/MSVC/14.12*
+rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Auxiliary/Build/14.12/
 df -h
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason

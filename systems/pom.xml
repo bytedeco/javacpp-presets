@@ -6,17 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>systems</artifactId>
-  <version>${revision}</version>
+  <version>${project.parent.version}</version>
   <name>JavaCPP Presets for Systems</name>
-
-  <properties>
-    <revision>${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>
@@ -41,6 +37,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/arm-linux-gnueabihf/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/aarch64-linux-gnu/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/powerpc64le-linux-gnu/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/i386-linux-gnu/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/x86_64-linux-gnu/</includePath>

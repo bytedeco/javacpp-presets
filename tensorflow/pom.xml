@@ -6,35 +6,34 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow</artifactId>
-  <version>${revision}</version>
+  <version>${tensorflow.version}-${project.parent.version}</version>
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>1.13.1</tensorflow.version>
+    <tensorflow.version>1.15.0</tensorflow.version>
     <tensorflow.path>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/tensorflow-${tensorflow.version}/</tensorflow.path>
-    <revision>${tensorflow.version}-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>numpy</artifactId>
-      <version>1.16.3-${project.parent.version}</version>
-      <optional>true</optional>
+      <artifactId>javacpp</artifactId>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn</artifactId>
-      <version>0.18.1-${project.parent.version}</version>
+      <version>0.21.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
-      <artifactId>javacpp</artifactId>
+      <artifactId>numpy</artifactId>
+      <version>1.17.4-${project.parent.version}</version>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.google.android</groupId>
@@ -88,8 +87,13 @@
         <dependencies>
           <dependency>
             <groupId>org.bytedeco</groupId>
+            <artifactId>mkl-dnn-platform</artifactId>
+            <version>0.21.2-${project.parent.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.bytedeco</groupId>
             <artifactId>numpy-platform</artifactId>
-            <version>1.16.3-${project.parent.version}</version>
+            <version>1.17.4-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -113,6 +117,7 @@
             <includePath>${tensorflow.path}/bazel-genfiles/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_absl/</includePath>
+            <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/com_google_protobuf/src/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/zlib_archive/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/grpc/include/</includePath>
             <includePath>${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/external/farmhash_archive/src/</includePath>
@@ -169,6 +174,7 @@
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/mkldnn/${javacpp.platform}/</buildResource>
             <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>
@@ -187,6 +193,7 @@
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/libs/</linkResource>
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
           </linkResources>
@@ -220,7 +227,8 @@
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.exp</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.lib</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*.obj</exclude>
-                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/local_config_cuda/**</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/**/**.zip</exclude>
+                <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/external/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/python/_solib_*/**</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*python*</exclude>
                 <exclude>org/bytedeco/tensorflow/${javacpp.platform}${javacpp.platform.extension}/*mklml*</exclude>
@@ -261,9 +269,12 @@
             <configuration>
               <properties>${javacpp.platform}</properties>
               <compilerOptions>
+                <compilerOption>/DNOMINMAX</compilerOption>
                 <compilerOption>/DCOMPILER_MSVC</compilerOption>
                 <compilerOption>/DTF_COMPILE_LIBRARY</compilerOption>
                 <compilerOption>@${tensorflow.path}/bazel-tensorflow-${tensorflow.version}/bazel-out/x64_windows-opt/objs.dos</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/c/env.cc</compilerOption>
+                <compilerOption>${tensorflow.path}/tensorflow/c/ops.cc</compilerOption>
 <!-- old hacks for the now obsolete CMake build
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/exception_jni.cc</compilerOption>
                 <compilerOption>${tensorflow.path}/tensorflow/java/src/main/native/graph_jni.cc</compilerOption>
@@ -277,6 +288,8 @@
                 <compilerOption>/link</compilerOption>
                 <compilerOption>/WHOLEARCHIVE:tensorflow_static.lib</compilerOption>
 -->
+                <compilerOption>/link</compilerOption>
+                <compilerOption>/FORCE:MULTIPLE</compilerOption>
               </compilerOptions>
             </configuration>
           </plugin>

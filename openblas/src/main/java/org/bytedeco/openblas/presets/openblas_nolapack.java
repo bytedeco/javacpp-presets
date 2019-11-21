@@ -46,7 +46,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
               preload = {"gcc_s@.1", "quadmath@.0", "gfortran@.5", "gfortran@.4", "gfortran@.3", "openblas@.0#openblas_nolapack@.0"},
               preloadpath = {"/opt/intel/lib/", "/opt/intel/mkl/lib/"}),
     @Platform(value = "android", link = "openblas", preload = ""),
-    @Platform(value = "macosx",  link = "openblas_nolapack", preload = "openblas#openblas_nolapack"),
+    @Platform(value = "macosx",  preloadpath = {"/usr/local/lib/gcc/8/", "/usr/local/lib/gcc/7/", "/usr/local/lib/gcc/6/", "/usr/local/lib/gcc/5/"}),
     @Platform(value = "windows", preload = "libopenblas#libopenblas_nolapack"),
     @Platform(value = "windows-x86",    preloadpath = {"C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/compiler/",
                                                        "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/ia32/mkl/"}),
@@ -54,6 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                                                        "C:/Program Files (x86)/IntelSWTools/compilers_and_libraries/windows/redist/intel64/mkl/"}),
     @Platform(value = "linux",          preloadpath = {"/usr/lib/", "/usr/lib32/", "/usr/lib64/"}),
     @Platform(value = "linux-armhf",    preloadpath = {"/usr/arm-linux-gnueabihf/lib/", "/usr/lib/arm-linux-gnueabihf/"}),
+    @Platform(value = "linux-arm64",    preloadpath = {"/usr/aarch64-linux-gnu/lib/", "/usr/lib/aarch64-linux-gnu/"}),
     @Platform(value = "linux-x86",      preloadpath = {"/lib32/", "/lib/", "/usr/lib32/", "/usr/lib/", "/opt/intel/lib/ia32/", "/opt/intel/mkl/lib/ia32/"}),
     @Platform(value = "linux-x86_64",   preloadpath = {"/lib64/", "/lib/", "/usr/lib64/", "/usr/lib/", "/opt/intel/lib/intel64/", "/opt/intel/mkl/lib/intel64/"}),
     @Platform(value = "linux-ppc64",    preloadpath = {"/usr/powerpc64-linux-gnu/lib/", "/usr/powerpc64le-linux-gnu/lib/",
@@ -61,6 +62,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "ios", preload = "libopenblas") })
 @NoException
 public class openblas_nolapack implements LoadEnabled, InfoMapper {
+    static { Loader.checkVersion("org.bytedeco", "openblas"); }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

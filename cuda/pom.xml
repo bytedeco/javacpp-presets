@@ -6,17 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>cuda</artifactId>
-  <version>${revision}</version>
+  <version>10.1-7.6-${project.parent.version}</version>
   <name>JavaCPP Presets for CUDA</name>
-
-  <properties>
-    <revision>10.1-7.5-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

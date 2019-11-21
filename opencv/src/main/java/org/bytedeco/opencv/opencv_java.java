@@ -52,7 +52,7 @@ import org.bytedeco.opencv.presets.*;
     value = {
         @Platform(preload = {"opencv_cuda@.4.1", "opencv_cudaarithm@.4.1", "opencv_cudafilters@.4.1", "opencv_cudaimgproc@.4.1", "opencv_java"}),
         @Platform(value = "ios", preload = "libopencv_java"),
-        @Platform(value = "windows", preload = {"opencv_cuda410", "opencv_cudaarithm410", "opencv_cudafilters410", "opencv_cudaimgproc410", "opencv_java"}),
+        @Platform(value = "windows", preload = {"opencv_cuda412", "opencv_cudaarithm412", "opencv_cudafilters412", "opencv_cudaimgproc412", "opencv_java"}),
     }
 )
 public class opencv_java {

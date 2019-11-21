@@ -6,17 +6,13 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tesseract</artifactId>
-  <version>${revision}</version>
+  <version>4.1.0-${project.parent.version}</version>
   <name>JavaCPP Presets for Tesseract</name>
-
-  <properties>
-    <revision>4.0.0-${project.parent.version}</revision>
-  </properties>
 
   <dependencies>
     <dependency>

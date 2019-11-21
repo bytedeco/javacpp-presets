@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ONNX 1.5.0  https://onnx.ai/
+ * ONNX 1.6.0  https://onnx.ai/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -35,7 +35,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.onnx</groupId>
     <artifactId>loadmodel</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.2</version>
     <properties>
         <exec.mainClass>LoadModel</exec.mainClass>
     </properties>
@@ -43,7 +43,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>onnx-platform</artifactId>
-            <version>1.5.0-1.5.1-SNAPSHOT</version>
+            <version>1.6.0-1.5.2</version>
         </dependency>
     </dependencies>
     <build>

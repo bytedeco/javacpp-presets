@@ -6,31 +6,30 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.3-SNAPSHOT</version>
     <relativePath>../../</relativePath>
   </parent>
 
   <groupId>org.bytedeco</groupId>
   <artifactId>tensorflow-platform</artifactId>
-  <version>${revision}</version>
+  <version>1.15.0-${project.parent.version}</version>
   <name>JavaCPP Presets Platform for TensorFlow</name>
 
   <properties>
     <javacpp.moduleId>tensorflow</javacpp.moduleId>
-    <revision>1.13.1-${project.parent.version}</revision>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>numpy-platform</artifactId>
-      <version>1.16.3-${project.parent.version}</version>
+      <version>1.17.4-${project.parent.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>mkl-dnn-platform</artifactId>
-      <version>0.18.1-${project.parent.version}</version>
+      <version>0.21.2-${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
