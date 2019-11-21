@@ -57,7 +57,7 @@ case $PLATFORM in
         sedinplace '/postdep_objects=/d' libtool
         sedinplace '/predeps=/d' libtool
         sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib//g' libtool
+        sedinplace 's/-nostdlib //g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
@@ -70,7 +70,7 @@ case $PLATFORM in
         sedinplace '/postdep_objects=/d' libtool
         sedinplace '/predeps=/d' libtool
         sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib//g' libtool
+        sedinplace 's/-nostdlib //g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
@@ -83,7 +83,7 @@ case $PLATFORM in
         sedinplace '/postdep_objects=/d' libtool
         sedinplace '/predeps=/d' libtool
         sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib//g' libtool
+        sedinplace 's/-nostdlib //g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
@@ -96,7 +96,7 @@ case $PLATFORM in
         sedinplace '/postdep_objects=/d' libtool
         sedinplace '/predeps=/d' libtool
         sedinplace '/postdeps=/d' libtool
-        sedinplace 's/-nostdlib//g' libtool
+        sedinplace 's/-nostdlib //g' libtool
         chmod -w libtool
         make -j $MAKEJ
         make install-strip
