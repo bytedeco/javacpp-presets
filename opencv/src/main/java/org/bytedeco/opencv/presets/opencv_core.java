@@ -22,11 +22,14 @@
 
 package org.bytedeco.opencv.presets;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bytedeco.javacpp.ClassProperties;
@@ -57,7 +60,7 @@ import org.bytedeco.openblas.presets.*;
             "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>", "<opencv2/core.hpp>",
             "<opencv2/core/cuda.hpp>", "<opencv2/core/ocl.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
             "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "<opencv2/core/async.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.4.1", "opencv_imgproc@.4.1"},
-            resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake"}, linkresource = "lib",
+            resource = {"include", "lib", "sdk", "share", "x86", "x64", "OpenCVConfig.cmake", "OpenCVConfig-version.cmake", "python"}, linkresource = "lib",
             preload = {"gomp@.1", "opencv_cudev@.4.1"}, compiler = "cpp11"),
         @Platform(value = "android", preload = ""),
         @Platform(value = "ios", preload = {"liblibjpeg", "liblibpng", "liblibprotobuf", "liblibwebp", "libzlib", "libopencv_core"}),
@@ -93,6 +96,27 @@ import org.bytedeco.openblas.presets.*;
 public class opencv_core implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "opencv"); }
 
+    /** Returns {@code Loader.cacheResource("/org/bytedeco/opencv/" + Loader.getPlatform() + extension + "/python/")}. */
+    public static File cachePackage() throws IOException {
+        Loader.load(org.bytedeco.cpython.global.python.class);
+        String path = Loader.load(opencv_core.class);
+        if (path != null) {
+            path = path.replace(File.separatorChar, '/');
+            int i = path.indexOf("/org/bytedeco/opencv/" + Loader.getPlatform());
+            int j = path.lastIndexOf("/");
+            return Loader.cacheResource(path.substring(i, j) + "/python/");
+        }
+        return null;
+    }
+
+    /** Returns {@code {numpy.cachePackages(), opencv.cachePackage()}}. */
+    public static File[] cachePackages() throws IOException {
+        File[] path = org.bytedeco.numpy.global.numpy.cachePackages();
+        path = Arrays.copyOf(path, path.length + 1);
+        path[path.length - 1] = cachePackage();
+        return path;
+    }
+
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");
         String extension = properties.getProperty("platform.extension");
@@ -105,7 +129,7 @@ public class opencv_core implements LoadEnabled, InfoMapper {
             return;
         }
         int i = 0;
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "nppc", "nppc", "nppial", "nppicc", "nppicom",
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "cudnn", "nppc", "nppial", "nppicc", "nppicom",
                          "nppidei", "nppif", "nppig", "nppim", "nppist", "nppisu", "nppitc", "npps"};
         for (String lib : libs) {
             switch (platform) {
@@ -113,10 +137,10 @@ public class opencv_core implements LoadEnabled, InfoMapper {
                 case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudart") ? "@.10.1" : "@.10";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.1" : "@.10";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudart") ? "64_101" : "64_10";
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_101" : "64_10";
                     break;
                 default:
                     continue; // no CUDA
