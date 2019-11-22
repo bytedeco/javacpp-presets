@@ -57,8 +57,8 @@ docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec 'echo "deb [arch=amd64] http
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "sed -i 's/deb http/deb [arch=i386,amd64] http/g' /etc/apt/sources.list"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EB9B1D8886F44E2A"
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get update"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:arm64 libasound2-dev:arm64 libusb-dev:arm64 libusb-1.0-0-dev:arm64 libffi-dev:arm64 libssl-dev:arm64 zlib1g-dev:arm64 libxcb1-dev:arm64"
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gfortran-aarch64-linux-gnu linux-libc-dev-arm64-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool perl nasm yasm curl cmake libffi-dev libssl-dev zlib1g-dev"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install python python2.7 python-minimal python2.7-minimal libgtk2.0-dev:arm64 libasound2-dev:arm64 libusb-dev:arm64 libusb-1.0-0-dev:arm64 libffi-dev:arm64 zlib1g-dev:arm64 libxcb1-dev:arm64"
+docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "apt-get -y install pkg-config ccache gcc-aarch64-linux-gnu g++-aarch64-linux-gnu gfortran-aarch64-linux-gnu linux-libc-dev-arm64-cross binutils-multiarch openjdk-8-jdk-headless ant python python-dev swig git file wget unzip tar bzip2 patch autoconf-archive autogen automake make libtool perl nasm yasm curl cmake libffi-dev zlib1g-dev"
 
 if [ "$OS" == "linux-arm64" ]; then
     if [[ "$PROJ" =~ flycapture ]]; then

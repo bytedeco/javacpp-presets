@@ -59,6 +59,8 @@
                 <exclude>org/bytedeco/cpython/${javacpp.platform}/lib/libpython*</exclude>
                 <exclude>org/bytedeco/cpython/${javacpp.platform}/lib/python*.dll</exclude>
                 <exclude>org/bytedeco/cpython/${javacpp.platform}/bin/python*.dll</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/bin/openssl*</exclude>
+                <exclude>org/bytedeco/cpython/${javacpp.platform}/include/openssl/**</exclude>
               </excludes>
             </configuration>
           </execution>
