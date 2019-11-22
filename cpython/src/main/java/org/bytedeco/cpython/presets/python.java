@@ -126,6 +126,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 //                "pyfpe.h",
             },
             link = "python3.7m@.1.0!",
+            preload = {"ffi@.6", "ffi@.5"},
             resource = {"include", "lib", "libs", "bin", "share"}
         ),
         @Platform(

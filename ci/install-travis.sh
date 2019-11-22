@@ -49,7 +49,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then export JAVA_HOME=$(/usr/libexec/java_hom
 if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ android ]]; then
   CENTOS_VERSION=6
   SCL_ENABLE="devtoolset-7 python27 rh-git29"
-  if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]] || [[ "$OS" =~ android ]]; then
+  if [[ "mxnet tensorflow onnx ngraph onnxruntime qt skia " =~ "$PROJ " ]] || [[ "$OS" =~ android ]]; then
     CENTOS_VERSION=7
     SCL_ENABLE="devtoolset-7 rh-git218"
   fi
@@ -58,7 +58,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel openssl-devel"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install rh-java-common-ant $SCL_ENABLE ccache clang gcc-c++ gcc-gfortran java-1.8.0-openjdk-devel ant python python36-devel python36-pip swig git file which wget unzip tar bzip2 gzip xz patch make cmake3 autoconf-archive libtool perl nasm yasm alsa-lib-devel freeglut-devel gtk2-devel libusb-devel libusb1-devel zlib-devel SDL-devel libva-devel libxkbcommon-devel fontconfig-devel libffi-devel"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -y --disablerepo=cuda update"
   if [ "$OS" == "linux-x86" ]; then
     docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -qa | sed s/.x86_64$/.i686/ | xargs yum -q -y --disablerepo=cuda install"
@@ -170,7 +170,7 @@ if [ "$OS" == "linux-armhf" ]; then
     sudo dpkg --add-architecture i386
     sudo apt-get update
     sudo apt-get -y install libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1
-    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev libssl-dev zlib1g-dev
+    sudo apt-get -y install ccache clang git file wget unzip tar bzip2 gzip patch autoconf-archive autogen automake libtool perl nasm yasm libasound2-dev freeglut3-dev libgtk2.0-dev libusb-dev libffi-dev zlib1g-dev
     curl -L https://github.com/raspberrypi/tools/archive/master.tar.gz -o $HOME/tools-master.tar.gz
     curl -L https://github.com/raspberrypi/userland/archive/master.tar.gz -o $HOME/userland-master.tar.gz
     mkdir -p $HOME/tools $HOME/userland
@@ -200,7 +200,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
    echo "performing brew update and install of dependencies, please wait.."
    brew update
-   brew upgrade cmake maven openssl@1.1
+   brew upgrade cmake maven
    brew install ccache swig autoconf-archive libtool libusb xz sdl gpg1 nasm yasm
 
    # Try to use ccache to speed up the build
@@ -260,7 +260,7 @@ fi
 echo "Download dependencies" 
 if [ "$TRAVIS_OS_NAME" == "osx" ]; then
 
-      if [[ "cpython mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]] || [[ "$PROJ" =~ numpy ]]; then
+      if [[ "mxnet tensorflow onnx ngraph onnxruntime " =~ "$PROJ " ]]; then
         curl -L https://www.python.org/ftp/python/3.6.6/python-3.6.6-macosx10.9.pkg -o $HOME/python.pkg
         echo "Install python pkg"
         sudo installer -store -pkg $HOME/python.pkg -target /
