@@ -15,20 +15,53 @@ mkdir -p "$PLATFORM$EXTENSION"
 cd "$PLATFORM$EXTENSION"
 INSTALL_PATH=`pwd`
 
+CPYTHON_PATH="$INSTALL_PATH/../../../cpython/cppbuild/$PLATFORM/"
 OPENBLAS_PATH="$INSTALL_PATH/../../../openblas/cppbuild/$PLATFORM/"
+NUMPY_PATH="$INSTALL_PATH/../../../numpy/cppbuild/$PLATFORM/"
 
 if [[ -n "${BUILD_PATH:-}" ]]; then
     PREVIFS="$IFS"
     IFS="$BUILD_PATH_SEPARATOR"
     for P in $BUILD_PATH; do
-        if [[ -f "$P/include/openblas_config.h" ]]; then
+        if [[ $(find "$P" -name Python.h) ]]; then
+            CPYTHON_PATH="$P"
+        elif [[ -f "$P/include/openblas_config.h" ]]; then
             OPENBLAS_PATH="$P"
+        elif [[ -f "$P/python/numpy/core/include/numpy/numpyconfig.h" ]]; then
+            NUMPY_PATH="$P"
         fi
     done
     IFS="$PREVIFS"
 fi
 
 export OpenBLAS_HOME=$OPENBLAS_PATH
+
+CPYTHON_PATH="${CPYTHON_PATH//\\//}"
+OPENBLAS_PATH="${OPENBLAS_PATH//\\//}"
+NUMPY_PATH="${NUMPY_PATH//\\//}"
+
+export PYTHON3_EXECUTABLE=
+export PYTHON3_INCLUDE_DIR=
+export PYTHON3_LIBRARY=
+export PYTHON3_PACKAGES_PATH=
+if [[ -f "$CPYTHON_PATH/include/python3.7m/Python.h" ]]; then
+    export LD_LIBRARY_PATH="$OPENBLAS_PATH/lib/:$CPYTHON_PATH/lib/:$NUMPY_PATH/lib/:${LD_LIBRARY_PATH:-}"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python3.7"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/python3.7m/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/lib/python3.7/"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/python3.7/site-packages/"
+    chmod +x "$PYTHON3_EXECUTABLE"
+elif [[ -f "$CPYTHON_PATH/include/Python.h" ]]; then
+    CPYTHON_PATH=$(cygpath $CPYTHON_PATH)
+    OPENBLAS_PATH=$(cygpath $OPENBLAS_PATH)
+    NUMPY_PATH=$(cygpath $NUMPY_PATH)
+    export PATH="$OPENBLAS_PATH:$CPYTHON_PATH:$NUMPY_PATH:$PATH"
+    export PYTHON3_EXECUTABLE="$CPYTHON_PATH/bin/python.exe"
+    export PYTHON3_INCLUDE_DIR="$CPYTHON_PATH/include/"
+    export PYTHON3_LIBRARY="$CPYTHON_PATH/libs/python37.lib"
+    export PYTHON3_PACKAGES_PATH="$INSTALL_PATH/lib/site-packages/"
+fi
+export PYTHONPATH="$NUMPY_PATH/python/:${PYTHONPATH:-}"
 
 echo "Decompressing archives..."
 tar --totals -xzf ../opencv-$OPENCV_VERSION.tar.gz
@@ -64,7 +97,17 @@ fi
 sedinplace '/typedef ::/d' modules/core/include/opencv2/core/cvdef.h
 sedinplace 's/__constant__//g' modules/core/include/opencv2/core/cuda/detail/color_detail.hpp
 
-BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
+# avoid issues when checking version of cross-compiled Python
+sedinplace '/if(PYTHONINTERP_FOUND)/a\
+    if(" ${_python_version_major}" STREQUAL " 3")\
+      set(PYTHON_VERSION_STRING "3.7")\
+      set(PYTHON_VERSION_MAJOR "3")\
+      set(PYTHON_VERSION_MINOR "7")\
+    endif()\
+' cmake/OpenCVDetectPython.cmake
+sedinplace '/execute_process/{N;N;N;d;}' cmake/OpenCVDetectPython.cmake
+
+BUILD_X="-DBUILD_ANDROID_EXAMPLES=OFF -DBUILD_ANDROID_PROJECTS=OFF -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=ON -DBUILD_opencv_python2=OFF -DBUILD_opencv_python3=ON -DPYTHON3_EXECUTABLE=$PYTHON3_EXECUTABLE -DPYTHON3_INCLUDE_DIR=$PYTHON3_INCLUDE_DIR -DPYTHON3_LIBRARY=$PYTHON3_LIBRARY -DPYTHON3_PACKAGES_PATH=$PYTHON3_PACKAGES_PATH -DPYTHON3_NUMPY_INCLUDE_DIRS=$NUMPY_PATH/python/numpy/core/include/ -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hdf=OFF -DBUILD_opencv_img_hash=ON"
 
 # support for OpenMP is NOT thread-safe so make sure to never enable it and use pthreads instead
 WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_IPP=OFF -DWITH_LAPACK=ON -DWITH_OPENCL=ON -DWITH_OPENMP=OFF -DOPENCV_ENABLE_NONFREE=ON"
@@ -189,7 +232,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm)
-        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X .
+        CC="arm-linux-gnueabi-gcc" CXX="arm-linux-gnueabi-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabi-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -201,7 +244,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-armhf)
-        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X .
+        CC="arm-linux-gnueabihf-gcc" CXX="arm-linux-gnueabihf-g++ -std=c++11" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=armv6 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard -Wl,-allow-shlib-undefined" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which arm-linux-gnueabihf-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -213,7 +256,7 @@ case $PLATFORM in
         sedinplace "s/.so.${OPENCV_VERSION%-*}/.so/g" ../lib/cmake/opencv4/OpenCVModules-release.cmake
         ;;
     linux-arm64)
-        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DBUILD_opencv_python3=OFF -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
+        PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig/ CC="aarch64-linux-gnu-gcc -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CXX="aarch64-linux-gnu-g++ -std=c++11 -DITT_ARCH=4 -I/usr/lib/jvm/default-java/include/ -I/usr/lib/jvm/default-java/include/linux/" CMAKE_C_COMPILER=$CC CMAKE_CXX_COMPILER=$CXX $CMAKE -DAARCH64=ON -DENABLE_NEON=OFF -DENABLE_SSE=OFF -DCMAKE_INSTALL_PREFIX="$INSTALL_PATH" -DCMAKE_INSTALL_LIBDIR="lib" -DCMAKE_SYSTEM_PROCESSOR=aarch64 -DBUILD_TESTS=OFF -DCMAKE_CXX_FLAGS="" -DCMAKE_C_FLAGS="" $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X -DWITH_GTK=OFF $GPU_FLAGS -DCUDA_HOST_COMPILER="$(which aarch64-linux-gnu-g++)" $BUILD_CONTRIB_X .
         # download files CMake failed to download
         if [[ -f download_with_curl.sh ]]; then
             bash download_with_curl.sh
@@ -323,5 +366,10 @@ rm ../java/org/opencv/android/CameraBridgeViewBase.java
 rm ../java/org/opencv/android/JavaCameraView.java
 rm ../java/org/opencv/android/OpenCVLoader.java
 rm ../java/*opencv* || true # remove stray binaries
+
+if [[ -d ${PYTHON3_PACKAGES_PATH:-} ]]; then
+    ln -snf ${PYTHON3_PACKAGES_PATH:-} ../python
+    rm -Rf $(find ../ -iname __pycache__)
+fi
 
 cd ../..

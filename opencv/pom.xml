@@ -22,6 +22,12 @@
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
+      <artifactId>numpy</artifactId>
+      <version>1.17.4-${project.parent.version}</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
     <dependency>
@@ -55,50 +61,73 @@
         <dependencies>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>openblas</artifactId>
+            <artifactId>openblas-platform</artifactId>
             <version>0.3.7-${project.parent.version}</version>
           </dependency>
           <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>openblas</artifactId>
-            <version>0.3.7-${project.parent.version}</version>
-            <classifier>${javacpp.platform}</classifier>
+            <artifactId>numpy-platform</artifactId>
+            <version>1.17.4-${project.parent.version}</version>
           </dependency>
         </dependencies>
         <configuration>
           <classPaths>
             <classPath>${basedir}/../openblas/target/classes/</classPath>
+            <classPath>${basedir}/../cpython/target/classes/</classPath>
+            <classPath>${basedir}/../numpy/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
             <includePath>${basedir}/../openblas/target/classes/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/src/main/resources/org/bytedeco/openblas/include/</includePath>
             <includePath>${basedir}/../openblas/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../cpython/src/main/resources/org/bytedeco/cpython/include/</includePath>
+            <includePath>${basedir}/../cpython/target/classes/org/bytedeco/cpython/include/</includePath>
+            <includePath>${basedir}/../cpython/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/../numpy/src/main/resources/org/bytedeco/numpy/include/</includePath>
+            <includePath>${basedir}/../numpy/target/classes/org/bytedeco/numpy/include/</includePath>
+            <includePath>${basedir}/../numpy/cppbuild/${javacpp.platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/include/</includePath>
             <includePath>${basedir}/target/classes/org/bytedeco/${javacpp.packageName}/include/</includePath>
           </includePaths>
           <linkPaths>
             <linkPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/lib/</linkPath>
             <linkPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
             <preloadPath>${basedir}/../openblas/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../cpython/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../numpy/cppbuild/${javacpp.platform}/bin/</preloadPath>
             <preloadPath>${basedir}/cppbuild/${javacpp.platform}${javacpp.platform.extension}/bin/</preloadPath>
           </preloadPaths>
           <buildResources>
             <buildResource>/${javacpp.platform.library.path}/</buildResource>
             <buildResource>/org/bytedeco/openblas/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/cpython/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/mkldnn/${javacpp.platform}/</buildResource>
+            <buildResource>/org/bytedeco/numpy/${javacpp.platform}/</buildResource>
           </buildResources>
           <includeResources>
             <includeResource>/${javacpp.platform.library.path}/include/</includeResource>
             <includeResource>/org/bytedeco/openblas/include/</includeResource>
             <includeResource>/org/bytedeco/openblas/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/cpython/include/</includeResource>
+            <includeResource>/org/bytedeco/cpython/${javacpp.platform}/include/</includeResource>
+            <includeResource>/org/bytedeco/numpy/include/</includeResource>
+            <includeResource>/org/bytedeco/numpy/${javacpp.platform}/include/</includeResource>
           </includeResources>
           <linkResources>
             <linkResource>/${javacpp.platform.library.path}/</linkResource>
             <linkResource>/${javacpp.platform.library.path}/lib/</linkResource>
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/</linkResource>
             <linkResource>/org/bytedeco/openblas/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/lib/</linkResource>
+            <linkResource>/org/bytedeco/cpython/${javacpp.platform}/libs/</linkResource>
+            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/</linkResource>
+            <linkResource>/org/bytedeco/numpy/${javacpp.platform}/lib/</linkResource>
           </linkResources>
         </configuration>
       </plugin>
@@ -129,6 +158,7 @@
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.a</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.dylib</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/*.so*</exclude>
+                <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/lib/python*/**</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.a</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.dylib</exclude>
                 <exclude>org/bytedeco/opencv/${javacpp.platform}${javacpp.platform.extension}/sdk/**/*.so*</exclude>
