@@ -22,14 +22,11 @@
 
 package org.bytedeco.opencv.presets;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bytedeco.javacpp.ClassProperties;
@@ -95,27 +92,6 @@ import org.bytedeco.openblas.presets.*;
 )
 public class opencv_core implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "opencv"); }
-
-    /** Returns {@code Loader.cacheResource("/org/bytedeco/opencv/" + Loader.getPlatform() + extension + "/python/")}. */
-    public static File cachePackage() throws IOException {
-        Loader.load(org.bytedeco.cpython.global.python.class);
-        String path = Loader.load(opencv_core.class);
-        if (path != null) {
-            path = path.replace(File.separatorChar, '/');
-            int i = path.indexOf("/org/bytedeco/opencv/" + Loader.getPlatform());
-            int j = path.lastIndexOf("/");
-            return Loader.cacheResource(path.substring(i, j) + "/python/");
-        }
-        return null;
-    }
-
-    /** Returns {@code {numpy.cachePackages(), opencv.cachePackage()}}. */
-    public static File[] cachePackages() throws IOException {
-        File[] path = org.bytedeco.numpy.global.numpy.cachePackages();
-        path = Arrays.copyOf(path, path.length + 1);
-        path[path.length - 1] = cachePackage();
-        return path;
-    }
 
     @Override public void init(ClassProperties properties) {
         String platform = properties.getProperty("platform");

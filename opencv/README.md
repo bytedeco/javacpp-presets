@@ -16,7 +16,8 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/opencv/apidocs/
 
-&lowast; Call `Loader.load(opencv_java.class)` before using the API in the `org.opencv` namespace.
+&lowast; Call `Loader.load(opencv_java.class)` before using the API in the `org.opencv` namespace.  
+&lowast; Call `Py_SetPath(opencv_python3.cachePackages())` before calling `Py_Initialize()`.
 
 
 Sample Usage
@@ -36,7 +37,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.opencv</groupId>
     <artifactId>stitching</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>Stitching</exec.mainClass>
     </properties>
@@ -44,21 +45,21 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
-            <version>4.1.2-1.5.2</version>
+            <version>4.1.2-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies required to use CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform-gpu</artifactId>
-            <version>4.1.2-1.5.2</version>
+            <version>4.1.2-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled CUDA and cuDNN -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>cuda-platform-redist</artifactId>
-            <version>10.1-7.6-1.5.2</version>
+            <version>10.1-7.6-1.5.3-SNAPSHOT</version>
         </dependency>
 
         <!-- Additional dependencies to use bundled full version of MKL -->
@@ -66,6 +67,13 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
             <groupId>org.bytedeco</groupId>
             <artifactId>mkl-platform-redist</artifactId>
             <version>2019.5-1.5.2</version>
+        </dependency>
+
+        <!-- Optional dependencies to load the Python module -->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>numpy-platform</artifactId>
+            <version>1.17.4-1.5.3-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
