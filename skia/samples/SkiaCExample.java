@@ -11,7 +11,7 @@ public class SkiaCExample {
         sk_imageinfo_t info = new sk_imageinfo_t();
         info.width(w);
         info.height(h);
-        info.colorType(sk_colortype_get_default_8888());
+        info.colorType(BGRA_8888_SK_COLORTYPE);
         info.alphaType(PREMUL_SK_ALPHATYPE);
         return sk_surface_new_raster(info, 0, null);
     }

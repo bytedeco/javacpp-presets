@@ -142,13 +142,13 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * MXNet 1.5.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.15.0  https://github.com/tensorflow/tensorflow
  * TensorRT 6.0  https://developer.nvidia.com/tensorrt
- * The Arcade Learning Environment 0.6.0  https://github.com/mgbellemare/Arcade-Learning-Environment
+ * The Arcade Learning Environment 0.6.x  https://github.com/mgbellemare/Arcade-Learning-Environment
  * ONNX 1.6.0  https://github.com/onnx/onnx
  * nGraph 0.26.0  https://github.com/NervanaSystems/ngraph
  * ONNX Runtime 1.0.0  https://github.com/microsoft/onnxruntime
  * LiquidFun  http://google.github.io/liquidfun/
  * Qt 5.13.x  https://download.qt.io/archive/qt/
- * Mono/Skia 1.68.0  https://github.com/mono/skia
+ * Mono/Skia 1.68.x  https://github.com/mono/skia
  * cpu_features 0.4.1  https://github.com/google/cpu_features
  * System APIs of the build environments:
    * Linux (glibc)  https://www.gnu.org/software/libc/

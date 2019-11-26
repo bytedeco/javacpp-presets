@@ -8,10 +8,15 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.skia.global.Skia.*;
 
+//     #endif
+// #endif
+
+///////////////////////////////////////////////////////////////////////////////////////
+
 @Opaque @Properties(inherit = org.bytedeco.skia.presets.Skia.class)
-public class sk_colorspace_t extends Pointer {
+public class sk_refcnt_t extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public sk_colorspace_t() { super((Pointer)null); }
+    public sk_refcnt_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public sk_colorspace_t(Pointer p) { super(p); }
+    public sk_refcnt_t(Pointer p) { super(p); }
 }

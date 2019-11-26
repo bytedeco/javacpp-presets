@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.skia</groupId>
     <artifactId>skiacexample</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3-SNAPSHOT</version>
     <properties>
         <exec.mainClass>SkiaCExample</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>skia-platform</artifactId>
-            <version>1.68.0-1.5.2</version>
+            <version>1.68.1-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
@@ -68,7 +68,7 @@ public class SkiaCExample {
         sk_imageinfo_t info = new sk_imageinfo_t();
         info.width(w);
         info.height(h);
-        info.colorType(sk_colortype_get_default_8888());
+        info.colorType(BGRA_8888_SK_COLORTYPE);
         info.alphaType(PREMUL_SK_ALPHATYPE);
         return sk_surface_new_raster(info, 0, null);
     }
