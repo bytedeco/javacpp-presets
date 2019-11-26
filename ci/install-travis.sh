@@ -211,7 +211,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        brew link --overwrite gcc@7
 
        # Remove "fixed" header files that are actually broken
-       sudo rm -Rf /usr/local/Cellar/gcc@7/7.4.0_2/lib/gcc/7/gcc/x86_64-apple-darwin17.7.0/7.4.0/include-fixed
+       sudo rm -Rf $(find /usr/local/Cellar/gcc@7/ -iname include-fixed)
 
        # Fix up some binaries to support rpath
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgomp.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
@@ -220,7 +220,7 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libquadmath.0.dylib
        sudo install_name_tool -add_rpath /usr/local/lib/gcc/7/ -add_rpath @loader_path/. -id @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgcc_s.1.dylib
        sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.4.0/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
-       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.4.0_2/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
+       sudo install_name_tool -change /usr/local/Cellar/gcc@7/7.5.0/lib/gcc/7/libquadmath.0.dylib @rpath/libquadmath.0.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgomp.1.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libstdc++.6.dylib
        sudo install_name_tool -change /usr/local/lib/gcc/7/libgcc_s.1.dylib @rpath/libgcc_s.1.dylib /usr/local/lib/gcc/7/libgfortran.4.dylib
