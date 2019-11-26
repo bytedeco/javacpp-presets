@@ -16,7 +16,7 @@
 
   <properties>
     <javacpp.nativeRequires>
-      requires org.bytedeco.mkl-dnn.${javacpp.platform.module};
+      requires org.bytedeco.mkldnn.${javacpp.platform.module};
     </javacpp.nativeRequires>
   </properties>
 
