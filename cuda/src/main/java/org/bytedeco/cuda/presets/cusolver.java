@@ -46,6 +46,8 @@ public class cusolver implements InfoMapper {
                .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
                .put(new Info("syevjInfo_t").valueTypes("syevjInfo").pointerTypes("@ByPtrPtr syevjInfo"))
                .put(new Info("gesvdjInfo_t").valueTypes("gesvdjInfo").pointerTypes("@ByPtrPtr gesvdjInfo"))
+               .put(new Info("cusolverDnIRSParams_t").valueTypes("cusolverDnIRSParams").pointerTypes("@ByPtrPtr cusolverDnIRSParams"))
+               .put(new Info("cusolverDnIRSInfos_t").valueTypes("cusolverDnIRSInfos").pointerTypes("@ByPtrPtr cusolverDnIRSInfos"))
                .put(new Info("cusolverRfHandle_t").valueTypes("cusolverRfCommon").pointerTypes("@ByPtrPtr cusolverRfCommon"))
                .put(new Info("cusolverSpHandle_t").valueTypes("cusolverSpContext").pointerTypes("@ByPtrPtr cusolverSpContext"))
                .put(new Info("csrqrInfo_t").valueTypes("csrqrInfo").pointerTypes("@ByPtrPtr csrqrInfo"));

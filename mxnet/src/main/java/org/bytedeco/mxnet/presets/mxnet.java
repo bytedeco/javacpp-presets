@@ -50,10 +50,10 @@ import org.bytedeco.opencv.presets.*;
         includepath = {"/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}),
     @Platform(value = {"linux-arm64", "linux-ppc64le", "linux-x86_64", "macosx-x86_64", "windows-x86_64"},
         define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1", "MSHADOW_USE_CUDA 1", "MSHADOW_USE_F16C 0"},
-        link = {"cudart@.10.1#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
-        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/"},
-        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/"},
-        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/"}, extension = "-gpu") })
+        link = {"cudart@.10.2#", "cuda@.1#", "mxnet"}, preload = {"mkldnn@.0", "libmxnet"},
+        includepath = {"/usr/local/cuda/include/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/"},
+        linkpath = {"/usr/local/cuda/lib/", "/usr/local/cuda/lib64/", "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/"},
+        preloadpath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/"}, extension = "-gpu") })
 public class mxnet implements LoadEnabled, InfoMapper {
     static { Loader.checkVersion("org.bytedeco", "mxnet"); }
 
@@ -84,10 +84,10 @@ public class mxnet implements LoadEnabled, InfoMapper {
                 case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvrtc") || lib.equals("cudart") ? "@.10.1" : "@.10";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvrtc") || lib.equals("cudart") ? "@.10.2" : "@.10";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_101_0" : lib.equals("cudart") ? "64_101" : "64_10";
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("nvrtc") ? "64_102_0" : lib.equals("cudart") ? "64_102" : "64_10";
                     break;
                 default:
                     continue; // no CUDA

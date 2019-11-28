@@ -38,15 +38,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include = {"<cuda.h>", "<crt/host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>", "cuda_fp16.hpp", "<library_types.h>"},
-              exclude = "<crt/host_defines.h>",
-              includepath = "/usr/local/cuda-10.1/include/", link = {"cudart@.10.1", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.1/lib/"),
-    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.1/lib64/"),
-    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.1/include/",
-                                           linkpath = {"/Developer/NVIDIA/CUDA-10.1/lib/", "/usr/local/cuda/lib/"}),
-    @Platform(value = "windows-x86_64",     preload = "cudart64_101",
-                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/",
-                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/bin/",
-                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/") },
+              compiler = "cpp11", exclude = "<crt/host_defines.h>",
+              includepath = "/usr/local/cuda-10.2/include/", link = {"cudart@.10.2", "cuda@.1#"}, linkpath = "/usr/local/cuda-10.2/lib/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda-10.2/lib64/"),
+    @Platform(value = "macosx-x86_64",  includepath =  "/Developer/NVIDIA/CUDA-10.2/include/",
+                                           linkpath = {"/Developer/NVIDIA/CUDA-10.2/lib/", "/usr/local/cuda/lib/"}),
+    @Platform(value = "windows-x86_64",     preload = "cudart64_102",
+                                        includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/",
+                                        preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin/",
+                                           linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/") },
         target = "org.bytedeco.cuda.cudart", global = "org.bytedeco.cuda.global.cudart")
 @NoException
 public class cudart implements InfoMapper {
@@ -85,7 +85,8 @@ public class cudart implements InfoMapper {
                              "!defined(DISABLE_CUSPARSE_DEPRECATED)", "!defined(_WIN32)").define(false))
                .put(new Info("__CUDA_FP16_DECL__", "__float_simpl_sinf(float)", "__float_simpl_cosf(float)",
                              "__internal_trig_reduction_kernel", "__internal_sin_cos_kernel", "cuDeviceGetP2PAttribute",
-                             "cuMemRangeGetAttribute", "cuMemRangeGetAttributes", "float2::__cuda_gnu_arm_ice_workaround", "cuDeviceGetLuid").skip())
+                             "cuMemRangeGetAttribute", "cuMemRangeGetAttributes", "float2::__cuda_gnu_arm_ice_workaround",
+                             "cuDeviceGetLuid", "cuDeviceGetNvSciSyncAttributes", "cudaDeviceGetNvSciSyncAttributes").skip())
                .put(new Info("CUcontext").valueTypes("CUctx_st").pointerTypes("@ByPtrPtr CUctx_st"))
                .put(new Info("CUmodule").valueTypes("CUmod_st").pointerTypes("@ByPtrPtr CUmod_st"))
                .put(new Info("CUfunction").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))

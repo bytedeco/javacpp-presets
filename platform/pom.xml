@@ -214,7 +214,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>cuda-platform</artifactId>
-      <version>10.1-7.6-${project.version}</version>
+      <version>10.2-7.6-${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>

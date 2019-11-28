@@ -36,9 +36,9 @@ C:\msys64\usr\bin\bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-tool
 SET "PATH=C:\Program Files (x86)\CMake\bin;C:\msys64\usr\bin\core_perl;C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%PATH%"
 C:\msys64\usr\bin\bash -c "ci/install-windows.sh %PROJ%"
 if exist "%ProgramFiles%\NVIDIA GPU Computing Toolkit" (
-    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.1"
-    SET "CUDA_PATH_V10_1=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.1"
-    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.1\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.1\libnvvp;%PATH%"
+    SET "CUDA_PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.2"
+    SET "CUDA_PATH_V10_2=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.2"
+    SET "PATH=%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin;%ProgramFiles%\NVIDIA GPU Computing Toolkit\CUDA\v10.2\libnvvp;%PATH%"
 )
 
 echo Building for "%APPVEYOR_REPO_BRANCH%"

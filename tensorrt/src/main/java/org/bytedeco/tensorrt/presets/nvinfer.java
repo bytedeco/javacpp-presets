@@ -64,7 +64,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
         int i = 0;
         String[] libs = {"cudart", "cublasLt", "cublas", "cudnn"};
         for (String lib : libs) {
-            lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.1" : "@.10";
+            lib += lib.equals("cudnn") ? "@.7" : lib.equals("cudart") ? "@.10.2" : "@.10";
             if (!preloads.contains(lib)) {
                 preloads.add(i++, lib);
             }

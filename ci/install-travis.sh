@@ -54,7 +54,7 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
     SCL_ENABLE="devtoolset-7 rh-git218"
   fi
   echo "Starting docker for x86_64 and x86 linux"
-  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.1-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
+  docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build nvidia/cuda:10.2-cudnn7-devel-centos$CENTOS_VERSION /bin/bash
   DOCKER_CONTAINER_ID=$(docker ps | grep centos | awk '{print $1}')
   echo "Container id is $DOCKER_CONTAINER_ID please wait while updates applied"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "yum -q -y --disablerepo=cuda install centos-release-scl-rh epel-release"
@@ -68,10 +68,10 @@ if [[ "$OS" == "linux-x86" ]] || [[ "$OS" == "linux-x86_64" ]] || [[ "$OS" =~ an
       docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "rpm -i --force --nodeps $HOME/*.rpm"
     fi
   fi
-  # work around issues with CUDA 10.1
+  # work around issues with CUDA 10.2
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/include/cublas* /usr/include/nvblas* /usr/local/cuda/include/"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "mv /usr/lib64/libcublas* /usr/lib64/libnvblas* /usr/local/cuda/lib64/"
-  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.1; done"
+  docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "for f in /usr/local/cuda/lib64/*.so.10; do ln -s \$f \$f.2; done"
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so; cp /usr/local/cuda/lib64/stubs/libcuda.so /usr/lib64/libcuda.so.1"
 
   docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec "cd $HOME/ccache-3.7/; ./configure; make; make install"
@@ -285,11 +285,11 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       if [[ "$PROJ" =~ cuda ]] || [[ "$EXT" =~ gpu ]]; then
         echo "installing cuda.."
         #don't put in download dir as will be cached and we can use direct url instead
-        curl -L http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_mac.dmg -o $HOME/cuda_10.1.243_mac.dmg
-        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.4/cudnn-10.1-osx-x64-v7.6.4.38.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.4.38.tgz
+        curl -L http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_mac.dmg -o $HOME/cuda_10.2.89_mac.dmg
+        curl -L https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.5/cudnn-10.1-osx-x64-v7.6.5.32.tgz -o $HOME/cudnn-10.1-osx-x64-v7.6.5.32.tgz
 
         echo "Mount dmg"
-        hdiutil mount $HOME/cuda_10.1.243_mac.dmg
+        hdiutil mount $HOME/cuda_10.2.89_mac.dmg
         sleep 5
         ls -ltr /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS 
         sudo /Volumes/CUDAMacOSXInstaller/CUDAMacOSXInstaller.app/Contents/MacOS/CUDAMacOSXInstaller --accept-eula --no-window; export BREW_STATUS=$? 
@@ -299,15 +299,15 @@ if [ "$TRAVIS_OS_NAME" == "osx" ]; then
           exit $BREW_STATUS
         fi
 
-        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.4.38.tgz
+        tar xvf $HOME/cudnn-10.1-osx-x64-v7.6.5.32.tgz
         sudo cp ./cuda/include/*.h /usr/local/cuda/include/
         sudo cp ./cuda/lib/*.dylib /usr/local/cuda/lib/
         sudo cp ./cuda/lib/*.a /usr/local/cuda/lib/
         sudo cp /usr/local/cuda/lib/* /usr/local/lib/
         sudo cp /usr/local/cuda/lib/libcuda.dylib /usr/local/cuda/lib/stubs/
 
-        # work around issues with CUDA 10.1
-        for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.1.dylib}; done
+        # work around issues with CUDA 10.2
+        for f in /usr/local/cuda/lib/*.10.dylib; do sudo ln -s $f ${f/%.10.dylib/.10.2.dylib}; done
 
         cd $HOME/ccache-3.7/; ./configure; make; sudo make install; cd $TRAVIS_BUILD_DIR
         echo 'CCACHE_CC=/usr/local/cuda/bin/nvcc /usr/local/bin/ccache compiler "$@"' | sudo tee /usr/local/cuda/bin/nvcccache
