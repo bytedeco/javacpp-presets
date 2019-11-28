@@ -16,6 +16,11 @@
 
   <properties>
     <javacpp.mkldnn.platform>${javacpp.platform}</javacpp.mkldnn.platform>
+    <javacpp.nativeRequires>
+      requires org.bytedeco.opencv.${javacpp.platform.module};
+      requires org.bytedeco.openblas.${javacpp.platform.module};
+      requires org.bytedeco.mkldnn.${javacpp.platform.module};
+    </javacpp.nativeRequires>
   </properties>
 
   <dependencies>

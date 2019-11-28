@@ -14,6 +14,12 @@
   <version>master-${project.parent.version}</version>
   <name>JavaCPP Presets for Chilitags</name>
 
+  <properties>
+    <javacpp.nativeRequires>
+      requires org.bytedeco.opencv.${javacpp.platform.module};
+    </javacpp.nativeRequires>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>

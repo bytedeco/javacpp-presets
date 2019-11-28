@@ -61,6 +61,7 @@
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
     <javacpp.moduleId>${project.artifactId}</javacpp.moduleId>
+    <javacpp.nativeRequires/>
     <javacpp.packageName>${project.artifactId}</javacpp.packageName>
     <javacpp.platform.nativeOutputPath>org/bytedeco/${javacpp.packageName}/${javacpp.platform}${javacpp.platform.extension}</javacpp.platform.nativeOutputPath>
     <javacpp.platform.root></javacpp.platform.root>
@@ -393,6 +394,7 @@
                   <moduleInfoSource>
                     open module org.bytedeco.${javacpp.packageName}.${javacpp.platform.module} {
                       requires transitive org.bytedeco.${javacpp.packageName};
+                      ${javacpp.nativeRequires}
                     }
                   </moduleInfoSource>
                 </module>
