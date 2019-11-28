@@ -301,9 +301,9 @@ import java.util.List;
 //                        "lmdb", "giflib", "libjpeg", "libpng16_static", "nsync", "nsync_cpp", "libprotobuf", "re2", "snappy", "sqlite", "mklml", "mkldnn",
 //                        "cudart", "cudart_static", "cuda", "cublasLt", "cublas", "cudnn", "cufft", "cufftw", "curand", "cusolver", "cusparse", "cupti",
 //                        "tf_core_gpu_kernels", "tensorflow_static", "tf_protos_cc", "tf_cc_op_gen_main",  "tf_python_protos_cc", "tf_c_python_api"},
-                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/include/"},
-                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/lib/x64/",
-                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.1/extras/CUPTI/lib64/"}),
+                includepath = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/include/"},
+                linkpath    = {"C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/lib/x64/",
+                               "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/extras/CUPTI/lib64/"}),
         @Platform(
                 value = {"android"},
                 compiler = {"cpp11"},
@@ -524,13 +524,13 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         for (String lib : libs) {
             switch (platform) {
                 case "linux-arm64":
-                case "linux-ppx64le":
+                case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvinfer") ? "@.5" : lib.equals("cudart") ? "@.10.1" : "@.10";
+                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvinfer") ? "@.5" : lib.equals("cudart") ? "@.10.2" : "@.10";
                     break;
                 case "windows-x86_64":
-                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_101" : "64_10";
+                    lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : "64_10";
                     break;
                 default:
                     continue; // no CUDA

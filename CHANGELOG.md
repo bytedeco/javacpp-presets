@@ -2,7 +2,7 @@
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
  * Bundle OpenSSL in the presets for CPython for consistency across platforms ([issue #796](https://github.com/bytedeco/javacpp-presets/issues/796))
  * Add presets for SciPy 1.3.2 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
- * Upgrade presets for NumPy 1.17.4, ALE 0.6.1, ONNX Runtime 1.0.0, Qt 5.13.2, Skia 1.68.1
+ * Upgrade presets for NumPy 1.17.4, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, ALE 0.6.1, ONNX Runtime 1.0.0, Qt 5.13.2, Skia 1.68.1
 
 ### November 5, 2019 version 1.5.2
  * Add presets for the `cudacodec`, `cudafeatures2d`, `cudastereo`, and `cudabgsegm` modules of OpenCV ([issue #806](https://github.com/bytedeco/javacpp-presets/issues/806))
@@ -20,7 +20,7 @@
  * Add profiles to parent `pom.xml` to detect host and use its artifacts, for example: `mvn -Djavacpp.platform.custom -Djavacpp.platform.host ...`
  * Add `-platform-gpu`, `-platform-python`, `-platform-python-gpu`, and `-platform-redist` artifacts for convenience
  * Add presets for librealsense2 2.29.0, DNNL 1.1, ONNX Runtime 0.5.0
- * Upgrade presets for OpenCV 4.1.2, FFmpeg 4.2.1, librealsense 1.12.4, MKL 2019.5, MKL-DNN 0.21.2, OpenBLAS 0.3.7, GSL 2.6, CPython 3.7.5, NumPy 1.17.3, LLVM 9.0.0, CUDA 10.1 Update 2, cuDNN 7.6.2, NCCL 2.4.8, MXNet 1.5.1, TensorFlow 1.15.0, TensorRT 6.0, ONNX 1.6.0 (pull #795), nGraph 0.26.0, Qt 5.13.1, cpu_features 0.4.1, and their dependencies
+ * Upgrade presets for OpenCV 4.1.2, FFmpeg 4.2.1, librealsense 1.12.4, MKL 2019.5, MKL-DNN 0.21.2, OpenBLAS 0.3.7, GSL 2.6, CPython 3.7.5, NumPy 1.17.3, LLVM 9.0.0, CUDA 10.1 Update 2, cuDNN 7.6.4, NCCL 2.4.8, MXNet 1.5.1, TensorFlow 1.15.0, TensorRT 6.0, ONNX 1.6.0 (pull #795), nGraph 0.26.0, Qt 5.13.1, cpu_features 0.4.1, and their dependencies
 
 ### July 9, 2019 version 1.5.1
  * Add `linux-arm64` CI builds for OpenCV, FFmpeg, OpenBLAS, FFTW, GSL, Leptonica, Tesseract, and others ([issue bytedeco/javacv#1021](https://github.com/bytedeco/javacv/issues/1021))
