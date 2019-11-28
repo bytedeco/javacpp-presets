@@ -16,6 +16,9 @@
 
   <properties>
     <javacpp.packageName>arpackng</javacpp.packageName>
+    <javacpp.nativeRequires>
+      requires org.bytedeco.openblas.${javacpp.platform.module};
+    </javacpp.nativeRequires>
   </properties>
 
   <dependencies>
