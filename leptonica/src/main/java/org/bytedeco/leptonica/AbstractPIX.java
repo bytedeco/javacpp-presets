@@ -117,7 +117,8 @@ public abstract class AbstractPIX extends Pointer implements Indexable {
      * @return PIX cloned. Do not call pixDestroy() on it.
      */
     @Override public PIX clone() {
-        PIX p = pixClone((PIX)this);
+        // make sure we return a new object
+        PIX p = new PIX(pixClone((PIX)this));
         if (p != null) {
             p.deallocator(new DestroyDeallocator(p));
         }
