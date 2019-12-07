@@ -67,7 +67,8 @@ public abstract class AbstractFPIX extends Pointer implements Indexable {
      * @return FPIX cloned. Do not call fpixDestroy() on it.
      */
     @Override public FPIX clone() {
-        FPIX p = fpixClone((FPIX)this);
+        // make sure we return a new object
+        FPIX p = new FPIX(fpixClone((FPIX)this));
         if (p != null) {
             p.deallocator(new DestroyDeallocator(p));
         }

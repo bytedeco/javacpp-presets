@@ -1,4 +1,5 @@
 
+ * Make sure `clone()` actually returns new `PIX`, `FPIX`, or `DPIX` objects with presets for Leptonica
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
  * Bundle OpenSSL in the presets for CPython for consistency across platforms ([issue #796](https://github.com/bytedeco/javacpp-presets/issues/796))
  * Add presets for SciPy 1.3.2 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
