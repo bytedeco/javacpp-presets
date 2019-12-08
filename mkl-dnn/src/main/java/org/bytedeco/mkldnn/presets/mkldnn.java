@@ -93,6 +93,14 @@ public class mkldnn implements InfoMapper {
                              "mkldnn::batch_normalization_forward::desc<float>",
                              "mkldnn::batch_normalization_backward::desc<float>").javaNames("desc").skipDefaults())
 
+               .put(new Info("mkldnn::handle::handle").javaText(
+                         "public stream(mkldnn_stream t, @Cast(\"bool\") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }\n"
+                       + "private native void allocate(mkldnn_stream t, @Cast(\"bool\") boolean weak/*=false*/);\n"
+                       + "public stream() { super((Pointer)null); allocate(); }\n"
+                       + "private native void allocate();\n"
+                       + "\n"
+                       + "public stream(@Const @ByRef stream other) { super((Pointer)null); allocate(other); }\n"
+                       + "private native void allocate(@Const @ByRef stream other);\n"))
                .put(new Info("mkldnn::rnn_cell::desc::operator const mkldnn_rnn_cell_desc_t*()").javaText(
                          "public native @Name(\"operator const mkldnn_rnn_cell_desc_t*\") @Const mkldnn_rnn_cell_desc_t as_mkldnn_rnn_cell_desc_t();\n"))
 
