@@ -587,6 +587,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>imbs-mt</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
@@ -1294,6 +1295,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>imbs-mt</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
@@ -1495,6 +1497,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>imbs-mt</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
