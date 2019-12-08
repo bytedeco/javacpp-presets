@@ -94,7 +94,10 @@ public class dnnl implements InfoMapper {
                .put(new Info("dnnl::stream::flags").pointerTypes("stream.flags"))
                .put(new Info("dnnl::primitive::kind").pointerTypes("primitive.kind"))
 
-               .put(new Info("dnnl::handle_traits").skip())
+               .put(new Info("dnnl::handle_traits", "dnnl::primitive_attr(dnnl_primitive_attr_t)",
+                             "dnnl::reorder::primitive_desc(dnnl_primitive_desc_t)",
+                             "dnnl::concat::primitive_desc(dnnl_primitive_desc_t)",
+                             "dnnl::sum::primitive_desc(dnnl_primitive_desc_t)").skip())
                .put(new Info("dnnl::handle<dnnl_engine_t>", "dnnl::handle<dnnl_engine_t,traits>").pointerTypes("dnnl_engine_handle"))
                .put(new Info("dnnl::handle<dnnl_memory_t>", "dnnl::handle<dnnl_memory_t,traits>").pointerTypes("dnnl_memory_handle"))
                .put(new Info("dnnl::handle<dnnl_primitive_desc_t>", "dnnl::handle<dnnl_primitive_desc_t,traits>").pointerTypes("dnnl_primitive_desc_handle"))
@@ -110,6 +113,15 @@ public class dnnl implements InfoMapper {
                              "dnnl::batch_normalization_forward::desc<float>",
                              "dnnl::batch_normalization_backward::desc<float>").javaNames("desc").skipDefaults())
 
+               .put(new Info("dnnl::handle::handle").javaText(
+                         "public stream() { super((Pointer)null); allocate(); }\n"
+                       + "private native void allocate();\n"
+                       + "public stream(@Const @ByRef stream arg0) { super((Pointer)null); allocate(arg0); }\n"
+                       + "private native void allocate(@Const @ByRef stream arg0);\n"
+                       + "public stream(dnnl_stream t, @Cast(\"bool\") boolean weak/*=false*/) { super((Pointer)null); allocate(t, weak); }\n"
+                       + "private native void allocate(dnnl_stream t, @Cast(\"bool\") boolean weak/*=false*/);\n"
+                       + "public stream(dnnl_stream t) { super((Pointer)null); allocate(t); }\n"
+                       + "private native void allocate(dnnl_stream t);\n"))
                .put(new Info("dnnl::rnn_cell::desc::operator const dnnl_rnn_cell_desc_t*()").javaText(
                          "public native @Name(\"operator const dnnl_rnn_cell_desc_t*\") @Const dnnl_rnn_cell_desc_t as_dnnl_rnn_cell_desc_t();\n"))
 
