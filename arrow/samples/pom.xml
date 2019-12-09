@@ -1,0 +1,20 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.arrow</groupId>
+    <artifactId>row-wise-conversion-example</artifactId>
+    <version>1.5.3-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>RowWiseConversionExample</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>arrow-platform</artifactId>
+            <version>0.15.1-1.5.3-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <sourceDirectory>.</sourceDirectory>
+    </build>
+</project>
+

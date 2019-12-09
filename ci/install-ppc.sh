@@ -42,7 +42,7 @@ else
 fi
 
 export BUILD_COMPILER=-Djavacpp.platform.compiler=powerpc64le-linux-gnu-g++
-export BUILD_OPTIONS=-Djava.library.path=/usr/powerpc64le-linux-gnu/lib/
+export BUILD_OPTIONS=-Djava.library.path=/usr/powerpc64le-linux-gnu/lib/:/usr/lib/powerpc64le-linux-gnu/
 
 echo "Starting docker for ppc cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build ubuntu:xenial /bin/bash

@@ -369,6 +369,10 @@ matrix:
         install: true
         script: ./ci/install-travis.sh
       - os: linux
+        env: PROJ=arrow OS=linux-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: linux
         env: PROJ=hdf5 OS=linux-x86_64
         install: true
         script: ./ci/install-travis.sh
@@ -470,6 +474,11 @@ matrix:
       - os: osx
         osx_image: xcode9.3
         env: PROJ=libdc1394,libfreenect,libfreenect2,librealsense,librealsense2 OS=macosx-x86_64
+        install: true
+        script: ./ci/install-travis.sh
+      - os: osx
+        osx_image: xcode9.3
+        env: PROJ=arrow OS=macosx-x86_64
         install: true
         script: ./ci/install-travis.sh
       - os: osx
