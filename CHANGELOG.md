@@ -3,7 +3,7 @@
  * Make sure `clone()` actually returns new `PIX`, `FPIX`, or `DPIX` objects with presets for Leptonica
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
  * Bundle OpenSSL in the presets for CPython for consistency across platforms ([issue #796](https://github.com/bytedeco/javacpp-presets/issues/796))
- * Add presets for SciPy 1.3.2 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
+ * Add presets for Arrow 0.15.1, SciPy 1.3.2 ([issue #747](https://github.com/bytedeco/javacpp-presets/issues/747))
  * Upgrade presets for NumPy 1.17.4, CUDA 10.2, cuDNN 7.6.5, NCCL 2.5.6, ALE 0.6.1, ONNX Runtime 1.0.0, Qt 5.13.2, Skia 1.68.1
 
 ### November 5, 2019 version 1.5.2

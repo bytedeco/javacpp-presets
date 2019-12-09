@@ -119,6 +119,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * Chilitags  https://github.com/chili-epfl/chilitags
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
+ * Arrow 0.15.x  https://arrow.apache.org/install/
  * HDF5 1.10.5  https://www.hdfgroup.org/downloads/
  * MKL 2019.5  https://software.intel.com/intel-mkl
  * MKL-DNN 0.21.x  https://github.com/intel/mkl-dnn
@@ -138,7 +139,7 @@ Each child module in turn relies by default on the included [`cppbuild.sh` scrip
  * Caffe 1.0  https://github.com/BVLC/caffe
  * CUDA 10.2  https://developer.nvidia.com/cuda-downloads
    * cuDNN 7.6.x  https://developer.nvidia.com/cudnn
-   * NCCL 2.4.x  https://developer.nvidia.com/nccl
+   * NCCL 2.5.x  https://developer.nvidia.com/nccl
  * MXNet 1.5.1  https://github.com/dmlc/mxnet
  * TensorFlow 1.15.0  https://github.com/tensorflow/tensorflow
  * TensorRT 6.0  https://developer.nvidia.com/tensorrt

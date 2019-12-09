@@ -42,7 +42,7 @@ else
 fi
 
 export BUILD_COMPILER=-Djavacpp.platform.compiler=aarch64-linux-gnu-g++
-export BUILD_OPTIONS=-Djava.library.path=/usr/aarch64-linux-gnu/lib/
+export BUILD_OPTIONS=-Djava.library.path=/usr/aarch64-linux-gnu/lib/:/usr/lib/aarch64-linux-gnu/
 
 echo "Starting docker for arm cross compile"
 docker run -d -ti -e CI_DEPLOY_USERNAME -e CI_DEPLOY_PASSWORD -e GPG_PASSPHRASE -e STAGING_REPOSITORY -v $HOME:$HOME -v $TRAVIS_BUILD_DIR/../:$HOME/build ubuntu:xenial /bin/bash

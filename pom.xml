@@ -587,6 +587,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
@@ -1072,6 +1073,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1124,6 +1126,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1175,6 +1178,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>openblas</module>
         <module>arpack-ng</module>
@@ -1231,6 +1235,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
@@ -1294,6 +1299,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
@@ -1364,6 +1370,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>
@@ -1435,6 +1442,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>openblas</module>
@@ -1495,6 +1503,7 @@
         <module>artoolkitplus</module>
         <module>chilitags</module>
         <module>flandmark</module>
+        <module>arrow</module>
         <module>hdf5</module>
         <module>mkl</module>
         <module>mkl-dnn</module>

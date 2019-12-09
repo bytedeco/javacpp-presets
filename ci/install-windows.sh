@@ -187,6 +187,7 @@ rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ DirectX\ SDK*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Tools/MSVC/14.12*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Redist/MSVC/14.12*
 rm -Rf /c/Program\ Files\ \(x86\)/Microsoft\ Visual\ Studio/2017/Community/VC/Auxiliary/Build/14.12/
+pacman -R --noconfirm python python2 mingw-w64-i686-python3 mingw-w64-x86_64-python3
 df -h
 
 # try to download partial builds, which doesn't work from AppVeyor's hosted VMs always returning "Connection state changed (MAX_CONCURRENT_STREAMS == 100)!" for some reason
