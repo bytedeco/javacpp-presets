@@ -24,13 +24,11 @@ public class QString extends AbstractQString {
 
 
     public QString() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public QString(@Const @ByRef QString arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Const @ByRef QString arg0);
-    public native @ByRef @Name("operator =") QString put(@Const @ByRef QString arg0);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
-    public native void swap(@ByRef QString other);
+    @NoException private native void allocate(@Const @ByRef QString arg0);
+    public native @ByRef @Name("operator =") @NoException QString put(@Const @ByRef QString arg0);
+    public native @NoException void swap(@ByRef QString other);
     public native int size();
     public native int count();
     public native int length();
@@ -47,6 +45,8 @@ public class QString extends AbstractQString {
     public native @Cast("bool") boolean isDetached();
     public native @Cast("bool") boolean isSharedWith(@Const @ByRef QString other);
     public native void clear();
+    
+    
 
     
     
@@ -69,6 +69,7 @@ public class QString extends AbstractQString {
 // #endif
     
     
+// #if QT_STRINGVIEW_LEVEL < 2
      public native @ByVal QString arg(@Const @ByRef QString a1, @Const @ByRef QString a2);
      public native @ByVal QString arg(@Const @ByRef QString a1, @Const @ByRef QString a2, @Const @ByRef QString a3);
      public native @ByVal QString arg(@Const @ByRef QString a1, @Const @ByRef QString a2, @Const @ByRef QString a3,
@@ -87,20 +88,31 @@ public class QString extends AbstractQString {
                 @Const @ByRef QString a4, @Const @ByRef QString a5, @Const @ByRef QString a6,
                 @Const @ByRef QString a7, @Const @ByRef QString a8, @Const @ByRef QString a9);
 
+// #if QT_DEPRECATED_SINCE(5, 14)
     public native @ByRef QString vsprintf(@Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer ap);
     public native @ByRef QString vsprintf(String format, @ByVal @Cast("va_list*") Pointer ap);
     public native @ByRef QString sprintf(@Cast("const char*") BytePointer format);
     public native @ByRef QString sprintf(String format);
+// #endif
     public static native @ByVal QString vasprintf(@Cast("const char*") BytePointer format, @ByVal @Cast("va_list*") Pointer ap);
     public static native @ByVal QString vasprintf(String format, @ByVal @Cast("va_list*") Pointer ap);
     public static native @ByVal QString asprintf(@Cast("const char*") BytePointer format);
     public static native @ByVal QString asprintf(String format);
+// #if QT_STRINGVIEW_LEVEL < 2
     public native int indexOf(@Const @ByRef QString s, int from/*=0*/, CaseSensitivity cs/*=Qt::CaseSensitive*/);
     public native int indexOf(@Const @ByRef QString s);
+// #endif
+     // ### Qt6: qsizetype
+// #if QT_STRINGVIEW_LEVEL < 2
     public native int lastIndexOf(@Const @ByRef QString s, int from/*=-1*/, CaseSensitivity cs/*=Qt::CaseSensitive*/);
     public native int lastIndexOf(@Const @ByRef QString s);
+// #endif
+
+     // ### Qt6: qsizetype
+// #if QT_STRINGVIEW_LEVEL < 2
     public native @Cast("bool") boolean contains(@Const @ByRef QString s, CaseSensitivity cs/*=Qt::CaseSensitive*/);
     public native @Cast("bool") boolean contains(@Const @ByRef QString s);
+// #endif
     public native int count(@Const @ByRef QString s, CaseSensitivity cs/*=Qt::CaseSensitive*/);
     public native int count(@Const @ByRef QString s);
 
@@ -131,8 +143,8 @@ public class QString extends AbstractQString {
 // #endif
      public native @ByVal QString left(int n);
      public native @ByVal QString right(int n);
-     public native @ByVal QString mid(int position, int n/*=-1*/);
-public native @ByVal QString mid(int position);
+     public native @ByVal QString mid(int _position, int n/*=-1*/);
+public native @ByVal QString mid(int _position);
      public native @ByVal QString chopped(int n);
 
 
@@ -198,7 +210,21 @@ public native @ByVal QString mid(int position);
 // #if QT_CONFIG(regularexpression)
     
     
+
+    
+    
+    
+    
+// #ifndef QT_NO_REGEXP
+    
+    
 // #endif
+// #ifndef QT_NO_REGULAREXPRESSION
+    
+    
+// #endif
+
+
     /** enum QString::NormalizationForm */
     public static final int
         NormalizationForm_D = 0,
@@ -265,13 +291,13 @@ public static native @ByVal QString fromWCharArray(@Cast("const wchar_t*") IntPo
     public native @ByRef QString setUtf16(@Cast("const unsigned short*") short[] utf16, int size);
 
 // #if QT_STRINGVIEW_LEVEL < 2
-    public native int compare(@Const @ByRef QString s, CaseSensitivity cs/*=Qt::CaseSensitive*/);
-    public native int compare(@Const @ByRef QString s);
+    public native @NoException int compare(@Const @ByRef QString s, CaseSensitivity cs/*=Qt::CaseSensitive*/);
+    public native @NoException int compare(@Const @ByRef QString s);
 // #endif
 
-    public static native int compare(@Const @ByRef QString s1, @Const @ByRef QString s2,
+    public static native @NoException int compare(@Const @ByRef QString s1, @Const @ByRef QString s2,
                                   CaseSensitivity cs/*=Qt::CaseSensitive*/);
-    public static native int compare(@Const @ByRef QString s1, @Const @ByRef QString s2);
+    public static native @NoException int compare(@Const @ByRef QString s1, @Const @ByRef QString s2);
 
     public native int localeAwareCompare(@Const @ByRef QString s);
     public static native int localeAwareCompare(@Const @ByRef QString s1, @Const @ByRef QString s2);

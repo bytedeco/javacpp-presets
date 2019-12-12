@@ -31,17 +31,13 @@ public class QIcon extends Pointer {
     public static final int On = 0, Off = 1;
 
     public QIcon() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public QIcon(@Const @ByRef QIcon other) { super((Pointer)null); allocate(other); }
     private native void allocate(@Const @ByRef QIcon other);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
     public QIcon(@Const @ByRef QString fileName) { super((Pointer)null); allocate(fileName); }
     private native void allocate(@Const @ByRef QString fileName); // file or resource name
     public native @ByRef @Name("operator =") QIcon put(@Const @ByRef QIcon other);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
-    public native void swap(@ByRef QIcon other);
+    public native @NoException void swap(@ByRef QIcon other);
 
     public native @ByVal @Name("operator QVariant") QVariant asQVariant();
 

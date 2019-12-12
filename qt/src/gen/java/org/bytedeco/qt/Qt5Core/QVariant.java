@@ -19,7 +19,7 @@ public class QVariant extends Pointer {
     
 
     public QVariant() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public QVariant(int typeId, @Const Pointer copy) { super((Pointer)null); allocate(typeId, copy); }
     private native void allocate(int typeId, @Const Pointer copy);
     public QVariant(int typeId, @Const Pointer copy, @Cast("unsigned int") int flags) { super((Pointer)null); allocate(typeId, copy, flags); }
@@ -42,9 +42,9 @@ public class QVariant extends Pointer {
     private native void allocate(float f);
 // #ifndef QT_NO_CAST_FROM_ASCII
     public QVariant(@Cast("const char*") BytePointer str) { super((Pointer)null); allocate(str); }
-    private native @Deprecated void allocate(@Cast("const char*") BytePointer str);
+    @Deprecated private native void allocate(@Cast("const char*") BytePointer str);
     public QVariant(String str) { super((Pointer)null); allocate(str); }
-    private native @Deprecated void allocate(String str);
+    @Deprecated private native void allocate(String str);
 // #endif
 
     public QVariant(@Const @ByRef QByteArray bytearray) { super((Pointer)null); allocate(bytearray); }
@@ -60,15 +60,15 @@ public class QVariant extends Pointer {
 // #if QT_CONFIG(regularexpression)
 // #endif // QT_CONFIG(regularexpression)
 // #ifndef QT_BOOTSTRAPPED
+// #if QT_CONFIG(easingcurve)
+// #endif
 // #endif // QT_BOOTSTRAPPED
 // #if QT_CONFIG(itemmodel)
 // #endif
 
     public native @ByRef @Name("operator =") QVariant put(@Const @ByRef QVariant other);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
 
-    public native void swap(@ByRef QVariant other);
+    public native @NoException void swap(@ByRef QVariant other);
     public native int userType();
     public native @Cast("const char*") BytePointer typeName();
 
@@ -116,6 +116,8 @@ public class QVariant extends Pointer {
 // #if QT_CONFIG(regularexpression)
 // #endif // QT_CONFIG(regularexpression)
 // #ifndef QT_BOOTSTRAPPED
+// #if QT_CONFIG(easingcurve)
+// #endif
 // #endif // QT_BOOTSTRAPPED
 // #if QT_CONFIG(itemmodel)
 // #endif

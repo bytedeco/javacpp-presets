@@ -78,7 +78,7 @@ public class QAction extends QObject {
     public native void setSeparator(@Cast("bool") boolean b);
     public native @Cast("bool") boolean isSeparator();
 
-// #ifndef QT_NO_SHORTCUT
+// #if QT_CONFIG(shortcut)
 
     public native void setShortcutContext(@Cast("Qt::ShortcutContext") int context);
     public native @Cast("Qt::ShortcutContext") int shortcutContext();

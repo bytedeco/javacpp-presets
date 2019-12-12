@@ -22,13 +22,11 @@ public class QMessageLogContext extends Pointer {
     }
 
      public QMessageLogContext() { super((Pointer)null); allocate(); }
-private native void allocate();
+@NoException private native void allocate();
      public QMessageLogContext(@Cast("const char*") BytePointer fileName, int lineNumber, @Cast("const char*") BytePointer functionName, @Cast("const char*") BytePointer categoryName) { super((Pointer)null); allocate(fileName, lineNumber, functionName, categoryName); }
-private native void allocate(@Cast("const char*") BytePointer fileName, int lineNumber, @Cast("const char*") BytePointer functionName, @Cast("const char*") BytePointer categoryName);
+@NoException private native void allocate(@Cast("const char*") BytePointer fileName, int lineNumber, @Cast("const char*") BytePointer functionName, @Cast("const char*") BytePointer categoryName);
 public QMessageLogContext(String fileName, int lineNumber, String functionName, String categoryName) { super((Pointer)null); allocate(fileName, lineNumber, functionName, categoryName); }
-private native void allocate(String fileName, int lineNumber, String functionName, String categoryName);
-
-    public native void copy(@Const @ByRef QMessageLogContext logContext);
+@NoException private native void allocate(String fileName, int lineNumber, String functionName, String categoryName);
 
     public native int version(); public native QMessageLogContext version(int setter);
     public native int line(); public native QMessageLogContext line(int setter);

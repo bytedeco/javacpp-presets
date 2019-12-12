@@ -101,6 +101,10 @@ public class QTextEdit extends QAbstractScrollArea {
 // #ifndef QT_NO_TEXTHTMLPARSER
     public native @ByVal QString toHtml();
 // #endif
+// #if QT_CONFIG(textmarkdownwriter)
+    public native @ByVal QString toMarkdown(@Cast("QTextDocument::MarkdownFeatures") int features/*=QTextDocument::MarkdownDialectGitHub*/);
+    public native @ByVal QString toMarkdown();
+// #endif
 
     public native void ensureCursorVisible();
 // #ifndef QT_NO_CONTEXTMENU
@@ -155,6 +159,9 @@ public class QTextEdit extends QAbstractScrollArea {
     public native void setPlainText(@Const @ByRef QString text);
 // #ifndef QT_NO_TEXTHTMLPARSER
     public native void setHtml(@Const @ByRef QString text);
+// #endif
+// #if QT_CONFIG(textmarkdownreader)
+    public native void setMarkdown(@Const @ByRef QString markdown);
 // #endif
     public native void setText(@Const @ByRef QString text);
 

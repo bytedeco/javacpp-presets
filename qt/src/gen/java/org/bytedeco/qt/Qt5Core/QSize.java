@@ -23,35 +23,38 @@ public class QSize extends Pointer {
     }
 
      public QSize() { super((Pointer)null); allocate(); }
-private native void allocate();
+@NoException private native void allocate();
      public QSize(int w, int h) { super((Pointer)null); allocate(w, h); }
-private native void allocate(int w, int h);
+@NoException private native void allocate(int w, int h);
 
-     public native @Cast("bool") boolean isNull();
-     public native @Cast("bool") boolean isEmpty();
-     public native @Cast("bool") boolean isValid();
+     public native @Cast("bool") @NoException boolean isNull();
+     public native @Cast("bool") @NoException boolean isEmpty();
+     public native @Cast("bool") @NoException boolean isValid();
 
-     public native int width();
-     public native int height();
-     public native void setWidth(int w);
-     public native void setHeight(int h);
-    public native void transpose();
-      public native @ByVal QSize transposed();
+     public native @NoException int width();
+     public native @NoException int height();
+     public native @NoException void setWidth(int w);
+     public native @NoException void setHeight(int h);
+    public native @NoException void transpose();
+      public native @ByVal @NoException QSize transposed();
 
-    public native void scale(int w, int h, @Cast("Qt::AspectRatioMode") int mode);
-    public native void scale(@Const @ByRef QSize s, @Cast("Qt::AspectRatioMode") int mode);
-     public native @ByVal QSize scaled(int w, int h, @Cast("Qt::AspectRatioMode") int mode);
-     public native @ByVal QSize scaled(@Const @ByRef QSize s, @Cast("Qt::AspectRatioMode") int mode);
+    public native @NoException void scale(int w, int h, @Cast("Qt::AspectRatioMode") int mode);
+    public native @NoException void scale(@Const @ByRef QSize s, @Cast("Qt::AspectRatioMode") int mode);
+     public native @ByVal @NoException QSize scaled(int w, int h, @Cast("Qt::AspectRatioMode") int mode);
+     public native @ByVal @NoException QSize scaled(@Const @ByRef QSize s, @Cast("Qt::AspectRatioMode") int mode);
 
-      public native @ByVal QSize expandedTo(@Const @ByRef QSize arg0);
-      public native @ByVal QSize boundedTo(@Const @ByRef QSize arg0);
+      public native @ByVal @NoException QSize expandedTo(@Const @ByRef QSize arg0);
+      public native @ByVal @NoException QSize boundedTo(@Const @ByRef QSize arg0);
 
-     public native @ByRef IntPointer rwidth();
-     public native @ByRef IntPointer rheight();
+     
+     
 
-     public native @ByRef @Name("operator +=") QSize addPut(@Const @ByRef QSize arg0);
-     public native @ByRef @Name("operator -=") QSize subtractPut(@Const @ByRef QSize arg0);
-     public native @ByRef @Name("operator *=") QSize multiplyPut(double c);
+     public native @ByRef @NoException IntPointer rwidth();
+     public native @ByRef @NoException IntPointer rheight();
+
+     public native @ByRef @Name("operator +=") @NoException QSize addPut(@Const @ByRef QSize arg0);
+     public native @ByRef @Name("operator -=") @NoException QSize subtractPut(@Const @ByRef QSize arg0);
+     public native @ByRef @Name("operator *=") @NoException QSize multiplyPut(double c);
     public native @ByRef @Name("operator /=") QSize dividePut(double c);
 
     

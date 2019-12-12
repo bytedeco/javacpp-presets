@@ -736,6 +736,13 @@ public class QStyle extends QObject {
         SP_MediaVolume = 68,
         SP_MediaVolumeMuted = 69,
         SP_LineEditClearButton = 70,
+        SP_DialogYesToAllButton = 71,
+        SP_DialogNoToAllButton = 72,
+        SP_DialogSaveAllButton = 73,
+        SP_DialogAbortButton = 74,
+        SP_DialogRetryButton = 75,
+        SP_DialogIgnoreButton = 76,
+        SP_RestoreDefaultsButton = 77,
         // do not add any values below/greater than this
         SP_CustomBase = 0xf0000000;
     

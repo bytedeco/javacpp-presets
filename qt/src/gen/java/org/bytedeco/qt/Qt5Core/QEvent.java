@@ -277,6 +277,6 @@ public class QEvent extends Pointer {
     public native void accept();
     public native void ignore();
 
-    public static native int registerEventType(int hint/*=-1*/);
-    public static native int registerEventType();
+    public static native @NoException int registerEventType(int hint/*=-1*/);
+    public static native @NoException int registerEventType();
 }

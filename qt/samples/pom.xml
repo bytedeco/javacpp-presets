@@ -10,7 +10,7 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>qt-platform</artifactId>
-            <version>5.13.2-1.5.3-SNAPSHOT</version>
+            <version>5.14.0-1.5.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
