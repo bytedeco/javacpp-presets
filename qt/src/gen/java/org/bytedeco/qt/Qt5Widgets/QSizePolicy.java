@@ -72,48 +72,48 @@ public class QSizePolicy extends Pointer {
     
 
      public QSizePolicy() { super((Pointer)null); allocate(); }
-private native void allocate();
+@NoException private native void allocate();
 
 // #if defined(Q_COMPILER_UNIFORM_INIT) && !defined(Q_QDOC)
 // #else
     public QSizePolicy(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical, ControlType type/*=QSizePolicy::DefaultType*/) { super((Pointer)null); allocate(horizontal, vertical, type); }
-    private native void allocate(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical, ControlType type/*=QSizePolicy::DefaultType*/);
+    @NoException private native void allocate(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical, ControlType type/*=QSizePolicy::DefaultType*/);
     public QSizePolicy(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical) { super((Pointer)null); allocate(horizontal, vertical); }
-    private native void allocate(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical);
+    @NoException private native void allocate(@Cast("QSizePolicy::Policy") int horizontal, @Cast("QSizePolicy::Policy") int vertical);
 // #endif // uniform-init
-     public native @Cast("QSizePolicy::Policy") int horizontalPolicy();
-     public native @Cast("QSizePolicy::Policy") int verticalPolicy();
-    public native ControlType controlType();
+     public native @NoException @Cast("QSizePolicy::Policy") int horizontalPolicy();
+     public native @NoException @Cast("QSizePolicy::Policy") int verticalPolicy();
+    public native @NoException ControlType controlType();
 
-     public native void setHorizontalPolicy(@Cast("QSizePolicy::Policy") int d);
-     public native void setVerticalPolicy(@Cast("QSizePolicy::Policy") int d);
-    public native void setControlType(ControlType type);
+     public native @NoException void setHorizontalPolicy(@Cast("QSizePolicy::Policy") int d);
+     public native @NoException void setVerticalPolicy(@Cast("QSizePolicy::Policy") int d);
+    public native @NoException void setControlType(ControlType type);
 
     
 
-     public native void setHeightForWidth(@Cast("bool") boolean b);
-     public native @Cast("bool") boolean hasHeightForWidth();
-     public native void setWidthForHeight(@Cast("bool") boolean b);
-     public native @Cast("bool") boolean hasWidthForHeight();
+     public native @NoException void setHeightForWidth(@Cast("bool") boolean b);
+     public native @Cast("bool") @NoException boolean hasHeightForWidth();
+     public native @NoException void setWidthForHeight(@Cast("bool") boolean b);
+     public native @Cast("bool") @NoException boolean hasWidthForHeight();
 
-     public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef QSizePolicy s);
-     public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef QSizePolicy s);
+     public native @Cast("bool") @Name("operator ==") @NoException boolean equals(@Const @ByRef QSizePolicy s);
+     public native @Cast("bool") @Name("operator !=") @NoException boolean notEquals(@Const @ByRef QSizePolicy s);
 
     
 
     public native @ByVal @Name("operator QVariant") QVariant asQVariant();
 
-     public native int horizontalStretch();
-     public native int verticalStretch();
+     public native @NoException int horizontalStretch();
+     public native @NoException int verticalStretch();
      public native void setHorizontalStretch(int stretchFactor);
      public native void setVerticalStretch(int stretchFactor);
 
-     public native @Cast("bool") boolean retainSizeWhenHidden();
-     public native void setRetainSizeWhenHidden(@Cast("bool") boolean retainSize);
+     public native @Cast("bool") @NoException boolean retainSizeWhenHidden();
+     public native @NoException void setRetainSizeWhenHidden(@Cast("bool") boolean retainSize);
 
-     public native void transpose();
+     public native @NoException void transpose();
     
 // #ifndef Q_QDOC
 // #endif
-    public native @ByVal QSizePolicy transposed();
+    public native @ByVal @NoException QSizePolicy transposed();
 }

@@ -45,8 +45,8 @@ public class QObject extends Pointer {
     public native @Cast("bool") boolean isWidgetType();
     public native @Cast("bool") boolean isWindowType();
 
-    public native @Cast("bool") boolean signalsBlocked();
-    public native @Cast("bool") boolean blockSignals(@Cast("bool") boolean b);
+    public native @Cast("bool") @NoException boolean signalsBlocked();
+    public native @Cast("bool") @NoException boolean blockSignals(@Cast("bool") boolean b);
 
     public native int startTimer(int interval, @Cast("Qt::TimerType") int timerType/*=Qt::CoarseTimer*/);
     public native int startTimer(int interval);
@@ -100,7 +100,7 @@ public class QObject extends Pointer {
 // #endif // QT_NO_PROPERTIES
 
 // #ifndef QT_NO_USERDATA
-    public static native @Cast("unsigned int") int registerUserData();
+    public static native @Cast("unsigned int") @Deprecated int registerUserData();
     public native QObject parent();
 
     public native @Cast("bool") boolean inherits(@Cast("const char*") BytePointer classname);

@@ -38,6 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMap;
         @Platform(
             include = {
                 "qevent.h",
+                "qtextdocument.h",
                 "QFont",
                 "QIcon",
                 "QGuiApplication"

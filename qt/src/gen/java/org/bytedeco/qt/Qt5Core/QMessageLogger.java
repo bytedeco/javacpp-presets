@@ -43,6 +43,6 @@ private native void allocate(String file, int line, String function, String cate
     
     public native void critical(@Cast("const char*") BytePointer msg);
     public native void critical(String msg);
-    public native void fatal(@Cast("const char*") BytePointer msg);
-    public native void fatal(String msg);
+    public native @NoException void fatal(@Cast("const char*") BytePointer msg);
+    public native @NoException void fatal(String msg);
 }

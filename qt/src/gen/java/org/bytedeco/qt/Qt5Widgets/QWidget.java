@@ -266,9 +266,11 @@ public class QWidget extends QObject {
     
 
     public native void setContentsMargins(int left, int top, int right, int bottom);
+// #if QT_DEPRECATED_SINCE(5, 14)
     public native void getContentsMargins(IntPointer left, IntPointer top, IntPointer right, IntPointer bottom);
     public native void getContentsMargins(IntBuffer left, IntBuffer top, IntBuffer right, IntBuffer bottom);
     public native void getContentsMargins(int[] left, int[] top, int[] right, int[] bottom);
+// #endif
     public native QLayout layout();
     public native void setLayout(QLayout arg0);
     public native void updateGeometry();

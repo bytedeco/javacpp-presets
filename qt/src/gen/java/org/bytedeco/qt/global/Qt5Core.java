@@ -196,6 +196,13 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         AscendingOrder = 0,
         DescendingOrder = 1;
 
+    /** enum Qt::SplitBehaviorFlags */
+    public static final int
+        KeepEmptyParts = 0,
+        SkipEmptyParts = 0x1;
+//     #define Q_DECLARE_FLAGS(arg0, arg1)(SplitBehavior, SplitBehaviorFlags)
+    
+
     /** enum Qt::TileRule */
     public static final int
         StretchTile = 0,
@@ -358,14 +365,18 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         WA_MouseTracking = 2,
         WA_ContentsPropagated = 3, // ## deprecated
         WA_OpaquePaintEvent = 4,
-        WA_NoBackground = WA_OpaquePaintEvent, // ## deprecated
+// #if QT_DEPRECATED_SINCE(5, 14)
+        WA_NoBackground = WA_OpaquePaintEvent,
+// #endif
         WA_StaticContents = 5,
         WA_LaidOut = 7,
         WA_PaintOnScreen = 8,
         WA_NoSystemBackground = 9,
         WA_UpdatesDisabled = 10,
         WA_Mapped = 11,
-        WA_MacNoClickThrough = 12, // Mac only
+// #if QT_DEPRECATED_SINCE(5, 14)
+        WA_MacNoClickThrough = 12,
+// #endif
         WA_InputMethodEnabled = 14,
         WA_WState_Visible = 15,
         WA_WState_Hidden = 16,
@@ -383,8 +394,10 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         WA_Moved = 43,
         WA_PendingUpdate = 44,
         WA_InvalidSize = 45,
-        WA_MacBrushedMetal = 46, // Mac only
-        WA_MacMetalStyle = WA_MacBrushedMetal, // obsolete
+// #if QT_DEPRECATED_SINCE(5, 14)
+        WA_MacBrushedMetal = 46,
+        WA_MacMetalStyle = 46,
+// #endif
         WA_CustomWhatsThis = 47,
         WA_LayoutOnEntireRect = 48,
         WA_OutsideWSRange = 49,
@@ -441,7 +454,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 
         WA_LayoutUsesWidgetRect = 92,
         WA_StyledBackground = 93, // internal
-        WA_MSWindowsUseDirect3D = 94, // Win only
+// #if QT_DEPRECATED_SINCE(5, 14)
+        WA_MSWindowsUseDirect3D = 94,
+// #endif
         WA_CanHostQMdiSubWindowTitleBar = 95, // Internal
 
         WA_MacAlwaysShowToolWindow = 96, // Mac only
@@ -473,9 +488,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         WA_X11NetWmWindowTypeNotification = 114,
         WA_X11NetWmWindowTypeCombo = 115,
         WA_X11NetWmWindowTypeDND = 116,
-
-        WA_MacFrameworkScaled  = 117,
-
+// #if QT_DEPRECATED_SINCE(5, 14)
+        WA_MacFrameworkScaled = 117,
+// #endif
         WA_SetWindowModality = 118,
         WA_WState_WindowOpacitySet = 119, // internal
         WA_TranslucentBackground = 120,
@@ -500,7 +515,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
 
     @Namespace("Qt") public enum ApplicationAttribute {
         AA_ImmediateWidgetCreation(0),
-        AA_MSWindowsUseDirect3DByDefault(1), // Win only
+// #if QT_DEPRECATED_SINCE(5, 14)
+        AA_MSWindowsUseDirect3DByDefault(1),
+// #endif
         AA_DontShowIconsInMenus(2),
         AA_NativeWindows(3),
         AA_DontCreateNativeWidgetSiblings(4),
@@ -510,7 +527,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         AA_DontUseNativeMenuBar(6),
         AA_MacDontSwapCtrlAndMeta(7),
         AA_Use96Dpi(8),
+// #if QT_DEPRECATED_SINCE(5, 14)
         AA_X11InitThreads(10),
+// #endif
         AA_SynthesizeTouchForUnhandledMouseEvents(11),
         AA_SynthesizeMouseForUnhandledTouchEvents(12),
         AA_UseHighDpiPixmaps(13),
@@ -531,9 +550,10 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         AA_DontShowShortcutsInContextMenus(28),
         AA_CompressTabletEvents(29),
         AA_DisableWindowContextHelpButton(30), // ### Qt 6: remove me
+        AA_DisableSessionManager(31),
 
         // Add new attributes before this line
-        AA_AttributeCount(31);
+        AA_AttributeCount(32);
 
         public final int value;
         private ApplicationAttribute(int v) { this.value = v; }
@@ -1207,7 +1227,8 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
     public static final int
         PlainText = 0,
         RichText = 1,
-        AutoText = 2;
+        AutoText = 2,
+        MarkdownText = 3;
 
     /** enum Qt::AspectRatioMode */
     public static final int
@@ -1394,7 +1415,9 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
     public static final int
         ImEnabled = 0x1,
         ImCursorRectangle = 0x2,
-        ImMicroFocus = 0x2, // deprecated
+// #if QT_DEPRECATED_SINCE(5, 14)
+        ImMicroFocus = 0x2,
+// #endif
         ImFont = 0x4,
         ImCursorPosition = 0x8,
         ImSurroundingText = 0x10,
@@ -1637,7 +1660,7 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
         BottomLeftSection = 8,
         TitleBarArea = 9;    // For move
 
-// #if defined(Q_COMPILER_CLASS_ENUM) && defined(Q_COMPILER_CONSTEXPR)
+// #if defined(Q_COMPILER_CONSTEXPR)
 // #else
     /** enum Qt::Initialization */
     public static final int
@@ -1750,6 +1773,15 @@ public static native @ByVal QString qFormatLogMessage(QtMsgType type, @Const @By
     public static final int
         ChecksumIso3309 = 0,
         ChecksumItuV41 = 1;
+
+    /** enum class Qt::HighDpiScaleFactorRoundingPolicy */
+    public static final int
+        Unset = 0,
+        Round = 1,
+        Ceil = 2,
+        Floor = 3,
+        RoundPreferFloor = 4,
+        PassThrough = 5;
 
 // #ifndef Q_QDOC
 // #endif // Q_DOC

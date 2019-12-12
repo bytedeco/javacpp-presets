@@ -51,5 +51,7 @@ public class QAbstractEventDispatcher extends QObject {
 
     public native void startingUp();
     public native void closingDown();
+// #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     public native @Cast("bool") boolean filterNativeEvent(@Const @ByRef QByteArray eventType, Pointer message, CLongPointer result);
+// #else
 }

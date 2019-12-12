@@ -116,6 +116,7 @@ public class QFont extends Pointer {
 
     /** enum QFont::ResolveProperties */
     public static final int
+        NoPropertiesResolved        = 0x0000,
         FamilyResolved              = 0x0001,
         SizeResolved                = 0x0002,
         StyleHintResolved           = 0x0004,
@@ -135,6 +136,7 @@ public class QFont extends Pointer {
         StyleNameResolved           = 0x10000,
         FamiliesResolved            = 0x20000,
         AllPropertiesResolved       = 0x3ffff;
+    
 
     public QFont() { super((Pointer)null); allocate(); }
     private native void allocate();
@@ -228,8 +230,6 @@ public class QFont extends Pointer {
     public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef QFont arg0);
     public native @ByVal @Name("operator QVariant") QVariant asQVariant();
     public native @Cast("bool") boolean isCopyOf(@Const @ByRef QFont arg0);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
 
 // #if QT_DEPRECATED_SINCE(5, 3)
     // needed for X11

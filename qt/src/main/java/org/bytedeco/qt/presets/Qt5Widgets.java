@@ -145,7 +145,8 @@ public class Qt5Widgets extends QtInfoMapper {
   @Override
   protected String[] intEnums() {
     return new String[]{
-        "QMessageBox::StandardButton"
+        "QMessageBox::StandardButton",
+        "QTextDocument::MarkdownFeatures"
     };
   }
 

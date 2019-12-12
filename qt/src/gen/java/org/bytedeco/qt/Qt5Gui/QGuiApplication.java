@@ -71,6 +71,9 @@ public class QGuiApplication extends QCoreApplication {
 
     public static native @Cast("Qt::ApplicationState") int applicationState();
 
+    public static native void setHighDpiScaleFactorRoundingPolicy(@Cast("Qt::HighDpiScaleFactorRoundingPolicy") int policy);
+    public static native @Cast("Qt::HighDpiScaleFactorRoundingPolicy") int highDpiScaleFactorRoundingPolicy();
+
     public static native int exec();
     public native @Cast("bool") @Name("notify") boolean _notify(QObject arg0, QEvent arg1);
 

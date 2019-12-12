@@ -117,9 +117,11 @@ public class QLineEdit extends QWidget {
     public native @Cast("bool") boolean hasAcceptableInput();
 
     public native void setTextMargins(int left, int top, int right, int bottom);
+// #if QT_DEPRECATED_SINCE(5, 14)
     public native void getTextMargins(IntPointer left, IntPointer top, IntPointer right, IntPointer bottom);
     public native void getTextMargins(IntBuffer left, IntBuffer top, IntBuffer right, IntBuffer bottom);
     public native void getTextMargins(int[] left, int[] top, int[] right, int[] bottom);
+// #endif
     public native void setText(@Const @ByRef QString arg0);
     public native void clear();
     public native void selectAll();

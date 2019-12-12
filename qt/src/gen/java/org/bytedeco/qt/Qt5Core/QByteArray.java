@@ -38,7 +38,7 @@ public class QByteArray extends Pointer {
 //     #define Q_DECLARE_FLAGS(arg0, arg1)(Base64Options, Base64Option)
 
     public QByteArray() { super((Pointer)null); allocate(); }
-    private native void allocate();
+    @NoException private native void allocate();
     public QByteArray(@Cast("const char*") BytePointer arg0, int size/*=-1*/) { super((Pointer)null); allocate(arg0, size); }
     private native void allocate(@Cast("const char*") BytePointer arg0, int size/*=-1*/);
     public QByteArray(@Cast("const char*") BytePointer arg0) { super((Pointer)null); allocate(arg0); }
@@ -52,15 +52,13 @@ public class QByteArray extends Pointer {
     public QByteArray(int size, @Cast("Qt::Initialization") int arg1) { super((Pointer)null); allocate(size, arg1); }
     private native void allocate(int size, @Cast("Qt::Initialization") int arg1);
     public QByteArray(@Const @ByRef QByteArray arg0) { super((Pointer)null); allocate(arg0); }
-    private native void allocate(@Const @ByRef QByteArray arg0);
+    @NoException private native void allocate(@Const @ByRef QByteArray arg0);
 
-    public native @ByRef @Name("operator =") QByteArray put(@Const @ByRef QByteArray arg0);
+    public native @ByRef @Name("operator =") @NoException QByteArray put(@Const @ByRef QByteArray arg0);
     public native @ByRef @Name("operator =") QByteArray put(@Cast("const char*") BytePointer str);
     public native @ByRef @Name("operator =") QByteArray put(String str);
-// #ifdef Q_COMPILER_RVALUE_REFS
-// #endif
 
-    public native void swap(@ByRef QByteArray other);
+    public native @NoException void swap(@ByRef QByteArray other);
 
     public native int size();
     public native @Cast("bool") boolean isEmpty();
@@ -86,6 +84,8 @@ public class QByteArray extends Pointer {
 
     public native @Cast("char") byte at(int i);
     public native @Cast("char") @Name("operator []") byte get(int i);
+    
+    
      public native @Cast("char") byte front();
     
      public native @Cast("char") byte back();
@@ -154,9 +154,9 @@ public native @ByVal QByteArray mid(int index);
      public native @ByVal QByteArray simplified();
 // #endif
 
-     public native @ByVal QByteArray leftJustified(int width, @Cast("char") byte fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
+     public native @ByVal QByteArray leftJustified(int width, @Cast("char") byte _fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
 public native @ByVal QByteArray leftJustified(int width);
-     public native @ByVal QByteArray rightJustified(int width, @Cast("char") byte fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
+     public native @ByVal QByteArray rightJustified(int width, @Cast("char") byte _fill/*=' '*/, @Cast("bool") boolean truncate/*=false*/);
 public native @ByVal QByteArray rightJustified(int width);
 
     public native @ByRef QByteArray prepend(@Cast("char") byte c);

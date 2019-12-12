@@ -65,7 +65,7 @@ public class Qt5Core extends QtInfoMapper {
     super.map(infoMap);
     infoMap
         .put(new Info("Q_CORE_EXPORT", "Q_INVOKABLE").cppTypes().annotations())
-        .put(new Info("QT_ASCII_CAST_WARN", "QT_DEPRECATED").cppTypes().annotations("@Deprecated"))
+        .put(new Info("QT_ASCII_CAST_WARN", "QT_DEPRECATED", "QT_DEPRECATED_VERSION_5_14").cppTypes().annotations("@Deprecated"))
 
         // Helper classes
         .put(new Info("QString").base("AbstractQString"))
@@ -117,6 +117,7 @@ public class Qt5Core extends QtInfoMapper {
 
         // qnamespace.h
         "defined(Q_COMPILER_CLASS_ENUM) && defined(Q_COMPILER_CONSTEXPR)",
+        "defined(Q_COMPILER_CONSTEXPR)",
         "Q_MOC_RUN",
 
         // QObject
@@ -217,6 +218,7 @@ public class Qt5Core extends QtInfoMapper {
     macros.put("quint64", "unsigned long long");
     macros.put("qlonglong", "long long");
     macros.put("qulonglong", "unsigned long long");
+    macros.put("qintptr", "long int");
     macros.put("uchar", "unsigned char");
     macros.put("ushort", "unsigned short");
     macros.put("uint", "unsigned int");
@@ -227,6 +229,7 @@ public class Qt5Core extends QtInfoMapper {
     macros.put("Q_ALWAYS_INLINE", "inline");
     macros.put("Q_DECL_COLD_FUNCTION", "");
     macros.put("Q_DECL_CONSTEXPR", "");
+    macros.put("Q_DECL_ENUMERATOR_DEPRECATED", "");
     macros.put("Q_DECL_DEPRECATED", "");
     macros.put("Q_DECL_NOEXCEPT", "");
     macros.put("Q_DECL_NOTHROW", "");
