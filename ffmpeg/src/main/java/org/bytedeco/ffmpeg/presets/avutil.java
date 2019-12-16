@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2018 Samuel Audet
+ * Copyright (C) 2013-2019 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -44,7 +44,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
             "<libavutil/opt.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>", "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>",
             "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>", "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>", "<libavutil/hwcontext.h>",
-            "log_callback.h"},
+            /*"<libavutil/hwcontext_cuda.h>", "<libavutil/hwcontext_d3d11va.h>", "<libavutil/hwcontext_dxva2.h>", "<libavutil/hwcontext_drm.h>",
+            "<libavutil/hwcontext_mediacodec.h>", "<libavutil/hwcontext_qsv.h>", "<libavutil/hwcontext_vaapi.h>", "<libavutil/hwcontext_vdpau.h>",
+            "<libavutil/hwcontext_videotoolbox.h>",*/ "<libavutil/adler32.h>", "<libavutil/aes.h>", "<libavutil/aes_ctr.h>", "<libavutil/base64.h>",
+            "<libavutil/blowfish.h>", "<libavutil/cast5.h>", "<libavutil/camellia.h>", "<libavutil/crc.h>", "<libavutil/des.h>", "<libavutil/lfg.h>",
+            "<libavutil/hmac.h>", "<libavutil/md5.h>", "<libavutil/rc4.h>", "<libavutil/ripemd.h>", "<libavutil/tea.h>", "<libavutil/twofish.h>",
+            "<libavutil/sha.h>", "<libavutil/sha512.h>", "<libavutil/xtea.h>", "<libavutil/avstring.h>", "<libavutil/bprint.h>", "<libavutil/common.h>",
+            "<libavutil/display.h>", "<libavutil/eval.h>", "<libavutil/encryption_info.h>", "<libavutil/file.h>", "<libavutil/hash.h>",
+            "<libavutil/hdr_dynamic_metadata.h>", "<libavutil/intfloat.h>", "<libavutil/intreadwrite.h>", "<libavutil/mastering_display_metadata.h>",
+            "<libavutil/murmur3.h>", "<libavutil/parseutils.h>", "<libavutil/pixelutils.h>", "<libavutil/random_seed.h>", "<libavutil/replaygain.h>",
+            "<libavutil/spherical.h>", "<libavutil/threadmessage.h>", "<libavutil/timecode.h>", "<libavutil/timestamp.h>", "<libavutil/tree.h>",
+            "<libavutil/tx.h>", "log_callback.h"},
             includepath = {"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
             link = "avutil@.56", compiler = {"default", "nodeprecated"}),
         @Platform(value = "windows", includepath = {"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload = "avutil-56")
@@ -56,12 +66,19 @@ public class avutil implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("NAN", "INFINITY").cppTypes("double"))
-               .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG").cppTypes())
+               .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID", "AVCOL_SPC_YCGCO", "AVCOL_SPC_YCOCG", "FF_CEIL_RSHIFT",
+                             "av_ceil_log2", "av_clip", "av_clip64", "av_clip_uint8", "av_clip_int8", "av_clip_uint16", "av_clip_int16",
+                             "av_clipl_int32", "av_clip_intp2", "av_clip_uintp2", "av_mod_uintp2", "av_sat_add32", "av_sat_dadd32",
+                             "av_sat_sub32", "av_sat_dsub32", "av_clipf", "av_clipd", "av_popcount", "av_popcount64", "av_parity").cppTypes().translate())
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
-               .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result").cppTypes().annotations())
+               .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result", "av_alias").cppTypes().annotations())
                .put(new Info("attribute_deprecated").annotations("@Deprecated"))
-               .put(new Info("AVPanScan", "AVCodecContext").cast().pointerTypes("Pointer"))
+               .put(new Info("DWORD", "UINT").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
+               .put(new Info("AVPanScan", "AVCodecContext", "AVMurMur3", "CUcontext", "CUstream",
+                             "ID3D11Device", "ID3D11DeviceContext", "ID3D11Texture2D", "ID3D11VideoContext", "ID3D11VideoDevice",
+                             "IDirect3DDeviceManager9", "IDirect3DSurface9", "IDirectXVideoDecoder", "mfxFrameSurface1", "mfxSession",
+                             "VAConfigID", "VASurfaceID", "VASurfaceAttrib", "VADisplay", "VdpDevice", "VdpGetProcAddress").cast().pointerTypes("Pointer"))
                .put(new Info("FF_API_VAAPI").define())
                .put(new Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI", "!FF_API_XVMC",
                              "FF_API_GET_BITS_PER_SAMPLE_FMT", "FF_API_FIND_OPT").define(false))
@@ -120,6 +137,8 @@ public class avutil implements InfoMapper {
                              "AV_CH_LAYOUT_OCTAGONAL",
                              "AV_CH_LAYOUT_HEXADECAGONAL",
                              "AV_CH_LAYOUT_STEREO_DOWNMIX").translate().cppTypes("long"))
+               .put(new Info("MKTAG", "MKBETAG").cppTypes("int", "char", "char", "char", "char"))
+               .put(new Info("int (*)(const void*, const void*)").cast().pointerTypes("Cmp_Const_Pointer_Const_Pointer"))
                .put(new Info("int (*)(void*, void*, int)").pointerTypes("Int_func_Pointer_Pointer_int"));
     }
 

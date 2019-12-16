@@ -1,4 +1,5 @@
 
+ * Include `timecode.h`, among other missing header files, in the `avutil` module of FFmpeg ([issue #822](https://github.com/bytedeco/javacpp-presets/issues/822))
  * Map a few more inherited constructors missing from the presets for MKL-DNN and DNNL
  * Make sure `clone()` actually returns new `PIX`, `FPIX`, or `DPIX` objects with presets for Leptonica
  * Add `opencv_python3` module and corresponding loader class with sample code to the presets for OpenCV
