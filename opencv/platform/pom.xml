@@ -172,10 +172,10 @@
                   <moduleInfoSource>
                     module org.bytedeco.${javacpp.moduleId}.platform {
                       requires transitive org.bytedeco.${javacpp.moduleId};
-                      requires org.bytedeco.${javacpp.moduleId}.android.arm;
-                      requires org.bytedeco.${javacpp.moduleId}.android.arm64;
-                      requires org.bytedeco.${javacpp.moduleId}.android.x86;
-                      requires org.bytedeco.${javacpp.moduleId}.android.x86_64;
+//                      requires org.bytedeco.${javacpp.moduleId}.android.arm;
+//                      requires org.bytedeco.${javacpp.moduleId}.android.arm64;
+//                      requires org.bytedeco.${javacpp.moduleId}.android.x86;
+//                      requires org.bytedeco.${javacpp.moduleId}.android.x86_64;
                       requires org.bytedeco.${javacpp.moduleId}.ios.arm64;
                       requires org.bytedeco.${javacpp.moduleId}.ios.x86_64;
                       requires org.bytedeco.${javacpp.moduleId}.linux.x86;
