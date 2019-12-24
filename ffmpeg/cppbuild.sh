@@ -39,7 +39,7 @@ download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCO
 download http://sourceforge.net/projects/opencore-amr/files/vo-amrwbenc/$VO_AMRWBENC.tar.gz/download $VO_AMRWBENC.tar.gz
 download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
 download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
-download https://download.videolan.org/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
+download https://code.videolan.org/videolan/x264/-/archive/stable/x264-stable.tar.bz2 x264-stable.tar.bz2
 download https://github.com/videolan/x265/archive/$X265.tar.gz x265-$X265.tar.gz
 download https://github.com/webmproject/libvpx/archive/v$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
 download https://ftp.osuosl.org/pub/blfs/conglomeration/alsa-lib/alsa-lib-$ALSA_VERSION.tar.bz2 alsa-lib-$ALSA_VERSION.tar.bz2
@@ -61,14 +61,14 @@ tar --totals -xzf ../$OPENCORE_AMR.tar.gz
 tar --totals -xzf ../$VO_AMRWBENC.tar.gz
 tar --totals -xzf ../$OPENSSL.tar.gz
 tar --totals -xzf ../openh264-$OPENH264_VERSION.tar.gz
-tar --totals -xjf ../last_stable_x264.tar.bz2
+tar --totals -xjf ../x264-stable.tar.bz2
 tar --totals -xzf ../x265-$X265.tar.gz
 tar --totals -xzf ../libvpx-$VPX_VERSION.tar.gz
 tar --totals -xJf ../freetype-$FREETYPE_VERSION.tar.xz
 tar --totals -xzf ../mfx_dispatch-$MFX_VERSION.tar.gz
 tar --totals -xzf ../nv-codec-headers-$NVCODEC_VERSION.tar.gz
 tar --totals -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
-X264=`echo x264-snapshot-*`
+X264="x264-stable"
 
 if [[ "${ACLOCAL_PATH:-}" == C:\\msys64\\* ]]; then
     export ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
