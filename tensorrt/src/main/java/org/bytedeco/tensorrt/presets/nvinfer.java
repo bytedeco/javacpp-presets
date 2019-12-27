@@ -33,19 +33,23 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 import org.bytedeco.cuda.presets.cudart;
+import org.bytedeco.cuda.presets.cublas;
+import org.bytedeco.cuda.presets.cudnn;
+import org.bytedeco.cuda.presets.nvrtc;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(
-    inherit = cudart.class,
+    inherit = {cublas.class, cudnn.class, nvrtc.class},
     value = @Platform(
         value = "linux-x86_64",
         compiler = "cpp11",
         include = {"NvInferVersion.h", "NvInferRuntimeCommon.h", "NvInferRuntime.h", "NvInfer.h", "NvUtils.h"},
         includepath = {"/usr/include/x86_64-linux-gnu/", "/usr/local/tensorrt/include/"},
-        link = "nvinfer@.6",
+        link = "nvinfer@.7",
+        preload = "myelin@.1",
         linkpath = {"/usr/lib/x86_64-linux-gnu/", "/usr/local/tensorrt/lib/"}),
     target = "org.bytedeco.tensorrt.nvinfer",
     global = "org.bytedeco.tensorrt.global.nvinfer")
@@ -90,7 +94,7 @@ public class nvinfer implements LoadEnabled, InfoMapper {
                .put(new Info("nvinfer1::Weights::values").javaText("public native @Const Pointer values(); public native Weights values(Pointer values);"))
                .put(new Info("nvinfer1::IRaggedSoftMaxLayer", "nvinfer1::IIdentityLayer", "nvinfer1::ISoftMaxLayer",
                              "nvinfer1::IConcatenationLayer", "nvinfer1::IInt8EntropyCalibrator", "nvinfer1::IInt8EntropyCalibrator2",
-                             "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer").purify())
+                             "nvinfer1::IInt8MinMaxCalibrator", "nvinfer1::IParametricReLULayer", "nvinfer1::IShapeLayer", "nvinfer1::ISelectLayer").purify())
                .put(new Info("nvinfer1::IGpuAllocator::free").javaNames("_free"))
                .put(new Info("nvinfer1::IProfiler", "nvinfer1::ILogger").purify().virtualize())
                .put(new Info("nvinfer1::IPluginRegistry::getPluginCreatorList").javaText(

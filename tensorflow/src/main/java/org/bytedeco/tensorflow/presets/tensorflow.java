@@ -156,6 +156,8 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/tf_status_internal.h",
+                        "tensorflow/c/tf_tensor_internal.h",
                         "tensorflow/c/env.h",
                         "tensorflow/c/kernels.h",
                         "tensorflow/c/ops.h",
@@ -403,6 +405,8 @@ import java.util.List;
                         "tensorflow/c/checkpoint_reader.h",
                         "tensorflow/c/c_api.h",
                         "tensorflow/c/c_api_internal.h",
+                        "tensorflow/c/tf_status_internal.h",
+                        "tensorflow/c/tf_tensor_internal.h",
                         "tensorflow/c/env.h",
                         "tensorflow/c/kernels.h",
                         "tensorflow/c/ops.h",
@@ -520,14 +524,19 @@ public class tensorflow implements BuildEnabled, LoadEnabled, InfoMapper {
         if (!Loader.isLoadLibraries() || extension == null || !extension.endsWith("-gpu")) {
             return;
         }
-        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvinfer"};
+        String[] libs = {"cudart", "cublasLt", "cublas", "cufft", "curand", "cusolver", "cusparse", "cudnn", "nccl", "nvrtc", "myelin", "nvinfer"};
         for (String lib : libs) {
             switch (platform) {
                 case "linux-arm64":
                 case "linux-ppc64le":
                 case "linux-x86_64":
                 case "macosx-x86_64":
-                    lib += lib.equals("cudnn") ? "@.7" : lib.equals("nccl") ? "@.2" : lib.equals("nvinfer") ? "@.5" : lib.equals("cudart") ? "@.10.2" : "@.10";
+                    lib += lib.equals("cudnn") ? "@.7"
+                         : lib.equals("nccl") ? "@.2"
+                         : lib.equals("myelin") ? "@.1"
+                         : lib.equals("nvinfer") ? "@.7"
+                         : lib.equals("cudart") || lib.equals("nvrtc") ? "@.10.2"
+                         : "@.10";
                     break;
                 case "windows-x86_64":
                     lib += lib.equals("cudnn") ? "64_7" : lib.equals("cudart") ? "64_102" : "64_10";

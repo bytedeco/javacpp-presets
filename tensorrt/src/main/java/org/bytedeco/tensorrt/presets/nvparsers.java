@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = nvinfer.class,
     value = @Platform(
         include = {"NvCaffeParser.h", "NvUffParser.h"},
-        link = "nvparsers@.6"),
+        link = "nvparsers@.7"),
     target = "org.bytedeco.tensorrt.nvparsers",
     global = "org.bytedeco.tensorrt.global.nvparsers")
 public class nvparsers implements InfoMapper {

@@ -36,12 +36,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     inherit = nvinfer_plugin.class,
     value = @Platform(
         include = "NvOnnxParser.h",
-        link = "nvonnxparser@.6"),
+        link = "nvonnxparser@.7"),
     target = "org.bytedeco.tensorrt.nvonnxparser",
     global = "org.bytedeco.tensorrt.global.nvonnxparser")
 public class nvonnxparser implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("SWIG").define(false))
+               .put(new Info("std::pair<std::vector<size_t>,bool>").pointerTypes("SubGraph_t").define())
+               .put(new Info("std::vector<SubGraph_t>").pointerTypes("SubGraphCollection_t").define())
+               .put(new Info("std::vector<size_t>").annotations("@StdVector").pointerTypes("SizeTPointer"))
+               .put(new Info("nvonnxparser::IPluginFactory").pointerTypes("OnnxPluginFactory"))
+               .put(new Info("nvonnxparser::IPluginFactoryExt").pointerTypes("OnnxPluginFactoryExt"))
                .put(new Info("nvonnxparser::ErrorCode").valueTypes("org.bytedeco.tensorrt.global.nvonnxparser.ErrorCode"))
                .put(new Info("nvonnxparser::EnumMax<nvonnxparser::ErrorCode>", "nvonnxparser::EnumMax<ErrorCode>").javaNames("ErrorCodeEnumMax"));
     }
