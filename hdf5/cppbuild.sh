@@ -20,6 +20,7 @@ tar --totals -xf ../hdf5-$HDF5_VERSION.tar.bz2
 cd hdf5-$HDF5_VERSION
 
 sedinplace '/cmake_minimum_required/d' $(find ./ -iname CMakeLists.txt)
+sedinplace 's/# *cmakedefine/#cmakedefine/g' config/cmake/H5pubconf.h.in
 
 case $PLATFORM in
 # HDF5 does not currently support cross-compiling:
