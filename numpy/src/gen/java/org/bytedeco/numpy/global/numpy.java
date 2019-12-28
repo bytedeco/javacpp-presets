@@ -92,6 +92,9 @@ public static final int NPY_1_12_API_VERSION = 0x00000008;
 public static final int NPY_1_13_API_VERSION = 0x00000008;
 public static final int NPY_1_14_API_VERSION = 0x00000008;
 public static final int NPY_1_15_API_VERSION = 0x00000008;
+public static final int NPY_1_16_API_VERSION = 0x00000008;
+public static final int NPY_1_17_API_VERSION = 0x00000008;
+public static final int NPY_1_18_API_VERSION = 0x00000008;
 
 // #endif
 
@@ -144,9 +147,13 @@ public static final int NPY_INLINE_MATH = 1;
 // #else
 // #define NPY_GCC_TARGET_AVX
 // #endif
+
+// #if defined HAVE_ATTRIBUTE_TARGET_AVX2_WITH_INTRINSICS
+// #define HAVE_ATTRIBUTE_TARGET_FMA
+// #define NPY_GCC_TARGET_FMA __attribute__((target("avx2,fma")))
+// #endif
+
 // #if defined HAVE_ATTRIBUTE_TARGET_AVX2 && defined HAVE_LINK_AVX2
-// #define NPY_GCC_TARGET_AVX2 __attribute__((target("avx2")))
-// #elif defined HAVE_ATTRIBUTE_TARGET_AVX2_WITH_INTRINSICS
 // #define NPY_GCC_TARGET_AVX2 __attribute__((target("avx2")))
 // #else
 // #define NPY_GCC_TARGET_AVX2
@@ -1331,7 +1338,22 @@ public static final double NPY_COEFF_Q2_LOGf = 2.453006071784736363091e+00f;
 public static final double NPY_COEFF_Q3_LOGf = 9.864942958519418960339e-01f;
 public static final double NPY_COEFF_Q4_LOGf = 1.546476374983906719538e-01f;
 public static final double NPY_COEFF_Q5_LOGf = 5.875095403124574342950e-03f;
-
+/*
+ * Constants used in vector implementation of sinf/cosf(x)
+ */
+public static final double NPY_TWO_O_PIf = 0x1.45f306p-1f;
+public static final double NPY_CODY_WAITE_PI_O_2_HIGHf = -0x1.921fb0p+00f;
+public static final double NPY_CODY_WAITE_PI_O_2_MEDf = -0x1.5110b4p-22f;
+public static final double NPY_CODY_WAITE_PI_O_2_LOWf = -0x1.846988p-48f;
+public static final double NPY_COEFF_INVF0_COSINEf = 0x1.000000p+00f;
+public static final double NPY_COEFF_INVF2_COSINEf = -0x1.000000p-01f;
+public static final double NPY_COEFF_INVF4_COSINEf = 0x1.55553cp-05f;
+public static final double NPY_COEFF_INVF6_COSINEf = -0x1.6c06dcp-10f;
+public static final double NPY_COEFF_INVF8_COSINEf = 0x1.98e616p-16f;
+public static final double NPY_COEFF_INVF3_SINEf = -0x1.555556p-03f;
+public static final double NPY_COEFF_INVF5_SINEf = 0x1.11119ap-07f;
+public static final double NPY_COEFF_INVF7_SINEf = -0x1.a06bbap-13f;
+public static final double NPY_COEFF_INVF9_SINEf = 0x1.7d3bbcp-19f;
 /*
  * Integer functions.
  */
@@ -1348,6 +1370,37 @@ public static final double NPY_COEFF_Q5_LOGf = 5.875095403124574342950e-03f;
 @NoException public static native @Cast("npy_long") long npy_lcml(@Cast("npy_long") long a, @Cast("npy_long") long b);
 @NoException public static native @Cast("npy_longlong") long npy_gcdll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
 @NoException public static native @Cast("npy_longlong") long npy_lcmll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
+
+@NoException public static native @Cast("npy_ubyte") byte npy_rshiftuhh(@Cast("npy_ubyte") byte a, @Cast("npy_ubyte") byte b);
+@NoException public static native @Cast("npy_ubyte") byte npy_lshiftuhh(@Cast("npy_ubyte") byte a, @Cast("npy_ubyte") byte b);
+@NoException public static native @Cast("npy_ushort") short npy_rshiftuh(@Cast("npy_ushort") short a, @Cast("npy_ushort") short b);
+@NoException public static native @Cast("npy_ushort") short npy_lshiftuh(@Cast("npy_ushort") short a, @Cast("npy_ushort") short b);
+@NoException public static native @Cast("npy_uint") int npy_rshiftu(@Cast("npy_uint") int a, @Cast("npy_uint") int b);
+@NoException public static native @Cast("npy_uint") int npy_lshiftu(@Cast("npy_uint") int a, @Cast("npy_uint") int b);
+@NoException public static native @Cast("npy_ulong") long npy_rshiftul(@Cast("npy_ulong") long a, @Cast("npy_ulong") long b);
+@NoException public static native @Cast("npy_ulong") long npy_lshiftul(@Cast("npy_ulong") long a, @Cast("npy_ulong") long b);
+@NoException public static native @Cast("npy_ulonglong") long npy_rshiftull(@Cast("npy_ulonglong") long a, @Cast("npy_ulonglong") long b);
+@NoException public static native @Cast("npy_ulonglong") long npy_lshiftull(@Cast("npy_ulonglong") long a, @Cast("npy_ulonglong") long b);
+
+@NoException public static native @Cast("npy_byte") byte npy_rshifthh(@Cast("npy_byte") byte a, @Cast("npy_byte") byte b);
+@NoException public static native @Cast("npy_byte") byte npy_lshifthh(@Cast("npy_byte") byte a, @Cast("npy_byte") byte b);
+@NoException public static native @Cast("npy_short") short npy_rshifth(@Cast("npy_short") short a, @Cast("npy_short") short b);
+@NoException public static native @Cast("npy_short") short npy_lshifth(@Cast("npy_short") short a, @Cast("npy_short") short b);
+@NoException public static native @Cast("npy_int") int npy_rshift(@Cast("npy_int") int a, @Cast("npy_int") int b);
+@NoException public static native @Cast("npy_int") int npy_lshift(@Cast("npy_int") int a, @Cast("npy_int") int b);
+@NoException public static native @Cast("npy_long") long npy_rshiftl(@Cast("npy_long") long a, @Cast("npy_long") long b);
+@NoException public static native @Cast("npy_long") long npy_lshiftl(@Cast("npy_long") long a, @Cast("npy_long") long b);
+@NoException public static native @Cast("npy_longlong") long npy_rshiftll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
+@NoException public static native @Cast("npy_longlong") long npy_lshiftll(@Cast("npy_longlong") long a, @Cast("npy_longlong") long b);
+
+/*
+ * avx function has a common API for both sin & cos. This enum is used to
+ * distinguish between the two
+ */
+/** enum NPY_TRIG_OP */
+public static final int
+    npy_compute_sin = 0,
+    npy_compute_cos = 1;
 
 /*
  * C99 double math funcs
@@ -3194,7 +3247,8 @@ public static final int NPY_DEFAULT_TYPE = NPY_DOUBLE;
 // #define PyDataType_ISOBJECT(obj) PyTypeNum_ISOBJECT(((PyArray_Descr*)(obj))->type_num)
 // #define PyDataType_HASFIELDS(obj) (((PyArray_Descr *)(obj))->names != NULL)
 // #define PyDataType_HASSUBARRAY(dtype) ((dtype)->subarray != NULL)
-// #define PyDataType_ISUNSIZED(dtype) ((dtype)->elsize == 0)
+// #define PyDataType_ISUNSIZED(dtype) ((dtype)->elsize == 0 &&
+//                                       !PyDataType_HASFIELDS(dtype))
 // #define PyDataType_MAKEUNSIZED(dtype) ((dtype)->elsize = 0)
 
 // #define PyArray_ISBOOL(obj) PyTypeNum_ISBOOL(PyArray_TYPE(obj))
@@ -3647,12 +3701,12 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native int PyArray_CastScalarDirect(PyObject arg0, PyArray_Descr arg1, Pointer arg2, int arg3);
 @NoException public static native PyObject PyArray_ScalarFromObject(PyObject arg0);
 @NoException public static native PyArray_VectorUnaryFunc PyArray_GetCastFunc(PyArray_Descr arg0, int arg1);
-@NoException public static native PyObject PyArray_FromDims(int arg0, IntPointer arg1, int arg2);
-@NoException public static native PyObject PyArray_FromDims(int arg0, IntBuffer arg1, int arg2);
-@NoException public static native PyObject PyArray_FromDims(int arg0, int[] arg1, int arg2);
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int arg0, IntPointer arg1, PyArray_Descr arg2, @Cast("char*") BytePointer arg3);
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int arg0, IntBuffer arg1, PyArray_Descr arg2, @Cast("char*") ByteBuffer arg3);
-@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int arg0, int[] arg1, PyArray_Descr arg2, @Cast("char*") byte[] arg3);
+@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, IntPointer __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
+@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, IntBuffer __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
+@NoException public static native PyObject PyArray_FromDims(int __NPY_UNUSED_TAGGEDnd, int[] __NPY_UNUSED_TAGGEDd, int __NPY_UNUSED_TAGGEDtype );
+@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, IntPointer __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") BytePointer __NPY_UNUSED_TAGGEDdata );
+@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, IntBuffer __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") ByteBuffer __NPY_UNUSED_TAGGEDdata );
+@NoException public static native PyObject PyArray_FromDimsAndDataAndDescr(int __NPY_UNUSED_TAGGEDnd, int[] __NPY_UNUSED_TAGGEDd, PyArray_Descr arg2, @Cast("char*") byte[] __NPY_UNUSED_TAGGEDdata );
 @NoException public static native PyObject PyArray_FromAny(PyObject arg0, PyArray_Descr arg1, int arg2, int arg3, int arg4, PyObject arg5);
 @NoException public static native PyObject PyArray_EnsureArray(PyObject arg0);
 @NoException public static native PyObject PyArray_EnsureAnyArray(PyObject arg0);
@@ -3668,7 +3722,7 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native PyObject PyArray_GetField(PyArrayObject arg0, PyArray_Descr arg1, int arg2);
 @NoException public static native int PyArray_SetField(PyArrayObject arg0, PyArray_Descr arg1, int arg2, PyObject arg3);
 @NoException public static native PyObject PyArray_Byteswap(PyArrayObject arg0, @Cast("npy_bool") byte arg1);
-@NoException public static native PyObject PyArray_Resize(PyArrayObject arg0, PyArray_Dims arg1, int arg2, @Cast("NPY_ORDER") int arg3);
+@NoException public static native PyObject PyArray_Resize(PyArrayObject arg0, PyArray_Dims arg1, int arg2, @Cast("NPY_ORDER") int __NPY_UNUSED_TAGGEDorder );
 @NoException public static native int PyArray_MoveInto(PyArrayObject arg0, PyArrayObject arg1);
 @NoException public static native int PyArray_CopyInto(PyArrayObject arg0, PyArrayObject arg1);
 @NoException public static native int PyArray_CopyAnyInto(PyArrayObject arg0, PyArrayObject arg1);
@@ -3765,14 +3819,14 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native int PyArray_CompareLists(@Cast("const npy_intp*") SizeTPointer arg0, @Cast("const npy_intp*") SizeTPointer arg1, int arg2);
 @NoException public static native int PyArray_AsCArray(@Cast("PyObject**") PointerPointer arg0, Pointer arg1, @Cast("npy_intp*") SizeTPointer arg2, int arg3, PyArray_Descr arg4);
 @NoException public static native int PyArray_AsCArray(@ByPtrPtr PyObject arg0, Pointer arg1, @Cast("npy_intp*") SizeTPointer arg2, int arg3, PyArray_Descr arg4);
-@NoException public static native int PyArray_As1D(@Cast("PyObject**") PointerPointer arg0, @Cast("char**") PointerPointer arg1, IntPointer arg2, int arg3);
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject arg0, @Cast("char**") @ByPtrPtr BytePointer arg1, IntPointer arg2, int arg3);
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1, IntBuffer arg2, int arg3);
-@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject arg0, @Cast("char**") @ByPtrPtr byte[] arg1, int[] arg2, int arg3);
-@NoException public static native int PyArray_As2D(@Cast("PyObject**") PointerPointer arg0, @Cast("char***") @ByPtrPtr PointerPointer arg1, IntPointer arg2, IntPointer arg3, int arg4);
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject arg0, @Cast("char***") @ByPtrPtr PointerPointer arg1, IntPointer arg2, IntPointer arg3, int arg4);
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject arg0, @Cast("char***") @ByPtrPtr PointerPointer arg1, IntBuffer arg2, IntBuffer arg3, int arg4);
-@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject arg0, @Cast("char***") @ByPtrPtr PointerPointer arg1, int[] arg2, int[] arg3, int arg4);
+@NoException public static native int PyArray_As1D(@Cast("PyObject**") PointerPointer __NPY_UNUSED_TAGGEDop, @Cast("char**") PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr BytePointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr ByteBuffer __NPY_UNUSED_TAGGEDptr, IntBuffer __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As1D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char**") @ByPtrPtr byte[] __NPY_UNUSED_TAGGEDptr, int[] __NPY_UNUSED_TAGGEDd1, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As2D(@Cast("PyObject**") PointerPointer __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, IntPointer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntPointer __NPY_UNUSED_TAGGEDd1, IntPointer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, IntBuffer __NPY_UNUSED_TAGGEDd1, IntBuffer __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
+@NoException public static native int PyArray_As2D(@ByPtrPtr PyObject __NPY_UNUSED_TAGGEDop, @Cast("char***") @ByPtrPtr PointerPointer __NPY_UNUSED_TAGGEDptr, int[] __NPY_UNUSED_TAGGEDd1, int[] __NPY_UNUSED_TAGGEDd2, int __NPY_UNUSED_TAGGEDtypecode );
 @NoException public static native int PyArray_Free(PyObject arg0, Pointer arg1);
 @NoException public static native int PyArray_Converter(PyObject arg0, @Cast("PyObject**") PointerPointer arg1);
 @NoException public static native int PyArray_Converter(PyObject arg0, @ByPtrPtr PyObject arg1);
@@ -3838,15 +3892,14 @@ public static native @ByRef PyTypeObject PyVoidArrType_Type(); public static nat
 @NoException public static native PyObject PyArray_CheckAxis(PyArrayObject arg0, IntBuffer arg1, int arg2);
 @NoException public static native PyObject PyArray_CheckAxis(PyArrayObject arg0, int[] arg1, int arg2);
 @NoException public static native @Cast("npy_intp") long PyArray_OverflowMultiplyList(@Cast("npy_intp*") SizeTPointer arg0, int arg1);
-@NoException public static native int PyArray_CompareString(@Cast("char*") BytePointer arg0, @Cast("char*") BytePointer arg1, @Cast("size_t") long arg2);
-@NoException public static native int PyArray_CompareString(@Cast("char*") ByteBuffer arg0, @Cast("char*") ByteBuffer arg1, @Cast("size_t") long arg2);
-@NoException public static native int PyArray_CompareString(@Cast("char*") byte[] arg0, @Cast("char*") byte[] arg1, @Cast("size_t") long arg2);
+@NoException public static native int PyArray_CompareString(@Cast("const char*") BytePointer arg0, @Cast("const char*") BytePointer arg1, @Cast("size_t") long arg2);
+@NoException public static native int PyArray_CompareString(String arg0, String arg1, @Cast("size_t") long arg2);
 @NoException public static native PyObject PyArray_MultiIterFromObjects(@Cast("PyObject**") PointerPointer arg0, int arg1, int arg2);
 @NoException public static native PyObject PyArray_MultiIterFromObjects(@ByPtrPtr PyObject arg0, int arg1, int arg2);
 @NoException public static native int PyArray_GetEndianness();
 @NoException public static native @Cast("unsigned int") int PyArray_GetNDArrayCFeatureVersion();
 @NoException public static native PyObject PyArray_Correlate2(PyObject arg0, PyObject arg1, int arg2);
-@NoException public static native PyObject PyArray_NeighborhoodIterNew(PyArrayIterObject arg0, @Cast("npy_intp*") SizeTPointer arg1, int arg2, PyArrayObject arg3);
+@NoException public static native PyObject PyArray_NeighborhoodIterNew(PyArrayIterObject arg0, @Cast("const npy_intp*") SizeTPointer arg1, int arg2, PyArrayObject arg3);
 public static native @ByRef PyTypeObject PyTimeIntegerArrType_Type(); public static native void PyTimeIntegerArrType_Type(PyTypeObject setter);
 
 public static native @ByRef PyTypeObject PyDatetimeArrType_Type(); public static native void PyDatetimeArrType_Type(PyTypeObject setter);
@@ -3857,11 +3910,11 @@ public static native @ByRef PyTypeObject PyHalfArrType_Type(); public static nat
 
 public static native @ByRef PyTypeObject NpyIter_Type(); public static native void NpyIter_Type(PyTypeObject setter);
 
-@NoException public static native void PyArray_SetDatetimeParseFunction(PyObject arg0);
-@NoException public static native void PyArray_DatetimeToDatetimeStruct(@Cast("npy_datetime") long arg0, @Cast("NPY_DATETIMEUNIT") int arg1, npy_datetimestruct arg2);
-@NoException public static native void PyArray_TimedeltaToTimedeltaStruct(@Cast("npy_timedelta") long arg0, @Cast("NPY_DATETIMEUNIT") int arg1, npy_timedeltastruct arg2);
-@NoException public static native @Cast("npy_datetime") long PyArray_DatetimeStructToDatetime(@Cast("NPY_DATETIMEUNIT") int arg0, npy_datetimestruct arg1);
-@NoException public static native @Cast("npy_datetime") long PyArray_TimedeltaStructToTimedelta(@Cast("NPY_DATETIMEUNIT") int arg0, npy_timedeltastruct arg1);
+@NoException public static native void PyArray_SetDatetimeParseFunction(PyObject __NPY_UNUSED_TAGGEDop );
+@NoException public static native void PyArray_DatetimeToDatetimeStruct(@Cast("npy_datetime") long __NPY_UNUSED_TAGGEDval, @Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_datetimestruct arg2);
+@NoException public static native void PyArray_TimedeltaToTimedeltaStruct(@Cast("npy_timedelta") long __NPY_UNUSED_TAGGEDval, @Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_timedeltastruct arg2);
+@NoException public static native @Cast("npy_datetime") long PyArray_DatetimeStructToDatetime(@Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_datetimestruct __NPY_UNUSED_TAGGEDd );
+@NoException public static native @Cast("npy_datetime") long PyArray_TimedeltaStructToTimedelta(@Cast("NPY_DATETIMEUNIT") int __NPY_UNUSED_TAGGEDfr, npy_timedeltastruct __NPY_UNUSED_TAGGEDd );
 @NoException public static native NpyIter NpyIter_New(PyArrayObject arg0, @Cast("npy_uint32") int arg1, @Cast("NPY_ORDER") int arg2, @Cast("NPY_CASTING") int arg3, PyArray_Descr arg4);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @Cast("PyArrayObject**") PointerPointer arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @Cast("PyArray_Descr**") PointerPointer arg6);
 @NoException public static native NpyIter NpyIter_MultiNew(int arg0, @ByPtrPtr PyArrayObject arg1, @Cast("npy_uint32") int arg2, @Cast("NPY_ORDER") int arg3, @Cast("NPY_CASTING") int arg4, @Cast("npy_uint32*") IntPointer arg5, @ByPtrPtr PyArray_Descr arg6);
@@ -3957,10 +4010,10 @@ public static native @ByRef PyTypeObject NpyIter_Type(); public static native vo
 @NoException public static native PyObject PyArray_MatrixProduct2(PyObject arg0, PyObject arg1, PyArrayObject arg2);
 @NoException public static native @Cast("npy_bool") byte NpyIter_IsFirstVisit(NpyIter arg0, int arg1);
 @NoException public static native int PyArray_SetBaseObject(PyArrayObject arg0, PyObject arg1);
-@NoException public static native void PyArray_CreateSortedStridePerm(int arg0, @Cast("npy_intp*") SizeTPointer arg1, npy_stride_sort_item arg2);
-@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("npy_bool*") BytePointer arg1);
-@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("npy_bool*") ByteBuffer arg1);
-@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("npy_bool*") byte[] arg1);
+@NoException public static native void PyArray_CreateSortedStridePerm(int arg0, @Cast("const npy_intp*") SizeTPointer arg1, npy_stride_sort_item arg2);
+@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("const npy_bool*") BytePointer arg1);
+@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("const npy_bool*") ByteBuffer arg1);
+@NoException public static native void PyArray_RemoveAxesInPlace(PyArrayObject arg0, @Cast("const npy_bool*") byte[] arg1);
 @NoException public static native void PyArray_DebugPrint(PyArrayObject arg0);
 @NoException public static native int PyArray_FailUnlessWriteable(PyArrayObject arg0, @Cast("const char*") BytePointer arg1);
 @NoException public static native int PyArray_FailUnlessWriteable(PyArrayObject arg0, String arg1);
@@ -4088,9 +4141,9 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 @NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
 @NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9);
 @NoException public static native PyObject PyUFunc_FromFuncAndData(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") byte[] arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9);
-@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, IntPointer arg3, Pointer arg4);
-@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, IntBuffer arg3, Pointer arg4);
-@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, int[] arg3, Pointer arg4);
+@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const IntPointer arg3, Pointer arg4);
+@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const IntBuffer arg3, Pointer arg4);
+@NoException public static native int PyUFunc_RegisterLoopForType(PyUFuncObject arg0, int arg1, PyUFuncGenericFunction arg2, @Const int[] arg3, Pointer arg4);
 @NoException public static native int PyUFunc_GenericFunction(PyUFuncObject arg0, PyObject arg1, PyObject arg2, @Cast("PyArrayObject**") PointerPointer arg3);
 @NoException public static native int PyUFunc_GenericFunction(PyUFuncObject arg0, PyObject arg1, PyObject arg2, @ByPtrPtr PyArrayObject arg3);
 @NoException public static native void PyUFunc_f_f_As_d_d(@Cast("char**") PointerPointer arg0, @Cast("npy_intp*") SizeTPointer arg1, @Cast("npy_intp*") SizeTPointer arg2, Pointer arg3);
@@ -4189,9 +4242,9 @@ public static native @ByRef PyTypeObject PyUFunc_Type(); public static native vo
 @NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, IntPointer arg3);
 @NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, IntBuffer arg3);
 @NoException public static native int PyUFunc_handlefperr(int arg0, PyObject arg1, int arg2, int[] arg3);
-@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, IntPointer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
-@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, IntBuffer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
-@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, int[] arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
+@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const IntPointer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
+@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const IntBuffer arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
+@NoException public static native int PyUFunc_ReplaceLoopBySignature(PyUFuncObject arg0, PyUFuncGenericFunction arg1, @Const int[] arg2, @ByPtrPtr PyUFuncGenericFunction arg3);
 @NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") PointerPointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
 @NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") BytePointer arg2, int arg3, int arg4, int arg5, int arg6, @Cast("const char*") BytePointer arg7, @Cast("const char*") BytePointer arg8, int arg9, @Cast("const char*") BytePointer arg10);
 @NoException public static native PyObject PyUFunc_FromFuncAndDataAndSignature(@ByPtrPtr PyUFuncGenericFunction arg0, @Cast("void**") @ByPtrPtr Pointer arg1, @Cast("char*") ByteBuffer arg2, int arg3, int arg4, int arg5, int arg6, String arg7, String arg8, int arg9, String arg10);
@@ -4430,14 +4483,6 @@ public static final int UFUNC_OUTER = 3;
 
 public static final String UFUNC_PYVALS_NAME = "UFUNC_PYVALS";
 
-// #define UFUNC_CHECK_ERROR(arg)
-//         do {if ((((arg)->obj & UFUNC_OBJ_NEEDS_API) && PyErr_Occurred()) ||
-//             ((arg)->errormask &&
-//              PyUFunc_checkfperr((arg)->errormask,
-//                                 (arg)->errobj,
-//                                 &(arg)->first)))
-//                 goto fail;} while (0)
-
 /*
  * THESE MACROS ARE DEPRECATED.
  * Use npy_set_floatstatus_* in the npymath library.
@@ -4447,10 +4492,6 @@ public static final int UFUNC_FPE_OVERFLOW =      NPY_FPE_OVERFLOW;
 public static final int UFUNC_FPE_UNDERFLOW =     NPY_FPE_UNDERFLOW;
 public static final int UFUNC_FPE_INVALID =       NPY_FPE_INVALID;
 
-// #define UFUNC_CHECK_STATUS(ret)
-//     {
-//        ret = npy_clear_floatstatus();
-//     }
 // #define generate_divbyzero_error() npy_set_floatstatus_divbyzero()
 // #define generate_overflow_error() npy_set_floatstatus_overflow()
 
