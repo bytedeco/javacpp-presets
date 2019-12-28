@@ -25,5 +25,6 @@ public class npy_iter_get_dataptr_t extends FunctionPointer {
     public    npy_iter_get_dataptr_t(Pointer p) { super(p); }
     protected npy_iter_get_dataptr_t() { allocate(); }
     private native void allocate();
-    public native @Cast("char*") BytePointer call(PyArrayIterObject iter, @Cast("npy_intp*") SizeTPointer arg1);
+    public native @Cast("char*") BytePointer call(
+        PyArrayIterObject iter, @Cast("const npy_intp*") SizeTPointer arg1);
 }

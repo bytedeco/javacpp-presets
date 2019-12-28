@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-SCIPY_VERSION=1.3.2
+SCIPY_VERSION=1.4.1
 download https://github.com/scipy/scipy/archive/v$SCIPY_VERSION.tar.gz scipy-$SCIPY_VERSION.tar.gz
 
 mkdir -p $PLATFORM
@@ -68,41 +68,42 @@ fi
 export PYTHONPATH="$PYTHON_INSTALL_PATH:$NUMPY_PATH/python/"
 mkdir -p "$PYTHON_INSTALL_PATH"
 
-if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython; then
+if ! $PYTHON_BIN_PATH -m pip install --target=$PYTHON_LIB_PATH cython pybind11; then
     echo "extra_link_args = -lgfortran"           >> site.cfg
-    "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython numpy
+    "$CPYTHON_HOST_PATH/bin/python3.7" -m pip install --target="$CPYTHON_HOST_PATH/lib/python3.7/" crossenv cython numpy pybind11
     "$CPYTHON_HOST_PATH/bin/python3.7" -m crossenv "$PYTHON_BIN_PATH" crossenv
-    cp $NUMPY_PATH/python/numpy/core/lib/libnpymath.a $CPYTHON_HOST_PATH/lib/python3.7/numpy/core/lib/libnpymath.a
+    cp "$NUMPY_PATH/python/numpy/core/lib/libnpymath.a" "$CPYTHON_HOST_PATH/lib/python3.7/numpy/core/lib/libnpymath.a"
+    cp -a "$CPYTHON_HOST_PATH/lib/python3.7/include" "$PYTHON_LIB_PATH"
     source crossenv/bin/activate
-    cross-expose cython numpy
+    cross-expose cython numpy pybind11
     PYTHON_BIN_PATH="python"
 fi
 
 case $PLATFORM in
     linux-armhf)
         FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
-        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F90="arm-linux-gnueabihf-gfortran" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="arm-linux-gnueabihf-gcc -std=c99 $FLAGS" F90="arm-linux-gnueabihf-gfortran" FFLAGS="$FLAGS -fPIC" LDFLAGS="$FLAGS -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         arm-linux-gnueabihf-strip $(find ../ -iname *.so)
         ;;
     linux-arm64)
-        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F90="aarch64-linux-gnu-gfortran" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="aarch64-linux-gnu-gcc -mabi=lp64" F90="aarch64-linux-gnu-gfortran" FFLAGS="-mabi=lp64 -fPIC" LDFLAGS="-mabi=lp64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         aarch64-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-ppc64le)
-        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F90="powerpc64le-linux-gnu-gfortran" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="powerpc64le-linux-gnu-gcc -m64" F90="powerpc64le-linux-gnu-gfortran" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         powerpc64le-linux-gnu-strip $(find ../ -iname *.so)
         ;;
     linux-x86)
-        ATLAS=None CC="gcc -m32" FFLAGS="-m32 -fPIC" LDFLAGS="-m32 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m32" FFLAGS="-m32 -fPIC" LDFLAGS="-m32 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     linux-x86_64)
-        ATLAS=None CC="gcc -m64" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None CC="gcc -m64" FFLAGS="-m64 -fPIC" LDFLAGS="-m64 -shared" "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         strip $(find ../ -iname *.so)
         ;;
     macosx-*)
         export F90="$(ls -1 /usr/local/bin/gfortran-? | head -n 1)"
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
+        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix $INSTALL_PATH
         # need to add RPATH so it can find MKL in cache
         for f in $(find ../ -iname *.so); do install_name_tool -add_rpath @loader_path/../../../ $f || true; done
         ;;
@@ -110,13 +111,13 @@ case $PLATFORM in
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
+        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
         ;;
     windows-x86_64)
         # the build sometimes fails with multiple jobs
         MAKEJ=1
         # setup.py install doesn't accept absolute paths on Windows
-        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
+        ATLAS=None "$PYTHON_BIN_PATH" setup.py --quiet build -j $MAKEJ build_ext -I$CPYTHON_PATH/include/ -I$PYTHON_LIB_PATH/include/python/ -L$CPYTHON_PATH/lib/ -L$CPYTHON_PATH/libs/ -L$OPENBLAS_PATH/lib/ -lopenblas install --prefix ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
